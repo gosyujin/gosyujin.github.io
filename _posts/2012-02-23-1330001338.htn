@@ -1,0 +1,64 @@
+---
+layout: post
+title: GitプロジェクトをコミットしたタイミングでJenkinsにビルドをしてもらいたい！
+description: ''
+catecory: ''
+tags: [Jenkins, 備忘録, Git]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20120223/1330001338
+---
+**あらすじ
+-全然CIっぽくJenkinsを使っていなかったので本格的に使ってみたい。
+-Gitを連携させたい
+-GitリポジトリにコミットしたタイミングでJenkinsにビルドさせてみたい
+…のだが、いきなりビルド時にcloneできないという現象でハマっていた。
+>||
+ERROR: Error cloning remote repo 'origin' : Could not clone C:/project/excel_for_ruby.git
+||<
+
+**上記の原因
+cloneできない問題はJenkins実行時にgit.exeにパスが通ってなかった、設定していなかったという非常に残念なものだった。Jenkins実践入門にも手順が書いてあった。((環境がアレだったので、proxyの設定とかその辺も探してしまった。))
+
+**Jenkinsの「ビルド実行」でGitリポジトリのソースのテストをする
+-Jenkinsの管理 => プラグインの管理 => Jenkins GIT plugin をインストール
+-新規ジョブ作成 => フリースタイル・プロジェクト でプロジェクト作成
+-ソースコードシステム
+--Gitを選択
+--リポジトリを入力
+---C:\project\excel_for_ruby
+-ビルド
+--Windowsバッチコマンドの実行
+---rspecを実行できるように記述する
+>||
+cd "C:\project\excel_for_ruby"
+rspec -fs spec\*
+||<
+これでビルドするとはじめのcloneできないエラー。
+>||
+Error cloning remote repo 'origin' : Could not clone C:\project\excel_for_ruby
+||<
+-Jenkinsから見たGitのパスを設定
+--Jenkinsの管理 => システムの設定
+---Gitのパスを追加するフォームがあるのでこれを追加
+---Nameもなんでもいいから入力する(Defaultにした)
+
+**GitでCommitしたらJenkinsがビルドをしてくれるようにする
+「wget ビルド実行パス」というコマンドをGitのフックスクリプトに記述すればコミット時にビルド実行できるらしい。とりあえずWindows用のwgetを取得。[http://users.ugent.be/~bpuype/wget/:title=WGET 1.11.4 for Windows (win32)]
+
+プロジェクト内の.git/hooks/post-commitを編集。
+>||
+echo "Hook post-commit start"
+wget --no-proxy http://localhost:8080/job/excel_for_ruby/build?delay=5sec || echo "wget failed"
+echo "Hook post-commit end"
+||<
+proxyが噛んでいたので--no-proxy指定しないと400エラーに。
+>||
+Hook post-commit start
+--2012-02-09 16:40:39--  http://localhost:8080/job/excel_for_ruby/build?delay=5s
+ec
+Resolving proxy.xxx.jp... xxx.xxx.xxx.xxx
+Connecting to proxy.xxx.jp|xxx.xxx.xxx.xxx|:8080... connected.
+Proxy request sent, awaiting response... 400 Bad Request
+2012-02-09 16:40:39 ERROR 400: Bad Request.
+||<
+これでCommit時にビルドが走ってくれる！　これでようやくスタートラインが見えてきた！
+

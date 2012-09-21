@@ -1,0 +1,99 @@
+---
+layout: post
+title: ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした
+description: ''
+catecory: ''
+tags: [Ruby, Windows, 備忘録]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20120420/1334933158
+---
+
+**前回までのあらすじ
+-{% post_link 2011-12-07-1323291938 %}
+前回は、ファイル編集する -> alt+tabでウィンドウ切り替える -> プロンプトでrspecコマンドうつ…の繰り返しを改善することができた。
+今回は、コード修正、保存 -> 違うターミナル切り替え -> ZenTestで自動実行された結果を見る…の繰り返しを改善する。テスト結果通知にGrowlを使用する事でいけそう。
+
+**参考サイト
+-[http://d.hatena.ne.jp/gan2/20080413/1208081539:title=RSpec を autotest で使う - gan2 の Ruby 勉強日記]
+-[http://www.edit.ne.jp/~koic/?date=20070731:title=Railsのテスト環境を改めて- Windows / RSpec / ZenTest / Snarl - Day by day(2007-07-31)]
+-[http://d.hatena.ne.jp/amacou/20090606/1244260607:title=ZenTest(autotest)のバージョン上げたらautotestが動かないので設定を変更する - AorBorF]
+-[https://github.com/rspec/rspec/wiki/autotest:title=autotest · rspec/rspec Wiki · GitHub]
+-[http://blog.masashi-fujiwara.net/2010/11/script-test.html:title=メタフィジクスとフィジクスの間で: テスト駆動開発の環境を整える(rspec + autotest + growl) (2010/11/07に大幅修正あり）]
+-[https://github.com/karl/autotest-growl:title=karl/autotest-growl · GitHub]
+-[http://rubyist.g.hatena.ne.jp/rochefort/20100414/p1:title=autospecの結果をgrowlで通知〜windows編 - うんたらかんたらRuby - Rubyist]
+-[http://d.hatena.ne.jp/zariganitosh/20080312/1205305079:title=autotestのGrowl通知をカスタマイズする - ザリガニが見ていた...。]
+-[http://blog.champierre.com/774:title=autotest + growl で楽々テスト - 僕は発展途上技術者]
+
+**環境
+-Windows XP
+-Ruby 1.9.3
+--Rubygems 1.8.11
+--Bundler 1.0.21
+--ZenTest 4.6.2
+--autotest-growl 0.2.16(だったか？)
+--rspec 2.8.0
+-Growl for Windows 2.0.9
+Macに置き換えてもいけるかは後で確認。
+
+**手順
+***Growls for Windowsインストール
+-[http://www.growlforwindows.com/gfw/displays.aspx:title=Growl for Windows] ここから落とす。
+
+***Gem入手
+-Gemfileファイルを作って以下のgemファイルを記載
+>||
+gem 'ZenTest'
+gem 'autotest-growl'
+||<
+-bundle install
+
+***.autotest
+-前回何も記載しなかった.autotestファイルに以下を追記。
+>||
+require 'autotest/growl'
+||<
+
+***実行
+>||
+$ bubdle exec autotest
+loading autotest/rspec2
+
+
+--------------------------------------------------------------------------------
+
+[2J[fC:\rubies\Ruby-193-p0\bin\ruby -rrubygems -S C:/WINDOWS/my/project/sha1/vendor/bundle/ruby/1.9.1/gems/rspec-core-2.8.0/exe/rspec --tty 'C:/WINDOWS/my/project/sha1/spec/sha1_spec.rb'
+.......
+
+Finished in 0.03125 seconds
+7 examples, 0 failures
+||<
+と同時にGrowlポップアップきたこれ！　意外とすぐだった！
+
+**以下いろいろと失敗の試行錯誤Log
+
+=====
+
+***Windows用でないとダメみたい？
+-[http://rubyist.g.hatena.ne.jp/rochefort/20100414/p1:title=autospecの結果をgrowlで通知〜windows編 - うんたらかんたらRuby - Rubyist] autotest-growlをWindows用に修正したgemが。Gemfileのautotest-growlは削除してkarl-autotest-growlとDL先のsourceを追加。
+>||
++ 3 source "http://gems.github.com"
+  8 gem 'ZenTest'
+- 9 gem 'autotest-growl'
++ 9 gem 'karl-autotest-growl'
+||<
+-bundle install
+-bubdle exec autotest
+
+***ZenTest実行されなくなった…
+>||
+- 8 gem 'ZenTest'
++ 9 gem 'autotest'
++10 gem 'autotest-growl'
++11 gem 'autotest-fsevent'
+||<
+fseventをインストールするにはDevelopment kitが必要らしい。{% post_link 2012-02-28-1330436604 %} インストール方法。
+
+で、.autotestに追加。
+>||
++ require 'autotest/fsevent'
+||< 
+

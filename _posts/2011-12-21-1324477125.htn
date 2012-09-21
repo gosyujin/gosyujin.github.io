@@ -1,0 +1,228 @@
+---
+layout: post
+title: Ruby実行時のオプションをよろしく解析してくれるoptparseを使ってみる
+description: ''
+catecory: ''
+tags: [Ruby, 備忘録]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20111221/1324477125
+---
+
+**あらすじ
+コマンドラインから引数つきでRubyを実行する時は
+>||
+ruby xxxx.rb ARG1 ARG2
+||<
+とかして、中でARGVをifで条件分岐とかしていたが…何か他にやり方があるのではと調べたらやっぱりあった。optparseを使えばよろしく解析してくれるようだ。
+
+**参考サイト
+-[http://www.ruby-lang.org/ja/old-man/html/optparse_A5C1A5E5A1BCA5C8A5EAA5A2A5EB.html:title=optparse::チュートリアル - Rubyリファレンスマニュアル]
+>>
+   1. OptionParser オブジェクト opt を生成する。
+   2. オプションを取り扱うブロックを opt に登録する。
+   3. opt.parse(ARGV) でコマンドラインを実際に parse する。
+<<
+基本はこういう事らしい。
+
+**サンプルソース
+とりあえずGistに。色々試してみる。
+<script src="https://gist.github.com/1376804.js?file=optparse.rb"></script>
+
+**実行結果
+***単純なオプション
+>|ruby|
+  # short option
+  opt.on('-a', 'DESCRIPTION') do |v|
+    puts "v class is #{v.class}"
+    puts "-a is #{v}"
+  end
+||<
+オプションに-aを指定するだけ。真偽値で返ってくる。第二引数のDESCRIPTIONは後述。
+>|ruby|
+$ ruby optparse.rb -a
+v class is TrueClass
+-a is true
+||<
+
+***オプションの後に値(必須)
+>|ruby|
+  # short option with require argument
+  opt.on('-b VALUE') do |v|
+    puts "v class is #{v.class}"
+    puts "-b is #{v}"
+  end
+||<
+オプションに-b xxxxと指定する。こう記述すると必須になるため、VALUEにあたる値を指定しないとエラーに。
+>|ruby|
+$ ruby optparse.rb -b
+C:/ruby/lib/ruby/1.8/optparse.rb:451:in `parse': missing argument: -b (OptionPar
+ser::MissingArgument)
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1295:in `parse_in_order'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1254:in `catch'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1254:in `parse_in_order'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1248:in `order!'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1339:in `permute!'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1360:in `parse!'
+        from optparse.rb:49
+        from C:/ruby/lib/ruby/1.8/optparse.rb:791:in `initialize'
+        from optparse.rb:4:in `new'
+        from optparse.rb:4
+||<
+VALUEを指定すると受け取れる。
+>|ruby|
+$ ruby optparse.rb -b sample.txt
+v class is String
+-b is sample.txt
+||<
+
+***オプションの後に値(任意)
+>|ruby|
+  # short option with argument
+  opt.on('-c [VALUE]') do |v|
+    puts "v class is #{v.class}"
+    puts "-c is #{v}"
+  end
+||<
+VALUEを[]で囲むと値は任意指定になる。指定しないのと指定するので返る値がちがう。(Nilが返ってくる)
+>|ruby|
+$ ruby optparse.rb -c
+v class is NilClass
+-c is
+||<
+>|ruby|
+$ ruby optparse.rb -c sample.txt
+v class is String
+-c is sample.txt
+||<
+
+***長いオプション
+>|ruby|
+  # long option. it can also -d, --d
+  opt.on('--define') do |v|
+    puts "v class is #{v.class}"
+    puts "--define is #{v}"
+  end
+||<
+一文字じゃなくて長い言葉(--define)にする事もできる。また、その頭文字をとって一文字指定(-d, --d)もできる。(かぶったらどっちが優先されるんだろう、まだ調べてない)
+>|ruby|
+$ ruby optparse.rb --define
+v class is TrueClass
+--define is true
+||<
+***単純なオプションと長いオプション両方指定
+>|ruby|
+  # short option and long option. it can also --e
+  opt.on('-e', '--element') do |v|
+    puts "v class is #{v.class}"
+    puts "-e, --element is #{v}"
+  end
+||<
+指定する事もできる。
+>|ruby|
+$ ruby optparse.rb -e
+v class is TrueClass
+-e, --element is true
+||<
+>|ruby|
+$ ruby optparse.rb --element
+v class is TrueClass
+-e, --element is true
+||<
+
+***オプションの後に真偽値
+>|ruby|
+  # class define
+  opt.on('-f BOOLEAN', TrueClass) do |v|
+    puts "v class is #{v.class}"
+    puts "-f is #{v}"
+  end
+||<
+BOOLEANで真偽値を入力させる事ができる。それ以外だとエラー。
+>|ruby|
+$ ruby optparse.rb -f aaa
+C:/ruby/lib/ruby/1.8/optparse.rb:454:in `parse': invalid argument: -f aaa (Optio
+nParser::InvalidArgument)
+        from C:/ruby/lib/ruby/1.8/optparse.rb:326:in `parse_arg'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:454:in `parse'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1295:in `parse_in_order'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1254:in `catch'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1254:in `parse_in_order'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1248:in `order!'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1339:in `permute!'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1360:in `parse!'
+        from optparse.rb:49
+        from C:/ruby/lib/ruby/1.8/optparse.rb:791:in `initialize'
+        from optparse.rb:4:in `new'
+        from optparse.rb:4
+||<
+真偽値が返ってくる。
+>|ruby|
+$ ruby optparse.rb -f true
+v class is TrueClass
+-f is true
+||<
+>|ruby|
+$ ruby optparse.rb -y
+v class is TrueClass
+-y is true
+||<
+
+***ヘルプとバージョン、ヘルプに表示するメッセージ
+>|ruby|
+  # -h, --h, --help is show usage.
+  # -v, --v, --version is show version.
+||<
+オプション-hと-vはヘルプとバージョンに用途が決められている模様。バージョンは何もやっていないので
+>|ruby|
+$ ruby optparse.rb -v
+optparse: version unknown
+||<
+こうなる。ヘルプは
+>|ruby|
+$ ruby optparse.rb -h
+Usage: optparse [options]
+    -z                               MOVE HEAD!!
+    -a                               DESCRIPTION
+    -b VALUE
+    -c [VALUE]
+        --define
+    -e, --element
+    -f BOOLEAN
+    -y                               MOVE TAIL!!
+||<
+ここで、一番上の-zと-yの位置とMOVE XXX、そして-aのDESCRIPTIONが気になる。さっきの-aの後にあるDESCRIPTIONはヘルプ用メッセージ。
+>|ruby|
+  # short option
+  opt.on('-a', 'DESCRIPTION') do |v|
+    puts "v class is #{v.class}"
+    puts "-a is #{v}"
+  end
+||<
+残りの-zと-yは、まず-aと同様に引数にMOVE XXXを指定しているのでこれが表示される。そして、opt.onメソッドの代わりにそれぞれon_headとon_tailを使っている。これでheadの場合はヘルプのはじめに上がってきて、tailの場合はおわりに下がるらしい。
+>|ruby|
+  # usage sort
+  opt.on_head('-z', 'MOVE HEAD!!') do |v|
+    puts "v class is #{v.class}"
+    puts "-z is #{v}"
+  end
+||<
+
+>|ruby|
+  # usage sort
+  opt.on_tail('-y', 'MOVE TAIL!!') do |v|
+    puts "v class is #{v.class}"
+    puts "-y is #{v}"
+  end
+||<
+
+***組み合わせ
+組み合わせもできる。
+>|ruby|
+$ ruby optparse.rb -aeb sample.txt
+v class is TrueClass
+-a is true
+v class is TrueClass
+-e, --element is true
+v class is String
+-b is sample.txt 
+||<
+

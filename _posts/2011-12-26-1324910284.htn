@@ -1,0 +1,122 @@
+---
+layout: post
+title: SinatraでHaml入門
+description: ''
+catecory: ''
+tags: [Ruby, 備忘録, Haml, Sinatra]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20111226/1324910284
+---
+
+**あらすじ
+Sinatraとか使っていてもHtmlべた書きばかりなのでHamlに入門してみる。
+
+**参考サイト
+-[http://haml.ursm.jp/getting-started:title=Getting Started - 日本Hamlの会]
+日本ハム！
+**Hamlとは
+>http://haml.ursm.jp/>
+HamlはHTML/XHTMLを生成するためのマークアップ言語です。インデントや簡略構文によって簡潔な記述が行えます。
+<<
+
+**今まで
+>|ruby|
+require 'rubygems'
+require 'sinatra'
+
+get '/' do
+  "<style type='text/css'>.head {border-bottom: 1px solid #CCCCCC;border-left: 5px solid #CCCCCC;}.time {color: #CCCCCC;}.tweet {}</style><h1>Hello Tycoon-Timeline powerd by Heroku!!</h1><a href=''>Reload</a><dl><dt class='head'>User <span class='time'>2011/12/26 02:25:00</span></dt><dd class='tweet'>ついーと</dd ..."
+end
+||<
+全部こんな感じ。なのでページがでかくなっていくことを考えると非常につらい。
+
+**準備
+***構成
+>||
+Gemfile
+app.rb
+views
+┗index.haml
+||<
+
+***Gemfile
+Bundlerを使うのでGemfileを作成。
+>|ruby|
+source :rubygems
+source "http://rubygems.org"
+
+gem 'sinatra'
+gem 'haml'
+||<
+SinatraとHamlをインストール。
+***gemインストール
+>||
+$ bundle install ./vendor/bundle
+||<
+
+***app.rb
+>|ruby|
+require 'rubygems'
+require 'sinatra'
+require 'haml'
+
+get '/' do
+  haml :index
+end
+||<
+今までhtmlタグを書いていた返り値をhtml :indexとする。するとここではviews/index.hamlを見に行ってくれる。
+
+***views/index.haml
+>|?|
+!!!
+%html
+  %head
+    %title Hello.
+  %body
+    %div#main
+      %h1 Hello!!
+      %a{:href =>  'http://google.com'} Google
+      %div.comment
+        / Html comment
+        This is html comment.
+      %div.comment
+        -# Haml comment
+        This is haml comment.
+      %div.ruby= Time.now
+      %div.fizbuz
+        - (1..15).each do |i|
+          - if i % 15 == 0
+            %p FizzBuzz
+          - elsif i % 3 == 0
+            %p Fizz
+          - elsif i % 5 == 0
+            %p Buzz
+          - else 
+            %p #{i} 
+||<
+ものすごく基本的な構文しか使っていないが、
+|*記述|*解説|*例|
+|!!!|DOCTYPE宣言|XMLとかも設定できる|
+|%hoge|要素名|%head で ＜head＞＜/head＞|
+|%hoge value|値にvalue|%title Hello. で ＜title＞Hello.＜/title＞|
+|%hoge{:属性 => 'value'}|属性セット|%a{:href =>  'http://google.com'} Google で <br />＜a href='http:google.com'＞Google＜/a＞|
+|%hoge#id|ID指定|%div#main で ＜div id='main'＞＜/div＞|
+|%hoge.class|class指定|%div.test で ＜div class='test'＞＜/div＞|
+|/ Html comment|コメント(Html)|/ Html comment で ＜!-- Html comment --＞|
+|-# Haml comment|コメント(Haml)|生成されたHtmlには表示されない|
+|%hoge= Rubyの構文|Rubyのコード実行|%div= Time.now で ＜div＞Mon Dec 26 ....＜/div＞|
+
+Rubyの構文はもう少し本格的に書く事もできるようで、条件分岐なんかも書ける。とりあえずFizzBuzzも書ける。
+
+**出力結果
+***実行
+>||
+$ bundle exec ruby app.rb
+||<
+
+***Htmlにで描画された画面
+[f:id:kk_Ataka:20111226233342j:image]
+
+***生成されたソース
+[f:id:kk_Ataka:20111226233343j:image]
+まださわりしか触っていないのでこれから触ってみる。 
+

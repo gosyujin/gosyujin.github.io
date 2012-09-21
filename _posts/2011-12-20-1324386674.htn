@@ -1,0 +1,40 @@
+---
+layout: post
+title: CapsLockキーとCtrlキーを入れ替える(置き換える)方法
+description: ''
+catecory: ''
+tags: [Windows, 備忘録]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20111220/1324386674
+---
+**あらすじ
+CapsLockいらない！　ここにCtrlキーほしい！
+
+**方法
+レジストリをいじってキーを置き換える事に。この例では無変換キーもまとめてCtrlキーに変更する。<span class="deco" style="color:#FF0000;">レジストリをいじるため<del>一か八か</del>細心の注意を払う。</span>
+-ファイルを指定して実行で regedit を起動
+-HKEY_LOCAL_MACHINE -> SYSTEM -> CurrentControlSet -> Control -> Keyboard Layout を選択し右クリック
+-新規 -> バイナリ で新しいキーを作成
+-新しいキーを選択し右クリック -> 名前の変更 で Scancode Map に変更
+-同じく右クリック -> 修正 でバイナリデータを以下のように編集
+>||
+      0000 00 00 00 00 00 00 00 00 ........
+      0008 04 00 00 00 1D 00 3A 00 ......:.
+      0010 1D 00 7B 00 00 00 00 00 ..{.....
+      0018
+||<
+-0000はヘッダらしい。全て0固定
+-0008前半部の04 00 00 00 は<span class="deco" style="font-weight:bold;"><span class="deco" style="color:#FF0000;">使用するキー+1を入力</span></span>する。今回は下記キーを使用するため04となる
+++左Ctrlキー
+++無変換キー
+++CapsLockキー
+++<span class="deco" style="font-weight:bold;"><span class="deco" style="color:#FF0000;">プラス1</span></span>
+-0008後半部の 1D 00 3A 00 と 0010前半部の 1D 00 7B 00 がキーをカスタマイズしている箇所
+-0010後半部の残りは 00 埋め
+**対応
+-キーとバイナリ値は下記のようになっている
+--が、書き込むときはひっくり返す事。(CapsLockなら 3A 00 となる)リトルエンディアンだとそうなるらしい
+--[http://ja.wikipedia.org/wiki/%E3%82%A8%E3%83%B3%E3%83%87%E3%82%A3%E3%82%A2%E3%83%B3#.E3.83.AA.E3.83.88.E3.83.AB.E3.82.A8.E3.83.B3.E3.83.87.E3.82.A3.E3.82.A2.E3.83.B3:title=エンディアン - Wikipedia]
+|*キー|*バイナリ|*ひっくり返す|
+|左ctrl|00 1D|1D 00|
+|無変換|00 7B|7B 00|
+|CapsLock|00 3A|3A 00|

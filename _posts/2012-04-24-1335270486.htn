@@ -1,0 +1,196 @@
+---
+layout: post
+title: Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編
+description: ''
+catecory: ''
+tags: [Git, Windows, 備忘録]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20120424/1335270486
+---
+
+**前回までのあらすじ
+-{% post_link 2012-03-05-1330951640 %}
+-{% post_link 2012-03-11-1331472478 %}
+-{% post_link 2012-03-15-1331816663 %}
+-{% post_link 2012-04-10-1334058674 %}
+-{% post_link 2012-04-23-1335185906 %}
+
+**参考
+-[http://progit.org/:title=Git - Book]
+-入門Git
+-入門git
+-実用Git 
+
+**無名ブランチ(detached HEAD)とは
+要約すると<span class="deco" style="font-weight:bold;">「過去のコミットの状態を眺めるための"便利機能"なのでここに永続的な変更をするなんてとんでもない！」</span>という事らしい。
+
+***無名ブランチ状態で作業するとどうなるか
+ちょっと「ブランチにいると思いこんだまま無名ブランチで作業し、さーてmasterブランチに戻ってmergeするかぁ……はぁ！？」な状況を作り出してみる。
+
+まずは無名ブランチの準備としてnobraブランチを作る。(これ以降の作業は、本当はnobraブランチでやっていきたいと思っている)
+>||
+$ git checkout -b nobra
+Switched to a new branch 'nobra'
+
+$ touch nobra
+$ git add nobra
+$ git commit -m "Add nobra"
+[nobra d62e4cb] Add nobra
+ 0 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 nobra
+
+$ git g
+ * d62e4cb  (HEAD, nobra, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit
+
+$ git br
+   master d62e4cb Add nobra
+ * nobra  d62e4cb Add nobra
+   topic  7ab5db8 Add message line 3
+||<
+次に、このnobraブランチのSHA1を指定してcheckoutする。
+>||
+$ git ch d62e4cb
+Note: checking out 'd62e4cb'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b new_branch_name
+
+HEAD is now at d62e4cb... Add nobra
+||<
+detached HEAD状態だよと教えてくれているようだ。このリビジョンのファイル一覧？　を見渡したり、実験的な変更やコミットができる。チェックアウトすれば他のブランチに影響を与えすにこの状態を作れる。変更を保持するために新しいブランチを作りたいなら、checkoutコマンドに-bつけて実行すればいいよ……って感じなのかな。ブランチはno branchと表示される。
+>||
+$ git br
+ * (no branch) d62e4cb Add nobra
+   master      d62e4cb Add nobra
+   nobra       d62e4cb Add nobra
+   topic       7ab5db8 Add message line 3
+||<
+この無名ブランチに対し変更をコミット。
+>||
+$ echo "no branch" >> nobra
+$ git add nobra
+$ git com "Add message nobra"
+[detached HEAD e45c786] Add message nobra
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+ 
+$ echo "detached HEAD" >> nobra
+$ git add nobra
+$ git com "Add message nobra"
+[detached HEAD 3aec83c] Add message nobra
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+||<
+グラフで見るとe45c786, 3aec83cがもくもくと作られている。
+>||
+$ git g
+ * 3aec83c  (HEAD) Add message nobra
+ * e45c786  Add message nobra
+ * d62e4cb  (nobra, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit
+||<
+さーて、masterにもどって変更をmergeするかー。((このPrevious HEAD position was ...というメッセージは無名ブランチからチェックアウトしないと表示されないようだ))
+>||
+$ git checkout master
+Previous HEAD position was 3aec83c... Add message nobra
+Switched to branch 'master'
+||<
+グラフを確認するとd62e4cb(masterブランチ)が先頭になっている……だと……。
+>||
+$ git g
+ * d62e4cb  (HEAD, nobra, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit
+||<
+さっきの変更どこいったんだ！　
+
+***無名ブランチの救出
+コンソールを上へ上へ辿って行けばもしかしたら作業ログが残っていて、そこから無名ブランチになってしまったコミットを特定できるかもしれないけど、ここではgit reflogを使って救済してみる。
+>||
+$ git reflog
+...
+d62e4cb HEAD@{6}: checkout: moving from 3aec83cdbfea0b1e96cf3c48937ab84eae1f4ec0 to nobra
+3aec83c HEAD@{7}: commit: Add message nobra
+e45c786 HEAD@{8}: commit: Add message nobra
+...
+||<
+見えなくなってしまったコミットは(今は)HEAD@{7}にあった！(checkoutしたりcommitすれば1ずつログがずれるから)　という事で、この変更が必要だった場合は、ここからトピックブランチでも作成して救出してやればよい。
+>||
+$ git g
+ * d62e4cb  (HEAD, nobra, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit
+||<
+reflogで消えたコミットを確認する。
+>||
+$ git reflog
+...
+d62e4cb HEAD@{8}: checkout: moving from 3aec83cdbfea0b1e96cf3c48937ab84eae1f4ec0 to nobra
+3aec83c HEAD@{9}: commit: Add message nobra
+e45c786 HEAD@{10}: commit: Add message nobra
+d62e4cb HEAD@{11}: checkout: moving from nobra to d62e4cb
+||<
+今はHEAD@{9}になっている。nobraブランチをうつしちゃおう。(新しいブランチを作成してもよい)
+>||
+$ git branch --f nobra HEAD@{9}
+
+$ git g
+ * 3aec83c  (nobra) Add message nobra
+ * e45c786  Add message nobra
+ * d62e4cb  (HEAD, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit
+||<
+3aec..が見えるようになった！　で、merge。
+>||
+$ git merge nobra
+Updating d62e4cb..3aec83c
+Fast-forward
+ nobra |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+$ git g
+ * 3aec83c  (HEAD, nobra, master) Add message nobra
+ * e45c786  Add message nobra
+ * d62e4cb  Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit
+||<
+救出完了！
+

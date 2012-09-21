@@ -1,0 +1,86 @@
+---
+layout: post
+title: さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする
+description: ''
+catecory: ''
+tags: [Unix, 備忘録, Dropbox, さくらVPS]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20111008/1318068887
+---
+
+**あらすじ
+DropboxにはEnable LAN syncというオプションがあり、これをONにすると同じLAN内のマシンはインターネットを経由しないで同期ができる。
+f:id:kk_Ataka:20111008190858j:image
+ただし、17500ポートに向けてUDPパケットがやまほど投げているようで、同じLAN内に自分以外のマシンがある状態でこのオプションをONにしていると近隣の方へやまほどパケットを投げまくりで非常に迷惑がかかります……。基本的にDropboxのオプションからEnable LAN sync(LAN同期を有効にする)をOFFにすればよい。
+
+……のだが、CUIからDropboxをインストールしている場合は少し手順を踏んでこのオプションを切る必要があります。
+
+**参考サイト
+-[http://d.hatena.ne.jp/otn/20110502/p1:title=「さくらのVPS」ファイアーウォール設定 - それはそれ。これはこれ。]
+-[http://blog.7kai.org/2011/04/dropbox-lan-sync-disable/:title=The Diary of Aska - これは不正アクセスですか？いいえ、Dropbox LAN syncです。]
+
+というか、前回の記事{% post_link 2011-04-23-1303489798 %} でインストールするときに参考にしたサイトにこの問題が書いてあった……。
+
+>http://wiki.dropbox.com/TipsAndTricks/TextBasedLinuxInstall#SuppressLANSyncbroadcasts>
+To stop dropbox from sending LAN Sync broadcasts every 30 seconds over port 17500 (http://forums.dropbox.com/topic.php?id=16253) see DropboxAddons/DisableLanSync
+<<
+
+**必要環境
+|*Python|2.6|
+
+**スクリプトDL
+-http://wiki.dropbox.com/DropboxAddons/PyDropboxValues から [http://dl.dropbox.com/u/340607/pyDropboxValues.py:title=pyDropboxValues.py] をDLする
+--設定値を表示できる
+-http://wiki.dropbox.com/DropboxAddons/DisableLanSync から [http://dl.dropbox.com/u/340607/dropbox_set_lansync.py:title=dropbox_set_lansync.py] をDLする
+--LAN syncオプションを切り替える
+
+**手順
+-pyDropboxValue.pyで設定をバックアップする
+>|python|
+$ PYTHON2.6 pyDropboxValues.py _backup
+Backed up 'config.db' to '/home/kk_Ataka/.dropbox/backup_1_config.db'
+||<
+--LAN syncオプションを確認する
+>|python|
+$ PYTHON2.6 pyDropboxValues.py | grep p2p_enable
+p2p_enable = 1 # LAN syncオプションはp2p_enableというらしい。1でON。
+||<
+-dropbox_set_lansync.pyでEnable LAN syncオプションをOFFにする
+>|python|
+$ PYTHON2.6 dropbox_set_lansync.py off # 特にレスポンスは返ってこないが…。
+||<
+--LAN syncオプションを確認する
+>|python|
+$ PYTHON2.6 pyDropboxValues.py | grep p2p_enable
+p2p_enable = 0 # 0になっていればよい。最後にプロセスを再起動するのを忘れないように……。
+||<
+f:id:kk_Ataka:20111008190855j:image
+-Dropboxプロセスを再起動する(dropbox.pyは以前DLしているはず)
+>||
+$ PYTHON2.6 dropbox.py stop
+Dropbox daemon stopped.
+$ PYTHON2.6 dropbox.py start
+Starting Dropbox...Dropbox isn't running!
+Done!
+||<
+
+**実行時にエラー？
+実行しようとするとsqlite3のImportErrorになる？　なんで？　標準で入ってるんじゃないの？
+>|Python|
+$ PYTHON2.6 pyDropboxValues.py
+Traceback (most recent call last):
+  File "pyDropboxValue.py", line 21, in <module>
+    import sqlite3
+  File "/usr/local/Python-2.6.2/lib/python2.6/sqlite3/__init__.py", line 24, in <module>
+    from dbapi2 import *
+  File "/usr/local/Python-2.6.2/lib/python2.6/sqlite3/dbapi2.py", line 27, in <module>
+    from _sqlite3 import *
+ImportError: No module named _sqlite3
+||<
+f:id:kk_Ataka:20111008190856j:image
+→ [http://d.hatena.ne.jp/omiyan/20110108/p1:title=Python2.6からsqlite3が読み込まれないエラーの解決方法 - ドラあり！*ドラゴンに挑むアリの物語 ** Python使いの日々] によるとPython2.6からはsqlite3は標準インストールから外れているらしい。この辺りはわからんね。yumでsqliteを入れなおす。
+>|python|
+$ sudo yum install sqlite-*
+||<
+f:id:kk_Ataka:20111008190857j:image
+そして、PythonをソースからインストールしなおせばOK！
+

@@ -1,0 +1,184 @@
+---
+layout: post
+title: RedmineとApacheを連携させるPassengerをインストールできなかった
+description: ''
+catecory: ''
+tags: [Ruby, Solaris, 備忘録, Redmine]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20111215/1323951847
+---
+**あらすじ
+-Redmineを自動起動するようにしたい
+--Phusion Passenger(mod_rails for Apache)を使えばApacheと連携できるらしい
+>http://redmine.jp/tech_note/apache-passenger/>
+特徴
+    * Apache単独でRailsアプリケーションを実行可能です。Apacheのモジュールとして実装されており、別途デーモンを起動する必要がありません。tcpポートも使いません。
+    * Railsアプリケーションのデプロイが簡単になります。ファイルをアップロードするだけ。ほぼPHP感覚です。
+    * サーバのメモリを節約できます。Railsインスタンスは必要なタイミングで生成します。また、一定時間アクセスがなければインスタンスを終了させます。
+<<
+ふーむ。
+
+**参考サイト
+-[http://redmine.jp/faq/system_management/redmine-auto-start/:title=Redmineを自動起動したい | Redmine.JP]
+-[http://redmine.jp/tech_note/apache-passenger/:title=Apache上でRuby on Railsアプリケーションを動かす／Passenger(mod_rails for Apache)の利用 | Redmine.JP]
+-[http://d.hatena.ne.jp/rx7/20080412/p1:title=Passenger (mod_rails for Apache) を使ってRedmineを動かしてみたよ！ - RX-7乗りの適当な日々]
+-[http://d.hatena.ne.jp/r7kamura/20110212/1297452845:title=さくらVPS設定その3 Git+Ruby+Gem+Rails+Passenger - ✘╹◡╹✘]
+
+**手順
+***passengerインストール
+Passengerを使うにはfastthread、daemon_controllerが必要らしい。
+>||
+$ gem install --local fastthread-1.0.7.gem
+$ gem install --local daemon_controller-0.2.6.gem
+$ gem install --local passenger-3.0.9.gem
+||<
+※スタンドアロンなマシンだったため。ネットにつながっていればgem install passengerで全部入るはず。
+
+**passenger-install-apache2-module実行
+対話形式でApacheのモジュール等を確認・インストールしていく。はじめにpassener-install-apache2-moduleを実行するとこんなメッセージが出てくる。
+>||
+$ passenger-install-apache2-module
+Welcome to the Phusion Passenger Apache 2 module installer, v3.0.9.
+
+This installer will guide you through the entire installation process. It
+shouldn't take more than 3 minutes in total.
+
+Here's what you can expect from the installation process:
+
+ 1. The Apache 2 module will be installed for you.
+ 2. You'll learn how to configure Apache.
+ 3. You'll learn how to deploy a Ruby on Rails application.
+
+Don't worry if anything goes wrong. This installer will advise you on how to
+solve any problems.
+
+Press Enter to continue, or Ctrl-C to abort.
+||<
++Apacheモジュールをインストールしたい
++Apacheの設定を知りたい
++Railsアプリのデプロイ方法をしりたい
+の中から一つ選んだらアドバイスしてやるよっと言っている？　のようなので1を選択。必要なソフトウェアがインストールされているかチェックされる。
+>||
+Checking for required software...
+
+ * GNU C++ compiler... found at /usr/local/bin/g++
+ * Curl development headers with SSL support... not found
+ * OpenSSL development headers... not found
+ * Zlib development headers... found
+ * Ruby development headers... found
+ * OpenSSL support for Ruby... found
+ * RubyGems... found
+ * Rake... found at /usr/local/bin/rake
+ * rack... found
+ * Apache 2... not found
+ * Apache 2 development headers... not found
+ * Apache Portable Runtime (APR) development headers... not found
+ * Apache Portable Runtime Utility (APU) development headers... not found
+
+Some required software is not installed.
+But don't worry, this installer will tell you how to install them.
+
+Press Enter to continue, or Ctrl-C to abort.
+||<
+結構インストールされていないものが多いな。メッセージでも「いろいろ入っていないものが見受けられるが心配すんな、俺がお前にインストール方法教えてやるよ！」と言われているようのでそのままエンター。
+>||
+Installation instructions for required software
+
+ * To install Curl development headers with SSL support:
+   Please download Curl from http://curl.haxx.se/libcurl and make sure you install it with SSL support.
+
+ * To install OpenSSL development headers:
+   Please download it from http://www.openssl.org/
+
+ * To install Apache 2:
+   Please download it from http://httpd.apache.org/
+
+ * To install Apache 2 development headers:
+   Please download it from http://httpd.apache.org/
+
+ * To install Apache Portable Runtime (APR) development headers:
+   Please download it from http://httpd.apache.org/
+   (APR is an integrated part of Apache.)
+
+ * To install Apache Portable Runtime Utility (APU) development headers:
+   Please download it from http://httpd.apache.org/
+   (APR Utility is an integrated part of Apache.)
+
+If the aforementioned instructions didn't solve your problem, then please take
+a look at the Users Guide:
+
+  /usr/local/lib/ruby/gems/1.8/gems/passenger-3.0.9/doc/Users guide Apache.html
+||<
+どこに何があるかUrlなどを教えてくれた。親切！
+
+**足りないもの集め
+***Curl
+-http://www.blastwave.org/pkg/pkgcontents.ftd?software=curl&style=brief&state=5&arch=i386 から
+-ディストリビューションを選択しパッケージをDL
+--依存ファイルもあるので注意
+-libidnとかlibssh2が足りなかったのでcurlが実行できない
+--not found状態になっていた
+
+***Apache
+-Apacheはあるはずなんだけどなあ。うまく見てくれてない
+-/usr/local/apache2/binにパスを通したらApache 2 development headerはfoundになった
+--え？　Apache 2 development headerだけ？　他は？
+
+***OpenSSL
+-OpenSSL development headersはなぜ入っていないのかわからなかった
+-パッケージをpkgaddしただけではダメ？
+--Solarisにopenssl-develみたいなものはある？
+-この文章を読むとソースから入れればよさそうなのだが…
+>http://www.sunhelp.org/pipermail/sunhelp/2003-September/019267.html>
+Does anyone know where I can obtain openssl-devel source or package for
+solaris.  I am trying to compile courier-imap-2.1.1 and it bombs out in
+the make process with the following error:
+<<
+>http://www.sunhelp.org/pipermail/sunhelp/2003-September/019268.html>
+You can download complete OpenSSL source from www.openssl.org.
+<<
+-configのオプションに --openssldir を指定してみてもダメだった。
+
+**とかなんとかしてるうちに
+Rubyが実行できなくなった。lddで調べてみると、シンボルが見つからなくなっている。
+>||
+
+        librt.so.1 =>    /usr/lib/librt.so.1
+        libdl.so.1 =>    /usr/lib/libdl.so.1
+        libcrypt_d.so.1 =>       /usr/lib/libcrypt_d.so.1
+        libm.so.2 =>     /usr/lib/libm.so.2
+        libc.so.1 =>     /usr/lib/libc.so.1
+        libgcc_s.so.1 =>         /usr/local/lib//libgcc_s.so.1
+        libaio.so.1 =>   /usr/lib/libaio.so.1
+        libmd.so.1 =>    /usr/lib/libmd.so.1
+        libgen.so.1 =>   /usr/lib/libgen.so.1
+        シンボルが見つかりません: rb_cObject          (./md5.so)
+        シンボルが見つかりません: MD5_Update          (./md5.so)
+        シンボルが見つかりません: MD5_Init            (./md5.so)
+        シンボルが見つかりません: MD5_Finish          (./md5.so)
+        /platform/SPARC-XXXX/lib/libc_psr.so.1
+        /platform/SPARC-XXXX/lib/libmd_psr.so.1
+||<
+md5.soを調べてみる。
+>||
+$ cd /usr/local/lib/ruby/1.8/sparc-solaris2.10/digest
+$ ldd -d md5.so
+        librt.so.1 =>    /usr/lib/librt.so.1
+        libdl.so.1 =>    /usr/lib/libdl.so.1
+        libcrypt_d.so.1 =>       /usr/lib/libcrypt_d.so.1
+        libm.so.2 =>     /usr/lib/libm.so.2
+        libc.so.1 =>     /usr/lib/libc.so.1
+        libgcc_s.so.1 =>         /usr/local/lib//libgcc_s.so.1
+        libaio.so.1 =>   /usr/lib/libaio.so.1
+        libmd.so.1 =>    /usr/lib/libmd.so.1
+        libgen.so.1 =>   /usr/lib/libgen.so.1
+        シンボルが見つかりません: rb_cObject          (./md5.so)
+        /platform/SUNW,SPARC-Enterprise-T5120/lib/libc_psr.so.1
+        /platform/SUNW,SPARC-Enterprise-T5120/lib/libmd_psr.so.1
+||<
+Ruby本体の中でなんかやっちゃったのかな？
+
+結局Rubyを再インストールしたらこのエラーは消えた。
+
+**今後
+-とりあえず、違うOSでPassenger入れなおしてみる
+

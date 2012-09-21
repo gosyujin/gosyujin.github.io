@@ -1,0 +1,234 @@
+---
+layout: post
+title: RubyでTwitterのOAuth認証をしてみる その2
+description: ''
+catecory: ''
+tags: [Ruby, Twitter, API]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20101130/1291125511
+---
+
+[http://d.hatena.ne.jp/kk_Ataka/20101121/1290271210:title=前回のエントリ] では、リクエストトークンまで発行してもらえました。だもんで今回は前回に続いてアクセストークンを発行してもらいます。アクセストークン発行の流れとしては、
+
++今もらったリクエストトークンを付加して http://twitter.com/oauth/authorize へアクセスする
++画面に表示されるPINコード(oauth_verifier)を控える
++リクエストトークンとPINコードをを付加して http://twitter.com/oauth/access_token へアクセスする
+
+行きます。
+
+**PINコードを発行してもらう
+
+リクエストトークンを発行してもらうと、 
+
+>||
+oauth_token=XXXXXXXXXX&oauth_token_secret=YYYYYYYYYYYYYYYYYYYYYYYYYYYY&oauth_callback_confirmed=true
+||<
+
+という文字列がbodyに埋まってきたはず。((この時のoauth_tokenとoauth_token_secretは一時的なものらしいので、アクセストークンがもらえれば忘れても良いようです。))
+
+この中から oauth_tokenを抜き出し、 http://twitter.com/oauth/authorize にパラメータとしてくっつけます。こんな感じ。
+
+http://twitter.com/oauth/authorize?oauth_token=XXXXXXXXXX
+
+アドレスが正しければ、以下のような画面が出るはず。((Twitterにログインしていなければ、ログイン画面がまず出たはず。))アプリケーションからのアクセスを許可しますか？　と尋ねられるので許可するを選択。
+
+[f:id:kk_Ataka:20101130220734j:image]
+
+許可すると、PINコードが画面に表示されるのでこれを控えておく。
+
+[f:id:kk_Ataka:20101130220731j:image]
+
+**再度signatureを作成する
+
+このPINコードを"oauth_verify"として。先ほどURLに貼っつけたoauth_tokenを"oauth_token"としてパラメータとして持たせます。
+
+そして、ここでもう一度signatureを作成を作成します。注意点としては、
+
++今まで使っていたoauth_signatureは一旦消して、以下のパラメータで新たにつくり直す
+++oauth_consumer_key
+++oauth_nonce
+++oauth_signature_method
+++oauth_timestamp
+++oauth_version
+++oauth_token <span style="color:#FF0000;">New!</span>
+++oauth_verifier <span style="color:#FF0000;">New!</span>
++URLは"http://twitter.com/oauth/access_token"をエスケープしたもの
++暗号化用のキーは"consumer_secret&oauth_token_secret"((リクエストトークンを作るときは"consumer_secret&"でした))
+
+この3点でしょうか。
+signatureが作成できたら、前回と同様にアルファベット順に並べて連結し、URLのおしりにくっつけます。URLはこんな感じになります。
+
+[f:id:kk_Ataka:20101130223243j:image]
+
+成功したら、oauth_token, oauth_token_secret,  user_id, screen_nameが返ってきます。これ俺や！！
+
+[f:id:kk_Ataka:20101130220728j:image]
+
+ここで返してもらったoauth_tokenとoauth_token_secretは本物なので大切にとっておく！　というわけで、次は自分のTimelineを取得します！
+
+ソースはこんな感じ。
+
+>|ruby|
+require 'openssl'
+require 'uri'
+require 'net/http'
+
+# signature作成
+def signature(method, consumer_secret, oauth_token_secret, url, oauth_header)
+	# signature_keyの作成
+	# リクエストトークン時は"CONSUMER_SECRET&"(アンドが入っている)
+	# アクセストークン時は"CONSUMER_SECRET&OAUTH_TOKEN_SECRET"として使用
+	signature_key = consumer_secret + "&"
+	if !oauth_token_secret.nil? then
+		signature_key += oauth_token_secret
+	end
+
+	# oauth_headerのパラメータをソートして連結
+	param = sort_and_concat(oauth_header)
+
+	# httpメソッドとURLとパラメータを&で連結する
+	value = method + "&" + escape(url) + "&" + escape(param)
+	# hmac_sha1
+	sha1 = OpenSSL::HMAC.digest(OpenSSL::Digest::SHA1.new, signature_key, value)
+	# base64
+	base64 = [sha1].pack('m').gsub(/\n/, '')
+	return base64
+end
+
+# 文字列のエスケープ(: / = %をエスケープする。. _ -はそのまま)
+def escape(value)
+	URI.escape(value, Regexp.new("[^a-zA-Z0-9._-]"))
+end
+
+# oauth_headerの情報をアルファベット順に並べ替え & で結合
+def sort_and_concat(oauth_header)
+	oauth_header_array = oauth_header.sort
+	param = ""
+	oauth_header_array.each do |params|
+		for i in 1..params.length
+			param += params[i-1]
+			if i % params.length == 0
+				param += "&"
+			else
+				param += "="
+			end
+		end
+	end
+	param = param.slice(0, param.length-1)
+end
+
+# リクエストトークン取得用のURL
+request_token_url = "http://twitter.com/oauth/request_token"
+# PINコード取得用URL
+authorize_url = "http://twitter.com/oauth/authorize"
+# アクセストークン取得用のURL
+access_token_url = "http://twitter.com/oauth/access_token"
+
+# Twitterで登録したらもらえる
+consumer_key = "XXXXXXXXXXXXXXXXXXXXX"
+consumer_secret = "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
+
+# Twitterからもらえるアクセストークン(最初は使わない)
+oauth_token = ""
+oauth_token_secret = ""
+
+# oauthパラメータたち
+oauth_header = {
+	# Consumer Key
+	"oauth_consumer_key" => consumer_key,
+	# 一意な値(今回は適当に実装)
+	"oauth_nonce" => "AAAAAAAA",
+	# 署名方式(HMAC-SHA1)
+	"oauth_signature_method" => "HMAC-SHA1",
+	# リクエスト生成時のタイムスタンプ(ミリ秒)
+	"oauth_timestamp" => Time.now.to_i.to_s,
+	# バージョン(1.0)
+	"oauth_version" => "1.0",
+}
+
+# signature作成
+oauth_header["oauth_signature"] = signature("GET", 
+					consumer_secret, 
+					nil, 
+					request_token_url, 
+					oauth_header)
+
+# GETする
+uri = URI.parse(request_token_url)
+proxy_class = Net::HTTP::Proxy(ARGV[0], 8080)
+http = proxy_class.new(uri.host)
+http.start do |http|
+	# oauth_headerのパラメータをソートして連結
+	param = sort_and_concat(oauth_header)
+
+	res = http.get(uri.path + "?#{param}")
+
+	if res.code == "200" then
+		# 返ってきた値を分割
+		params = res.body.split("&")
+		params.each do |param|
+			# さらに=で分割し前部分をkey、後方部分をvalueに格納
+			key,value = param.split("=")
+
+			# リクエストトークンを格納
+			if ("oauth_token" == key) then
+				oauth_token = value
+			elsif ("oauth_token_secret" == key) then
+				oauth_token_secret = value
+			end
+		end
+
+		# プロンプトにPINコード取得用URL表示
+		print "#{authorize_url}?oauth_token=#{oauth_token}\n"
+		print "Input PIN Code. Input...\n"
+
+		# PINコード入力待ち
+		oauth_verifier = STDIN.gets
+		# 改行コード(\n)取り除き
+		oauth_verifier = oauth_verifier.slice(0, oauth_verifier.length-1)
+
+		# ヘッダにアクセストークンとPINコード追加
+		oauth_header["oauth_token"] = oauth_token
+		oauth_header["oauth_verifier"] = oauth_verifier
+		
+		# いったんoauth_signature削除
+		oauth_header.delete("oauth_signature")
+
+		# 再びsignature作成
+		oauth_header["oauth_signature"] = signature("GET", 
+							consumer_secret, 
+							oauth_token_secret, 
+							access_token_url, 
+							oauth_header)
+
+		# oauth_headerのパラメータをソートして連結
+		param = sort_and_concat(oauth_header)
+
+		# GETする
+		uri = URI.parse(access_token_url)
+		proxy_class = Net::HTTP::Proxy(ARGV[0], 8080)
+		http = proxy_class.new(uri.host)
+		http.start do |http|
+			res = http.get(uri.path + "?#{param}")
+			if res.code =="200" then
+				print "#{res.code}\n"
+				print "#{res.body}\n"
+			else
+				print "ERROR: #{res.code}\n"
+			end
+		end
+	else
+		print "ERROR: #{res.code}\n"
+	end
+end
+||<
+
+処理の流れとしては、oauth_tokenを貼りつけたhttp://twitter.com/oauth/authorizeのアドレスを出力するので、(お手数ですが)ブラウザからアクセスしてもらう。
+
+[f:id:kk_Ataka:20101130220736j:image]
+
+ブラウザに表示されたPINコードを貼っつけてもらって、これをoauth_verifierとし、アクセストークンを発行してもらう。
+
+[f:id:kk_Ataka:20101130220728j:image]
+
+PINコードの所はいちいちブラウザから行かないようにすることもできそうなんですが……。
+

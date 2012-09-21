@@ -1,0 +1,185 @@
+---
+layout: post
+title: Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編
+description: ''
+catecory: ''
+tags: [Git, 備忘録, Windows]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20120410/1334058674
+---
+
+**前回までのあらすじ
+-{% post_link 2012-03-05-1330951640 %}
+-{% post_link 2012-03-11-1331472478 %}
+-{% post_link 2012-03-15-1331816663 %}
+
+GitHubで他の人の.gitconfigとかを見たりすると、HEAD^とかHEAD~~とかにエイリアスが貼ってあるけど、これってなんなの？
+今の認識: 書いた分だけリビジョンが戻ってくれる程度
+
+**参考
+-[http://progit.org/:title=Git - Book]
+-入門Git <span class="deco" style="color:#FF0000;">New !!</span>
+-入門git
+
+**調査
+入門Git P87 コミットの祖先の指定によると、
+|*記法|*意味|
+|^|指定したコミットの1番目の親|
+|^番号|指定したコミットのN番目の親|
+|~|指定したコミットの1世代前の親|
+|~世代|指定したコミットのN世代前の親|
+という事らしい……が、番目と世代は何が違うんだろう？　とりあえずこんな歴史があるとして、masterから戻ってみる。
+***確認
+>||
+ * b467307 2012-04-05 kk_Ataka  (HEAD, origin/master, master) Add get_sheetname.rb(convert exe file b
+ | * b025b6b 2012-04-05 kk_Ataka  (1.0stable, fileignore) Ignore docx files
+ * |   90aaa1c 2012-04-04 kk_Ataka  Merge branch 'studyissue'
+ |\ \
+ * | | 2d387ba 2012-04-04 kk_Ataka  (concat) Add concat function (test pending...)
+ * | | 68ac3d9 2012-04-04 kk_Ataka  Add csv concat
+ * | | 9a4ed9b 2012-04-04 kk_Ataka  Move input cell(ex:B2) downcase(b2) in cell_reg_check and cell_to
+ | * | 670d891 2012-04-04 kk_Ataka  (studyissue) Move comment, source to readme
+ |/ /
+ * | d0f2b58 2012-04-04 kk_Ataka  Refactoring now
+ |/
+ * 0563594 2012-04-04 kk_Ataka  1.0stable
+ * 3d2f6bb 2012-04-04 kk_Ataka  First commit
+||<
+まず一番目の親を指定……。
+>||
+$ git checkout HEAD^
+...
+HEAD is now at 90aaa1c... Merge branch 'studyissue'
+||<
+うん、指定できてる。んじゃ一旦masterに戻って、次はキャレット連発で。二つ前を指定できるはず。
+>||
+$ git checkout HEAD^^
+...
+HEAD is now at 2d387ba... Add concat function (test pending...)
+||<
+読み通り。じゃあ次は^NでN番目の親を指定してみる。
+>||
+$ git checkout HEAD^2
+error: pathspec 'HEAD^2' did not match any file(s) known to git.
+||<
+あ、あれ？
+>||
+$ git checkout HEAD^3
+error: pathspec 'HEAD^3' did not match any file(s) known to git.
+||<
+ん？
+>||
+$ git checkout HEAD^1
+...
+HEAD is now at 90aaa1c... Merge branch 'studyissue'
+||<
+これはできるの？　ふーむ。
+
+
+(以下略)
+
+
+結局こうなった。
+>||
+ * b467307       master(HEAD)
+ | * b025b6b   
+ * |   90aaa1c   HEAD^     HEAD^1 HEAD~     HEAD~1
+ |\ \  
+ * | | 2d387ba   HEAD^^           HEAD~~    HEAD~2
+ * | | 68ac3d9   HEAD^^^          HEAD~~~   HEAD~3
+ * | | 9a4ed9b   HEAD^^^^         HEAD~~~~  HEAD~4
+ | * | 670d891          
+ |/ /                   
+ * | d0f2b58     HEAD^^^^^        HEAD~~~~~ HEAD~5
+ |/
+ * 0563594 
+ * 3d2f6bb 
+||<
+うーむ。戻れるのはわかったけど、2つわからんとこが残る。。。
+-番目と世代前の違い
+-^^と^2の違い
+
+***本に戻ってみる
+入門Gitを少し読み進める。
+>>
+大多数のコミットには親が1つしかありませんが、マージコミットには
+親が複数あります。
+<<
+>>
+マージする以前のホームマシンの作業リポジトリの先頭のコミットがHEAD^、
+一方、マージしたコミットはHEAD^2ということになります。
+<<
+……入門gitでは
+>>
+^:キャレットはマイナス1の意味だ。18f822e^は18f822eに
+マッチするリビジョンの前にあるリビジョンとして解釈される。
+<<
+>>
+~N:チルダと数字Nは、そのコミット名からNだけ前に戻る。前の例だと
+18f822e~1は18f822eの前のリビジョン、18f822e~2は18f822eの2つ前の
+リビジョンだ。
+<<
+親が複数ある状況を作らないといけないという事かな。
+***再度チャレンジ
+少し適当にコミットしてマージして親が2つある状況を作った。
+>||
+ *   8dc8247 2012-04-10 kk_Ataka  (HEAD, master) Merge branch 'mergedbranch'
+ |\
+ * | ca6b93d 2012-04-10 kk_Ataka  (mergedbranch2) temp
+ * | 7819449 2012-04-10 kk_Ataka  temp
+ | * 074c658 2012-04-10 kk_Ataka  (mergedbranch) temp
+ * | b467307 2012-04-05 kk_Ataka  (origin/master) Add get_sheetname.rb(convert exe file by ocra
+ |/
+ | * b025b6b 2012-04-05 kk_Ataka  (1.0stable, fileignore) Ignore docx files
+ * |   90aaa1c 2012-04-04 kk_Ataka  Merge branch 'studyissue'
+||<
+>||
+$ git ch HEAD^
+...
+HEAD is now at ca6b93d... temp
+||<
+これはできると。んで、問題の^2は……
+>||
+$ git ch HEAD^2
+...
+HEAD is now at 074c658... temp
+||<
+できた！　ってことは、二つのブランチしかマージしていないから、^3はエラーになるはず……。
+>||
+$ git ch HEAD^3
+error: pathspec 'HEAD^3' did not match any file(s) known to git.
+||<
+おー。
+>||
+ *   8dc8247     master(HEAD)
+ |\
+ * | ca6b93d     HEAD^    HEAD^1  HEAD~    HEAD~1
+ * | 7819449     HEAD^^           HEAD~~   HEAD~2
+ | * 074c658              HEAD^2
+ * | b467307     HEAD^^^          HEAD~~~  HEAD~3
+ |/            
+ | * b025b6b   
+ * |   90aaa1c   HEAD^^^^ HEAD^2^ HEAD~~~~ HEAD~4
+ 
+                   (ERROR:HEAD^3)
+||<
+んん？　^Nはわかったけど、^^と^2の違いが余計わからなくなった……。
+
+あ！　HEAD^2^という合わせ技ができたって事はもしかして……。
+
+**まとめ
+|*コマンド|*意味|*備考|
+|HEAD^  |指定したコミットの1番目の親|※1|
+|HEAD^^ |指定したコミットの1番目の親…<span class="deco" style="font-weight:bold;">の1番目の親</span>|※2|
+|HEAD^^^|指定したコミットの1番目の親…<span class="deco" style="font-weight:bold;">の1番目の親</span>…<span class="deco" style="font-weight:bold;">の1番目の親</span>|※3|
+|HEAD^2 |指定したコミットの2番目の親| |
+|HEAD^2^|指定したコミットの2番目の親…の1番目の親| |
+|HEAD~  |指定したコミットの1世代前の親|※1|
+|HEAD~~ |指定したコミットの1世代前の親…の1世代前の親|※2|
+|HEAD~~~|指定したコミットの1世代前の親…の1世代前の親…の1世代前の親|※3|
+|HEAD~1 |指定したコミットの1世代前の親|※1|
+|HEAD~2 |指定したコミットの2世代前の親|※2|
+|HEAD~3 |指定したコミットの3世代前の親|※3|
+※1 ※2 ※3 は同じリビジョン
+
+こういう事かな。あっているならチェックアウトの挙動と一致するのだけど！
+
