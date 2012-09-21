@@ -18,9 +18,31 @@ Jekyllではデフォルトでコードにハイライトをつける事はで�
 
 easy_installは[http://peak.telecommunity.com/dist/ez_setup.py](http://peak.telecommunity.com/dist/ez_setup.py)からDLし `$ (sudo) python ez_setup.py` でインストールする。
 
-※後に使用するRubypythonでlibpython2.7.soというファイルを探しに行くが、見つからないとすぐあきらめるようなので？　--enable-sharedオプションつけてのインストールが吉。以下の様なエラーが出る。
+※ 後に以下のようなエラーが出るかもしれない。
 
 > Liquid error: undefined method 'Py_IsInitialized' for RubyPython::Python:Module
+
+これはRubyからPythonを呼びに行くRubypythonというライブラリの中で、libpython2.7.soというファイルを探しに行くが、見つからないとすぐあきらめるようなので？　`--enable-shared` オプションつけてのインストールが吉。
+
+また、以下の様なエラーが出た場合、libpython2.7.so.1.0が見つからなくてpythonコマンドが実行できなくなった。
+
+    $ python
+    > python: error while loading shared libraries: libpython2.7.so.1.0: cannot open shared object file: No such file or directory
+    
+    $ ldd python
+        linux-vdso.so.1 =>  (0x00007fff9cf94000)
+        libpython2.7.so.1.0 => not found
+        libpthread.so.0 => /lib64/libpthread.so.0 (0x000000343d600000)
+        libdl.so.2 => /lib64/libdl.so.2 (0x000000343ce00000)
+        libutil.so.1 => /lib64/libutil.so.1 (0x0000003440200000)
+        libm.so.6 => /lib64/libm.so.6 (0x0000003665600000)
+        libc.so.6 => /lib64/libc.so.6 (0x000000343d200000)
+        /lib64/ld-linux-x86-64.so.2 (0x000000343ca00000)
+
+/usr/libとか共有ライブラリが検索するように設定しているパスにシンボリックリンクを貼るか、LD_LIBRARY_PATHにパスを追加するか/etc/ld.so.conf.d/hogehoge.confを作ってパスを追加するかしてからもう一回Pythonインストールする。
+
+- [CentOS 5.5にvirtualenvを入れて、Python2.7とFlaskの環境を作ったよ！ - Bouldering & Com.](http://d.hatena.ne.jp/shrkw/20110124/1295851744)
+- [共有ライブラリのコンパイル時に必要な検索パスを追加する方法 - ドキ！丸ごと！夏目だらけの水泳大会](http://d.hatena.ne.jp/natsumesouxx/20111126/1322339821)
 
 ## 参考サイト
 
