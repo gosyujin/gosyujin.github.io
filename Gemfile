@@ -1,8 +1,8 @@
 source :rubygems
 source "http://rubygems.org"
 
-gem 'jekyll'
+gem 'jekyll', :git => 'git://github.com/mojombo/jekyll.git'
 gem 'RedCloth'
 gem 'rdiscount'
-gem 'hparser'
-gem 'pygments.rb'
+gem 'hparser', :git => 'git://github.com/hotchpotch/hparser.git'
+gem 'pygments.rb', '=0.2.12'
