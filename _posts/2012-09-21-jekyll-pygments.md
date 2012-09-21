@@ -18,6 +18,10 @@ Jekyllではデフォルトでコードにハイライトをつける事はで�
 
 easy_installは[http://peak.telecommunity.com/dist/ez_setup.py](http://peak.telecommunity.com/dist/ez_setup.py)からDLし `$ (sudo) python ez_setup.py` でインストールする。
 
+※後に使用するRubypythonでlibpython2.7.soというファイルを探しに行くが、見つからないとすぐあきらめるようなので？　--enable-sharedオプションつけてのインストールが吉。以下の様なエラーが出る。
+
+> Liquid error: undefined method 'Py_IsInitialized' for RubyPython::Python:Module
+
 ## 参考サイト
 
 * [ Windowsでpygmentsを使ってコードハイライト ](http://fingaholic.tumblr.com/post/20841800395/windows-pygments)
