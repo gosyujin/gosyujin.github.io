@@ -39,7 +39,7 @@ easy_installは[http://peak.telecommunity.com/dist/ez_setup.py](http://peak.tele
         libc.so.6 => /lib64/libc.so.6 (0x000000343d200000)
         /lib64/ld-linux-x86-64.so.2 (0x000000343ca00000)
 
-/usr/libとか共有ライブラリが検索するように設定しているパスにシンボリックリンクを貼るか、LD_LIBRARY_PATHにパスを追加するか/etc/ld.so.conf.d/hogehoge.confを作ってパスを追加するかしてからもう一回Pythonインストールする。
+/usr/libとか共有ライブラリが検索するように設定しているパスにシンボリックリンクを貼るか、LD_LIBRARY_PATHにパスを追加するか/etc/ld.so.conf.d/hogehoge.confを作ってパスを追加するかldconfigコマンドでパスを追加してからもう一回Pythonインストールする。
 
 - [CentOS 5.5にvirtualenvを入れて、Python2.7とFlaskの環境を作ったよ！ - Bouldering & Com.](http://d.hatena.ne.jp/shrkw/20110124/1295851744)
 - [共有ライブラリのコンパイル時に必要な検索パスを追加する方法 - ドキ！丸ごと！夏目だらけの水泳大会](http://d.hatena.ne.jp/natsumesouxx/20111126/1322339821)
