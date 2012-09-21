@@ -22,7 +22,7 @@ easy_installは[http://peak.telecommunity.com/dist/ez_setup.py](http://peak.tele
 
 * [ Windowsでpygmentsを使ってコードハイライト ](http://fingaholic.tumblr.com/post/20841800395/windows-pygments)
 * [pygmentsが原因でjekyllが重くなってた](http://d.hatena.ne.jp/hokaccha/20120808/1344436656)
-* [Swap out albino for pygments.rb](https://github.com/tombell/jekyll/commits/)
+* [Swap out albino for pygments.rb](https://github.com/tombell/jekyll/commit/b2a1d61c0407d6612450fe7d90a9a1a397aaa28e)
 * [tpw / css / syntax.css](https://github.com/mojombo/tpw/blob/master/css/syntax.css)
 
 ## 手順
@@ -64,7 +64,7 @@ easy_installは[http://peak.telecommunity.com/dist/ez_setup.py](http://peak.tele
 
 ## Jekyllの修正
 
-[Swap out albino for pygments.rb](https://github.com/tombell/jekyll/commits/ "Swap out albino for pygments.rb")を見ながら `albino` を `pygments.rb` に差し替えてやる。
+[Swap out albino for pygments.rb](https://github.com/tombell/jekyll/commit/b2a1d61c0407d6612450fe7d90a9a1a397aaa28e)を見ながら `albino` を `pygments.rb` に差し替えてやる。
 
 差し替えが完了したらpygment.rbとその依存gemを取りに行くためbundle update。
 
