@@ -16,7 +16,7 @@ Jekyllではデフォルトでコードにハイライトをつける事はで�
 - Python 2.7.3 (2.6以上が必要)
   - easy_install
 
-easy_installはSphinxを入れた時に用意していたのでそのまま使う。
+easy_installは[http://peak.telecommunity.com/dist/ez_setup.py](http://peak.telecommunity.com/dist/ez_setup.py)からDLし `$ (sudo) python ez_setup.py` でインストールする。
 
 ## 参考サイト
 
