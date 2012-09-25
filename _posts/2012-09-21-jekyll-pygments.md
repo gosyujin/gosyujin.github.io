@@ -68,7 +68,7 @@ easy_installは[http://peak.telecommunity.com/dist/ez_setup.py](http://peak.tele
     Processing dependencies for Pygments
     Finished processing dependencies for Pygments
 
-以下、highlight hogeタグをテストするが、以下のようなエラーが表示されてしまった。
+highlight hogeタグをテストするが、以下のようなエラーが表示されてしまった。
 
     Liquid error: Bad file descriptor
 
