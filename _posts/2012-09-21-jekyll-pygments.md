@@ -72,7 +72,7 @@ highlight hogeタグをテストするが、以下のようなエラーが表示
 
     Liquid error: Bad file descriptor
 
-* [ Windowsでpygmentsを使ってコードハイライト ](http://fingaholic.tumblr.com/post/20841800395/windows-pygments " Windowsでpygmentsを使ってコードハイライト ")によると、
+[ Windowsでpygmentsを使ってコードハイライト ](http://fingaholic.tumblr.com/post/20841800395/windows-pygments " Windowsでpygmentsを使ってコードハイライト ")によると、
 
 > C:\Ruby193\lib\ruby\gems\1.9.1\gems\albino-1.3.3\lib\albino.rbにパッチを当てる。
 
@@ -92,7 +92,7 @@ highlight hogeタグをテストするが、以下のようなエラーが表示
 
 [Swap out albino for pygments.rb](https://github.com/tombell/jekyll/commit/b2a1d61c0407d6612450fe7d90a9a1a397aaa28e)を見ながら `albino` を `pygments.rb` に差し替えてやる。
 
-差し替えが完了したらpygment.rbとその依存gemを取りに行くためbundle update。
+差し替えが完了したらpygments.rbとその依存gemを取りに行くためbundle update。
 
     $ bundle update
     Fetching source index for http://rubygems.org/
