@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Pygmentを使ってJekyll内記事のコードハイライトを実現する"
+title: "Pygmentsを使ってJekyll内記事のコードハイライトを実現する"
 description: ""
 category: 
 tags: [Python, Ruby, Jekyll]
@@ -9,7 +9,7 @@ tags: [Python, Ruby, Jekyll]
 
 ## あらすじ
 
-Jekyllではデフォルトでコードにハイライトをつける事はできないようなので、Pygmentという拡張を入れる。
+Jekyllではデフォルトでコードにハイライトをつける事はできないようなので、Pygmentsという拡張を入れる。
 
 ## 環境
 
