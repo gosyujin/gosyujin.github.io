@@ -1,0 +1,299 @@
+---
+layout: post
+title: Solarisのパッケージを作ってみる もう少し学んだ版
+description: ''
+catecory: ''
+tags: [Solaris, 備忘録]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20110914/1316002377
+---
+
+**前回までのあらすじ
+-{% post_link 2011-09-12-1315826713 %}
+もう少し調べてみた。
+
+**参考サイト
+-[http://dlc.sun.com/osol/g11n/content/PACKINSTALL/ja/ch2buildpkg-11300.html:title=pkginfo ファイルの作成 - アプリケーションパッケージ開発者ガイド]
+
+**必要なもの
+:パッケージコンテンツ:ディレクトリ含めたソース一式。ざっくりソース一式とか言ってるのでここは作るものによってもう少しブレークダウンする必要がある
+:pkginfoファイル:パッケージ名等のパラメータを定義するファイル。コマンドではなくファイル。
+:Prototypeファイル:パッケージのコンポーネント一覧を記載するファイル
+
+**場合によって用意するもの(必須ではない)
+:compverファイル:パッケージと互換性がある以前のバージョンのパッケージの定義ファイル
+:dependファイル:パッケージと関連があるパッケージの定義ファイル
+:spaceファイル:インストールに必要なディスク容量の定義ファイル
+:copyrightファイル:インストール時に表示される著作権メッセージの定義ファイル
+
+**パッケージコンテンツの作成
+作成ディレクトリと内訳。
+>||
+$ pwd
+/home/kk_Ataka/pkgroot/
+
+MYAPpkg┳bin┳proccess
+　　　 ┃　 ┗start
+　　　 ┣lib━common.lib
+　　　 ┗etc━etcFile
+||<
+これを/直下にインストールしたい。
+
+**pkginfoファイル作成
+/にインストールしたいので、BASEDIRが/でいいのか？
+>||
+PKG="MYAPpkg"
+NAME="MyApplyPackage"
+ARCH="sparc"
+VERSION="release 1.0 /svn revision r222"
+CATEGORY="application"
+DESC="This is my test packages."
+VENDOR="MYAPPLY"
+BASEDIR="/"
+||<
+
+***pkginfoファイル書式
+|*PKG|必須|32文字以内|パッケージの省略名 英数字で構成、頭に数字は× 予約語(install, new等)は使用できない。最初の4文字は社名などがお勧め|
+|*NAME|必須|256文字以内 |パッケージの完全名 英数字で構成 必要なタイミング、インストールするパーティション等を明瞭に記載する((たとえばこんな感じらしい。「Chip designers need CAD application software to design abc chips.  Runs only on xyz hardware and is installed in the usr partition.」))|
+|*ATCH|必須|16文字以内|アーキテクチャ 複数対応している場合はカンマ区切り|
+|*VERSION|必須|256文字以内|バージョン 先頭に(は×|
+|*CATEGORY|必須|16文字以内|カテゴリ 英数字で構成 最低でもsystemかapplicationには属する 複数に属している場合はカンマ区切り|
+|*DESC|必須ではない|?|パッケージの説明。description|
+|*VENDOR|必須ではない|?|社名など|
+|*BASEDIR|必須ではない|?|ファイルのデフォルトの位置|
+|*PSTAMP|必須ではない|?|プロダクションのスタンプ。pkgmapで使用されるらしい。デフォルト値は「マシン名YYYYMMDDHHMISS」|
+
+**Prototypeファイル作成
+前回はviでパッケージにしたいパスをゴリゴリ書いてPrototypeファイルに変換したが、Prototype DIRで指定したDIRの下のファイルをPrototypeファイルのフォーマットにしてくれた。
+
+>||
+$ pkgproto ./MYAPpkg/
+d none MYAPpkg 0755 kk_Ataka users
+d none MYAPpkg/bin 0755 kk_Ataka users
+f none MYAPpkg/bin/proccess 0644 kk_Ataka users
+f none MYAPpkg/bin/testbin 0644 kk_Ataka users
+d none MYAPpkg/lib 0755 kk_Ataka users
+f none MYAPpkg/lib/lib.lib 0644 kk_Ataka users
+d none MYAPpkg/etc 0755 kk_Ataka users
+f none MYAPpkg/etc/etcfile 0644 kk_Ataka users
+||<
+
+これをリダイレクトさせてPrototypeファイルを作成する。
+>||
+$ pkgproto ./MYAPpkg/ >> Prototype
+||<
+
+作成したPrototypeファイルを微調整。pkginfoファイルを読み込むようにするためファイルの先頭に以下を記述する。
+
+>||
+i pkginfo
+||<
+
+***Prototypeファイル書式
+上の生成されたファイルを見る限り、かっこのものはなくてもよさげ
+>||
+(part) ftype class path (major) (minor) mode owner group
+||<
+
+|*part|パッケージ オブジェクトを細かくグループ化できる、省略可能な数値フィールドです。デフォルト値は part 1 です。…らしい。|
+|*ftype|オブジェクトの種類を指定するフィールド(後述)|
+|*class|オブジェクトが所属するインストールクラス|
+|*path|パッケージコンテンツのインストール場所を示すパス(後述)|
+|*major|ブロック特殊デバイスまたは文字特殊デバイスのためのメジャーデバイス番号です。…らしい。|
+|*minor|ブロック特殊デバイスまたは文字特殊デバイスのためのマイナーデバイス番号です。…らしい。|
+|*mode|オブジェクトの実行権限を指定するフィールド|
+|*owner|オブジェクトの所有者|
+|*group|オブジェクトが所属するグループ|
+
+***ftype
+fとdが主に使用する事になるかな。
+|*f|実行ファイル等|
+|*d|ディレクトリ|
+|*l|リンクファイル|
+|*s|シンボリックリンク|
+|*i|情報ファイル・インストールスクリプト|
+|*e|インストール・削除時に編集するファイル|
+|*v|ログファイル等の揮発性ファイル|
+|*x|このパッケージでのみアクセスできる排他的なディレクトリ|
+|*p|名前付きパイプ|
+|*c|文字特殊デバイス|
+|*b|ブロック特殊デバイス|
+
+***path
+絶対パス指定と相対パス指定があり、相対パス指定はさらに集合的再配置と個別再配置にわかれる。今回はBASEDIRを指定しているから集合的再配置ってやつだろうか。
+
+|*絶対パス|Prototypeファイル内に絶対パスで指定 再配置する事はできない pkginfoファイルのBASEDIRは無視される？|
+|*集合的再配置|Prototypeファイル内に相対パスで指定 相対パス+pkginfoのBASEDIRを元にインストール？|
+|*個別再配置|Prototypeファイル内に相対パスで指定 そのパスの中にインストール変数を指定し、requestスクリプトというものを作成 インストール時に対話的にパスを決定する？|
+
+**パッケージの構築
+pkginfoファイルとPrototypeファイルを作成したため、構成はこんな感じになった。
+>||
+$ pwd
+/home/kk_Ataka/pkgroot/
+
+MYAPpkg┳bin┳proccess
+　　　 ┃　 ┗start
+　　　 ┣lib━common.lib
+　　　 ┗etc━etcFile
+Prototype
+pkginfo
+package━
+||<
+同じパスでパッケージ作ろうとすると警告が出たので、パッケージ保存用にpackageディレクトリ作成。そしてpackageにパッケージ作成。
+>||
+$ pwd
+/home/kk_Ataka/pkgroot/
+$ pkgmk -o -r . -d ./package
+## prototype ファイルから pkgmap を作成中です。
+## pkginfo ファイルを処理中です。
+    警告: パラメータ <PSTAMP> の値は "XXXXXXXX20110914163337" に設定されます。
+    警告: パラメータ <CLASSES> の値は "none" に設定されます。
+## pkgmap の 8 個の項目をボリューム単位で分割しようとしています。
+第  1 部-- 37 ブロック, 23 エントリ
+## 1 部をパッケージ処理中です。
+/home/kk_Ataka/pkgroot/package/MYAPpkg/pkgmap
+/home/kk_Ataka/pkgroot/package/MYAPpkg/pkginfo
+/home/kk_Ataka/pkgroot/package/MYAPpkg/reloc/MYAPpkg/bin/process
+/home/kk_Ataka/pkgroot/package/MYAPpkg/reloc/MYAPpkg/bin/start
+/home/kk_Ataka/pkgroot/package/MYAPpkg/reloc/MYAPpkg/etc/etcFile
+/home/kk_Ataka/pkgroot/package/MYAPpkg/reloc/MYAPpkg/lib/common.lib
+## 制御スクリプトの妥当性検査中です。
+## パッケージ処理は完了しました。
+||<
+パッケージを作るとこうなる。
+>||
+$ pwd
+/home/kk_Ataka/pkgroot/
+
+MYAPpkg┳bin┳proccess
+　　　 ┃　 ┗start
+　　　 ┣lib━common.lib
+　　　 ┗etc━etcFile
+Prototype
+pkginfo
+package━MYAPpkg┳pkginfo
+　　　　　　　　┣pkgmap
+　　　　　　　　┗reloc━MYAPpkg┳bin┳proccess
+　　　　　　　　　　　　　　　　┃　 ┗start
+　　　　　　　　　　　　　　　　┣lib━common.lib
+　　　　　　　　　　　　　　　　┗etc━etcFile
+||<
+最後にできたパッケージをひとつに固める。
+>||
+$ pwd
+/home/kk_Ataka/pkgroot/
+
+$ pkgtrans ./package MYAPpkg.pkg
+
+The following packages are available:
+  1  MYAPpkg     MyApplyPackage
+                 (sparc) release 1.0 /svn revision r222
+
+Select package(s) you wish to process (or 'all' to process
+all packages). (default: all) [?,??,q]:
+Transferring <MYAPpkg> package instance
+||<
+まだよくわかっていないが、第一引数には作成したパッケージのあるディレクトリ(package)を指定してやらないといけない。第二引数は相対パスにすると第一引数で指定したパス(package)からの相対になる。((絶対パスは関係ない))
+
+**パッケージインストール、アンインストール
+>||
+$ pkgadd -d package/MYAPpkg.pkg
+||<
+-d をつけないと/var/spool/pkgの下を見に行く。
+>||
+$ pkgrm MYAPpkg
+||<
+pkginfoファイルのPKGで定義した名称で選択。探す場合はpkginfoコマンドから。
+
+**以下、コマンド。
+***pkgproto(コマンド)
+Prototypeファイルを作成するコマンド。(まだよくわかってない)
+***pkgmk(コマンド)
+-pkgmk -o
+パッケージに上書き。
+-pkgmk -d DEVICE
+指定したDEVICE(パスでもいい)にパッケージが作成される。
+-pkgmk -r ROOTPATH
+パッケージのルートパス指定？
+
+***pkginfo(コマンド)
+-pkginfo -i
+現在インストールされているパッケージ情報を表示する
+
+>||
+application SMCsvn1612                       subversion
+system      TESTPKG                          This is a Test Package.
+||<
+
+-pkginfo -l PKG
+指定したパッケージの内容を表示する。必須項目しか記載しなかったTESTPKGはこんな感じ。
+>||
+$ pkginfo -l TESTPKG
+   PKGINST:  TESTPKG
+      NAME:  This is a Test Package.
+  CATEGORY:  system
+      ARCH:  sparc
+   VERSION:  1.0
+   BASEDIR:  /
+    PSTAMP:  XXXXXXXX20110912170357
+  INSTDATE:  9月 12 2011 17:21
+    STATUS:  完全にインストールされました。
+     FILES:        4 のインストールされたパス名
+                   1 の共有パス名
+                   3 のディレクトリ
+||<
+ちなみにzshはこう。
+>||
+$ pkginfo -l SUNWzsh
+   PKGINST:  SUNWzsh
+      NAME:  Z shell (zsh)
+  CATEGORY:  system
+      ARCH:  sparc
+   VERSION:  11.10.0,REV=2005.01.08.05.16
+   BASEDIR:  /
+    VENDOR:  Sun Microsystems, Inc.
+      DESC:  Z shell (zsh)
+    PSTAMP:  sfw1020050108052452
+  INSTDATE:  Jun 13 2011 09:41
+   HOTLINE:  Please contact your local service provider
+    STATUS:  完全にインストールされました。
+     FILES:      594 のインストールされたパス名
+                   6 の共有パス名
+                   1 のリンクされたファイル
+                  32 のディレクトリ
+                  30 の実行可能ファイル
+                5585 ブロック (概算値) が使われました
+||<
+Subversionはこんな感じ。
+>||
+$ pkginfo -l SMCsvn1612
+   PKGINST:  SMCsvn1612
+      NAME:  subversion
+  CATEGORY:  application
+      ARCH:  sparc
+   VERSION:  1.6.12
+   BASEDIR:  /usr/local
+    VENDOR:  The Subversion Group
+    PSTAMP:  Steve Christensen
+  INSTDATE:  7月 22 2011 16:21
+     EMAIL:  steve@smc.vnet.net
+    STATUS:  完全にインストールされました。
+     FILES:      787 のインストールされたパス名
+                  32 の共有パス名
+                 119 のディレクトリ
+                 196 の実行可能ファイル
+               32057 ブロック (概算値) が使われま
+||<
+
+***pkgadd(コマンド)
+-pkgadd PKG
+パッケージのインストール
+-pkgadd -n PKG
+パッケージのインストール(選択肢を全てデフォルトとする)
+
+***pkgrm(コマンド)
+-pkgrm PKG
+パッケージのアンインストール
+-pkgrm -n PKG
+パッケージのアンインストール(選択肢を全てデフォルトとする)
+

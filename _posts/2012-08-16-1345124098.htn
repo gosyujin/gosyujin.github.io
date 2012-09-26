@@ -1,0 +1,182 @@
+---
+layout: post
+title: Sphinxの見出しについて学びなおし
+description: ''
+catecory: ''
+tags: [備忘録, reST, Sphinx]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20120816/1345124098
+---
+**前回までのあらすじ
+-{% post_link 2011-12-02-1322839748 %}で見出しの理解が間違っている事をSphinx 初心者 さんに教えてもらった
+-もう一度ドキュメントを見なおしてみる事に
+
+**参考サイト
+-[http://sphinx.shibu.jp/rest.html#id9:title=reStructuredText入門 — Sphinx v1.0 (hg) documentation]
+-[http://docutils.sourceforge.net/docs/user/rst/quickstart.html#sections:title=A ReStructuredText Primer]
+
+**見出し周辺を読み直し
+>>
+セクションのヘッダは、セクションのタイトルを句読点などの記号の文字でアンダーラインを引くことで設定します。必要に応じてでオーバーラインも併用することができます。
+<<
+>>
+使用していない種類のアンダーラインが出てくると、見出しのレベルが一段変わる、というルールになっています。
+<<
+>>
+. These are a single line of text (one or more words) with adornment: an underline alone, or an underline and an overline together, in dashes "-----", equals "======", tildes "~~~~~~" or any of the non-alphanumeric characters = - ` : ' " ~ ^ _ * + # < > that you feel comfortable with.
+<<
+つまり……
+-英数字以外の記号でアンダーラインを引くとセクションヘッダ
+--アンダーラインとオーバーラインで囲むのも別の定義として判断される
+--己がしっくりくるものを選んでよい
+-初めて出てきた順に見出しレベルが割り当てられる
+
+**確認
+Pythonドキュメント慣例にならってこういうソースを書くと、
+>||
+##################
+上下 # 部
+##################
+
+ここは上下 # で囲った部の文章。
+
+下 # 部
+##############
+
+ここは下 # で囲った部の文章。
+
+*******************
+上下 * 章
+*******************
+
+ここは上下 * で囲った章の文章。
+
+下 * 章
+*******************
+
+ここは下 * で囲った章の文章。
+
+===========================
+上下 = セクション
+===========================
+
+ここは上下 = で囲ったセクションの文章。
+
+下 = セクション
+===========================
+
+ここは下 = で囲ったセクションの文章。
+
+---------------------------
+上下 - サブセクション
+---------------------------
+
+ここは上下 - で囲ったサブセクションの文章。
+
+下 - サブセクション
+---------------------------
+
+ここは下 - で囲ったサブセクションの文章。
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+上下 ^ サブサブセクション
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ここは上下 ^ で囲ったサブサブセクションの文章。
+
+下 ^ サブサブセクション
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ここは下 ^ で囲ったサブサブセクションの文章。
+
+"""""""""""""""""""""""""""""""""
+上下 " パラグラフ
+"""""""""""""""""""""""""""""""""
+
+ここは上下 " で囲ったパラグラフの文章。
+
+下 " パラグラフ
+"""""""""""""""""""""""""""""""""
+
+ここは下 " で囲ったパラグラフの文章。
+||<
+htmlはこう生成される。
+>|html|
+<h1>上下 # 部<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>ここは上下 # で囲った部の文章。</p>
+<div class="section" id="id2">
+<h2>下 # 部<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>ここは下 # で囲った部の文章。</p>
+<div class="section" id="id3">
+<h3>上下 * 章<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>ここは上下 * で囲った章の文章。</p>
+<div class="section" id="id4">
+<h4>下 * 章<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<p>ここは下 * で囲った章の文章。</p>
+<div class="section" id="id5">
+<h5>上下 = セクション<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
+<p>ここは上下 = で囲ったセクションの文章。</p>
+<div class="section" id="id6">
+<h6>下 = セクション<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h6>
+<p>ここは下 = で囲ったセクションの文章。</p>
+<div class="section" id="id7">
+<h7>上下 - サブセクション<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h7>
+<p>ここは上下 - で囲ったサブセクションの文章。</p>
+<div class="section" id="id8">
+<h8>下 - サブセクション<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h8>
+<p>ここは下 - で囲ったサブセクションの文章。</p>
+<div class="section" id="id9">
+<h9>上下 ^ サブサブセクション<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h9>
+<p>ここは上下 ^ で囲ったサブサブセクションの文章。</p>
+<div class="section" id="id10">
+<h10>下 ^ サブサブセクション<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h10>
+<p>ここは下 ^ で囲ったサブサブセクションの文章。</p>
+<div class="section" id="id11">
+<h11>上下 &#8221; パラグラフ<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h11>
+<p>ここは上下 &#8221; で囲ったパラグラフの文章。</p>
+<div class="section" id="id12">
+<h12>下 &#8221; パラグラフ<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h12>
+<p>ここは下 &#8221; で囲ったパラグラフの文章。</p>
+||<
+まあ、h12まであるページとか見たことないんだけど、新しいものを定義し続けるとどんどん深くなる。
+
+ここでソースを以下のように編集。がっつりカットしつつ、適当に数個残し。あと<<<で新しいセクションを定義してみた。
+>||
+  # 部
+##############
+
+ここは下 # で囲った部の文章。
+
+*******************
+上下 * 章
+*******************
+
+ここは上下 * で囲った章の文章。
+
+下 - サブセクション
+---------------------------
+
+ここは下 - で囲ったサブセクションの文章。
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+新しく作った
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+<<<<<で新しくセクションを作ってみた。
+||<
+htmlはこう生成される。
+>|html|
+<h1>下 # 部<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>ここは下 # で囲った部の文章。</p>
+<div class="section" id="id2">
+<h2>上下 * 章<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>ここは上下 * で囲った章の文章。</p>
+<div class="section" id="id3">
+<h3>下 - サブセクション<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>ここは下 - で囲ったサブセクションの文章。</p>
+<div class="section" id="id4">
+<h4>新しく作った<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<p>&lt;&lt;&lt;&lt;&lt;で新しくセクションを作ってみた。</p>
+||<
+うーんなるほど。
+
+ちゃんとドキュメント読まず、他の記法と同じノリでこれはこの見出しって決めつけてしまっていた！

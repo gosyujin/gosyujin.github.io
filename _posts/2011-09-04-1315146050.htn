@@ -1,0 +1,82 @@
+---
+layout: post
+title: vmstatとかiostatとかsarとかswapコマンドのメモ
+description: ''
+catecory: ''
+tags: [Solaris, 備忘録]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20110904/1315146050
+---
+すぐ忘れるのでメモ。あと略称とかも。
+
+**vmstat
+-表示
+>||
+ kthr      memory            page            disk          faults      cpu
+ r b w   swap  free  re  mf pi po fr de sr ** ** ** **   in   sy   cs us sy id
+||<
+-kthr: KernelTHRead
+|*r|Run queue|待ち行列内のカーネルスレッド数(mpstatやprstatでも取得可能)|
+|*b|?|I/Oで待たされているカーネルスレッド数|
+|*w|?|スワップアウトされたカーネルスレッド数|
+-memory
+|*swap|-|現在利用可能なスワップ領域(ディスク上+メモリ上のスワップ領域)|
+|*free|-|空きメモリ領域|
+-page
+|*re|pageREclaims|freeListに入れられた後、復帰したページ数|
+|*mf|MinorFault|HAT faultとAddress Space faultを足した数|
+|*pi|PageIn|ページインされたメモリサイズ(キロバイト)|
+|*po|PageOut|ページアウトされたメモリサイズ(キロバイト)|
+|*fr|FRee?|解放されたメモリサイズ(キロバイト)|
+|*de|DEficit|次のプロセスで必要と予測しSolarisが確保する仮想メモリのバッファ|
+|*sr|?|ページデーモンによってスキャンされたページ数(0以外だと実行されている)|
+-disk 
+|*最高4台のデータを表示|読み書きした回数|
+-fault
+|*in|INterrupt|1秒あたりの割り込み(インタラプト)回数|
+|*sy|SYstemcall|1秒あたりのシステムコース回数|
+|*cs|CpucontextSwitches|コンテクストスイッチ発生回数|
+-cpu
+|*us|USertime?|ユーザモードで使用したCPU時間|
+|*sy|SYstemtime?|システムモードで使用したCPU時間|
+|*id|IDletime|CPUが使用されていなかった時間|
+
+**iostat -D
+-表示
+>||
+    ****          ****          ****          ****
+rps wps util  rps wps util  rps wps util  rps wps util
+||<
+-パラメータ
+|*rps|ReadperSec|毎秒何回読み取りしているか|
+|*wps|WriteperSec|毎秒何回書き込みしているか|
+|*util|UTILization?|各デバイスの使用率|
+
+**iostat -x(全てのディスク情報)
+-表示
+>||
+                 extended device statistics
+device    r/s    w/s   kr/s   kw/s wait actv  svc_t  %w  %b
+||<
+-パラメータ
+|*device|-|デバイス名|
+|*r/s|ReadperSec|毎秒何回読み取りしているか|
+|*w/s|WriteperSec|毎秒何回書き込みしているか|
+|*kr/s|KiloReadperSec|毎秒何KB読み取りしているか|
+|*kw/s|KiloWriteperSec|毎秒何KB書き込みしているか|
+|*wait|-|実行待ち中のI/Oの数|
+|*actv|ACTiVe|毎秒処理されているI/Oの数|
+|*svc_t|SerViCeTime|平均サービス時間？|
+|*%w|?|待ち行列が存在している時間の割合、リーマン和|
+|*%b|?|ディスクビジーの時間の割合、リーマン和|
+
+**swap -s
+-表示
+>||
+合計: 7429999k バイト割り当て済み + 99999k 予約済み = 8399999k 使用済み, 5199999k使用可
+||<
+-パラメータ
+|*allocated|割り当て済み|バックアップ用の記憶域として使用可能なスワップ空間を表す1024バイトのブロック数|
+|*reserved|予約済み|後から使用できるようにメモリによって回収されるスワップ空間を表す1024バイトのブロック数|
+|*used|使用済み|割り当て・予約済みのスワップ空間を表す1024バイトのブロック数|
+|*available|使用可|後から予約や割り当てに使用可能なスワップ空間を表す1024バイトのブロック数|
+

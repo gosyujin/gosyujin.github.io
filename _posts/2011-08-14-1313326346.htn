@@ -1,0 +1,27 @@
+---
+layout: post
+title: Subversionのauto-props設定ではまった
+description: ''
+catecory: ''
+tags: [Subversion, 備忘録]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20110814/1313326346
+---
+SubversionでExcelファイルをコミットしようとするとエラーが発生。
+>||
+ファイル 'C:\～～～\なんとか管理表.xls' の MIMEタイプ属性はバイナリです
+||<
+んーなんでだっけー？.xlsファイルのmime-typeを指定してないからかなー？ という事でconfigファイルにmime-type指定。[http://trac.symfony-project.org/wiki/SymfonyRepositoryTips:title=SymfonyRepositoryTips - symfony - Trac] ここを参考に。
+>||
+ *.xls = svn:mime-type=application/vnd.ms-excel
+||<
+しかしエラーは変わらず。なんでだー。というか今までは別にmime-type指定しなくてもいけてた気がするのに…と、ここまでやってconfigをよく見ると
+>||
+ *.xls = svn:mime-type=application/vnd.ms-excel
+ * = svn:eol-style=native
+||<
+こうなってた。全部のファイルにeol-style=nativeしている！！((自分でやったんだけど))　とあるファイル種別<span class="deco" style="font-weight:bold;">以外</span>、みたいな指定はできない？　っぽいので、横着せずに一拡張子毎に設定を書いてうまく行きました。 
+>||
+ *.xls = svn:mime-type=application/vnd.ms-excel
+ *.sh = svn:eol-style=native
+||<
+

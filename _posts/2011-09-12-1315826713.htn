@@ -1,0 +1,140 @@
+---
+layout: post
+title: Solarisのパッケージを作ってみる
+description: ''
+catecory: ''
+tags: [Solaris, 備忘録]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20110912/1315826713
+---
+<span class="deco" style="color:#FF0000;">もう少し学んだ。{% post_link 2011-09-14-1316002377 %}</span>
+**あらすじ
+-Solarisのパッケージの作り方を学ぶ刻がきた
+
+**参考サイト
+-[http://www.syuhitu.org/other/package/package.html:title=パッケージの作成]
+-[http://www.nognog.com/techmemo/Solaris_Package_Creation_HOWTO.php:title=うにっくすさんの覚え書き - Solaris - オリジナルパッケージの作成]
+-http://blogs.oracle.com/yappri/entry/create_solaris_package
+
+**インストール後のファイルを作成する
+作業用ディレクトリに移動する。
+>||
+$ cd /tmp/kk_Ataka
+||<
+次にインストール後のファイル構成を作る。今回はこんなパッケージを作る。
+>||
+/home/kk_Ataka/testpkg
+/home/kk_Ataka/testpkg/readme.txt
+||<
+実際に作る。
+>||
+$ mkdir /home/kk_Ataka/testpkg
+$ touch /home/kk_Ataka/testpkg/readme.txt
+||<
+あと、パッケージ名を考えておく。今回はTESTPKGでいいかな。
+**Prototypeファイルを作成する
+以下のような内容のファイルを作成し保存する。名前は適当でよいので今回はtext.txtとした。これはまだPrototypeファイルではない。
+>||
+/home/
+/home/kk_Ataka/
+/home/kk_Ataka/testpkg/
+/home/kk_Ataka/testpkg/readme.txt
+||<
+次に下記コマンドを実行する。
+>||
+pkgproto < test.txt > Prototype
+||<
+成功したら、カレントディレクトリにPrototypeというファイルが出来ている。中身はこんなもん。
+>||
+d none /home 0755 root root
+d none /home/kk_Ataka 0755 kk_Ataka users
+d none /home/kk_Ataka/testpkg 0755 kk_Ataka users
+f none /home/kk_Ataka/testpkg/readme.txt 0644 kk_Ataka users
+||<
+左がファイルのタイプ？(d:ディレクトリ、f:ファイル)　noneはなんだろう？作成するファイル、権限、ユーザ名、グループ名かな。
+PrototypeファイルができたらPrototypeファイルの先頭に以下を追加する。
+>||
+i pkginfo
+||<
+なのでこうなる。
+>||
+i pkginfo
+d none /home 0755 root root
+d none /home/kk_Ataka 0755 kk_Ataka users
+d none /home/kk_Ataka/testpkg 0755 kk_Ataka users
+f none /home/kk_Ataka/testpkg/readme.txt 0644 kk_Ataka users
+||<
+***どっちがいいのか？
+ちなみに、test.txtを一番最下層のファイルのみにするとこうなるが、どっちの方がいいんだろう。後で試してみる。
+>||
+/home/kk_Ataka/testpkg/readme.txt
+||<
+>||
+f none /home/kk_Ataka/testpkg/readme.txt 0644 kk_Ataka users
+||<
+**pkginfoファイルを作成する
+pkginfoファイルを作成する。中身はパッケージの情報。
+>||
+PKG="TESTPKG"
+NAME="This is a Test Package."
+ARCH="sparc"
+VERSION="1.0"
+CATEGORY="system"
+||<
+
+|*PKG|必須|パッケージ名称|
+|*NAME|必須|パッケージの名前|
+|*ARCH|必須|アーキテクチャ sparc, i386など|
+|*VERSION|必須|バージョン|
+|*CATEGORY|必須|カテゴリ application, systemなどがあるらしい|
+
+**パッケージ作成
+Prototypeファイルとpkginfoファイルを使いパッケージを作成する。
+>||
+$ pkgmk -r / -d .
+## prototype ファイルから pkgmap を作成中です。
+## pkginfo ファイルを処理中です。
+    警告: パラメータ <PSTAMP> の値は "xxx999999999999999999" に設定されます。
+    警告: パラメータ <CLASSES> の値は "none" に設定されます。
+## pkgmap の 4 個の項目をボリューム単位で分割しようとしています。
+第  1 部-- 21 ブロック, 14 エントリ
+## 1 部をパッケージ処理中です。
+/tmp/kk_Ataka/TESTPKG/pkgmap
+/tmp/kk_Ataka/TESTPKG/pkginfo
+/tmp/kk_Ataka/TESTPKG/root/home/kk_Ataka/testpkg/readme.txt
+## 制御スクリプトの妥当性検査中です。
+## パッケージ処理は完了しました。
+||<
+pkginfoに設定する項目が足りないせいか警告は出たが問題なさげ。ともかくこれでパッケージはできた！
+>||
+$ pwd
+/tmp/kk_Ataka
+$ ls
+Prototype   TESTPKG/    pkginfo     test.txt
+||<
+**パッケージを一つにまとめる
+今のままではTESTPKGというディレクトリなので、これをパッケージ(.pkg)としてまとめる。以下のコマンドを使用する。
+>||
+$ pkgtrans . TESTPKG.pkg
+||<
+>||
+$ pkgtrans . TESTPKG.pkg
+
+The following packages are available:
+  1  TESTPKG     This is a Test Package.
+                 (sparc) 1.0
+
+Select package(s) you wish to process (or 'all' to process
+all packages). (default: all) [?,??,q]:
+
+Transferring <TESTPKG> package instance
+$ ls
+Prototype     TESTPKG/      TESTPKG.pkg   pkginfo       test.txt
+||<
+TESTPKGがTESTPKG.pkgにまとまった。
+**パッケージをインストールする
+最後にインストール。root権限で。
+>||
+# pkgadd -d TESTPKG.pkg
+||<
+以上。
+

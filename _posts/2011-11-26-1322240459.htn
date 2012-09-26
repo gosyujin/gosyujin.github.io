@@ -1,0 +1,174 @@
+---
+layout: post
+title: HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた
+description: ''
+catecory: ''
+tags: [Ruby, 備忘録, Sinatra, Heroku]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20111126/1322240459
+---
+
+**あらすじ
+いよいよHerokuをはじめる。
+
+**参考サイト
+-[http://d.hatena.ne.jp/ruedap/20110209/ruby_heroku_twitter_bot:title=Herokuを使って1日1回名言をツイートするTwitter Botの作り方 - アインシュタインの電話番号☎]
+-[http://studyheroku.wiki.fc2.com/wiki/Heroku%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89:title=Herokuコマンド - study_heroku]
+-[http://kuranuki.sonicgarden.jp/2009/05/rubypaasherokurails.html:title=Ruby版PaaSの"Heroku"で無料Railsホスティング環境を手に入れよう - Social Change!]
+
+**事前準備
+-Ruby 1.9.3
+-Git 1.7.3
+-rvm 1.9.2
+-gem 1.8.10
+--gem管理にbundlerを使いたい
+
+**プロジェクト作成
+***Bundler準備
+プロジェクトフォルダ(heroku_sample)を作成し、その中にGemfileファイルを作成する。gem 'heroku'は後ほどHerokuに対してプロジェクトを作ったりするのに使用する。
+>|ruby|
+$ mkdir heroku_sample
+$ cd heroku_sample
+$ vi Gemfile
+source :rubygems
+source 'http://rubygems.org'
+
+gem 'sinatra'
+gem 'heroku'
+||<
+bundleでインストール。場所は任意で。今回はカレントのvendor/bundleにインストール。
+>|ruby|
+$ bundle install ./vendor/bundle
+||<
+***Sinatra準備
+SinatraでHello World!!できるようにサンプルファイルapp.rbを作成。
+>|ruby|
+$ vi app.rb
+require 'rubygems'
+require 'sinatra'
+
+get '/' do
+  "Hello World!"
+end
+||<
+Rackアプリケーションとして起動するためconfig.ruファイルを作成する。
+>|ruby|
+require './app.rb'
+run Sinatra::Application
+||<
+<span class="deco" style="color:#FF0000;">※ちょっと先の話になるけど、始めは1行目をrequire 'app.rb'としていた。それでもローカルでは問題なくロードして動作してたし。が、Herokuにデプロイすると下記のようなログを吐きエラーとなった。</span>
+>||
+2011-11-23T08:10:02+00:00 heroku[web.1]: State changed from created to starting
+2011-11-23T08:10:03+00:00 heroku[web.1]: Starting process with command `thin -p 54821 -e production -R /home/heroku_rack/heroku.ru start`
+2011-11-23T08:10:04+00:00 app[web.1]: <internal:lib/rubygems/custom_require>:29:in `require': no such file to load -- .app.rb (LoadError)
+2011-11-23T08:10:04+00:00 app[web.1]:      from <internal:lib/rubygems/custom_require>:29:in `require'
+2011-11-23T08:10:04+00:00 app[web.1]:      from config.ru:1:in `block (3 levels) in <main>'
+...
+||<
+<span class="deco" style="color:#FF0000;">ん？　`require': no such file to load -- .app.rb (LoadError)ってなんでapp.rbでロードエラーしてんの？　何か設定し忘れ？　――HerokuのRubyはデフォルトで1.9.2になっているということがわかった。そして、Ruby1.9.2からロードパスにカレントディレクトリが含まれなくなったらしく。カレントディレクトリのファイルは./で明示的に教えてあげないといけないようなのでした。うーんRuby1.9.2からの仕様だったのか。1.8ばっかり使ってたからしらなんだ。</span>
+
+-[http://d.hatena.ne.jp/ruedap/20110531/ruby_require_load_path:title=Rubyでrbファイルをrequireするときはドットを打つと良さそう - アインシュタインの電話番号☎]
+-[http://www.ruby-lang.org/ja/news/2010/08/18/ruby-1-9-2-is-released/#label-8:title=Ruby 1.9.2ãªãªã¼ã¹]
+
+***Gitの管理下に
+で、戻ってきて…次にgitの管理対象におく。(今はまだやる必要ないけど、先にすませとく)bundle系のファイルはignoreしておく。
+>||
+$ git init
+$ vi .gitignore
+.bundle
+vendor
+||<
+ここまでのプロジェクト構成はこう。
+>||
+heroku_sample
+┣.bundle/
+┣.git/
+┣.gitignore
+┣Gemfile
+┣Gemfile.lock
+┣config.ru
+┣app.rb
+┗vendor/
+||<
+
+**ローカルで動作確認
+***Sinatra起動
+ちょっとローカルで動作確認。((この時はRuby1.8.7でやっていた。後ほど1.9代へ変更))
+>||
+$ bundle exec ruby app.rb
+[2011-11-23 13:51:52] INFO  WEBrick 1.3.1
+[2011-11-23 13:51:52] INFO  ruby 1.8.7 (2011-06-30) [i686-darwin10.8.0]
+== Sinatra/1.3.1 has taken the stage on 4567 for development with backup from WEBrick
+[2011-11-23 13:51:52] INFO  WEBrick::HTTPServer#start: pid=50924 port=4567
+||<
+http://localhost:4567にアクセスしてHello World!!できていればローカルでは成功。
+
+**Herokuへデプロイ
+***Sign up
+http://www.heroku.comにアクセスし、sign upを選択。
+[f:id:kk_Ataka:20111126014002j:image]
+メールアドレスを登録し送られてきたメールからHerokuへ再度アクセスしパスワードを登録。
+[f:id:kk_Ataka:20111126014003j:image]
+
+***プロジェクト作成
+先ほどgemで入れたherokuでHerokuにプロジェクトを作成する。その際、メールアドレスとパスワードの入力が求められる。あとsshキーが必要になるっぽい。
+>||
+$ bundle exec heroku create heroku_sample
+Enter your Heroku credentials.
+Email: メールアドレス入れる
+Password: パスワード入れる
+Found existing public key: /Users/kk_Ataka/.ssh/id_rsa.pub
+Uploading ssh public key /Users/kk_Ataka/.ssh/id_rsa.pub
+ !   Name must start with a letter and can only contain lowercase letters, numbers, and dashes
+||<
+ん？　名前は小文字と数字とダッシュだけ？　んじゃ適当に…。
+>||
+$ bundle exec heroku create tycoon-gosyujin
+Creating tycoon-gosyujin... done, stack is bamboo-mri-1.9.2
+http://tycoon-gosyujin.heroku.com/ | git@heroku.com:tycoon-gosyujin.git
+Git remote heroku added
+||<
+お、できたできた。HerokuにアクセスしてMy Appsを見に行くとプロジェクトができてた。ちなみに、現在HerokuのサーバのRubyデフォルトバージョンは1.9.2の模様。これはherokuコマンドで1.8などに変えられるみたい。
+[f:id:kk_Ataka:20111126014001j:image]
+***GitでHerokuへpush
+そしたらGitのローカルリポジトリにcommitしたのち、Herokuへpushする。(gitコマンドエイリアス使ってます)
+>||
+$ git add ./
+$ git com 'First commit.'
+$ git push heroku master
+Counting objects: 774, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (679/679), done.
+Writing objects: 100% (774/774), 1.94 MiB, done.
+Total 774 (delta 49), reused 0 (delta 0)
+
+-----> Heroku receiving push
+-----> Ruby/Sinatra app detected
+-----> Gemfile detected, running Bundler version 1.0.7
+       Unresolved dependencies detected; Installing...
+       Using --without development:test
+       Fetching source index for http://rubygems.org/
+       Fetching source index for http://rubygems.org/
+       Installing addressable (2.2.6)
+       Installing launchy (2.0.5)
+       Installing mime-types (1.17.2)
+       Installing rest-client (1.6.7)
+       Installing rubyzip (0.9.4)
+       Installing term-ansicolor (1.0.7)
+       Installing heroku (2.14.0)
+       Installing pit (0.0.6)
+       Installing rack (1.3.5)
+       Installing rack-protection (1.1.4)
+       Installing tilt (1.3.3)
+       Installing sinatra (1.3.1)
+       Using bundler (1.0.7)
+       Your bundle is complete! It was installed into ./.bundle/gems/
+-----> Compiled slug size is 1.9MB
+-----> Launching... done, v4
+       http://tycoon-gosyujin.heroku.com deployed to Heroku
+
+To git@heroku.com:tycoon-gosyujin.git
+ * [new branch]      master -> master
+
+||<
+無事にデプロイが成功したようなので、Webページへアクセス。
+

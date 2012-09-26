@@ -1,0 +1,40 @@
+---
+layout: post
+title: Solarisで現在のOSバージョンやパッチバージョンを確認する
+description: ''
+catecory: ''
+tags: [Solaris, 備忘録]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20111208/1323357042
+---
+<del datetime="2011-12-10T09:14:42+09:00">SPARC向けだろうか。</del>そんなことなかったぜ！
+**参考サイト
+-[http://www.rose.sannet.ne.jp/nterasim/solaris/patch.html:title=solarisのパッチ適用]
+
+**unameコマンドでパッチ確認+α
+uname(現在のシステム名の表示)コマンドを使用していろいろ取得する。
+|*コマンド 引数|*意味|*出力内容|
+|uname|OSの表示|SunOS|
+|uname -n|ホスト名の表示|XXXXXXX|
+|uname -r|OSリリースレベルの表示|5.10|
+|uname -v|カーネルパッチバージョンの表示|Generic_999999-99|
+|uname -m|マシンタイプの表示|sunXX|
+|uname -p|プロセッサタイプの表示|sparc|
+|uname -i|プラットフォーム名の表示|SUNXX,SPARC-ZZZZZZZZZZ|
+|uname -a|全部|SunOS XXXXXXX 5.10 Generic_141999-99 (以下略)|
+[f:id:kk_Ataka:20111210091242j:image]
+パッチは6ケタのパッチ番号と2ケタのバージョンで管理されている。上記の例だと999999がパッチ番号で99がバージョン。
+
+**当たっているパッチ一覧の確認
+現在当たっているパッチの一覧は以下のコマンドで表示できる。
+>||
+$ showrev -p
+||<
+>||
+$ patchadd -p
+||<
+[f:id:kk_Ataka:20111210091241j:image]
+後は grep と組み合わせて当たっているパッチと当たっていないパッチを精査していく？
+一応、当てたパッチのログは /var/sadm/patch/パッチID/log に残されているので、こっちを見るとパッチがどこまで当たっているかわかりやすい？？
+
+patchcheckというスクリプトを使えば更新状況がわかるようだが、内部で閉じているサーバ環境だと使えないか。
+

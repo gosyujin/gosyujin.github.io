@@ -1,0 +1,142 @@
+---
+layout: post
+title: JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備
+description: ''
+catecory: ''
+tags: [Ruby, StartUp, Jekyll]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20120914/1347595853
+---
+**あらすじ
+-はてな記法、綺麗に出力できて今までお気に入りだったんだけど、欠点として、はてなでしか使わないという問題が
+-他にも文章書く時にreSTとかMarkdownを使うと捗るが、結局アウトプットするのは個人でははてなが多い……((個人でない場合はExcelとか))
+-そもそもはてな記法は基本はてなじゃなきゃ見れない
+-なら最初から…？
+
+うーん。他の記法使う時がきたのか。
+
+**Jekyllとは
+>https://github.com/mojombo/jekyll/wiki>
+Jekyll is a simple, blog aware, static site generator.
+<<
+静的サイトのジェネレーターなのね。 HTML, Markdown, textile なんでもござれ。
+
+**参考サイト
+-[https://github.com/mojombo/jekyll:title=mojombo/jekyll · GitHub]
+-[http://mattn.kaoriya.net/software/lang/ruby/20090409185248.htm:title=Big Sky :: Jekyllで始める簡単ブログ]
+-[http://melborne.github.com/2012/05/13/first-step-of-jekyll/:title=30分のチュートリアルでJekyllを理解する]
+-[http://tokkonopapa.github.com/blog/2011/12/28/easy-usage-of-jekyll-on-github/:title=jekyllで作る簡単GitHub Pages - T.I.D.]
+-[http://d.hatena.ne.jp/yuum3/20120620/1340180894:title=Jekyll は軽快なブログソフトなので乗り換えてみた - @yuumi3のお仕事日記]
+-[http://d.hatena.ne.jp/takuti/20110724/1311464070:title=Jekyllであそぼう！ - takutism]
+-[http://dsuket.hatenablog.com/entry/2012/03/06/191459:title=静的サイト生成ツール Jekyll を使って、bootstrapサイトを作ってみたよ - webとかmacとかやってみようか R]
+-[http://d.hatena.ne.jp/seinzumtode/20120426/1335402322:title=Jekyllをはじめる - how to code something]
+
+**環境
+-CentOS 6.2 と、WindowsXP
+-Ruby 1.9.2
+--Bundler 1.1.4
+-Git 1.7.9.6
+-Jekyll 0.11.2
+-RedCloth 4.2.9
+
+**いきなり動かす
+本来は決まったディレクトリを作ったり、コンフィグファイルを作ったり、レイアウトファイルを作ったりしていく……のだけど、Jekyll Bootstrapを使えばいきなりフルセットで動かす事ができる。
+
+取得はGitで。
+>||
+$ git clone http://github.com/plusjade/jekyll-bootstrap.git JEKYLL_HOME
+||<
+
+JekyllはBundlerでインストールするので移動してGemfileを作成。そしてjekyllコマンドで実行！
+>||
+$ cd JEKYLL_HOME
+$ vi Gemfile
+$ cat Gemfile
+source :rubygems
+source "http://rubygems.org"
+
+gem 'jekyll'
+gem 'RedCloth'
+
+$ bundle install --path vendor/bundle
+$ bundle exec jekyll --server
+||<
+これで、http://localhost:4000 にアクセスしてみると超カッコいいサンプルページが出来上がっている。CentOSは以上。
+
+**ハマり for Windows
+ところで、Windows XPで同じ事やっても_site下に静的ファイルが全然できなかった。……まあ、そもそもXP使うなって話？
+
+結果としては、<span class="deco" style="color:#FF0000;">RedCloth-4.2.9-x86-mingw32直下のspecディレクトリを削除したら生成されるようになった。</span>静的ファイル生成の流れを追っていくと、
+-jekyll/bin/jekyll内でsite.processメソッドが呼ばれている
+-jekyll/lib/jekyll/site.rbのprocessメソッドからread,readからread_directoriesメソッドが呼ばれている
+-read_directoriesメソッドは以下のようになっている
+>|ruby|
+     def read_directories(dir = '')
+       base = File.join(self.source, dir)
+       entries = Dir.chdir(base) { filter_entries(Dir['*']) }
+       self.read_posts(dir)
+
+       entries.each do |f|
+         f_abs = File.join(base, f)
+         f_rel = File.join(dir, f)
+         if File.directory?(f_abs)
+           next if self.dest.sub(/\/$/, '') == f_abs
+           read_directories(f_rel)
+         elsif !File.symlink?(f_abs)
+           first3 = File.open(f_abs) { |fd| fd.read(3) }
+           if first3 == "---"
+#＼yaml！／
+             # file appears to have a YAML header so process it as a page
+             pages << Page.new(self, self.source, dir, f)
+           else
+             # otherwise treat it as a static file
+             static_files << StaticFile.new(self, self.source, dir, f)
+           end
+         end
+       end
+     end
+||<
+-読み込むファイルをputs して眺めていると、＼yaml！／のところでRedCloth-4.2.9-x86-mingw32\spec\fixtures\basic.ymlを呼んだ瞬間止まっている模様……
+-まあ、specファイルだしなくてもいいよね？　削除、で、動いたという事で((なんでbasic.ymlを読もうとして止まったかまでは調べてないです……))
+
+で、動かす(Windows)。
+>||
+$ be jekyll --server
+Configuration from C:/HOGE/jekyll/_config.yml
+Auto-regenerating enabled: C:/HOGE/project/jekyll -> C:/HOGE/project/jekyll/_site
+[2012-09-12 23:50:51] regeneration: 983 files changed
+[2012-09-12 23:50:54] INFO  WEBrick 1.3.1
+[2012-09-12 23:50:54] INFO  ruby 1.9.2 (2011-07-09) [i386-mingw32]
+[2012-09-12 23:50:54] INFO  WEBrick::HTTPServer#start: pid=5944 port=4000
+
+ ___________________________________________________________________________
+| Maruku tells you:
++---------------------------------------------------------------------------
+| Unclosed span (waiting for ["_"])
+| ---------------------------------------------------------------------------
+| Included file 'sig.markdown' not found in _includes directoryEOF
+| -------------------------------------------------------------|--------------
+|                                                              +--- Byte 61
+| Shown bytes [0 to 61] of 61:
+| >Included file 'sig.markdown' not found in _includes directory
+|
+| At line 2
+|       text     |Included file 'sig.markdown' not found in _includes directory|
+|      empty --> ||
+|       text     |This _is_ cool|
+|
+|
+| Elements read in span:
+|
+| Current string:
+|   "includes directory"
++---------------------------------------------------------------------------
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/errors_management.rb:49:in `maruku_error'
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/input/parse_span_better.rb:222:in `read_span'
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/input/parse_span_better.rb:423:in `read_em'
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/input/parse_span_better.rb:202:in `read_span'
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/input/parse_span_better.rb:46:in `parse_span_better'
+\___________________________________________________________________________
+
+||<
+エラーは出てるけど、これで http://localhost:4000にアクセスするとページが見れる！
+sig ... 署名？　あんまりよくないけど、空っぽでも存在さえすれば怒られないっぽい。

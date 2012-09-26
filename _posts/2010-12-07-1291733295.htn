@@ -1,0 +1,223 @@
+---
+layout: post
+title: RubyでTwitterのタイムラインを取得してみる
+description: ''
+catecory: ''
+tags: [Ruby, Twitter, API]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20101207/1291733295
+---
+**前回までのあらすじ
++{% post_link 2010-11-21-1290271210 %}
++{% post_link 2010-11-30-1291125511 %}
+
+前回までで、なんとかOAuth認証を突破する事ができました。目標は達成できたっちゃあできたんですが……せっかくなので、取得したアクセストークンを使ってTwitterからタイムラインを取得してみます！
+
+**タイムラインの取得方法
++signatureを作成する
++以下のパラメータをアルファベット順にxxx=yyy&vvv=zzz……の形で連結した値を[http://api.twitter.com/1/statuses/home_timeline.json]のおしりにくっつけてGET or POST
+++oauth_consumer_key
+++oauth_nonce
+++oauth_signature
+++oauth_signature_method
+++oauth_timestamp
+++oauth_token
+++oauth_version
+
+取得はこれで完了。
+
+signatureの作成方法は今までと同じで、
+
++認証用の値を生成する(以下の3つの値を&で連結する)
+++"GET"
+++"[http://api.twitter.com/1/statuses/home_timeline.json]"をエスケープしたもの
+++oauth_signature以外のパラメータ((oauth_consumer_key, oauth_nonce, oauth_signature_method, oauth_timestamp, oauth_token, oauth_versionの6個っすねー。oauth_tokenを忘れずに。))をアルファベット順に並べてxxx=yyy&vvv=zzz……の形で連結した値をエスケープしたもの
++署名キーを生成する
+++"consumer_secret&oauth_token_secret"
++キーを元に値をHMAC-SHA1方式で暗号化した値をbase64形式でエンコードする
+
+です。OAuth認証して獲得したアクセストークン、oauth_tokenとoauth_token_secretを随所で使います。そして作成したsignatureと他のパラメータを[http://api.twitter.com/1/statuses/home_timeline.json]のおしりにくっつけて(今回は)GETリクエスト。
+
+**戻ってきたタイムライン
+
+タイムラインらしきものはjsonという形式のデータで戻って来ます。home_timeline.jsonのjson部分をxmlとかrssに変えるとxml形式のタイムライン、rss形式のタイムラインが返ってくるようですが今回はこのjsonを何とかしてみます。
+
+jsonの詳細は後にググるとして、一人当たりの情報はこんな感じ。((本来は一行で取得します))
+
+>|json|
+.......},{
+	\"coordinates\":null,
+	\"created_at\":\"Tue Dec 07 13:50:49 +0000 2010\",
+.
+(略)
+.
+	\"in_reply_to_screen_name\":null,
+	\"in_reply_to_status_id_str\":null,
+	\"id_str\":\"99999999999999999\",
+	\"contributors\":null,
+	\"retweet_count\":null,
+	\"in_reply_to_user_id\":null,
+	\"in_reply_to_user_id_str\":null,
+	\"user\":{
+.
+(略)
+.
+		\"screen_name\":\"kk_Ataka\",
+		\"profile_sidebar_border_color\":\"C0DEED\",
+		\"follow_request_sent\":false,
+		\"location\":\"Kawasaki, Kanagawa, Japan\",
+.
+(略)
+.
+		\"profile_link_color\":\"0084B4\"},
+	\"geo\":null,
+	\"retweeted\":false,
+	\"id\":99999999999999999,
+	\"text\":\"test\"
+},{......
+||<
+
+初見だとこれ×20件のデータが改行なしでずらりと画面に並ぶので、面食らったのですが、よく見てみると見覚えがあるデータもちらほら……。
+
+例えば、userの中にあるscreen_nameはkk_Ataka……これ俺や！　あとは、text:testも、testってツイートした後だったので、ツイート内容なのかなと。
+
+リプライしたときはin_reply_to系のキーにリプライ相手のidやscreen_nameが入っていると思います。
+
+んで、このデータをどうやって解析しようか……と思ってググってみると、jsonをparseしてハッシュにしてくれるプログラムが。@webos_goodiesさんの[http://webos-goodies.jp/archives/51071565.html:title=Ruby 用 JSON パーサーを更新、 JSON への変換も追加 - WebOS Goodies]このプログラムをありがたく使わせていただきました。
+
+ソースはこんな感じ。上記のparserは下記のrbファイルと同じディレクトリ、もしくはパスの通っている場所にsimplejsonparser.rbとして配備しました。
+
+>|ruby|
+require 'openssl'
+require 'uri'
+require 'net/http'
+# http://webos-goodies.jp/archives/51071565.html
+require 'simplejsonparser'
+require 'nkf'
+require 'time'
+
+# signature作成
+def signature(method, consumer_secret, oauth_token_secret, url, oauth_header)
+	# signature_keyの作成
+	# リクエストトークン時は"CONSUMER_SECRET&"(アンドが入っている)
+	# アクセストークン時は"CONSUMER_SECRET&OAUTH_TOKEN_SECRET"として使用
+	signature_key = consumer_secret + "&"
+	if !oauth_token_secret.nil? then
+		signature_key += oauth_token_secret
+	end
+
+	# oauth_headerのパラメータをソートして連結
+	param = sort_and_concat(oauth_header)
+
+	# httpメソッドとURLとパラメータを&で連結する
+	value = method + "&" + escape(url) + "&" + escape(param)
+	# hmac_sha1
+	sha1 = OpenSSL::HMAC.digest(OpenSSL::Digest::SHA1.new, signature_key, value)
+	# base64
+	base64 = [sha1].pack('m').gsub(/\n/, '')
+	return base64
+end
+
+# 文字列のエスケープ(: / = %をエスケープする。. _ -はそのまま)
+def escape(value)
+	URI.escape(value, Regexp.new("[^a-zA-Z0-9._-]"))
+end
+
+# oauth_headerの情報をアルファベット順に並べ替え & で結合
+def sort_and_concat(oauth_header)
+	oauth_header_array = oauth_header.sort
+	param = ""
+	oauth_header_array.each do |params|
+		for i in 1..params.length
+			param += params[i-1]
+			if i % params.length == 0
+				param += "&"
+			else
+				param += "="
+			end
+		end
+	end
+	param = param.slice(0, param.length-1)
+end
+
+# 自分のタイムライン取得用のURL
+home_timeline_url = "http://api.twitter.com/1/statuses/home_timeline.json"
+
+# Twitterで登録したらもらえる
+consumer_key = "XXXXXXXXXXXXXXXXXXX"
+consumer_secret = "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
+
+# Twitterからもらえるアクセストークン
+oauth_token = "11111111-ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+oauth_token_secret = "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV"
+
+# oauthパラメータたち
+oauth_header = {
+	# Consumer Key
+	"oauth_consumer_key" => consumer_key,
+	# 一意な値(今回は適当に実装)
+	"oauth_nonce" => "AAAAAAAA",
+	# 署名方式(HMAC-SHA1)
+	"oauth_signature_method" => "HMAC-SHA1",
+	# リクエスト生成時のタイムスタンプ(ミリ秒)
+	"oauth_timestamp" => Time.now.to_i.to_s,
+	# バージョン(1.0)
+	"oauth_version" => "1.0",
+
+	# アクセストークン
+	"oauth_token" => oauth_token 
+}
+
+# signature作成
+oauth_header["oauth_signature"] = signature("GET", 
+					consumer_secret, 
+					oauth_token_secret, 
+					home_timeline_url, 
+					oauth_header)
+
+# GETする
+uri = URI.parse(home_timeline_url)
+proxy_class = Net::HTTP::Proxy(ARGV[0], 8080)
+http = proxy_class.new(uri.host)
+http.start do |http|
+	# oauth_headerのパラメータをソートして連結
+	param = sort_and_concat(oauth_header)
+	
+	res = http.get(uri.path + "?#{param}")
+	if res.code == "200" then
+		json = res.body
+		# simplejsonparserでparseしてもらう
+		jsonparse = JsonParser.new.parse(json)
+
+		# 逆順にして古い物から取得する
+		jsonparse = jsonparse.reverse
+
+		for i in 0..jsonparse.length-1
+
+			# 日付フォーマットを年/月/日 時間に変更
+			time = Time.parse(jsonparse[i]["created_at"]).strftime("%Y/%m/%d %X")
+
+			# SJIS変換(コマンドプロンプトで見る用)
+			# print NKF.nkf('-s', "■#{jsonparse[i]["user"]["screen_name"]} (#{jsonparse[i]["user"]["name"]}) #{time}\n　#{jsonparse[i]["text"]}\n")
+			print "■#{jsonparse[i]["user"]["screen_name"]} (#{jsonparse[i]["user"]["name"]}) #{time}\n　#{jsonparse[i]["text"]}\n"
+		end
+	else
+		print "#{res.code}\n"
+	end
+end
+||<
+
+結果はこう。タイムラインゲットー！
+[f:id:kk_Ataka:20101207233454j:image]
+
+**Windows用……
+ソースの最後、parseも終わってその中からほしいキーの値を取り出してるところで。
+
+>|ruby|
+			# SJIS変換(コマンドプロンプトで見る用)
+			# print NKF.nkf('-s', "■#{jsonparse[i]["user"]["screen_name"]} (#{jsonparse[i]["user"]["name"]}) #{time}\n　#{jsonparse[i]["text"]}\n")
+||<
+
+SJIS変換してるところがあるんですが、これ、もともとWindowsのコマンドプロンプトで動かしたくて作っていたものなんです。でもコマンドプロンプトって文字コードがSJISのようでそのまま表示すると文字化け起こすのでこういう対応を。
+
+一応軽くググった感じだと、コマンドプロンプトでもUnicode文字を読めるようなのですが……。
+

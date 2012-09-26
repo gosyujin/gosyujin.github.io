@@ -1,0 +1,139 @@
+---
+layout: post
+title: RubyではてなのWSSE認証をしてはてブにブクマをポストする
+description: ''
+catecory: ''
+tags: [Ruby, API]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20110308/1299588433
+---
+ReadItLaterの続きをやろうと思ったのですが、GitHubにはてブスクリプトをコミットしたので先にまとめる。
+
+結構前に作ったので、OAuthではなくWSSE認証を使っています。
+
+**手順
+
++X-WSSEヘッダを作成する
++ブックマークするUrl・コメントを記述したxmlデータと、X-WSSEヘッダを含めたリクエストをhttp://b.hatena.ne.jp/atom/postへPOSTする
+
+手順はこれだけ。次に詳細を…。
+
+**ヘッダを作成する
+
+以下のデータを用意します
+
+|*Username|はてなID|
+|*Nonce|HTTPリクエスト毎に生成したセキュリティ・トークンをBASE64エンコードしたもの((一意な値ならとりあえず動くようです。))|
+|*Created|Nonce作成時のタイムスタンプをISO-8601表記で記述したもの|
+|*PasswordDigest|「Nonce+Created+はてなのパスワード」をSHA1でダイジェスト化しBASE64エンコードしたもの|
+
+これらのデータをX-WSSEヘッダに以下の形式で格納します。
+
+>||
+UsernameToken Username="USERNAME", PasswordDigest="PASSWORDDIGEST", Nonce="NONCE", Created="CREATED"
+||<
+
+**POSTする
+
+ヘッダは完成したので、次にブックマークする情報を用意します。形式はxmlで以下のようなフォーマットで作成します。((ブックマークコメントを[]でくくるとタグになります。[Google]みたいな。))
+
+>||
+<entry xmlns="http://purl.org/atom/ns#">
+                <title>dummy</title>
+                <link rel="related" type="text/html" href="ブックマークするURL" />
+                <summary type="text/plain">ブックマークコメント</summary>
+</entry>
+||<
+
+作成されたヘッダとデータはこんな感じになります。
+
+[f:id:kk_Ataka:20110308213639j:image]
+
+最後に作成したヘッダとブックマークデータをhttp://b.hatena.ne.jp/atom/postへポストすると。
+
+[f:id:kk_Ataka:20110308213640j:image]
+
+おお。
+
+正常に作成された場合は、ステータスコードは201が返ってくるようです。
+
+**ソース
+
+Gistは直接貼れるけどGitHubは貼れないのね…。ここにあります。[https://github.com/gosyujin/hatena:title=gosyujin/hatena · GitHub]
+
+>|ruby|
+require 'rubygems'
+require 'pit'
+require 'time'
+require 'digest/sha1'
+require 'net/http'
+require 'uri'
+require 'nkf'
+
+# wsse認証を行う
+def wsse(hatena_id, password)
+	# 一意な値(仮実装)
+	nonce = [Time.now.to_i.to_s].pack('m').gsub(/\n/, '')
+	# nonce作成時のタイムスタンプをISO-8601表記で記述したもの
+	now = Time.now.utc.iso8601
+	
+	# SHA1ダイジェスト化した文字列をBase64エンコード
+	digest = [Digest::SHA1.digest(nonce + now + password)].pack("m").gsub(/\n/, '')
+	
+	{ 'X-WSSE' => sprintf(
+		%Q<UsernameToken Username="%s", PasswordDigest="%s", Nonce="%s", Created="%s">,
+		hatena_id, digest, nonce, now)
+	}
+end
+
+# はてブ登録用xmlを生成する
+def getXml(link, summary)
+	%Q(
+	<entry xmlns="http://purl.org/atom/ns#">
+		<title>dummy</title>
+		<link rel="related" type="text/html" href="#{link}" />
+		<summary type="text/plain">#{summary}</summary>
+	</entry>
+	)
+end
+
+b_url = ARGV.shift || abort("Usage: hatenabookmark.rb <url> <comment>")
+b_comment = ARGV.shift
+
+# エンドポイント
+url = "http://b.hatena.ne.jp/atom/post"
+
+# ユーザ情報読み込み
+hatena = Pit.get("hatena", :require => {
+	# はてなIDとパスワード
+	"hatena_id" => "your hatena_id", 
+	"password" => "your password", 
+})
+# pitを使わずにべた書き用
+# hatena = {
+#	hatena_id => HATENA_ID, 
+#	password = PASSWORD
+# }
+
+# WSSE認証
+header = wsse(hatena["hatena_id"], hatena["password"])
+
+uri = URI.parse(url)
+proxy_class = Net::HTTP::Proxy(ENV["PROXY"], 8080)
+http = proxy_class.new(uri.host)
+http.start do |http|
+	# 読み込んだ文字列をutf-8に変換
+	# b_url = NKF.nkf('-w', b_url)
+	# b_comment = NKF.nkf('-w', b_comment)
+	
+	# エンドポイントへPOST
+	res = http.post(uri.path, getXml(b_url, b_comment), header)
+	if res.code == "201" then
+		print "Bookmark success: #{b_url}\n"
+	else
+		print "#{res.code} Error: #{b_url}\n"
+	end
+end
+||<
+
+参考にしたサイトにトラックバック打とうと思ったけど前すぎて忘れた＞＜　見つけたら追記します。
+

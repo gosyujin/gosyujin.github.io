@@ -1,0 +1,187 @@
+---
+layout: post
+title: Fluentdというログ収集ツールを使ってApacheのログを取得するまで
+description: ''
+catecory: ''
+tags: [Fluentd, 備忘録, Ruby]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20120712/1342098141
+---
+
+**あらすじ
+-Twitterで@[https://twitter.com/tosikawa:title=tosikawa]さんにこんなツールあるよ、と教えてもらった
+-…が、未見だったためすぐググる
+-とりあえずどんなものか動かしてみる事に
+
+***Fluentdとは
+>http://fluentd.org/>
+Log everything in JSON
+<<
+Oh...シンプルイズベスト…。
+>>
+Fluentd is a log collector daemon written in Ruby. Fluentd receives logs as JSON streams, buffers them, and sends them to other systems like MySQL, MongoDB, or even other instances of Fluentd.
+<<
+Rubyで作られたログ収集ツール。ただし、JSONで……？
+
+**参考サイト
+-[http://fluentd.org/:title=Fluentd: Log Everything in JSON]
+--公式のDocumentationがSphinx
+-[http://d.hatena.ne.jp/viver/20110929:title=2011-09-29 - 古橋貞之の日記]
+-[http://d.hatena.ne.jp/wyukawa/20120207/1328625443:title=fluentdを試してみた - wyukawa’s blog]
+-[http://d.hatena.ne.jp/zakihaya/20120616/1339856226:title=fluentdを使ってnginxのログを溜めてみるメモ - zakihayaの日記]
+-[http://d.hatena.ne.jp/fat47/20120426/1335428063:title=【作業メモ】Apacheログをfluentd+MongoDBで収集しRubyで集計してみたが… - FAT47の底辺インフラ議事録]
+-[http://shinobra.com/2012/02/sawanoboly/gluent_getting_start:title=fluentことはじめ、起動からmongodbにログを突っ込むまで | しのぶら!!!]
+
+**環境
+-CentOS 6.2
+-Ruby 1.9.3
+-RubyGems 1.8.21
+
+**手順
+とりあえずbundlerで動かしてみるためにGemfileを作成。
+>||
+$ cat Gemfile
+source :rubygems
+source "http://rubygems.org"
+
+gem 'fluentd'
+||<
+インストール。
+>||
+$ bundle install --path ./vendor/bundle
+Fetching gem metadata from http://rubygems.org/....
+Fetching gem metadata from http://rubygems.org/....
+Installing iobuffer (1.1.2) with native extensions
+Installing cool.io (1.1.0) with native extensions
+Installing http_parser.rb (0.5.3) with native extensions
+Installing json (1.7.3) with native extensions
+Installing msgpack (0.4.7) with native extensions
+Installing yajl-ruby (1.1.0) with native extensions
+Installing fluentd (0.10.24)
+Using bundler (1.1.3)
+Your bundle is complete! It was installed into ./vendor/bundle
+||<
+OK。((CentOSはこれでよかったんだけど、はじめにWindowsで挑戦したらエラッタ。。))
+
+**実行
+[http://fluentd.org/doc/install.html#confirm-installation:title=Installation — fluentd v0.10 documentation] を参考に。
+-設定ファイルなどのテンプレートを指定先に作ってくれる。
+>||
+$ bundle exec fluentd --setup ./fluent
+Installed ./fluent/fluent.conf.
+||<
+
+-コンフィグファイル指定+traceモードで起動
+>||
+$ bundle exec fluentd -c ./fluent/fluent.conf -vv &
+[1] 12973
+2012-07-10 21:37:47 +0900: fluent/supervisor.rb:153:supervise: starting fluentd-0.10.24
+2012-07-10 21:37:47 +0900: fluent/supervisor.rb:235:read_config: reading config file path="./fluent/fluent.conf"
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered buffer plugin 'file'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered buffer plugin 'memory'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'exec'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'forward'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'gc_stat'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'http'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'object_space'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'status'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'tcp'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'unix'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'syslog'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'tail'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'copy'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'exec'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'exec_filter'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'file'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'forward'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'null'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'roundrobin'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'stdout'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'tcp'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'unix'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'test'
+2012-07-10 21:37:47 +0900: fluent/engine.rb:63:block in configure: adding source type="forward"
+2012-07-10 21:37:47 +0900: fluent/engine.rb:63:block in configure: adding source type="http"
+2012-07-10 21:37:47 +0900: fluent/engine.rb:79:block in configure: adding match pattern="debug.**" type="stdout"
+2012-07-10 21:37:47 +0900: plugin/in_forward.rb:60:listen: listening fluent socket on 0.0.0.0:24224
+2012-07-10 21:37:47 +0900: plugin/in_http.rb:74:start: listening http on 0.0.0.0:8888
+||<
+
+-ログを送ってみる
+>||
+$ echo '{"json":"message"}' | bundle exec fluent-cat debug.test
+2012-07-10 21:40:02 +0900: plugin/in_forward.rb:139:initialize: accepted fluent socket object_id=14145560
+2012-07-10 21:40:02 +0900 debug.test: {"json":"message"}
+2012-07-10 21:40:02 +0900: plugin/in_forward.rb:180:on_close: closed fluent socket object_id=14145560
+||<
+
+
+**Apacheのログを集めてみる
+集めるログ……自鯖のApacheのログをfluentdで集めてみよう。
+-コンフィグファイルにはじめからコメントアウトされている設定があったので、これを利用
+>||
+## File input                                                                                                                                 
+## read apache logs with tag=apache.access                                                                                                    
+<source>
+  type tail
+  format apache
+  path /var/log/httpd-access.log
+  tag apache.access
+</source>
+||<
+
+-typeにはInput Pluginを指定するらしい。種類はhttp, tail, forward, execなど
+--[http://fluentd.org/doc/plugin.html#input-plugins:title=Plugins — fluentd v0.10 documentation]
+-format(必須)はLogのフォーマットを指定。今回はApacheのログなのでapache
+-path(必須)はLogのパスかな
+-tag(必須)はfluentd内で使うタグ？ myapp.accessみたいにドットで分けるらしい
+上記の条件にマッチしたものを、今度はmatchタグに従ってoutputしている……のかな？
+>||
+## match tag=apache.access and write to file                                                                                                  
+<match apache.access>
+  type file
+  path /home/kk_Ataka/log
+</match>
+||<
+
+では動かしてみよう。
+>||
+$ sudo bundle exec fluentd -c fluent/fluent.conf
+||<
+
+Apacheへアクセス。(Redmineがいるので、Redmineホームにアクセスしてみる)
+
+…。
+
+…。
+
+**結果
+***Apacheの方でいつもどおり作られたログ
+>||
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] "GET / HTTP/1.1" 200 4371
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] "GET /themes/alternate/stylesheets/application.css?1339785657 HTTP/1.1" 304 -
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] "GET /javascripts/controls.js?1339785657 HTTP/1.1" 304 -
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] "GET /javascripts/effects.js?1339785657 HTTP/1.1" 304 -
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] "GET /javascripts/prototype.js?1339785657 HTTP/1.1" 304 -
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] "GET /javascripts/dragdrop.js?1339785657 HTTP/1.1" 304 -
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] "GET /javascripts/application.js?1339785657 HTTP/1.1" 304 -
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] "GET /stylesheets/scm.css?1339785657 HTTP/1.1" 304 -
+::1 - - [10/Jul/2012:22:20:36 +0900] "OPTIONS * HTTP/1.0" 200 -
+||<
+見慣れたもんが出ました。
+
+***fluentdで作られたログ
+>||
+2012-07-10T22:20:30+09:00       apache.access   {"host":"xxx.xxx.xxx.xxx","user":"-","method":"GET","path":"/","code":"200","size":"4371"}
+2012-07-10T22:20:30+09:00       apache.access   {"host":"xxx.xxx.xxx.xxx","user":"-","method":"GET","path":"/themes/alternate/stylesheets/application.css?1339785657","code":"304","size":"-"}
+2012-07-10T22:20:30+09:00       apache.access   {"host":"xxx.xxx.xxx.xxx","user":"-","method":"GET","path":"/javascripts/controls.js?1339785657","code":"304","size":"-"}
+2012-07-10T22:20:30+09:00       apache.access   {"host":"xxx.xxx.xxx.xxx","user":"-","method":"GET","path":"/javascripts/effects.js?1339785657","code":"304","size":"-"}
+2012-07-10T22:20:30+09:00       apache.access   {"host":"xxx.xxx.xxx.xxx","user":"-","method":"GET","path":"/javascripts/prototype.js?1339785657","code":"304","size":"-"}
+2012-07-10T22:20:30+09:00       apache.access   {"host":"xxx.xxx.xxx.xxx","user":"-","method":"GET","path":"/javascripts/dragdrop.js?1339785657","code":"304","size":"-"}
+2012-07-10T22:20:30+09:00       apache.access   {"host":"xxx.xxx.xxx.xxx","user":"-","method":"GET","path":"/javascripts/application.js?1339785657","code":"304","size":"-"}
+2012-07-10T22:20:30+09:00       apache.access   {"host":"xxx.xxx.xxx.xxx","user":"-","method":"GET","path":"/stylesheets/scm.css?1339785657","code":"304","size":"-"}
+2012-07-10T22:20:36+09:00       apache.access   {"host":"::1","user":"-","method":"OPTIONS","path":"*","code":"200","size":"-"}
+||<
+自動で全部jsonにparseされている！　さすがLog everything in JSONと公式に書いているだけの事はある！
+
+こうなってくると、MongoDBとかの知識も必要になってくるな。
+
