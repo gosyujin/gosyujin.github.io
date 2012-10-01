@@ -1,6 +1,7 @@
 source :rubygems
 source "http://rubygems.org"
 
+gem 'rake'
 gem 'jekyll', :git => 'git://github.com/mojombo/jekyll.git'
 gem 'RedCloth'
 gem 'rdiscount'
