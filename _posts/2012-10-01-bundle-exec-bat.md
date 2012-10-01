@@ -9,9 +9,11 @@ tags: [Ruby, Bundle, Windows]
 
 ## あらすじ
 
-Bundler、非常によいツールなんだけど、bundle exec がめんどい。シェルで実行する場合はbundle-exec.shというツールを使う事でうまい事回避してくれるんだけど、Windowsでもこれを実現したい。 - [bundle exec を省略する - おもしろWEBサービス開発日記](http://d.hatena.ne.jp/willnet/20110612/1307849053)
+Bundler、非常によいツールなんだけど、bundle exec がめんどい。
 
-シェルを参考にバッチファイルを作成して同じ事できないかな。
+ググってみたところ `gemset` を使う方法 [rvmのgemsetを使ってbundlerと賢く付き合う方法 - Hello, world! - s21g](http://blog.s21g.com/articles/1930) と、 `bundle-exec.sh` というツールを使う [bundle exec を省略する - おもしろWEBサービス開発日記](http://d.hatena.ne.jp/willnet/20110612/1307849053) 方法があるみたい。
+
+Windowsでこれを実現したいんだけど、gemsetはちょっと大げさな気がするので、bundle-exec.shを参考にバッチファイルを作成できないかな。
 
 ## 参考サイト
 
@@ -37,13 +39,15 @@ Bundler、非常によいツールなんだけど、bundle exec がめんどい�
 
 ## ソース
 
+で、作ってみた。
+
 [gosyujin/bundler-exec-bat](https://github.com/gosyujin/bundler-exec-bat)
 
-## 手順
+## 使い方
 
 ### aliasをはる
 
-コマンドプロンプトの場合は、マクロ定義ファイルを作成して、それを起動時に読むようにバッチファイルを作る、起動オプションを変更する必要があるらしい。(またはレジストリに登録など)
+コマンドプロンプトの場合にはaliasがないようなので、マクロ定義ファイルを作成し、それを起動時に読むようにバッチファイルを作る。または起動オプションを変更する必要があるらしい。(レジストリに登録などでもいい)
 
 定義ファイルは以下のように記述する。とりあえずruby, rspec, herokuを使えるように。必要なコマンドは適宜このファイルに追加する事になる。
 
@@ -61,7 +65,7 @@ alias(マクロ)を確認するには
 
 ### それ以降
 
-それ以降の処理はバッチファイルに記述する。
+それ以降の処理は `bundler-exec.bat` に記述している。
 
 バッチファイルをがっつり書く機会もあまりなかったので、結構試行錯誤。(pwdをWindowsで実現させるには？　コマンドの実行結果を変数に格納するには？　while文ないの？　等々)
 
@@ -109,10 +113,10 @@ bundler is NOT found or Gemfile is NOT found: ruby fizzbuzz.rb 15
 FizzBuzz
 {% endhighlight %}
 
-ちゃんと `bundle exec` なしで実行できた。
+ちゃんと `bundle exec` なしで実行できた！
 
 ## 残件
 
 - なんか重い
 
-結構力技でやってるから…。 
+結構力技でやってるから…？　またはテストしてるPCがヘボいから？
