@@ -13,7 +13,7 @@ Bundler、非常によいツールなんだけど、bundle exec がめんどい�
 
 ググってみたところ `gemset` を使う方法 [rvmのgemsetを使ってbundlerと賢く付き合う方法 - Hello, world! - s21g](http://blog.s21g.com/articles/1930) と、 `bundle-exec.sh` というツールを使う [bundle exec を省略する - おもしろWEBサービス開発日記](http://d.hatena.ne.jp/willnet/20110612/1307849053) 方法があるみたい。
 
-Windowsでこれを実現したいんだけど、gemsetはちょっと大げさな気がするので、bundle-exec.shを参考にバッチファイルを作成できないかな。
+Windowsでこれを実現したいんだけど、gemsetはちょっと大げさな気がするので、bundler-exec.shを参考にバッチファイルを作成できないかな。
 
 ## 参考サイト
 
@@ -29,7 +29,7 @@ Windowsでこれを実現したいんだけど、gemsetはちょっと大げさ�
 
 ソースを読む限り、やっている処理は
 
-1. `ruby` とか` rspec` とかbundle exec hogehogeしたいコマンドにaliasをはる(rubyならbundle-exec.sh rubyとなるように)
+1. `ruby` とか` rspec` とかbundle exec hogehogeしたいコマンドにaliasをはる(rubyならbundler-exec.sh rubyとなるように)
 1. `bundle` コマンドが使えるのか探してみる。使えない場合はそのままコマンドを実行する
 1.  `bundle` が使える場合、今いるパスに `Gemfile` ファイルがあるのか調べる。ない場合は一つ階層を上がってまた `Gemfile` があるか探す
 1. 上記をを繰り返す。 `Gemfile` がない場合はそのままコマンドを実行する
