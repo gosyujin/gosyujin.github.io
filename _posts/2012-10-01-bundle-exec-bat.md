@@ -11,7 +11,7 @@ tags: [Ruby, Bundle, Windows]
 
 Bundler、非常によいツールなんだけど、bundle exec がめんどい。
 
-ググってみたところ `gemset` を使う方法 [rvmのgemsetを使ってbundlerと賢く付き合う方法 - Hello, world! - s21g](http://blog.s21g.com/articles/1930) と、 `bundle-exec.sh` というツールを使う [bundle exec を省略する - おもしろWEBサービス開発日記](http://d.hatena.ne.jp/willnet/20110612/1307849053) 方法があるみたい。
+ググってみたところ `gemset` を使う方法 [rvmのgemsetを使ってbundlerと賢く付き合う方法 - Hello, world! - s21g](http://blog.s21g.com/articles/1930) と、 `bundler-exec.sh` というツールを使う [bundle exec を省略する - おもしろWEBサービス開発日記](http://d.hatena.ne.jp/willnet/20110612/1307849053) 方法があるみたい。
 
 Windowsでこれを実現したいんだけど、gemsetはちょっと大げさな気がするので、bundler-exec.shを参考にバッチファイルを作成できないかな。
 
@@ -51,9 +51,9 @@ Windowsでこれを実現したいんだけど、gemsetはちょっと大げさ�
 
 定義ファイルは以下のように記述する。とりあえずruby, rspec, herokuを使えるように。必要なコマンドは適宜このファイルに追加する事になる。
 
-    heroku=bundle-exec heroku $*
-    rspec=bundle-exec rspec $*
-    ruby=bundle-exec ruby $*
+    heroku=bundler-exec heroku $*
+    rspec=bundler-exec rspec $*
+    ruby=bundler-exec ruby $*
 
 定義ファイルを読み込む場合は
 
