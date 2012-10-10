@@ -17,7 +17,7 @@ Jekyllのプラグイン作成の練習。エントリから見出しを抽出�
 
 ## ソース
 
-github
+- [gosyujin.github.com/_plugins/tree_list.rb at master · gosyujin/gosyujin.github.com · GitHub](https://github.com/gosyujin/gosyujin.github.com/blob/master/_plugins/tree_list.rb)
 
 ### まだできてない事
 
@@ -25,7 +25,7 @@ github
   - 記事タイトルが `h1 (#)` なので、 `h2 (##)` 以下の見出しを集めてくるようにしている
 - 目次から記事へのリンク
   - Markdownでは `## <a name="section"> hoge` と記載すればnameを振ってくれるようだけど、めんどいので自動で振ってほしい
-  - むしろ今はaタグを入れているとレイアウトが崩れる
+  - **むしろ今はaタグを入れているとレイアウトが崩れる**
 
 ## 作り方
 
@@ -46,7 +46,7 @@ end
 Liquid::Template.register_tag('sample', Jekyll::SampleTag)
 {% endhighlight %}
 
-これでMarkdown中に `{{ " {% sample hogehoge fuga " }} %}` と書くと、initializeメソッドの `tag_name` にsample、 `xxx` にhogehoge fuga、 `tokens` に本文が渡される。
+これでMarkdown中に `{{ "{% sample hogehoge fuga " }} %}` と書くと、initializeメソッドの `tag_name` にsample、 `xxx` にhogehoge fuga、 `tokens` に本文が渡される。
 
 という事でタグにつけた引数や本文を使う場合はinitializeで確保しとく。
 
@@ -56,8 +56,8 @@ renderメソッドでreturnした文字列がそのままページに出力さ�
 
 ## 例
 
-- 己のJekyll下の `_plugins` に上記のソースを突っ込む
-- html(postするMarkdownファイルでもいいし、テンプレートのhtmlでもいい)のどこかに `{{ " {% tree " }} %}` を埋め込む
+- 己のJekyll下の `_plugins` に `tree_list.rb` を突っ込む
+- html(postするMarkdownファイルでもいいし、テンプレートのhtmlでもいい)のどこかに `{{ "{% tree " }} %}` を埋め込む
 - `$ jekyll --server` 実行後localhost:4000にアクセス
 
 これで文中の見出しが目次としてかき集められる。
