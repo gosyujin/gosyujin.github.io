@@ -43,7 +43,8 @@ end #JB
 # Usage: rake deploy
 desc "Begin a push static file to GitHub"
 task :deploy do
-  puts "! Copy static file from _site to _deploy"
+  puts "! Clean and copy static file from _site to _deploy"
+  sh "rm -rf _deploy/*"
   sh "cp -r _site/* _deploy/"
   puts "! Change directory _deplay"
   cd "_deploy" do
