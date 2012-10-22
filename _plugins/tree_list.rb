@@ -14,6 +14,7 @@ module Jekyll
       h1 = 1
       now_hx = h1 + 1
       before_hx = h1 + 1
+      total_hx_count = 0
       ignore_area = false
 
       content = context.environments[0]["page"]["content"]
@@ -39,8 +40,14 @@ module Jekyll
               tree += "<ul>"
               before_hx += 1
             end
-            tree += "<li>#{title.chomp!}</li>"
 
+            if total_hx_count == 0 then
+              tree += "<li><a href='#section'>#{title.chomp!}</a></li>"
+            else
+              tree += "<li><a href='#section-#{total_hx_count}'>#{title.chomp!}</a></li>"
+            end
+
+            total_hx_count += 1
             before_hx = now_hx
           end
         end
