@@ -19,6 +19,7 @@ module Jekyll
 
       content = context.environments[0]["page"]["content"]
       content.each_line do |line|
+        # ignore source code area
         if line =~ /^{% endhighlight / then
           ignore_area = false
         elsif line =~ /^{% highlight / then
@@ -26,7 +27,7 @@ module Jekyll
         end
 
         if !ignore_area then
-          if line =~ /^#+[ ]/ then
+          if line =~ /#+[ ]/ then
             # $`:マッチした前 $&:マッチした箇所 $':マッチした後
             now_hx = $&.count("#")
             title = $'
@@ -41,10 +42,12 @@ module Jekyll
               before_hx += 1
             end
 
-            if total_hx_count == 0 then
-              tree += "<li><a href='#section'>#{title.chomp!}</a></li>"
-            else
-              tree += "<li><a href='#section-#{total_hx_count}'>#{title.chomp!}</a></li>"
+            if line =~ /^#+[ ]/ then
+              if total_hx_count == 0 then
+                tree += "<li><a href='#section'>#{title.chomp!}</a></li>"
+              else
+                tree += "<li><a href='#section-#{total_hx_count}'>#{title.chomp!}</a></li>"
+              end
             end
 
             total_hx_count += 1
