@@ -17,7 +17,7 @@ Jekyllのプラグイン作成の練習。エントリから見出しを抽出�
 
 ## ソース
 
-- [gosyujin.github.com/_plugins/tree_list.rb at master · gosyujin/gosyujin.github.com · GitHub](https://github.com/gosyujin/gosyujin.github.com/blob/master/_plugins/tree_list.rb)
+- [gosyujin.github.com/_plugins/tree_list.rb at master · gosyujin/gosyujin.github.com · GitHub](https://github.com/gosyujin/gosyujin.github.com/blob/source/_plugins/tree_list.rb)
 
 ### まだできてない事
 
