@@ -3,7 +3,7 @@ layout: post
 title: "すごいHaskellたのしく学ぼうでHaskellことはじめ"
 description: ""
 category: 
-tags: [Haskel]
+tags: [Haskell]
 ---
 {% include JB/setup %}
 
