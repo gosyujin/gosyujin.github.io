@@ -7,6 +7,16 @@ tags: [Haskell]
 ---
 {% include JB/setup %}
 
+## 前回までのあらすじ
+
+[すごいHaskellたのしく学ぼうでHaskellことはじめ](http://gosyujin.github.com/2013/01/21/haskell-helloworld2/)
+
+GitHub Pagesの方にリンクを貼ってみよう。
+
+## 参考
+
+- すごいHaskellたのしく学ぼう
+
 ## 3章 関数の構文
 
 ### パターンマッチ
