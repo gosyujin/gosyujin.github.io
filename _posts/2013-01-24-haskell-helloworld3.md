@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "すごいHaskellたのしく学ぼうでHaskellことはじめ"
+title: "すごいHaskellたのしく学ぼうでHaskellことはじめ2"
 description: ""
 category: 
 tags: [Haskell]
