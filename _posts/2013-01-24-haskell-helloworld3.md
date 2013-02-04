@@ -165,10 +165,10 @@ bmiTell wei hei
 **同一パターンの中でしか使えない。**
 
 {% highlight haskell %}
-20 greet "Juan"     = hell ++ " Juan"
-21 greet "Fernando" = hell ++ " Fernando"
-22 greet name       = hell ++ " " ++ name
-23  where hell = "Hell."
+greet "Juan"     = hell ++ " Juan"
+greet "Fernando" = hell ++ " Fernando"
+greet name       = hell ++ " " ++ name
+ where hell = "Hell."
 {% endhighlight %}
 
 コンパイルすると20, 21行目でNot in scope。
