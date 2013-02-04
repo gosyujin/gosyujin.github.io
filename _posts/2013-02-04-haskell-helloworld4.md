@@ -44,7 +44,7 @@ max' (x:xs) = max x (max' xs)  -- 3番目
 *** Exception: empty
 {% endhighlight %}
 
-### 他の再起
+### 他の再帰
 
 残りの再帰例も写経してみる+一部いじってみる。
 
