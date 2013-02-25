@@ -128,7 +128,9 @@ Please upgrade to Bundler 1.3 or higher.
 
 ガーン。Bundler 1.3以降じゃないと対応してないのかー。
 
-あれ？GitHubには24 February 2013に1.3出てるって書かれてる。 - https://github.com/carlhuda/bundler
+あれ？GitHubには24 February 2013に1.3出てるって書かれてる。
+
+- [carlhuda/bundler · GitHub](https://github.com/carlhuda/bundler)
 
 まだRubygemsに反映されていないのかな？なら直接入れてみよう。
 
