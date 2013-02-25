@@ -181,7 +181,7 @@ Bundler version 1.3.0
 {% endhighlight %}
 
 入った。
-プロジェクトだけbundle installしてみたけどうまく動いたので、とりあえずOKかな。
+1プロジェクトだけbundle installしてみたけどうまく動いたので、とりあえずOKかな。
 
 次。
 
@@ -193,7 +193,7 @@ Bundler version 1.3.0
 
 ## インストール
 
-……するに。そのままだと `rvm list known` を見てもruby 1.9.3までしかないので、rvmの更新を行う。
+……する前に。そのままだと `rvm list known` を見てもruby 1.9.3までしかないので、rvmの更新を行う。
 
 - [RVM がかなり古くなってたので、RVM のアップデートに挑戦 - KUROIGAMEN(黒い画面)](http://kuroigamen.com/51)
 
