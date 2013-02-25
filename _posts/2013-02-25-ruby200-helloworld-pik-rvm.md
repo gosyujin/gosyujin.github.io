@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Ruby2.0.0 をpikとrvm経由でインストール&環境構築"
+title: "Ruby 2.0.0 をpikとrvm経由でインストール&環境構築"
 description: ""
 category: 
 tags: [Ruby, StartUp]
@@ -12,6 +12,8 @@ tags: [Ruby, StartUp]
 Ruby 2.0.0 がリリースされたので、インストールしつつ、新機能を使ってみる。
 
 …と思ったけど、意外とてこずったので、とりあえずインストールと準備だけ。
+
+後途中にGemの作り方めも。
 
 ## 環境1
 
