@@ -40,6 +40,13 @@ module JB
   end #Path
 end #JB
 
+# Usage: rake sed html="html file"
+desc "Begin ad sed html file to hatena"
+task :sed do
+  html = ENV["html"]
+  sh "sh _scripts/html_sed_to_hatena #{html}"
+end
+
 # Usage: rake deploy
 desc "Begin a push static file to GitHub"
 task :deploy do
