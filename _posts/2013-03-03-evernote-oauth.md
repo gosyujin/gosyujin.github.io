@@ -21,7 +21,7 @@ tags: [Ruby, Evernote, OAuth]
 
 - Ruby 1.8.7
 
-Evernoteスクリプトは自分しか使っていない。
+注: Evernoteスクリプトは自分しか使っていない。
 
 ## 参考サイト
 
