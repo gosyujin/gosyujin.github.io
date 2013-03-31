@@ -1,13 +1,29 @@
 ---
 layout: post
-title: "chef helloworld"
+title: " 入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで"
 description: ""
 category: 
 tags: [Ruby, Chef]
 ---
 {% include JB/setup %}
 
-## 環境
+## あらすじ
+
+Chefを触ってみたいと思いつつ、取っ掛かりを作るにはかなり用語が多いなーとウダウダしていたら、3/11にこんな本が出版されており。
+
+- [Amazon.co.jp： 入門Chef Solo - Infrastructure as Code eBook: 伊藤直也: Kindleストア](http://www.amazon.co.jp/exec/obidos/ASIN/B00BSPH158/everlasting-22/ref=nosim/)
+
+早速購入。
+
+本書のはじめにはこんな事が書かれていました。
+
+> 公式ドキュメントがあまりにしっかり書かれすぎていることもあって「はじめの一歩」としてどの辺りを知ればいいのか、つまり「普通に使う分にはこの程度知っていればOK」というのがどの辺りなのかを掴むのが難しい…というのが筆者の個人的な印象です。
+
+はじめの一歩をどうしようか迷ってる場合オススメと……。
+
+ではHello Worldしてみよう。
+
+## 環境(Windows編)
 
 - Windows XP
 - CentOS 6.2 Final
@@ -18,7 +34,7 @@ tags: [Ruby, Chef]
 
 ### Chef インストール
 
-ぼっち環境のため、vendor/cacheディレクトリに必要なGemsを放り込んでbundle install
+ネットワークに繋がっていないぼっち環境のため、vendor/cacheディレクトリに必要なGemをありったけ放り込んでbundle install。
 
 {% highlight console %}
 $ bundle install --local --path vendor/bundle
@@ -47,7 +63,7 @@ Installing chef (11.4.0)
 Using bundler (1.3.1)
 {% endhighlight %}
 
-### レポジトリ、クックブック、レシピ
+### 構成 レポジトリ、クックブック、レシピ
 
 Chefには `レポジトリ` , `クックブック` , `レシピ` という概念がある。
 
@@ -63,7 +79,7 @@ Chefには `レポジトリ` , `クックブック` , `レシピ` という概�
 $ git clone http://github.com/opscode/chef-repo.git
 {% endhighlight %}
 
-中身はこんな感じ。
+中身はこんな感じ。それぞれの役目はまだわからない。
 
 - LICENSE
 - README.md
@@ -78,7 +94,9 @@ $ git clone http://github.com/opscode/chef-repo.git
 
 #### クックブック作成
 
-クックブックを作るためのツール `knife` の初期設定。 `knife` はChefをインストールすれば使える。
+クックブックを作るためにはツール `knife` を使う。
+
+`knife` の初期設定。 `knife` はChefをインストールすれば使えるようになっている。
 
 {% highlight console %}
 $ bundle exec knife -h
@@ -101,6 +119,8 @@ Usage: knife sub-command (options)
 {% endhighlight %}
 
 設定ファイルなど作成するために `knife configure` を実行。
+
+色々聞かれるが、今はそのままでいい。
 
 {% highlight console %}
 $ bundle exec knife configure
@@ -129,6 +149,8 @@ Configuration file written to C:/Documents and Settings/USER/.chef/knife.rb
 
 初期設定が終わったので、さっき落としたレポジトリの中でクックブックを作る。
 
+`knife cookbook create COOKBOOK_NAME -o COOKBOOK_DIR`
+
 {% highlight console %}
 $ bundle exec knife cookbook create hello -o cookbooks
 ** Creating cookbook hello
@@ -151,11 +173,16 @@ $ bundle exec knife cookbook create hello -o cookbooks
 - resources/
 - templates/
 
-`knife` コマンドも、生成されたファイルもまだ全然わからないけど、とりあえず作成する事はできた。
+`knife` コマンドも、生成されたファイルもまだ全然わからないけど、
+
+1. レポジトリを作成
+1. クックブックを作成
+
+まではできたので、次はいよいよレシピを作成。
 
 #### レシピ編集
 
-すでにひな形はできている。(コメントだけだけど) `recipes/default.rb`
+すでにひな形はできている。(コメントだけだけど) `chef-repo/cookbooks/hello/recipes/default.rb`
 
 {% highlight ruby %}
 #
@@ -168,17 +195,17 @@ $ bundle exec knife cookbook create hello -o cookbooks
 #
 {% endhighlight %}
 
-上記ファイルに追記して、はじめにlogを吐くだけのレシピを作成。
+上記ファイルに追記。
+
+はじめはlogでHello Worldを吐くだけのレシピを作成。
 
 {% highlight ruby %}
-# All rights reserved - Do Not Redistribute
-#
 log "Hello World!"
 {% endhighlight %}
 
-### その他設定色々、もう少し
+### その他設定色々、動かすためにもう少し
 
-レポジトリの直下 `chef-repo` に どのレシピを実行するか指定するjsonファイルを作る。名前は `localhost.json` とした。
+レポジトリの直下 `chef-repo/` に どのレシピを実行するか指定するjsonファイルを作る。名前は `localhost.json` とした。
 
 {% highlight json %}
 // localhost.json
@@ -224,8 +251,10 @@ cannot load such file -- win32/service (LoadError)
         from C:/chef/vendor/bundle/ruby/1.9.1/bin/chef-solo:23:in `<main>'
 {% endhighlight %}
 
-- http://stackoverflow.com/questions/12868121/cannot-load-such-file-ruby-wmi-loaderror-cannot-load-such-file-win32-s
-- http://wiki.opscode.com/display/chef/Common+Errors#CommonErrors-Nosuchfiletoloadrubywmi
+色々調べてみる……。
+
+- [windows - cannot load such file -- ruby-wmi (LoadError) & cannot load such file -- win32/service (LoadError) - Stack Overflow](http://stackoverflow.com/questions/12868121/cannot-load-such-file-ruby-wmi-loaderror-cannot-load-such-file-win32-s)
+- [Common Errors - Chef - Opscode Open Source Wiki](http://wiki.opscode.com/display/chef/Common+Errors#CommonErrors-Nosuchfiletoloadrubywmi)
 
 最終的にGemfileはこうなった。
 
@@ -237,7 +266,6 @@ gem "chef"
 gem 'ffi'
 
 gem "win32-service"
-#gem "win32-open3"
 gem "ruby-wmi"
 gem "windows-api"
 gem "windows-pr"
@@ -258,31 +286,13 @@ Recipe: hello::default
 Chef Client finished, 1 resources updated
 {% endhighlight %}
 
-ちょっと表示がアレだけど、Hello Worldこれた！
+## 本当に何かインストールしてみる
 
-### 本当に何かインストールしてみる
+ここからは、本当に何かをインストールしてみる。
 
-本書だとzshを簡単に入れてたんだけど、Windowsではどうすればいいのか……。
+……と同時に、サーバいじるんだからWindowsじゃなくていいよねということで構成変更。
 
-- http://weathercook.hatenadiary.jp/entry/20120117/1326778600
-- https://github.com/opscode/cookbooks/tree/deprecated-master/7-zip
-
-7-zipのクックブックが練習になりそう。
-
-まずは、クックブックの `attributes` に `default.rb` ファイルを作る。 `$ vi cookbooks\hello\attributes\default.rb`
-
-{% highlight ruby %}
-default['7-zip']['url']          = "http://downloads.sourceforge.net/sevenzip/7z920.msi"
-default['7-zip']['checksum']     = "fe4807b4698ec89f82de7d85d32deaa4c772fc871537e31fb0fccf4473455cb8"
-default['7-zip']['package_name'] = "7-Zip 9.20"
-default['7-zip']['home']         = "C:\\7-zip"
-{% endhighlight %}
-
-ダウンロードUrl、チェックサム、パッケージ名、インストール先を定義。
-
-
-
-## 環境
+## 環境(Linux編)
 
 - Red Hat Linux 5.4
 - Ruby 1.9.3
@@ -300,7 +310,7 @@ zshをchefでインストールしてみる。
 
 できるように準備。
 
-`cookbooks/hello/recipes/default.rb` にzshを追加。
+`chef-solo/cookbooks/hello/recipes/default.rb` にzshを追加。
 
 {% highlight ruby %}
 package "zsh" do
@@ -372,14 +382,14 @@ Chef Client failed. 0 resources updated
 [2013-03-25T19:00:12+09:00] FATAL: Chef::Exceptions::Exec: package[zsh] (hello::default line 9) had an error: Chef::Exceptions::Exec: rpm  -U /home/kk_Ataka/zsh-3.0.5-6.i386.rpm returned 1, expected 0
 {% endhighlight %}
 
-なんでだろ。あ、もしかして一般ユーザだから？
+なんでだろ。あ、 **一般ユーザだから** か、そういえば？
 
 {% highlight console %}
 $ rpm  -U /home/kk_Ataka/zsh-3.0.5-6.i386.rpm
 エラー: can't create transaction lock on /var/lib/rpm/__db.000
 {% endhighlight %}
 
-Oh..。
+やはり。
 
 {% highlight console %}
 $ su
@@ -402,6 +412,8 @@ Recipe: hello::default
 
 次にnginxを入れてみる。
 
+レシピはインストールするパッケージ毎に分けた方がいいみたいなんだけど、今回は仮なので同じレシピに詰め込んでいく。
+
 {% highlight ruby %}
 package "nginx" do
   action   :install
@@ -420,7 +432,7 @@ Chef Client failed. 0 resources updated
 [2013-03-28T19:20:48+09:00] FATAL: Chef::Exceptions::Exec: package[nginx] (hello::default line 18) had an error: Chef::Exceptions::Exec: rpm  -U /var/package/nginx-1.2.7-1.el5.ngx.i386.rpm returned 1, expected 0
 {% endhighlight %}
 
-だめ？何だこのエラー…直接rpmしてみるか。
+だめ？何だこのエラー…直接rpmできるか確認してみるか。
 
 {% highlight console %}
 rpm -ivh /var/package/nginx-1.2.7-1.el5.ngx.i386.rpm
@@ -492,7 +504,9 @@ nginx を起動中:                                            [  OK  ]
 
 ### service
 
-今までレシピには `package` と `log` しか使っていなかった。次に、 `service` の定義方法。
+今までレシピには `package` と `log` しか使っていなかった。
+
+次に、 `service` の定義方法を確認。
 
 serviceを定義する事でサービス周りの操作をできる。
 
@@ -503,7 +517,7 @@ serviceを定義する事でサービス周りの操作をできる。
 nginx           0:off   1:off   2:on    3:on    4:on    5:on    6:off
 {% endhighlight %}
 
-レシピのservice > `action` をこうして再インストールすると。
+レシピのservice > `action` を `:disable` にして再インストールすると。
 
 {% highlight ruby %}
 service "nginx" do
@@ -517,7 +531,7 @@ end
     - disable service service[nginx]
 {% endhighlight %}
 
-サービスが無効になる。逆にenableにしてみる。プラス、startも透けてみる。
+サービスが無効になる。逆に `:enable`にしてみる。プラス、 `start` もつけてみる。
 
 {% highlight ruby %}
 service "nginx" do
@@ -570,6 +584,9 @@ end
 {% highlight console %}
 # ls -l /etc/nginx/nginx.conf
 -rw-r--r-- 1 root root 643  2月 12 22:57 /etc/nginx/nginx.conf
+{% endhighlight %}
+
+{% highlight nginx %}
 # cat /etc/nginx/nginx.conf
 user  nginx;
 worker_processes  1;
@@ -606,7 +623,7 @@ http {
 
 これをパーミッションから内容から色々操作したい。
 
-レシピに `template` を追記。
+そんな時にレシピ `template` を追記。
 
 {% highlight ruby %}
 template "nginx.conf" do
@@ -648,9 +665,9 @@ http {
 }
 {% endhighlight %}
 
-基本的には、設定ファイルを作成するだけ。
+基本的には、思うままに設定ファイルを作成するだけ。
 
-ただし、一点特徴として、 `Attribute` が使える。変数を埋め込んで展開できる。
+ただし、一点特徴として、設定ファイルの中に `Attribute` が使える。変数を埋め込んで展開できる。
 
 上記のファイルでは `listen` の値を `<%= node['nginx']['port'] %>` としてある。
 
@@ -773,7 +790,7 @@ http {
 
 置き変わってる。listen ポートも8090になってる。
 
-notifiesの話はまた今度。
+`notifies` の話はまた今度。
 
 ### cookbook file
 
@@ -894,7 +911,7 @@ Chef Client failed. 0 resources updated
 
 ### directory
 
-そのもの、ディレクトリを作る / 削る。レシピはこう。
+そのもの、ディレクトリを作る または 削除する。レシピはこう。
 
 {% highlight ruby %}
 directory "/tmp/mydirectory" do
@@ -904,7 +921,7 @@ directory "/tmp/mydirectory" do
 end
 {% endhighlight %}
 
-`action` に作るか消すかを設定、 `:create` か `:delete`
+`action` に作るか消すかを設定、 `:create` か `:delete` を指定。
 
 {% highlight console %}
 # bundle exec chef-solo -c solo.rb -j localhost.json
@@ -924,10 +941,10 @@ drwxr-xr-x  2 kk_Ataka root 4096  3月 29 23:03 mydirectory
 
 ところで、レシピを記述する順番とかは意識する必要があるんだろうか。
 
-- README を /tmp/mydirectory に置きたい
-- /tmp/mydirectory はレシピで作る(今はない)
+- README を `/tmp/mydirectory` に置きたい
+- `/tmp/mydirectory` はレシピで作る(今はない)
 
-後ディレクトリ。
+後でディレクトリを作る。
 
 {% highlight ruby %}
 cookbook_file "/tmp/mydirectory/README" do
@@ -950,7 +967,7 @@ Chef Client failed. 0 resources updated
 [2013-03-29T23:11:39+09:00] FATAL: Chef::Exceptions::EnclosingDirectoryDoesNotExist: cookbook_file[/tmp/mydirectory/README] (hello::default line 47) had an error: Chef::Exceptions::EnclosingDirectoryDoesNotExist: Parent directory /tmp/mydirectory does not exist.
 {% endhighlight %}
 
-先ディレクトリ。
+先にディレクトリを作る。
 
 {% highlight ruby %}
 directory "/tmp/mydirectory" do
@@ -992,6 +1009,8 @@ this is readme file
 - 存在しないディレクトリを作ったりという事は、Chefではよろしくやってくれない
 - 必要なディレクトリなどは先に作っておく必要がある
 
+ということかな。
+
 ### user
 
 ユーザ作成。 `action` は `:create` の場合省略していいみたい。削除する場合は `:remove` 修正もできるが一旦置いておく。
@@ -1030,7 +1049,7 @@ end
 
 ### bash
 
-bashを使う事も出来る。が、「あるべき状態」に持っていくのがたいへんなので、ご利用は計画的にな面もある。
+bashを使う事も出来る。が、「あるべき状態」に持っていくのがたいへんなので、ご利用は計画的に。
 
 {% highlight ruby %}
 bash "make_echofile_in homedir" do
@@ -1062,7 +1081,7 @@ end
 
 している。
 
-最後の `creates` は `creates のコマンドがある場合は、このリソースを実行しない` という判断のために使用される。
+最後の `creates` は **creates に定義したコマンドがある(実行できる)場合は、このリソースを実行しない** という判断のために使用される。
 
 上記のレシピを実行すると、初回は
 
@@ -1086,4 +1105,11 @@ end
     - execute "bash"  "/tmp/chef-script20130329-11473-1bf7sg9"
 {% endhighlight %}
 
+{% highlight console %}
+  * bash[make_echofile_in homedir] action run
+    - execute "bash"  "/tmp/chef-script20130329-xxxxx-xxxxxxx"
+{% endhighlight %}
+
 何度もexecuteされる。helloファイルも作成され続ける。
+
+ここまでで、本書の2, 3, 9-13, 15辺りをひと通り触った事になる。
