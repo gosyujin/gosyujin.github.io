@@ -3,7 +3,7 @@ layout: post
 title: " 入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで"
 description: ""
 category: 
-tags: [Ruby, Chef]
+tags: [Ruby, StartUp, Chef]
 ---
 {% include JB/setup %}
 
