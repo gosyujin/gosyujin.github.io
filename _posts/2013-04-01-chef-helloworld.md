@@ -26,7 +26,6 @@ Chefを触ってみたいと思いつつ、取っ掛かりを作るにはかな�
 ## 環境(Windows編)
 
 - Windows XP
-- CentOS 6.2 Final
 - Ruby 1.9.3
 - Rubygems 1.8.24
 
