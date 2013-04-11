@@ -50,6 +50,7 @@ end
 # Usage: rake deploy
 desc "Begin a push static file to GitHub"
 task :deploy do
+  sh "jekyll build"
   puts "! Push to source branch of GitHub"
   sh "git push origin source:source"
   puts "! Clean and copy static file from _site to _deploy"
