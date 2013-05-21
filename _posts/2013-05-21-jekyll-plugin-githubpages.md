@@ -9,14 +9,14 @@ tags: [Jekyll, Git]
 
 ## あらすじ
 
-Jekyll＠GitHub Pagesの場合、Liquidで作ったりしたプラグインは使えないという事が判明した。(ローカルで起動 `jekyll --server` した場合は関係ない)
+Jekyll＠GitHub Pagesの場合、Liquidで(自分で)作ったプラグインは使えないという事が判明した。(ローカルで起動した場合/safeモードじゃない場合は関係ない)
 
 - [俺の最強ブログシステムも火を噴いてたぜ - Webtech Walker](http://webtech-walker.com/archive/2012/09/fired-myblog.html)
 
 これを回避するには
 
-- GitHub Pages 以外を使う(レンタルサーバにデプロイ)
-- GitHub Pages に静的ファイルとしてデプロイ
+- GitHub Pages をやめる(レンタルサーバを借りてデプロイ)
+- GitHub Pages に **静的ファイル** としてhtml自体をデプロイ
 
 する方法がありそう。今回はGitHub Pagesを使い続けたいので後者で頑張ってみる。
 
@@ -43,17 +43,17 @@ Jekyll＠GitHub Pagesの場合、Liquidで作ったりしたプラグインは�
 > - カスタムドメインを使っていないなら、Project PagesはUser Pageのサブパスの下で使われる。 `username.github.com/projectname`
 > - ...
 
-頑張って訳してみたけど…？？
-
-### 要約
+### ということは
 
 まず、GitHub Pagesは2種類ある。
 
-1. ユーザ、組織用のページ
-   - 己のページ。 `username.github.com` という特別なリポジトリを作れば `http://username.github.com` でアクセスできる
+1. **ユーザ、組織用** のページ
+   - 己のページ
+   - `USERNAME.github.com` という特別なリポジトリを作れば `http://USERNAME.github.com` でアクセスできる
    - ビルドには `master` ブランチが使用される
-1. プロジェクトのページ
-   - 各プロジェクト用のページ。 `project` というプロジェクトがあれば `http://username.github.com/project` でアクセスできる
+1. **プロジェクト** のページ
+   - 各プロジェクト用のページ
+   - GitHubに `PROJECT` というプロジェクトがあれば `http://USERNAME.github.com/PROJECT` でアクセスできる
    - ビルドには **`gh-pages`** ブランチが使用される
 
 という事でよろしい？
@@ -75,7 +75,9 @@ Jekyll＠GitHub Pagesの場合、Liquidで作ったりしたプラグインは�
 
 ## GitHub Pagesの作り方
 
-既に `master` が少し育っているプロジェクトのGitHub Pagesとして `gh-pages` ブランチを作成してみる。とりあえず、GitHubから以下のようなコマンド例が提示される。
+プロジェクト用のGitHub Pagesの場合。
+
+既に `master` が少し育っているとして `gh-pages` ブランチを作成してみる。とりあえず、GitHubから以下のようなコマンド例が提示される。
 
 {% highlight console %}
 $ cd /path/to/repo-name
@@ -134,19 +136,27 @@ $ git push origin gh-pages
 
 今までの情報からわかった事は以下。
 
-- 自分が使っているのはユーザ用GitHub Pages
-- ユーザ用GitHub Pagesは **`master`** ブランチのファイルがビルドされる
-- 今の `master` ブランチにはソースがある
+- 自分が使っているのは **ユーザ用のGitHub Pages**
+  - つまり、 **`master`** ブランチのファイルがビルドされる
+- 今の `master` ブランチにはJekyll用のソースがある
   - ページのテンプレートやMarkdownで書かれたエントリなど
 
 この状況を以下のように変更する。
 
 - `source` ブランチ: 現在の `master` ブランチのソースをそのまま持ってくる
   - エントリなどはこちらで書いていく事になる
-- `master` ブランチ: 一旦からっぽにして、 `source` ブランチのソースから生成した静的ファイルを持ってきてプッシュする
+- `master` ブランチ: 一旦からっぽにして、 `source` ブランチのソースから生成した **静的ファイル** を持ってきてプッシュする
   - ローカルで一旦生成しちゃった後でGitHub Pagesにpushしているから、プラグインが動かないという問題も起こらない
 
-そうすると `source` ブランチで生成したファイル(_site/直下)を `master` にコピーしてpush…を毎回やらなければならない…それはめんどくさい！
+そうすると
+
+- `source` ブランチでファイルを生成する(_site/直下)
+- これを `master` にコピーする
+- push
+
+を毎回やらなければならない…それはめんどくさい！
+
+これはrakeでやればいいかな。
 
 - Rakefile にdeployコマンドとして上記の動作を実行してくれる処理を記載する
   - [deploy タスクを追加 2943985 gosyujin/gosyujin.github.com GitHub](https://github.com/gosyujin/gosyujin.github.com/commit/2943985064ced913767157eb0fdae431b68ac491)
