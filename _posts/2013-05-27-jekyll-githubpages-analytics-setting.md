@@ -17,7 +17,7 @@ Jekyllで指定していたGoogle Analyticsの設定が効かなくなってい�
 
 - 前回 GitHub Pages の運用形態を変えていた ... [GitHub PagesでJekyllプラグインを使えるようにするには…](http://gosyujin.github.io/2013/05/21/jekyll-plugin-githubpages/)
   - 変更前: `master` ブランチにコンテンツを配備し、GitHubにデプロイしてもらう
-  - 変更後: `source` ブランチを作成しコンテンツを移動。ローカルでビルドした静的ファイルを `master` ブランチpush
+  - 変更後: `source` ブランチを作成しコンテンツを移動。ローカルでビルドした静的ファイルを `master` ブランチにpush
 - それによる **オプション指定の凡ミス**
 
 おぉ…。
