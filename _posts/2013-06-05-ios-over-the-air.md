@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Over-the-Airという形式でiOSアプリをインストールを試みるが失敗する場合がある"
+title: "Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある"
 description: ""
 category: 
-tags: [iOS]
+tags: [iPhone, iOS]
 ---
 {% include JB/setup %}
 
