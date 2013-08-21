@@ -24,9 +24,9 @@ Sphinx-Users.jp のインストール手順では 2.6 が使われていたの�
 
 環境変数 `PATH` に以下のパスを追加。
 
-- `C:\Python26`
+- `C:\Python27`
   - Pythonのコマンドが含まれるフォルダ
-- `C:\Python26\Scripts`
+- `C:\Python27\Scripts`
   - 次に説明するeasy_installコマンドや、Sphinxのコマンドが格納されるフォルダ
 
 ## easy_install インストール(distribute_setup.py)
