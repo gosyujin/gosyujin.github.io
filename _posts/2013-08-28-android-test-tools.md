@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Androidの自動テストツール、今から使うなら何がよいのか"
+title: "Androidの自動テストツール、今(2013年)から使うなら何がよいのか"
 description: ""
 category: 
 tags: [Java, Android]
