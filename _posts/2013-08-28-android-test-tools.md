@@ -51,10 +51,10 @@ Androidのテストを自動化したいので、テストツールの選定を�
 NativeDriver|[svn](http://nativedriver.googlecode.com/svn)       |-       |-   |-                                     |開発終了
 robotium    |[GitHub](https://github.com/jayway/robotium)        |1.6 以上|    |`Java`                                |
 Scirocco    |[GitHub](https://github.com/sonixlabs/scirocco-webdriver)|-  |-   |-                                     |2012/09 で更新が止まっている
-Monkeyrunner|sdk内                                               |`○`    |    |`Java` `Python`                       |Jython で実行 / Plugin は Java で書ける / 今回はうまく動かせなかった
-Appium      |[GitHub](https://github.com/appium/appium)          |4.2 以上|`○`|`Node.js` `Python` `PHP` `Ruby` `Java`|Windows 版は beta / iOS がメイン？ [ファイル置場 / BitBucket](https://bitbucket.org/appium/appium.app/downloads) 
+Monkeyrunner|sdk内                                               |`○`     |    |`Java` `Python`                       |Jython で実行 / Plugin は Java で書ける / 今回はうまく動かせなかった
+Appium      |[GitHub](https://github.com/appium/appium)          |4.2 以上|`○` |`Node.js` `Python` `PHP` `Ruby` `Java`|Windows 版は beta / iOS がメイン？ [ファイル置場](https://bitbucket.org/appium/appium.app/downloads) 
 Spoon       |[GitHub](https://github.com/square/spoon)           |4.1 以上|    |`Java`                                |Maven 実行推奨？
-Selenroid   |[GitHub](https://github.com/DominikDary/selendroid) |`○`    |    |                                      |Windows 版は現状未サポート
+Selenroid   |[GitHub](https://github.com/DominikDary/selendroid) |`○`     |    |`Java`                                |Windows 版は現状未サポート / Ruby でもテスト書ける？
 
 Android / iOS 欄の `○` は公式で動くと謳っているが、詳しいバージョンまで見つけられなかったものに記入。
 
