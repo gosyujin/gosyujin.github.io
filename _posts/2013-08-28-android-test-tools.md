@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "android test tools"
+title: "Androidの自動テストツール、今から使うなら何がよいのか"
 description: ""
 category: 
-tags: []
+tags: [Java, Android]
 ---
 {% include JB/setup %}
 
