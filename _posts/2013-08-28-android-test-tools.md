@@ -346,7 +346,7 @@ Mac か Linux で動作確認。 **Windows 版は not offially supported** で�
 `Monkeyrunner` と同じ場所に入っていた。
 
 - AndroidSDK 21 でサポートされた
-- Android 4.1 以降で動作？
+- Android 4.1 以降で動作？(サポートされているのが 4.1 以降？)
 - これは `adb shell` からたたく感じのツールみたい
 
 ちょっとさわってみようと思ったが、これもかなり苦戦する。挙句動かせないという。
