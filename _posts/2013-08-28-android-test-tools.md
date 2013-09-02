@@ -51,10 +51,11 @@ Androidのテストを自動化したいので、テストツールの選定を�
 NativeDriver|[svn](http://nativedriver.googlecode.com/svn)       |-       |-   |-                                     |開発終了
 robotium    |[GitHub](https://github.com/jayway/robotium)        |1.6 以上|    |`Java`                                |
 Scirocco    |[GitHub](https://github.com/sonixlabs/scirocco-webdriver)|-  |-   |-                                     |2012/09 で更新が止まっている
-Monkeyrunner|sdk内                                               |`○`     |    |`Java` `Python`                       |Jython で実行 / Plugin は Java で書ける / 今回はうまく動かせなかった
-Appium      |[GitHub](https://github.com/appium/appium)          |4.2 以上|`○` |`Node.js` `Python` `PHP` `Ruby` `Java`|Windows 版は beta / iOS がメイン？ [ファイル置場](https://bitbucket.org/appium/appium.app/downloads) 
+Monkeyrunner|sdk内                                               |`○`    |    |`Java` `Python`                       |Jython で実行 / Plugin は Java で書ける / 今回はうまく動かせなかった
+Appium      |[GitHub](https://github.com/appium/appium)          |4.2 以上|`○`|`Node.js` `Python` `PHP` `Ruby` `Java`|Windows 版は beta / iOS がメイン？ [ファイル置場](https://bitbucket.org/appium/appium.app/downloads)
 Spoon       |[GitHub](https://github.com/square/spoon)           |4.1 以上|    |`Java`                                |Maven 実行推奨？
-Selenroid   |[GitHub](https://github.com/DominikDary/selendroid) |`○`     |    |`Java`                                |Windows 版は現状未サポート / Ruby でもテスト書ける？
+Selenroid   |[GitHub](https://github.com/DominikDary/selendroid) |`○`    |    |`Java`                                |Windows 版は現状未サポート / Ruby でもテスト書ける？
+uiautomator |sdk内                                               |4.1 以上|    |`Java`                                |今回はうまく動かせなかった
 
 Android / iOS 欄の `○` は公式で動くと謳っているが、詳しいバージョンまで見つけられなかったものに記入。
 
@@ -98,7 +99,7 @@ Selenium WebDriver の源流になっている WebDriver (Google謹製 / 2009年
   - 2012年 [Robotiumを触ってみた(Android自動テストツール) - くのっふむ(knnfm)](http://d.hatena.ne.jp/knnfm/20120125/1327460923)
   - 2010年 [RobotiumでAndroidアプリのシナリオテストを自動化する - 遥かへのスピードランナー](http://poly.hatenablog.com/entry/20101019/p1)
 
-この中では一番プロジェクトの歴史が古く、2013年に入っても精力的にコミットなされている。 
+この中では一番プロジェクトの歴史が古く、2013年に入っても精力的にコミットなされている。
 
 > This project is neither affiliated with Google nor with OpenQA (Selenium).
 
@@ -180,7 +181,7 @@ public class LoginActivityTest
 
 基本的には `robotium` に機能がプラスされたツールなんだろう。テストのレポートやスクリーンショットがとれる模様。(前述のとおり、 スクリーンショットは `robotium` でも(今は？)できる様子)
 
-けど、 `robotium` が猛烈に更新されている一方で、こっちは更新が止まっている(遅れている？)ようなので、 Scirocco は深追いせずこれで終わり。
+けど、 `robotium` が猛烈に更新されている一方で、こっちは更新が止まっている(遅れている？)ようなので、 `Scirocco` は深追いせずこれで終わり。
 
 ### MonkeyRunner
 
@@ -278,7 +279,7 @@ java.lang.NullPointerException: java.lang.NullPointerException
 
 - 公式 [Appium: Mobile App Automation Made Awesome.](http://appium.io/)
   - コミットログ日付 2013-06-03 - 2013-08-07
-  - ファイル置場 https://bitbucket.org/appium/appium.app/downloads 
+  - ファイル置場 https://bitbucket.org/appium/appium.app/downloads
   - 2013年 [Appiumを使ってスマートフォンアプリのテストを自動化する - Python編 - Qiita [キータ]](http://qiita.com/skinoshita/items/211ca23edbb5f2776771)
   - 2013年 [Android - Appiumを使ってスマートフォンアプリのテストを自動化する - 概要編 - Qiita [キータ]](http://qiita.com/skinoshita/items/fab6373f95836eceb177)
   - 2013年 [AppiumでiOSを自動で受け入れテスト Rspecでテストできるよ！ - コンユウメモ](http://konyu.hatenablog.com/entry/2013/06/08/011118)
@@ -332,27 +333,198 @@ Mac か Linux で動作確認。 **Windows 版は not offially supported** で�
 
 日本語の情報は少ない。
 
+### uiautomator
+
+はてブコメントや Twiter にて言及いただいたので調査。抜けていたのは、単純に知らなかったからです…。
+
+- AndroidSDKに同梱されている ( `SDK_ROOT\sdk\tools\uiautomatorviewer.bat` )
+  - 2013年 [2.11. テスト ・ mixi-inc/AndroidTraining Wiki ・ GitHub](https://github.com/mixi-inc/AndroidTraining/wiki/2.11.-%E3%83%86%E3%82%B9%E3%83%88)
+  - 2012年 [uiautomatorを試してみた #android_tec - やらなイカ？](http://nowsprinting.hatenablog.com/entry/2012/11/22/235609)
+  - 2012年 [[Android] はじめてのuiautomator - adakoda](http://www.adakoda.com/adakoda/2012/12/android-uiautomator-2.html)
+  - 2012年 [Android APIレベル17から使えそうな、UI Automator Testについて調べてみた(その１) - Hack the World!](http://d.hatena.ne.jp/graceful_life/20121021/1350843227)
+
+`Monkeyrunner` と同じ場所に入っていた。
+
+- AndroidSDK 21 でサポートされた
+- Android 4.1 以降で動作？
+- これは `adb shell` からたたく感じのツールみたい
+
+ちょっとさわってみようと思ったが、これもかなり苦戦する。挙句動かせないという。
+
+AndroidSDK に同梱されているツールは一筋縄で動かないなぁ。
+
+#### 前準備
+
+- テスト用プロジェクト右クリックし、 `Properties -> Java Build Path -> Add External JARs` から `SDK_ROOT\sdk\platforms\android-17\uiautomator.jar` を追加する
+- テストクラスを `UIAutomatorTestCase` で extend する
+
+#### シナリオ作成
+
+- [uiautomator｜Android Developers](http://developer.android.com/tools/help/uiautomator/index.html)
+
+UIxxx クラスで端末を操作していく。上記のサイトを参考に…。
+
+{% highlight java %}
+public class LoginActivityUITest extends UiAutomatorTestCase {
+  public void testHelloWorld() throws Exception {
+    getUiDevice().pressHome();
+
+    UiObject allAppsButton = new UiObject(new UiSelector().description("アプリ"));
+    allAppsButton.clickAndWaitForNewWindow();
+    UiObject appsTab = new UiObject(new UiSelector().text("アプリ"));
+    appsTab.click();
+  }
+}
+{% endhighlight %}
+
+#### 実行
+
+ただ JUnit 実行すればいいってわけじゃないらしい。結構めんどい。
+
+##### ビルドする
+
+`SDK_ROOT\sdk\tools\` 下にある `android.bat` を使ってビルド。
+
+{% highlight console %}
+$ android.bat create uitest-project -n hoge -t x -p .
+{% endhighlight %}
+
+それぞれの引数はこう。
+
+{% highlight console %}
+Options:
+  -p --path    : The new project's directory. [required]
+  -n --name    : Project name.
+  -t --target  : Target ID of the new project. [required]
+{% endhighlight %}
+
+`--target` は `android.bat list` コマンドで取得できる。(ずっと API レベルのことだと思って 17 とか指定していたら `Error: Target id is not valid. Use 'android.bat list targets' to get the target ids.` エラーで死んでた)
+
+{% highlight console %}
+$ android list
+Available Android targets:
+----------
+(略)
+----------
+id: 6 or "android-17"
+     Name: Android 4.2.2
+     Type: Platform
+     API level: 17
+     Revision: 2
+     Skins: HVGA, QVGA, WQVGA400, WQVGA432, WSVGA, WVGA800 (default), WVGA854, WXGA720, WXGA800, WXGA800-7in
+     ABIs : armeabi-v7a
+Available Android Virtual Devices:
+    Name: test
+    Path: C:\USER_PROFILE\.android\avd\test.avd
+  Target: Android 3.2 (API level 13)
+     ABI: armeabi
+    Skin: 480x854
+Snapshot: true
+{% endhighlight %}
+
+実行すると `build.xml` ができる。
+
+{% highlight console %}
+$ android.bat create uitest-project -n hoge -t 6 -p C:\hoge
+Added file C:\hoge\build.xml
+{% endhighlight %}
+
+`ant build` して `bin` 下にできる jar ファイルを回収する
+
+{% highlight console %}
+$ C:\apache-ant-1.9.2\bin\ant build
+Buildfile: C:\hoge\build.xml
+
+-check-env:
+ [checkenv] Android SDK Tools Revision 21.1.0
+ [checkenv] Installed at SDK_ROOT\sdk
+
+-build-setup:
+     [echo] Resolving Build Target for hoge...
+[getuitarget] Project Target:   Android 4.2.2
+[getuitarget] API level:        17
+     [echo] ----------
+     [echo] Creating output directories if needed...
+
+-pre-compile:
+
+compile:
+
+-post-compile:
+
+-dex:
+      [dex] input: C:\hoge\bin\classes
+      [dex] Converting compiled files and external libraries into C:\hoge\bin\classes.dex...
+
+-post-dex:
+
+-jar:
+      [jar] Building jar: C:\hoge\bin\hoge.jar
+
+-post-jar:
+
+build:
+
+BUILD SUCCESSFUL
+Total time: 4 seconds
+{% endhighlight %}
+
+##### 転送してテスト実行
+
+次は `adb` コマンドで 今作った jar ファイルを端末に転送する。
+
+{% highlight console %}
+$ pwd
+SDK_ROOT\sdk\platform-tools
+$ adb.exe push C:\hoge\hoge.jar /data/local/tmp
+463 KB/s (4271 bytes in 0.009s)
+{% endhighlight %}
+
+そして実行…だけど permission denied ？？
+
+{% highlight console %}
+$ adb.exe shell uiautomator runtest hoge.jar -c com.example.test
+uiautomator: permission denied
+{% endhighlight %}
+
+- [testing - Cannot run android ui tests from command line - Stack Overflow](http://stackoverflow.com/questions/15949907/cannot-run-android-ui-tests-from-command-line)
+
+権限とかも、特に間違ってないみたいなんだけど…。
+
+{% highlight console %}
+$ ls -l /data/local/tmp/*.jar
+ls -l /data/local/tmp/*.jar
+-rw-rw-rw- shell    shell        4271 2013-09-02 20:58 hoge.jar
+{% endhighlight %}
+
+とりあえず、用意が相当めんどくさいということはわかった。
+
+それを補って余りある API が提供されているのだろうか…。
+
 ## おまけ
 
-Android API レベルとOSの対応のメモ [Android - Wikipedia](http://ja.wikipedia.org/wiki/Android#.E3.83.90.E3.83.BC.E3.82.B8.E3.83.A7.E3.83.B3_2) より。
+Android API レベルとOSとリリース日の対応のメモ。<del>裏をとるのがめんどいので</del>おまけなので、 Wikipedia 情報を全面的に信頼する。
 
-OS                   |API レベル
----------------------|----------
-Android 4.3          |18
-Android 4.2          |17
-Android 4.1          |16
-Android 4.0.3 - 4.0.4|15
-Android 4.0 - 4.0.2  |14
-Android 3.2          |13
-Android 3.1          |12
-Android 3.0          |11
-Android 2.3.3 - 2.3.7|10
-Android 2.3 - 2.3.2  |9
-Android 2.2          |8
-Android 2.1          |7
-Android 2.0.1        |6
-Android 2.0          |5
-Android 1.6          |4
-Android 1.5          |3
-Android 1.1          |2
-Android 1.0          |1
+- [Android - Wikipedia](http://ja.wikipedia.org/wiki/Android#.E3.83.90.E3.83.BC.E3.82.B8.E3.83.A7.E3.83.B3_2)
+- [Androidのバージョン履歴 - Wikipedia](http://ja.wikipedia.org/wiki/Android%E3%81%AE%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E5%B1%A5%E6%AD%B4)
+
+OS                   |API レベル|コードネーム    |リリース
+---------------------|----------|----------------|------------------
+Android 4.3          |18        |JellyBean       |2013/07/24
+Android 4.2          |17        |JellyBean       |2012/11/13
+Android 4.1          |16        |JellyBean       |2012/06/27
+Android 4.0.3 - 4.0.4|15        |IceCreamSandwich|2012/03/28(4.0.4)
+Android 4.0 - 4.0.2  |14        |IceCreamSandwich|2011/10/18
+Android 3.2          |13        |Honeycomb       |2011/07/15
+Android 3.1          |12        |Honeycomb       |2011/05/10
+Android 3.0          |11        |Honeycomb       |2011/02/22
+Android 2.3.3 - 2.3.7|10        |Gingerbread     |2011/09/20(2.3.7)
+Android 2.3 - 2.3.2  |9         |Gingerbread     |2010/12/06(2.3)
+Android 2.2          |8         |Froyo           |2010/05/21
+Android 2.1          |7         |Eclair          |2010/01/12
+Android 2.0.1        |6         |Eclair          |2009/12/03
+Android 2.0          |5         |Eclair          |2009/10/26
+Android 1.6          |4         |Donut           |2009/09/15
+Android 1.5          |3         |Cupcake         |2009/04/30
+Android 1.1          |2         |-               |2009/02/09
+Android 1.0          |1         |-               |2008/09/23
