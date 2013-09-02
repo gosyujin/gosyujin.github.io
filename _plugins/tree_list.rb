@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# h1 x
-# link x
 
 module Jekyll
   class TreeListTag < Liquid::Tag
@@ -8,59 +6,87 @@ module Jekyll
       super
     end
 
-    def render(context)
-      tree = '<h2>Contents</h2><div class="tree_list"><ul>'
+    H1_SHARP_COUNT = 1
 
-      h1 = 1
-      now_hx = h1 + 1
-      before_hx = h1 + 1
-      total_hx_count = 0
-      ignore_area = false
+    def render(context)
+      # exclude .htn file
+      return if File.extname(context.environments[0]["page"]["path"]) == ".htn"
+
+      tree =  '<h2 class="content_tree">Contents</h2>'
+      tree << '<div class="content_tree_list">'
+      tree << '<ul><!-- start tree list -->'
+
+      current_sharp_count = H1_SHARP_COUNT + 1
+      before_sharp_count  = H1_SHARP_COUNT + 1
+      # count section: section-1, section-2 ...
+      total_sharp_count   = 0
+
+      # is ignore area?
+      ignore = false
 
       content = context.environments[0]["page"]["content"]
       content.each_line do |line|
-        # ignore source code area
-        if line =~ /^{% endhighlight / then
-          ignore_area = false
-        elsif line =~ /^{% highlight / then
-          ignore_area = true
-        end
+        unless ignore_area?(line, ignore) then
+          ignore = false
 
-        if !ignore_area then
-          if line =~ /#+[ ]/ then
+          if line =~ /^#+[ ]/ then
             # $`:マッチした前 $&:マッチした箇所 $':マッチした後
-            now_hx = $&.count("#")
-            title = $'
-            # puts "Tree sharp.count:#{now_hx}, bef:#{before_hx}, title:#{title}"
+            current_sharp_count = $&.count("#")
+            title               = $'
+            # puts "Tree: bef:#{before_sharp_count}, #{("#" * current_sharp_count)} #{title}"
 
-            while now_hx < before_hx do
-              tree += "</ul>"
-              before_hx -= 1
+            # #### sample 1-1-1
+            # ## sample 2
+            while current_sharp_count < before_sharp_count do
+              tree << '</ul>'
+              before_sharp_count -= 1
             end
-            while now_hx > before_hx do
-              tree += "<ul>"
-              before_hx += 1
-            end
-
-            if line =~ /^#+[ ]/ then
-              if total_hx_count == 0 then
-                tree += "<li><a href='#section'>#{title.chomp!}</a></li>"
-              else
-                tree += "<li><a href='#section-#{total_hx_count}'>#{title.chomp!}</a></li>"
-              end
+            # ## sample 1
+            # ### sample 1-1
+            while current_sharp_count > before_sharp_count do
+              tree << '<ul>'
+              before_sharp_count += 1
             end
 
-            total_hx_count += 1
-            before_hx = now_hx
+            tree << "<li><a href='#{add_section(total_sharp_count)}'>#{title.chomp!}</a></li>"
+
+            total_sharp_count += 1
+            before_sharp_count = current_sharp_count
           end
+        else
+          ignore = true
         end
       end
-      while now_hx > h1 do
-        tree += "</ul>"
-        now_hx -= 1
+      while current_sharp_count > H1_SHARP_COUNT do
+        tree << "</ul>"
+        current_sharp_count -= 1
       end
 
-      tree += "</ul></div>"
+      tree << '</ul><!-- end of tree list -->'
+      tree << '</div>'
+    end
+
+private
+    def add_section(total_sharp_count)
+      if total_sharp_count == 0 then
+        "#section"
+      else
+        "#section-#{total_sharp_count}"
+      end
+    end
+
+    # ignore area (ex. in source code by pygments)
+    def ignore_area?(line, ignore)
+      if line =~ /^{% highlight / then
+        # puts "switch ignore    : #{line}"
+        true
+      elsif line =~ /^{% endhighlight / then
+        # puts "switch not ignore: #{line}"
+        false
+      else
+        # puts "keep          #{ignore ? "ign" : "not"}: #{line}"
+        ignore
+      end
     end
   end
 end
