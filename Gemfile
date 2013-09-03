@@ -8,3 +8,5 @@ gem 'redcarpet'
 #gem 'rdiscount'
 gem 'hparser', :git => 'git://github.com/hotchpotch/hparser.git'
 gem 'pygments.rb', '=0.4.2'
+
+gem 'nokogiri'
