@@ -40,18 +40,12 @@ module JB
   end #Path
 end #JB
 
-# Usage: rake sed html="html file"
-desc "Begin ad sed html file to hatena"
-task :sed do
-  html = ENV["html"]
-  sh "sh _scripts/html_sed_to_hatena #{html}"
-end
-
 # Usage: rake deploy
 desc "Begin a push static file to GitHub"
 task :deploy do
   sh "jekyll build"
   puts "! Push to source branch of GitHub"
+  # push source branch (source file)
   sh "git push origin source:source"
   puts "! Clean and copy static file from _site to _deploy"
   sh "rm -rf _deploy/*"
@@ -63,12 +57,15 @@ task :deploy do
     message = "deploy at #{Time.now}"
     begin
       sh "git commit -m \"#{message}\""
+      # push master branch (html)
       sh "git push origin master:master"
     rescue Exception => e
       puts "! Error - git command abort"
       exit -1
     end
   end
+  # convert
+  sh "_scripts/convert_html_to_hatena.rb"
 end
 
 # Usage: rake post title="A Title" [date="2012-02-09"]
