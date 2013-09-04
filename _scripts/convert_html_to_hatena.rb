@@ -1,6 +1,8 @@
 require 'nokogiri'
 require 'time'
 
+ABSOLUTE_IMG_PATH = "http://gosyujin.github.com/images"
+
 # permalink: yyyy/mm/dd
 arg = ARGV[0]
 begin
@@ -13,7 +15,6 @@ rescue => ex
   arg = Time.now.to_s
   retry
 end
-
 
 scripts   = File.expand_path(File.dirname(__FILE__))
 site      = "#{scripts}/../_site"
@@ -62,9 +63,21 @@ files.each do |file|
       content << con.children.to_s
     end
 
+    # output
     puts title
+
     content.each_line do |content_line|
-      puts content_line
+      if content_line.match(/<\/?h([1-9])/) then
+        # headline conbine hatena format
+        # jekyll: ## (h2) == hatena: <h4>
+        headline = $1.to_i
+        puts content_line.gsub(/(<\/?)h#{headline}/, '\1h%i' % [headline + 2])
+      elsif content_line.match(/<img src="\/images/) then
+        # img src convert absolute path to github
+        puts content_line.gsub(/<img src="\/images/, "<img src=\"#{ABSOLUTE_IMG_PATH}")
+      else
+        puts content_line
+      end
     end
   end
 end
