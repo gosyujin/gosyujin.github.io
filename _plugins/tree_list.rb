@@ -48,7 +48,7 @@ module Jekyll
               before_sharp_count += 1
             end
 
-            tree << "<li><a href='#{add_section(total_sharp_count)}'>#{title.chomp!}</a></li>"
+            tree << "<li><a href='##{generate_id(title)}'>#{title.chomp!}</a></li>"
 
             total_sharp_count += 1
             before_sharp_count = current_sharp_count
@@ -67,12 +67,21 @@ module Jekyll
     end
 
 private
-    def add_section(total_sharp_count)
-      if total_sharp_count == 0 then
-        "#section"
+
+    # COPY from kramdown-0.14.2/lib/kramdown/converter/base#generate_id
+    def generate_id(str)
+      gen_id = str.gsub(/^[^a-zA-Z]+/, '')
+      gen_id.tr!('^a-zA-Z0-9 -', '')
+      gen_id.tr!(' ', '-')
+      gen_id.downcase!
+      gen_id = 'section' if gen_id.length == 0
+      @used_ids ||= {}
+      if @used_ids.has_key?(gen_id)
+        gen_id += '-' << (@used_ids[gen_id] += 1).to_s
       else
-        "#section-#{total_sharp_count}"
+        @used_ids[gen_id] = 0
       end
+      gen_id
     end
 
     # ignore area (ex. in source code by pygments)
