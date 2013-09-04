@@ -65,7 +65,7 @@ task :deploy do
     end
   end
   # convert
-  sh "_scripts/convert_html_to_hatena.rb"
+  sh "ruby _scripts/convert_html_to_hatena.rb"
 end
 
 # Usage: rake post title="A Title" [date="2012-02-09"]
