@@ -26,7 +26,7 @@ if files == [] then
   puts Dir.glob("#{site}/**/index.html")
   puts "-----------------------"
   puts "#{path}: file not found"
-  exit 1
+  exit 0
 end
 
 files.each do |file|
