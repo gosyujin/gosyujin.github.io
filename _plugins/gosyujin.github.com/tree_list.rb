@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+# {% tree %} 記載箇所に
+# ページの見出しを集めた目次を出力する。
+# a タグを使ったページ内リンクは
+# kramdown-0.14.2 の仕様を元に生成
 module Jekyll
   class TreeListTag < Liquid::Tag
     def initialize(tag_name, name, tokens)
@@ -67,7 +71,6 @@ module Jekyll
     end
 
 private
-
     # COPY from kramdown-0.14.2/lib/kramdown/converter/base#generate_id
     def generate_id(str)
       gen_id = str.gsub(/^[^a-zA-Z]+/, '')
