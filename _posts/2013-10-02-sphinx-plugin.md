@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Sphinxのプラグインの作り方"
+title: "Sphinxのプラグインの作り方を学ぶ"
 description: ""
 category: 
 tags: [Sphinx]
