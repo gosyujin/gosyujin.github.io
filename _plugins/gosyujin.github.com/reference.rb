@@ -36,7 +36,6 @@ module Jekyll
     end
 
     def render(context)
-      puts $reference
       return if $reference.none?
 
       list = "<hr class='start-reference'><div class='reference'><ul>"
