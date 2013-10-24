@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 module Jekyll
+  # use Reference and ReferenceAnchor
+  $reference = {}
+
   class Reference < Liquid::Tag
     # reference counter
     @@ref_num = 1
@@ -16,11 +19,11 @@ module Jekyll
         context.environments[0]["reference_anchor"] = {}
       end
 
-      page_id = context.environments[0]["page"]["id"]
+      page_id = context.environments[0]["page"]["id"].gsub('/', '')
       link = "reference-anchor-#{page_id}-#{@@ref_num}"
       anchor = "<a href='##{link}' name='#{link}ori' title='#{@reference}'>*#{@@ref_num}</a>"
 
-      context.environments[0]["reference_anchor"][@@ref_num] = @reference
+      $reference[@@ref_num] = @reference
 
       @@ref_num += 1
       anchor
@@ -33,16 +36,24 @@ module Jekyll
     end
 
     def render(context)
-      return unless context.environments[0].key?("reference_anchor")
+      puts $reference
+      return if $reference.none?
 
       list = "<hr class='start-reference'><div class='reference'><ul>"
-      page_id = context.environments[0]["page"]["id"]
-
-      context.environments[0]["reference_anchor"].each do |ref_num, reference|
+      page_id = context.environments[0]["page"]["id"].gsub('/', '')
+      $reference.each do |ref_num, reference|
         link = "reference-anchor-#{page_id}-#{ref_num}"
-        list << "<li><a href='##{link}ori' name='#{link}'>*#{ref_num}</a> #{reference}</li>"
+        list << "<li>"
+        list << "<a href='##{link}ori' name='#{link}' title='#{reference}'>*#{ref_num}</a>"
+        list << "<span> #{reference}</span>"
+        list << "</li>"
       end
       list << "</ul></div>"
+
+      # RESET global $reference BEFORE return list
+      $reference = {}
+
+      list
     end
   end
 end
