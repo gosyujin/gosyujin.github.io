@@ -12,9 +12,9 @@ tags: [Git]
 この記事は [Git Advent Calendar 2013](http://qiita.com/advent-calendar/2013/git) の 14 日目の記事です。
 
 - 12 日目: [@ton1517](https://twitter.com/ton1517)さん - [gitのサブコマンドを自分で作る - ton-tech-ton](http://ton-up.net/technote/2013/12/12/git-subcommand)
-- 13 日目: [@horimislime](https://twitter.com/horimislime)さん - まだ記事ないよ
+- 13 日目: [@horimislime](https://twitter.com/horimislime)さん - [git mergeでコンフリクトが発生するか前もって調べる方法 - Qiita [キータ]](http://qiita.com/horimislime/items/84fa431460c8d39f37e6)
 - 14 日目: ここ
-- 15 日目: [kyanro](http://qiita.com/kyanro@github)さん - to be continued
+- 15 日目: [kyanro](http://qiita.com/kyanro@github)さん - [git - rebase 直後に、自分が修正していたファイルが変更されたかどうかを調べる - Qiita [キータ]](http://qiita.com/kyanro@github/items/67056e9e4316b2cfe00f)
 
 とりあえず 12 日目へつなげておきますね。
 
