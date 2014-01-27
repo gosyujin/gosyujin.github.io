@@ -56,5 +56,54 @@
     {% include JB/tags_list %}
     </ul>
   {% endunless %}  
+
+    <hr class="start-share" />
+    <div class="share">
+      {% if post %}
+        {% assign p = post %}
+      {% else %}
+        {% assign p = page %}
+      {% endif %}
+
+      <!-- Hatena Bookmark Users -->
+      <a href="http://b.hatena.ne.jp/entry/{{ site.production_url }}{{ p.url }}/">
+        <img src="http://b.hatena.ne.jp/entry/image/{{ site.production_url }}{{ p.url }}/" />
+      </a>
+
+      <!-- Hatena Bookmark Button -->
+      <a href="http://b.hatena.ne.jp/entry/{{ site.production_url }}{{ p.url }}/"
+        data-hatena-bookmark-title="{{ p.title | escape }} - {{ site.title }}"
+        data-hatena-bookmark-layout="standard"
+        class="hatena-bookmark-button"
+        title="このエントリーをはてなブックマークに追加">
+          <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+            alt="このエントリーをはてなブックマークに追加"
+            width="20" height="20"
+            style="border: none;" />
+      </a>
+      <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+      <!-- Tweet Button -->
+      <a href="https://twitter.com/share"
+        data-url="{{ site.production_url }}{{ p.url }}/"
+        data-text="{{ p.title | escape }} - {{ site.title }}"
+        data-related="{{ site.author.name }}"
+        data-lang="ja"
+        data-size="horizontal"
+        data-dnt="true"
+        class="twitter-share-button">Tweet</a>
+      <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+      <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+      <script type= "text/javascript">/*<![CDATA[*/
+      // var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+      // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+      // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+      // var hatena_bookmark_anywhere_url = {{ site.production_url }}{{ p.url }}/; // 表示するURL 未指定の場合、現在のページ
+      /*]]>*/</script>
+      <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+      <div id="hatena_bookmark_anywhere"></div>
+    </div>
+
   </div>
 </div>
