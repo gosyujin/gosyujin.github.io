@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Jekyllドキュメントを翻訳をしてなんとなくわかってきたもの"
+title: "Jekyllドキュメントを翻訳してなんとなくわかってきたもの"
 description: ""
 category: 
 tags: [Jekyll, Translate]
