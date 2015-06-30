@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "hugo helloworld"
+title: "Hugoを使ってみた"
 description: ""
-category: ["tech"]
+category:
 tags: ["golang", "hugo"]
 ---
 {% include JB/setup %}
