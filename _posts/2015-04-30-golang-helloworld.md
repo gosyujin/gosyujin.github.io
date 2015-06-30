@@ -3,7 +3,7 @@ layout: post
 title: "golangでサーバのファイルをゆっくりダウンロードするツール作ってみた"
 description: ""
 category: 
-tags: [golang]
+tags: [Golang]
 ---
 {% include JB/setup %}
 
