@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Ruby, Bundle, Windows]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

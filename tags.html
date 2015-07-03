@@ -1,21 +1,23 @@
 ---
 layout: page
 title: Tags
-header: Posts By Tag
-group: navigation
 ---
-{% include JB/setup %}
+
+<h2>Tag cloud</h2>
 
 <ul class="tag_box inline">
-  {% assign tags_list = site.tags %}  
-  {% include JB/tags_list %}
+  {% for tag in site.tags %}
+    {% assign t = tag[0] %}
+    <a href="/tags.html#{{ t }}">{{ t }} {{ site.tags[t].size }}</a>
+  {% endfor %}
 </ul>
 
+<h2>Entries</h2>
 
 {% for tag in site.tags %} 
-  <h2 id="{{ tag[0] }}-ref">{{ tag[0] }}</h2>
-  <ul>
-    {% assign pages_list = tag[1] %}  
-    {% include JB/pages_list %}
-  </ul>
+  <h3 id="{{ tag[0] }}">{{ tag[0] }}</h3>
+
+  {% assign lists = tag[1] %}
+  {% include list.html %}
+
 {% endfor %}

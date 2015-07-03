@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Sphinx]
 ---
-{% include JB/setup %}
 
 ## 前回のあらすじ
 

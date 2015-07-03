@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [node.js, Hubot]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

@@ -5,7 +5,6 @@ description: ""
 category:
 tags: [Java, Android]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Python, Sphinx]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

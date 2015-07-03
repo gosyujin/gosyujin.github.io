@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Jekyll]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

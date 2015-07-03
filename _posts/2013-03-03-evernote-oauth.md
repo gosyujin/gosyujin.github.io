@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Ruby, Evernote, OAuth]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 
@@ -32,8 +31,8 @@ tags: [Ruby, Evernote, OAuth]
 - [サンドボックス用のデベロッパトークンを取得 »](https://sandbox.evernote.com/api/DeveloperToken.action) ログイン必要
 - [テストの完了後、プロダクション用のデベロッパトークンを取得 »](https://www.evernote.com/api/DeveloperToken.action) ログイン必要
 
-![img](/images/EvernoteOAuth-0.jpg)
-![img](/images/EvernoteOAuth-1.jpg)
+![img](/static/images/EvernoteOAuth-0.jpg)
+![img](/static/images/EvernoteOAuth-1.jpg)
 
 他の人が使っていない、自分だけで使っている場合は以降の箇所だけ修正すればよい。
 

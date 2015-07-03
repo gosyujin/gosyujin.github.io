@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Golang]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

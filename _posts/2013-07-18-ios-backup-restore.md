@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [iPhone, iOS]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

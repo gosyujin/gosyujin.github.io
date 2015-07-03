@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Jekyll, Translate]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

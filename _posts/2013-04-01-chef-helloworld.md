@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Ruby, StartUp, Chef]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Jekyll]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 
@@ -31,11 +30,11 @@ Jekyll ではてなダイアリーのような脚注をつけられるプラグ�
 
 こうなる。
 
-![ref](http://gosyujin.github.io/images/2013-11-25/ref.png)
+![ref](http://gosyujin.github.io/static/images/2013-11-25/ref.png)
 
 (略)
 
-![refanc](http://gosyujin.github.io/images/2013-11-25/refanc.png)
+![refanc](http://gosyujin.github.io/static/images/2013-11-25/refanc.png)
 
 一応、やりたいことはできたんだけど、以下のようなことができなくて力技でなんとかした。
 

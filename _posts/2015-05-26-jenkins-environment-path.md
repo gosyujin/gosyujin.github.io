@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Jenkins]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Jekyll, Translate]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 
@@ -141,7 +140,7 @@ Hello!
 
 で済むようになる。こんな感じ。
 
-![img](/images/2014-06-22/use-togglate.png)
+![img](/static/images/2014-06-22/use-togglate.png)
 
 ## おまけ
 

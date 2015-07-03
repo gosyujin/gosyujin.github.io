@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Git, Subversion]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

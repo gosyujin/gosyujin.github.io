@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Haskell]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

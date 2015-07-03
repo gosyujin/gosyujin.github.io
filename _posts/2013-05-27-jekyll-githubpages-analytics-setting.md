@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Jekyll, Ruby]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 
@@ -281,4 +280,4 @@ _layouts/default.html の二つ目の include。一部を除き、htmlがつら�
 
 rake post title=hoge として作った _posts/2013-xx-yy-hoge.md を表示するためには、こんな風に埋め込みしていっている？
 
-![jekyll-page](http://gosyujin.github.io/images/2013-05-27/jekyll-page.png)
+![jekyll-page](/static/images/2013-05-27/jekyll-page.png)

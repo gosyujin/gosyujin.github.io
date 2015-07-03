@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Selenium, Firefox, Ruby]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Redmine]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

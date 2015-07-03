@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Git]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 
@@ -241,7 +240,7 @@ $ git cat-file -p 557db03de997c86a4a028e1ebd3a1ceb225be238
 Hello World # 中身
 {% endhighlight %}
 
-また、Git のオブジェクトは zlib 圧縮されているファイルなので、自力で展開することもできる。 {% ref ただし、validなフォーマットで圧縮はされていないのでgunzipなどでは展開できないらしい %}
+また、Git のオブジェクトは zlib 圧縮されているファイルなので、自力で展開することもできる。(ただし、validなフォーマットで圧縮はされていないのでgunzipなどでは展開できないらしい)
 
 {% highlight console %}
 $ cd .git/objects/55

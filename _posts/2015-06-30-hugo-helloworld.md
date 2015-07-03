@@ -3,9 +3,8 @@ layout: post
 title: "Hugoを使ってみた"
 description: ""
 category:
-tags: ["Golang", "Hugo"]
+tags: [Golang, Hugo]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

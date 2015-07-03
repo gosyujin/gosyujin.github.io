@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Jekyll, Liquid, Ruby]
 ---
-{% include JB/setup %}
 
 ## 前回までのあらすじ
 

@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Ruby, Selenium, iPhone, IE, Test]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

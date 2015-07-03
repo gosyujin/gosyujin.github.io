@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <link rel="icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    {% include ga.html %}
+
+    <a href="/">{{ site.title }}</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>{{ page.title }}</h1>
+      {% if page.date %}
+        <span>Published: {{ page.date | date: "%Y/%m/%d" }}</span>
+      {% endif %}
+      {% if page.tags %}
+        <span>Tags: </span>
+        {% for tag in page.tags %}
+          <i>[ <a href="/tags.html#{{ tag }}">{{ tag }}</a> ]</i>
+        {% endfor %}
+      {% endif %}
+

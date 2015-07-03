@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Python, Ruby, Jekyll]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 

@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [Ruby, Rails, Redmine]
 ---
-{% include JB/setup %}
 
 ## あらすじ
 
