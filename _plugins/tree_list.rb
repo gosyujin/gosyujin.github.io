@@ -52,8 +52,19 @@ module Jekyll
               before_sharp_count += 1
             end
 
-            # redcarpetでは空白はハイフン、アルファベットはすべて小文字に変換される
-            title_link = title.gsub(/ /, "-")
+            # titleに影響しないように深いコピー
+            title_link = Marshal.load(Marshal.dump(title))
+
+            # redcarpetでは空白、ドットはハイフン、アルファベットはすべて小文字に変換される
+            # xx(yy)はxx-yyだが、xx(yy)zzはxx-yy-zz
+            # はじめに行末の閉じカッコを消す
+            title_link.gsub!(/\)$/, "")
+
+            # 残りはハイフンに
+            title_link.gsub!(/ /, "-")
+            title_link.gsub!(/\)/, "-")
+            title_link.gsub!(/\(/, "-")
+            title_link.gsub!(/\./, "-")
             tree << "<li><a href='##{title_link.downcase}'>#{title}</a></li>"
 
             total_sharp_count += 1
