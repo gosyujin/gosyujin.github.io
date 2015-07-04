@@ -1,7 +1,7 @@
 require 'nokogiri'
 require 'time'
 
-ABSOLUTE_IMG_PATH = "http://gosyujin.github.com/images"
+ABSOLUTE_IMG_PATH = "http://gosyujin.github.io/static/images"
 
 # permalink: yyyy/mm/dd
 arg = ARGV[0]
@@ -20,15 +20,17 @@ scripts   = File.expand_path(File.dirname(__FILE__))
 site      = "#{scripts}/../_site"
 path      = "#{site}/#{permalink}/**/index.html"
 
+puts "Search path: #{path}"
 files = Dir.glob(path)
 if files == [] then
   puts "_site index files is"
   puts Dir.glob("#{site}/**/index.html")
   puts "-----------------------"
   puts "#{path}: file not found"
-  exit 0
+  exit 1
 end
 
+puts "Read start"
 files.each do |file|
   File.open(file, "r") do |f|
     doc = Nokogiri::HTML(f.read)
@@ -39,7 +41,7 @@ files.each do |file|
 
     # get blog tags
     # ex: <a href="/tags.html#Java-ref">Java <span>11</span></a>
-    doc.xpath('//ul[@class="tag_box"]/li/a').each do |tags|
+    doc.xpath('//i/a').each do |tags|
       title << "[#{tags.text.split(' ')[0]}]"
     end
 
@@ -51,14 +53,20 @@ files.each do |file|
 
     # hatena content
     content = ""
-    doc.xpath('//div[@class="span8"]').each do |con|
+
+    doc.xpath('//article[@class="markdown-body"]').each do |con|
+      # remove title
+      con.children.xpath('//h1').remove
       # remove pagination
+      con.children.xpath('//div[@class="published"]').remove
       con.children.xpath('//div[@class="pagination"]').remove
       # remove disqus script
       con.children.xpath('//div[@id="disqus_thread"]').remove
       con.children.xpath('//script').remove
       con.children.xpath('//noscript').remove
       con.children.xpath('//a[@class="dsq-brlink"]').remove
+      # remove social module
+      con.children.xpath('//div[@class="social-module"]').remove
 
       content << con.children.to_s
     end
@@ -75,6 +83,8 @@ files.each do |file|
       elsif content_line.match(/<img src="\/images/) then
         # img src convert absolute path to github
         puts content_line.gsub(/<img src="\/images/, "<img src=\"#{ABSOLUTE_IMG_PATH}")
+      elsif content_line.match(/^( )*\n$/) then
+        # nothing todo
       else
         puts content_line
       end
