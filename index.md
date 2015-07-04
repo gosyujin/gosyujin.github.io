@@ -1,7 +1,13 @@
 ---
 layout: page
-title: kk_Atakaの日記
+title: index
 ---
+
+## Link
+
+- はてな
+- GitHub
+- Slideshare
 
 ## Recent Entries
 

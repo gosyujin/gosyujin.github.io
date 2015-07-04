@@ -12,16 +12,17 @@ CONFIG = {
 # Usage: rake deploy
 desc "Begin a push static file to GitHub"
 task :deploy do
+  puts "Build..."
+  sh "rm -rf _site/*"
   sh "jekyll build"
-  puts "! Push to source branch of GitHub"
+
   # push source branch (source file)
+  puts "Push to source branch of GitHub"
   sh "git push origin source:source"
-  puts "! Clean and copy static file from _site to _deploy"
-  sh "rm -rf _deploy/*"
-  sh "cp -r _site/* _deploy/"
-  puts "! Change directory _deplay"
-  cd "_deploy" do
-    puts "! Push to master branch of GitHub"
+
+  puts "Change directory _site"
+  cd "_site" do
+    puts "Push to master branch of GitHub"
     sh "git add *"
     message = "deploy at #{Time.now}"
     begin
