@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Pro Gitと入門Gitと入門gitと実用GitとGit道場#1でGitの復習 rebase編 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Pro Gitと入門Gitと入門gitと実用GitとGit道場#1でGitの復習 rebase編</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Git">Git</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/04/23</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/22/1335108555" title=" Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo">
+           Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/04/24/1335270486" title="Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編">
+          Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<ul><li><a href="2012-03-05-1330951640">2012-03-05-1330951640</a></li><li><a href="2012-03-11-1331472478">2012-03-11-1331472478</a></li><li><a href="2012-03-15-1331816663">2012-03-15-1331816663</a></li><li><a href="2012-04-10-1334058674">2012-04-10-1334058674</a></li></ul>
+<ul><li><a href="2012-04-22-1335108555">2012-04-22-1335108555</a></li></ul>
+<h1>参考</h1>
+<ul><li><a href="http://progit.org/">Git - Book</a></li><li>入門Git</li><li>入門git</li><li>実用Git <span class="deco" style="color:#FF0000;">New !!</span></li><li>Git道場#1 講義 <a href="http://speakerdeck.com/u/ogawa/p/git">http://speakerdeck.com/u/ogawa/p/git</a> <span class="deco" style="color:#FF0000;">New !!</span></li></ul>
+<h1>rebaseとは</h1>
+<blockquote><p>入門git P126</p><p>土台の置き換え(リベース)にはgit rebaseコマンドを使う。</p></blockquote>
+<blockquote><p>実用Git P176</p><p>一連のコミットのもととなるもの(基点)を変更する際に使います。</p></blockquote>
+<blockquote><p>Git道場 講義</p><p>コミットをかぶせる事<span class="footnote"><a href="#f1" title="Git道場で実施したのはpull --rebaseだけど基本は同じはず" name="fn1">*1</a></span></p></blockquote>
+<p>コミットの基を変更すると。</p>
+<h2>パターン1 一般的な？場合(前方移植(forward-port))</h2>
+<p>Git道場で繰り返したパターンに近いかな。こういうブランチを作る。</p>
+<pre class="">       1---2---3(topic)
+      /
+A---B---C---D(master)</pre>
+<p>まずは1-5行目にそれぞれ1-5と入力したファイルを用意。</p>
+<pre class="">$ touch num
+$ git add num
+$ git commit -am&quot;first commit&quot;
+[master (root-commit) fa9eabc] first commit
+ 0 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 num
+
+$ vi num
+$ cat num
+$ git commit -am &quot;Add line number&quot;
+[master 15f636f] Add line number
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+$ git g
+ * 15f636f  (HEAD, master) Add line number
+ * fa9eabc  first commit</pre>
+<p>次にtopicブランチを作成しを育てる。</p>
+<pre class="">$ vi num
+$ cat num
+1 git add
+2
+3
+4
+5
+$ git commit -am &quot;Add message line 1&quot;
+[topic 29d901e] Add message line 1
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+$ vi num
+$ cat num
+1 git add
+2 git commit
+3
+4
+5
+$ git commit -am &quot;Add message line 2&quot;
+[topic 0b89cc2] Add message line 2
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+$ vi num
+$ cat num
+1 git add
+2 git commit
+3 git rebase
+4
+5
+$ git commit -am &quot;Add message line 3&quot;
+[topic 2588a24] Add message line 3
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+
+$ git g
+ * 2588a24  (HEAD, topic) Add message line 3
+ * 0b89cc2  Add message line 2
+ * 29d901e  Add message line 1
+ * 15f636f  (master) Add line number
+ * fa9eabc  first commit</pre>
+<p>masterに戻り、同じくファイルを編集。</p>
+<pre class="">$ git chm
+Switched to branch 'master'
+
+$ vi num
+$ cat num
+1
+2
+3
+4
+5 git add from_master
+$ git commit -am &quot;Add message line 5&quot;
+[master 0b91a9f] Add message line 5
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+$ vi num
+$ cat num
+1
+2
+3
+4 git commit from_master
+5 git add from_master
+$ git commit -am &quot;Add message line 4&quot;
+[master 93b8e52] Add message line 4
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+$ git g
+D  * 93b8e52  (HEAD, master) Add message line 4
+C  * 0b91a9f  Add message line 5
+ 3 | * 2588a24  (topic) Add message line 3
+ 2 | * 0b89cc2  Add message line 2
+ 1 | * 29d901e  Add message line 1
+   |/
+B  * 15f636f  Add line number
+A  * fa9eabc  first commit</pre>
+<p>各コミットをABCD123とすると、こう。</p>
+<pre class="">       1---2---3(topic)
+      /
+A---B---C---D(master)</pre>
+<p>そして、topicブランチの変更をmasterブランチへ"かぶせる"</p>
+<pre class="">$ git ch topic
+Switched to branch 'topic'
+
+$ git rebase master
+First, rewinding head to replay your work on top of it...
+Applying: Add message line 1
+Using index info to reconstruct a base tree...
+&lt;stdin&gt;:11: trailing whitespace.
+1 git add
+warning: 1 line adds whitespace errors.
+Falling back to patching base and 3-way merge...
+Auto-merging num
+Applying: Add message line 2
+Using index info to reconstruct a base tree...
+&lt;stdin&gt;:12: trailing whitespace.
+2 git commit
+warning: 1 line adds whitespace errors.
+Falling back to patching base and 3-way merge...
+Auto-merging num
+Applying: Add message line 3
+Using index info to reconstruct a base tree...
+&lt;stdin&gt;:13: trailing whitespace.
+3 git rebase
+warning: 1 line adds whitespace errors.
+Falling back to patching base and 3-way merge...
+Auto-merging num
+CONFLICT (content): Merge conflict in num
+Failed to merge in the changes.
+Patch failed at 0003 Add message line 3
+
+When you have resolved this problem run &quot;git rebase --continue&quot;.
+If you would prefer to skip this patch, instead run &quot;git rebase --skip&quot;.
+To restore the original branch and stop rebasing run &quot;git rebase --abort&quot;.</pre>
+<p>途中でコンフリクトしたけど、内部ではこうなっている。HEADは今ここ。</p>
+<ul><li>topicブランチの一つ目の変更をmasterブランチに適用</li></ul>
+<pre class="">       1---2---3(topic)
+      /
+A---B---C---D(master)---1'(HEAD)</pre>
+<ul><li>topicブランチの二つ目の変更をmasterブランチに適用</li></ul>
+<pre class="">       1---2---3(topic)
+      /
+A---B---C---D(master)---1'---2'(HEAD)</pre>
+<ul><li>topicブランチの三つ目の変更をmasterブランチに適用しようとしてコンフリクト</li></ul>
+<pre class="">       1---2---3(topic)
+      /
+A---B---C---D(master)---1'---2'---3'(HEAD)</pre>
+<p>コンフリクト発生時、グラフはこうなっている。</p>
+<pre class="">$ git g
+ * cf6c3d6  (HEAD) Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  (master) Add message line 4
+ * 0b91a9f  Add message line 5
+ | * 2588a24  (topic) Add message line 3
+ | * 0b89cc2  Add message line 2
+ | * 29d901e  Add message line 1
+ |/
+ * 15f636f  Add line number
+ * fa9eabc  first commit</pre>
+<p>Add message line 1と2がmasterブランチから生えてる、イコールmasterブランチにtopicブランチの変更(二つ)がコミットされている。一個ずつ変更を適用してコミットとしているので、もとのtopicブランチとSHA1値が変わっている。</p>
+<p>最後の変更をコミットしようとしたらコンフリクトしたので、直す。</p>
+<pre class="">$ vi num
+$ git add num
+$ git rebase --continue
+Applying: Add message line 3</pre>
+<p>rebaseが無事終了。グラフを見てみると…。</p>
+<pre class="">$ git g
+ * 7ab5db8  (HEAD, topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  (master) Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit</pre>
+<p>masterブランチとtopicブランチが一直線になった。旧topicブランチは変更が適用されたという事で削除されている。最終的にはこうなる。</p>
+<pre class="">A---B---C---D(master)---1'---2'---3'(HEAD, topic)</pre>
+<p>一連の流れのreflogはこんな感じ。</p>
+<pre class="">7ab5db8 HEAD@{0}: rebase: Add message line 3           # 一つずつ変更を適用
+cf6c3d6 HEAD@{1}: rebase: Add message line 2           # 一つずつ変更を適用
+38f8aff HEAD@{2}: rebase: Add message line 1           # 一つずつ変更を適用
+93b8e52 HEAD@{3}: checkout: moving from topic to 93b8e52... # rebaseが勝手に無名ブランチ(masterの所)へcheckout
+2588a24 HEAD@{4}: checkout: moving from master to topic     # rebaseのため自力でcheckoutした</pre>
+<h2>パターン2 rebaseしたいブランチに依存しているブランチがある場合</h2>
+<p>これを見てまたrebase怖いと思ってしまった。内容を見てみる。</p>
+<pre class="">           x---y(subdev)
+          /
+   1---2---3(dev)
+  /
+A---B---C(master)</pre>
+<p>こういうブランチがあった時に、devをrebaseするとどうなるかという事。なるかどうかは別にして、git rebase master devで下記のようになってくれるとうれしい。</p>
+<pre class="">                             x'---y'(subdev)
+                            /
+A---B---C(master)---1'---2'---3'(dev)</pre>
+<p>だが、実態はそうではない。以下で試してみる。まず準備。</p>
+<pre class="">#devブランチを作成
+$ git chb dev
+$ touch newfeature
+$ git add newfeature
+$ git commit -am&quot;Add newfeature&quot;
+$ echo &quot;feature is ...&quot; &gt;&gt; newfeature
+$ git commit -am &quot;Add message line 1&quot;
+#devブランチにサブのブランチを作成し育てる
+$ git chb subdev
+$ echo &quot;sub module now&quot; &gt;&gt; newfeature
+$ git commit -am &quot;Add message line 2(sub module)&quot;
+$ echo &quot;sub module now 2&quot; &gt;&gt; newfeature
+$ git commit -am &quot;Add message line 3(sub module)&quot;
+#devブランチに戻り育てる
+$ git ch dev
+$ echo &quot;new feature end&quot; &gt;&gt; newfeature
+$ git commit -am &quot;Add message line 2&quot;
+#masterブランチに戻り育てる
+$ git chm
+$ echo &quot;feature add&quot; &gt;&gt; num
+$ git commit -am &quot;Modify num&quot;
+$ echo &quot;feature add 2&quot; &gt;&gt; num
+$ git commit -am &quot;Modify num 2&quot;</pre>
+<p>で、今のグラフ。</p>
+<pre class="">$ git g
+  y * ebdc7e7  (subdev) Add message line 3(sub module)
+C   | * 18ac45f  (HEAD, master) Modify num 2
+B   | * a43a699  Modify num
+ 3  | | * a3f65de  (dev) Add message line 2
+  x * | | f473f19  Add message line 2(sub module)
+    | |/
+    |/|
+ 2  * | cf36abe  Add message line 1
+ 1  * | 43b3504  Add newfeature
+    |/
+A   * 3aec83c  (nobra) Add message nobra</pre>
+<p>rebase開始。</p>
+<pre class="">$ git rebase master dev
+First, rewinding head to replay your work on top of it...
+Applying: Add newfeature
+Applying: Add message line 1
+Applying: Add message line 2</pre>
+<p>グラフはこうなる。</p>
+<pre class="">$ git g
+ 3'  * 948e1a4  (HEAD, dev) Add message line 2
+ 2'  * 0bc3e36  Add message line 1
+ 1'  * ae15a29  Add newfeature
+   y | * ebdc7e7  (subdev) Add message line 3(sub module)
+C    * | 18ac45f  (master) Modify num 2
+B    * | a43a699  Modify num
+   x | * f473f19  Add message line 2(sub module)
+ 2   | * cf36abe  Add message line 1
+ 1   | * 43b3504  Add newfeature
+     |/
+A    * 3aec83c  (nobra) Add message nobra</pre>
+<p>(ブランチが)すごく…多いです。こうなった。</p>
+<pre class="">           x---y(subdev)
+          /
+   1---2--
+  /
+A---B---C(master)---1'---2'---3'(dev)</pre>
+<p>dev(1,2,3)はきちんと適用された。が、subdev(x,y)は適用されていない。ので1,2,x,yは残っている。(3はdevをrebaseし、subdevから到達できないのでいつもどおり削除されている)</p>
+<p>むむむ。しかし、修正内容さえ分かっていればコンフリクトしても冷静に直せばきちんとrebaseできるか。dev(3')にsubdev(y)をrebaseする。</p>
+<pre class="">$ git rebase dev subdev
+First, rewinding head to replay your work on top of it...
+Applying: Add message line 2(sub module)
+Using index info to reconstruct a base tree...
+Falling back to patching base and 3-way merge...
+Auto-merging newfeature
+CONFLICT (content): Merge conflict in newfeature
+Failed to merge in the changes.
+Patch failed at 0001 Add message line 2(sub module)
+
+When you have resolved this problem run &quot;git rebase --continue&quot;.
+If you would prefer to skip this patch, instead run &quot;git rebase --skip&quot;.
+To restore the original branch and stop rebasing run &quot;git rebase --abort&quot;.
+
+$ vi newfeature
+$ git add newfeature
+$ git rebase --continue
+Applying: Add message line 2(sub module)
+Applying: Add message line 3(sub module)
+Using index info to reconstruct a base tree...
+Falling back to patching base and 3-way merge...
+Auto-merging newfeature
+
+$ git g
+ * 0fe8a57  (HEAD, subdev) Add message line 3(sub module)
+ * 71f976a  Add message line 2(sub module)
+ * 948e1a4  (dev) Add message line 2
+ * 0bc3e36  Add message line 1
+ * ae15a29  Add newfeature
+ * 18ac45f  (master) Modify num 2
+ * a43a699  Modify num
+ * 3aec83c  (nobra) Add message nobra</pre>
+<h1>rebase対merge</h1>
+<ul><li>1人1リポジトリとかで作業している場合は、あまり意識せずに自由にやってもいい<ul><li>mergeの方が何をしていたかの履歴が残るので良いかもしれない</li></ul></li><li>rebaseを使う時の問題は、複数人複数リポジトリで作業している場合<ul><li>rebaseすると新しいコミットになる(SHA1も変わる)</li><li>公開した(pushした)後にrebaseするのはまずい</li></ul></li><li>上記のようにrebaseしたいブランチに依存しているブランチがある場合も注意かもしれない<ul><li>うまくrebaseしていかないとグラフがどうなっているのかわからなくなりそう…</li><li>マージを含むブランチがある場合のrebaseも同様</li></ul></li></ul>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: Git道場で実施したのはpull --rebaseだけど基本は同じはず</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/22/1335108555" title=" Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo">
+           Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/04/24/1335270486" title="Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編">
+          Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/04/23/1335185906" data-text="kk_Atakaの日記 - Pro Gitと入門Gitと入門gitと実用GitとGit道場#1でGitの復習 rebase編" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/23/1335185906/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/04/23/1335185906/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/23/1335185906/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Pro Gitと入門Gitと入門gitと実用GitとGit道場#1でGitの復習 rebase編"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/04/23/1335185906/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

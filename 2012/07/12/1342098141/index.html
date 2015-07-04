@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Fluentdというログ収集ツールを使ってApacheのログを取得するまで - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Fluentdというログ収集ツールを使ってApacheのログを取得するまで</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Fluentd">Fluentd</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/07/12</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/06/19/1340106125" title="JenkinsでAdmin権限を持つユーザのパスワードを全て忘れた時の復旧方法">
+          JenkinsでAdmin権限を持つユーザのパスワードを全て忘れた時の復旧方法
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/07/17/1342535044" title="Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり)">
+          Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり)
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<ul><li>Twitterで@<a href="https://twitter.com/tosikawa">tosikawa</a>さんにこんなツールあるよ、と教えてもらった</li><li>…が、未見だったためすぐググる</li><li>とりあえずどんなものか動かしてみる事に</li></ul>
+<h2>Fluentdとは</h2>
+<blockquote><p>Log everything in JSON</p><cite><a href="http://fluentd.org/">http://fluentd.org/</a></cite></blockquote>
+<p>Oh...シンプルイズベスト…。</p>
+<blockquote><p>Fluentd is a log collector daemon written in Ruby. Fluentd receives logs as JSON streams, buffers them, and sends them to other systems like MySQL, MongoDB, or even other instances of Fluentd.</p></blockquote>
+<p>Rubyで作られたログ収集ツール。ただし、JSONで……？</p>
+<h1>参考サイト</h1>
+<ul><li><a href="http://fluentd.org/">Fluentd: Log Everything in JSON</a><ul><li>公式のDocumentationがSphinx</li></ul></li><li><a href="http://d.hatena.ne.jp/viver/20110929">2011-09-29 - 古橋貞之の日記</a></li><li><a href="http://d.hatena.ne.jp/wyukawa/20120207/1328625443">fluentdを試してみた - wyukawa’s blog</a></li><li><a href="http://d.hatena.ne.jp/zakihaya/20120616/1339856226">fluentdを使ってnginxのログを溜めてみるメモ - zakihayaの日記</a></li><li><a href="http://d.hatena.ne.jp/fat47/20120426/1335428063">【作業メモ】Apacheログをfluentd+MongoDBで収集しRubyで集計してみたが… - FAT47の底辺インフラ議事録</a></li><li><a href="http://shinobra.com/2012/02/sawanoboly/gluent_getting_start">fluentことはじめ、起動からmongodbにログを突っ込むまで | しのぶら!!!</a></li></ul>
+<h1>環境</h1>
+<ul><li>CentOS 6.2</li><li>Ruby 1.9.3</li><li>RubyGems 1.8.21</li></ul>
+<h1>手順</h1>
+<p>とりあえずbundlerで動かしてみるためにGemfileを作成。</p>
+<pre class="">$ cat Gemfile
+source :rubygems
+source &quot;http://rubygems.org&quot;
+
+gem 'fluentd'</pre>
+<p>インストール。</p>
+<pre class="">$ bundle install --path ./vendor/bundle
+Fetching gem metadata from http://rubygems.org/....
+Fetching gem metadata from http://rubygems.org/....
+Installing iobuffer (1.1.2) with native extensions
+Installing cool.io (1.1.0) with native extensions
+Installing http_parser.rb (0.5.3) with native extensions
+Installing json (1.7.3) with native extensions
+Installing msgpack (0.4.7) with native extensions
+Installing yajl-ruby (1.1.0) with native extensions
+Installing fluentd (0.10.24)
+Using bundler (1.1.3)
+Your bundle is complete! It was installed into ./vendor/bundle</pre>
+<p>OK。<span class="footnote"><a href="#f1" title="CentOSはこれでよかったんだけど、はじめにWindowsで挑戦したらエラッタ。。" name="fn1">*1</a></span></p>
+<h1>実行</h1>
+<p><a href="http://fluentd.org/doc/install.html#confirm-installation">Installation — fluentd v0.10 documentation</a> を参考に。</p>
+<ul><li>設定ファイルなどのテンプレートを指定先に作ってくれる。</li></ul>
+<pre class="">$ bundle exec fluentd --setup ./fluent
+Installed ./fluent/fluent.conf.</pre>
+<ul><li>コンフィグファイル指定+traceモードで起動</li></ul>
+<pre class="">$ bundle exec fluentd -c ./fluent/fluent.conf -vv &amp;
+[1] 12973
+2012-07-10 21:37:47 +0900: fluent/supervisor.rb:153:supervise: starting fluentd-0.10.24
+2012-07-10 21:37:47 +0900: fluent/supervisor.rb:235:read_config: reading config file path=&quot;./fluent/fluent.conf&quot;
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered buffer plugin 'file'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered buffer plugin 'memory'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'exec'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'forward'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'gc_stat'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'http'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'object_space'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'status'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'tcp'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'unix'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'syslog'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered input plugin 'tail'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'copy'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'exec'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'exec_filter'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'file'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'forward'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'null'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'roundrobin'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'stdout'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'tcp'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'unix'
+2012-07-10 21:37:47 +0900: fluent/plugin.rb:85:register_impl: registered output plugin 'test'
+2012-07-10 21:37:47 +0900: fluent/engine.rb:63:block in configure: adding source type=&quot;forward&quot;
+2012-07-10 21:37:47 +0900: fluent/engine.rb:63:block in configure: adding source type=&quot;http&quot;
+2012-07-10 21:37:47 +0900: fluent/engine.rb:79:block in configure: adding match pattern=&quot;debug.**&quot; type=&quot;stdout&quot;
+2012-07-10 21:37:47 +0900: plugin/in_forward.rb:60:listen: listening fluent socket on 0.0.0.0:24224
+2012-07-10 21:37:47 +0900: plugin/in_http.rb:74:start: listening http on 0.0.0.0:8888</pre>
+<ul><li>ログを送ってみる</li></ul>
+<pre class="">$ echo '{&quot;json&quot;:&quot;message&quot;}' | bundle exec fluent-cat debug.test
+2012-07-10 21:40:02 +0900: plugin/in_forward.rb:139:initialize: accepted fluent socket object_id=14145560
+2012-07-10 21:40:02 +0900 debug.test: {&quot;json&quot;:&quot;message&quot;}
+2012-07-10 21:40:02 +0900: plugin/in_forward.rb:180:on_close: closed fluent socket object_id=14145560</pre>
+<br />
+<h1>Apacheのログを集めてみる</h1>
+<p>集めるログ……自鯖のApacheのログをfluentdで集めてみよう。</p>
+<ul><li>コンフィグファイルにはじめからコメントアウトされている設定があったので、これを利用</li></ul>
+<pre class="">## File input                                                                                                                                 
+## read apache logs with tag=apache.access                                                                                                    
+&lt;source&gt;
+  type tail
+  format apache
+  path /var/log/httpd-access.log
+  tag apache.access
+&lt;/source&gt;</pre>
+<ul><li>typeにはInput Pluginを指定するらしい。種類はhttp, tail, forward, execなど<ul><li><a href="http://fluentd.org/doc/plugin.html#input-plugins">Plugins — fluentd v0.10 documentation</a></li></ul></li><li>format(必須)はLogのフォーマットを指定。今回はApacheのログなのでapache</li><li>path(必須)はLogのパスかな</li><li>tag(必須)はfluentd内で使うタグ？ myapp.accessみたいにドットで分けるらしい</li></ul>
+<p>上記の条件にマッチしたものを、今度はmatchタグに従ってoutputしている……のかな？</p>
+<pre class="">## match tag=apache.access and write to file                                                                                                  
+&lt;match apache.access&gt;
+  type file
+  path /home/kk_Ataka/log
+&lt;/match&gt;</pre>
+<p>では動かしてみよう。</p>
+<pre class="">$ sudo bundle exec fluentd -c fluent/fluent.conf</pre>
+<p>Apacheへアクセス。(Redmineがいるので、Redmineホームにアクセスしてみる)</p>
+<p>…。</p>
+<p>…。</p>
+<h1>結果</h1>
+<h2>Apacheの方でいつもどおり作られたログ</h2>
+<pre class="">xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET / HTTP/1.1&quot; 200 4371
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET /themes/alternate/stylesheets/application.css?1339785657 HTTP/1.1&quot; 304 -
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET /javascripts/controls.js?1339785657 HTTP/1.1&quot; 304 -
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET /javascripts/effects.js?1339785657 HTTP/1.1&quot; 304 -
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET /javascripts/prototype.js?1339785657 HTTP/1.1&quot; 304 -
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET /javascripts/dragdrop.js?1339785657 HTTP/1.1&quot; 304 -
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET /javascripts/application.js?1339785657 HTTP/1.1&quot; 304 -
+xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET /stylesheets/scm.css?1339785657 HTTP/1.1&quot; 304 -
+::1 - - [10/Jul/2012:22:20:36 +0900] &quot;OPTIONS * HTTP/1.0&quot; 200 -</pre>
+<p>見慣れたもんが出ました。</p>
+<h2>fluentdで作られたログ</h2>
+<pre class="">2012-07-10T22:20:30+09:00       apache.access   {&quot;host&quot;:&quot;xxx.xxx.xxx.xxx&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/&quot;,&quot;code&quot;:&quot;200&quot;,&quot;size&quot;:&quot;4371&quot;}
+2012-07-10T22:20:30+09:00       apache.access   {&quot;host&quot;:&quot;xxx.xxx.xxx.xxx&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/themes/alternate/stylesheets/application.css?1339785657&quot;,&quot;code&quot;:&quot;304&quot;,&quot;size&quot;:&quot;-&quot;}
+2012-07-10T22:20:30+09:00       apache.access   {&quot;host&quot;:&quot;xxx.xxx.xxx.xxx&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/javascripts/controls.js?1339785657&quot;,&quot;code&quot;:&quot;304&quot;,&quot;size&quot;:&quot;-&quot;}
+2012-07-10T22:20:30+09:00       apache.access   {&quot;host&quot;:&quot;xxx.xxx.xxx.xxx&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/javascripts/effects.js?1339785657&quot;,&quot;code&quot;:&quot;304&quot;,&quot;size&quot;:&quot;-&quot;}
+2012-07-10T22:20:30+09:00       apache.access   {&quot;host&quot;:&quot;xxx.xxx.xxx.xxx&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/javascripts/prototype.js?1339785657&quot;,&quot;code&quot;:&quot;304&quot;,&quot;size&quot;:&quot;-&quot;}
+2012-07-10T22:20:30+09:00       apache.access   {&quot;host&quot;:&quot;xxx.xxx.xxx.xxx&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/javascripts/dragdrop.js?1339785657&quot;,&quot;code&quot;:&quot;304&quot;,&quot;size&quot;:&quot;-&quot;}
+2012-07-10T22:20:30+09:00       apache.access   {&quot;host&quot;:&quot;xxx.xxx.xxx.xxx&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/javascripts/application.js?1339785657&quot;,&quot;code&quot;:&quot;304&quot;,&quot;size&quot;:&quot;-&quot;}
+2012-07-10T22:20:30+09:00       apache.access   {&quot;host&quot;:&quot;xxx.xxx.xxx.xxx&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/stylesheets/scm.css?1339785657&quot;,&quot;code&quot;:&quot;304&quot;,&quot;size&quot;:&quot;-&quot;}
+2012-07-10T22:20:36+09:00       apache.access   {&quot;host&quot;:&quot;::1&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;OPTIONS&quot;,&quot;path&quot;:&quot;*&quot;,&quot;code&quot;:&quot;200&quot;,&quot;size&quot;:&quot;-&quot;}</pre>
+<p>自動で全部jsonにparseされている！　さすがLog everything in JSONと公式に書いているだけの事はある！</p>
+<p>こうなってくると、MongoDBとかの知識も必要になってくるな。</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: CentOSはこれでよかったんだけど、はじめにWindowsで挑戦したらエラッタ。。</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/06/19/1340106125" title="JenkinsでAdmin権限を持つユーザのパスワードを全て忘れた時の復旧方法">
+          JenkinsでAdmin権限を持つユーザのパスワードを全て忘れた時の復旧方法
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/07/17/1342535044" title="Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり)">
+          Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり)
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/07/12/1342098141" data-text="kk_Atakaの日記 - Fluentdというログ収集ツールを使ってApacheのログを取得するまで" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/07/12/1342098141/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/07/12/1342098141/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/07/12/1342098141/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Fluentdというログ収集ツールを使ってApacheのログを取得するまで"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/07/12/1342098141/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

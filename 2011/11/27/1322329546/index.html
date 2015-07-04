@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>LokkaをインストールしてHerokuにデプロイした - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>LokkaをインストールしてHerokuにデプロイした</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Heroku">Heroku</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Lokka">Lokka</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/11/27</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/11/26/1322240459" title="HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた">
+          HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/11/28/1322482230" title="pikでインストールしたRubyでbundle exec rubyしたらエラーになった">
+          pikでインストールしたRubyでbundle exec rubyしたらエラーになった
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<p>Herokuを使い出したのでLokkaを触ってみる。</p>
+<h1>参考サイト</h1>
+<ul><li><a href="http://lokka.org/getting-started">Getting Started - Lokka</a></li></ul>
+<p>公式ページの手順だけでなんとかなりそう。</p>
+<h1>手順</h1>
+<h2>Lokka入手、インストール</h2>
+<p>LokkaをGitHubからCloneして、Bundle install。--withoutオプションでmysql, postgresql, sqliteから使わないDBを指定できる。</p>
+<pre class="">$ git clone git://github.com/komagata/lokka.git$ cd lokka
+$ bundle install ./vendor/bundle --without development mysql sqlite</pre>
+<p>ん、何かエラッた。</p>
+<pre class="">Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native extension.
+(略)
+Gem files will remain installed in /home/kk_Ataka/github/lokka/vendor/bundle/ruby/1.9.1/bundler/gems/do-d7cb262d89a1/do_postgres for inspection.
+Results logged to /home/kk_Ataka/github/lokka/vendor/bundle/ruby/1.9.1/bundler/gems/do-d7cb262d89a1/do_postgres/ext/do_postgres/gem_make.out
+An error occured while installing do_postgres (0.10.6), and Bundler cannot continue.
+Make sure that `gem install do_postgres -v '0.10.6'` succeeds before bundling.</pre>
+<p>do_postgresがbundlerだとインストールできてない…？</p>
+<pre class="">$ gem install do_postgres
+Fetching: addressable-2.2.6.gem (100%)
+Fetching: data_objects-0.10.7.gem (100%)
+Fetching: do_postgres-0.10.7.gem (100%)
+Building native extensions.  This could take a while...
+ERROR:  Error installing do_postgres:
+     ERROR: Failed to build gem native extension.
+
+        /home/kk_Ataka/.rvm/rubies/ruby-1.9.3-p0/bin/ruby extconf.rb
+checking for main() in -lpq... no
+checking for main() in -llibpq... no
+*** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of
+necessary libraries and/or headers.  Check the mkmf.log file for more
+details.  You may need configuration options.</pre>
+<p>postgresが入っていなかったので入れる。</p>
+<p><span class="deco" style="color:#FF0000;">※やっぱりSQLite3でやることにしたため以下はメモ。</span></p>
+<pre class="">$ sudo yum install postgresql-devel
+(略)
+$ cd ~/.rvm/gems/ruby-1.9.3-p0/gems/do_postgres-0.10.7/ext/do_postgres
+$ ruby extconf.rb
+checking for main() in -lpq... yes
+checking for libpq-fe.h... yes
+checking for libpq/libpq-fs.h... yes
+checking for postgres.h... yes
+checking for mb/pg_wchar.h... yes
+checking for catalog/pg_type.h... yes
+checking for localtime_r()... yes
+checking for gmtime_r()... yes
+checking for PQsetClientEncoding()... yes
+checking for pg_encoding_to_char()... yes
+checking for PQfreemem()... yes
+creating Makefile
+$ make
+linking shared-object do_postgres/do_postgres.so
+$ make install
+/usr/bin/install -c -m 0755 do_postgres.so /home/kk_Ataka/.rvm/rubies/ruby-1.9.3-p0/lib/ruby/site_ruby/1.9.1/x86_64-linux/do_postgres
+installing default do_postgres libraries</pre>
+<p><span class="deco" style="color:#FF0000;">メモここまで。</span></p>
+<p>Lokkaのディレクトリに戻って再度bundle install...。</p>
+<pre class="">Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native extension.
+
+        /home/kk_Ataka/.rvm/rubies/ruby-1.9.3-p0/bin/ruby extconf.rb
+extconf.rb:10: Use RbConfig instead of obsolete and deprecated Config.
+checking for libxml/parser.h... no
+-----
+libxml2 is missing.  please visit http://nokogiri.org/tutorials/installing_nokogiri.html for help with installing dependencies.
+-----
+*** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of
+necessary libraries and/or headers.  Check the mkmf.log file for more
+details.  You may need configuration options.
+
+(略)
+
+Gem files will remain installed in /home/kk_Ataka/github/lokka/vendor/bundle/ruby/1.9.1/gems/nokogiri-1.5.0 for inspection.
+Results logged to /home/kk_Ataka/github/lokka/vendor/bundle/ruby/1.9.1/gems/nokogiri-1.5.0/ext/nokogiri/gem_make.out
+An error occured while installing nokogiri (1.5.0), and Bundler cannot continue.
+Make sure that `gem install nokogiri -v '1.5.0'` succeeds before bundling.
+</pre>
+<p>nokogiriはlibxml2が必要なのか。</p>
+<pre class="">$ sudo yum install libxml2-devel</pre>
+<p>libxsltもか。</p>
+<pre class="">$ sudo yum install libxslt-devel</pre>
+<p>んで満を持してBundle。</p>
+<pre class="">$ bundle install ./vendor/bundle --without development mysql postgres</pre>
+<h2>もろもろの設定、ローカルで起動</h2>
+<p>database.default.ymlファイルをコピーしてdatabase.ymlを作成。そしてDBセットアップから起動。</p>
+<pre class="">$ cp database.default.yml database.yml
+$ bundle exec rake db:setup
+$ bundle exec rackup</pre>
+<p><a href="http://localhost:9292">http://localhost:9292</a>にアクセスし、TestSiteが表示されたらOK！</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111127024213"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111127/20111127024213.jpg"></a></p>
+<h1>その他</h1>
+<ul><li>初期IDとパスワードがtest/testなのでAdmin loginよりログインして変更する</li><li>プラグインは<a href="http://lokka.org/plugins">Plugins - Lokka</a>から欲しいものをDLする。public/plugin/に置けばいいらしいが…？</li></ul>
+<h1>Herokuにpush</h1>
+<p>Gitでpushする手順は<a href="http://d.hatena.ne.jp/kk_Ataka/20111126/1322240459">前回の記事を参照</a>。その後、Heroku側のDBセットアップを。</p>
+<pre class="">$ bundle exec heroku rake db:setup</pre>
+<h2>Herokuのタイムゾーン</h2>
+<p>Herokuのタイムゾーンが日本になっていない。日本に住んでいるのでブログ更新したら更新日は日本時間で出てほしいなと思ったが、これはconfig:addで設定でけるよう。</p>
+<pre class="">$ bundle exec heroku config:add TZ=Asia/Tokyo</pre>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/11/26/1322240459" title="HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた">
+          HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/11/28/1322482230" title="pikでインストールしたRubyでbundle exec rubyしたらエラーになった">
+          pikでインストールしたRubyでbundle exec rubyしたらエラーになった
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/11/27/1322329546" data-text="kk_Atakaの日記 - LokkaをインストールしてHerokuにデプロイした" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/11/27/1322329546/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/11/27/1322329546/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/11/27/1322329546/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - LokkaをインストールしてHerokuにデプロイした"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/11/27/1322329546/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

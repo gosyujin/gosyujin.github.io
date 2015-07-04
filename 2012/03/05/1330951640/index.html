@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Pro Gitと入門gitでGitの復習 基本操作編 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Pro Gitと入門gitでGitの復習 基本操作編</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Git">Git</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/03/05</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/02/29/1330528564" title="Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など">
+          Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/03/11/1331472478" title="Pro Gitと入門gitでGitの復習 ブランチ編">
+          Pro Gitと入門gitでGitの復習 ブランチ編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<p>めっきりadd, commitくらいしか使っていないGitをもう一回さわってみて学びなおす。Pro Gitのページもブクマしただけで真剣に読んでいなかったので読み進める。</p>
+<p>続き。</p>
+<ul><li><a href="2012-03-11-1331472478">2012-03-11-1331472478</a></li></ul>
+<h1>参考</h1>
+<ul><li><a href="http://progit.org/">Git - Book</a></li><li>入門git</li></ul>
+<h1>リポジトリの作成</h1>
+<p>リポジトリにしたいディレクトリの中でinitコマンドで作成 or init ディレクトリ で生成。</p>
+<pre class="">$ git init
+Initialized empty Git repository in c:/project/testRemote/test/.git/</pre>
+<p>以後は基本的にリポジトリの中で作業。</p>
+<h1>コンフィグ</h1>
+<h2>コンフィグファイルの適用範囲と優先度</h2>
+<p>下に行くほど適用範囲は狭くなり、優先度が上がる。(同じオプションがあったら下のものが適用される)</p>
+<table><tr><th>ファイル</th><th>Windows(msysGit)では</th><th>範囲</th><th>優先度</th><th>configコマンドでの設定方法</th></tr><tr><td>/etc/gitconfig</td><td>(msysのルート)/etc/gitconfig</td><td>システム全体</td><td>低</td><td>--system</td></tr><tr><td>~/.gitconfig</td><td>%USERPROFILE%\.gitconfig</td><td>あるユーザ</td><td>中</td><td>--global</td></tr><tr><td>(リポジトリ内).git/config</td><td>(リポジトリ内).git/config</td><td>そのリポジトリ</td><td>高</td><td>(指定なし)</td></tr></table>
+<h2>コンフィグの一覧を見る</h2>
+<p>そのリポジトリのコンフィグを見る。</p>
+<pre class="">$ git config --list
+user.name=kk_Ataka
+...</pre>
+<p>あるユーザのコンフィグを見る。</p>
+<pre class="">$ git config --list --global</pre>
+<p>システム全体のコンフィグを見る。</p>
+<pre class="">$ git config --list --system</pre>
+<h2>コンフィグの確認(特定の)</h2>
+<pre class="">$ git config user.name
+kk_Ataka</pre>
+<h2>コンフィグの編集</h2>
+<pre class="">$ git config --global user.name &quot;kk_Ataka&quot;
+$ git config --global user.email &quot;test@example.com&quot;</pre>
+<h1>リポジトリ作成</h1>
+<p>.git ファイルを作成し、その中にGitリポジトリのスケルトンが格納される。→スケルトン？</p>
+<h2>リポジトリを作成する</h2>
+<pre class="">$ git init testdir
+Initialized empty Git repository in c:/project/testdir/.git/</pre>
+<h1>リポジトリのクローン</h1>
+<p>既存のリポジトリを歴史毎ごっそり持ってくる。プロトコルにはhttp,https,git等がある。</p>
+<h2>既存リポジトリのクローン</h2>
+<pre class="">$ git clone http://github.com/gosyujin/excel_for_ruby.git
+Cloning into excel_for_ruby...
+remote: Counting objects: 22, done.
+remote: Compressing objects: 100% (13/13), done.
+remote: Total 22 (delta 2), reused 21 (delta 1)
+Unpacking objects: 100% (22/22), done.</pre>
+<pre class="">$ cd excel_for_ruby\
+$ git log
+commit b6cd9964b1e586d8be280acd40c9719f6cc045c0
+Author: kk_Ataka &lt;kk_ataka@---.---.jp&gt;
+Date:   Sun Dec 25 17:36:53 2011 +0900
+
+    .gitignore追加</pre>
+<h1>状態確認</h1>
+<h2>作業ツリーの状態確認</h2>
+<ul><li>変更なし</li></ul>
+<pre class="">$ git status
+# On branch master
+nothing to commit (working directory clean)</pre>
+<ul><li>変更あり</li><li>Untracked files</li></ul>
+<p>まだGitに追跡されていないファイル。(＝前回コミット時になかったファイル)これからaddする必要がある。赤く表示される。</p>
+<pre class="">$ git status
+# On branch master
+# Untracked files:
+#   (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+#
+#       README
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)</pre>
+<ul><li>new file</li></ul>
+<p>addで新しく追跡開始されたファイルmenu.htmlがステージされている。緑で表示される。</p>
+<pre class=""># On branch master
+# Changes to be committed:
+#   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)
+#
+#       new file:   menu.html</pre>
+<ul><li>modified</li></ul>
+<p>既に追跡されているファイルが変更された。赤で表示される。これからaddでステージする。</p>
+<pre class="">$ git status
+# On branch master
+# Changed but not updated:
+#   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+#   (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)
+#
+#       modified:   index.html
+#
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</pre>
+<h1>ファイル追加(追跡)</h1>
+<h2>リポジトリに追加(追跡の開始)</h2>
+<h2>ステージング</h2>
+<p>追跡の開始ともいうらしい。ディレクトリを指定すると、その下を再帰的に追跡する。</p>
+<pre class="">$ git add index.html</pre>
+<h1>ファイル比較</h1>
+<h2>ファイルの比較</h2>
+<ul><li>作業ツリーの内容とステージングエリアの比較</li></ul>
+<pre class="">$ git status
+# On branch master
+# Changed but not updated:
+#   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+#   (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)
+#
+#       modified:   index.html
+#
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</pre>
+<pre class="">$ git diff
+diff --git a/index.html b/index.html
+index a633da3..bc2a94f 100644
+--- a/index.html
++++ b/index.html
+@@ -1,8 +1,9 @@
+ &lt;html&gt;
+   &lt;head&gt;
+-    &lt;title&gt;Welcome !!&lt;/title&gt;
++    &lt;title&gt;Welcome&lt;/title&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+     &lt;h1&gt;Hello&lt;/h1&gt;
++    &lt;p&gt;Hello world&lt;/p&gt;
+   &lt;/body&gt;
+ &lt;/html&gt;</pre>
+<ul><li>ステージされた内容と直近のコミットの比較</li></ul>
+<pre class="">$ git add index.html
+$ git status
+# On branch master
+# Changes to be committed:
+#   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)
+#
+#       modified:   index.html
+#
+$ git diff</pre>
+<p>add してdiff すると出力はなし。--cached, --stagedオプションをつけるとステージされた内容との比較を取る。</p>
+<pre class="">$ git diff --cached
+diff --git a/index.html b/index.html
+index a633da3..bc2a94f 100644
+--- a/index.html
++++ b/index.html
+@@ -1,8 +1,9 @@
+ &lt;html&gt;
+   &lt;head&gt;
+-    &lt;title&gt;Welcome !!&lt;/title&gt;
++    &lt;title&gt;Welcome&lt;/title&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+     &lt;h1&gt;Hello&lt;/h1&gt;
++    &lt;p&gt;Hello world&lt;/p&gt;
+   &lt;/body&gt;
+ &lt;/html&gt;
+$ git diff --staged
+diff --git a/index.html b/index.html
+index a633da3..bc2a94f 100644
+--- a/index.html
++++ b/index.html
+@@ -1,8 +1,9 @@
+ &lt;html&gt;
+   &lt;head&gt;
+-    &lt;title&gt;Welcome !!&lt;/title&gt;
++    &lt;title&gt;Welcome&lt;/title&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+     &lt;h1&gt;Hello&lt;/h1&gt;
++    &lt;p&gt;Hello world&lt;/p&gt;
+   &lt;/body&gt;
+ &lt;/html&gt;</pre>
+<p>ステージした後に編集。</p>
+<pre class="">$ git status
+# On branch master
+# Changes to be committed:
+#   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)
+#
+#       modified:   index.html
+#
+# Changed but not updated:
+#   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+#   (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)
+#
+#       modified:   index.html</pre>
+<p>これをdiff, diff --stagedで比較すると……。</p>
+<pre class="">$ git diff
+diff --git a/index.html b/index.html
+index bc2a94f..341bb47 100644
+--- a/index.html
++++ b/index.html
+@@ -4,6 +4,7 @@
+   &lt;/head&gt;
+   &lt;body&gt;
+     &lt;h1&gt;Hello&lt;/h1&gt;
+-    &lt;p&gt;Hello world&lt;/p&gt;
++    &lt;p&gt;Hello world !!&lt;/p&gt;
++    &lt;span&gt;I am typo&lt;/span&gt;
+   &lt;/body&gt;
+ &lt;/html&gt;
+$ git diff --staged
+diff --git a/index.html b/index.html
+index a633da3..bc2a94f 100644
+--- a/index.html
++++ b/index.html
+@@ -1,8 +1,9 @@
+ &lt;html&gt;
+   &lt;head&gt;
+-    &lt;title&gt;Welcome !!&lt;/title&gt;
++    &lt;title&gt;Welcome&lt;/title&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+     &lt;h1&gt;Hello&lt;/h1&gt;
++    &lt;p&gt;Hello world&lt;/p&gt;
+   &lt;/body&gt;
+ &lt;/html&gt;</pre>
+<p>diffが作業ツリーの内容とステージングエリアの比較でdiff --stagedがステージされた内容と直近のコミットの比較だから歴史としてはa633da3 -> bc2a94f -> 341bb47こうか。</p>
+<h1>ファイル削除(追跡除外)</h1>
+<h2>ファイルの削除(追跡の除外)</h2>
+<p>通常のrmだと作業ツリーからファイルを消しただけ。</p>
+<pre class="">$ rm VERSION
+
+$ git status
+# On branch master
+# Changed but not updated:
+#   (use &quot;git add/rm &lt;file&gt;...&quot; to update what will be committed)
+#   (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)
+#
+#       deleted:    VERSION
+#
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</pre>
+<p>git rm 後にcommitする事で追跡対象から除外する。</p>
+<pre class="">$ git rm VERSION
+rm 'VERSION'
+
+$ git status
+# On branch master
+# Changes to be committed:
+#   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)
+#
+#       deleted:    VERSION
+#
+$ git commit -m &quot;Deleted VERSION file&quot;
+[master 5981baf] Deleted VERSION file
+ 0 files changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 VERSION
+
+$ git status
+# On branch master
+nothing to commit (working directory clean)</pre>
+<h1>コミット</h1>
+<h2>コミットを行う</h2>
+<p>ログ記述のためにgit config core.editorや環境変数EDITORに適切なエディタが設定されている必要がある。VIなど</p>
+<pre class="">$ git commit index.html</pre>
+<pre class=""> 1
+ 2 # Please enter the commit message for your changes. Lines starting
+ 3 # with '#' will be ignored, and an empty message aborts the commit.
+ 4 # On branch master
+ 5 # Changes to be committed:
+ 6 #   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)
+ 7 #
+ 8 #       modified:   index.html
+ 9 #</pre>
+<p>commit -v でdiffを確認する事も出来る。</p>
+<pre class=""> 1
+ 2 # Please enter the commit message for your changes. Lines starting
+ 3 # with '#' will be ignored, and an empty message aborts the commit.
+ 4 # Explicit paths specified without -i nor -o; assuming --only paths...
+ 5 # On branch master
+ 6 # Changes to be committed:
+ 7 #   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)
+ 8 #
+ 9 #       modified:   index.html
+10 #
+11 diff --git a/index.html b/index.html
+12 index a633da3..341bb47 100644
+13 --- a/index.html
+14 +++ b/index.html
+15 @@ -1,8 +1,10 @@
+16  &lt;html&gt;
+17    &lt;head&gt;
+18 -    &lt;title&gt;Welcome !!&lt;/title&gt;
+19 +    &lt;title&gt;Welcome&lt;/title&gt;
+20    &lt;/head&gt;
+21    &lt;body&gt;
+22      &lt;h1&gt;Hello&lt;/h1&gt;
+23 +    &lt;p&gt;Hello world !!&lt;/p&gt;</pre>
+<pre class="">[master (root-commit) 4b5c302] First commit.
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+ create mode 100644 index.html</pre>
+<h2>コミットを行う(コミットログまでワンライナー)</h2>
+<p>commit -mでコミットログを指定できる。-mを打つ毎に改行される</p>
+<pre class="">$ git commit -m &quot;Modified index.html title&quot; -m &quot;Added menu.html&quot;
+[master eaa9ebc] Modified index.html title
+ 2 files changed, 6 insertions(+), 1 deletions(-)
+ create mode 100644 menu.html</pre>
+<h2>追跡ファイルのステージを省略</h2>
+<p>addを省く。</p>
+<pre class="">$ git status
+# On branch master
+# Changed but not updated:
+#   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+#   (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)
+#
+#       modified:   menu.html
+#
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</pre>
+<pre class="">$ git commit -a -m &quot;Added head tag&quot;
+[master 1d4d741] Added head tag
+ 1 files changed, 2 insertions(+), 0 deletions(-)</pre>
+<pre class="">$ git status
+# On branch master
+nothing to commit (working directory clean)</pre>
+<p>追跡可能じゃないとできない？</p>
+<pre class="">$ touch VERSION
+
+$ git commit -a -m &quot;Added VERSION file&quot;
+# On branch master
+# Untracked files:
+#   (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+#
+#       VERSION
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)</pre>
+<h1>コミットのやり直し</h1>
+<p>誤ってtypoしたままコミットしてしまった。</p>
+<pre class="">$ cat README
+Haloo Wold
+
+$ git commit -a -m &quot;Typo commit&quot;
+[master 663daa6] Typo commit
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+$ git log
+commit 663daa64c7fab6a23e17a7e544dd81df85d88dc6
+Author: kk_Ataka &lt;test@example.com&gt;
+Date:   Tue Feb 21 18:50:59 2012 +0900
+
+    Typo commit
+
+commit 5981baf9b3a9bd4a1d5a9cf5f26738391fbb9fff
+Author: kk_Ataka &lt;test@example.com&gt;
+Date:   Tue Feb 21 13:10:02 2012 +0900
+
+    Deleted VERSION file</pre>
+<p>コミットした後commit --amendで前回のコミット直前からやり直せる？</p>
+<pre class="">$ vi README
+$ git add README
+$ git commit --amend
+
+$ git log
+commit a59ff99de68cbf359c814f25cda9c926ef9cdad9
+Author: kk_Ataka &lt;test@example.com&gt;
+Date:   Tue Feb 21 18:50:59 2012 +0900
+
+    Modified typo
+commit 5981baf9b3a9bd4a1d5a9cf5f26738391fbb9fff
+Author: kk_Ataka &lt;test@example.com&gt;
+Date:   Tue Feb 21 13:10:02 2012 +0900
+
+    Deleted VERSION file</pre>
+<h1>ステージのやり直し</h1>
+<p>ステージングエリアに入れたファイルを取り消したいときはresetコマンドを使う。</p>
+<pre class="">$ git status
+# On branch master
+# Changed but not updated:
+#   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+#   (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)
+#
+#       modified:   README
+#
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+
+$ git add README
+
+$ git status
+# On branch master
+# Changes to be committed:
+#   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)
+#
+#       modified:   README
+#</pre>
+<p>ここでステージングエリアに入れたREADMEファイルをreset。</p>
+<pre class="">$ git reset HEAD README
+Unstaged changes after reset:
+M       README</pre>
+<pre class="">$ git status
+# On branch master
+# Changed but not updated:
+#   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+#   (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)
+#
+#       modified:   README
+#
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</pre>
+<p>HEADってなんじゃらほい？　今自分が作業じているローカルブランチへのポインタ。上から見ていくと今はmasterから動いていないので作業しているブランチはmasterのまま=HEADもmaster。</p>
+<h1>変更の取り消し</h1>
+<p>SubversionでいうところのRevertであっている？　編集したファイルを直前のコミットの状態まで戻す。実はずっとgit statusコマンド打っていたときに出ていた。</p>
+<pre class="">$ git diff README
+diff --git a/README b/README
+index 27f338f..557db03 100644
+--- a/README
++++ b/README
+@@ -1 +1 @@
+-Hello Wrld
++Hello World
+
+$ git status
+# On branch master
+# Changed but not updated:
+#   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+#   (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)
+#
+#       modified:   README
+#
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</pre>
+<p>checkout -- <file>で戻せるようだ。</p>
+<pre class="">$ git checkout -- README
+
+$ git diff README
+
+$ cat README
+Hello Wrld</pre>
+<h1>リモート関連</h1>
+<h2>(リモート)リポジトリの作成</h2>
+<p>作業ディレクトリがいらない場合はinit --bareオプションをつける。ディレクトリ名に.gitをつけるのは慣例……だったかな？　何かに書いてあった気がする。</p>
+<pre class="">$ git init --bare remote1.git
+Initialized empty Git repository in c:/project/testRemote/remote1.git/</pre>
+<h2>リモートリポジトリの追加</h2>
+<p>追加はremote add [shortname] [url]で行う。以後、gitコマンドからはshortnameで指定できるようになる。</p>
+<pre class="">$ git remote add rem1 c:/project/testRemote/remote1</pre>
+<p>ここでURLを間違えていた事に気づく。(.git忘れた)が、同じshortnameにaddしても既にあるよって言われてしまうので削除しないといけない。</p>
+<pre class="">$ git remote add rem1 c:/project/testRemote/remote1.git
+fatal: remote rem1 already exists.</pre>
+<p>また、Windows？msysGit？を使っている場合は、Windows感覚でパスを打ちこむとエスケープされる。</p>
+<pre class="">$ git remote add rem1 c:\project\testRemote\remote1.git
+
+$ git remote -v
+rem1    c:projecttestRemoteremote1.git (fetch)
+rem1    c:projecttestRemoteremote1.git (push)</pre>
+<p>円マークを重ねるのとスラッシュとでは表記は変わるけど違いはないようだ。</p>
+<pre class="">$ git remote add rem1 c:/project/testRemote/remote1.git
+
+$ git remote add rem2 c:\\project\\testRemote\\remote2.git
+
+$ git remote -v
+rem1    c:/project/testRemote/remote1.git (fetch)
+rem1    c:/project/testRemote/remote1.git (push)
+rem2    c:\project\testRemote\remote2.git (fetch)
+rem2    c:\project\testRemote\remote2.git (push)</pre>
+<h2>リモートリポジトリのリネーム</h2>
+<p>remote rename [shortname_now] [shortname_after]でいける。</p>
+<pre class="">$ git remote rename rem1 remo
+
+$ git remote
+rem2
+remo</pre>
+<h2>リモートリポジトリの削除</h2>
+<p>remote rm [shortname]</p>
+<pre class="">$ git remote rm rem1</pre>
+<h2>リモートリポジトリの確認</h2>
+<p>リポジトリからcloneしてきた場合はoriginという名前が付けられる。Gitがデフォルトでつけるshortname。よくgit push origin masterとかで出てくるorigin。</p>
+<pre class="">$ git remote -v
+origin  http://github.com/gosyujin/evernote_for_ruby.git (fetch)
+origin  http://github.com/gosyujin/evernote_for_ruby.git (push)</pre>
+<p>git initでローカルに作成したリポジトリだとoriginもないので何も表示されない。</p>
+<pre class="">$ git remote
+</pre>
+<p>addした後はそのリポジトリのshortnameが列挙される。</p>
+<pre class="">$ git remote
+rem1
+rem2</pre>
+<p>remote -vでURLも。</p>
+<pre class="">$ git remote -v
+rem1    c:/project/testRemote/remote1.git (fetch)
+rem1    c:/project/testRemote/remote1.git (push)
+rem2    c:\project\testRemote\remote2.git (fetch)
+rem2    c:\project\testRemote\remote2.git (push)</pre>
+<p>remote show [shortname]でより詳しく。</p>
+<pre class="">$ git remote show rem1
+ * remote rem1
+   Fetch URL: c:/project/testRemote/remote1.git
+   Push  URL: c:/project/testRemote/remote1.git
+   HEAD branch: master
+   Remote branch:
+     master tracked
+   Local ref configured for 'git push':
+     master pushes to master (up to date)</pre>
+<h2>リモートリポジトリからデータ取得(フェッチ、プル)</h2>
+<p>リモートにあるデータの内、まだ持っていないものを取得できる。fetchコマンドを使う。</p>
+<pre class="">$ git fetch rem1
+
+$ git fetch rem2</pre>
+<p>空のリポジトリからfetchしているので特に何も起こらなかった……。cloneした後(最近fetchした後)からの変更を取得できる。ただし、これだと取得しただけなのでfetch後マージをしてやる必要がある。フェッチ、マージを一気にやってくれるgit pullというコマンドもある。</p>
+<h2>リモートリポジトリへのデータ登録(プッシュ)</h2>
+<p>ローカルにコミットしたデータをプッシュ。という事でpushコマンドを使用。push [shortname] [branch]でプッシュ先とプッシュするブランチを指定。</p>
+<pre class="">$ git push rem1 master
+Counting objects: 26, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (22/22), done.
+Writing objects: 100% (26/26), 2.33 KiB, done.
+Total 26 (delta 5), reused 0 (delta 0)
+Unpacking objects: 100% (26/26), done.
+To c:/project/testRemote/remote1.git
+ * [new branch]      master -&gt; master</pre>
+<p>次はブランチから。</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/02/29/1330528564" title="Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など">
+          Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/03/11/1331472478" title="Pro Gitと入門gitでGitの復習 ブランチ編">
+          Pro Gitと入門gitでGitの復習 ブランチ編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/03/05/1330951640" data-text="kk_Atakaの日記 - Pro Gitと入門gitでGitの復習 基本操作編" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/03/05/1330951640/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/03/05/1330951640/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/03/05/1330951640/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Pro Gitと入門gitでGitの復習 基本操作編"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/03/05/1330951640/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

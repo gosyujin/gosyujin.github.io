@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#イベント">イベント</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Jenkins">Jenkins</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Redmine">Redmine</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/05/28</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/05/21/1337605575" title="SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした">
+          SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/06/03/1338724924" title="TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました">
+          TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>概要</h1>
+<ul><li><a href="http://connpass.com/event/500/">Jenkins,Redmine使いこなし勉強会 - connpass</a></li></ul>
+<p>前半は発表のメモ。後半は実際にプラグイン作ったりインストールしたりのメモ。</p>
+<h1>Redmineプラグイン活用入門 - @<a href="http://twitter.com/Kokawa_Takashi">Kokawa Takashi (Kokawa_Takashi)さんはTwitterを使っています</a>さん</h1>
+<p><span class="deco" style="color:#FF0000;">注意:Redmine開発環境が安定していないので、すぐ陳腐化してしまう事がある！</span></p>
+<h2>Redmineにおける問題</h2>
+<ul><li>Redmineの設定で解決</li><li>運用で解決</li><li>ツール自体を拡張して解決<ul><li>プラグインの探し方・おすすめ</li><li>REST APIを使って外部から</li><li>プラグインを作る</li></ul></li></ul>
+<h2>プラグインの探し方・おすすめ</h2>
+<ul><li><a href="http://www.r-labs.org/projects/r-labs/wiki/Redmine%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E9%9B%86">r-labs</a></li><li><a href="http://www.redmine.org/plugins">Plugins - Redmine</a></li><li>一つだけおすすめを… Wiki Extensions Plugin<ul><li>オートプレビュー</li><li>任意のページをメニューに</li><li>任意のページを埋め込み 等々…</li></ul></li><li>他のおすすめ<ul><li>CodeRevirew</li><li>Backlogs</li><li>TimeTracker</li></ul></li></ul>
+<h2>REST API</h2>
+<ul><li>自動でチケットを作ったりできる</li><li>チケット一覧を取得できたり</li><li>この一連の流れができたらJenkinsに任せる事ができる<ul><li>期日が間近のチケットのメール通知などもできる</li></ul></li></ul>
+<h2>プラグインを作る</h2>
+<ul><li>Redmine1.4 or 2.0が対象(Ruby1.9,Bundler対応している/これ以前はしていない)</li><li>プラグイン開発環境構築がつらいので</li></ul>
+<h2>Ruby環境</h2>
+<ul><li>WindowsならRubyInstaller + DevKit</li><li>MacならRVM<ul><li>自分でも少しまとめている <a href="2011-12-04-1323009249">2011-12-04-1323009249</a></li></ul></li></ul>
+<h2>Redmineインストール</h2>
+<ul><li>公式を参考に<ul><li>自分でも少しまとめている <a href="2011-05-01-1304204171">2011-05-01-1304204171</a></li><li>同じく <a href="2011-09-07-1315401886">2011-09-07-1315401886</a></li></ul></li><li>rmagickを除外する</li></ul>
+<pre class="">bundle install -without development test rmagick -path vendor/bundle</pre>
+<h2>Rubyデバッグ環境</h2>
+<ul><li>ruby-debug-ide…だがこの環境ではうまく動かなくなってしまった</li><li>ruby-debug-base19が必要らしいが、そのまま落としてきても動かない<ul><li>preオプションを入れる</li></ul></li></ul>
+<p>>|?|</p>
+<p>gem install ruby-debug-base19 --pre</p>
+<p>gem install ruby-debug-ide --pre</p>
+<table><tr><td><</td></tr></table>
+<h2>NetBeans</h2>
+<ul><li>ただし、公式サポートは6.9.1が最終</li></ul>
+<h2>一つだけシンプルなプラグインを</h2>
+<ul><li>Redmineのメニューからヘルプを消す</li><li>スケルトンを作ってinit.rbに一文足すだけ<ul><li>最後に試してみるよ</li></ul></li></ul>
+<h1>Jenkinsプラグイン活用入門- @<a href="http://twitter.com/cactusman">さぼてん（さぼ福）しんざき 佐藤太一  (cactusman)さんはTwitterを使っています</a>さん</h1>
+<h2>Jenkinsとは</h2>
+<ul><li>高性能Cron</li></ul>
+<h2>プラグインの探し方</h2>
+<ul><li>探す前に…</li><li>shやbatなどをうまく組み合わせられないかなどをまず考える</li><li>Jenkins自体の昨日もうまく使う</li><li>プラグイン自体は本家に登録されている</li><li>Jenkins Plugin Hub<ul><li>ソフト、ツール名などでとりあえず引っ掛けてみる</li></ul></li></ul>
+<h2>プラグインの使い方</h2>
+<ul><li>すごくメンテされているものとほったらかされているものでまちまち</li><li>コミットやDL数を見てみる</li><li>TackScanerPlugin<ul><li>キーワードを拾う(TODOなど)</li><li>最後に入れてみる</li></ul></li><li>DickUsagePlugin<ul><li>Jenkinsのディスク使用量を見る</li></ul></li><li>JobConfigHistoryPlugin<ul><li>設定ファイルのバックアップ、差分表示</li></ul></li></ul>
+<h2>プラグインのハック</h2>
+<ul><li>エクステンションポイントを継承する<ul><li>Notifierを継承すれば通知系の事ができる</li></ul></li><li>mvnにおまじないを追加する</li><li>Jenkinsの公式Pluginが参考になる</li></ul>
+<h1>実際にやってみる(Redmine)</h1>
+<p>メニューの一部を消してみる。</p>
+<h2>環境</h2>
+<ul><li>Windows XP</li><li>Ruby 1.8.7</li><li>Redmine 1.0.0.stable (SQLite)</li></ul>
+<h2>手順</h2>
+<ul><li>はじめにRedmine Pluginのスケルトンを作成する。名前はdelete_menuとした</li></ul>
+<pre class="">$ cd REDMINE_ROOT
+$ ruby script\generate redmine_plugin delete_menu
+./script/../config/../vendor/rails/railties/lib/rails/gem_dependency.rb:119:Warning: Gem::Dependency#version_requirements is deprecated and will be removed on or after August 2010.  Use #requirement
+      create  vendor/plugins/redmine_delete_menu/app/controllers
+      create  vendor/plugins/redmine_delete_menu/app/helpers
+      create  vendor/plugins/redmine_delete_menu/app/models
+      create  vendor/plugins/redmine_delete_menu/app/views
+      create  vendor/plugins/redmine_delete_menu/db/migrate
+      create  vendor/plugins/redmine_delete_menu/lib/tasks
+      create  vendor/plugins/redmine_delete_menu/assets/images
+      create  vendor/plugins/redmine_delete_menu/assets/javascripts
+      create  vendor/plugins/redmine_delete_menu/assets/stylesheets
+      create  vendor/plugins/redmine_delete_menu/lang
+      create  vendor/plugins/redmine_delete_menu/config/locales
+      create  vendor/plugins/redmine_delete_menu/test
+      create  vendor/plugins/redmine_delete_menu/README.rdoc
+      create  vendor/plugins/redmine_delete_menu/init.rb
+      create  vendor/plugins/redmine_delete_menu/lang/en.yml
+      create  vendor/plugins/redmine_delete_menu/config/locales/en.yml
+      create  vendor/plugins/redmine_delete_menu/test/test_helper.rb</pre>
+<ul><li>vendor/pluginにredmine_delete_menuというフォルダができている</li></ul>
+<pre class="">$ ls
+...
+redmine_delete_menu/
+...
+$ cd redmine_delete_menu
+$ ls
+README.rdoc assets/     db/         lang/       test/
+app/        config/     init.rb*    lib/</pre>
+<ul><li>init.rbに例の一文を挿入</li></ul>
+<pre class="ruby"> Redmine::Plugin.register :redmine_delete_menu do
+   ...
+   
++  delete_menu_item :top_menu, :help
+ end</pre>
+<ul><li>そして起動</li></ul>
+<pre class="">$ cd REDMINE_ROOT
+$ ruby script\server -e production
+=&gt; Booting WEBrick
+=&gt; Rails 2.3.5 application starting on http://0.0.0.0:3000
+./script/../config/../vendor/rails/railties/lib/rails/gem_dependency.rb:119:Warning: Gem::Dependency#version_requirements is deprecated and will be removed on or after August 2010.  Use #requirement
+=&gt; Call with -d to detach
+=&gt; Ctrl-C to shutdown server
+[2012-05-28 19:15:50] INFO  WEBrick 1.3.1
+[2012-05-28 19:15:50] INFO  ruby 1.8.7 (2010-12-23) [i386-mswin32]
+[2012-05-28 19:15:50] INFO  WEBrick::HTTPServer#start: pid=4640 port=3000</pre>
+<ul><li><a href="http://localhost:3000">http://localhost:3000</a> にアクセスすると…おお！　消えてる！</li></ul>
+<h2>環境その2</h2>
+<p>Ruby1.9、Redmine1.4でもやってみるかー。</p>
+<ul><li>Windows XP</li><li>Ruby 1.9.3</li><li>Redmine 1.4.0.stable (SQLite)</li></ul>
+<h2>手順その2</h2>
+<ul><li>いきなりgenerateしようとしたらbundle installしろと言われた</li></ul>
+<pre class="">$ ruby script\generate redmine_plugin delete_menu
+Some gems may need to be installed or updated.
+Please run `bundle install --without development test`.</pre>
+<ul><li>なのでbundle install</li></ul>
+<pre class="">$ bundle install --without development test --path ./vendor/bundle
+Fetching source index for http://rubygems.org/
+Installing rake (0.9.2.2)
+Installing activesupport (2.3.14)
+Installing rack (1.1.3)
+Installing actionpack (2.3.14)
+Installing actionmailer (2.3.14)
+Installing activerecord (2.3.14)
+Installing activeresource (2.3.14)
+Installing coderay (1.0.6)
+Installing i18n (0.4.2)
+Installing mysql2 (0.2.18)
+Installing net-ldap (0.3.1)
+Installing pg (0.13.2)
+Installing rails (2.3.14)
+Installing rmagick (2.13.1) with native extensions</pre>
+<ul><li>rmagickが入らず止まりっぱなし……そういえば、rmagickは使わなければwithoutしてしまってもいいです的な事を言われていた気がするのでそれをプラス</li></ul>
+<pre class="">$ bundle install --without development test rmagick --path ./vendor/bundle
+Fetching source index for http://rubygems.org/
+Using rake (0.9.2.2)
+Using activesupport (2.3.14)
+Using rack (1.1.3)
+Using actionpack (2.3.14)
+Using actionmailer (2.3.14)
+Using activerecord (2.3.14)
+Using activeresource (2.3.14)
+Using coderay (1.0.6)
+Using i18n (0.4.2)
+Using mysql2 (0.2.18)
+Using net-ldap (0.3.1)
+Using pg (0.13.2)
+Using rails (2.3.14)
+Installing ruby-openid (2.1.8)
+Installing sqlite3 (1.3.6)
+Installing tzinfo (0.3.33)
+Using bundler (1.0.21)
+Your bundle is complete! It was installed into ./vendor/bundle</pre>
+<ul><li>再度。先ほどbundlerを使ったのでbundle exec</li></ul>
+<pre class="">$ bundle exec ruby script\generate redmine_plugin delete_menu
+C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/activesupport-2.3.14/lib/active_support/inflector.rb:3:in `&lt;top (required)&gt;': iconv will be deprecated in the future, use String#encode instead.
+NOTE: Gem.source_index is deprecated, use Specification. It will be removed on or after 2011-11-01.
+Gem.source_index called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/rails-2.3.14/lib/rails/gem_dependency.rb:21.
+NOTE: Dependency.new w/ a regexp is deprecated.
+Dependency.new called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/rails-2.3.14/lib/rails_generator/lookup.rb:211
+NOTE: Gem.cache is deprecated, use Gem::source_index. It will be removed on or after 2011-08-01.
+Gem.cache called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/rails-2.3.14/lib/rails_generator/lookup.rb:212.
+NOTE: Gem.source_index is deprecated, use Specification. It will be removed on or after 2011-11-01.
+Gem.source_index called from C:/rubies/Ruby-193-p0/lib/ruby/1.9.1/rubygems.rb:1154.
+NOTE: Gem::SourceIndex#search is deprecated with no replacement. It will be removed on or after 2011-11-01.
+Gem::SourceIndex#search called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/rails-2.3.14/lib/rails/vendor_gem_source_index.rb:119.
+NOTE: Gem::SourceIndex#search is deprecated with no replacement. It will be removed on or after 2011-11-01.
+Gem::SourceIndex#search called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/rails-2.3.14/lib/rails/vendor_gem_source_index.rb:119.
+NOTE: Gem.cache is deprecated, use Gem::source_index. It will be removed on or after 2011-08-01.
+Gem.cache called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/rails-2.3.14/lib/rails_generator/lookup.rb:234.
+NOTE: Gem.source_index is deprecated, use Specification. It will be removed on or after 2011-11-01.
+Gem.source_index called from C:/rubies/Ruby-193-p0/lib/ruby/1.9.1/rubygems.rb:1154.
+NOTE: Gem::SourceIndex#each is deprecated with no replacement. It will be removed on or after 2011-11-01.
+Gem::SourceIndex#each called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/rails-2.3.14/lib/rails/vendor_gem_source_index.rb:123.
+NOTE: Gem::SourceIndex#each is deprecated with no replacement. It will be removed on or after 2011-11-01.
+Gem::SourceIndex#each called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/rails-2.3.14/lib/rails/vendor_gem_source_index.rb:124.
+      create  vendor/plugins/redmine_delete_menu/app/controllers
+      create  vendor/plugins/redmine_delete_menu/app/helpers
+      create  vendor/plugins/redmine_delete_menu/app/models
+      create  vendor/plugins/redmine_delete_menu/app/views
+      create  vendor/plugins/redmine_delete_menu/db/migrate
+      create  vendor/plugins/redmine_delete_menu/lib/tasks
+      create  vendor/plugins/redmine_delete_menu/assets/images
+      create  vendor/plugins/redmine_delete_menu/assets/javascripts
+      create  vendor/plugins/redmine_delete_menu/assets/stylesheets
+      create  vendor/plugins/redmine_delete_menu/lang
+      create  vendor/plugins/redmine_delete_menu/config/locales
+      create  vendor/plugins/redmine_delete_menu/test
+      create  vendor/plugins/redmine_delete_menu/README.rdoc
+      create  vendor/plugins/redmine_delete_menu/init.rb
+      create  vendor/plugins/redmine_delete_menu/config/locales/en.yml
+      create  vendor/plugins/redmine_delete_menu/test/test_helper.rb</pre>
+<ul><li>deprecateがやまほど出たけど、一応スケルトンは作れたみたい。で、init.rbを編集。ここは同じ</li></ul>
+<pre class="ruby"> Redmine::Plugin.register :redmine_delete_menu do
+   ...
+   
++  delete_menu_item :top_menu, :help
+ end</pre>
+<ul><li>で、起動。ここでもbundle exec</li></ul>
+<pre class="">$ bundle exec ruby script\server -e production
+C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/activesupport-2.3.14/lib/active_support/inflector.rb:3:in `&lt;top (required)&gt;': iconv will be deprecated in the future, use String#encode instead.
+=&gt; Booting WEBrick
+=&gt; Rails 2.3.14 application starting on http://0.0.0.0:3000
+NOTE: Gem.source_index is deprecated, use Specification. It will be removed on or after 2011-11-01.
+Gem.source_index called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/rails-2.3.14/lib/rails/gem_dependency.rb:21.
+=&gt; Call with -d to detach
+=&gt; Ctrl-C to shutdown server
+[2012-05-28 20:03:32] INFO  WEBrick 1.3.1
+[2012-05-28 20:03:32] INFO  ruby 1.9.3 (2011-10-30) [i386-mingw32]
+[2012-05-28 20:03:32] INFO  WEBrick::HTTPServer#start: pid=3248 port=3000</pre>
+<p>1.4台でもいけた！</p>
+<h1>実際にプラグインを入れてみる(Jenkins)</h1>
+<p>Task Scanner Pluginを入れてみよう。</p>
+<h2>環境</h2>
+<ul><li>Windows XP</li><li>Jenkins 1.450</li></ul>
+<h2>手順</h2>
+<ul><li>Jenkinsの管理 => プラグインの管理 => 利用可能タブ => Task Scanner Pluginをチェックしインストール<ul><li>Static Code Analysis Plug-insも同時にDLされるみたい</li></ul></li><li>再起動</li><li>Jenkinsプロジェクト => 設定 => ビルド後の処理 => 未解決タスクの集計<span class="footnote"><a href="#f1" title="ローカライズされてた" name="fn1">*1</a></span>にチェック<ul><li>集計対象: source/*.rst<ul><li>今回はSphinxのドキュメントソース内のTODOを拾うので</li></ul></li><li>集計対象外: source/*.py<ul><li>conf.pyなどは除外する</li></ul></li><li>タスクタグ 優先度 Normal: //TODO<ul><li>ドキュメント内の//TODOを探してもらう。優先度は適当</li></ul></li><li>高度な設定を開きデフォルトのエンコーディング: UTF-8</li></ul></li><li>保存してビルド</li><li>一度ビルドするとJenkinsプロジェクトのメニューに【未解決タスク】のリンクが表示される<ul><li>今回設定した//TODOがまとめられてる！</li><li>後、//TODO hogehogeとキーワードの後ろに何か書いておくとメッセージとしてどんなTODOなのかも表示される！</li></ul></li></ul>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: ローカライズされてた</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/05/21/1337605575" title="SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした">
+          SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/06/03/1338724924" title="TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました">
+          TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/05/28/1338209339" data-text="kk_Atakaの日記 - Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/05/28/1338209339/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/05/28/1338209339/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/05/28/1338209339/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/05/28/1338209339/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

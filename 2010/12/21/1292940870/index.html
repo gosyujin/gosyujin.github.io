@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>pixiv Tech Meetingに行ってきました - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>pixiv Tech Meetingに行ってきました</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#イベント">イベント</a> ]</i>
+          
+        
+        
+          <span>Published: 2010/12/21</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2010/12/11/1292077752" title="java-ja忘年会に参加しました2010">
+          java-ja忘年会に参加しました2010
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/01/12/1294833920" title="Wicket勉強会に参加しました">
+          Wicket勉強会に参加しました
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<ul><li>詳細: <a href="http://atnd.org/events/10866">pixiv Tech Meeting : ATND</a></li></ul>
+<p>日頃からプレミアム会員として利用させていただいているシステムの裏側が見れる！　という事で、ATND見てから参加余裕でした。今回はなんとか時間通りに辿りつけました。一瞬GoogleMap先生が変な場所指すので迷子になったけど。</p>
+<p>内容としては、次々にアップされる画像ファイルの捌き方や一番いいインフラの運用法、画面はjsを使用しているって事で、普段自分が触った事のない分野の話が大半。リファクタリング話やiPhoneSafariでのjsゲーム作成など、自分が普段使っている分野から近い話は頭に入ってきやすかったのですが、インフラの話などはわからない用語が出たら適宜ググってました；</p>
+<p>以下メモ。</p>
+<br />
+<h1>VPとSPIDERを使ったMySQL運用 @kamipoさん - <a href="http://www.slideshare.net/kamipo/vpspidermysql">VPとSPIDERを使ったMySQL運用</a></h1>
+<ul><li>VP+SPIDERでホスト間テーブル移動をやる<ul><li>VPはカラムごとにテーブルを垂直分割</li><li>SPIDERはテーブルを複数ホストに水平分割</li></ul></li></ul>
+<h2>VP</h2>
+<ul><li>vp_copy_tables()でaにあるテーブルの値をbにコピー出来る</li><li>vp_copy_tables()はPRIMARY_KEYがないと使えない</li></ul>
+<h2>注意</h2>
+<ul><li>COMMENTは60文字までしか書けない -> MySQL5.5なら大丈夫！</li><li>MySQL5.0だと色々なクエリでエラーが起こるので、できるだけ最新版を使おう</li></ul>
+<h2>質問</h2>
+<ul><li>エクストラバックアップの方が早くね？<ul><li>用途が違う。これは止めずに移動できるのがいい</li></ul></li></ul>
+<br />
+<h1>pixiv.js -4年目のサービスをきれいにしよう @<a href="http://twitter.com/#!/yksk">yksk</a>さん</h1>
+<ul><li>15億PV/月達成！　ソースを綺麗に</li></ul>
+<h2>現在は、Prototype.js + jQueryで走っている</h2>
+<ul><li>最終的にはjQueryに統一したい！</li><li>$.noConflict(jQuery)を使えば、衝突することなくjQueryで行ける！</li></ul>
+<blockquote><p>この関数を実行すると、$関数の動作が先に定義されている動作に戻る。</p><p>$関数はprototype.jsなどをはじめ、多くのライブラリがそれぞれ拡張している関数である。</p><p>jQueryでも、核となるjQueryオブジェクトのショートカットして極めて頻繁に利用される。</p><p>このコマンドは、そのような$関数を定義する複数のライブラリを用いた際に衝突することを防ぐものである。</p><cite><a href="http://semooh.jp/jquery/api/core/jQuery.noConflict/_/">http://semooh.jp/jquery/api/core/jQuery.noConflict/_/</a></cite></blockquote>
+<h2>名前空間をひとつに統一する</h2>
+<ul><li>windows.pixiv.*に統一すればかぶる可能性は無くなる</li></ul>
+<h2>html5を使う</h2>
+<ul><li>記述がちょっと減る</li><li>scriptタグとか簡略化できる</li><li>プレースホルダーなどのUIの新機能が使える</li><li>data-*属性は要素に好きな名前をつけられるようになった</li></ul>
+<h2>1ページ1ファイル、ページごとに読むjsを変更するのが大変</h2>
+<ul><li>URLディスパッチャーで振り分ける</li></ul>
+<h2>LABjs</h2>
+<ul><li>非同期でスクリプトを読み込める、順番を指定できる</li><li>他のファイルの読み込みをブロックしない</li><li>Twitterでも使われている</li><li>実は、Loadの仕組みは標準化されていないので、ブラウザが新しくなるたびチェックする必要がある<ul><li>将来的にはscript async/deferに移行するかも</li></ul></li></ul>
+<h2>QUnit</h2>
+<ul><li>ブラウザを開けばテストできる、簡単！</li></ul>
+<h2>まとめ</h2>
+<ul><li>コアライブラリが2つあるのはまずいので1つに</li><li>URLディスパッチャーとLABjsで高速化、ソースも綺麗</li><li>QUnitでテスト！</li></ul>
+<br />
+<h1>エログロOK!? JavaScriptとCanvasで作るiPhone向け勝手ゲーム開発 @<a href="http://twitter.com/#!/Moyashipan">Moyashipan</a>さん</h1>
+<ul><li>もともとFLASHer</li><li>jsでゲームが作れるよ！　というデモ</li><li>実際にiPhoneを持っている人はiPhoneでデモページを見ながら話を聞く</li></ul>
+<h2>jsでiPhone向けゲームを作成するメリット</h2>
+<ul><li>アプリじゃないのでAppleの審査が不要</li><li>他プラットフォームでも動かせる</li></ul>
+<h2>デメリット</h2>
+<ul><li>描画性能がとても貧弱</li><li>画面固定ができない(iPhone自体で回転をロックしないとグルグルするゲームは厳しい)</li></ul>
+<h2>表示と移動はDOM、Canvas(html5)でできる</h2>
+<ul><li>Canvasで、FLASHのベジェ曲線同等</li></ul>
+<h2>描画がとても遅い…</h2>
+<ul><li>再描画範囲の固定<ul><li>背景、キャラ、エフェクトとレイヤを分ける</li></ul></li><li>縦に長いゲームにするとブラウザのスクロールを使える！(チョビのゲームのようにジャンプしていくヤツ)</li></ul>
+<h2>webkit transformで回転・移動</h2>
+<h2>まとめ</h2>
+<ul><li>iPhoneのブラウザゲームは素直につくるとすぐ重くなる</li><li>再描画は最小範囲に</li></ul>
+<br />
+<h1>pixivの画像アップロードシステム @cubicdaiyaさん - <a href="http://www.slideshare.net/cubicdaiya/pixiv-6261780">pixivの画像アップロードシステム</a></h1>
+<h2>従来のアップロードの問題</h2>
+<ul><li>サムネイル生成が同期的に処理される<ul><li>アクセスが集中するととても重くなった<span class="footnote"><a href="#f1" title="確かにアップにものすごい時間がかかっていた時期があったような？" name="fn1">*1</a></span></li></ul></li></ul>
+<h2>アップロードのフロー</h2>
+<ul><li>ファイル選択→※→情報入力→完了画面<ul><li>※でサムネを作っていた＝画面が切り替わるのを待たないといけないためユーザには遅く感じられる、というか実際遅かった</li></ul></li><li>アップロード時の上記3画面の中では、情報入力画面が一番開かれている時間が長い<ul><li>じゃあここで非同期でアップしよう！</li></ul></li><li>サムネイル生成の非同期化を行う事によって処理性能がアップした！</li></ul>
+<br />
+<h1>pixivのリコメンデーションシステム @<a href="http://twitter.com/#!/aopico">aopico</a>さん</h1>
+<ul><li>チームラボのロゴを書いた</li><li>リコメンデーションシステム＝おすすめ機能の話</li></ul>
+<h2>おすすめ機能を作ったわけ</h2>
+<ul><li>古いイラストが埋もれる</li><li>趣味・趣向が多様</li><li>ロングテール</li></ul>
+<h2>協調フィルタリングとは</h2>
+<ul><li>以下のように5つのitemと4人のUserがいたとする。今回はAさんを基準にする</li></ul>
+<table><tr><td>　</td><td>item1</td><td>item2</td><td>item3</td><td>item4</td><td>item5</td></tr><tr><td>UserA</td><td>買</td><td>　</td><td>買</td><td>買</td><td>　</td></tr><tr><td>UserB</td><td>　</td><td>買</td><td>　</td><td>買</td><td>　</td></tr><tr><td>UserC</td><td>　</td><td>　</td><td>　</td><td>　</td><td>買</td></tr><tr><td>UserD</td><td>買</td><td>　</td><td>買</td><td>買</td><td>買</td></tr></table>
+<ol><ol><li>Aさんと似ているユーザを探す…Dさん</li><li>CさんはAさんが買っているitem1, 3, 4の他にitem5を買っている</li><li>ならば、Aさんも5を買うのではないか？　…という推論</li></ol></ol>
+<ul><li>実際にAmazonで使われている<ul><li>Amazonのものは計算量が多い</li><li>なるべくサーバに不可をかけたくない<ul><li>もっとシンプルにならないか？</li></ul></li></ul></li></ul>
+<h2>ブックマークタグ*ユーザ</h2>
+<ul><li>メカ好きのAopicoさんとエロス好きのAopicoさんは別と考える</li><li>同じブックマークタグを付けているユーザの数をカウントする</li><li>たくさんブックマークを付けている人は重みを下げる</li></ul>
+<h2>実装</h2>
+<ul><li>C++</li><li>メモリは5G</li><li>初回計算は12時間</li></ul>
+<h2>今後</h2>
+<ul><li>ユーザ間の類似度計算</li><li>ブックマークされていないイラストの救済</li><li>タグ揺れの解消</li></ul>
+<br />
+<h1>私事……</h1>
+<p>今回の発表は、全員床に座りながら聞くというスタイルでした。なかなかベストな座り方を見つけられず、このあたりで持病の腰痛と激しいバトルを繰り広げ始めたため、メモの量が著しく落ち……(; _ _)</p>
+<br />
+<h1>SSD+Squidで画像をキャッシュしなイカ？ @phji]さん - <a href="http://www.slideshare.net/phji/ssdsquidika">SSD+Squidで画像をキャッシュしなイカ？</a></h1>
+<h2>Squid</h2>
+<ul><li>proxyサーバ、キャッシュサーバ、イカ</li><li>イカ娘、名前だけでも覚えて帰ってくださいねという感じ</li></ul>
+<h2>SSDの用途</h2>
+<ul><li>データベース</li><li>画像参照のキャッシュ<ul><li>調査の結果、Sサイズの画像のリクエストが最も多かったので、SSDはまずSサイズ画像から</li></ul></li></ul>
+<h1>6GbpsをさばくオレオレCDN構築術 @semindさん - <a href="http://www.slideshare.net/semind/20101220-pixiv-techmeeting-6267332">20101220 pixiv tech_meeting</a></h1>
+<h2>画像にアクセスがくる</h2>
+<ul><li>画像を保存しているサーバだけでは捌けない</li></ul>
+<h2>CDN</h2>
+<ul><li>コンテンツの配信を代わりにやってくれるもの</li><li>データセンタを借りて自分のCDNを</li></ul>
+<h2>今年の初夏にトラフィックが頭打ち</h2>
+<ul><li>構成なども限界だった</li></ul>
+<h2>なのでデータセンタを借りる事に…</h2>
+<ul><li>しかし、時間もないし経験者もいない</li></ul>
+<h2>詳しいことは懇親会で！</h2>
+<br />
+<h1>PHPあるある話 @<a href="http://twitter.com/#!/cocoitiban">cocoitiban</a>さん</h1>
+<ul><li>なにか一つでも発見があれば</li></ul>
+<h2>文化編</h2>
+<ul><li>マニュアルはとても充実している</li><li>unset: nullへのキャストというものがある</li><li>コーディング規約がたくさん<ul><li>PEARコーディング規約</li><li>ZendFramework規約</li><li>PEAR2コーディング規約</li></ul></li></ul>
+<h2>コーディング編</h2>
+<ul><li>HttpClientは何を使うか…いっぱいある<ul><li>PEAR Http_Request</li><li>PEAR2 Http_Request</li><li>Zend Http_Request</li><li>curl などなど</li></ul></li></ul>
+<ul><li>REDHAD系ならRPMで構築するのがいい</li></ul>
+<ul><li>短時間にデプロイをたくさんしたらメモリがあふれた<ul><li>デプロイ時にApacheのメモリが倍になっている</li><li>xcache？</li></ul></li></ul>
+<br />
+<h1>phjosh(仮)プロジェクト @moriyoshitさん - <a href="http://www.slideshare.net/moriyoshi/phjosh">Phjosh(仮)プロジェクト</a></h1>
+<h2>jsでオブジェクト指向…あまり美しくない</h2>
+<ul><li>既存言語から生成する</li></ul>
+<h2>GWT</h2>
+<ul><li>jsをJavaのソースコードから生成できる</li><li>IDEを使える</li></ul>
+<h2>rb2js</h2>
+<ul><li>Rubyからjsに</li></ul>
+<h2>py2js</h2>
+<ul><li>alpha quarity…どうなった？</li></ul>
+<h2>PHPは？</h2>
+<ul><li>PHPはjsと似ている</li></ul>
+<h1>発表終了後</h1>
+<p>懇親会の会場へ歩いていたとき。たまたま一緒に話しながら歩いていた人が大学の研究室の先輩である事が判明。Σ(ﾟ口ﾟ;. 自分が学部3年の時、修士2年だったので、会っていた期間は僅かのはず…。いや～～……どこで、誰に会うかわからないもんですね。</p>
+<p>聞けば、同じ会社で働いていた人がpixivへ転職、今回のスピーカーだったためたまたま見にきたとの事。</p>
+<p>それだけでも偶然だと思ったのに、その先輩と@Moyashipanさんが同じ高校出身、同郷であったことも判明。どんだけ狭いのだ。</p>
+<p>そんな@Moyashipanさんは自分と同い年<span class="footnote"><a href="#f2" title="今まで参加した勉強会では1,2年上や1,2年下の割と世代の近しい方とはお会いした事があったのですが、完全に同じ年代の人は初めてあった。" name="fn2">*2</a></span>なのに、既にpixivに様々なシステムを作りリリースしているという点で、尊敬と<del>もうExcelをこねくり回して共有サーバでファイル管理するお仕事は嫌だお</del>自分も頑張らねばと。何か作りたい衝動に駆られます。</p>
+<p>今回はすごく勉強になりました、技術的な話意外にも色んな意味で来てよかった……。さしあたってjs系とQUnitはちょっと使ってみたいと思いました。会場を提供してくださったpixivさん、発表者の皆さんありがとうございました！！</p>
+<h1>こっそり</h1>
+<p>@aopicoさん…ブクマ0の人の寂しいレコメンデーションに救済を……。</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 確かにアップにものすごい時間がかかっていた時期があったような？</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: 今まで参加した勉強会では1,2年上や1,2年下の割と世代の近しい方とはお会いした事があったのですが、完全に同じ年代の人は初めてあった。</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2010/12/11/1292077752" title="java-ja忘年会に参加しました2010">
+          java-ja忘年会に参加しました2010
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/01/12/1294833920" title="Wicket勉強会に参加しました">
+          Wicket勉強会に参加しました
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2010/12/21/1292940870" data-text="kk_Atakaの日記 - pixiv Tech Meetingに行ってきました" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2010/12/21/1292940870/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2010/12/21/1292940870/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2010/12/21/1292940870/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - pixiv Tech Meetingに行ってきました"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2010/12/21/1292940870/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

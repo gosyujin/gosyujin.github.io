@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>svn infoコマンドでリビジョン番号を抜き出す - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>svn infoコマンドでリビジョン番号を抜き出す</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Subversion">Subversion</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Unix">Unix</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/12/16</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/15/1323951847" title="RedmineとApacheを連携させるPassengerをインストールできなかった">
+          RedmineとApacheを連携させるPassengerをインストールできなかった
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/17/1324168464" title="Unixでwmvファイルを他のファイルフォーマットに変換したい">
+          Unixでwmvファイルを他のファイルフォーマットに変換したい
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<ul><li><a href="2011-12-13-1323783496">2011-12-13-1323783496</a></li></ul>
+<h1>もっとよい方法</h1>
+<p>どう考えても他にやり方があるだろうと思っていたらやっぱりあった。<a href="http://twitter.com/#!/jun66j5">@jun66j5</a>さんよりTwitterで教えてもらいました。ありがとうございます。</p>
+<p><blockquote class="twitter-tweet" lang="ja"><p lang="ja" dir="ltr"><a href="https://twitter.com/kk_Ataka">@kk_Ataka</a> svn info 使って LC_ALL=en_US.UTF8 svn info とか svn info --xml とかすればいいんじゃないかな</p>&mdash; Jun ?mae (@jun66j5) <a href="https://twitter.com/jun66j5/status/147687551027781632">2011, 12月 16</a></blockquote></p>
+<p><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+<p>svn infoコマンドで見られるのか。というわけで(全然使ってない)プロジェクトで試してみた。まず普通。</p>
+<pre class="">$ svn info
+パス: .
+URL: file:///home/kk_Ataka/svn/xxxx
+リポジトリのルート: file:///home/kk_Ataka/svn/xxxx
+リポジトリ UUID: 99999999-9999-9999-9999-999999999999
+リビジョン: 4
+ノード種別: ディレクトリ
+準備中の処理: 特になし
+最終変更者: user
+最終変更リビジョン: 4
+最終変更日時: 2010-12-29 21:31:44 +0900 (水, 29 12月 2010)</pre>
+<p>ロケールをen_USに。</p>
+<pre class="">$ LC_ALL=en_US.UTF8 svn info
+Path: .
+URL: file:///home/kk_Ataka/svn/xxxx
+Repository Root: file:///home/kk_Ataka/svn/xxxx
+Repository UUID: 99999999-9999-9999-9999-999999999999
+Revision: 4
+Node Kind: directory
+Schedule: normal
+Last Changed Author: user
+Last Changed Rev: 4
+Last Changed Date: 2010-12-29 21:31:44 +0900 (Wed, 29 Dec 2010)</pre>
+<p>xml形式で出力もできる。</p>
+<pre class="xml">$ svn info --xml
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;info&gt;
+&lt;entry
+   kind=&quot;dir&quot;
+   path=&quot;.&quot;
+   revision=&quot;4&quot;&gt;
+&lt;url&gt;file:///home/kk_Ataka/svn/xxxx&lt;/url&gt;
+&lt;repository&gt;
+&lt;root&gt;file:///home/kk_Ataka/svn/xxxx&lt;/root&gt;
+&lt;uuid&gt;99999999-9999-9999-9999-999999999999&lt;/uuid&gt;
+&lt;/repository&gt;
+&lt;wc-info&gt;
+&lt;schedule&gt;normal&lt;/schedule&gt;
+&lt;/wc-info&gt;
+&lt;commit
+   revision=&quot;4&quot;&gt;
+&lt;author&gt;user&lt;/author&gt;
+&lt;date&gt;2010-12-29T12:31:44.294483Z&lt;/date&gt;
+&lt;/commit&gt;
+&lt;/entry&gt;
+&lt;/info&gt;</pre>
+<p>ってことは、これをgrepすれば……。</p>
+<pre class="">$ LC_ALL=en_US.UTF8 svn info | grep Revision
+Revision: 4</pre>
+<p>簡単にとれた！　けど、ちゃんと調べないといかんなーこんな簡単に取れるものを敢えて難しくとる必要ないしな。</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/15/1323951847" title="RedmineとApacheを連携させるPassengerをインストールできなかった">
+          RedmineとApacheを連携させるPassengerをインストールできなかった
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/17/1324168464" title="Unixでwmvファイルを他のファイルフォーマットに変換したい">
+          Unixでwmvファイルを他のファイルフォーマットに変換したい
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/12/16/1324086694" data-text="kk_Atakaの日記 - svn infoコマンドでリビジョン番号を抜き出す" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/16/1324086694/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/16/1324086694/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/16/1324086694/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - svn infoコマンドでリビジョン番号を抜き出す"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/12/16/1324086694/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

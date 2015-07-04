@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>RubyでTwitterのOAuth認証をしてみる - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>RubyでTwitterのOAuth認証をしてみる</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Twitter">Twitter</a> ]</i>
+          
+            <i>[ <a href="/tags.html#API">API</a> ]</i>
+          
+        
+        
+          <span>Published: 2010/11/21</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2010/11/13/1289639385" title="Hudson勉強会に行ってきました">
+          Hudson勉強会に行ってきました
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2010/11/30/1291125511" title="RubyでTwitterのOAuth認証をしてみる その2">
+          RubyでTwitterのOAuth認証をしてみる その2
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<p>随分前にTwitterがベーシック認証からOAuth認証に切り替えたという事で。Java+Wicket+AppEngineでベーシック認証を駆使して作っていたTwitterサイトが見れなくなったもんで切り替えました。(<a href="http://gihyo.jp/dev/feature/01/wicket">特集：Wicketで始めるオブジェクト指向ウェブ開発｜gihyo.jp … 技術評論社</a> を見つつ)</p>
+<p>一応出来たんですが、結局のところOAuthがどうなってるのかよくわからなかった……ので、ちょっと一から書いてみようと。</p>
+<p><a href="http://d.hatena.ne.jp/Yoshiori/">id:Yoshiori</a> さんの<a href="http://d.hatena.ne.jp/Yoshiori/20100929/1285727199">やる夫と Python で学ぶ Twitter の OAuth - YoshioriのBlog</a> と、 <a href="http://d.hatena.ne.jp/yuroyoro/">id:yuroyoro</a> さんの<a href="http://d.hatena.ne.jp/yuroyoro/20100506/1273137673">OAuthプロトコルの中身をざっくり解説してみるよ - ( ꒪⌓꒪) ゆるよろ日記</a>がとっても詳しかったので、参考にしました。</p>
+<p>大きな流れとしては、</p>
+<ol><li>consumer_keyとconsumer_secretを発行してもらう</li><li>リクエストトークンを発行してもらう</li><li>アクセストークンを発行してもらう</li></ol>
+<p>の3項目。今回はリクエストトークンを発行してもらうところまでやります。</p>
+<h1>準備 Twitterにアプリを登録し、consumer_keyとconsumer_secretを発行してもらう</h1>
+<ul><li>Twitterにログイン > 設定 > 連携アプリ を選択</li></ul>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20101120225746"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101120/20101120225746.png"></a></p>
+<ul><li>開発者の方へ > こちら を選択</li></ul>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20101120230042"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101120/20101120230042.png"></a></p>
+<ul><li>ページ下部の新しいアプリケーションを追加 を選択</li></ul>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20101120230314"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101120/20101120230314.png"></a></p>
+<p>後で編集もできるのでとりあえず入力しておく。下記の2項目はとりあえず</p>
+<ol><ul><li>アプリケーションの種類: クライアントアプリケーション</li><li>標準のアクセスタイプ: Read & Write</li></ul></ol>
+<p>にしておく。</p>
+<ul><li>登録したら、consumer_keyとconsumer_secretをもらえるので控えておく</li></ul>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20101120232314"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101120/20101120232314.png"></a></p>
+<p>フォローをリクエストしました。のURL、Access token URL、Authorize URLは認証時に使うのでこれも控えておく。</p>
+<h1>リクエストトークンを発行してもらう</h1>
+<p>こっからRuby。以下のパラメータを生成して<a href="http://twitter.com/oauth/request_token">http://twitter.com/oauth/request_token</a>に送ります。POSTでもGETでもよいみたいなので、今回はGETを使ってURLのおしりにくっつけて送ります。</p>
+<table><tr><th>oauth_consumer_key</th><td>Twitterからもらったconsumer_key</td></tr><tr><th>oauth_nonce</th><td>一意な値(にする必要があるが、とりあえず適当でもよいみたい)</td></tr><tr><th>oauth_signature</th><td>認証するための暗号</td></tr><tr><th>oauth_signature_method</th><td>認証方式(色々あるようだが、Twitterでは"HMAC-SHA1"固定)</td></tr><tr><th>oauth_timestamp</th><td>今のタイムスタンプ(ミリ秒)</td></tr><tr><th>oauth_version</th><td>バージョン(必須ではないが、付ける場合は"1.0")</td></tr></table>
+<p>consumer_key, nonce, signature_method, timestamp, versionの生成は難しくないのですが、問題はsignature。signature生成は大きく3つの流れを踏む事になります。</p>
+<ul><li>認証用の値を生成する(以下の3つの値を&で連結する←この&は<span style="font-weight:bold;">エスケープしない</span>)</li></ul>
+<ol><ol><li>http_methodの種類("GET"か"POST"。今回は"GET")</li><li>"<a href="http://twitter.com/oauth/request_token">http://twitter.com/oauth/request_token</a>"をエスケープしたもの</li><li>上記のパラメータから<span style="font-weight:bold;">oauth_signatureを抜かしたパラメータ</span>を<span style="font-weight:bold;">アルファベット順</span>に並べて<span style="font-weight:bold;">xxx=yyy&vvv=zzz……</span>の形で連結した値を<span style="font-weight:bold;">エスケープしたもの</span></li></ol></ol>
+<ul><li>署名キーを生成する</li></ul>
+<ol><ol><li>リクエストトークンを発行してもらうときは<span style="font-weight:bold;">"consumer_secret&"</span>(consumer_secretのおしりに&を連結する)</li></ol></ol>
+<ul><li>キーを元に値をHMAC-SHA1方式で暗号化した値をbase64形式でエンコードする</li></ul>
+<p>……認証に失敗したとき、どこのステップで間違ってるのかわからなかったので非常に苦労しました。幸いsignatureを生成してくれるページ <a href="http://cgi.geocities.jp/ydevnet/techblog/sample/signature.html">OAuth Signature生成サンプル</a> があるので、ここで作成した値と同じ状況を作って比較しました。</p>
+<table><tr><th>OAuth type</th><td>2-legged OAuth</td></tr><tr><th>URL</th><td><a href="http://twitter.com/oauth/request_token">http://twitter.com/oauth/request_token</a></td></tr><tr><th>parameters</th><td>なし</td></tr><tr><th>consumer key</th><td>Twitterからもらったconsumer_key</td></tr><tr><th>consumer secret</th><td>Twitterからもらったconsumer_secret</td></tr><tr><th>version</th><td>1.0</td></tr><tr><th>timestamp</th><td>nowを押して発行されたtimestampをソースに逆移植する</td></tr><tr><th>nonce</th><td>randomを押して発行されたnonceをソースに逆移植する</td></tr><tr><th>signature method</th><td>HMAC-SHA1固定</td></tr></table>
+<p>これでsignして生成された値のうち、signature base stringが「認証用の値を生成する」で生成したかった値。signatureが「キーを元に値をHMAC-SHA1方式で暗号化した値をbase64形式でエンコードする」で生成したかった値となっている。あとはがんばる！</p>
+<h1>ソースコード</h1>
+<p>コードはこんな感じで…かなり泥臭く実装；　基本的に上から下に流れていきますが文字列のエスケープとoauthパラメータの並べ替えと結合は何回か使うのでメソッドにしました。</p>
+<pre class="ruby">require 'openssl'
+require 'uri'
+require 'net/http'
+
+# 文字列のエスケープ(: / = %をエスケープする。. _ -はそのまま)
+def escape(value)
+	URI.escape(value, Regexp.new(&quot;[^a-zA-Z0-9._-]&quot;))
+end
+
+# oauth_headerの情報をアルファベット順に並べ替え &amp; で結合
+def sort_and_concat(oauth_header)
+	oauth_header_array = oauth_header.sort
+	param = &quot;&quot;
+	oauth_header_array.each do |params|
+		for i in 1..params.length
+			param += params[i-1]
+			if i % params.length == 0
+				param += &quot;&amp;&quot;
+			else
+				param += &quot;=&quot;
+			end
+		end
+	end
+	param = param.slice(0, param.length-1)
+end
+
+# リクエストトークン取得用のURL
+request_token_url = &quot;http://twitter.com/oauth/request_token&quot;
+
+# Twitterで登録したらもらえる
+consumer_key = &quot;XXXXXXXXXXXXXXXXXXXXXX&quot;
+consumer_secret = &quot;YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY&quot;
+
+# oauthパラメータたち
+oauth_header = {
+	# Consumer Key
+	&quot;oauth_consumer_key&quot; =&gt; consumer_key,
+	# 一意な値(今回は適当に実装)
+	&quot;oauth_nonce&quot; =&gt; &quot;AAAAAAAA&quot;,
+	# 署名方式(HMAC-SHA1)
+	&quot;oauth_signature_method&quot; =&gt; &quot;HMAC-SHA1&quot;,
+	# リクエスト生成時のタイムスタンプ(ミリ秒)
+	&quot;oauth_timestamp&quot; =&gt; Time.now.to_i.to_s,
+	# バージョン(1.0)
+	&quot;oauth_version&quot; =&gt; &quot;1.0&quot;,
+}
+
+# signature作成
+# oauth_headerのパラメータをソートして連結
+param = sort_and_concat(oauth_header)
+
+# メソッドとURLとパラメータを&amp;で連結する
+value = &quot;GET&quot; + &quot;&amp;&quot; + escape(request_token_url) + &quot;&amp;&quot; + escape(param)
+
+# sigunature_keyの作成
+# リクエストトークン時は&quot;CONSUMER_SECRET&amp;&quot;(アンドが入っている)
+signature_key = consumer_secret + &quot;&amp;&quot;
+
+# hmac_sha1
+sha1 = OpenSSL::HMAC.digest(OpenSSL::Digest::SHA1.new, signature_key, value)
+# base64エンコード signatureを生成できたので、これをoauth_signatureとする
+oauth_header[&quot;oauth_signature&quot;] = [sha1].pack('m').gsub(/\n/, '')
+
+# GETする
+uri = URI.parse(request_token_url)
+proxy_class = Net::HTTP::Proxy(ARGV[0], 8080)
+http = proxy_class.new(uri.host)
+http.start do |http|
+	# oauth_headerのパラメータをソートして連結
+	param = sort_and_concat(oauth_header)
+
+	res = http.get(uri.path + &quot;?#{param}&quot;)
+
+	if res.code == &quot;200&quot; then
+		print &quot;#{res.code}\n&quot;
+		print &quot;#{res.body}\n&quot;
+	else
+		print &quot;ERROR: #{res.code}\n&quot;
+	end
+end</pre>
+<p>結果はこんな感じで。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20101121013615"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101121/20101121013615.png"></a></p>
+<p>成功するとbodyにoauth_token, oauth_token_secret他がくっついた値が帰ってきます。次はこれを使ってアクセストークンをもらいます！</p>
+<p>まだRubyも知らない事多すぎる！</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2010/11/13/1289639385" title="Hudson勉強会に行ってきました">
+          Hudson勉強会に行ってきました
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2010/11/30/1291125511" title="RubyでTwitterのOAuth認証をしてみる その2">
+          RubyでTwitterのOAuth認証をしてみる その2
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2010/11/21/1290271210" data-text="kk_Atakaの日記 - RubyでTwitterのOAuth認証をしてみる" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2010/11/21/1290271210/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2010/11/21/1290271210/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2010/11/21/1290271210/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - RubyでTwitterのOAuth認証をしてみる"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2010/11/21/1290271210/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

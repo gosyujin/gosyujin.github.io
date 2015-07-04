@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>複数のRuby環境の管理・切替ができるpikを実行できた nyaos編 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>複数のRuby環境の管理・切替ができるpikを実行できた nyaos編</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/11/24</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/11/17/1321537502" title="Word2007でCtrl+hjklで移動できるようにする">
+          Word2007でCtrl+hjklで移動できるようにする
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/11/26/1322240459" title="HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた">
+          HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<ul><li><a href="2011-10-04-1317660186">2011-10-04-1317660186</a></li></ul>
+<p>まず、環境変数がおかしいとpikが正常に動きませんよというのが一つ。もう一つの原因がコマンドプロンプトではなくnyaosを使っていたという事。</p>
+<h1>参考サイト</h1>
+<ul><li><a href="http://d.hatena.ne.jp/miyamuko/20100905/nyaos_with_pik">nyaos で pik を使う設定と pik の動作原理 - *Trace Output*</a></li></ul>
+<h1>修正方法</h1>
+<p>そのままだと、nyaosでPATH追加シェルを起動しても親シェルであるnyaosには反映されませんよってんで、動かすには_nyaファイルに以下のコードを追加する。</p>
+<pre class="">pik{
+  pik_runner.exe pik.bat %*
+  if exist &quot;%USERPROFILE%\.pik\pik.bat&quot; then
+    source &quot;%USERPROFILE%\.pik\pik.bat&quot; 2&gt; nul
+  endif
+}</pre>
+<p>msysgitを使ってる時も同じ感じで追加すればいいのかな。</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/11/17/1321537502" title="Word2007でCtrl+hjklで移動できるようにする">
+          Word2007でCtrl+hjklで移動できるようにする
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/11/26/1322240459" title="HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた">
+          HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/11/24/1322138944" data-text="kk_Atakaの日記 - 複数のRuby環境の管理・切替ができるpikを実行できた nyaos編" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/11/24/1322138944/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/11/24/1322138944/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/11/24/1322138944/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - 複数のRuby環境の管理・切替ができるpikを実行できた nyaos編"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/11/24/1322138944/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

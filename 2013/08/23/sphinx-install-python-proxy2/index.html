@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Python">Python</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Sphinx">Sphinx</a> ]</i>
+          
+        
+        
+          <span>Published: 2013/08/23</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/08/21/sphinx-install-python-proxy" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話">
+          Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/08/26/utf8-space-c2a0" title="ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話">
+          ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#前回までのあらすじ'>前回までのあらすじ</a></li><li><a href='#結論'>結論</a></li><ul><li><a href='#レジストリ(-ie-の設定)から'>レジストリ( IE の設定)から</a></li><li><a href='#環境変数から'>環境変数から</a></li></ul><li><a href='#内部の処理'>内部の処理</a></li><ul><li><a href='#環境変数-`http_proxy`-を設定している、ieのプロキシを設定している場合'>環境変数 `HTTP_PROXY` を設定している、IEのプロキシを設定している場合</a></li><li><a href='#環境変数-`http_proxy`-を設定していない、ieのプロキシを設定している場合'>環境変数 `HTTP_PROXY` を設定していない、IEのプロキシを設定している場合</a></li></ul></ul></ul><!-- end of tree list --></div>
+
+<h2 id="前回までのあらすじ">前回までのあらすじ</h2>
+
+<ul>
+<li><a href="http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy/">Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話</a></li>
+</ul>
+
+<p>easy_install で見に行く proxy の順番はこんな感じだった。</p>
+
+<ol>
+<li>引数に明示的に指定した場合は引数を使う</li>
+<li>↑を満たさず、環境変数 <code>xxxx_proxy</code> が設定されている場合はそこから読み込む</li>
+<li>↑を満たさない場合、 Windows ではレジストリ( IE の proxy 設定)を見にいく</li>
+</ol>
+
+<p>で、なぜか環境変数 <code>HTTP_PROXY</code> を読み込んだ場合は失敗して、 <code>HTTP_PROXY</code> をクリアしてレジストリの proxy 設定を使ったら DL が成功しちゃったという話。</p>
+
+<p>なんでか気になったので調べた。</p>
+
+<h2 id="結論">結論</h2>
+
+<p>http <strong>以外</strong> の proxy 設定をしていなかったから。というマヌケなオチ。</p>
+
+<p>次から気をつけよう。</p>
+
+<h3 id="レジストリ-ie-の設定-から">レジストリ( IE の設定)から</h3>
+
+<p>IE の 設定では、 <code>ツール &gt; インターネットオプション &gt; 接続 &gt; LAN の設定 &gt; 詳細設定</code> の Secure にも proxy の設定が入れていた。</p>
+
+<p><code>すべてのプロトコルに同じプロキシサーバーを使用する</code> にチェックを入れていたので。</p>
+
+<p>レジストリから読み込んだ場合、 Python 実行中に取得した変数 <code>proxies</code> (使用する proxy をしまっておく変数)の値はこんな感じだった。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">[(</span><span class="s">&#39;http&#39;</span><span class="p">,</span> <span class="s">&#39;http://PROXY:PORT/&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;https&#39;</span><span class="p">,</span> <span class="s">&#39;https://PROXY:PORT/&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;ftp&#39;</span><span class="p">,</span> <span class="s">&#39;ftp://PROXY:PORT&#39;</span><span class="p">)]</span></code></pre></div>
+
+<h3 id="環境変数から">環境変数から</h3>
+
+<p>一方、環境変数には <code>HTTP_PROXY</code> しか指定していなかった。 <code>proxies</code> を出力するとこう。</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">[(</span><span class="s">&#39;http&#39;</span><span class="p">,</span> <span class="s">&#39;http://PROXY:PORT/&#39;</span><span class="p">)]</span></code></pre></div>
+
+<p>なので、環境変数に <code>HTTPS_PROXY</code> : <code>https://PROXY:PORT/</code> を追加すると無事に easy_install できた！</p>
+
+<h2 id="内部の処理">内部の処理</h2>
+
+<p>内部がどうなっているのか見てみよう。</p>
+
+<h3 id="環境変数-http_proxy-を設定している、ieのプロキシを設定している場合">環境変数 <code>HTTP_PROXY</code> を設定している、IEのプロキシを設定している場合</h3>
+
+<p>この場合、環境変数 <code>HTTP_PROXY</code> が使われる。</p>
+
+<p>また、ProxyHandler への引数 <code>proxies</code> が指定されている場合(明示的に指定している場合)、それが最優先で使われる。</p>
+
+<ul>
+<li>urllib2#ProxyHandler から urllib#getproxies を呼ぶ</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">ProxyHandler</span><span class="p">(</span><span class="n">BaseHandler</span><span class="p">):</span>
+    <span class="c"># Proxies must be in front</span>
+    <span class="n">handler_order</span> <span class="o">=</span> <span class="mi">100</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">proxies</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">proxies</span> <span class="o">=</span> <span class="n">getproxies</span><span class="p">()</span></code></pre></div>
+
+<ul>
+<li>getproxies_environment を呼ぶ</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">getproxies</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;Return a dictionary of scheme -&gt; proxy server URL mappings.</span>
+
+<span class="sd">        Returns settings gathered from the environment, if specified,</span>
+<span class="sd">        or the registry.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">getproxies_environment</span><span class="p">()</span> <span class="ow">or</span> <span class="n">getproxies_registry</span><span class="p">()</span></code></pre></div>
+
+<ul>
+<li>環境変数を取得して <code>xxxx_proxy</code> のものを探して返す</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">getproxies_environment</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Return a dictionary of scheme -&gt; proxy server URL mappings.</span>
+
+<span class="sd">    Scan the environment for variables named &lt;scheme&gt;_proxy;</span>
+<span class="sd">    this seems to be the standard convention.  If you need a</span>
+<span class="sd">    different way, you can pass a proxies dictionary to the</span>
+<span class="sd">    [Fancy]URLopener constructor.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">proxies</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">and</span> <span class="n">name</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:]</span> <span class="o">==</span> <span class="s">&#39;_proxy&#39;</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">name</span>
+            <span class="n">proxies</span><span class="p">[</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">6</span><span class="p">]]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">return</span> <span class="n">proxies</span></code></pre></div>
+
+<p>これで <code>HTTP_PROXY</code> が見つかって <code>proxies</code> にぶちこまれてる。</p>
+
+<h3 id="環境変数-http_proxy-を設定していない、ieのプロキシを設定している場合">環境変数 <code>HTTP_PROXY</code> を設定していない、IEのプロキシを設定している場合</h3>
+
+<p>この場合、 IE の proxy 設定をレジストリから探しに行く。</p>
+
+<ul>
+<li>getproxies<em>environment を呼ぶところまでは同じだが、 getproxies</em>environment から設定を見つけられないので getproxies_registry へ</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">getproxies_registry</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;Return a dictionary of scheme -&gt; proxy server URL mappings.</span>
+
+<span class="sd">        Win32 uses the registry to store proxies.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">proxies</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">_winreg</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="c"># Std module, so should be around - but you never know!</span>
+            <span class="k">return</span> <span class="n">proxies</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">internetSettings</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">OpenKey</span><span class="p">(</span><span class="n">_winreg</span><span class="o">.</span><span class="n">HKEY_CURRENT_USER</span><span class="p">,</span>
+                <span class="s">r&#39;Software\Microsoft\Windows\CurrentVersion\Internet Settings&#39;</span><span class="p">)</span>
+            <span class="n">proxyEnable</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">QueryValueEx</span><span class="p">(</span><span class="n">internetSettings</span><span class="p">,</span>
+                                               <span class="s">&#39;ProxyEnable&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">proxyEnable</span><span class="p">:</span>
+                <span class="c"># Returned as Unicode but problems if not converted to ASCII</span>
+                <span class="n">proxyServer</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">_winreg</span><span class="o">.</span><span class="n">QueryValueEx</span><span class="p">(</span><span class="n">internetSettings</span><span class="p">,</span>
+                                                       <span class="s">&#39;ProxyServer&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="s">&#39;=&#39;</span> <span class="ow">in</span> <span class="n">proxyServer</span><span class="p">:</span></code></pre></div>
+
+<p>Internet Settings に探しにいっている。</p>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/08/21/sphinx-install-python-proxy" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話">
+          Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/08/26/utf8-space-c2a0" title="ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話">
+          ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2" data-text="kk_Atakaの日記 - Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Jenkins">Jenkins</a> ]</i>
+          
+        
+        
+          <span>Published: 2015/05/26</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2015/04/30/golang-helloworld" title="golangでサーバのファイルをゆっくりダウンロードするツール作ってみた">
+          golangでサーバのファイルをゆっくりダウンロードするツール作ってみた
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2015/06/30/hugo-helloworld" title="Hugoを使ってみた">
+          Hugoを使ってみた
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#環境'>環境</a></li><li><a href='#結論'>結論</a></li><ul><li><a href='#コマンドプロンプトで実行したとき'>コマンドプロンプトで実行したとき</a></li><li><a href='#jenkinsで実行したとき'>Jenkinsで実行したとき</a></li></ul><li><a href='#原因にたどり着くまで'>原因にたどり着くまで</a></li></ul></ul><!-- end of tree list --></div>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>結構昔にWindows 7上において、以下の2通りのSeleniumスクリプト実行結果が違ってすごく困っていた。</p>
+
+<p>前提条件としては、Seleniumスクリプトは同じ。実行コマンドも <code>bundle exec ruby hoge.rb</code> で同じ。違うのは実行の仕方だけ。</p>
+
+<ol>
+<li>コマンドプロンプトで実行
+
+<ul>
+<li>Seleniumスクリプト</li>
+<li>コマンドプロンプトからコマンド実行</li>
+<li>正常終了</li>
+</ul></li>
+<li>Jenkinsで実行
+
+<ul>
+<li>Seleniumスクリプト(「Windowsバッチコマンドの実行」でジョブに登録)</li>
+<li>リモートビルドから実行</li>
+<li>＼エラー／</li>
+</ul></li>
+</ol>
+
+<p>原因の切り分け方とかもわからなかったのでかなり苦戦…。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Windows 7</li>
+<li>Jenkins 1.581</li>
+<li>Ruby 1.9.3
+
+<ul>
+<li>bundler (1.3.5)</li>
+<li>pit (0.0.7)</li>
+<li>selenium-webdriver (2.43.0)</li>
+</ul></li>
+</ul>
+
+<h2 id="結論">結論</h2>
+
+<p>原因はJenkinsとコマンドプロンプトでの実行時の <strong>環境変数の違い</strong> だった。環境変数をいじって解決。</p>
+
+<p>具体的に何が起こっていたかというと…。</p>
+
+<ul>
+<li>Seleniumスクリプトの中で <code>pit</code> (https://github.com/cho45/pit) というアカウントのID、パスワードを外出しできるGemを使用していた
+
+<ul>
+<li>pitの挙動は、 <code>~/.pit</code> 直下にあるyamlファイルを探して、IDとパスワードを取得するというもの</li>
+</ul></li>
+</ul>
+
+<h3 id="コマンドプロンプトで実行したとき">コマンドプロンプトで実行したとき</h3>
+
+<ol>
+<li>実行ユーザは「今Windowsにログオンしている自分」</li>
+<li>pitは <code>~/.pit</code> = <code>C:\Users\USER\.pit</code> を見に行っていた</li>
+</ol>
+
+<p>ホームディレクトリにはアカウント定義しているyamlがあるので正常に動作。まあこれはそうだよね。問題は次。</p>
+
+<h3 id="jenkinsで実行したとき">Jenkinsで実行したとき</h3>
+
+<ol>
+<li>実行ユーザは「Jenkins自体？」(コンソール出力を見るとリモートホスト127.0.0.1が実行となってる)</li>
+<li>pitは <code>~/.pit</code> = <code>C:\windows\system32\config\systemprofile\.pit</code> を見に行っていた</li>
+</ol>
+
+<p>system32…？こんなパスにアカウント定義しているyamlはないので当然失敗する。</p>
+
+<p>Jenkinsの管理 -&gt; システム情報 からシステムプロパティを見ると <code>user.home</code> が <code>C:\Windows\System32\config\systemprofile</code> と定義されていた</p>
+
+<ul>
+<li>Seleniumスクリプト実行前にこんな環境変数セットして無理矢理解決した</li>
+</ul>
+
+<p><code>set USERPROFILE=C:\Users\USER</code></p>
+
+<ul>
+<li>普段目立たなかったライブラリの環境変数が変わっていることに気づかなかった</li>
+<li>あと、そこに気づけるようになっていなかったので、原因突き詰めるのにも手間取った</li>
+</ul>
+
+<h2 id="原因にたどり着くまで">原因にたどり着くまで</h2>
+
+<ul>
+<li>Jenkinsで実行するとこんなエラーがでた。なんかframeがないと。</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">[remote server] file:///C:/windows/Temp/webdriver-rb-profilecopy20140902-7960-9wnep3/extensions/fxdriver@googlecode.com/components/driver_component.js:8929:5:in `FirefoxDriver.prototype.switchToFrame&#39;: Unable to locate frame: mainframe (Selenium::WebDriver::Error::NoSuchFrameError)</span></code></pre></div>
+
+<ul>
+<li>でも、このエラーだけじゃ全然よくわからん…しかし、どうやって原因を切り分ければよいのかもわからんかった。
+
+<ul>
+<li>とりあえずputsを入れまくってみた</li>
+<li>@yando さんの助言によりこけてそうなところでスクリーンショットを取るようにしてみた</li>
+</ul></li>
+<li>putsとスクショの結果を眺めると、ログインフォームにID、パスワードが入ってないようだ</li>
+<li>pitがうまく動いてないとわかった</li>
+</ul>
+
+<p>という感じ。</p>
+
+<p>いろんなテクニックを駆使して、どこでコケてるかわかりやすくしなければならないのか。</p>
+
+<ul>
+<li><a href="http://qiita.com/oh_rusty_nail/items/b8ba525d31ea7c522856">全国のSeleniumer必読</a></li>
+<li><a href="http://qiita.com/oh_rusty_nail/items/d2284efc7fd2dd7c3206">Selenium+JenkinsのCIをできるだけコケなくするコツ</a></li>
+</ul>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2015/04/30/golang-helloworld" title="golangでサーバのファイルをゆっくりダウンロードするツール作ってみた">
+          golangでサーバのファイルをゆっくりダウンロードするツール作ってみた
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2015/06/30/hugo-helloworld" title="Hugoを使ってみた">
+          Hugoを使ってみた
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2015/05/26/jenkins-environment-path" data-text="kk_Atakaの日記 - 実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - 実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2015/05/26/jenkins-environment-path/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

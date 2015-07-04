@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Jekyllのバージョンを 0.12.0 にあげた - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Jekyllのバージョンを 0.12.0 にあげた</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Jekyll">Jekyll</a> ]</i>
+          
+        
+        
+          <span>Published: 2013/04/11</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/04/01/chef-helloworld" title=" 入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで">
+           入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/04/27/bpstudy68" title="BPStudy#68に参加しました #bpstudy">
+          BPStudy#68に参加しました #bpstudy
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#参考サイト'>参考サイト</a></li><li><a href='#手順'>手順</a></li></ul></ul><!-- end of tree list --></div>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>ぼちぼちJekyllのバージョンを上げてみる。</p>
+
+<h2 id="参考サイト">参考サイト</h2>
+
+<ul>
+<li><a href="http://tech.nitoyon.com/ja/blog/2012/12/25/jekyll-0-12-0/">Jekyll の 0.12.0 でシンタックス ハイライトが便利になった - てっく煮ブログ</a></li>
+</ul>
+
+<h2 id="手順">手順</h2>
+
+<p><code>Gemfile</code> をちょっと修正。redcarpetを追加する、のとpygmentsのバージョンをアップ。</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">gem</span> <span class="s1">&#39;rake&#39;</span>
+ <span class="n">gem</span> <span class="s1">&#39;jekyll&#39;</span><span class="p">,</span> <span class="ss">:git</span> <span class="o">=&gt;</span> <span class="s1">&#39;git://github.com/mojombo/jekyll.git&#39;</span>
+ <span class="n">gem</span> <span class="s1">&#39;RedCloth&#39;</span>
+<span class="o">-</span><span class="n">gem</span> <span class="s1">&#39;rdiscount&#39;</span>
+<span class="o">+</span><span class="n">gem</span> <span class="s1">&#39;redcarpet&#39;</span>
+<span class="o">+</span><span class="c1">#gem &#39;rdiscount&#39;</span>
+ <span class="n">gem</span> <span class="s1">&#39;hparser&#39;</span><span class="p">,</span> <span class="ss">:git</span> <span class="o">=&gt;</span> <span class="s1">&#39;git://github.com/hotchpotch/hparser.git&#39;</span>
+<span class="o">-</span><span class="n">gem</span> <span class="s1">&#39;pygments.rb&#39;</span><span class="p">,</span> <span class="s1">&#39;=0.2.12&#39;</span>
+<span class="o">+</span><span class="n">gem</span> <span class="s1">&#39;pygments.rb&#39;</span><span class="p">,</span> <span class="s1">&#39;=0.3.2&#39;</span></code></pre></div>
+
+<p>そして <code>bundle install</code> 。</p>
+
+<p>オプションもだいぶ変わってるみたい。</p>
+
+<p>昔。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> jekyll --help
+<span class="go">bundle exec jekyll --help</span>
+<span class="go">Jekyll is a blog-aware, static site generator.</span>
+
+<span class="go">Basic Command Line Usage:</span>
+<span class="go">  jekyll                                                   # . -&gt; ./_site</span>
+<span class="go">  jekyll &lt;path to write generated site&gt;                    # . -&gt; &lt;path&gt;</span>
+<span class="go">  jekyll &lt;path to source&gt; &lt;path to write generated site&gt;   # &lt;path&gt; -&gt; &lt;path&gt;</span>
+<span class="go">  jekyll import &lt;importer name&gt; &lt;options&gt;            DB to import from</span>
+<span class="go">        --user [TEXT]                Username to use when importing</span>
+<span class="go">        --pass [TEXT]                Password to use when importing</span>
+<span class="go">        --host [HOST ADDRESS]        Host to import from</span>
+<span class="go">        --site [SITE NAME]           Site to import from</span>
+<span class="go">        --[no-]safe                  Safe mode (default unsafe)</span>
+<span class="go">        --[no-]auto                  Auto-regenerate</span>
+<span class="go">        --server [PORT]              Start web server (default port 4000)</span>
+<span class="go">        --no-server                  Do not start a web server</span>
+<span class="go">        --base-url [BASE_URL]        Serve website from a given base URL (default &#39;/&#39;</span>
+<span class="go">        --[no-]lsi                   Use LSI for better related posts</span>
+<span class="go">        --[no-]kdown</span>
+<span class="go">        --time [TIME]                Time to generate the site for</span>
+<span class="go">        --[no-]future                Render future dated posts</span>
+<span class="go">        --permalink [TYPE]           Use &#39;date&#39; (default) for YYYY/MM/DD</span>
+<span class="go">        --paginate [POSTS_PER_PAGE]  Paginate a blog&#39;s posts</span>
+<span class="go">        --limit_posts [MAX_POSTS]    Limit the number of posts to publish</span>
+<span class="go">        --url [URL]                  Set custom site.url</span>
+<span class="go">        --version                    Display current version</span></code></pre></div>
+
+<p>今。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> jekyll -h
+<span class="go">bundle exec jekyll -h</span>
+<span class="go">  NAME:</span>
+
+<span class="go">    jekyll</span>
+
+<span class="go">  DESCRIPTION:</span>
+
+<span class="go">    Jekyll is a blog-aware, static site generator in Ruby</span>
+
+<span class="go">  COMMANDS:</span>
+<span class="go">        </span>
+<span class="go">    build                Build your site                </span>
+<span class="go">    help                 Display global or [command] help documentation.                </span>
+<span class="go">    import               Import your old blog to Jekyll         </span>
+<span class="go">    serve                Serve your site locally                </span>
+
+<span class="go">  ALI      Safe mode (defaults to false)</span>
+<span class="go">        </span>
+<span class="go">    --plugins </span>
+<span class="go">        Plugins directory (defaults to ./_plugins)</span>
+<span class="go">        </span>
+<span class="go">    --layouts </span>
+<span class="go">        Layouts directory (defaults to ./_layouts)</span>
+<span class="go">        </span>
+<span class="go">    -h, --help </span>
+<span class="go">        Display help documentation</span>
+<span class="go">          Display backtrace when an error occurs</span></code></pre></div>
+
+<p>ビルドする時は、 <code>jekyll build</code> 。</p>
+
+<p>サーバ起動するときは <code>jekyll serve</code> 。</p>
+
+<p>Redcarpetを使う場合は <code>_config.yml</code> を編集してRedcarpetを使うように指定してやる。</p>
+
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">auto</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+ <span class="l-Scalar-Plain">pygments</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+<span class="l-Scalar-Plain">-markdown</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kramdown</span>
+<span class="l-Scalar-Plain">+markdown</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">redcarpet</span>
+<span class="l-Scalar-Plain">+#markdown</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kramdown</span></code></pre></div>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/04/01/chef-helloworld" title=" 入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで">
+           入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/04/27/bpstudy68" title="BPStudy#68に参加しました #bpstudy">
+          BPStudy#68に参加しました #bpstudy
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/04/11/jekyll-0120" data-text="kk_Atakaの日記 - Jekyllのバージョンを 0.12.0 にあげた" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/04/11/jekyll-0120/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/04/11/jekyll-0120/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/04/11/jekyll-0120/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Jekyllのバージョンを 0.12.0 にあげた"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2013/04/11/jekyll-0120/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

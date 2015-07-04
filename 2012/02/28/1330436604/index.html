@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Rails3レシピブックを読みながらRailsを学ぶ - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Rails3レシピブックを読みながらRailsを学ぶ</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Rails">Rails</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/02/28</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/02/23/1330001338" title="GitプロジェクトをコミットしたタイミングでJenkinsにビルドをしてもらいたい！">
+          GitプロジェクトをコミットしたタイミングでJenkinsにビルドをしてもらいたい！
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/02/29/1330528564" title="Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など">
+          Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<p>Redmineプラグインの作り方を学ぶ前にRailsの基本的な事を学ばねばなりますまい。そういやあ。</p>
+<h1>参考</h1>
+<ul><li>Rail3レシピブック 190の技</li></ul>
+<h1>環境</h1>
+<ul><li>WindowsXP</li><li>Ruby 1.8.7</li><li>Rails 3.2.1</li></ul>
+<h1>準備</h1>
+<ul><li>はじめにbundleでrailsをインストールする……が、なんかエラーが。</li></ul>
+<pre class="">Gem::InstallError: The 'json' native gem requires installed build
+tools.
+
+Please update your PATH to include build tools or download the DevKit
+from 'http://rubyinstaller.org/downloads' and follow the instructions
+at 'http://github.com/oneclick/rubyinstaller/wiki/Development-Kit'
+An error occured while installing json (1.6.5), and Bundler cannot continue.
+Make sure that `gem install json -v '1.6.5'` succeeds before bundling.</pre>
+<p>bundleするまえにjsonをインストールしてくれと言われた。ので、そのとおりにgem install……。</p>
+<pre class="">$ gem install json -v '1.6.5'
+ERROR:  Error installing json:
+        The 'json' native gem requires installed build tools.
+
+Please update your PATH to include build tools or download the DevKit
+from 'http://rubyinstaller.org/downloads' and follow the instructions
+at 'http://github.com/oneclick/rubyinstaller/wiki/Development-Kit'</pre>
+<p>まだだめか。Development-Kitが必要？　<a href="https://github.com/oneclick/rubyinstaller/wiki/Development-Kit">Development Kit · oneclick/rubyinstaller Wiki · GitHub</a>へ。</p>
+<p>どれ落とせばいいんだろうと思ったら、</p>
+<blockquote><p>for the legacy RubyInstaller v1.8.6 use the DevKit-3.4.5 available at our archive downloads page. For RubyInstaller versions 1.8.7, 1.9.2, and 1.9.3 use the DevKit 4.5.2 from our main downloads page.</p></blockquote>
+<p>という事らしいので4.5.2をDLしexeを実行。さらに以下を実行。</p>
+<pre class="">$ cd &lt;DEVKIT_INSTALL_DIR&gt;
+$ ruby dk.rb init
+
+Initialization complete! Please review and modify the auto-generated
+'config.yml' file to ensure it contains the root directories to all
+of the installed Rubies you want enhanced by the DevKit.</pre>
+<p>config.ymlが生成されるので例に従ってRubyのパスを記述。</p>
+<pre class="">  8 # Example:
+  9 #
+ 10 # ---
+ 11 # - C:/ruby19trunk
+ 12 # - C:/ruby192dev
+ 13 #
+ 14 ---
++15 - C:\rubies\Ruby-187-p352</pre>
+<p>で、インストール。</p>
+<pre class="">$ ruby dk.rb review
+Based upon the settings in the 'config.yml' file generated
+from running 'ruby dk.rb init' and any of your customizations,
+DevKit functionality will be injected into the following Rubies
+when you run 'ruby dk.rb install'.
+
+C:/rubies/Ruby-187-p352
+
+$ ruby dk.rb install
+[INFO] Updating convenience notice gem override for 'C:/rubies/Ruby-187-p352'
+[INFO] Installing 'C:/rubies/Ruby-187-p352/lib/ruby/site_ruby/devkit.rb'</pre>
+<p>満を持してbundle install再び。</p>
+<pre class="">…
+Installing json (1.6.5) with native extensions
+…</pre>
+<p>オッケー。</p>
+<h1>アプリケーション作成</h1>
+<ul><li>rails new アプリ名で作成</li></ul>
+<pre class="">$ bundle exec rails new sampleapp
+      create
+      create  README.rdoc
+      create  Rakefile
+      create  config.ru
+      create  .gitignore
+      create  Gemfile
+      create  app
+      create  app/assets/images/rails.png</pre>
+<ul><li>rails new アプリ名 -d DBでDBを指定して作成もできる。省略した場合はSQLite3</li><li>このアプリ名は変数Rails.rootで参照できる</li><li>Rails.rootでbundle install(また？)</li></ul>
+<p>Bundleで入れたRailsでRailsアプリをnewしてそのRailsアプリでまたBundleしてるのが気持ち悪いけどこんなもんなのかな。</p>
+<h1>DB設定</h1>
+<p>これはRedmineでやった事ある。</p>
+<ul><li>config/database.ymlを編集……し……？</li></ul>
+<pre class="">  6 development:
+  7   adapter: sqlite3
+  8   database: db/development.sqlite3
+  9   pool: 5
+ 10   timeout: 5000</pre>
+<p>あれ？　もうよろしくされてるじゃん。</p>
+<h1>バージョン等</h1>
+<ul><li>rail -vでRailsのバージョン</li></ul>
+<pre class="">$ bundle exec rails -v
+Rails 3.2.1</pre>
+<ul><li>rake aboutでRailが使っているライブラリ</li></ul>
+<pre class="">$ bundle exec rake about
+About your application's environment
+Ruby version              1.8.7 (i386-mingw32)
+RubyGems version          1.8.12
+Rack version              1.4
+Rails version             3.2.1
+JavaScript Runtime        Node.js (V8)
+Active Record version     3.2.1
+…</pre>
+<h1>とりあえず起動</h1>
+<ul><li>rails sまたはrails serverで起動。rails s -p ポート番号でポート指定可能</li></ul>
+<pre class="">$ bundle exec rails s
+=&gt; Booting WEBrick
+=&gt; Rails 3.2.1 application starting in development on http://0.0.0.0:3000
+=&gt; Call with -d to detach
+=&gt; Ctrl-C to shutdown server
+[2012-02-28 19:27:58] INFO  WEBrick 1.3.1
+[2012-02-28 19:27:58] INFO  ruby 1.8.7 (2011-06-30) [i386-mingw32]
+[2012-02-28 19:27:58] INFO  WEBrick::HTTPServer#start: pid=5396 port=3000</pre>
+<ul><li><a href="http://localhost:3000">http://localhost:3000</a>にアクセスしてWelcome aboard You’re riding Ruby on Rails! と表示されていれば動いている</li></ul>
+<h1>Railsアプリ内のファイルとディレクトリ(抜粋)</h1>
+<p>Redmineでも見たことがあるファイル等もあるが、役割を明確にわかっていなかった。</p>
+<table><tr><th>file/dir</th><th>役割</th></tr><tr><td>config.ru</td><td>Rackアプリケーションとして実行する際の設定ファイル</td></tr><tr><td>Rakefile</td><td>MakefileのRuby版、MakeのRuby版であるRakeで使う</td></tr><tr><td>app/</td><td>アプリケーションを格納</td></tr><tr><td>app/assets/</td><td>CoffeeScript等を格納</td></tr><tr><td>app/controllers/</td><td>コントローラを格納</td></tr><tr><td>app/models/</td><td>モデルを格納</td></tr><tr><td>app/views/</td><td>ビューのテンプレート(html,js)を格納</td></tr><tr><td>app/views/layouts/</td><td>ビューのレイアウトとして使用するhtmlテンプレートを格納</td></tr><tr><td>app/helper/</td><td>ヘルパーを格納</td></tr><tr><td>config/</td><td>DB設定、環境設定等各種設定ファイルを格納</td></tr><tr><td>config/environments/</td><td>各実行環境用の設定ファイルを格納</td></tr><tr><td>config/initializers/</td><td>初期化時に実行されるファイルを格納</td></tr><tr><td>config/locales/</td><td>I18n用のファイルを格納</td></tr><tr><td>db/</td><td>DB操作に使用するスクリプトを格納、SQLite3の場合はDBファイルも</td></tr><tr><td>db/migrate/</td><td>DBスキーマの編集のためのマイグレーションファイルを格納</td></tr><tr><td>lib/</td><td>MVCいずれにも属さない処理をライブラリ化し格納</td></tr><tr><td>script/</td><td>各種スクリプトを格納</td></tr><tr><td>public</td><td>静的ファイル(html,js,css,画像)を格納</td></tr><tr><td>test/</td><td>テストコードを格納</td></tr><tr><td>vendor/</td><td>サードパーティ製のライブラリ、外部ライブラリを格納</td></tr><tr><td>vendor/plugins/</td><td>プラグインを格納</td></tr></table>
+<p>ほとんどになってしまった……。とりあえず役割は覚えておこう。ただし一部ピンときてない場所もあり。</p>
+<p>続く。<a href="2012-02-29-1330528564">2012-02-29-1330528564</a></p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/02/23/1330001338" title="GitプロジェクトをコミットしたタイミングでJenkinsにビルドをしてもらいたい！">
+          GitプロジェクトをコミットしたタイミングでJenkinsにビルドをしてもらいたい！
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/02/29/1330528564" title="Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など">
+          Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/02/28/1330436604" data-text="kk_Atakaの日記 - Rails3レシピブックを読みながらRailsを学ぶ" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/02/28/1330436604/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/02/28/1330436604/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/02/28/1330436604/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Rails3レシピブックを読みながらRailsを学ぶ"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/02/28/1330436604/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

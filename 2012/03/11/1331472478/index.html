@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Pro Gitと入門gitでGitの復習 ブランチ編 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Pro Gitと入門gitでGitの復習 ブランチ編</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Git">Git</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/03/11</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/03/05/1330951640" title="Pro Gitと入門gitでGitの復習 基本操作編">
+          Pro Gitと入門gitでGitの復習 基本操作編
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/03/15/1331816663" title="Pro Gitと入門gitでGitの復習 マージ編">
+          Pro Gitと入門gitでGitの復習 マージ編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<ul><li><a href="2012-03-05-1330951640">2012-03-05-1330951640</a></li></ul>
+<p>今回はローカルブランチから。</p>
+<h1>参考</h1>
+<ul><li><a href="http://progit.org/">Git - Book</a></li><li>入門git</li></ul>
+<h1>他のVCSとの違い</h1>
+<ul><li>Subversionなどは各ファイルに対しての差分を時間軸で持っていた</li><li>Gitではコミットのたびにその時のリポジトリ全体のスナップショットをとる<ul><li>ただし、変更がなかったファイルは以前のスナップショットで格納したファイルへのリンクを貼っている</li></ul></li></ul>
+<h1>Gitのオブジェクト</h1>
+<p>Gitには大きく分けて4つのオブジェクトが存在する。</p>
+<ul><li>Commitオブジェクト</li><li>Treeオブジェクト</li><li>Blobオブジェクト</li><li>Tagオブジェクト</li></ul>
+<h2>Commitオブジェクト</h2>
+<p>リポジトリのルート。ファイル情報(ツリー)やメタデータを格納している。以下のコミットのCommitオブジェクトを見てみる。</p>
+<pre class="">$ git log --pretty=oneline
+5f431a8cf6023e7398102dfef8b88baf1c581023 Typo 4</pre>
+<p>log --pretty=rawコマンドを実行するとハッシュタグがいろいろと。</p>
+<pre class="">$ git log --pretty=raw 5f431a8cf6023e7398102dfef8b88baf1c581023
+commit 5f431a8cf6023e7398102dfef8b88baf1c581023
+tree de445cf5b526c554dea465d09cea6d65059d1f80
+parent a59ff99de68cbf359c814f25cda9c926ef9cdad9
+author kk_Ataka &lt;test@example.com&gt; 1329818747 +0900
+committer kk_Ataka &lt;test@example.com&gt; 1329819044 +0900
+
+    Typo 4</pre>
+<table><tr><th>commit</th><td>このコミットに対するSHA1名</td></tr><tr><th>tree</th><td>このコミットの中身を記載しているSHA1名</td></tr><tr><th>parent</th><td>一つ前のコミットのSHA1名。存在しない場合はそれが一発目(Rootコミット)、マージされた場合は1つ以上になる場合もある</td></tr><tr><th>author</th><td>作成者</td></tr><tr><th>committer</th><td>コミッター</td></tr></table>
+<p>author, committerあたりがメタデータになるのかな。</p>
+<h2>Treeオブジェクト</h2>
+<p>あるコミット時点の中身を格納している。ls-treeコマンドかshowコマンドで確認が出来る。ls-treeコマンドの方が詳しい。</p>
+<pre class="">$ git ls-tree 5f431a8cf6023e7398102dfef8b88baf1c581023
+100644 blob 27f338f5bd0c368f96e063127705bd1bb81e992a    README # ファイル
+100644 blob 0dc64072619bf0734c878d90e9150b6978898083    index.html # ファイル
+100644 blob 543200914423ddc0cb2249c322f262e31ee11c55    menu.html # ファイル</pre>
+<pre class="">100644 blob c447b5cfd585f44aafef7d513c5efea5471e2848    convert.rb # ファイル
+040000 tree a1117a81580de591d292b9e6d80deee3e1cabd85    testdata # ディレクトリ
+
+#testdataディレクトリを調査
+$ git ls-tree a1117a81580de591d292b9e6d80deee3e1cabd85
+040000 tree a9da0b188817cc119eff96f4c8db5306d0be009d    init # ディレクトリ
+
+#initディレクトリを調査
+$ git ls-tree a9da0b188817cc119eff96f4c8db5306d0be009d
+100644 blob 2918a6642d19aadf2b11213978ae6044166a87e0    read_cell # ファイル</pre>
+<p>showで調査する場合はこんな感じ。ファイル名だけ？</p>
+<pre class="">#initディレクトリを調査
+$ git show a9da0b188817cc119eff96f4c8db5306d0be009d
+tree a9da0b188817cc119eff96f4c8db5306d0be009d
+
+read_cell</pre>
+<p>実行権、ファイルタイプ、SHA1名、ファイル名が出力される。ファイルタイプは超ざっくりこんな感じみたい。</p>
+<table><tr><th>blob</th><td>普通のファイル</td></tr><tr><th>tree</th><td>ディレクトリ</td></tr></table>
+<h2>Blobオブジェクト</h2>
+<p>ファイルそのもの。showコマンドで見る事が出来るのはファイルの中身。</p>
+<pre class="">#READMEを調査
+$ git show 27f338f5bd0c368f96e063127705bd1bb81e992a
+Hello Wrld</pre>
+<pre class="">#index.htmlを調査
+$ git show 0dc64072619bf0734c878d90e9150b6978898083
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Welcome&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello&lt;/h1&gt;
+    &lt;p&gt;Hello world !!&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+<pre class="">#menu.htmlを調査
+$ git show 543200914423ddc0cb2249c322f262e31ee11c55
+&lt;html&gt;
+  &lt;head&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;menu&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+<h1>で、ブランチ</h1>
+<p>ブランチはこの一つのCommitオブジェクトをさすポインタとなる。今は最新がこれ。</p>
+<pre class="">$ git log --pretty=raw 5f431a8cf6023e7398102dfef8b88baf1c581023
+commit 5f431a8cf6023e7398102dfef8b88baf1c581023
+tree de445cf5b526c554dea465d09cea6d65059d1f80
+parent a59ff99de68cbf359c814f25cda9c926ef9cdad9
+author kk_Ataka &lt;test@example.com&gt; 1329818747 +0900
+committer kk_Ataka &lt;test@example.com&gt; 1329819044 +0900
+
+    Typo 4</pre>
+<p>で、branchコマンドでブランチを確認すると……。</p>
+<pre class="">$ git branch
+ * master</pre>
+<p>masterというブランチがある。これは最初にコミットした時点で作られるブランチ。次にまたコミットをするとmasterブランチはそれを追いかけていく。</p>
+<h1>ブランチの作成</h1>
+<p>branch [newbranch]で作成。</p>
+<pre class="">$ git branch checkpoint1</pre>
+<p>branchコマンドで確認ができる。アスタリスクがついているのブランチが今のブランチ。</p>
+<pre class="">$ git branch
+   checkpoint1
+ * master</pre>
+<h1>ブランチの確認</h1>
+<p>基本はbranchコマンドで確認できる。</p>
+<pre class="">$ git branch
+   checkpoint1
+ * master</pre>
+<p>vオプションでCommitオブジェクトのSHA1とログなどを冗長に確認できる。今は全部同じだが……。</p>
+<pre class="">$ git branch -v
+   checkpoint1 5f431a8 Typo 4
+ * master      5f431a8 Typo 4</pre>
+<p>rオプションでリモートのブランチも確認できる。(まだよくわかってない)</p>
+<pre class="">$ git remote -v
+rem1    c:/project/testRemote/remote1.git (fetch)
+rem1    c:/project/testRemote/remote1.git (push)
+rem2    c:\project\testRemote\remote2.git (fetch)
+rem2    c:\project\testRemote\remote2.git (push)
+
+$ git branch -rv
+  rem1/master 5f431a8 Typo 4
+  rem2/master 5f431a8 Typo 4</pre>
+<h1>ブランチの削除</h1>
+<p>branch d [branch]、またはbranch D [branch]で削除する事ができる。</p>
+<pre class="">$ git branch -d checkpoint1
+Deleted branch checkpoint1 (was 5f431a8).
+
+$ git branch
+ * master</pre>
+<p>ちなみになうなブランチは削除できない。</p>
+<pre class="">$ git branch -d master
+error: Cannot delete the branch 'master' which you are currently on.</pre>
+<p>dオプションとDオプションの違いは"今のブランチから到達不可能なブランチの削除を試みた場合"、警告を出す(d)か強制削除(D)か、らしい。どういうことだろう？</p>
+<p>→parent,parentで過去へ遡及はできそうだけど、そこから未来には進めなさそう？</p>
+<h1>ブランチを切り替える</h1>
+<p>checkoutコマンドを使う。</p>
+<pre class="">$ git branch checkpoint1
+
+$ git checkout checkpoint1
+Switched to branch 'checkpoint1'
+
+$ git branch
+ * checkpoint1
+   master</pre>
+<p>ブランチを作りつつcheckoutも同時に行う事もできるcheckout -b [newbranch] [branch]</p>
+<pre class="">$ git checkout -b check-b master
+Switched to a new branch 'check-b'
+
+$ git branch
+ * check-b
+   checkpoint1
+   master</pre>
+<p>ただし、作業ディレクトリにファイル作りっぱなしとかステージングしっぱなしの状態だと原則としてブランチの切り替えはできない。</p>
+<pre class="">$ git checkout master
+error: Your local changes to the following files would be overwritten by checkout:
+        index.html
+Please, commit your changes or stash them before you can switch branches.
+Aborting</pre>
+<h1>HEAD？？</h1>
+<p>Git系のBlogエントリとか読んでるとちょいちょい出てくるHEAD。これは.gitディレクトリの中のHEADファイルに定義されていて、常に今作業中のブランチを指す、という事になっている。よく見たら<a href="http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640">前のエントリ</a>でgit reset HEAD [resetfile]というコマンドをうっていた！</p>
+<pre class="">$ git branch
+   check-b
+   checkpoint1
+ * master
+
+$ cat .git/HEAD
+ref: refs/heads/master</pre>
+<p>masterの時はHEADもmasterだ。</p>
+<pre class="">$ git checkout checkpoint1
+Switched to branch 'checkpoint1'
+
+$ git branch
+   check-b
+ * checkpoint1
+   master
+
+$ cat .git/HEAD
+ref: refs/heads/checkpoint1</pre>
+<p>別のブランチに切り替えるとHEADも変わる。logコマンドでCommitオブジェクト(SHA1)の代わりにHEADを指定すると見れる！</p>
+<pre class="">$ git log --pretty=raw HEAD
+commit 5f431a8cf6023e7398102dfef8b88baf1c581023
+tree de445cf5b526c554dea465d09cea6d65059d1f80
+parent a59ff99de68cbf359c814f25cda9c926ef9cdad9
+author kk_Ataka &lt;test@example.com&gt; 1329818747 +0900
+committer kk_Ataka &lt;test@example.com&gt; 1329819044 +0900
+
+    Typo 4
+
+commit a59ff99de68cbf359c814f25cda9c926ef9cdad9
+(略)</pre>
+<p>この辺は各々のブランチの歴史を進めた上で比較しないと全部同じだからわかりづらいな。次はマージから。</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/03/05/1330951640" title="Pro Gitと入門gitでGitの復習 基本操作編">
+          Pro Gitと入門gitでGitの復習 基本操作編
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/03/15/1331816663" title="Pro Gitと入門gitでGitの復習 マージ編">
+          Pro Gitと入門gitでGitの復習 マージ編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/03/11/1331472478" data-text="kk_Atakaの日記 - Pro Gitと入門gitでGitの復習 ブランチ編" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/03/11/1331472478/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/03/11/1331472478/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/03/11/1331472478/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Pro Gitと入門gitでGitの復習 ブランチ編"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/03/11/1331472478/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

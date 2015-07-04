@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Jekyllドキュメントを翻訳してなんとなくわかってきたもの - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Jekyllドキュメントを翻訳してなんとなくわかってきたもの</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Jekyll">Jekyll</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Translate">Translate</a> ]</i>
+          
+        
+        
+          <span>Published: 2014/06/22</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2014/05/28/sphinx-latexpdfja-for-windows" title="WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話">
+          WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2014/07/13/kawasakirb-011-012-013" title="kawasaki.rb #013 でSphinx導入事例の発表をしてきました と #011 #012 参加記録 #kwskrb #sphinxjp">
+          kawasaki.rb #013 でSphinx導入事例の発表をしてきました と #011 #012 参加記録 #kwskrb #sphinxjp
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#現状'>現状</a></li><li><a href='#知見とか'>知見とか</a></li><ul><li><a href='#意訳-or-直訳？'>意訳 or 直訳？</a></li><li><a href='#原文はどうしよう？'>原文はどうしよう？</a></li><li><a href='#誰が、どこで、どう管理するか？'>誰が、どこで、どう管理するか？</a></li></ul><li><a href='#更新の追従'>更新の追従</a></li><ul><li><a href='#更新の追従をするには'>更新の追従をするには</a></li><li><a href='#togglateでできること'>Togglateでできること</a></li><li><a href='#原文チラ見したい問題'>原文チラ見したい問題</a></li></ul><li><a href='#おまけ'>おまけ</a></li></ul></ul><!-- end of tree list --></div>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>Jekyllドキュメントの翻訳リポジトリを作成して約3ヶ月くらいたちまして。</p>
+
+<ul>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20140314/1394723421">Jekyllドキュメントの日本語翻訳リポジトリ「jekyllrb.com.jp」を作成しました - kk_Atakaの日記</a></li>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20140401/1396349183">kawasaki.rb #010 で発表してきました #kwskrb - kk_Atakaの日記</a></li>
+</ul>
+
+<p>現状報告と、今までの知見のまとめを。</p>
+
+<p>とりあえず自分の中でたまっているものを整理したいのでとりとめもなく書き出していくメソッド。</p>
+
+<h2 id="現状">現状</h2>
+
+<p><a href="http://jekyllrb-ja.github.io/">Jekyll &bull; シンプルで、ブログのような、静的サイト</a></p>
+
+<ul>
+<li>翻訳当時のリビジョンの Documentation 全翻訳が完了しました！(historyなど一部を除く)
+
+<ul>
+<li>翻訳期間中、本家の更新に追従できていないのでこれから猛追モードに入ります</li>
+</ul></li>
+<li>プロジェクトを Organization に昇格させました
+
+<ul>
+<li><a href="https://github.com/jekyllrb-ja/jekyllrb-ja.github.io">jekyllrb-ja/jekyllrb-ja.github.io</a></li>
+<li>もともとは.br版の翻訳をしている人のリポジトリをお手本にしていたので個人リポジトリで細々とやっていた</li>
+<li>が、協力していただける方が増えたのもあり Org 化</li>
+</ul></li>
+</ul>
+
+<h2 id="知見とか">知見とか</h2>
+
+<p>翻訳開始時に悩んでいた事は以下の3点。</p>
+
+<p>それに対しての答えは、現時点で少しずつ見えてきた気がする。</p>
+
+<p>少なくとも、今の自分の中で納得できる答えは見つけられた。</p>
+
+<h3 id="意訳-or-直訳？">意訳 or 直訳？</h3>
+
+<ul>
+<li>色々な人の意見をもとに「日本人が読みやすいように意訳していく」のが良いではという結論に至った</li>
+<li>結局のところ翻訳した文書は誰が読むかを考えると、自分(日本人)だろう、という話が一番腑に落ちたので…以下、感銘を受けた記事など
+
+<ul>
+<li><a href="http://www.slideshare.net/t2y/python-6731903">Python界隈の翻訳プロジェクト</a></li>
+<li><a href="http://blog.shibu.jp/article/30577636.html">エンジニアは翻訳をやるとお得 - 渋日記@shibu.jp</a></li>
+<li><a href="http://tink.elliptium.net/2014/04/26/a_suggestion_on_translation.html">翻訳のススメ - Elliptium</a></li>
+<li><a href="http://sphinx-users.jp/cookbook/translation.html">ドキュメントの翻訳にSphinxを使う (i18n非利用) - Sphinx-Users.jp</a></li>
+</ul></li>
+<li>なんという Python 率。「ドキュメント 翻訳 なんとか」でググると Python 界隈の方の活動がすごい引っかかるのはそれだけ盛んであるということなんだろうか(Ruby 方面へのアンテナの感度が低いだけとも思う)</li>
+<li><del>直訳でもフツーに間違うから</del>固い文より、読みやすい文の方がよいのではないか(誤訳しない努力はする)</li>
+</ul>
+
+<h3 id="原文はどうしよう？">原文はどうしよう？</h3>
+
+<ul>
+<li>これについては「更新の追従」で書く</li>
+<li>Jekyllrb-jaでは「原文(英語)はコメントアウトで残す」方式を採用した</li>
+</ul>
+
+<h3 id="誰が、どこで、どう管理するか？">誰が、どこで、どう管理するか？</h3>
+
+<ul>
+<li>これに関しては、結局プロジェクトによりけりとしかいえないかな</li>
+<li>プロジェクトの舵を取る人が「入れよう！」といったら入れればいいし、「分けよう！」といったら分ければよいと思う
+
+<ul>
+<li>「分けよう！」はこのプロジェクト(jekyll)だし、「入れよう！」は progit とか sinatra かな</li>
+</ul></li>
+</ul>
+
+<p>こんな感じなことが多いのかな〜。まあ、こんな綺麗に二分割はできないけどだいたいの方向性として。</p>
+
+<ul>
+<li>誰が:
+
+<ul>
+<li>「入れよう」メインコミッターの人たち？</li>
+<li>「分けよう」翻訳したい人たち</li>
+</ul></li>
+<li>どこで:
+
+<ul>
+<li>「入れよう」本家リポジトリ内、あるいはメインコミッターの人が管理しているドキュメント用リポジトリ内</li>
+<li>「分けよう」翻訳したい人たちが作った翻訳用リポジトリ</li>
+</ul></li>
+<li>どう管理:
+
+<ul>
+<li>「入れよう」基本的に本家(メインコミッターの人)の方針に順守</li>
+<li>「分けよう」本家の方針を守りつつ独自(翻訳フローなど)にいける？</li>
+</ul></li>
+</ul>
+
+<h2 id="更新の追従">更新の追従</h2>
+
+<h3 id="更新の追従をするには">更新の追従をするには</h3>
+
+<p>本家のドキュメントの更新にどうやってついていくか…今後のモチベージョン(めんどくさくないこと、など)に関わってくるのでできるだけ簡単にしたい。</p>
+
+<p>※ 一番最初の版に関しては、どこかターゲットとなる本家のリビジョンを決めておいて動かさない。あとはターゲットに対して「えいや」で翻訳＆コミットしていけばなんとかなると思っている</p>
+
+<p>例えば Sphinx ではリビジョンを覚えておいてそれとぶつける方式で、</p>
+
+<blockquote>
+<ul>
+<li>翻訳した元のリビジョン番号を特定</li>
+<li>最新のリポジトリとマージ</li>
+</ul>
+</blockquote>
+
+<p>ProGit では本家とぴったりあわせる方式のようです。</p>
+
+<blockquote>
+<ul>
+<li>本家の更新1コミットにつき訳文更新1コミット</li>
+</ul>
+</blockquote>
+
+<p>これを解決するために Jekyllrb-ja では @melborne さん謹製の <a href="https://github.com/melborne/togglate">Togglate - GitHub</a> というツールを使わせていただく事に決めました。</p>
+
+<h3 id="togglateでできること">Togglateでできること</h3>
+
+<ul>
+<li>原文に対して Togglate を使うと、すべての文章がコメントアウトされる
+
+<ul>
+<li>使用前</li>
+</ul></li>
+</ul>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">Hello!</span></code></pre></div>
+
+<ul>
+<li>使用後</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">こんにちは！</span>
+
+<span class="go">&lt;!--original</span>
+<span class="go">Hello!</span>
+<span class="go">--&gt;</span></code></pre></div>
+
+<p>こんな感じ <code>&lt;!--original --&gt;</code> でコメントアウトしているのが Togglate でコメントアウトした文章(=原文)。</p>
+
+<p>この形式でコメントアウトする事で以下のようなことができる。</p>
+
+<ul>
+<li>Togglateで <code>&lt;!--original --&gt;</code> 内の文章のみを抽出できる(=原文を再構築できる)
+
+<ul>
+<li>「jekyllrb-jaドキュメント内の原文」を再構築することで、「本家の原文」との比較に使用できる(ややこしい)</li>
+</ul></li>
+<li>Togglateで出力するjsをhtmlに追加すると「対応する日本語にマウスカーソルを当てると原文がポップアップする」ことができる
+
+<ul>
+<li>後述する「原文チラ見したい問題」を解決できる</li>
+</ul></li>
+</ul>
+
+<p>更新の追従をする際に、更新された箇所の日本語文とコメントアウトした原文両方を更新しなければならないのがちょいめんどうだけど、上記 2 点を解消できる点で有用だと思っている。あわせて日本語文と原文の更新も自動化できれば…。</p>
+
+<p>…この辺はまだまだ試行錯誤なので、ちょっとうまくまとまらず。また進捗があったら改めてまとめる。</p>
+
+<h3 id="原文チラ見したい問題">原文チラ見したい問題</h3>
+
+<p>また、別の問題として「日本語読んでいる途中で原文チラ見したい」というものも人によってはあるかも。</p>
+
+<p>これが意外とめんどくさくて、</p>
+
+<ul>
+<li>日本語サイトをブラウザで開きつつ</li>
+<li>原文のサイトかリポジトリを開き</li>
+<li>対応するファイル or Webページを開き</li>
+<li>対応する文章を探し</li>
+<li>並べて比較してみる</li>
+</ul>
+
+<p>という手順を踏む必要がある。</p>
+
+<p>これをTogglateは、原文を <code>&lt;!--original --&gt;</code> でコメントアウトしておいて、ブラウザからポップアップすると表示できるようになっている。</p>
+
+<p>そのため、上記のフローが</p>
+
+<ul>
+<li>気になるところにカーソルをあわせる</li>
+</ul>
+
+<p>で済むようになる。こんな感じ。</p>
+
+<p><img src="/static/images/2014-06-22/use-togglate.png" alt="img"></p>
+
+<h2 id="おまけ">おまけ</h2>
+
+<ul>
+<li>他の人のプロジェクトに Issue を追加したりすることに抵抗が減った</li>
+</ul>
+
+<p>良い傾向。</p>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2014/05/28/sphinx-latexpdfja-for-windows" title="WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話">
+          WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2014/07/13/kawasakirb-011-012-013" title="kawasaki.rb #013 でSphinx導入事例の発表をしてきました と #011 #012 参加記録 #kwskrb #sphinxjp">
+          kawasaki.rb #013 でSphinx導入事例の発表をしてきました と #011 #012 参加記録 #kwskrb #sphinxjp
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2014/06/22/translated-jekyllrb" data-text="kk_Atakaの日記 - Jekyllドキュメントを翻訳してなんとなくわかってきたもの" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2014/06/22/translated-jekyllrb/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2014/06/22/translated-jekyllrb/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2014/06/22/translated-jekyllrb/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Jekyllドキュメントを翻訳してなんとなくわかってきたもの"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2014/06/22/translated-jekyllrb/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Git">Git</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/04/10</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/05/1333553936" title="VimでBundler(プラグイン管理)するvundleインストール手順">
+          VimでBundler(プラグイン管理)するvundleインストール手順
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/04/17/1334669770" title="Subversionで2ヶ所のリポジトリの同期を取るメモ">
+          Subversionで2ヶ所のリポジトリの同期を取るメモ
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<ul><li><a href="2012-03-05-1330951640">2012-03-05-1330951640</a></li><li><a href="2012-03-11-1331472478">2012-03-11-1331472478</a></li><li><a href="2012-03-15-1331816663">2012-03-15-1331816663</a></li></ul>
+<p>GitHubで他の人の.gitconfigとかを見たりすると、HEAD^とかHEAD~~とかにエイリアスが貼ってあるけど、これってなんなの？</p>
+<p>今の認識: 書いた分だけリビジョンが戻ってくれる程度</p>
+<h1>参考</h1>
+<ul><li><a href="http://progit.org/">Git - Book</a></li><li>入門Git <span class="deco" style="color:#FF0000;">New !!</span></li><li>入門git</li></ul>
+<h1>調査</h1>
+<p>入門Git P87 コミットの祖先の指定によると、</p>
+<table><tr><th>記法</th><th>意味</th></tr><tr><td>^</td><td>指定したコミットの1番目の親</td></tr><tr><td>^番号</td><td>指定したコミットのN番目の親</td></tr><tr><td>~</td><td>指定したコミットの1世代前の親</td></tr><tr><td>~世代</td><td>指定したコミットのN世代前の親</td></tr></table>
+<p>という事らしい……が、番目と世代は何が違うんだろう？　とりあえずこんな歴史があるとして、masterから戻ってみる。</p>
+<h2>確認</h2>
+<pre class=""> * b467307 2012-04-05 kk_Ataka  (HEAD, origin/master, master) Add get_sheetname.rb(convert exe file b
+ | * b025b6b 2012-04-05 kk_Ataka  (1.0stable, fileignore) Ignore docx files
+ * |   90aaa1c 2012-04-04 kk_Ataka  Merge branch 'studyissue'
+ |\ \
+ * | | 2d387ba 2012-04-04 kk_Ataka  (concat) Add concat function (test pending...)
+ * | | 68ac3d9 2012-04-04 kk_Ataka  Add csv concat
+ * | | 9a4ed9b 2012-04-04 kk_Ataka  Move input cell(ex:B2) downcase(b2) in cell_reg_check and cell_to
+ | * | 670d891 2012-04-04 kk_Ataka  (studyissue) Move comment, source to readme
+ |/ /
+ * | d0f2b58 2012-04-04 kk_Ataka  Refactoring now
+ |/
+ * 0563594 2012-04-04 kk_Ataka  1.0stable
+ * 3d2f6bb 2012-04-04 kk_Ataka  First commit</pre>
+<p>まず一番目の親を指定……。</p>
+<pre class="">$ git checkout HEAD^
+...
+HEAD is now at 90aaa1c... Merge branch 'studyissue'</pre>
+<p>うん、指定できてる。んじゃ一旦masterに戻って、次はキャレット連発で。二つ前を指定できるはず。</p>
+<pre class="">$ git checkout HEAD^^
+...
+HEAD is now at 2d387ba... Add concat function (test pending...)</pre>
+<p>読み通り。じゃあ次は^NでN番目の親を指定してみる。</p>
+<pre class="">$ git checkout HEAD^2
+error: pathspec 'HEAD^2' did not match any file(s) known to git.</pre>
+<p>あ、あれ？</p>
+<pre class="">$ git checkout HEAD^3
+error: pathspec 'HEAD^3' did not match any file(s) known to git.</pre>
+<p>ん？</p>
+<pre class="">$ git checkout HEAD^1
+...
+HEAD is now at 90aaa1c... Merge branch 'studyissue'</pre>
+<p>これはできるの？　ふーむ。</p>
+<br />
+<p>(以下略)</p>
+<br />
+<p>結局こうなった。</p>
+<pre class=""> * b467307       master(HEAD)
+ | * b025b6b   
+ * |   90aaa1c   HEAD^     HEAD^1 HEAD~     HEAD~1
+ |\ \  
+ * | | 2d387ba   HEAD^^           HEAD~~    HEAD~2
+ * | | 68ac3d9   HEAD^^^          HEAD~~~   HEAD~3
+ * | | 9a4ed9b   HEAD^^^^         HEAD~~~~  HEAD~4
+ | * | 670d891          
+ |/ /                   
+ * | d0f2b58     HEAD^^^^^        HEAD~~~~~ HEAD~5
+ |/
+ * 0563594 
+ * 3d2f6bb </pre>
+<p>うーむ。戻れるのはわかったけど、2つわからんとこが残る。。。</p>
+<ul><li>番目と世代前の違い</li><li>^^と^2の違い</li></ul>
+<h2>本に戻ってみる</h2>
+<p>入門Gitを少し読み進める。</p>
+<blockquote><p>大多数のコミットには親が1つしかありませんが、マージコミットには</p><p>親が複数あります。</p></blockquote>
+<blockquote><p>マージする以前のホームマシンの作業リポジトリの先頭のコミットがHEAD^、</p><p>一方、マージしたコミットはHEAD^2ということになります。</p></blockquote>
+<p>……入門gitでは</p>
+<blockquote><p>^:キャレットはマイナス1の意味だ。18f822e^は18f822eに</p><p>マッチするリビジョンの前にあるリビジョンとして解釈される。</p></blockquote>
+<blockquote><p>~N:チルダと数字Nは、そのコミット名からNだけ前に戻る。前の例だと</p><p>18f822e~1は18f822eの前のリビジョン、18f822e~2は18f822eの2つ前の</p><p>リビジョンだ。</p></blockquote>
+<p>親が複数ある状況を作らないといけないという事かな。</p>
+<h2>再度チャレンジ</h2>
+<p>少し適当にコミットしてマージして親が2つある状況を作った。</p>
+<pre class=""> *   8dc8247 2012-04-10 kk_Ataka  (HEAD, master) Merge branch 'mergedbranch'
+ |\
+ * | ca6b93d 2012-04-10 kk_Ataka  (mergedbranch2) temp
+ * | 7819449 2012-04-10 kk_Ataka  temp
+ | * 074c658 2012-04-10 kk_Ataka  (mergedbranch) temp
+ * | b467307 2012-04-05 kk_Ataka  (origin/master) Add get_sheetname.rb(convert exe file by ocra
+ |/
+ | * b025b6b 2012-04-05 kk_Ataka  (1.0stable, fileignore) Ignore docx files
+ * |   90aaa1c 2012-04-04 kk_Ataka  Merge branch 'studyissue'</pre>
+<pre class="">$ git ch HEAD^
+...
+HEAD is now at ca6b93d... temp</pre>
+<p>これはできると。んで、問題の^2は……</p>
+<pre class="">$ git ch HEAD^2
+...
+HEAD is now at 074c658... temp</pre>
+<p>できた！　ってことは、二つのブランチしかマージしていないから、^3はエラーになるはず……。</p>
+<pre class="">$ git ch HEAD^3
+error: pathspec 'HEAD^3' did not match any file(s) known to git.</pre>
+<p>おー。</p>
+<pre class=""> *   8dc8247     master(HEAD)
+ |\
+ * | ca6b93d     HEAD^    HEAD^1  HEAD~    HEAD~1
+ * | 7819449     HEAD^^           HEAD~~   HEAD~2
+ | * 074c658              HEAD^2
+ * | b467307     HEAD^^^          HEAD~~~  HEAD~3
+ |/            
+ | * b025b6b   
+ * |   90aaa1c   HEAD^^^^ HEAD^2^ HEAD~~~~ HEAD~4
+ 
+                   (ERROR:HEAD^3)</pre>
+<p>んん？　^Nはわかったけど、^^と^2の違いが余計わからなくなった……。</p>
+<p>あ！　HEAD^2^という合わせ技ができたって事はもしかして……。</p>
+<h1>まとめ</h1>
+<table><tr><th>コマンド</th><th>意味</th><th>備考</th></tr><tr><td>HEAD^</td><td>指定したコミットの1番目の親</td><td>※1</td></tr><tr><td>HEAD^^</td><td>指定したコミットの1番目の親…<span class="deco" style="font-weight:bold;">の1番目の親</span></td><td>※2</td></tr><tr><td>HEAD^^^</td><td>指定したコミットの1番目の親…<span class="deco" style="font-weight:bold;">の1番目の親</span>…<span class="deco" style="font-weight:bold;">の1番目の親</span></td><td>※3</td></tr><tr><td>HEAD^2</td><td>指定したコミットの2番目の親</td><td></td></tr><tr><td>HEAD^2^</td><td>指定したコミットの2番目の親…の1番目の親</td><td></td></tr><tr><td>HEAD~</td><td>指定したコミットの1世代前の親</td><td>※1</td></tr><tr><td>HEAD~~</td><td>指定したコミットの1世代前の親…の1世代前の親</td><td>※2</td></tr><tr><td>HEAD~~~</td><td>指定したコミットの1世代前の親…の1世代前の親…の1世代前の親</td><td>※3</td></tr><tr><td>HEAD~1</td><td>指定したコミットの1世代前の親</td><td>※1</td></tr><tr><td>HEAD~2</td><td>指定したコミットの2世代前の親</td><td>※2</td></tr><tr><td>HEAD~3</td><td>指定したコミットの3世代前の親</td><td>※3</td></tr></table>
+<p>※1 ※2 ※3 は同じリビジョン</p>
+<p>こういう事かな。あっているならチェックアウトの挙動と一致するのだけど！</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/05/1333553936" title="VimでBundler(プラグイン管理)するvundleインストール手順">
+          VimでBundler(プラグイン管理)するvundleインストール手順
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/04/17/1334669770" title="Subversionで2ヶ所のリポジトリの同期を取るメモ">
+          Subversionで2ヶ所のリポジトリの同期を取るメモ
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/04/10/1334058674" data-text="kk_Atakaの日記 - Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/10/1334058674/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/04/10/1334058674/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/10/1334058674/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/04/10/1334058674/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた2 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた2</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Sphinx">Sphinx</a> ]</i>
+          
+        
+        
+          <span>Published: 2014/05/19</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2014/04/01/kawasakirb-010" title="kawasaki.rb #010 で発表してきました #kwskrb">
+          kawasaki.rb #010 で発表してきました #kwskrb
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2014/05/28/sphinx-latexpdfja-for-windows" title="WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話">
+          WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#前回のあらすじ'>前回のあらすじ</a></li><li><a href='#課題'>課題</a></li><ul><li><a href='#第1段階:-対開発工程の課題'>第1段階: 対開発工程の課題</a></li><li><a href='#第2段階:-対納品工程の課題'>第2段階: 対納品工程の課題</a></li></ul><li><a href='#対開発工程'>対開発工程</a></li><ul><li><a href='#登場人物'>登場人物</a></li><li><a href='#プロジェクト内での運用方法'>プロジェクト内での運用方法</a></li></ul><li><a href='#対納品工程'>対納品工程</a></li><ul><li><a href='#登場人物'>登場人物</a></li><li><a href='#納品形式'>納品形式</a></li><li><a href='#納品後修正が発生した場合'>納品後修正が発生した場合</a></li></ul></ul></ul><!-- end of tree list --></div>
+
+<h2 id="前回のあらすじ">前回のあらすじ</h2>
+
+<ul>
+<li><a href="http://gosyujin.github.io/2013/10/25/sphinx-recommend/">「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた - kk_Atakaの日記</a></li>
+</ul>
+
+<p>かなり期間があいてしまったが、次に考えるは、実際にどうやって「導入」して「運用」するか。</p>
+
+<p>「納品」するに当たってどんな問題があるか。</p>
+
+<p>このあたり、良い前例があったら知りたいところ。</p>
+
+<h2 id="課題">課題</h2>
+
+<p>課題はとりあえず2段階あると思っている。</p>
+
+<h3 id="第1段階-対開発工程の課題">第1段階: 対開発工程の課題</h3>
+
+<ul>
+<li>プロジェクトに対しての導入・運用方法</li>
+</ul>
+
+<p>どうやって運用していくか。</p>
+
+<p>ルール決め大事。</p>
+
+<h3 id="第2段階-対納品工程の課題">第2段階: 対納品工程の課題</h3>
+
+<ul>
+<li>納品形式</li>
+<li>納品後修正が発生した場合どうするか</li>
+</ul>
+
+<p>顧客(※)に対してどうやって納品するか、またそれをなおすのは誰？</p>
+
+<p>(※) 顧客とは、納品したドキュメントを読む、使う、なおす人。社内の人かもしれないし、社外の人かもしれない。</p>
+
+<p>一つずつ考えていく。</p>
+
+<h2 id="対開発工程">対開発工程</h2>
+
+<h3 id="登場人物">登場人物</h3>
+
+<p>以下、架空の登場人物とする。</p>
+
+<ul>
+<li><code>リーダー</code> : Sphinx を導入したい側
+
+<ul>
+<li>Sphinx 導入に燃えている人</li>
+</ul></li>
+<li><code>メンバー</code> : 導入した Sphinx を使う側
+
+<ul>
+<li>Sphinx および reST は知らない</li>
+</ul></li>
+</ul>
+
+<h3 id="プロジェクト内での運用方法">プロジェクト内での運用方法</h3>
+
+<ul>
+<li>reST は覚えてもらう
+
+<ul>
+<li>マスト。これがないと書けないから</li>
+<li>一応「 reST 記法書き方」的なページは <code>リーダー</code> が事前に作って教えてあげることが前提</li>
+<li>実はマストではなかった</li>
+<li>Markdownとかがよければ、 Pandoc を経由して Markdown -&gt; reST -&gt; OUTPUT というのもありかも</li>
+<li><a href="http://librabuch.jp/2013/12/sphinx_documentation_advent_calendar_2013/">ドキュメンテーションツール「Sphinx」をチーム運用するまでの道のり - Librabuch</a></li>
+</ul></li>
+<li>とりあえず <code>メンバー</code> にはドキュメント作成に注力してもらい、ファイル生成などは <code>リーダー</code> が整備する</li>
+<li>運用はできるだけ git push または svn commit してもらうだけにしたい
+
+<ul>
+<li>ただし、いきなりファイルを push してもらうのはちょっと嫌で、 Sintax error くらいは <code>メンバー</code> のローカルでも確認してもらいたいんだけど</li>
+<li>そうすると Python インストール必須だよなぁ…</li>
+<li>ローカルで reST プレビューとかできるのかなぁ…</li>
+<li>GitHub とか使えばプレビューできるんだけど…</li>
+<li>バージョン管理ツールの使い方は割愛</li>
+<li>アウトライン(雛形？ / タイトルとか目次とか)はあらかじめ定めておき、空ファイル(ひな形)は <code>リーダー</code> が事前に用意しておく</li>
+</ul></li>
+<li>コミット後は、コミットをフックして make (Jenkins などで)して Apache の下とかに展開する
+
+<ul>
+<li>http://xx.xx.xx.xx/hoge にアクセスしたらすぐ最新版が見られるようにする</li>
+</ul></li>
+</ul>
+
+<p>その他にも、そのプロジェクトの風土にあわせたカスタマイズが必要かもしれない。</p>
+
+<p>例えば、「表紙の次のページに変更記録一覧 (Rev.X は誰が何を直して誰が承認したか) みたいな表が必須とか」</p>
+
+<h2 id="対納品工程">対納品工程</h2>
+
+<h3 id="登場人物">登場人物</h3>
+
+<ul>
+<li><code>プロジェクト</code> : Sphinx でドキュメントを作成した側
+
+<ul>
+<li>上記開発工程の <code>リーダー</code> と <code>メンバー</code> の集合体</li>
+</ul></li>
+<li><code>顧客</code> : Sphinx で作成したドキュメントを納品される側
+
+<ul>
+<li>社内の人かもしれないし、社外の人かもしれない</li>
+<li>慣例から、成果物は Office で納品されることが多い</li>
+</ul></li>
+</ul>
+
+<h3 id="納品形式">納品形式</h3>
+
+<p>なにをどう納品すべきなのか。(開発工程に入る前に、納品形式は両者の間で Fix させておく必要はある)</p>
+
+<p>とりあえず 2 つ考えられる。</p>
+
+<ol>
+<li>reST ファイル、 reST からアウトプットしたファイル、説明書(Sphinx インストール、ビルド手順など)の 3 点セット
+
+<ul>
+<li>対象フォーマットで納品したけど、 reST からどうとでもできるよ形式</li>
+</ul></li>
+<li>reST からアウトプットしたファイルのみ
+
+<ul>
+<li>html , pdf などのみ</li>
+</ul></li>
+</ol>
+
+<p>前者は <code>顧客</code> への負担が高すぎ。</p>
+
+<p>かといって後者だと納品後問題が発生した場合どうすればいいのか…。(後述)</p>
+
+<p>裏技として「 Pandoc を使って reST to docx 」という方法も見つけたが、体裁がうまいこと作れなかった…。</p>
+
+<h3 id="納品後修正が発生した場合">納品後修正が発生した場合</h3>
+
+<p>誰がどう修正するのか。</p>
+
+<p>これも 2 つ考えられる。</p>
+
+<ol>
+<li>保守などで <code>プロジェクト</code> が適宜修正する事ができる取り決めの場合
+
+<ul>
+<li>この場合は、 Sphinx の環境を使ってなおせばよい</li>
+</ul></li>
+<li><code>顧客</code> が巻き取り、その後ガンガン機能追加・修正していく場合
+
+<ul>
+<li>reST を修正してもらう？</li>
+<li>アウトプットファイル(htmlとか) を直接修正してもらう？</li>
+</ul></li>
+</ol>
+
+<p>前者は特に問題ない。困るのは後者。</p>
+
+<p>Javadoc とかは、 html ファイルで納品するが、修正するのに直接いじらないよな。やるならソースを直して Javadoc 再生成だろう。</p>
+
+<p>…とすると、 reST も reST を直して再生成するのが一番いいんだけど……それをやってもらう？？</p>
+
+<p>ということで、今考えているのが</p>
+
+<ul>
+<li>開発時は reST で作成、レビューも reST からの OUTPUT で行う</li>
+<li>最終納品のときに reST を Office 形式に変換して納品する
+
+<ul>
+<li>ただしこの変換、逆はできないのでいったっきり</li>
+</ul></li>
+<li><code>顧客</code> には Office でなおしてもらう</li>
+<li>改修のお鉢が <code>プロジェクト</code> に回ってきた場合は (-人-)</li>
+</ul>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2014/04/01/kawasakirb-010" title="kawasaki.rb #010 で発表してきました #kwskrb">
+          kawasaki.rb #010 で発表してきました #kwskrb
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2014/05/28/sphinx-latexpdfja-for-windows" title="WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話">
+          WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2014/05/19/sphinx-recommend2" data-text="kk_Atakaの日記 - 「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた2" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2014/05/19/sphinx-recommend2/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2014/05/19/sphinx-recommend2/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2014/05/19/sphinx-recommend2/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - 「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた2"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2014/05/19/sphinx-recommend2/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

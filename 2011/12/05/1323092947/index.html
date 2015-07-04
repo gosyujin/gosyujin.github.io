@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>RedmineでプラグインインストールしたらTemplateErrorが出た - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>RedmineでプラグインインストールしたらTemplateErrorが出た</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Redmine">Redmine</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/12/05</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/04/1323009249" title="複数のRuby環境の管理・切替ができるrvmをインストールした">
+          複数のRuby環境の管理・切替ができるrvmをインストールした
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/06/1323186439" title="UnixでストリーミングファイルをDLしたい">
+          UnixでストリーミングファイルをDLしたい
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<p>Redmineにプラグインをインストールした後で動かそうとしたらエラーが。</p>
+<h1>調査</h1>
+<p>下記の例はredmine_importerというCSVでチケット一括登録するプラグイン。</p>
+<pre class="">ActionView::TemplateError (No plugin called 'redmine_importer' - please use the full name of a loaded plugin.) on line #2 of vendor/plugins/idlysphere-redmine_importer-7a19e8d/app/views/importer/match.html.erb:
+1: &lt;% content_for :header_tags do %&gt;
+2:     &lt;%= stylesheet_link_tag 'importer', :plugin =&gt; 'redmine_importer' %&gt;
+3: &lt;% end %&gt;
+4:
+5: &lt;h2&gt;&lt;%= l(:label_match_columns) %&gt;&lt;/h2&gt;
+
+    vendor/plugins/idlysphere-redmine_importer-7a19e8d/app/views/importer/match.html.erb:2
+    app/helpers/application_helper.rb:764:in `content_for'
+    vendor/plugins/idlysphere-redmine_importer-7a19e8d/app/views/importer/match.html.erb:1
+    /usr/local/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/local/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/local/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/local/lib/ruby/1.8/webrick/server.rb:162:in `start'
+    /usr/local/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/local/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/local/lib/ruby/1.8/webrick/server.rb:92:in `each'
+    /usr/local/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/local/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/local/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering /usr/local/redmine-1.0.0/public/500.html (500 Internal Server Error)</pre>
+<p>redmine_importerが呼ばれていないようだ。いろいろ変えて判明した原因としては、このエラープラグインフォルダ名が「redmine_importer」になってなかったかららしい。</p>
+<h1>原因</h1>
+<p>なんでこんなエラー出したかというと、GitHubからソースを落としてくると「ユーザ名-プロジェクト名-リビジョン」というフォルダ名(？)になるのだが、これをそのままvendor/plugin下に突っ込んでしまったためredmine_importerがないといわれているようだ。リネームしてから移動することで解決する？</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/04/1323009249" title="複数のRuby環境の管理・切替ができるrvmをインストールした">
+          複数のRuby環境の管理・切替ができるrvmをインストールした
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/06/1323186439" title="UnixでストリーミングファイルをDLしたい">
+          UnixでストリーミングファイルをDLしたい
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/12/05/1323092947" data-text="kk_Atakaの日記 - RedmineでプラグインインストールしたらTemplateErrorが出た" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/05/1323092947/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/05/1323092947/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/05/1323092947/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - RedmineでプラグインインストールしたらTemplateErrorが出た"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/12/05/1323092947/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Redmineインストール備忘録(Windows) - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Redmineインストール備忘録(Windows)</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Redmine">Redmine</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/05/01</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/04/23/1303489798" title="さくらVPSにDropboxをインストールした">
+          さくらVPSにDropboxをインストールした
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/05/17/1305560776" title="MicrosoftOutlookのメールをRubyで操作する！">
+          MicrosoftOutlookのメールをRubyで操作する！
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>参考サイト</h1>
+<ul><li><a href="http://redmine.jp/tech_note/install/">http://redmine.jp/tech_note/install/</a></li></ul>
+<h1>OSとRubyとか</h1>
+<ul><li>OSはWindows XP</li><li>Ruby, RubyGemsインストール済み</li><li>DBはSQLite3にする</li></ul>
+<h1>必要なものをDL, インストール</h1>
+<ul><li>GemでRailsをインストール</li></ul>
+<pre class="">&gt;gem install rails</pre>
+<ul><li>同じくsqlite3をインストール<ul><li>最新のsqlite3-ruby(1.2.4)ではなく、1.2.3を指定<span class="footnote"><a href="#f1" title="http://redmine.ruby-lang.org/issues/1097" name="fn1">*1</a></span></li></ul></li></ul>
+<pre class="">&gt;gem install sqlite3-ruby --version '= 1.2.3'</pre>
+<ul><li><a href="http://www.sqlite.org/download.html">SQLite Download Page</a> でSQLite3のdllをDLしC:\WINDOWS\system32(パスが通ってるところ)にコピー<ul><li>コマンドラインから動かす予定はないのでexeは落とさない</li></ul></li></ul>
+<ul><li><a href="http://rubyforge.org/frs/?group_id=1850">RubyForge: Redmine: Project Filelist</a> でRedmineをDLし解凍</li></ul>
+<h1>各種設定</h1>
+<ul><li>Redmineフォルダ内のconfig/database.ymlを作成し<span class="footnote"><a href="#f2" title="確かサンプルファイルがあったはず。" name="fn2">*2</a></span>、最低限下記のように編集</li></ul>
+<p>>|??|</p>
+<p>production:</p>
+<p>	adapter: sqlite3		# SQLite3を指定</p>
+<p>	database: db/redmine.db	# DB名は任意</p>
+<p>	timeout: 5000		# タイムアウト時間</p>
+<table><tr><td><</td></tr></table>
+<ul><li>config/initializers/session_store.rb作成</li></ul>
+<pre class="">&gt;rake generate_session_store</pre>
+<ul><li>DBの初期化</li></ul>
+<pre class="">&gt;rake db:migrate RAILS_ENV=production
+&gt;rake redmine:load_default_data RAILS_ENV=production</pre>
+<ul><li>…が、ここでエラー<ul><li>rackバージョンが1.2.2はダメ、1.0.1にしてって事らしい</li></ul></li></ul>
+<pre class="">rake aborted!
+RubyGem version error: rack(1.2.2 not ~&gt; 1.0.1)</pre>
+<ul><li>バージョン指定してインストールし直し、再度DBの初期化を実行</li></ul>
+<pre class="">&gt;gem uninstall rack
+&gt;gem install rack -v=1.0.1</pre>
+<ul><li>2つ目のコマンド実行時、途中で言語を求められるのでjaを指定</li></ul>
+<pre class="">(略)
+Select language: bg, bs, ca, cs, da, de, el, en, en-GB, es, eu, fi, fr, gl, he,
+hr, hu, id, it, ja, ko, lt, lv, mk, mn, nl, no, pl, pt, pt-BR, ro, ru, sk, sl, s
+r, sr-YU, sv, th, tr, uk, vi, zh, zh-TW [en]</pre>
+<h1>起動</h1>
+<pre class="">&gt;ruby script\server -e production</pre>
+<p>というわけで、一人でRedmine使ってみる。</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: http://redmine.ruby-lang.org/issues/1097</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: 確かサンプルファイルがあったはず。</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/04/23/1303489798" title="さくらVPSにDropboxをインストールした">
+          さくらVPSにDropboxをインストールした
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/05/17/1305560776" title="MicrosoftOutlookのメールをRubyで操作する！">
+          MicrosoftOutlookのメールをRubyで操作する！
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/05/01/1304204171" data-text="kk_Atakaの日記 - Redmineインストール備忘録(Windows)" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/05/01/1304204171/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/05/01/1304204171/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/05/01/1304204171/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Redmineインストール備忘録(Windows)"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/05/01/1304204171/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Sphinxの見出しについて学びなおし - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Sphinxの見出しについて学びなおし</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#reST">reST</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Sphinx">Sphinx</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/08/16</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/07/17/1342535044" title="Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり)">
+          Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり)
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/08/17/1345209899" title="Fluentdのプラグインを作成してみる(練習用)">
+          Fluentdのプラグインを作成してみる(練習用)
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<ul><li><a href="2011-12-02-1322839748">2011-12-02-1322839748</a>で見出しの理解が間違っている事をSphinx 初心者 さんに教えてもらった</li><li>もう一度ドキュメントを見なおしてみる事に</li></ul>
+<h1>参考サイト</h1>
+<ul><li><a href="http://sphinx.shibu.jp/rest.html#id9">reStructuredText入門 — Sphinx v1.0 (hg) documentation</a></li><li><a href="http://docutils.sourceforge.net/docs/user/rst/quickstart.html#sections">A ReStructuredText Primer</a></li></ul>
+<h1>見出し周辺を読み直し</h1>
+<blockquote><p>セクションのヘッダは、セクションのタイトルを句読点などの記号の文字でアンダーラインを引くことで設定します。必要に応じてでオーバーラインも併用することができます。</p></blockquote>
+<blockquote><p>使用していない種類のアンダーラインが出てくると、見出しのレベルが一段変わる、というルールになっています。</p></blockquote>
+<blockquote><p>. These are a single line of text (one or more words) with adornment: an underline alone, or an underline and an overline together, in dashes "-----", equals "======", tildes "~~~~~~" or any of the non-alphanumeric characters = - ` : ' " ~ ^ _ * + # < > that you feel comfortable with.</p></blockquote>
+<p>つまり……</p>
+<ul><li>英数字以外の記号でアンダーラインを引くとセクションヘッダ<ul><li>アンダーラインとオーバーラインで囲むのも別の定義として判断される</li><li>己がしっくりくるものを選んでよい</li></ul></li><li>初めて出てきた順に見出しレベルが割り当てられる</li></ul>
+<h1>確認</h1>
+<p>Pythonドキュメント慣例にならってこういうソースを書くと、</p>
+<pre class="">##################
+上下 # 部
+##################
+
+ここは上下 # で囲った部の文章。
+
+下 # 部
+##############
+
+ここは下 # で囲った部の文章。
+
+*******************
+上下 * 章
+*******************
+
+ここは上下 * で囲った章の文章。
+
+下 * 章
+*******************
+
+ここは下 * で囲った章の文章。
+
+===========================
+上下 = セクション
+===========================
+
+ここは上下 = で囲ったセクションの文章。
+
+下 = セクション
+===========================
+
+ここは下 = で囲ったセクションの文章。
+
+---------------------------
+上下 - サブセクション
+---------------------------
+
+ここは上下 - で囲ったサブセクションの文章。
+
+下 - サブセクション
+---------------------------
+
+ここは下 - で囲ったサブセクションの文章。
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+上下 ^ サブサブセクション
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ここは上下 ^ で囲ったサブサブセクションの文章。
+
+下 ^ サブサブセクション
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ここは下 ^ で囲ったサブサブセクションの文章。
+
+&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;
+上下 &quot; パラグラフ
+&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;
+
+ここは上下 &quot; で囲ったパラグラフの文章。
+
+下 &quot; パラグラフ
+&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;
+
+ここは下 &quot; で囲ったパラグラフの文章。</pre>
+<p>htmlはこう生成される。</p>
+<pre class="html">&lt;h1&gt;上下 # 部&lt;a class=&quot;headerlink&quot; href=&quot;#id1&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;ここは上下 # で囲った部の文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id2&quot;&gt;
+&lt;h2&gt;下 # 部&lt;a class=&quot;headerlink&quot; href=&quot;#id2&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;ここは下 # で囲った部の文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id3&quot;&gt;
+&lt;h3&gt;上下 * 章&lt;a class=&quot;headerlink&quot; href=&quot;#id3&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;ここは上下 * で囲った章の文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id4&quot;&gt;
+&lt;h4&gt;下 * 章&lt;a class=&quot;headerlink&quot; href=&quot;#id4&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h4&gt;
+&lt;p&gt;ここは下 * で囲った章の文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id5&quot;&gt;
+&lt;h5&gt;上下 = セクション&lt;a class=&quot;headerlink&quot; href=&quot;#id5&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h5&gt;
+&lt;p&gt;ここは上下 = で囲ったセクションの文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id6&quot;&gt;
+&lt;h6&gt;下 = セクション&lt;a class=&quot;headerlink&quot; href=&quot;#id6&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h6&gt;
+&lt;p&gt;ここは下 = で囲ったセクションの文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id7&quot;&gt;
+&lt;h7&gt;上下 - サブセクション&lt;a class=&quot;headerlink&quot; href=&quot;#id7&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h7&gt;
+&lt;p&gt;ここは上下 - で囲ったサブセクションの文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id8&quot;&gt;
+&lt;h8&gt;下 - サブセクション&lt;a class=&quot;headerlink&quot; href=&quot;#id8&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h8&gt;
+&lt;p&gt;ここは下 - で囲ったサブセクションの文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id9&quot;&gt;
+&lt;h9&gt;上下 ^ サブサブセクション&lt;a class=&quot;headerlink&quot; href=&quot;#id9&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h9&gt;
+&lt;p&gt;ここは上下 ^ で囲ったサブサブセクションの文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id10&quot;&gt;
+&lt;h10&gt;下 ^ サブサブセクション&lt;a class=&quot;headerlink&quot; href=&quot;#id10&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h10&gt;
+&lt;p&gt;ここは下 ^ で囲ったサブサブセクションの文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id11&quot;&gt;
+&lt;h11&gt;上下 &amp;#8221; パラグラフ&lt;a class=&quot;headerlink&quot; href=&quot;#id11&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h11&gt;
+&lt;p&gt;ここは上下 &amp;#8221; で囲ったパラグラフの文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id12&quot;&gt;
+&lt;h12&gt;下 &amp;#8221; パラグラフ&lt;a class=&quot;headerlink&quot; href=&quot;#id12&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h12&gt;
+&lt;p&gt;ここは下 &amp;#8221; で囲ったパラグラフの文章。&lt;/p&gt;</pre>
+<p>まあ、h12まであるページとか見たことないんだけど、新しいものを定義し続けるとどんどん深くなる。</p>
+<p>ここでソースを以下のように編集。がっつりカットしつつ、適当に数個残し。あと<<<で新しいセクションを定義してみた。</p>
+<pre class="">  # 部
+##############
+
+ここは下 # で囲った部の文章。
+
+*******************
+上下 * 章
+*******************
+
+ここは上下 * で囲った章の文章。
+
+下 - サブセクション
+---------------------------
+
+ここは下 - で囲ったサブセクションの文章。
+
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+新しく作った
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+&lt;&lt;&lt;&lt;&lt;で新しくセクションを作ってみた。</pre>
+<p>htmlはこう生成される。</p>
+<pre class="html">&lt;h1&gt;下 # 部&lt;a class=&quot;headerlink&quot; href=&quot;#id1&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;ここは下 # で囲った部の文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id2&quot;&gt;
+&lt;h2&gt;上下 * 章&lt;a class=&quot;headerlink&quot; href=&quot;#id2&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;ここは上下 * で囲った章の文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id3&quot;&gt;
+&lt;h3&gt;下 - サブセクション&lt;a class=&quot;headerlink&quot; href=&quot;#id3&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;ここは下 - で囲ったサブセクションの文章。&lt;/p&gt;
+&lt;div class=&quot;section&quot; id=&quot;id4&quot;&gt;
+&lt;h4&gt;新しく作った&lt;a class=&quot;headerlink&quot; href=&quot;#id4&quot; title=&quot;Permalink to this headline&quot;&gt;¶&lt;/a&gt;&lt;/h4&gt;
+&lt;p&gt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;で新しくセクションを作ってみた。&lt;/p&gt;</pre>
+<p>うーんなるほど。</p>
+<p>ちゃんとドキュメント読まず、他の記法と同じノリでこれはこの見出しって決めつけてしまっていた！</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/07/17/1342535044" title="Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり)">
+          Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり)
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/08/17/1345209899" title="Fluentdのプラグインを作成してみる(練習用)">
+          Fluentdのプラグインを作成してみる(練習用)
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/08/16/1345124098" data-text="kk_Atakaの日記 - Sphinxの見出しについて学びなおし" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/08/16/1345124098/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/08/16/1345124098/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/08/16/1345124098/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Sphinxの見出しについて学びなおし"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/08/16/1345124098/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

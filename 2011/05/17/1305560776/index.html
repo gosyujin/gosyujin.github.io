@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>MicrosoftOutlookのメールをRubyで操作する！ - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>MicrosoftOutlookのメールをRubyで操作する！</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/05/17</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/05/01/1304204171" title="Redmineインストール備忘録(Windows)">
+          Redmineインストール備忘録(Windows)
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/06/26/1309044393" title="PythonでCOBOLファイルの行頭に連番をふる">
+          PythonでCOBOLファイルの行頭に連番をふる
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<ol><li>職場のメールはMicrosoftOutlook…添付ファイルとかメール本文を手動で保存するだけの簡単なお仕事がめんどいのでマクロを作った</li><li>ある日、なんか共通マクロを適用してくださいねとか通達がきたので適用した(今まで使っていた自分のマクロは退避した)</li><li>新マクロにはご丁寧にパスワードがかけられていた…編集不可／(^o^)＼</li><li>Outlookからマクロを実行するのは諦めて外部からメールを操作しよう…<span class="footnote"><a href="#f1" title="もしかしたらググッたら打開策があるのかもしれない。" name="fn1">*1</a></span></li><li>Rubyでできないかな？　…win32oleというものがあるらしい！←今ここ</li></ol>
+<h1>参考サイト</h1>
+<ul><li><a href="http://jp.rubyist.net/magazine/?0007-Win32OLE">Rubyist Magazine - Win32OLE 活用法 【第 5 回】 Outlook</a></li></ul>
+<p>ドンピシャでした。</p>
+<h1>やりたい事</h1>
+<ul><li>メール本文を保存したい(ファイル名は件名.txt)</li><li>添付ファイルを保存したい(ファイル名は添付ファイル名のまま)</li><li>上記のファイルをYYYYMMDD_添付ファイル名(拡張子なし)フォルダの中へ格納</li><li>保存場所はマイドキュメントかデスクトップ</li></ul>
+<p>こんな感じ</p>
+<pre class="">[メール]
+件名:subsubject
+添付ファイル:tmptmpfile.zip
+
+↓ダウンロード
+
+[マイドキュメント]
+└[YYYYMMDD_tmptmpfile]
+　├tmptmpfile.zip
+　└subsubject.txt</pre>
+<h1>手順</h1>
+<p>まずソースはこんな感じ。GitHubは <a href="https://github.com/gosyujin/outlook_for_ruby">gosyujin/outlook_for_ruby · GitHub</a></p>
+<pre class="ruby"># -*- encoding: UTF-8 -*-
+require &quot;win32ole&quot;
+
+# 保存ディレクトリ基準。一応マイドキュメントへ
+SaveRootPath = &quot;#{ENV[&quot;USERPROFILE&quot;]}\\My Documents&quot;
+
+class Outlook
+	def initialize
+		# Outlookに接続
+		ol = WIN32OLE::connect(&quot;Outlook.Application&quot;)
+		# NameSpace取得(getNameSpaceの引数は&quot;MAPI&quot;のみ)
+		@nameSpace = ol.getNameSpace(&quot;MAPI&quot;)
+	end
+
+	# EntryIDを元にメールを取得	
+	def mail(entryId)
+		item = @nameSpace.GetItemFromID(entryId)
+		return item
+	end
+	
+	# メールの一覧を取得
+	def mails
+		# GetDefaultFolder(6)は受信トレイ
+		folder = @nameSpace.GetDefaultFolder(6)
+		folder.Items.each do |mail|
+			GC.start
+			yield mail
+		end
+	end	
+end
+
+outlook = Outlook.new
+# メールのタイトル、送信日時、EntryID一欄を表示
+outlook.mails do |mail|
+	#puts &quot;To     :#{mail.To}&quot;
+	puts &quot;#{mail.SentOn} | #{mail.Subject.unpack(&quot;a50&quot;)}&quot;
+	puts &quot;#{mail.EntryID}&quot;
+end
+
+# 入力待ち。保存したいメールのEntryIdを貼りつけ
+mail = outlook.mail(STDIN.gets.chomp)
+#puts mail.Attachments.ole_methods
+#puts mail.Attachments.Item(1).ole_methods
+
+# 添付ファイルのファイル名を取得
+file = mail.Attachments.Item(1).FileName
+# RootPath下に添付ファイル名のディレクトリ作成
+SaveDir = &quot;#{SaveRootPath}\\#{file.split(&quot;.&quot;)[0]}&quot;
+Dir.mkdir(SaveDir)
+
+# 添付ファイル保存
+mail.Attachments.Item(1).SaveAsFile(&quot;#{SaveDir}\\#{file}&quot;)
+
+# ディレクトリ下にタイトル.txtファイルを作成し送信者、タイトル、本文を書きこむ
+File.open(&quot;#{SaveDir}\\#{mail.Subject}.txt&quot;, &quot;w&quot;) do |file|
+	file.write &quot;SENDER      : #{mail.SenderName}(#{mail.SenderEmailAddress})\n&quot;
+	file.write &quot;TO          : #{mail.To}\n&quot;
+	file.write &quot;CC          : #{mail.CC}\n&quot;
+	file.write &quot;ReceivedTime: #{mail.SentOn}\n&quot;
+	file.write &quot;SUBJECT     : #{mail.Subject}\n&quot;
+	file.write &quot;BODY: \n#{mail.Body}\n&quot;
+end</pre>
+<p>基本的に参考サイトの「Ruby から Outlook を操作する」の章の通りに進めば、まず受信トレイの一覧を取ってこれるまではいけます。詰まったのは添付ファイルの扱い…Attachmentsオブジェクトの扱い方でした。</p>
+<ul><li>まず、自作のOutlook#mailを呼び出し特定のメールを取得します。(EntryIDを元に)</li></ul>
+<pre class="ruby">	# EntryIDを元にメールを取得	
+	def mail(entryId)
+		item = @nameSpace.GetItemFromID(entryId)
+		return item
+	end</pre>
+<ul><li>このメールオブジェクトにAttachmentsが。そしてAttachments.Item(number)に添付ファイルが格納されているようです。Itemのnumberは1から始まっている？　0だとエラーが出たような…。</li><li>Item(number)#FileNameで添付ファイル名が、Item(number)#SaveAsFile(path)で添付ファイルの保存ができました。この辺り。</li></ul>
+<pre class="ruby">file = mail.Attachments.Item(1).FileName
+# RootPath下に添付ファイル名のディレクトリ作成
+SaveDir = &quot;#{SaveRootPath}\\#{file.split(&quot;.&quot;)[0]}&quot;
+Dir.mkdir(SaveDir)
+
+# 添付ファイル保存
+mail.Attachments.Item(1).SaveAsFile(&quot;#{SaveDir}\\#{file}&quot;)</pre>
+<h1>まとめ</h1>
+<ul><li>メール本文を保存したい(ファイル名は件名.txt)<ul><li>とりあえずできた</li></ul></li><li>添付ファイルを保存したい(ファイル名は添付ファイル名のまま)<ul><li>とりあえずできた</li></ul></li><li>上記のファイルをYYYYMMDD_添付ファイル名(拡張子なし)フォルダの中へ格納<ul><li>YYYYMMDD付加はまだ、フォルダはできた</li></ul></li><li>保存場所はマイドキュメントかデスクトップ<ul><li>マイドキュメントに保存はできた</li></ul></li></ul>
+<h1>TODO</h1>
+<ul><li>フォルダ名先頭にYYYYMMDD</li><li>フォルダ名に使用できない文字を全角に置換</li><li>フォルダ存在時の対処</li><li>デスクトップに保存したい</li></ul>
+<p>穴だらけだしまだわからない事も多いけど、とりあえず動く所までは行けた！　ので続く。</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: もしかしたらググッたら打開策があるのかもしれない。</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/05/01/1304204171" title="Redmineインストール備忘録(Windows)">
+          Redmineインストール備忘録(Windows)
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/06/26/1309044393" title="PythonでCOBOLファイルの行頭に連番をふる">
+          PythonでCOBOLファイルの行頭に連番をふる
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/05/17/1305560776" data-text="kk_Atakaの日記 - MicrosoftOutlookのメールをRubyで操作する！" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/05/17/1305560776/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/05/17/1305560776/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/05/17/1305560776/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - MicrosoftOutlookのメールをRubyで操作する！"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/05/17/1305560776/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

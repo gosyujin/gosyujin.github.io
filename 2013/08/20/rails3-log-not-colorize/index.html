@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Rails3のログ出力にANSIカラーコードを使用しない設定 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Rails3のログ出力にANSIカラーコードを使用しない設定</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Rails">Rails</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Redmine">Redmine</a> ]</i>
+          
+        
+        
+          <span>Published: 2013/08/20</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/08/09/redmine2.3-install-and-plugin" title="WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ">
+          WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/08/21/sphinx-install-python-proxy" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話">
+          Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#環境'>環境</a></li><li><a href='#参考サイト'>参考サイト</a></li><ul><li><a href='#ansiカラーというコードを使用されている'>ANSIカラーというコードを使用されている</a></li><li><a href='#この現象自体を止めるには'>この現象自体を止めるには</a></li><li><a href='#windows(コマンドプロンプト)でもansiカラー(未実施)'>Windows(コマンドプロンプト)でもANSIカラー(未実施)</a></li></ul><li><a href='#ansiカラー'>ANSIカラー</a></li><li><a href='#無効化するには'>無効化するには</a></li></ul></ul><!-- end of tree list --></div>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>WindowsでRails(Redmine)を実行した時のログが超見づらいのはなんで？</p>
+
+<p>こんな風になる。helloと表示されるはずの場合。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">[31mhello[0m</span></code></pre></div>
+
+<p>何とかしたい。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Windows 7</li>
+<li>Rails 3.2</li>
+</ul>
+
+<h2 id="参考サイト">参考サイト</h2>
+
+<h3 id="ansiカラーというコードを使用されている">ANSIカラーというコードを使用されている</h3>
+
+<ul>
+<li><a href="http://melborne.github.io/2010/11/07/Ruby-ANSI/">RubyでANSIカラーシーケンスを学ぼう！</a></li>
+<li><a href="http://hatenaclang.blogspot.jp/2011/03/ansi.html">謎のC言語ブログ: ANSI標準エスケープシーケンス</a></li>
+</ul>
+
+<h3 id="この現象自体を止めるには">この現象自体を止めるには</h3>
+
+<ul>
+<li><a href="http://qiita.com/nekoruri/items/3dc559949b1ece85962a">Ruby - Rails3でログの色分けを止める - Qiita [キータ]</a></li>
+<li><a href="http://railsdoc.com/config#%E3%83%AD%E3%82%B0%E3%82%92%E5%87%BA%E5%8A%9B%E3%81%99%E3%82%8B%E3%81%A8%E3%81%8D%E3%81%AB%E3%82%AB%E3%83%A9%E3%83%BC%E3%81%AB%E3%81%99%E3%82%8B%E3%81%8B%28config.colorize_logging%29">設定ファイル(config) - Railsドキュメント</a></li>
+</ul>
+
+<h3 id="windows-コマンドプロンプト-でもansiカラー-未実施">Windows(コマンドプロンプト)でもANSIカラー(未実施)</h3>
+
+<ul>
+<li><a href="http://rubyist.g.hatena.ne.jp/yyamasak/20100106">WindowsのコマンドプロンプトでRailsのログをカラー表示する - yyamasakの日記 - Rubyist</a></li>
+<li><a href="http://homepage2.nifty.com/LM/kurogam/w2k-ansi.htm">Windows ansi.sys</a></li>
+<li><a href="http://www.moongift.jp/2011/01/20110102-2/">WindowsのコマンドプロンプトでもANSIカラーを使いたい「wac」｜オープンソース・ソフトウェア、ITニュースを毎日紹介するエンジニア、デザイナー向けブログ</a></li>
+</ul>
+
+<h2 id="ansiカラー">ANSIカラー</h2>
+
+<ul>
+<li>ターミナルにおいて、文字に色を付けるためのエスケープシーケンスみたい</li>
+<li>ソースコード上には <code>print &quot;\e[31mhello\e[0m&quot;</code> こう記載されている
+
+<ul>
+<li><code>\e[xxm</code> がコード</li>
+<li><code>31</code> は文字色を赤に</li>
+<li><code>0</code> は終われ</li>
+<li>コードによって文字色、背景色、装飾をいじることができる</li>
+</ul></li>
+</ul>
+
+<p>で、Rail3はこれに対応しているので、UnixとかMacとかだとログが色分けされ美しく表示されるようになっている。(あとCygwinでもいけるっぽい)</p>
+
+<p>そういえば、さくらVPS上(CentOS)でRailsを実行している時は奇麗だったんだよな思い出してみれば。</p>
+
+<h2 id="無効化するには">無効化するには</h2>
+
+<p>Windowsでも色つけができる(参考サイト参照)ようだが、めんどいので無効化する方向で。</p>
+
+<p><code>REDMINE/config/application.rb</code> に以下の記述を追加。</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">config</span><span class="o">.</span><span class="n">colorize_logging</span> <span class="o">=</span> <span class="kp">false</span></code></pre></div>
+
+<p>特定環境のみとかの設定もできるが、とりあえずオールオフで。</p>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/08/09/redmine2.3-install-and-plugin" title="WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ">
+          WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/08/21/sphinx-install-python-proxy" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話">
+          Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/08/20/rails3-log-not-colorize" data-text="kk_Atakaの日記 - Rails3のログ出力にANSIカラーコードを使用しない設定" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/20/rails3-log-not-colorize/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/08/20/rails3-log-not-colorize/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/20/rails3-log-not-colorize/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Rails3のログ出力にANSIカラーコードを使用しない設定"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2013/08/20/rails3-log-not-colorize/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

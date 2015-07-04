@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Git">Git</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/04/24</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/23/1335185906" title="Pro Gitと入門Gitと入門gitと実用GitとGit道場#1でGitの復習 rebase編">
+          Pro Gitと入門Gitと入門gitと実用GitとGit道場#1でGitの復習 rebase編
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/04/28/1335575351" title="BPStudy#57に参加しました #bpstudy">
+          BPStudy#57に参加しました #bpstudy
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<ul><li><a href="2012-03-05-1330951640">2012-03-05-1330951640</a></li><li><a href="2012-03-11-1331472478">2012-03-11-1331472478</a></li><li><a href="2012-03-15-1331816663">2012-03-15-1331816663</a></li><li><a href="2012-04-10-1334058674">2012-04-10-1334058674</a></li><li><a href="2012-04-23-1335185906">2012-04-23-1335185906</a></li></ul>
+<h1>参考</h1>
+<ul><li><a href="http://progit.org/">Git - Book</a></li><li>入門Git</li><li>入門git</li><li>実用Git</li></ul>
+<h1>無名ブランチ(detached HEAD)とは</h1>
+<p>要約すると<span class="deco" style="font-weight:bold;">「過去のコミットの状態を眺めるための"便利機能"なのでここに永続的な変更をするなんてとんでもない！」</span>という事らしい。</p>
+<h2>無名ブランチ状態で作業するとどうなるか</h2>
+<p>ちょっと「ブランチにいると思いこんだまま無名ブランチで作業し、さーてmasterブランチに戻ってmergeするかぁ……はぁ！？」な状況を作り出してみる。</p>
+<p>まずは無名ブランチの準備としてnobraブランチを作る。(これ以降の作業は、本当はnobraブランチでやっていきたいと思っている)</p>
+<pre class="">$ git checkout -b nobra
+Switched to a new branch 'nobra'
+
+$ touch nobra
+$ git add nobra
+$ git commit -m &quot;Add nobra&quot;
+[nobra d62e4cb] Add nobra
+ 0 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 nobra
+
+$ git g
+ * d62e4cb  (HEAD, nobra, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit
+
+$ git br
+   master d62e4cb Add nobra
+ * nobra  d62e4cb Add nobra
+   topic  7ab5db8 Add message line 3</pre>
+<p>次に、このnobraブランチのSHA1を指定してcheckoutする。</p>
+<pre class="">$ git ch d62e4cb
+Note: checking out 'd62e4cb'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b new_branch_name
+
+HEAD is now at d62e4cb... Add nobra</pre>
+<p>detached HEAD状態だよと教えてくれているようだ。このリビジョンのファイル一覧？　を見渡したり、実験的な変更やコミットができる。チェックアウトすれば他のブランチに影響を与えすにこの状態を作れる。変更を保持するために新しいブランチを作りたいなら、checkoutコマンドに-bつけて実行すればいいよ……って感じなのかな。ブランチはno branchと表示される。</p>
+<pre class="">$ git br
+ * (no branch) d62e4cb Add nobra
+   master      d62e4cb Add nobra
+   nobra       d62e4cb Add nobra
+   topic       7ab5db8 Add message line 3</pre>
+<p>この無名ブランチに対し変更をコミット。</p>
+<pre class="">$ echo &quot;no branch&quot; &gt;&gt; nobra
+$ git add nobra
+$ git com &quot;Add message nobra&quot;
+[detached HEAD e45c786] Add message nobra
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+ 
+$ echo &quot;detached HEAD&quot; &gt;&gt; nobra
+$ git add nobra
+$ git com &quot;Add message nobra&quot;
+[detached HEAD 3aec83c] Add message nobra
+ 1 files changed, 1 insertions(+), 0 deletions(-)</pre>
+<p>グラフで見るとe45c786, 3aec83cがもくもくと作られている。</p>
+<pre class="">$ git g
+ * 3aec83c  (HEAD) Add message nobra
+ * e45c786  Add message nobra
+ * d62e4cb  (nobra, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit</pre>
+<p>さーて、masterにもどって変更をmergeするかー。<span class="footnote"><a href="#f1" title="このPrevious HEAD position was ...というメッセージは無名ブランチからチェックアウトしないと表示されないようだ" name="fn1">*1</a></span></p>
+<pre class="">$ git checkout master
+Previous HEAD position was 3aec83c... Add message nobra
+Switched to branch 'master'</pre>
+<p>グラフを確認するとd62e4cb(masterブランチ)が先頭になっている……だと……。</p>
+<pre class="">$ git g
+ * d62e4cb  (HEAD, nobra, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit</pre>
+<p>さっきの変更どこいったんだ！　</p>
+<h2>無名ブランチの救出</h2>
+<p>コンソールを上へ上へ辿って行けばもしかしたら作業ログが残っていて、そこから無名ブランチになってしまったコミットを特定できるかもしれないけど、ここではgit reflogを使って救済してみる。</p>
+<pre class="">$ git reflog
+...
+d62e4cb HEAD@{6}: checkout: moving from 3aec83cdbfea0b1e96cf3c48937ab84eae1f4ec0 to nobra
+3aec83c HEAD@{7}: commit: Add message nobra
+e45c786 HEAD@{8}: commit: Add message nobra
+...</pre>
+<p>見えなくなってしまったコミットは(今は)HEAD@{7}にあった！(checkoutしたりcommitすれば1ずつログがずれるから)　という事で、この変更が必要だった場合は、ここからトピックブランチでも作成して救出してやればよい。</p>
+<pre class="">$ git g
+ * d62e4cb  (HEAD, nobra, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit</pre>
+<p>reflogで消えたコミットを確認する。</p>
+<pre class="">$ git reflog
+...
+d62e4cb HEAD@{8}: checkout: moving from 3aec83cdbfea0b1e96cf3c48937ab84eae1f4ec0 to nobra
+3aec83c HEAD@{9}: commit: Add message nobra
+e45c786 HEAD@{10}: commit: Add message nobra
+d62e4cb HEAD@{11}: checkout: moving from nobra to d62e4cb</pre>
+<p>今はHEAD@{9}になっている。nobraブランチをうつしちゃおう。(新しいブランチを作成してもよい)</p>
+<pre class="">$ git branch --f nobra HEAD@{9}
+
+$ git g
+ * 3aec83c  (nobra) Add message nobra
+ * e45c786  Add message nobra
+ * d62e4cb  (HEAD, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit</pre>
+<p>3aec..が見えるようになった！　で、merge。</p>
+<pre class="">$ git merge nobra
+Updating d62e4cb..3aec83c
+Fast-forward
+ nobra |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+$ git g
+ * 3aec83c  (HEAD, nobra, master) Add message nobra
+ * e45c786  Add message nobra
+ * d62e4cb  Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit</pre>
+<p>救出完了！</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: このPrevious HEAD position was ...というメッセージは無名ブランチからチェックアウトしないと表示されないようだ</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/23/1335185906" title="Pro Gitと入門Gitと入門gitと実用GitとGit道場#1でGitの復習 rebase編">
+          Pro Gitと入門Gitと入門gitと実用GitとGit道場#1でGitの復習 rebase編
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/04/28/1335575351" title="BPStudy#57に参加しました #bpstudy">
+          BPStudy#57に参加しました #bpstudy
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/04/24/1335270486" data-text="kk_Atakaの日記 - Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/24/1335270486/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/04/24/1335270486/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/24/1335270486/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/04/24/1335270486/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

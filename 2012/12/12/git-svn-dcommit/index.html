@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>git-svnインストールからgit svn dcommit完了までの手順 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>git-svnインストールからgit svn dcommit完了までの手順</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Git">Git</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Subversion">Subversion</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/12/12</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/11/12/from-hatena-to-jekyll" title="はてなダイアリーのエントリをJekyllへ移行する">
+          はてなダイアリーのエントリをJekyllへ移行する
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/12/25/ruby-memo" title="メモ化を知った">
+          メモ化を知った
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#環境'>環境</a></li><li><a href='#手順'>手順</a></li><ul><li><a href='#perl(svn::core)'>perl(SVN::Core)</a></li><li><a href='#perl(term::readkey)'>perl(Term::ReadKey)</a></li></ul><li><a href='#動作確認'>動作確認</a></li></ul></ul><!-- end of tree list --></div>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>CentOSのインストール時に入れたGitにはgit-svnが入っていない(？)ので、一から入れようとしたが、ネットに繋がっていない環境だと結構依存とかがめんどくさかったのでメモ。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>CentOS 6.2</li>
+<li>Git 1.7.1
+
+<ul>
+<li>git は入っているが、git svnは実行できない</li>
+</ul></li>
+</ul>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git svn 
+<span class="go">git: &#39;svn&#39; is not a git command. See &#39;git --help&#39;.</span></code></pre></div>
+
+<ul>
+<li>svn 1.6.11 (r934486)</li>
+<li>ネットにつながっていないぼっち環境</li>
+</ul>
+
+<p>yumとかで入れられると一発っぽいんだけどなー。</p>
+
+<h2 id="手順">手順</h2>
+
+<p>まずは、git-svnのrpmをDLしてくる。</p>
+
+<ul>
+<li><a href="http://rpmfind.net/linux/rpm2html/search.php?query=git-svn">RPM resource git-svn</a></li>
+</ul>
+
+<p>インストールしたいPCに持ってきて、rpmコマンド。 <code>perl(SVN::Core)</code> と、 <code>perl(Term:ReadKey)</code> がないと言われる。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> rpm -ivh git-svn-1.7.1-2.el6_0.1.noarch.rpm
+<span class="go">警告: git-svn-1.7.1-2.el6_0.1.noarch.rpm: ヘッダ V3 RSA/SHA256 Signature, key ID c105b9de: NOKEY</span>
+<span class="go">エラー: 依存性の欠如:</span>
+<span class="go">        perl(SVN::Core) は git-svn-1.7.1-2.el6_0.1.noarch に必要とされています</span>
+<span class="go">        perl(Term::ReadKey) は git-svn-1.7.1-2.el6_0.1.noarch に必要とされています</span></code></pre></div>
+
+<h3 id="perl-svn-core">perl(SVN::Core)</h3>
+
+<p>SVN::Coreは <code>subversion-perl</code> というパッケージから入れられるよう。</p>
+
+<ul>
+<li><a href="http://d.hatena.ne.jp/init9/20080709/1215571342">SVN::Core は subversion-perl に入っている - init9の日記</a></li>
+<li><a href="http://rpm.pbone.net/index.php3/stat/4/idpl/18080007/dir/centos_5/com/subversion-perl-1.6.11-10.el5_8.i386.rpm.html">RPM CentOS 5 subversion-perl 1.6.11 i386 rpm</a></li>
+</ul>
+
+<p>subversion-perlをDLしてインストール。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> rpm -ivh subversion-perl-1.6.11-7.el6.i686.rpm
+<span class="go">警告: subversion-perl-1.6.11-7.el6.i686.rpm: ヘッダ V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY</span>
+<span class="go">エラー: 依存性の欠如:</span>
+<span class="go">        subversion = 1.6.11-7.el6 は subversion-perl-1.6.11-7.el6.i686 に必要と されています</span></code></pre></div>
+
+<p>あれ？Subversion入ってるのに見つけられてない？Subversionを入れ直してみる？</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> rpm -ivh subversion-1.6.11-7.el6.i686.rpm
+<span class="go">警告: subversion-1.6.11-7.el6.i686.rpm: ヘッダ V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY</span>
+<span class="go">準備中...                ########################################### [100%]</span>
+<span class="go">        ファイル /usr/bin/svnserve (パッケージ subversion-1.6.11-7.el6.i686 から) は、パッケージ subversion-1.6.11-2.el6_1.4.i686 からのファイルと競合しています。</span>
+<span class="go">略</span></code></pre></div>
+
+<p>やっぱインストール済み…1.6.11-2.el6<em>1</em>4…だと…。このrelease番号？ってsvn --versionじゃ確認できないの？</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> svn --version
+<span class="go">svn, バージョン 1.6.11 (r934486)</span>
+<span class="go">   コンパイル日時: Sep 27 2011, 14:59:40</span>
+
+<span class="go">   Copyright (C) 2000-2009 CollabNet.</span>
+<span class="go">   Subversion is open source software, see http://subversion.tigris.org/</span>
+<span class="go">   This product includes software developed by CollabNet (http://www.Collab.Net/).</span>
+
+<span class="go">   以下のリポジトリアクセス (RA) モジュールが利用できます:</span>
+
+<span class="go">   * ra_neon : Neon を利用して WebDAV (DeltaV) プロトコルでリポジトリにアクセスするモジュール。</span>
+<span class="go">     - &#39;http&#39; スキームを操作します</span>
+<span class="go">       - &#39;https&#39; スキームを操作します</span>
+<span class="go">       * ra_svn : svn ネットワークプロトコルを使ってリポジトリにアクセスするモジュール 。</span>
+<span class="go">         - Cyrus SASL 認証を併用</span>
+<span class="go">   - &#39;svn&#39; スキームを操作します</span>
+<span class="go">   * ra_local : ローカルディスク上のリポジトリにアクセスするモジュール。</span>
+<span class="go">     - &#39;file&#39; スキームを操作します</span></code></pre></div>
+
+<p>色々探して、とりあえず1.6.11-2.el6<em>1</em>4のsubversion-perlを見つけた。</p>
+
+<ul>
+<li><a href="http://rpm.pbone.net/index.php3/stat/4/idpl/16844891/dir/scientific_linux_6/com/subversion-perl-1.6.11-2.el6_1.4.i686.rpm.html">RPM Scientific Linux 6 subversion-perl 1.6.11 i686 rpm</a></li>
+</ul>
+
+<p>再チャレンジ。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> rpm -ivh subversion-perl-1.6.11-2.el6_1.4.i686.rpm
+<span class="go">警告: subversion-perl-1.6.11-2.el6_1.4.i686.rpm: ヘッダ V4 DSA/SHA1 Signature, key ID 192a7d7d: NOKEY</span>
+<span class="go">準備中...                ########################################### [100%]</span>
+<span class="go">   1:subversion-perl        ########################################### [100%]</span></code></pre></div>
+
+<p>入ったー。で、依存は一個消えた。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> rpm -ivh git-svn-1.7.1-2.el6_0.1.noarch.rpm
+<span class="go">警告: git-svn-1.7.1-2.el6_0.1.noarch.rpm: ヘッダ V3 RSA/SHA256 Signature, key ID c105b9de: NOKEY</span>
+<span class="go">エラー: 依存性の欠如:</span>
+<span class="go">        perl(Term::ReadKey) は git-svn-1.7.1-2.el6_0.1.noarch に必要とされています</span></code></pre></div>
+
+<h3 id="perl-term-readkey">perl(Term::ReadKey)</h3>
+
+<p>特にバージョンの指定がないんだけど、とりあえず後ろ(el6)は合わせてみた。elってRHELのELなのかな…？</p>
+
+<ul>
+<li><a href="http://blogger.horisawa.info/2012/03/rpm.html">泡史朗の戯れの日々: RPMパッケージの命名規則</a></li>
+<li><a href="http://pkgs.org/centos-6-rhel-6/centos-rhel-i386/perl-TermReadKey-2.30-13.el6.i686.rpm.html">perl-TermReadKey-2.30-13.el6.i686.rpm CentOS 6 (RHEL 6) Download</a></li>
+</ul>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">[root@tpc6102 share]# rpm -ivh perl-TermReadKey-2.30-13.el6.i686.rpm</span>
+<span class="go">警告: perl-TermReadKey-2.30-13.el6.i686.rpm: ヘッダ V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY</span>
+<span class="go">準備中...                ########################################### [100%]</span>
+<span class="go">   1:perl-TermReadKey       ########################################### [100%]</span></code></pre></div>
+
+<p>いった！</p>
+
+<p>で、git-svnも入った！</p>
+
+<h2 id="動作確認">動作確認</h2>
+
+<p>コミットしようとしたらエラーが。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git svn dcommit
+<span class="go">Committing to svn://xxxxxxx/repo/trunk ...</span>
+<span class="go">Authentication realm: &lt;svn://xxxxxxx:3690&gt; xxxxxxxx-...</span>
+
+<span class="go">(gnome-ssh-askpass:20438): Gtk-WARNING **: cannot open display:</span>
+<span class="go">Use of uninitialized value $password in substitution (s///) at /usr/libexec/git-core/git-svn line 3979.</span>
+<span class="go">error: git-svn died of signal 11</span></code></pre></div>
+
+<p>GUIでLinuxをインストールしている場合、 <code>gnome-ssh-askpass</code> を使ってパスワード認証をかますようにパスが通っており、今はtelnetなどでつないでいる(=認証画面出したいのに画面ない)のが問題みたい。</p>
+
+<ul>
+<li><a href="http://ultimania.org/trac/yuna/wiki/pm/DVCS#git%E3%81%A7%E8%AA%8D%E8%A8%BC%E3%82%A8%E3%83%A9%E3%83%BC">pm/DVCS - Yuna&#39;s Technical Guide</a></li>
+</ul>
+
+<p>確かにいる。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> <span class="nb">echo</span> <span class="nv">$SSH_ASKPASS</span>
+<span class="go">/usr/libexec/openssh/gnome-ssh-askpass</span></code></pre></div>
+
+<p>これを空にしてやればよい。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> <span class="nb">unset </span>SSH_ASKPASS
+<span class="gp">$</span> <span class="nb">echo</span> <span class="nv">$SSH_ASKPASS</span></code></pre></div>
+
+<p>で、dcommit！</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git svn dcommit
+<span class="go">Committing to svn://xxxxxxxx/repo/trunk ...</span>
+<span class="go">Authentication realm: &lt;svn://xxxxxxxx:3690&gt; xxxxxxxxxxx.....</span>
+<span class="go">Password for &#39;kk_Ataka&#39;:</span></code></pre></div>
+
+<p>パスワード認証もOK。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">M       memo/test.txt</span>
+<span class="go">略</span></code></pre></div>
+
+<p>コミットされた！</p>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/11/12/from-hatena-to-jekyll" title="はてなダイアリーのエントリをJekyllへ移行する">
+          はてなダイアリーのエントリをJekyllへ移行する
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/12/25/ruby-memo" title="メモ化を知った">
+          メモ化を知った
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/12/12/git-svn-dcommit" data-text="kk_Atakaの日記 - git-svnインストールからgit svn dcommit完了までの手順" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/12/12/git-svn-dcommit/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/12/12/git-svn-dcommit/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/12/12/git-svn-dcommit/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - git-svnインストールからgit svn dcommit完了までの手順"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/12/12/git-svn-dcommit/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

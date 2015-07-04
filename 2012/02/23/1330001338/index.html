@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>GitプロジェクトをコミットしたタイミングでJenkinsにビルドをしてもらいたい！ - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>GitプロジェクトをコミットしたタイミングでJenkinsにビルドをしてもらいたい！</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Jenkins">Jenkins</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Git">Git</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/02/23</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/02/20/1329744294" title="Rubyの実行ファイルを作成するExerbとOcraを試してみた">
+          Rubyの実行ファイルを作成するExerbとOcraを試してみた
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/02/28/1330436604" title="Rails3レシピブックを読みながらRailsを学ぶ">
+          Rails3レシピブックを読みながらRailsを学ぶ
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<ul><li>全然CIっぽくJenkinsを使っていなかったので本格的に使ってみたい。</li><li>Gitを連携させたい</li><li>GitリポジトリにコミットしたタイミングでJenkinsにビルドさせてみたい</li></ul>
+<p>…のだが、いきなりビルド時にcloneできないという現象でハマっていた。</p>
+<pre class="">ERROR: Error cloning remote repo 'origin' : Could not clone C:/project/excel_for_ruby.git</pre>
+<h1>上記の原因</h1>
+<p>cloneできない問題はJenkins実行時にgit.exeにパスが通ってなかった、設定していなかったという非常に残念なものだった。Jenkins実践入門にも手順が書いてあった。<span class="footnote"><a href="#f1" title="環境がアレだったので、proxyの設定とかその辺も探してしまった。" name="fn1">*1</a></span></p>
+<h1>Jenkinsの「ビルド実行」でGitリポジトリのソースのテストをする</h1>
+<ul><li>Jenkinsの管理 => プラグインの管理 => Jenkins GIT plugin をインストール</li><li>新規ジョブ作成 => フリースタイル・プロジェクト でプロジェクト作成</li><li>ソースコードシステム<ul><li>Gitを選択</li><li>リポジトリを入力<ul><li>C:\project\excel_for_ruby</li></ul></li></ul></li><li>ビルド<ul><li>Windowsバッチコマンドの実行<ul><li>rspecを実行できるように記述する</li></ul></li></ul></li></ul>
+<pre class="">cd &quot;C:\project\excel_for_ruby&quot;
+rspec -fs spec\*</pre>
+<p>これでビルドするとはじめのcloneできないエラー。</p>
+<pre class="">Error cloning remote repo 'origin' : Could not clone C:\project\excel_for_ruby</pre>
+<ul><li>Jenkinsから見たGitのパスを設定<ul><li>Jenkinsの管理 => システムの設定<ul><li>Gitのパスを追加するフォームがあるのでこれを追加</li><li>Nameもなんでもいいから入力する(Defaultにした)</li></ul></li></ul></li></ul>
+<h1>GitでCommitしたらJenkinsがビルドをしてくれるようにする</h1>
+<p>「wget ビルド実行パス」というコマンドをGitのフックスクリプトに記述すればコミット時にビルド実行できるらしい。とりあえずWindows用のwgetを取得。<a href="http://users.ugent.be/~bpuype/wget/">WGET 1.11.4 for Windows (win32)</a></p>
+<p>プロジェクト内の.git/hooks/post-commitを編集。</p>
+<pre class="">echo &quot;Hook post-commit start&quot;
+wget --no-proxy http://localhost:8080/job/excel_for_ruby/build?delay=5sec || echo &quot;wget failed&quot;
+echo &quot;Hook post-commit end&quot;</pre>
+<p>proxyが噛んでいたので--no-proxy指定しないと400エラーに。</p>
+<pre class="">Hook post-commit start
+--2012-02-09 16:40:39--  http://localhost:8080/job/excel_for_ruby/build?delay=5s
+ec
+Resolving proxy.xxx.jp... xxx.xxx.xxx.xxx
+Connecting to proxy.xxx.jp|xxx.xxx.xxx.xxx|:8080... connected.
+Proxy request sent, awaiting response... 400 Bad Request
+2012-02-09 16:40:39 ERROR 400: Bad Request.</pre>
+<p>これでCommit時にビルドが走ってくれる！　これでようやくスタートラインが見えてきた！</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 環境がアレだったので、proxyの設定とかその辺も探してしまった。</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/02/20/1329744294" title="Rubyの実行ファイルを作成するExerbとOcraを試してみた">
+          Rubyの実行ファイルを作成するExerbとOcraを試してみた
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/02/28/1330436604" title="Rails3レシピブックを読みながらRailsを学ぶ">
+          Rails3レシピブックを読みながらRailsを学ぶ
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/02/23/1330001338" data-text="kk_Atakaの日記 - GitプロジェクトをコミットしたタイミングでJenkinsにビルドをしてもらいたい！" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/02/23/1330001338/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/02/23/1330001338/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/02/23/1330001338/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - GitプロジェクトをコミットしたタイミングでJenkinsにビルドをしてもらいたい！"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/02/23/1330001338/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

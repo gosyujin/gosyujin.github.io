@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Unixでwmvファイルを他のファイルフォーマットに変換したい - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Unixでwmvファイルを他のファイルフォーマットに変換したい</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Unix">Unix</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/12/17</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/16/1324086694" title="svn infoコマンドでリビジョン番号を抜き出す">
+          svn infoコマンドでリビジョン番号を抜き出す
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/18/1324219740" title="Vimを使い始めるためにインストールから設定まで行った">
+          Vimを使い始めるためにインストールから設定まで行った
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<ul><li><a href="2011-12-06-1323186439">2011-12-06-1323186439</a></li></ul>
+<p>ダウンロードしたwmvファイルを他のファイルフォーマットに変換したい。</p>
+<h1>参考サイト</h1>
+<ul><li><a href="http://d.hatena.ne.jp/griffith181/20090302/1235980536">ffmpegでWMVをMP4に変換 - YouのMacとかプログラムとか映像編集とか</a></li></ul>
+<h1>インストール</h1>
+<p>ソースをgit clone で取得してくる。</p>
+<pre class="">$ git clone git://source.ffmpeg.org/ffmpeg.git ffmpeg
+Cloning into ffmpeg...
+remote: Counting objects: 192168, done.
+remote: Compressing objects: 100% (43840/43840), done.
+remote: Total 192168 (delta 150640), reused 188926 (delta 148049)
+Receiving objects: 100% (192168/192168), 49.63 MiB | 278 KiB/s, done.
+Resolving deltas: 100% (150640/150640), done.</pre>
+<pre class="">$ ./configure --disable-yasm
+$ make
+$ sudo make install</pre>
+<h1>使い方</h1>
+<p>基本的に-iオプションでインプットファイルを選択すれば使えるはずなのだが……。</p>
+<pre class="">$ ffmpeg -i input.wmv -acodec copy output.mp3
+ffmpeg version N-35890-g83b4671, Copyright (c) 2000-2011 the FFmpeg developers
+  built on Dec 17 2011 22:36:09 with gcc 4.1.2 20080704 (Red Hat 4.1.2-48)
+  configuration: --disable-yasm
+  libavutil    51. 32. 0 / 51. 32. 0
+  libavcodec   53. 46. 0 / 53. 46. 0
+  libavformat  53. 26. 0 / 53. 26. 0
+  libavdevice  53.  4. 0 / 53.  4. 0
+  libavfilter   2. 53. 0 /  2. 53. 0
+  libswscale    2.  1. 0 /  2.  1. 0
+Input #0, asf, from 'input.wmv':
+  Metadata:
+    WMFSDKVersion   : 12.0.7601.17514
+    WMFSDKNeeded    : 0.0.0.0000
+    IsVBR           : 0
+  Duration: 00:40:30.10, start: 0.000000, bitrate: 110 kb/s
+    Stream #0:0: Audio: wmav2 (a[1][0][0] / 0x0161), 44100 Hz, 2 channels, s16, 96 kb/s
+Output #0, mp3, to 'output.mp3':
+  Metadata:
+    WMFSDKVersion   : 12.0.7601.17514
+    WMFSDKNeeded    : 0.0.0.0000
+    IsVBR           : 0
+    TSSE            : Lavf53.26.0
+    Stream #0:0: Audio: wmav2 (a[1][0][0] / 0x0161), 44100 Hz, 2 channels, 96 kb/s
+Stream mapping:
+  Stream #0:0 -&gt; #0:0 (copy)
+Press [q] to stop, [?] for help
+size=   28464kB time=00:40:30.10 bitrate=  96.0kbits/s   
+video:0kB audio:28464kB global headers:0kB muxing overhead 0.001513%
+</pre>
+<p>エラーは出ていないが、再生ができない。多分copyだとダメなのかな…。</p>
+<p>試しに他のフォーマットで変換してみたら、mp4だとうまくいった。</p>
+<pre class="">$ ffmpeg -i input.wmv output.mp4
+ffmpeg version N-35890-g83b4671, Copyright (c) 2000-2011 the FFmpeg developers
+  built on Dec 17 2011 22:36:09 with gcc 4.1.2 20080704 (Red Hat 4.1.2-48)
+  configuration: --disable-yasm
+  libavutil    51. 32. 0 / 51. 32. 0
+  libavcodec   53. 46. 0 / 53. 46. 0
+  libavformat  53. 26. 0 / 53. 26. 0
+  libavdevice  53.  4. 0 / 53.  4. 0
+  libavfilter   2. 53. 0 /  2. 53. 0
+  libswscale    2.  1. 0 /  2.  1. 0
+Input #0, asf, from 'input.wmv':
+  Metadata:
+    WMFSDKVersion   : 12.0.7601.17514
+    WMFSDKNeeded    : 0.0.0.0000
+    IsVBR           : 0
+  Duration: 00:40:30.10, start: 0.000000, bitrate: 110 kb/s
+    Stream #0:0: Audio: wmav2 (a[1][0][0] / 0x0161), 44100 Hz, 2 channels, s16, 96 kb/s
+encoder 'aac' is experimental and might produce bad results.
+Add '-strict experimental' if you want to use it.
+</pre>
+<p>ん、-strict experimentalを付けないとだめらしい。</p>
+<pre class="">$ ffmpeg ｰn -i input.wmv -strict experimental output.mp4
+ffmpeg version N-35890-g83b4671, Copyright (c) 2000-2011 the FFmpeg developers
+  built on Dec 17 2011 22:36:09 with gcc 4.1.2 20080704 (Red Hat 4.1.2-48)
+  configuration: --disable-yasm
+  libavutil    51. 32. 0 / 51. 32. 0
+  libavcodec   53. 46. 0 / 53. 46. 0
+  libavformat  53. 26. 0 / 53. 26. 0
+  libavdevice  53.  4. 0 / 53.  4. 0
+  libavfilter   2. 53. 0 /  2. 53. 0
+  libswscale    2.  1. 0 /  2.  1. 0
+Input #0, asf, from 'input.wmv':
+  Metadata:
+    WMFSDKVersion   : 12.0.7601.17514
+    WMFSDKNeeded    : 0.0.0.0000
+    IsVBR           : 0
+  Duration: 00:40:30.10, start: 0.000000, bitrate: 110 kb/s
+    Stream #0:0: Audio: wmav2 (a[1][0][0] / 0x0161), 44100 Hz, 2 channels, s16, 96 kb/s
+Output #0, mp4, to 'output.mp4':
+  Metadata:
+    WMFSDKVersion   : 12.0.7601.17514
+    WMFSDKNeeded    : 0.0.0.0000
+    IsVBR           : 0
+    encoder         : Lavf53.26.0
+    Stream #0:0: Audio: aac (@[0][0][0] / 0x0040), 44100 Hz, 2 channels, s16, 128 kb/s
+Stream mapping:
+  Stream #0:0 -&gt; #0:0 (wmav2 -&gt; aac)
+Press [q] to stop, [?] for help
+size=   37922kB time=00:40:30.10 bitrate= 127.8kbits/s   
+video:0kB audio:37513kB global headers:0kB muxing overhead 1.091713%
+</pre>
+<p>これでできた。</p>
+<h1>オプション</h1>
+<table><tr><th>-y</th><td>アウトプットファイルを上書きする</td></tr><tr><th>-n</th><td>アウトプットファイルを上書きしない</td></tr><tr><th>-i</th><td>インプットファイル指定</td></tr><tr><th>-acodec</th><td>オーディオコーデック(copyでコピー)</td></tr><tr><th>-strict</th><td>厳密さ(very > strict > normal(デフォルト) > unofficial > experimental)</td></tr></table>
+<p>うーんできることが多すぎて惑う。</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/16/1324086694" title="svn infoコマンドでリビジョン番号を抜き出す">
+          svn infoコマンドでリビジョン番号を抜き出す
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/18/1324219740" title="Vimを使い始めるためにインストールから設定まで行った">
+          Vimを使い始めるためにインストールから設定まで行った
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/12/17/1324168464" data-text="kk_Atakaの日記 - Unixでwmvファイルを他のファイルフォーマットに変換したい" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/17/1324168464/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/17/1324168464/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/17/1324168464/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Unixでwmvファイルを他のファイルフォーマットに変換したい"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/12/17/1324168464/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

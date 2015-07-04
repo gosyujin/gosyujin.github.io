@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>vmstatとかiostatとかsarとかswapコマンドのメモ - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>vmstatとかiostatとかsarとかswapコマンドのメモ</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Solaris">Solaris</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/09/04</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/08/23/1314103220" title="MicrosoftOutlookで消せなくなったフォルダをwin32ole経由でRubyから消してみる">
+          MicrosoftOutlookで消せなくなったフォルダをwin32ole経由でRubyから消してみる
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/09/07/1315401886" title="Redmineのプラグイン作成のための備忘録と、時々SQLite3">
+          Redmineのプラグイン作成のための備忘録と、時々SQLite3
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<p>すぐ忘れるのでメモ。あと略称とかも。</p>
+<h1>vmstat</h1>
+<ul><li>表示</li></ul>
+<pre class=""> kthr      memory            page            disk          faults      cpu
+ r b w   swap  free  re  mf pi po fr de sr ** ** ** **   in   sy   cs us sy id</pre>
+<ul><li>kthr: KernelTHRead</li></ul>
+<table><tr><th>r</th><td>Run queue</td><td>待ち行列内のカーネルスレッド数(mpstatやprstatでも取得可能)</td></tr><tr><th>b</th><td>?</td><td>I/Oで待たされているカーネルスレッド数</td></tr><tr><th>w</th><td>?</td><td>スワップアウトされたカーネルスレッド数</td></tr></table>
+<ul><li>memory</li></ul>
+<table><tr><th>swap</th><td>-</td><td>現在利用可能なスワップ領域(ディスク上+メモリ上のスワップ領域)</td></tr><tr><th>free</th><td>-</td><td>空きメモリ領域</td></tr></table>
+<ul><li>page</li></ul>
+<table><tr><th>re</th><td>pageREclaims</td><td>freeListに入れられた後、復帰したページ数</td></tr><tr><th>mf</th><td>MinorFault</td><td>HAT faultとAddress Space faultを足した数</td></tr><tr><th>pi</th><td>PageIn</td><td>ページインされたメモリサイズ(キロバイト)</td></tr><tr><th>po</th><td>PageOut</td><td>ページアウトされたメモリサイズ(キロバイト)</td></tr><tr><th>fr</th><td>FRee?</td><td>解放されたメモリサイズ(キロバイト)</td></tr><tr><th>de</th><td>DEficit</td><td>次のプロセスで必要と予測しSolarisが確保する仮想メモリのバッファ</td></tr><tr><th>sr</th><td>?</td><td>ページデーモンによってスキャンされたページ数(0以外だと実行されている)</td></tr></table>
+<ul><li>disk</li></ul>
+<table><tr><th>最高4台のデータを表示</th><td>読み書きした回数</td></tr></table>
+<ul><li>fault</li></ul>
+<table><tr><th>in</th><td>INterrupt</td><td>1秒あたりの割り込み(インタラプト)回数</td></tr><tr><th>sy</th><td>SYstemcall</td><td>1秒あたりのシステムコース回数</td></tr><tr><th>cs</th><td>CpucontextSwitches</td><td>コンテクストスイッチ発生回数</td></tr></table>
+<ul><li>cpu</li></ul>
+<table><tr><th>us</th><td>USertime?</td><td>ユーザモードで使用したCPU時間</td></tr><tr><th>sy</th><td>SYstemtime?</td><td>システムモードで使用したCPU時間</td></tr><tr><th>id</th><td>IDletime</td><td>CPUが使用されていなかった時間</td></tr></table>
+<h1>iostat -D</h1>
+<ul><li>表示</li></ul>
+<pre class="">    ****          ****          ****          ****
+rps wps util  rps wps util  rps wps util  rps wps util</pre>
+<ul><li>パラメータ</li></ul>
+<table><tr><th>rps</th><td>ReadperSec</td><td>毎秒何回読み取りしているか</td></tr><tr><th>wps</th><td>WriteperSec</td><td>毎秒何回書き込みしているか</td></tr><tr><th>util</th><td>UTILization?</td><td>各デバイスの使用率</td></tr></table>
+<h1>iostat -x(全てのディスク情報)</h1>
+<ul><li>表示</li></ul>
+<pre class="">                 extended device statistics
+device    r/s    w/s   kr/s   kw/s wait actv  svc_t  %w  %b</pre>
+<ul><li>パラメータ</li></ul>
+<table><tr><th>device</th><td>-</td><td>デバイス名</td></tr><tr><th>r/s</th><td>ReadperSec</td><td>毎秒何回読み取りしているか</td></tr><tr><th>w/s</th><td>WriteperSec</td><td>毎秒何回書き込みしているか</td></tr><tr><th>kr/s</th><td>KiloReadperSec</td><td>毎秒何KB読み取りしているか</td></tr><tr><th>kw/s</th><td>KiloWriteperSec</td><td>毎秒何KB書き込みしているか</td></tr><tr><th>wait</th><td>-</td><td>実行待ち中のI/Oの数</td></tr><tr><th>actv</th><td>ACTiVe</td><td>毎秒処理されているI/Oの数</td></tr><tr><th>svc_t</th><td>SerViCeTime</td><td>平均サービス時間？</td></tr><tr><th>%w</th><td>?</td><td>待ち行列が存在している時間の割合、リーマン和</td></tr><tr><th>%b</th><td>?</td><td>ディスクビジーの時間の割合、リーマン和</td></tr></table>
+<h1>swap -s</h1>
+<ul><li>表示</li></ul>
+<pre class="">合計: 7429999k バイト割り当て済み + 99999k 予約済み = 8399999k 使用済み, 5199999k使用可</pre>
+<ul><li>パラメータ</li></ul>
+<table><tr><th>allocated</th><td>割り当て済み</td><td>バックアップ用の記憶域として使用可能なスワップ空間を表す1024バイトのブロック数</td></tr><tr><th>reserved</th><td>予約済み</td><td>後から使用できるようにメモリによって回収されるスワップ空間を表す1024バイトのブロック数</td></tr><tr><th>used</th><td>使用済み</td><td>割り当て・予約済みのスワップ空間を表す1024バイトのブロック数</td></tr><tr><th>available</th><td>使用可</td><td>後から予約や割り当てに使用可能なスワップ空間を表す1024バイトのブロック数</td></tr></table>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/08/23/1314103220" title="MicrosoftOutlookで消せなくなったフォルダをwin32ole経由でRubyから消してみる">
+          MicrosoftOutlookで消せなくなったフォルダをwin32ole経由でRubyから消してみる
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/09/07/1315401886" title="Redmineのプラグイン作成のための備忘録と、時々SQLite3">
+          Redmineのプラグイン作成のための備忘録と、時々SQLite3
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/09/04/1315146050" data-text="kk_Atakaの日記 - vmstatとかiostatとかsarとかswapコマンドのメモ" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/09/04/1315146050/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/09/04/1315146050/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/09/04/1315146050/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - vmstatとかiostatとかsarとかswapコマンドのメモ"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/09/04/1315146050/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

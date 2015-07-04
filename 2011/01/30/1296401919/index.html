@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>BPStudy#41に参加しました - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>BPStudy#41に参加しました</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#JavaScript">JavaScript</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Git">Git</a> ]</i>
+          
+            <i>[ <a href="/tags.html#イベント">イベント</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/01/30</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/01/25/1295956879" title="RubyでFizzBuzzみじかいのに挑戦した">
+          RubyでFizzBuzzみじかいのに挑戦した
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/03/02/1299062938" title="Read it LaterをRubyで取得する">
+          Read it LaterをRubyで取得する
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<ul><li>詳細: <a href="http://atnd.org/events/11755">BPStudy#41 : ATND</a></li></ul>
+<p>ATNDなどでBPStudyの存在は知っていたのですが、今回初参加。</p>
+<p>分散SCMを勉強しようと思って最近Gitを使いはじめたのですが、リアル周りに使っている人がいないので知識共有ができず……。他の人はどうやって使っているのかなーと思っているところに神速さんがGitの発表をすると聞いたので、自重せずに参加しました。</p>
+<p>以下メモ。前半戦のjsも、聞けばわかるかなーとか思っていたら甘かった……jsは勉強不足でした。もう少し使えないと話にもついていけない……。</p>
+<h1>JavaScript @<a href="http://twitter.com/monjudoh">monjudoh</a>さん</h1>
+<ul><li><a href="http://d.hatena.ne.jp/monjudoh/20110128/1296205331">BPStudy#41 RequireJSとeventとUIコンポーネント - 文殊堂</a></li></ul>
+<h2>RequireJS実践編</h2>
+<ul><li>RequireJSって何？<ul><li>jsの依存性解決をしてくれるライブラリ</li><li>モジュール内で他のモジュールを再帰的に読み込みを行いたい場合…define関数を使用して読み込んでいく</li><li>require関数を使うと逆に読み込んでいく</li></ul></li></ul>
+<ul><li>RequireJS読み込みの前にrequireなんたらという名前が付いているグローバル変数がある場合、設定ファイルとして使ってくれる</li></ul>
+<ul><li>モジュールjsのあるディレクトリが深い場合呼び出しがめんどい<ul><li>baseUrlを指定してjsがあるパスを基底のパスにすると楽になる</li></ul></li></ul>
+<ul><li>パスの上書きもできる<ul><li>スタブモジュールと置き換える事もできる</li></ul></li></ul>
+<ul><li>キャッシュされた古いJavaScriptを読みこまないようにもできる<ul><li>クエリパラメータにデプロイ日時を入れる</li></ul></li></ul>
+<h2>jQuery custom event 応用編</h2>
+<ul><li>custom eventって何？<ul><li>ブラウザがサポートしてないイベント<span class="footnote"><a href="#f1" title="普通はユーザがクリックするとか、ページが読み込み終わるとイベントが始まるけど、jQueryはtriggerHandlerメソッドで(ユーザに関係なく)始まる" name="fn1">*1</a></span>を定義する独自のイベント</li></ul></li></ul>
+<ul><li>普通のプログラムのような事もcustom eventでできる<ul><li>関数呼び出し</li><li>引数付き呼び出し</li><li>インスタンス変数へのアクセス</li><li>クラス作成のような事</li><li>mixin</li><li>callback</li><li>mixout</li><li>同名のn(≧0)個の関数呼び出し</li></ul></li></ul>
+<h2>疎結合なUIコンポーネントの作成について</h2>
+<ul><li>複数画面で使えるAjaxformダイアログのコンポーネントを作りたい<ul><li>例えば、Googleカレンダーのように日付セルをクリックしたらスケジュール登録ダイアログが出るように</li></ul></li></ul>
+<ul><li>仕様変更<ul><li>セルをクリックしたらアクティブ、アクティブをクリックしたらスケジュール登録ダイアログが出るように</li><li>ダイアログを開く→custom eventにして「開く」と「ユーザアクションの検知」を別に</li></ul></li></ul>
+<ul><li>仕様変更<ul><li>スケジュール一覧画面を作る、画面に新規追加ボタンもあり、カレンダーのセルをクリックしたときと同じダイアログをだす</li><li>ユーザアクション検知のモジュールをカレンダー画面とスケジュール表示画面に分ける</li><li>callback処理も分ける</li></ul></li></ul>
+<ul><li>本体の再利用性も高いし、挿し込むパーツも機能が明確なので再利用性が高くなる</li></ul>
+<h1>マスタリング非同期読み込み @<a href="http://twitter.com/os0x">os0x</a>さん</h1>
+<ul><li><a href="http://ss-o.net/event/js20110128/">マスタリング非同期読み込み BPStudy#41</a></li></ul>
+<h2>最近非同期読み込みが流行っているらしい…</h2>
+<ul><li>Node.jsなどが有名</li><li>JavaScriptは他のリソースの読み込みをブロックするので非同期で行いたい</li><li>新UIになったTwitterでも使われている<ul><li>けど、あまりはやくなってない？</li><li>本文が最後に表示されるから(先に読み込もうとしているけど表示に時間がかかっている)</li></ul></li></ul>
+<h2>ライブラリ</h2>
+<ul><li>LAB.js<ul><li>ロード処理をjsで実装。Twitterでも使われている</li></ul></li><li>ControlJS<ul><li>scriptタグのtypeをtext/javascript→text/cjsにしてあとでcjsとして評価する</li></ul></li><li>RequireJS<ul><li>document.createElement('script')してinsertで使える</li><li>が、依存がネストすると非同期にならない→先に読み込んでおく</li></ul></li></ul>
+<h1>gitの歴史改変について @<a href="http://twitter.com/sinsoku_listy">sinsoku_listy</a>さん</h1>
+<ul><li><a href="https://dl.dropbox.com/u/3501492/bpstudy-41/presen.html">git の歴史改変について</a></li></ul>
+<h2>分散SCMの利点について</h2>
+<ul><li>各操作が早い</li><li>他リポジトリに影響を与えない</li></ul>
+<h2>今回のGitコマンド</h2>
+<ul><li>git add -p<ul><li>部分変更を記録するコミット</li></ul></li><li>git rebase -i<ul><li>歴史を書き換えるコマンド<ul><li>コミットの変更、コミットメッセージの変更などができる</li></ul></li></ul></li></ul>
+<h2>デモ</h2>
+<ul><li>pep8規約違反を起こしたコードを改変する<ul><li>bisect(テストの失敗したコミットを二分探索でさがす)で探して改変</li><li>rebaseでコミットの修正</li></ul></li></ul>
+<h2>まとめ</h2>
+<ul><li>詳しくは「入門Git」で！</li><li>他人が作ったコミット、他人に渡したコミットは改変してはいけない</li><li>…が、実際はプロジェクトの方針によってまちまち</li></ul>
+<h1>発表後</h1>
+<p>ATNDに登録していなかったのですが、無理を言って懇親会に参加させていただきました。懇親会の場で話題にあがった、先のない技術の維持をダラダラ続けているのは守りの姿勢、それならニートでいる方がよっぽど攻めている。自分が本当に突き詰めたいものをもって外に攻め出たほうがいい。という言葉がちょっと考えさせられました。本当にこのままでいいのだろうかという……。とりあえず少しずつ。Gitを使いこなす所から始めよう。</p>
+<h1>最後に</h1>
+<p>主催者の@haru860さん、発表者の@monjudohさん、@os0xさん、@sinsoku_listyさん、受付をしてくださった皆さん今回はありがとうございました！</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 普通はユーザがクリックするとか、ページが読み込み終わるとイベントが始まるけど、jQueryはtriggerHandlerメソッドで(ユーザに関係なく)始まる</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/01/25/1295956879" title="RubyでFizzBuzzみじかいのに挑戦した">
+          RubyでFizzBuzzみじかいのに挑戦した
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/03/02/1299062938" title="Read it LaterをRubyで取得する">
+          Read it LaterをRubyで取得する
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/01/30/1296401919" data-text="kk_Atakaの日記 - BPStudy#41に参加しました" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/01/30/1296401919/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/01/30/1296401919/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/01/30/1296401919/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - BPStudy#41に参加しました"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/01/30/1296401919/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

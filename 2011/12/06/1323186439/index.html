@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>UnixでストリーミングファイルをDLしたい - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>UnixでストリーミングファイルをDLしたい</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Unix">Unix</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/12/06</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/05/1323092947" title="RedmineでプラグインインストールしたらTemplateErrorが出た">
+          RedmineでプラグインインストールしたらTemplateErrorが出た
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/07/1323291938" title="ZenTestでRSpecを自動実行できるようにした">
+          ZenTestでRSpecを自動実行できるようにした
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<p><a href="http://hibiki-radio.jp/description/milky">ミルキィホームズのラジオ</a>(番組はなんでも可)を毎週自動的にサーバにDLするスクリプトを組みたい！</p>
+<h1>調べること</h1>
+<ul><li>ラジオはMMSプロトコルのASFファイル<ul><li>wgetでDLできる？<ul><li>MMSに対応してない模様？　wget proなら対応しているらしいが…</li></ul></li><li>mplayerというソフトウェアでUnixでもMMSファイルをDLできるらしい <a href="http://ja.wikipedia.org/wiki/MPlayer">MPlayer - Wikipedia</a></li></ul></li></ul>
+<p>というわけでまずはmplayerを使ってUnixでストリーミングファイルをDLできるようにしてみる。</p>
+<h1>ダウンロード、インストール</h1>
+<p>ソースからDL。まずはzlibそしてGitが必要。</p>
+<p><a href="http://zlib.net/">zlib Home Site</a></p>
+<pre class="">$ wget http://zlib.net/zlib-1.2.5.tar.gz
+$ gunzip zlib-1.2.5.tar.gz 
+$ tar xf zlib-1.2.5.tar 
+$ cd zlib-1.2.5/
+$ ./configure
+$ make
+$ sudo make install</pre>
+<p><a href="http://git-scm.com/">Git</a></p>
+<pre class="">$ wget http://git-core.googlecode.com/files/git-1.7.7.4.tar.gz
+$ gunzip git-1.7*
+$ tar xf git -1.7*
+$ cd git-1.7*
+$ ./configure
+$ make
+$ sudo make install</pre>
+<p><a href="http://www.mplayerhq.hu/design7/dload.html">MPlayer - The Movie Player</a></p>
+<pre class="">$ wget http://www.mplayerhq.hu/MPlayer/releases/mplayer-export-snapshot.tar.bz2
+$ bunzip2 mplayer-export-*
+$ tar xf mplayer-export-*
+$ cd mplayer-export-*
+$ ./configure --yasm=''
+
+# FFmpegをチェックアウトするのにGitが必要
+No FFmpeg checkout, press enter to download one with git or CTRL+C to abort
+
+Cloning into 'ffmpeg'...
+
+$ make 
+$ sudo make install
+
+$ which mplayer
+/usr/local/bin/mplayer</pre>
+<h1>基本的な使い方</h1>
+<pre class="">$ mplayer URL -dumpstream -dumpfile OUTPUT</pre>
+<p>でOK。試しに落としてみる…。URLはwgetコマンドで引っ張ってくる。</p>
+<pre class="">$ wget -O - http://origin.hibiki-radio.info/movie/asx/8/2080.asx
+--2011-12-05 06:47:08--  http://origin.hibiki-radio.info/movie/asx/8/2080.asx
+Resolving origin.hibiki-radio.info... 202.210.134.26
+Connecting to origin.hibiki-radio.info|202.210.134.26|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 216 [video/x-ms-asf]
+Saving to: `STDOUT'
+
+ 0% [                                                                       ] 0           --.-K/s              &lt;ASX version=&quot;3.0&quot;&gt;
+    &lt;TITLE&gt;&amp;#65533;~&amp;#65533;&amp;#65533;&amp;#65533;L&amp;#65533;B3 #33 11/29&lt;/TITLE&gt;
+    &lt;AUTHOR&gt;&lt;/AUTHOR&gt;
+    &lt;COPYRIGHT&gt;&lt;/COPYRIGHT&gt;
+    &lt;ENTRY&gt;
+        &lt;REF HREF=&quot;mms://wms.hibiki-radio.info/hibiki1004/8_0_2080.wmv&quot; /&gt;
+    &lt;/ENTRY&gt;
+&lt;/ASX&gt;
+100%[======================================================================&gt;] 216         --.-K/s   in 0s      
+
+2011-12-05 06:47:08 (37.6 MB/s) - written to stdout [216/216]</pre>
+<pre class="">$ mplayer mms://wms.hibiki-radio.info/hibiki1004/8_0_2080.wmv -dumpstream -dumpfile milky.wmv
+MPlayer SVN-r34393-snapshot-4.4.5 (C) 2000-2011 MPlayer Team
+
+Playing mms://wms.hibiki-radio.info/hibiki1004/8_0_2080.wmv.
+STREAM_ASF, URL: mms://wms.hibiki-radio.info/hibiki1004/8_0_2080.wmv
+Resolving wms.hibiki-radio.info for AF_INET6...
+
+Couldn't resolve name for AF_INET6: wms.hibiki-radio.info
+Resolving wms.hibiki-radio.info for AF_INET...
+Connecting to server wms.hibiki-radio.info[202.210.134.27]: 1755...
+
+connect error: Connection timed out
+Resolving wms.hibiki-radio.info for AF_INET6...
+
+Couldn't resolve name for AF_INET6: wms.hibiki-radio.info
+Resolving wms.hibiki-radio.info for AF_INET...
+Connecting to server wms.hibiki-radio.info[202.210.134.27]: 80...
+Resolving wms.hibiki-radio.info for AF_INET6...
+
+Couldn't resolve name for AF_INET6: wms.hibiki-radio.info
+Resolving wms.hibiki-radio.info for AF_INET...
+Connecting to server wms.hibiki-radio.info[202.210.134.27]: 80...
+
+Cache size set to 180 KBytes
+Stream not seekable!
+dump: 3502080 bytes written</pre>
+<pre class="">$ while : ; do date; ls -l mil*; sleep 1 ; done
+Mon Dec  5 06:50:21 PST 2011
+-rw-r--r-- 1 gosyujin gosyujin 946176 2011-12-05 06:50 milky.wmv
+Mon Dec  5 06:50:22 PST 2011
+-rw-r--r-- 1 gosyujin gosyujin 962560 2011-12-05 06:50 milky.wmv
+Mon Dec  5 06:50:23 PST 2011
+-rw-r--r-- 1 gosyujin gosyujin 970752 2011-12-05 06:50 milky.wmv
+Mon Dec  5 06:50:24 PST 2011
+-rw-r--r-- 1 gosyujin gosyujin 987136 2011-12-05 06:50 milky.wmv
+Mon Dec  5 06:50:25 PST 2011
+-rw-r--r-- 1 gosyujin gosyujin 1003520 2011-12-05 06:50 milky.wmv
+Mon Dec  5 06:50:26 PST 2011
+-rw-r--r-- 1 gosyujin gosyujin 1019904 2011-12-05 06:50 milky.wmv
+Mon Dec  5 06:50:27 PST 2011
+-rw-r--r-- 1 gosyujin gosyujin 1019904 2011-12-05 06:50 milky.wmv
+Mon Dec  5 06:50:28 PST 2011
+-rw-r--r-- 1 gosyujin gosyujin 1036288 2011-12-05 06:50 milky.wmv
+Mon Dec  5 06:50:29 PST 2011
+-rw-r--r-- 1 gosyujin gosyujin 1052672 2011-12-05 06:50 milky.wmv
+Mon Dec  5 06:50:30 PST 2011
+-rw-r--r-- 1 gosyujin gosyujin 1069056 2011-12-05 06:50 milky.wmv
+Mon Dec  5 06:50:31 PST 2011
+-rw-r--r-- 1 gosyujin gosyujin 1077248 2011-12-05 06:50 milky.wmv</pre>
+<p>もりもりDLなされている！　そしてちゃんと聞ける！</p>
+<p><del datetime="2011-12-18T09:35:51+09:00">次回は毎週お目当てのファイルを探し当てる旅にでます。</del></p>
+<h1>次回</h1>
+<ul><li><a href="2011-12-17-1324168464">2011-12-17-1324168464</a></li></ul>
+<p>その前にダウンロードしたファイルを変換する事に。</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/05/1323092947" title="RedmineでプラグインインストールしたらTemplateErrorが出た">
+          RedmineでプラグインインストールしたらTemplateErrorが出た
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/07/1323291938" title="ZenTestでRSpecを自動実行できるようにした">
+          ZenTestでRSpecを自動実行できるようにした
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/12/06/1323186439" data-text="kk_Atakaの日記 - UnixでストリーミングファイルをDLしたい" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/06/1323186439/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/06/1323186439/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/06/1323186439/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - UnixでストリーミングファイルをDLしたい"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/12/06/1323186439/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Rails">Rails</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/02/29</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/02/28/1330436604" title="Rails3レシピブックを読みながらRailsを学ぶ">
+          Rails3レシピブックを読みながらRailsを学ぶ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/03/05/1330951640" title="Pro Gitと入門gitでGitの復習 基本操作編">
+          Pro Gitと入門gitでGitの復習 基本操作編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<ul><li><a href="2012-02-28-1330436604">2012-02-28-1330436604</a></li></ul>
+<p>Railsをインストールして起動する所まではできた。</p>
+<h1>参考</h1>
+<ul><li>Rail3レシピブック 190の技</li></ul>
+<h1>環境</h1>
+<ul><li>WindowsXP</li><li>Ruby1.8.7</li><li>Rails3.2.1</li></ul>
+<h1>MVCを自動生成する</h1>
+<h2>アプリケーションのscaffold(足場)の作成</h2>
+<p>scaffoldジェネレータを実行する事でCRUD操作が可能な簡単なアプリケーションの足場が生成できる。コマンドはrails generate ジェネレータ モデル名 カラム名:型 カラム名:型 (以下繰り返せる)...</p>
+<pre class="">$ bundle exec rails generate scaffold Blog name:string user_id:integer
+      invoke  active_record
+      create    db/migrate/20120229022816_create_blogs.rb
+      create    app/models/blog.rb
+      invoke    test_unit
+      create      test/unit/blog_test.rb
+      create      test/fixtures/blogs.yml
+       route  resources :blogs
+      invoke  scaffold_controller
+      create    app/controllers/blogs_controller.rb
+      invoke    erb
+      create      app/views/blogs
+      create      app/views/blogs/index.html.erb
+      create      app/views/blogs/edit.html.erb
+      create      app/views/blogs/show.html.erb
+      create      app/views/blogs/new.html.erb
+      create      app/views/blogs/_form.html.erb
+      invoke    test_unit
+      create      test/functional/blogs_controller_test.rb
+      invoke    helper
+      create      app/helpers/blogs_helper.rb
+      invoke      test_unit
+      create        test/unit/helpers/blogs_helper_test.rb
+      invoke  assets
+      invoke    coffee
+      create      app/assets/javascripts/blogs.js.coffee
+      invoke    scss
+      create      app/assets/stylesheets/blogs.css.scss
+      invoke  scss
+      create    app/assets/stylesheets/scaffolds.css.scss</pre>
+<p>いろいろ生成された！　確かに<a href="http://d.hatena.ne.jp/kk_Ataka/20120228/1330436604">前回</a>のまとめたファイルとディレクトリの役割通りにファイルが生成されてるっぽい。</p>
+<h2>テーブルの作成</h2>
+<p>テーブルをDBに定義。rake db:migrateコマンドを実行する。足場を作った際にdb/migrate/20120229022816_create_blogs.rbというマイグレーションファイルができたので、これを使っている？</p>
+<pre class="">$ bundle exec rake db:migrate
+==  CreateBlogs: migrating ====================================================
+-- create_table(:blogs)
+   -&gt; 0.0000s
+==  CreateBlogs: migrated (0.0000s) ===========================================</pre>
+<p>作られたようだ。</p>
+<h2>マイグレーションとは</h2>
+<ul><li>DBのスキーマを変更する機能</li><li>一気に作らずちょっとずつ変更もできる</li><li>rails generate migration マイグレーション名で作成可能<ul><li>ファイル名はタイムスタンプ_マイグレーション名.rbでdb/migrate/に格納</li></ul></li><li>上記の場合はscaffoldジェネレータで全部一括で作成している様子<ul><li>db/migrate/20120229022816_create_blogs.rb</li></ul></li></ul>
+<h2>また起動</h2>
+<p>で、わくわくしながら起動。アドレスは<a href="http://localhost:3000/blogs">http://localhost:3000/blogs</a>。Listing blogsというページとCRUDできるフォームが用意されたページが！</p>
+<p>Blogモデルを作成して、blogsになったのは規約ってやつだろうか……といったところで次のレシピが規約だった。</p>
+<h1>Railsの規約</h1>
+<ul><li>設定ファイルはあまり作らない</li><li>ファイル名、クラス名、ディレクトリの場所に規則</li></ul>
+<p>規則を知る事でどこでなにやってるのかわかりそう。</p>
+<h2>コントローラ</h2>
+<ul><li>app/controllers/に格納</li><li>クラス名は単語区切りキャメルケースで「(先頭大文字)コントローラController」 => BlogsController</li><li>ファイル名はクラス名をスネークケースに変換 => blogs_controller.rb</li><li>名称は対応するモデルの複数系 => BlogモデルのコントローラなのでBlogs<ul><li>scaffoldで生成されたモデルとコントローラもこの規則に従っている</li></ul></li></ul>
+<p>なるほどね。だからBlogモデルでコントローラはBlogsだったのか。</p>
+<h2>モデル</h2>
+<ul><li>app/models/に格納</li><li>クラス名は単語区切りキャメルケースで名詞の単数形 => Blog</li><li>ファイル名はクラス名をスネークケースに変換 => blog.rb</li><li>モデルとDBテーブルは1:1で対応 => モデルBlog : blogsテーブル</li><li>変換ルールはActiveSupportで定義されている</li></ul>
+<h2>ビュー</h2>
+<ul><li>app/views/コントローラ名/にテンプレート<ul><li>上で作ってたblogの場合app/views/blogsの下</li></ul></li><li>ビューファイル名はindex.html.erb, show.html.erb 等<ul><li>アクション名.フォーマット名.レンダリングエンジン名の規則で命名</li><li>レンダリングエンジンerbは任意のテキストファイルにRubyコードを埋められるもの。Javaのjspみたいなもん？</li><li>hamlとかでもいい？</li></ul></li><li>show.html.erb の場合はshowアクションを実行する場合show.html.erbをerbでレンダリングしてhtmlフォーマットで出力とかそういう感じかな</li></ul>
+<p>……ここまではなんとか。どこで何してるかとかは少しずつわかってきた。</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/02/28/1330436604" title="Rails3レシピブックを読みながらRailsを学ぶ">
+          Rails3レシピブックを読みながらRailsを学ぶ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/03/05/1330951640" title="Pro Gitと入門gitでGitの復習 基本操作編">
+          Pro Gitと入門gitでGitの復習 基本操作編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/02/29/1330528564" data-text="kk_Atakaの日記 - Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/02/29/1330528564/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/02/29/1330528564/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/02/29/1330528564/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/02/29/1330528564/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

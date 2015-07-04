@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Word2007でCtrl+hjklで移動できるようにする - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Word2007でCtrl+hjklで移動できるようにする</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/11/17</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/11/16/1321447232" title="Excel2007のF1キーを無効化する">
+          Excel2007のF1キーを無効化する
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/11/24/1322138944" title="複数のRuby環境の管理・切替ができるpikを実行できた nyaos編">
+          複数のRuby環境の管理・切替ができるpikを実行できた nyaos編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<ul><li>あーWord使ってる時hjklで移動してーあとバックスペースも</li></ul>
+<h1>手順</h1>
+<p>テンプレートファイルを編集するとできるよう。で、それはApplication Data下にある。</p>
+<ul><li>Word2007を起動し、左上のWindowsマークから開くを選択<ul><li>ファイルの種類で「Word マクロ有効テンプレート(.dotm)」を選択<ul><li>%APPDATA%\Microsoft\Templates\Normal.dotmを開く</li></ul></li></ul></li><li>開発タブ -> VisualBasic -> Normal -> Microsoft Word Objects -> ThisDocumentに以下をペーストする</li></ul>
+<pre class="vb">Sub BkSpPrc()
+  Selection.TypeBackspace
+End Sub
+Sub MoveLeft()
+    Selection.MoveLeft
+End Sub
+Sub MoveRight()
+    Selection.MoveRight
+End Sub
+Sub MoveUp()
+    Selection.MoveUp
+End Sub
+Sub MoveDown()
+    Selection.MoveDown
+End Sub</pre>
+<ul><li>左上のWindowsマーク -> Wordのオプション -> ユーザー設定 -> ショートカットキー:ユーザー設定 -> 分類:マクロ<ul><li>マクロに上記で記載した関数が表示されていることを確認</li><li>マクロを選択してMoveLeftはCtrl+h、MoveDownはCtrl+j...とキーを割り当てていく</li></ul></li></ul>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/11/16/1321447232" title="Excel2007のF1キーを無効化する">
+          Excel2007のF1キーを無効化する
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/11/24/1322138944" title="複数のRuby環境の管理・切替ができるpikを実行できた nyaos編">
+          複数のRuby環境の管理・切替ができるpikを実行できた nyaos編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/11/17/1321537502" data-text="kk_Atakaの日記 - Word2007でCtrl+hjklで移動できるようにする" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/11/17/1321537502/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/11/17/1321537502/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/11/17/1321537502/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Word2007でCtrl+hjklで移動できるようにする"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/11/17/1321537502/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

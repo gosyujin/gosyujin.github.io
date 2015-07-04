@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>PL/SQLとSQLの種類 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>PL/SQLとSQLの種類</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Oracle">Oracle</a> ]</i>
+          
+            <i>[ <a href="/tags.html#SQL">SQL</a> ]</i>
+          
+        
+        
+          <span>Published: 2009/10/19</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2009/10/10/1255182752" title="Firefoxに入れるアドオンめも">
+          Firefoxに入れるアドオンめも
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2009/10/31/1257000092" title="文字リテラルで'を使用する場合">
+          文字リテラルで'を使用する場合
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<p>　OracleM@sterを目指すためにちょっとずつOracle（というかSQL）のエントリを増やしていく。超にわかなところから徐々にOracleM@sterをコーナーに追い詰めていこうと思います。</p>
+<p>　というわけで題名の件。</p>
+<h1>PL/SQL</h1>
+<p>　OracleのOracleによるOracleのための<span style="font-weight:bold;">プログラミング言語</span>。SQLに変数宣言やif文、for文exceptionなどを記述可能にしたプログラミング言語なのでSQLに分類されない。</p>
+<p>　記述的にはこんな感じになる。</p>
+<pre class="">DECLARE
+	宣言
+BEGIN
+	IF (条件) THEN
+		処理
+	END IF
+EXCEPTION
+	WHEN 例外条件 THEN
+		処理
+END</pre>
+<p>　次にSQLの種類。</p>
+<h1>SQLの種類</h1>
+<p>　SQLの操作は大きく四つに分けられて、</p>
+<ul><li>データを<span style="font-weight:bold;">定義</span>する言語: DDL(Data <span style="font-weight:bold;">Definition</span> Language)</li><li>データを<span style="font-weight:bold;">操作</span>する言語: DML(Data <span style="font-weight:bold;">Manipulation</span> Language)</li><li>データを<span style="font-weight:bold;">制御</span>する言語: DCL(Data <span style="font-weight:bold;">Control</span> Language)</li><li>トランザクション制御</li></ul>
+<p>　となっている。全部読んで字のごとくなんだけど初見だと略称から意味が出てこない；　あと、若干略称からコマンドが出てこない事がある。コマンドは、</p>
+<table><tr><th>DDL</th><td>CREATE(作成)</td><td>ALTER(変更)</td><td>DROP(削除)</td><td><span style="font-weight:bold;">TRUNCATE(切捨て)</span></td><td>　</td></tr><tr><th>DML</th><td>SELECT(問い合わせ)</td><td>INSERT(挿入)</td><td>UPDATE(更新)</td><td>DELETE(削除)</td><td><span style="font-weight:bold;">MERGE(挿入更新)</span></td></tr><tr><th>DCL</th><td><span style="font-weight:bold;">GRANT(権限付与)</span></td><td><span style="font-weight:bold;">REVOKE(権限削除)</span></td><td>　</td><td>　</td><td>　</td></tr><tr><th>トランザクション</th><td>COMMIT(コミット)</td><td>ROLLBACK(取り消し)</td><td>SAVEPOINT(RB位置指定)</td><td>　</td><td>　</td></tr></table>
+<p>　こんな感じ。</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2009/10/10/1255182752" title="Firefoxに入れるアドオンめも">
+          Firefoxに入れるアドオンめも
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2009/10/31/1257000092" title="文字リテラルで'を使用する場合">
+          文字リテラルで'を使用する場合
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2009/10/19/1255949562" data-text="kk_Atakaの日記 - PL/SQLとSQLの種類" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2009/10/19/1255949562/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2009/10/19/1255949562/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2009/10/19/1255949562/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - PL/SQLとSQLの種類"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2009/10/19/1255949562/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

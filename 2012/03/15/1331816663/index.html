@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Pro Gitと入門gitでGitの復習 マージ編 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Pro Gitと入門gitでGitの復習 マージ編</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Git">Git</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/03/15</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/03/11/1331472478" title="Pro Gitと入門gitでGitの復習 ブランチ編">
+          Pro Gitと入門gitでGitの復習 ブランチ編
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/03/20/1332240122" title="Windows環境用にrcovをビルドしなおす手順">
+          Windows環境用にrcovをビルドしなおす手順
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<ul><li><a href="2012-03-05-1330951640">2012-03-05-1330951640</a></li><li><a href="http://d.hatena.ne.jp/kk_Ataka/">kk_Atakaの日記</a></li></ul>
+<p>今回はマージから。</p>
+<h1>参考</h1>
+<ul><li><a href="http://progit.org/">Git - Book</a></li><li>入門git</li></ul>
+<h1>マージ</h1>
+<h2>前準備</h2>
+<p>ここでブランチ用にリポジトリを作りなおした。</p>
+<pre class="">$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;</pre>
+<p>というファイルを作成し、chapter1というブランチを切る。</p>
+<pre class="">$ git branch chapter1
+
+$ git branch
+   chapter1
+ * master</pre>
+<p>ブランチはこうなるはず。</p>
+<pre class=""> *master/chapter1/HEAD
+ ↓
+ ↓
+ ○
+　</pre>
+<p>次にchapter2を作成し、ブランチ切り替え。</p>
+<pre class="">$ git checkout -b chapter2law chapter1
+Switched to a new branch 'chapter2law'
+</pre>
+<p>文言を追加し、コミット。</p>
+<pre class="">$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
+&lt;h2&gt;誰も僕を責めることはできない&lt;/h2&gt;
+
+$ git commit -a -m &quot;Add chapter2 law route&quot;</pre>
+<p>ブランチはこうなるはず。chapter2lawに切り替えているのでHEADもこちらへ。</p>
+<pre class="">master/chapter1
+↓　*chapter2law/HEAD
+↓　↓
+↓┌○
+○┘
+　</pre>
+<p>同様にchapter3lawも作る。</p>
+<pre class="">$ git checkout -b chapter3law chapter2law
+Switched to a new branch 'chapter3law'
+
+$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
+&lt;h2&gt;誰も僕を責めることはできない&lt;/h2&gt;
+&lt;h3&gt;欺き欺かれて&lt;/h3&gt;
+
+$ git commit -a -m &quot;Add chapter3 law route&quot;</pre>
+<pre class="">master/chapter1
+↓　chapter2law
+↓　↓　*chapter3law/HEAD
+↓　↓　↓
+↓┌○─○
+○┘
+　</pre>
+<p>ここでchapter1から派生させて、馬鹿な事はやめるんだッ！　と新しいブランチを作成。</p>
+<pre class="">$ git checkout -b chapter2chaos chapter1
+Switched to a new branch 'chapter2chaos'</pre>
+<p>chapter1を元にcheckout -bしたのでファイルの中身を見るとh1タグしかない状態に戻っている。</p>
+<pre class="">$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;</pre>
+<p>また文言を追加しコミット。</p>
+<pre class="">$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
+&lt;h2&gt;思いどおりにいかないのが世の中なんて割り切りたくないから&lt;/h2&gt;
+
+$ git commit -a -m &quot;Add chapter2 chaos route&quot;</pre>
+<pre class="">master/chapter1
+↓　chapter2law
+↓　↓　chapter3law
+↓　↓　↓
+↓┌○─○
+↓│
+○┴○
+　　↑
+　　*chapter2chaos/HEAD</pre>
+<p>この調子でchapter3neutralとchapter3chaosブランチを作る。</p>
+<pre class="">$ git checkout -b chapter3neutral chapter2chaos
+Switched to a new branch 'chapter3neutral'
+
+$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
+&lt;h2&gt;思いどおりにいかないのが世の中なんて割り切りたくないから&lt;/h2&gt;
+&lt;h3&gt;すくいきれないもの&lt;/h3&gt;
+
+$ git commit -a -m &quot;Add chapter3 neutral route&quot;
+
+$ git checkout -b chapter3chaos chapter2chaos
+Switched to a new branch 'chapter3chaos'
+
+$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
+&lt;h2&gt;思いどおりにいかないのが世の中なんて割り切りたくないから&lt;/h2&gt;
+&lt;h3&gt;駆り立てるのは野心と欲望、横たわるのは犬と豚&lt;/h3&gt;
+
+$ git commit -a -m &quot;Add chapter3 chaos route&quot;</pre>
+<pre class="">master/chapter1
+↓　chapter2law
+↓　↓　chapter3law
+↓　↓　↓
+↓┌○─○
+↓│
+○┴○┬○
+　　↑│↑
+　　↑│chapter3neutral
+　　↑└○
+　　↑　↑
+　　↑　*chapter3chaos/HEAD
+　　chapter2chaos</pre>
+<p>logコマンドで見てみる。あってるかな。</p>
+<pre class="">$ git log --graph --date-order --all --date=short -C -M --pretty=format:&quot;%h&quot;\ %ad\ %cn\ %Cgreen%d%Cre
+set\ %s
+ * 2078f0a 2012-03-07 kk_Ataka  (HEAD, chapter3chaos) Add chapter3 chaos route
+ | * 427a08c 2012-03-07 kk_Ataka  (chapter3neutral) Add chapter3 neutral route
+ |/
+ * 416daca 2012-03-07 kk_Ataka  (chapter2chaos) Add chapter2 chaos route
+ | * 3dc258a 2012-03-07 kk_Ataka  (chapter3law) Add chapter3 law route
+ | * cae3956 2012-03-07 kk_Ataka  (chapter2law) Add chapter2 law route
+ |/
+ * 9d2e5d1 2012-03-07 kk_Ataka  (master, chapter1) typo
+ * 4e0ebaa 2012-03-07 kk_Ataka  Add chapter 1
+ * 338a929 2012-03-07 kk_Ataka  First commit</pre>
+<h2>いよいよマージ</h2>
+<p>最後に今わかれているlaw,chaos,neutralのブランチをchapter4にマージする。まずは久々にmasterブランチに戻る。</p>
+<pre class="">$ git checkout master
+Switched to branch 'master'
+
+$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;</pre>
+<p>merge [branch]コマンドでまずchapter3lawをマージ。</p>
+<pre class="">$ git merge chapter3law
+Updating 9d2e5d1..3dc258a
+Fast-forward
+ field.html |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+ 
+$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
+&lt;h2&gt;誰も僕を責めることはできない&lt;/h2&gt;
+&lt;h3&gt;欺き欺かれて&lt;/h3&gt;</pre>
+<p>マージ元のブランチ(master)がマージ先のブランチ(chapter3law)の親である場合、"直接到達できる"という事なので、masterブランチをそのままchapter3lawまですすめられた。</p>
+<p>本来は、ここでchapter3lawブランチは削除するらしい(masterにすべてマージされたからもう必要ないであろうということ？)が、記念に残しておく。</p>
+<p>次にchaosルートも取り込む。コマンドは同じだが、出力が少し違う。</p>
+<pre class="">$ git merge chapter3chaos
+Auto-merging field.html
+CONFLICT (content): Merge conflict in field.html
+Automatic merge failed; fix conflicts and then commit the result.</pre>
+<p>コンフリクトが起きたようだ。競合を解決してくださいとファイルが編集されるのでステータスも変わる。しかもメッセージもいつもと違う。Unmerged pathとか出る。</p>
+<p>いつもの。</p>
+<pre class="">$ git status
+# On branch master
+# Untracked files:
+#   (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+#
+#       README
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)</pre>
+<p>今回の。</p>
+<pre class="">$ git status
+# On branch master
+# Unmerged paths:
+#   (use &quot;git add/rm &lt;file&gt;...&quot; as appropriate to mark resolution)
+#
+#       both modified:      field.html
+#
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</pre>
+<p>ファイルを見てみる。</p>
+<pre class="">$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+&lt;h2&gt;誰も僕を責めることはできない&lt;/h2&gt;
+&lt;h3&gt;欺き欺かれて&lt;/h3&gt;
+=======
+&lt;h2&gt;思いどおりにいかないのが世の中なんて割り切りたくないから&lt;/h2&gt;
+&lt;h3&gt;駆り立てるのは野心と欲望、横たわるのは犬と豚&lt;/h3&gt;
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; chapter3chaos</pre>
+<p>今マージしたchapter3law=master=HEADとchapter3chaosで競合。とりあえずそのまま追記追記するように。</p>
+<pre class="">$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
+&lt;h2&gt;誰も僕を責めることはできない&lt;/h2&gt;
+&lt;h3&gt;欺き欺かれて&lt;/h3&gt;
+&lt;h2&gt;思いどおりにいかないのが世の中なんて割り切りたくないから&lt;/h2&gt;
+&lt;h3&gt;駆り立てるのは野心と欲望、横たわるのは犬と豚&lt;/h3&gt;</pre>
+<p>最後にニュートラルなんだけど、また競合しそう……。</p>
+<pre class="">$ git merge chapter3neutral
+Auto-merging field.html
+CONFLICT (content): Merge conflict in field.html
+Automatic merge failed; fix conflicts and then commit the result.</pre>
+<p>ああやっぱり。</p>
+<pre class="">$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
+&lt;h2&gt;誰も僕を責めることはできない&lt;/h2&gt;
+&lt;h3&gt;欺き欺かれて&lt;/h3&gt;
+&lt;h2&gt;思いどおりにいかないのが世の中なんて割り切りたくないから&lt;/h2&gt;
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+&lt;h3&gt;駆り立てるのは野心と欲望、横たわるのは犬と豚&lt;/h3&gt;
+=======
+&lt;h3&gt;すくいきれないもの&lt;/h3&gt;
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; chapter3neutral</pre>
+<p>とりあえず競合を消して最後の文言を。</p>
+<pre class="">$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
+&lt;h2&gt;誰も僕を責めることはできない&lt;/h2&gt;
+&lt;h3&gt;欺き欺かれて&lt;/h3&gt;
+&lt;h2&gt;思いどおりにいかないのが世の中なんて割り切りたくないから&lt;/h2&gt;
+&lt;h3&gt;駆り立てるのは野心と欲望、横たわるのは犬と豚&lt;/h3&gt;
+&lt;h3&gt;すくいきれないもの&lt;/h3&gt;
+
+$ git commit -a -m &quot;Merge conflict&quot;
+[master 134d7a8] Merge conflict
+
+$ cat field.html
+&lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
+&lt;h2&gt;誰も僕を責めることはできない&lt;/h2&gt;
+&lt;h3&gt;欺き欺かれて&lt;/h3&gt;
+&lt;h2&gt;思いどおりにいかないのが世の中なんて割り切りたくないから&lt;/h2&gt;
+&lt;h3&gt;駆り立てるのは野心と欲望、横たわるのは犬と豚&lt;/h3&gt;
+&lt;h3&gt;すくいきれないもの&lt;/h3&gt;
+&lt;h4&gt;手を取り合って&lt;/h4&gt;
+
+$ git commit -a -m &quot;Add chapter4 title&quot;
+[master f83bfdb] Add chapter4 title
+ 1 files changed, 1 insertions(+), 0 deletions(-)</pre>
+<p>最後にグラフを見てみる。</p>
+<pre class="">$ git log --graph --date-order --all --date=short -C -M --pretty=format:&quot;%h&quot;\ %ad\ %cn\ %Cgreen%d%Cre
+set\ %s
+ * f83bfdb 2012-03-07 kk_Ataka  (HEAD, master, chapter4) Add chapter4 title
+ *   134d7a8 2012-03-07 kk_Ataka  Merge conflict
+ |\
+ * | a8e9a29 2012-03-07 kk_Ataka  Merge conflict
+ * | a1d3f55 2012-03-07 kk_Ataka  Delete conflict
+ * |   9040fa9 2012-03-07 kk_Ataka  Merge chapter3law in master
+ |\ \
+ | * | 2078f0a 2012-03-07 kk_Ataka  (chapter3chaos) Add chapter3 chaos route
+ | | * 427a08c 2012-03-07 kk_Ataka  (chapter3neutral) Add chapter3 neutral route
+ | |/
+ | * 416daca 2012-03-07 kk_Ataka  (chapter2chaos) Add chapter2 chaos route
+ * | 3dc258a 2012-03-07 kk_Ataka  (chapter3law) Add chapter3 law route
+ * | cae3956 2012-03-07 kk_Ataka  (chapter2law) Add chapter2 law route
+ |/
+ * 9d2e5d1 2012-03-07 kk_Ataka  (chapter1) typo
+ * 4e0ebaa 2012-03-07 kk_Ataka  Add chapter 1
+ * 338a929 2012-03-07 kk_Ataka  First commit</pre>
+<p>こうなってるか。</p>
+<pre class="">chapter1
+↓　chapter2law
+↓　↓　chapter3law　　　 master/chapter4/HEAD
+↓　↓　↓　　　　　　　　↓
+↓┌○─○───────┐↓
+↓│　　　　　　　　　　│↓
+○┴○┬○───────┼○
+　　↑│↑　　　　　　　│
+　　↑│chapter3neutral │
+　　↑└○───────┘
+　　↑　↑
+　　↑　chapter3chaos
+　　chapter2chaos</pre>
+<p>本当は、これをやってみたかったんだけど例が悪すぎて両方コンフリクトしてしまった</p>
+<blockquote><p># 図 3-16. Git が共通の先祖を自動的に見つけ、ブランチのマージに使用する</p><p>$ git checkout master</p><p>$ git merge iss53</p><p>Merge made by recursive.</p><p> README |    1 +</p><p> 1 files changed, 1 insertions(+), 0 deletions(-)</p></blockquote>
+<p>次はリモートブランチとかリベース。</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/03/11/1331472478" title="Pro Gitと入門gitでGitの復習 ブランチ編">
+          Pro Gitと入門gitでGitの復習 ブランチ編
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/03/20/1332240122" title="Windows環境用にrcovをビルドしなおす手順">
+          Windows環境用にrcovをビルドしなおす手順
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/03/15/1331816663" data-text="kk_Atakaの日記 - Pro Gitと入門gitでGitの復習 マージ編" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/03/15/1331816663/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/03/15/1331816663/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/03/15/1331816663/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Pro Gitと入門gitでGitの復習 マージ編"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/03/15/1331816663/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

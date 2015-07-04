@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#SlideShare">SlideShare</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Heroku">Heroku</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#API">API</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/05/21</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/28/1335575351" title="BPStudy#57に参加しました #bpstudy">
+          BPStudy#57に参加しました #bpstudy
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/05/28/1338209339" title="Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red">
+          Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<p>slideshareを社内から閲覧する事を禁じられているので、ワンクッションおいてスライドのpptを落とせるようにしたい</p>
+<h1>参考サイト</h1>
+<ul><li><a href="http://www.slideshare.net/developers/documentation#get_slideshow">SlideShare » Developer Documentation</a></li></ul>
+<p>とりあえず公式サイトを抑えておけばいけそう。</p>
+<h1>流れ</h1>
+<h2>API申請</h2>
+<ul><li>slideshare -> Developer & APIのページからApply for API keyに移動</li><li>ログイン or 新規アカウント作成</li><li>Name、E-Mail、How do you want to use the API?を入力し送信。頑張って英文書く。</li></ul>
+<pre class="">I want to get slideshare's slide from API.</pre>
+<ul><li>送信されたメールに貼られている<span class="deco" style="font-weight:bold;">API Key</span>と<span class="deco" style="font-weight:bold;">Shared Secret</span>を控える</li></ul>
+<h2>パラメータ</h2>
+<ul><li>slideshare -> Documentationを見ながら必要なパラメータを調べる</li></ul>
+<table><tr><th>api_key</th><td>さっきのAPI Key</td></tr><tr><th>ts</th><td>タイムスタンプ<span class="footnote"><a href="#f1" title="Set this to the current time in Unix TimeStamp format, to the nearest second(?)." name="fn1">*1</a></span></td></tr><tr><th>hash</th><td>さっきのShared Secretとこれから取得するtsでハッシュを作る<span class="footnote"><a href="#f2" title="Set this to the SHA1 hash of the concatenation of the shared secret and the timestamp (ts). i.e. SHA1 (sharedsecret + timestamp). The order of the terms in the concatenation is important." name="fn2">*2</a></span></td></tr><tr><th>(username)</th><td>登録ID</td></tr><tr><th>(password)</th><td>パスワード</td></tr></table>
+<p>全然関係ないけど、Documentationのページ内にあるi.e.って単語を初めて見たのでググってみた。<a href="http://www.masahiko.info/life/archives/000799.html">論文中の「e.g.」「i.e.」の意味は何？ － Diary@一色政彦WebSite</a> that is ... すなわちとかそういう意味らしい。e.g.で例えば、for example的な。</p>
+<h1>ソース</h1>
+<p>ソースはこんな感じ。</p>
+<pre class="ruby">require 'openssl'
+require 'uri'
+require 'net/http'
+
+url = 'http://www.slideshare.net/api/2/get_slideshow'
+param = Hash.new
+param[&quot;slideshow_url&quot;] = 'http://www.slideshare.net/gishi/wicket-presentation'
+param[&quot;api_key&quot;] = 'XXXXXXXX'
+param[&quot;sharedsecret&quot;] = 'XXXXXXXX'
+# ts
+param[&quot;ts&quot;] = Time.now.to_i.to_s
+# hash
+param[&quot;hash&quot;] = Digest::SHA1.hexdigest(param[&quot;sharedsecret&quot;]+param[&quot;ts&quot;])
+
+uri = URI.parse(url)
+Net::HTTP.new(uri.host).start do |http|
+#Net::HTTP.new(uri.host, 80, ENV[&quot;PROXY&quot;], 8080).start do |http|
+  uri_param = param.sort.map {|i|i.join('=')}.join('&amp;')
+  
+  res = http.get(uri.path + '?' + uri_param)
+  puts res.body
+end</pre>
+<p>成功するとこんな感じの内容が返ってくる。</p>
+<pre class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;Slideshow&gt;
+  &lt;ID&gt;579496&lt;/ID&gt;
+  &lt;Title&gt;Wicket&amp;#20307;&amp;#39443;&amp;#35527;&lt;/Title&gt;
+  &lt;Description&gt;&amp;#31532;1&amp;#22238;Wicket&amp;#21193;&amp;#24375;&amp;#20250;&amp;#12398;&amp;#12521;&amp;#12452;&amp;#12488;&amp;#12491;&amp;#12531;&amp;#12464;&amp;#12488;&amp;#12540;&amp;#12463;&amp;#30330;&amp;#34920;&amp;#36039;&amp;#26009;&lt;/Description&gt;
+  &lt;Status&gt;2&lt;/Status&gt;
+  &lt;Username&gt;gishi&lt;/Username&gt;
+  &lt;URL&gt;http://www.slideshare.net/gishi/wicket-presentation&lt;/URL&gt;
+  &lt;ThumbnailURL&gt;http://cdn.slidesharecdn.com/wicket-1220375587470160-8-thumbnail&lt;/ThumbnailURL&gt;
+  &lt;ThumbnailSmallURL&gt;http://cdn.slidesharecdn.com/wicket-1220375587470160-8-thumbnail-2&lt;/ThumbnailSmallURL&gt;
+  &lt;Embed&gt;&amp;lt;div style=&amp;quot;width:425px&amp;quot; id=&amp;quot;__ss_579496&amp;quot;&amp;gt;&amp;lt;strong style=&amp;quot;display:block;margin:12px 0 4px&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;http://www.slideshare.net/gishi/wicket-presentation&amp;quot; title=&amp;quot;Wicket&amp;#20307;&amp;#39443;&amp;#35527;&amp;quot;&amp;gt;Wicket&amp;#20307;&amp;#39443;&amp;#35527;&amp;lt;/a&amp;gt;&amp;lt;/strong&amp;gt;&amp;lt;object id=&amp;quot;__sse579496&amp;quot; width=&amp;quot;425&amp;quot; height=&amp;quot;355&amp;quot;&amp;gt;&amp;lt;param name=&amp;quot;movie&amp;quot; value=&amp;quot;http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=wicket-1220375587470160-8&amp;amp;stripped_title=wicket-presentation&amp;amp;userName=gishi&amp;quot; /&amp;gt;&amp;lt;param name=&amp;quot;allowFullScreen&amp;quot; value=&amp;quot;true&amp;quot;/&amp;gt;&amp;lt;param name=&amp;quot;allowScriptAccess&amp;quot; value=&amp;quot;always&amp;quot;/&amp;gt;&amp;lt;param name=&amp;quot;wmode&amp;quot; value=&amp;quot;transparent&amp;quot;/&amp;gt;&amp;lt;embed name=&amp;quot;__sse579496&amp;quot; src=&amp;quot;http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=wicket-1220375587470160-8&amp;amp;stripped_title=wicket-presentation&amp;amp;userName=gishi&amp;quot; type=&amp;quot;application/x-shockwave-flash&amp;quot; allowscriptaccess=&amp;quot;always&amp;quot; allowfullscreen=&amp;quot;true&amp;quot; wmode=&amp;quot;transparent&amp;quot; width=&amp;quot;425&amp;quot; height=&amp;quot;355&amp;quot;&amp;gt;&amp;lt;/embed&amp;gt;&amp;lt;/object&amp;gt;&amp;lt;div style=&amp;quot;padding:5px 0 12px&amp;quot;&amp;gt;View more &amp;lt;a href=&amp;quot;http://www.slideshare.net/&amp;quot;&amp;gt;presentations&amp;lt;/a&amp;gt; from &amp;lt;a href=&amp;quot;http://www.slideshare.net/gishi&amp;quot;&amp;gt;Hiroto Yamakawa&amp;lt;/a&amp;gt;.&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&lt;/Embed&gt;
+  &lt;Created&gt;Tue Sep 02 10:14:12 -0500 2008&lt;/Created&gt;
+  &lt;Updated&gt;Tue Sep 02 10:16:15 -0500 2008&lt;/Updated&gt;
+  &lt;Language&gt;ja&lt;/Language&gt;
+  &lt;Format&gt;ppt&lt;/Format&gt;
+  &lt;Download&gt;1&lt;/Download&gt;
+  &lt;DownloadUrl&gt;http://s3.amazonaws.com/ppt-download/wicket-1220375587470160-8.ppt?response-content-disposition=attachment&amp;amp;Signature=ABs151smgWZ9213%2FyFq81fnMc6A%3D&amp;amp;Expires=1328606581&amp;amp;AWSAccessKeyId=AKIAJLJT267DEGKZDHEQ&lt;/DownloadUrl&gt;
+  &lt;SlideshowType&gt;0&lt;/SlideshowType&gt;
+  &lt;InContest&gt;0&lt;/InContest&gt;
+&lt;/Slideshow&gt;</pre>
+<p>おー取れた。んで、xmlの中のDownloadUrlからpptをゲットできた！　これをSinatraでWebアプリケーションにしてHerokuにデプロイすれば職場から行けるかな！？</p>
+<p>→いけた！　自分の中ではお役立ち。<a href="http://tycoon-slidedown.heroku.com/">http://tycoon-slidedown.heroku.com/</a></p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: Set this to the current time in Unix TimeStamp format, to the nearest second(?).</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: Set this to the SHA1 hash of the concatenation of the shared secret and the timestamp (ts). i.e. SHA1 (sharedsecret + timestamp). The order of the terms in the concatenation is important.</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/28/1335575351" title="BPStudy#57に参加しました #bpstudy">
+          BPStudy#57に参加しました #bpstudy
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/05/28/1338209339" title="Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red">
+          Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/05/21/1337605575" data-text="kk_Atakaの日記 - SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/05/21/1337605575/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/05/21/1337605575/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/05/21/1337605575/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/05/21/1337605575/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

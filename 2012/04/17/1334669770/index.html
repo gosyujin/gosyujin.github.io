@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Subversionで2ヶ所のリポジトリの同期を取るメモ - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Subversionで2ヶ所のリポジトリの同期を取るメモ</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Solaris">Solaris</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Subversion">Subversion</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/04/17</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/10/1334058674" title="Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編">
+          Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/04/20/1334933158" title="ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした">
+          ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回のあらすじ</h1>
+<ul><li><a href="2012-01-15-1326624864">2012-01-15-1326624864</a></li></ul>
+<h1>参考サイト</h1>
+<ul><li><a href="http://www.asahi-net.or.jp/~iu9m-tcym/svndoc/svn_backup.html">Subversionリポジトリのバックアップ [概略</a>]</li><li><a href="http://www.ilovex.co.jp/blog/system/other/subversion.html">Subversionの履歴を保持したままリポジトリを移動するには - システム開発ブログ （システム開発のアイロベックス｜東京都新宿区の業務システム開発会社）</a></li><li><a href="http://www.02.246.ne.jp/~torutk/subversion/intro.html">Subversionでバージョン管理</a></li><li><a href="http://d.hatena.ne.jp/pasela/20090206/svn_backup">Subversionリポジトリのバックアップ方法いろいろ - ぱせらんメモ</a></li><li><a href="http://terai.xrea.jp/Subversion.html">Subversion - てんぷらメモ</a></li></ul>
+<h1>前提</h1>
+<ul><li>以下の二つのサーバがある<ul><li>Aサーバ:開発を進んでいるリポジトリがある(r222)</li><li>Bサーバ:これからAサーバのリポジトリと同期をとりたいリポジトリがある(r111)</li></ul></li></ul>
+<h1>差分のdumpとってload(失敗)</h1>
+<h2>Aサーバ</h2>
+<ul><li>進んでいる分のダンプを取る。<ul><li>rオプションでダンプを取るリビジョンを指定できる。一つだけだとそのリビジョンだけ。(222ならリビジョン222)範囲指定する場合はAAA:BBBとする</li></ul></li></ul>
+<pre class="">$ svnadmin dump リポジトリパス(/home/xxx/yyyなど) -r 111:222 --incremental &gt; repo.dump</pre>
+<ul><li>これをなんらかの方法でBサーバへ移動する(ftpでもUSBでも)</li></ul>
+<h2>Bサーバ</h2>
+<ul><li>svnadmin loadコマンドで差分ダンプファイルを流しこむ。<ul><li>リビジョンがかぶっているとエラー(リビジョン111未満のもの)</li></ul></li></ul>
+<pre class="">$ svnadmin load リポジトリパス(/home/xxx/yyyなど) &lt; repo.dump
+&lt;&lt;&lt; オリジナルのリビジョン 111 に基づき、新しいトランザクションを開始しました
+     * パスを追加しています : trunk/xxx ...svnadmin: ファイルが既に存在します: ファイルシステム 'リポジトリパス', トランザクション xxx-xx, パス 'trunk/xxx'</pre>
+<ol><ul><li>112からダンプしたファイルをloadする…とうまくいく予定だったのだが、なんかファイルのチェックサムが違うといわれた……。</li></ul></ol>
+<pre class="">$ svnadmin load リポジトリパス(/home/xxx/yyyなど) &lt; repo.dump
+&lt;&lt;&lt; オリジナルのリビジョン 112 に基づき、新しいトランザクションを開始しました
+     * パスを編集しています : trunk/xxx/a.sh ... 完了しました。
+
+------- 新しいリビジョン xxx を (オリジナルのリビジョン xxx からロードして) コミットしました &gt;&gt;&gt;
+
+&lt;&lt;&lt; オリジナルのリビジョン 113 に基づき、新しいトランザクションを開始しました
+     * パスを編集しています : trunk/xxx/b.sh ... 完了しました。
+     * パスを編集しています : trunk/xxx/c.sh ...
+     svnadmin: ファイル '/trunk/xxx/c.sh' のチェックサムが一致しませんでした:
+   期待:  f566e489511cea2fd1e6 ...
+   実際:  0f76ab4f5d0625e9de9c ...</pre>
+<p>フルダンプをとる => 新しくリポジトリを作成 => loadでも同じファイル(リビジョンは違った)でコケたので別の方法を考える……。</p>
+<h1>hotcopy(成功)</h1>
+<blockquote><p>このサブコマンドは、すべてのフック、設定ファイル、そしてもちろんデータベースファイルを含む、リポジトリの完全な「ホット」バックアップを作成します。</p><cite><a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.4-final/svn.ref.svnadmin.c.hotcopy.html">http://www.caldron.jp/~nabetaro/svn/svnbook-1.4-final/svn.ref.svnadmin.c.hotcopy.html</a></cite></blockquote>
+<p>ただし可搬性に乏しいとの事。今回は同マシン、OS、Subversionバージョンなので大丈夫だと思う。まずAサーバでコピー。</p>
+<pre class="">$ svnadmin hotcopy リポジトリパス(/home/xxx/yyyなど) コピー先のリポジトリパス
+a /home/xxx/yyy OK
+a /home/xxx/yyy/hooks OK
+a /home/xxx/yyy/hooks/start-commit.tmpl 3K
+...
+a /home/xxx/yyy/format 1K</pre>
+<p>これをBサーバへ持ってくるだけ。フルバックアップしかできないのでこれしか方法はない？</p>
+<p>とりあえず一時しのぎはできたけど、チェックサム解消法も考えないといけないな。 </p>
+<ul><li><a href="http://d.hatena.ne.jp/replication/20120405/1333548839">TortoiseSVNでchecksum mismatchというエラーでコミットできない場合の対処方法 - 大人になったら肺呼吸</a></li><li><a href="http://rack990.sakura.ne.jp/archives/entry-184.html">Subversionでチェックサムがおかしいとき  - 日々是雑記</a></li><li><a href="http://d.hatena.ne.jp/espresso3389/20090208">espresso3389の日記</a></li><li><a href="http://web.archive.org/web/20101221154224/http://nonn-et-twk.net/twk/svn-checksum-mismatch">subversion checksum mismatchから簡単に復活する方法 | twk @ ふらっと</a></li><li><a href="http://glob.bushi.net.nz/glob/2007/02/14/subversion-checksum-mismatch-easy-workaround/">subversion checksum mismatch - easy workaround | bur.gs</a></li><li><a href="http://weekbuild.blog39.fc2.com/?mode=m&no=30">WeekBuildのHACK日記  ディスククラッシュ</a></li><li><a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.4-final/svn.ref.svnadmin.c.hotcopy.html">svnadmin hotcopy</a></li></ul>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/10/1334058674" title="Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編">
+          Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/04/20/1334933158" title="ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした">
+          ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/04/17/1334669770" data-text="kk_Atakaの日記 - Subversionで2ヶ所のリポジトリの同期を取るメモ" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/17/1334669770/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/04/17/1334669770/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/17/1334669770/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Subversionで2ヶ所のリポジトリの同期を取るメモ"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/04/17/1334669770/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

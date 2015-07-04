@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Windowsのローカル環境にWordPressをインストールした - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Windowsのローカル環境にWordPressをインストールした</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/10/11</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/10/08/1318068887" title="さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする">
+          さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/11/16/1321447232" title="Excel2007のF1キーを無効化する">
+          Excel2007のF1キーを無効化する
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<ul><li>Wordpress上ではてな記法を使うことができるというプラグイン <a href="http://rewish.org/wp/hatena_notation_plugin">WordPressにはてな記法を導入するプラグインを作った - Rewish</a> を見つけて使ってみたい！　と思ったのでWordpress備忘録も兼ねてインストール</li></ul>
+<h1>参考サイト</h1>
+<ul><li>WordPress<ul><li><a href="http://ja.wordpress.org/">WordPress | 日本語</a></li><li><a href="http://ja.wordpress.org/install/">WordPress | 日本語 » インストール</a></li><li><a href="http://www.webcreatorbox.com/tech/wordpress-install-local/">Wordpressをローカルにインストールする | Webクリエイターボックス</a></li></ul></li><li>MySQL<ul><li><a href="http://y-kit.jp/saba/xp/mysqlinst.htm">MySQLデータベースサーバーのインストール Windows篇</a></li><li><a href="http://www.mysql.com/downloads/installer/">MySQL ::  Download MySQL Installer</a></li></ul></li></ul>
+<h1>推奨環境</h1>
+<ul><li>WordPress 3.2 の場合<ul><li>PHP 5.2.4 以上</li><li>MySQL 5.0 以上</li></ul></li></ul>
+<h1>実行環境</h1>
+<ul><li>Windows XP</li><li>WordPress 3.2</li><li>Apache 2.2.1</li><li>PHP 5.3.8</li><li>MySQL 5.5.15</li></ul>
+<h1>MySQL</h1>
+<h2>インストール、設定</h2>
+<ul><li><a href="http://www.mysql.com/downloads/installer/">MySQL ::  Download MySQL Installer</a>よりMySQLをDL。登録がめんどかったら<a href="http://download.softagency.net/mysql/Downloads/MySQL-5.5/">Index of /mysql/Downloads/MySQL-5.5</a>この辺から</li><li>msi実行。基本的に次へ次へ</li><li>C:\windows直下にmy.iniファイルを作成以下のように記述<ul><li>basedirはMySQLのルート(msiでデフォルトインストールするとC:/Program Files/MySQL/MySQL Server 5.5に入る)</li><li>datadirはその中のdataフォルダ</li></ul></li></ul>
+<pre class="python">[mysqld]
+basedir=&quot;C:/Program Files/MySQL/MySQL Server 5.5&quot;
+datadir=&quot;C:/Program Files/MySQL/MySQL Server 5.5/data&quot;
+default-character-set=cp932
+
+[mysql]
+default-character-set=cp932</pre>
+<h2>Windowsサービス登録</h2>
+<pre class="python">$ cd &quot;c:/Program Files/MySQL/MySQL Server 5.5/bin/&quot;
+$ mysqld --install
+Service successfully installed.</pre>
+<h2>Windowsサービス起動</h2>
+<pre class="python">$ net start mysql
+MySQL サービスを開始します....
+MySQL サービスを開始できませんでした。
+
+システム エラーが発生しました。
+
+システム エラー 1067 が発生しました。
+
+プロセスを途中で強制終了しました。</pre>
+<ul><li>エラーが起きた。1067でググってみると設定ファイルがうまく読み込めていないよう</li><li>さらにdatadir下にある.errファイルを見るとこんなエラーが。default-character-setミスってるっぽい？</li></ul>
+<pre class="python">111004 17:18:24 [ERROR] c:\Program Files\MySQL\MySQL Server 5.5\bin\mysqld.exe: unknown variable 'default-character-set=cp932'</pre>
+<ul><li>default-character-setが使えるのははMySQL5.0までで5.5以降はcharacter-set-serverとなるらしい</li><li>ただし、[mysql]はdefault-character-setらしい…？</li><li>my.ini書き換え</li></ul>
+<pre class="python">[mysqld]
+basedir=&quot;C:/Program Files/MySQL/MySQL Server 5.5&quot;
+datadir=&quot;C:/Program Files/MySQL/MySQL Server 5.5/data&quot;
+# default-character-set=cp932
+character-set-server=cp932
+
+[mysql]
+default-character-set=cp932
+# character-set-server=cp932</pre>
+<ul><li>一旦サービス削除</li></ul>
+<pre class="python">$ mysqld --remove
+Service successfully removed.</pre>
+<ul><li>設定ファイルを指定しつつサービス登録</li></ul>
+<pre class="python">$ mysqld --install
+Service successfully installed.</pre>
+<ul><li>再度起動</li></ul>
+<pre class="python">$ net start mysql
+MySQL サービスを開始します..
+MySQL サービスは正常に開始されました</pre>
+<p>よし。</p>
+<h2>ユーザ作成</h2>
+<ul><li>はじめにrootユーザのパスワードを設定する</li></ul>
+<pre class="python">$ mysqladmin.exe -u root password root</pre>
+<ul><li>接続</li></ul>
+<pre class="python">$ mysql -u root -p
+Enter password: **** # パスワード求められる</pre>
+<ul><li>Wordpress用のDBを作成</li></ul>
+<pre class="python">mysql&gt; create database wordpress
+    -&gt; ;
+Query OK, 1 row affected (0.05 sec)</pre>
+<ul><li>とりあえず終了</li></ul>
+<pre class="python">mysql&gt; quit
+Bye</pre>
+<h1>PHP</h1>
+<h2>インストール</h2>
+<ul><li><a href="http://windows.php.net/download/">PHP For Windows: Binaries and sources Releases</a> からWindows用のPHPをDL<ul><li>Non Thread safe版にはApacheと連携するためのライブラリ等が入っていないのでThread safe版のInstallerを</li></ul></li><li>次へ次へ<ul><li>インストール先はC:\Program Files\PHP\にした</li></ul></li><li>Web Server Setup は Apache 2.2.x Moduleを選択</li><li>Apache Configuration Directory は次に入れるApacheのパスを記述(どこまで？Apacheルート？　bin？)</li></ul>
+<h1>Apache</h1>
+<h2>インストール</h2>
+<ul><li><a href="http://httpd.apache.org/download.cgi#apache22">Download - The Apache HTTP Server Project</a> からDL</li></ul>
+<h1>ApacheとPHPとWordpressの連携</h1>
+<ul><li>APACHE2.2\conf\httpd.confファイルを編集<ul><li>LoadModuleの近くに追加</li></ul></li></ul>
+<pre class="python">PHPIniDir &quot;C:\Program Files\PHP\&quot; # PHPがインストールされているフォルダ
+LoadModule php5_module &quot;C:/Program Files/PHP/php5apache2_2.dll&quot;</pre>
+<ol><ul><li>DocumentRootをWordpressのルートに変更</li></ul></ol>
+<pre class="python">DocumentRoot &quot;C:\Program Files\wordpress&quot; # Wordpressを解凍したフォルダ
+
+&lt;Directory &quot;C:\Program Files\wordpress&quot;&gt; # 同じく</pre>
+<ol><ul><li>index.phpをウェルカムファイルに追加</li></ul></ol>
+<pre class="">    DirectoryIndex index.html, index.php # index.php追加。htmlより左に持って行くと最優先でindex.phpが表示</pre>
+<ol><ul><li>AddTypeなどを追加</li></ul></ol>
+<pre class="">     AddHandler cgi-script .cgi
+
+     AddType application/x-httpd-php .php
+     PHPIniDir &quot;C:/Program Files/PHP&quot;</pre>
+<ul><li>Apache再起動後、localhost:80へアクセスすると(エラーが出るが)PHPが実行されているはず</li></ul>
+<h1>WordPress</h1>
+<ul><li><a href="http://ja.wordpress.org/">WordPress | 日本語</a> からWordPressをDLし解凍</li><li>wp-config-sample.phpをコピーしwp-config.phpを作成し、以下の設定を変更</li></ul>
+<pre class="python">// ** MySQL 設定 - こちらの情報はホスティング先から入手してください。 ** //
+/** WordPress のためのデータベース名 */
+define('DB_NAME', 'database_name_here'); # 上で作成したwordpressに
+
+/** MySQL データベースのユーザー名 */
+define('DB_USER', 'username_here'); # ユーザ(今回はrootで)
+
+/** MySQL データベースのパスワード */
+define('DB_PASSWORD', 'password_here'); # パスワード</pre>
+<ul><li>localhost:80/wp-admin/install.phpへアクセスし、「ようこそ」画面が出てきたら正常動作している</li><li>サイトのタイトル、ユーザ名、パスワードを入力し「Wordpressをインストール」ボタン押下</li><li>localhost:80にアクセスし、Hello World!が表示されていれば完了！</li></ul>
+<h1>wordpress-hatena</h1>
+<h2>参考サイト</h2>
+<ul><li><a href="http://rewish.org/wp/hatena_notation_plugin">WordPressにはてな記法を導入するプラグインを作った - Rewish</a></li></ul>
+<h1>手順</h1>
+<ul><li><a href="http://downloads.wordpress.org/plugin/wp-hatena-notation.zip">WPHatenaNotation</a> をDL</li><li>Wordpressにログイン</li><li>プラグイン -> 新規追加 -> アップロード -> zipを参照しいますぐインストール -> プラグインを有効化</li></ul>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/10/08/1318068887" title="さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする">
+          さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/11/16/1321447232" title="Excel2007のF1キーを無効化する">
+          Excel2007のF1キーを無効化する
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/10/11/1318334855" data-text="kk_Atakaの日記 - Windowsのローカル環境にWordPressをインストールした" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/11/1318334855/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/10/11/1318334855/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/11/1318334855/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Windowsのローカル環境にWordPressをインストールした"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/10/11/1318334855/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>複数のRuby環境の管理・切替ができるpikを実行できた - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>複数のRuby環境の管理・切替ができるpikを実行できた</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/10/04</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/10/03/1317642705" title="Rubyのgemバージョン管理ができるBundlerを実行できなかった">
+          Rubyのgemバージョン管理ができるBundlerを実行できなかった
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/10/08/1318068887" title="さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする">
+          さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<ul><li><a href="2011-10-03-1317642705">2011-10-03-1317642705</a>にてBundlerでのgem管理に失敗した</li><li>別の方法はないかと調べているとRubyをバージョンごとに管理できるrvmとpikを見つけた<ul><li>とりあえず別出ししておいて安定させたい環境と色々試行錯誤したい環境に分けられる？</li></ul></li><li>Windows環境なのでpikを使ってみようとインストールしてみた</li></ul>
+<h1>インストール手順(gem)</h1>
+<p>※gemでは実際にRubyをinstallする段階の所で失敗したので、実際は次のmsiを使ってインストールした。</p>
+<ul><li>gemでOK</li></ul>
+<pre class="">gem install pik</pre>
+<ul><li>pikをインストールするにはpik_installコマンドを実行する必要があるが、フォルダを作成し、PATHに追加してから実行してくれと言われる</li></ul>
+<pre class="">$ pik_install
+Usage:  pik_install path\to\install
+
+You should install to a directory that is in your system path,
+or add the directory to your system path.  Do not install to
+your ruby's bin directory because pik will remove it from the
+path when switching versions.
+
+Example:
+
+  C:\&gt;path
+
+  PATH=C:\tools;C:\ruby\Ruby-186-p383\bin;C:\WINDOWS\system32;...
+
+  C:\&gt;pik_install C:\tools</pre>
+<ul><li>C:\pikフォルダ作成しPATHに追加し再度</li></ul>
+<pre class="">$ pik_install C:\pik
+Thank you for using pik.
+
+mkdir -p C:\pik
+mkdir -p %userprofile%/.pik
+Installing to C:\pik
+
+cp C:/ruby/lib/ruby/gems/1.8/gems/pik-0.2.8/tools/pik_runner.exe C:\pik
+cp C:/ruby/lib/ruby/gems/1.8/gems/pik-0.2.8/tools/pik.bat C:\pik
+cp C:/ruby/lib/ruby/gems/1.8/gems/pik-0.2.8/tools/pik.ps1 C:\pik
+
+creating %USERPROFILE%/.pik/.pikrc
+
+pik is installed
+
+The directory you installed to is not in the sytem path.
+C:\pik
+
+You will need to add it.
+
+
+if you want to use pik with git bash, add the following line to your ~/.bashrc:
+
+  [[ -s $USERPROFILE/.pik/.pikrc ]] &amp;&amp; source $USERPROFILE/.pik/.pikr</pre>
+<ul><li>ホームとC直下にファイルが作成された</li></ul>
+<h1>インストール手順(msi)</h1>
+<p>※gemから入れるとRubyをinstallする段階でエラーが表示された。</p>
+<pre class="">$ pik install ruby -v 1.9.2-P136
+pik 0.2.8
+
+There was an error.
+ Error: private method `gsub' called for nil:NilClass
+
+  in: pik/commands/install_command.rb:24:in `execute'
+  in: pik_runner:33</pre>
+<ul><li>他のバージョンでもだめだった。ぐぬぬ。調べてみるとgemからではなくmsiからインストールした方がよいとの事なので一回gem uninstallしてmsiからインストールする事に。。。</li></ul>
+<blockquote><p>    * <a href="https://github.com/vertiginous/pik/downloads">Downloads · vertiginous/pik · GitHub</a></p><p>から .msi をダウンロードして実行してください。今回は pik 2.8.0 を使いました。</p><cite><a href="http://d.hatena.ne.jp/miau/20110106/1294325095">http://d.hatena.ne.jp/miau/20110106/1294325095</a></cite></blockquote>
+<ul><li>msiからインストールする場合Rubyが空っぽの場合からでもいけるようなので既存のRubyを削除。。</li><li>そしてmsi実行</li></ul>
+<p>pikコマンドを打つ際にRubyが一つも入っていないとエラーになるため、%USERPROFILE%\.pik\config.ymlにダミーのバージョンを記載する必要がある。</p>
+<pre class="">--- 
+&quot;000: ruby 0.0.0 (dummy ruby for pik)&quot;: 
+  :path: !ruby/object:Pathname 
+    path: C:/pik/dummy
+--- {}</pre>
+<p>で、使用法へ。</p>
+<h1>使用法</h1>
+<ul><li>現在インストールされているRuby表示</li></ul>
+<pre class="">$ pik list
+ * 187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]</pre>
+<ul><li>インストール可能なRuby一覧表示。Ruby1.8から1.9からJRubyまで</li></ul>
+<pre class="">$ pik list -r
+---
+DevKit:
+  3.4.5r3: http://rubyforge.org/frs/download.php/66888/devkit-3.4.5r3-20091110.7z
+IronRuby:
+  0.3.0: http://rubyforge.org/frs/download.php/53552/ironruby-0.3.0.zip
+  0.5.0: http://rubyforge.org/frs/download.php/57126/ironruby-0.5.0.zip
+  0.6.0: http://rubyforge.org/frs/download.php/59717/ironruby-0.6.0.zip
+  0.9.0: http://rubyforge.org/frs/download.php/61382/ironruby-0.9.0.zip
+  0.9.1: http://rubyforge.org/frs/download.php/64504/ironruby-0.9.1.zip
+  0.9.2: http://rubyforge.org/frs/download.php/66606/ironruby-0.9.2.zip
+  &quot;1.0&quot;: http://rubyforge.org/frs/download.php/70179/ironruby-1.0.zip
+  1.0-rc1: http://rubyforge.org/frs/download.php/67955/ironruby-1.0-rc1.zip
+  1.0-rc2: http://rubyforge.org/frs/download.php/69180/ironruby-1.0-rc2.zip
+  1.0.0rc: http://rubyforge.org/frs/download.php/69853/ironruby-1.0.0rc.zip
+  1.0rc3: http://rubyforge.org/frs/download.php/69665/ironruby-1.0rc3.zip
+  1.0v4: http://rubyforge.org/frs/download.php/70181/ironruby-1.0v4.zip
+JRuby:
+  1.5.6: http://jruby.org.s3.amazonaws.com/downloads/1.5.6/jruby-bin-1.5.6.zip
+  1.6.4: http://jruby.org.s3.amazonaws.com/downloads/1.6.4/jruby-bin-1.6.4.zip
+Ruby:
+  1.8.7-p302: http://rubyforge.org/frs/download.php/72087/ruby-1.8.7-p302-i386-mingw32.7z
+  1.8.7-p330: http://rubyforge.org/frs/download.php/73720/ruby-1.8.7-p330-i386-mingw32.7z
+  1.8.7-p334: http://rubyforge.org/frs/download.php/74296/ruby-1.8.7-p334-i386-mingw32.7z
+  1.8.7-p352: http://rubyforge.org/frs/download.php/75108/ruby-1.8.7-p352-i386-mingw32.7z
+  1.9.1-p429: http://rubyforge.org/frs/download.php/71496/ruby-1.9.1-p429-i386-mingw32.7z
+  1.9.1-p430: http://rubyforge.org/frs/download.php/72076/ruby-1.9.1-p430-i386-mingw32.7z
+  1.9.2-p0: http://rubyforge.org/frs/download.php/72160/ruby-1.9.2-p0-i386-mingw32.7z
+  1.9.2-p136: http://rubyforge.org/frs/download.php/73723/ruby-1.9.2-p136-i386-mingw32.7z
+  1.9.2-p180: http://rubyforge.org/frs/download.php/74299/ruby-1.9.2-p180-i386-mingw32.7z
+  1.9.2-p290: http://rubyforge.org/frs/download.php/75128/ruby-1.9.2-p290-i386-mingw32.7z
+  1.9.2-rc1: http://rubyforge.org/frs/download.php/71498/ruby-1.9.2-rc1-i386-mingw32.7z
+  1.9.2dev-preview3-1: http://rubyforge.org/frs/download.php/71175/ruby-1.9.2dev-preview3-i386-mingw32-1.7z</pre>
+<ul><li>pikフォルダへRubyインストール</li></ul>
+<pre class="">$ pik install ruby -v 1.9.2-p0
+pik 0.2.8
+** Downloading:  http://rubyforge.org/frs/download.php/72160/ruby-1.9.2-p0-i386-mingw32.7z
+   to:  %userprofile%\.pik\downloads\ruby-1.9.2-p0-i386-mingw32.7z
+
+ruby-1.9.2-p0-i386-mingw32.7z: 100% |oooooooooo|   5.7MB/  5.7MB Time: 00:00:20
+
+You need the 7zip utility to extract this file.
+Would you like me to download it? (yes/no)  |yes|
+y [ENTER]
+7za465.zip: 100% |ooooooooooooooooooooooooooooo| 352.5KB/352.5KB Time: 00:00:00
+
+** Extracting:  %USERPROFILE%\.pik\downloads\ruby-1.9.2-p0-i386-mingw32.7z
+   to:  %USERPROFILE%\.pik\rubies\Ruby-192-p0
+done
+
+** Adding:  192: ruby 1.9.2p0 (2010-08-18) [i386-mingw32]
+ Located at:  %USERPROFILE%\.pik\rubies\Ruby-192-p0\bin</pre>
+<p>お、行けた。<span class="footnote"><a href="#f1" title="config.ymlを開きっぱにしている場合、Permission deniedがでる" name="fn1">*1</a></span></p>
+<ul><li>再度確認。1.9が入ってる。</li></ul>
+<pre class=""> $ pik list
+ * 187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]
+   192: ruby 1.9.2p0 (2010-08-18) [i386-mingw32]</pre>
+<p><del datetime="2011-11-24T21:41:19+09:00">最後にswitch or sw or use コマンドを使用する事でrubyのバージョンを切り替えられる……はずだったのだが、どうにも試した環境だと変わらなかった。何故変わらんのだー。ので、今回の導入は見送りして少し調べないといかん。</del></p>
+<h2><span class="deco" style="color:#FF0000;">20111124追記</span></h2>
+<p>……と、切り替わらなかったのが前回までの話。原因は主に二つあり、なぜ切り替わらなかったのかわかるためにはpikの動きを追う必要があった。</p>
+<ol><li>環境変数がおかしかった</li><li>コマンドプロンプトではなくnyaosを使っていた</li></ol>
+<p>この記事では1を解決させる。nyaosは <a href="2011-11-24-1322138944">2011-11-24-1322138944</a> で。</p>
+<ul><li><a href="http://d.hatena.ne.jp/miyamuko/20100905/nyaos_with_pik">nyaos で pik を使う設定と pik の動作原理 - *Trace Output*</a></li></ul>
+<p>2-1. pik_runner.exe の処理を読むと最後に切り替えたRubyのパスを環境変数に追加するために%USERPROFILE%\.pik\pik.batを実行していると書いている。</p>
+<ul><li>ただし、このpik.batはインストールしてpik listとかって実行する時のpik.batとは違う<ul><li>そのpikはC:\pikとかに入っているはず</li></ul></li></ul>
+<p>知らなかった……こんなbatファイルが生成されているとは。このSET PATHを見ると……ギャーーー！！　なんかpath変数の頭の方に%PATH%が入っていて、pikで追加したRuby(%USERPROFILE%\.pik\rubies\Ruby-192-p0\binなど)より既存Ruby(C:\ruby\binなど)のパスが前におるじゃないかぁぁぁ！　というわけで、path変数から%PATH%を取り除いたのが一つ。これでコマンドプロンプトからは動いた！</p>
+<h1>その他</h1>
+<p>今回は使わなかったコマンドたち</p>
+<p>既に入っているRubyをpikへ追加するaddと削除するuninstall</p>
+<pre class="">$ pik add Rubyのパス(ruby.exeのある場所)
+$ pik uninstall ruby -v 187</pre>
+<p>※コマンドはバージョンによって若干記述が違う様子。特にsw or switch or useあたり？</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: config.ymlを開きっぱにしている場合、Permission deniedがでる</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/10/03/1317642705" title="Rubyのgemバージョン管理ができるBundlerを実行できなかった">
+          Rubyのgemバージョン管理ができるBundlerを実行できなかった
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/10/08/1318068887" title="さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする">
+          さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/10/04/1317660186" data-text="kk_Atakaの日記 - 複数のRuby環境の管理・切替ができるpikを実行できた" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/04/1317660186/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/10/04/1317660186/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/04/1317660186/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - 複数のRuby環境の管理・切替ができるpikを実行できた"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/10/04/1317660186/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>すごいHaskellたのしく学ぼうでHaskellことはじめ - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>すごいHaskellたのしく学ぼうでHaskellことはじめ</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Haskell">Haskell</a> ]</i>
+          
+        
+        
+          <span>Published: 2013/01/21</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/01/09/haskell-helloworld" title="プログラミングHaskellでHaskellことはじめ">
+          プログラミングHaskellでHaskellことはじめ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/01/24/haskell-helloworld3" title="すごいHaskellたのしく学ぼうでHaskellことはじめ2">
+          すごいHaskellたのしく学ぼうでHaskellことはじめ2
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#参考'>参考</a></li><li><a href='#2章-型を信じろ！'>2章 型を信じろ！</a></li><ul><li><a href='#型変数'>型変数</a></li><li><a href='#型クラス'>型クラス</a></li><ul><li><a href='#=>'>=></a></li></ul></ul></ul></ul><!-- end of tree list --></div>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>Halkellを学ぶにあたってのメモやわからない所を以下に時系列でつらつらと。</p>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li>すごいHaskellたのしく学ぼう</li>
+</ul>
+
+<h2 id="2章-型を信じろ！">2章 型を信じろ！</h2>
+
+<ul>
+<li>Haskellでは、すべての式の型がコンパイル時にわかっている</li>
+<li>また、自分で書かなくても型推論でなんとかしてくれる</li>
+<li>式の型は <code>:t</code> コマンドで調べられる</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="kt">:</span><span class="n">t</span> <span class="s">&quot;Hello&quot;</span>
+<span class="s">&quot;Hello&quot;</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Char</span><span class="p">]</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="kt">:</span><span class="n">t</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="ow">::</span> <span class="kt">Num</span> <span class="n">t</span> <span class="ow">=&gt;</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="kt">:</span><span class="n">t</span> <span class="p">(</span><span class="kt">True</span><span class="p">,</span> <span class="s">&quot;Hello&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="kt">True</span><span class="p">,</span> <span class="s">&quot;Hello&quot;</span><span class="p">)</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Bool</span><span class="p">,</span> <span class="p">[</span><span class="kt">Char</span><span class="p">])</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="kt">:</span><span class="n">t</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">5</span>
+<span class="mi">4</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">::</span> <span class="kt">Bool</span></code></pre></div>
+
+<ul>
+<li><code>::</code> は <code>の型を持つ</code> の意味
+
+<ul>
+<li>&quot;Hello&quot;はChar型のリスト(文字列)を持つ</li>
+</ul></li>
+</ul>
+
+<p>こんな関数を作る。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">removeNonUppercase</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Char</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="kt">Char</span><span class="p">]</span>
+<span class="nf">removeNonUppercase</span> <span class="n">st</span> <span class="ow">=</span> <span class="p">[</span><span class="n">c</span> <span class="o">|</span> <span class="n">c</span> <span class="ow">&lt;-</span> <span class="n">st</span><span class="p">,</span> <span class="n">c</span> <span class="p">`</span><span class="n">elem</span><span class="p">`</span> <span class="p">[</span><span class="n">&#39;A&#39;</span><span class="o">..</span><span class="n">&#39;Z&#39;</span><span class="p">]]</span></code></pre></div>
+
+<p>実行結果はこう。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">removeNonUppercase</span> <span class="s">&quot;Hello World&quot;</span>
+<span class="s">&quot;HW&quot;</span></code></pre></div>
+
+<p>この関数は <code>[Char] -&gt; [Char]</code> という型を持つ。これは <code>1つの文字列型を受け取り、1つの文字列型を返す</code> と考える。たしかに&quot;Hello World&quot;を受け取り&quot;HW&quot;を返してるな。</p>
+
+<p>次はこんな関数。ちょっとややこしくなってきた。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">addThree</span> <span class="ow">::</span> <span class="kt">Int</span> <span class="ow">-&gt;</span> <span class="kt">Int</span> <span class="ow">-&gt;</span> <span class="kt">Int</span> <span class="ow">-&gt;</span> <span class="kt">Int</span>
+<span class="nf">addThree</span> <span class="n">x</span> <span class="n">y</span> <span class="n">z</span> <span class="ow">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">addThree</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span>
+<span class="mi">6</span></code></pre></div>
+
+<p>ここでは、 <code>3つのIntを受け取り、1つのIntを返す</code> としか読めないが、いったんそう覚えておく。うーん。</p>
+
+<h3 id="型変数">型変数</h3>
+
+<p>headって、リストを引数に渡せば文字だろうが数値だろうがheadを返してくれる。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">head</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="mi">1</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">head</span> <span class="p">[</span><span class="n">&#39;s&#39;</span><span class="p">,</span><span class="n">&#39;a&#39;</span><span class="p">,</span><span class="n">&#39;f&#39;</span><span class="p">]</span>
+<span class="n">&#39;s&#39;</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">head</span> <span class="p">[</span><span class="kt">True</span><span class="p">,</span><span class="kt">False</span><span class="p">,</span><span class="kt">True</span><span class="p">]</span>
+<span class="kt">True</span></code></pre></div>
+
+<p>型はどうなってんの？</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="kt">:</span><span class="n">t</span> <span class="n">head</span>
+<span class="nf">head</span> <span class="ow">::</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="n">a</span></code></pre></div>
+
+<p>a…だと…。</p>
+
+<p>aは型変数と呼ばれ、どんな型でもとれる。ただし、aは同じである必要がある。</p>
+
+<p>今回は数値を渡したら <code>[Int] -&gt; Int</code> となるという事かな。</p>
+
+<h3 id="型クラス">型クラス</h3>
+
+<ul>
+<li>なんらかの振る舞いを定義するインターフェース</li>
+<li>関数の集まり</li>
+<li>型クラスに集まる関数をメソッドとも呼ぶ</li>
+<li>関数が特殊文字のみの場合、デフォルトで中置関数になる
+
+<ul>
+<li>+とか*とか</li>
+</ul></li>
+</ul>
+
+<p>ふーむ。よくわからんので実例を見てみよう。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="kt">:</span><span class="n">t</span> <span class="p">(</span><span class="o">==</span><span class="p">)</span>
+<span class="p">(</span><span class="o">==</span><span class="p">)</span> <span class="ow">::</span> <span class="kt">Eq</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Bool</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">1</span>
+<span class="kt">True</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">2</span>
+<span class="kt">False</span></code></pre></div>
+
+<p>(==) は1つの何かの型の引数と1つの何かの型の引数を受け取り、Bool型を返す。</p>
+
+<p>中置関数なので、実際は <code>(==) 1 1</code> こういう事か。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="kt">:</span><span class="n">t</span> <span class="p">(</span><span class="o">+</span><span class="p">)</span>
+<span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="ow">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">a</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="mi">3</span></code></pre></div>
+
+<p>これはIntとIntを渡してIntが返る。</p>
+
+<p>なるほどね。</p>
+
+<p><code>=&gt;</code> はなんだろう。</p>
+
+<h4 id="gt">=&gt;</h4>
+
+<ul>
+<li>このシンボルより前にあるものは型クラス制約と呼ばれる。</li>
+<li>(==)の場合は1つの何かの型の引数と1つの何かの型の引数を受け取り、Bool型を返す。ただし <code>引数aはEqクラスのインスタンスでなければならない</code> という事か</li>
+<li><strong>型クラスのクラスは、オブジェクト指向のクラスとは同じでない</strong> </li>
+</ul>
+
+<p>わかったようなわからんような。</p>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/01/09/haskell-helloworld" title="プログラミングHaskellでHaskellことはじめ">
+          プログラミングHaskellでHaskellことはじめ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/01/24/haskell-helloworld3" title="すごいHaskellたのしく学ぼうでHaskellことはじめ2">
+          すごいHaskellたのしく学ぼうでHaskellことはじめ2
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/01/21/haskell-helloworld2" data-text="kk_Atakaの日記 - すごいHaskellたのしく学ぼうでHaskellことはじめ" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/01/21/haskell-helloworld2/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/01/21/haskell-helloworld2/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/01/21/haskell-helloworld2/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - すごいHaskellたのしく学ぼうでHaskellことはじめ"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2013/01/21/haskell-helloworld2/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

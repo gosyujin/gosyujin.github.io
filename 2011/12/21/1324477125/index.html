@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Ruby実行時のオプションをよろしく解析してくれるoptparseを使ってみる - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Ruby実行時のオプションをよろしく解析してくれるoptparseを使ってみる</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/12/21</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/20/1324386674" title="CapsLockキーとCtrlキーを入れ替える(置き換える)方法">
+          CapsLockキーとCtrlキーを入れ替える(置き換える)方法
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/22/1324573161" title="SolarisにSubversionをインストールするときのメモ">
+          SolarisにSubversionをインストールするときのメモ
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<p>コマンドラインから引数つきでRubyを実行する時は</p>
+<pre class="">ruby xxxx.rb ARG1 ARG2</pre>
+<p>とかして、中でARGVをifで条件分岐とかしていたが…何か他にやり方があるのではと調べたらやっぱりあった。optparseを使えばよろしく解析してくれるようだ。</p>
+<h1>参考サイト</h1>
+<ul><li><a href="http://www.ruby-lang.org/ja/old-man/html/optparse_A5C1A5E5A1BCA5C8A5EAA5A2A5EB.html">optparse::チュートリアル - Rubyリファレンスマニュアル</a></li></ul>
+<blockquote><p>   1. OptionParser オブジェクト opt を生成する。</p><p>   2. オプションを取り扱うブロックを opt に登録する。</p><p>   3. opt.parse(ARGV) でコマンドラインを実際に parse する。</p></blockquote>
+<p>基本はこういう事らしい。</p>
+<h1>サンプルソース</h1>
+<p>とりあえずGistに。色々試してみる。</p>
+<p><script src="https://gist.github.com/1376804.js?file=optparse.rb"></script></p>
+<h1>実行結果</h1>
+<h2>単純なオプション</h2>
+<pre class="ruby">  # short option
+  opt.on('-a', 'DESCRIPTION') do |v|
+    puts &quot;v class is #{v.class}&quot;
+    puts &quot;-a is #{v}&quot;
+  end</pre>
+<p>オプションに-aを指定するだけ。真偽値で返ってくる。第二引数のDESCRIPTIONは後述。</p>
+<pre class="ruby">$ ruby optparse.rb -a
+v class is TrueClass
+-a is true</pre>
+<h2>オプションの後に値(必須)</h2>
+<pre class="ruby">  # short option with require argument
+  opt.on('-b VALUE') do |v|
+    puts &quot;v class is #{v.class}&quot;
+    puts &quot;-b is #{v}&quot;
+  end</pre>
+<p>オプションに-b xxxxと指定する。こう記述すると必須になるため、VALUEにあたる値を指定しないとエラーに。</p>
+<pre class="ruby">$ ruby optparse.rb -b
+C:/ruby/lib/ruby/1.8/optparse.rb:451:in `parse': missing argument: -b (OptionPar
+ser::MissingArgument)
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1295:in `parse_in_order'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1254:in `catch'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1254:in `parse_in_order'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1248:in `order!'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1339:in `permute!'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1360:in `parse!'
+        from optparse.rb:49
+        from C:/ruby/lib/ruby/1.8/optparse.rb:791:in `initialize'
+        from optparse.rb:4:in `new'
+        from optparse.rb:4</pre>
+<p>VALUEを指定すると受け取れる。</p>
+<pre class="ruby">$ ruby optparse.rb -b sample.txt
+v class is String
+-b is sample.txt</pre>
+<h2>オプションの後に値(任意)</h2>
+<pre class="ruby">  # short option with argument
+  opt.on('-c [VALUE]') do |v|
+    puts &quot;v class is #{v.class}&quot;
+    puts &quot;-c is #{v}&quot;
+  end</pre>
+<p>VALUEを[]で囲むと値は任意指定になる。指定しないのと指定するので返る値がちがう。(Nilが返ってくる)</p>
+<pre class="ruby">$ ruby optparse.rb -c
+v class is NilClass
+-c is</pre>
+<pre class="ruby">$ ruby optparse.rb -c sample.txt
+v class is String
+-c is sample.txt</pre>
+<h2>長いオプション</h2>
+<pre class="ruby">  # long option. it can also -d, --d
+  opt.on('--define') do |v|
+    puts &quot;v class is #{v.class}&quot;
+    puts &quot;--define is #{v}&quot;
+  end</pre>
+<p>一文字じゃなくて長い言葉(--define)にする事もできる。また、その頭文字をとって一文字指定(-d, --d)もできる。(かぶったらどっちが優先されるんだろう、まだ調べてない)</p>
+<pre class="ruby">$ ruby optparse.rb --define
+v class is TrueClass
+--define is true</pre>
+<h2>単純なオプションと長いオプション両方指定</h2>
+<pre class="ruby">  # short option and long option. it can also --e
+  opt.on('-e', '--element') do |v|
+    puts &quot;v class is #{v.class}&quot;
+    puts &quot;-e, --element is #{v}&quot;
+  end</pre>
+<p>指定する事もできる。</p>
+<pre class="ruby">$ ruby optparse.rb -e
+v class is TrueClass
+-e, --element is true</pre>
+<pre class="ruby">$ ruby optparse.rb --element
+v class is TrueClass
+-e, --element is true</pre>
+<h2>オプションの後に真偽値</h2>
+<pre class="ruby">  # class define
+  opt.on('-f BOOLEAN', TrueClass) do |v|
+    puts &quot;v class is #{v.class}&quot;
+    puts &quot;-f is #{v}&quot;
+  end</pre>
+<p>BOOLEANで真偽値を入力させる事ができる。それ以外だとエラー。</p>
+<pre class="ruby">$ ruby optparse.rb -f aaa
+C:/ruby/lib/ruby/1.8/optparse.rb:454:in `parse': invalid argument: -f aaa (Optio
+nParser::InvalidArgument)
+        from C:/ruby/lib/ruby/1.8/optparse.rb:326:in `parse_arg'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:454:in `parse'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1295:in `parse_in_order'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1254:in `catch'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1254:in `parse_in_order'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1248:in `order!'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1339:in `permute!'
+        from C:/ruby/lib/ruby/1.8/optparse.rb:1360:in `parse!'
+        from optparse.rb:49
+        from C:/ruby/lib/ruby/1.8/optparse.rb:791:in `initialize'
+        from optparse.rb:4:in `new'
+        from optparse.rb:4</pre>
+<p>真偽値が返ってくる。</p>
+<pre class="ruby">$ ruby optparse.rb -f true
+v class is TrueClass
+-f is true</pre>
+<pre class="ruby">$ ruby optparse.rb -y
+v class is TrueClass
+-y is true</pre>
+<h2>ヘルプとバージョン、ヘルプに表示するメッセージ</h2>
+<pre class="ruby">  # -h, --h, --help is show usage.
+  # -v, --v, --version is show version.</pre>
+<p>オプション-hと-vはヘルプとバージョンに用途が決められている模様。バージョンは何もやっていないので</p>
+<pre class="ruby">$ ruby optparse.rb -v
+optparse: version unknown</pre>
+<p>こうなる。ヘルプは</p>
+<pre class="ruby">$ ruby optparse.rb -h
+Usage: optparse [options]
+    -z                               MOVE HEAD!!
+    -a                               DESCRIPTION
+    -b VALUE
+    -c [VALUE]
+        --define
+    -e, --element
+    -f BOOLEAN
+    -y                               MOVE TAIL!!</pre>
+<p>ここで、一番上の-zと-yの位置とMOVE XXX、そして-aのDESCRIPTIONが気になる。さっきの-aの後にあるDESCRIPTIONはヘルプ用メッセージ。</p>
+<pre class="ruby">  # short option
+  opt.on('-a', 'DESCRIPTION') do |v|
+    puts &quot;v class is #{v.class}&quot;
+    puts &quot;-a is #{v}&quot;
+  end</pre>
+<p>残りの-zと-yは、まず-aと同様に引数にMOVE XXXを指定しているのでこれが表示される。そして、opt.onメソッドの代わりにそれぞれon_headとon_tailを使っている。これでheadの場合はヘルプのはじめに上がってきて、tailの場合はおわりに下がるらしい。</p>
+<pre class="ruby">  # usage sort
+  opt.on_head('-z', 'MOVE HEAD!!') do |v|
+    puts &quot;v class is #{v.class}&quot;
+    puts &quot;-z is #{v}&quot;
+  end</pre>
+<pre class="ruby">  # usage sort
+  opt.on_tail('-y', 'MOVE TAIL!!') do |v|
+    puts &quot;v class is #{v.class}&quot;
+    puts &quot;-y is #{v}&quot;
+  end</pre>
+<h2>組み合わせ</h2>
+<p>組み合わせもできる。</p>
+<pre class="ruby">$ ruby optparse.rb -aeb sample.txt
+v class is TrueClass
+-a is true
+v class is TrueClass
+-e, --element is true
+v class is String
+-b is sample.txt </pre>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/20/1324386674" title="CapsLockキーとCtrlキーを入れ替える(置き換える)方法">
+          CapsLockキーとCtrlキーを入れ替える(置き換える)方法
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/22/1324573161" title="SolarisにSubversionをインストールするときのメモ">
+          SolarisにSubversionをインストールするときのメモ
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/12/21/1324477125" data-text="kk_Atakaの日記 - Ruby実行時のオプションをよろしく解析してくれるoptparseを使ってみる" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/21/1324477125/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/21/1324477125/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/21/1324477125/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Ruby実行時のオプションをよろしく解析してくれるoptparseを使ってみる"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/12/21/1324477125/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

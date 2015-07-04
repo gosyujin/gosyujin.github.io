@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>自作EvernoteスクリプトをOAuth対応する - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>自作EvernoteスクリプトをOAuth対応する</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Evernote">Evernote</a> ]</i>
+          
+            <i>[ <a href="/tags.html#OAuth">OAuth</a> ]</i>
+          
+        
+        
+          <span>Published: 2013/03/03</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/02/25/ruby200-helloworld-pik-rvm" title="Ruby 2.0.0 をpikとrvm経由でインストール&環境構築">
+          Ruby 2.0.0 をpikとrvm経由でインストール&環境構築
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/03/07/selenium-ie-iphone-browser" title="IEとかiPhoneWebView上でSeleniumを走らせる">
+          IEとかiPhoneWebView上でSeleniumを走らせる
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#環境'>環境</a></li><li><a href='#参考サイト'>参考サイト</a></li><li><a href='#手順'>手順</a></li><li><a href='#修正箇所'>修正箇所</a></li></ul></ul><!-- end of tree list --></div>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>結構前に、Evernoteの認証方法がOAuthになるので、変更してくださいねーというメールがEvernoteからきていた。</p>
+
+<p><a href="http://dev.evernote.com/intl/jp/documentation/cloud/chapters/Transition.php">ユーザ名とパスワードによる認証から OAuth 認証への移行 - Evernote Developers</a></p>
+
+<p>そのまま従来のスクリプトを動かしていると、認証エラーになるので、OAuth認証ができるように修正した。</p>
+
+<p>主に自分用メモ。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Ruby 1.8.7</li>
+</ul>
+
+<p>注: Evernoteスクリプトは自分しか使っていない。</p>
+
+<h2 id="参考サイト">参考サイト</h2>
+
+<ul>
+<li><a href="http://dev.evernote.com/intl/jp/documentation/cloud/chapters/Authentication.php#devtoken">認証 - Evernote Developers</a></li>
+</ul>
+
+<h2 id="手順">手順</h2>
+
+<ul>
+<li><a href="https://sandbox.evernote.com/api/DeveloperToken.action">サンドボックス用のデベロッパトークンを取得 »</a> ログイン必要</li>
+<li><a href="https://www.evernote.com/api/DeveloperToken.action">テストの完了後、プロダクション用のデベロッパトークンを取得 »</a> ログイン必要</li>
+</ul>
+
+<p><img src="/static/images/EvernoteOAuth-0.jpg" alt="img">
+<img src="/static/images/EvernoteOAuth-1.jpg" alt="img"></p>
+
+<p>他の人が使っていない、自分だけで使っている場合は以降の箇所だけ修正すればよい。</p>
+
+<h2 id="修正箇所">修正箇所</h2>
+
+<p>上記のDeveloperTokenをソース上で取得できるようにする。(今まで使っていたuserid、パスワードはいらない)以下では、Pitを使ってtokenなどを別出ししているので、そこを修正。</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">user</span> <span class="o">=</span> <span class="no">Pit</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;evernote&quot;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="o">+</span>            <span class="s2">&quot;developerToken&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;your evernote token.&quot;</span><span class="p">,</span>
+         <span class="p">})</span></code></pre></div>
+
+<p>従来は、 <code>userStore.authenticate()</code> で認証を通して、 <code>authenticationToken</code> を使うようにしていたが、このくだりを <strong>まるまるカット</strong> 。</p>
+
+<p>この <code>authenticationToken</code> を <code>developerToken</code> に置き換えてやる。</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># 認証</span>
+<span class="o">-</span>        <span class="vi">@auth</span> <span class="o">=</span> <span class="n">auth</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">userStore</span><span class="p">)</span>
+<span class="o">-</span>        <span class="vi">@authToken</span> <span class="o">=</span> <span class="vi">@auth</span><span class="o">.</span><span class="n">authenticationToken</span>
+<span class="o">-</span>       
+<span class="o">+</span>        <span class="vi">@authToken</span> <span class="o">=</span> <span class="n">user</span><span class="o">[</span><span class="s2">&quot;developerToken&quot;</span><span class="o">]</span>
+<span class="o">+</span></code></pre></div>
+
+<p>で、一個だけ困ったのが、認証結果からuserのshardIdを取ってきてnoteStoreUrlを生成していた箇所。</p>
+
+<p>まるまるカットされたので、どうやって取得するのかな？　と思ったら、userStoreに <code>getNoteStoreUrl(token)</code> というメソッドがあるので、これを使えば良い。</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">noteStoreUrlBase</span> <span class="o">=</span> <span class="s2">&quot;https://</span><span class="si">#{</span><span class="n">evernoteHost</span><span class="si">}</span><span class="s2">/edam/note/&quot;</span>
+<span class="o">-</span>        <span class="n">noteStoreUrl</span> <span class="o">=</span> <span class="n">noteStoreUrlBase</span> <span class="o">+</span> <span class="vi">@auth</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">shardId</span>
+<span class="o">+</span>        <span class="n">noteStoreUrl</span> <span class="o">=</span> <span class="n">userStore</span><span class="o">.</span><span class="n">getNoteStoreUrl</span><span class="p">(</span><span class="vi">@authToken</span><span class="p">)</span>
+         <span class="n">noteStoreTransport</span> <span class="o">=</span> <span class="no">Thrift</span><span class="o">::</span><span class="no">HTTPClientTransport</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">noteStoreUrl</span><span class="p">)</span>
+         <span class="n">noteStoreProtocol</span> <span class="o">=</span> <span class="no">Thrift</span><span class="o">::</span><span class="no">BinaryProtocol</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">noteStoreTransport</span><span class="p">)</span>
+         <span class="vi">@noteStore</span> <span class="o">=</span> <span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">NoteStore</span><span class="o">::</span><span class="no">NoteStore</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">noteStoreProtocol</span><span class="p">)</span></code></pre></div>
+
+<p>これだけで、とりあえず動くようにはなった！</p>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/02/25/ruby200-helloworld-pik-rvm" title="Ruby 2.0.0 をpikとrvm経由でインストール&環境構築">
+          Ruby 2.0.0 をpikとrvm経由でインストール&環境構築
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/03/07/selenium-ie-iphone-browser" title="IEとかiPhoneWebView上でSeleniumを走らせる">
+          IEとかiPhoneWebView上でSeleniumを走らせる
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/03/03/evernote-oauth" data-text="kk_Atakaの日記 - 自作EvernoteスクリプトをOAuth対応する" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/03/03/evernote-oauth/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/03/03/evernote-oauth/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/03/03/evernote-oauth/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - 自作EvernoteスクリプトをOAuth対応する"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2013/03/03/evernote-oauth/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

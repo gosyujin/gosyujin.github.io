@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Vimを使い始めるためにインストールから設定まで行った - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Vimを使い始めるためにインストールから設定まで行った</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Unix">Unix</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Vim">Vim</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/12/18</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/17/1324168464" title="Unixでwmvファイルを他のファイルフォーマットに変換したい">
+          Unixでwmvファイルを他のファイルフォーマットに変換したい
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/19/1324307879" title="Excelの備忘録">
+          Excelの備忘録
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<ul><li><a href="http://atnd.org/events/21925">Vim Advent Calendar 2011  : ATND</a> を見てvim使いたいと思った！</li></ul>
+<h1>参考サイト</h1>
+<ul><li><a href="http://d.hatena.ne.jp/osyo-manga/20111201/1322665228">【Vim Advent Calendar 2011】Vim の開発環境【1日目】 - C++でゲームプログラミング</a></li><li><a href="http://d.hatena.ne.jp/arcright/20100207/1265551998">Vimをソースからインストール - WapBox</a></li><li><a href="http://sites.google.com/site/vimdocja/various-html">http://sites.google.com/site/vimdocja/various-html</a></li><li><a href="http://www.hazama.nu/t2o2/archives/002696.shtml">さくらインターネットの共用サーバに vim をインストールする - talk to oneself 2</a></li><li><a href="http://blog.ville.jp/2011/03/11/536">最新のvimをインストールする | 村式流 イッパシエンジニアへの道</a></li><li><a href="http://ystyle.jpn.org/geekstyle/archives/9">vimインストール «  GeekStyle</a></li></ul>
+<h1>ダウンロード</h1>
+<p>はじめにVimをgetする。</p>
+<pre class="">$ wget ftp://ftp.vim.org/pub/vim/unix/vim-7.3.tar.bz2</pre>
+<p>次にvim7.3の最新のパッチファイルを確認して、ftp://ftp.vim.org/pub/vim/patches/7.3/からダウンロードする。今382だった。</p>
+<pre class="">$ cd vim73
+$ mkdir patches
+$ curl -O 'ftp://ftp.vim.org/pub/vim/patches/7.3/7.3.[001-382]'
+$ cd ../
+$ cat patches/7.3.* | patch -p0
+patching file src/misc1.c
+patching file src/version.c
+patching file src/ex_docmd.c
+patching file src/version.c
+.
+.
+.</pre>
+<p>patchコマンドって使った事ないなーと思い、-p0ってなんぞやとman patchしてみる……。</p>
+<blockquote><p> -pnum  または  --strip=num</p><p>　　　パッチファイルで見つかったファイル名それぞれについて、 num 個の</p><p>　　　スラッシュを含む最小のプレフィクスを取り除く。隣接した 1 個また</p><p>　　　は複数のスラッシュの並びは 1 個のスラッシュとして数えられる。こ</p><p>　　　のオプションはパッチを送った人と異なるディレクトリにファイルを</p><p>　　　格納している場合のために、パッチファイル中のファイル名の扱いを</p><p>　　　変更する。例えば、パッチファイル中のファイル名が</p><p>　　　/u/howard/src/blurfl/blurfl.c</p><p>　　　であったとすると、 -p0 とするとファイル名全体が変更されずに用い</p><p>　　　られ、 -p1 とすると</p><p>　　　u/howard/src/blurfl/blurfl.c</p><p>　　　のように先頭のスラッシュが取り除かれ、 -p4 とすると</p><p>　　　blurfl/blurfl.c</p><p>　　　のようになり、 -p を指定しなければ blurfl.c となる。最終的に参</p><p>　　　照されるディレクトリはカレントディレクトリ、または -d オプション</p><p>　　　で指定されたディレクトリである。</p></blockquote>
+<h1>インストール</h1>
+<p>configureで色々オプションを指定する必要があるよう。</p>
+<table><tr><th>--disable-selinux</th><td>Don't check for SELinux support.</td></tr><tr><th>--enable-xim</th><td>Include XIM input support.</td></tr><tr><th>--enable-multibyte</th><td>Include multibyte editing support.</td></tr><tr><th>--enable-fontset</th><td>Include X fontset output support.</td></tr><tr><th>--enable-rubyinterp=OPTS</th><td>Include Ruby interpreter.  default=no OPTS=no/yes/dynamic</td></tr><tr><th>--enable-pythoninterp=OPTS</th><td>Include Python interpreter. default=no OPTS=no/yes/dynamic</td></tr><tr><th>--with-features=TYPE</th><td>TYPE: tiny, small, normal, big or huge (default: normal)</td></tr></table>
+<p>うーん。xim(X Input Method)とX fontsetはいらないのかも？</p>
+<pre class="">$ ./configure --disable-selinux --enable-multibyte --enable-rubyinterp --enable-pythoninterp --with-features=huge
+$ make
+$ sudo make install</pre>
+<h1>設定ファイル</h1>
+<p>$HOME/_vimrcもしくは.vimrcファイルの中に書きこんでいく。とりあえずこんなものを設定してみた。なお、.vimrcファイルではダブルクォーテーションがコメントとなる。</p>
+<pre class="">&quot;オートインデント
+set autoindent
+&quot;バックアップディレクトリ
+set backupdir=/tmp/vimbackup
+&quot;スワップファイル用ディレクトリ
+set directory=/tmp/vimbackup
+&quot;タブ、行末を可視化
+set list
+&quot;listで表示する文字の設定
+set listchars=eol:$,tab:&gt;\ ,extends:&lt;
+&quot;行番号表示
+set number
+&quot;シフトの移動幅
+set shiftwidth=2</pre>
+<h1>色づけ</h1>
+<ul><li><a href="http://d.hatena.ne.jp/kattton/20110425/1303746056">新卒さんのための人気Vimカラースキーマランキング5+1(vim.org &amp; github調べ) - 黒魔法使いの弟子</a></li></ul>
+<p>vim　カラースキーマなどでググると色々出てくる。もしくはvimをインストールした場所(/usr/local/share/vimなど)/vim73/colorsの下にもある。このファイルを$HOME/vimfiles/colorsもしくは$HOME/.vim/colorsに放り込む。</p>
+<ul><li><a href="http://ethanschoonover.com/solarized">Solarized - Ethan Schoonover</a></li><li><a href="http://ethanschoonover.com/solarized/vim-colors-solarized">README - Ethan Schoonover</a></li></ul>
+<p>今回はSolarizedを入れてみる。</p>
+<pre class="">$ mkdir -p .vim/bundle
+$ mkdir .vim/colors
+$ cd .vim/bundle/
+$ git clone git://github.com/altercation/vim-colors-solarized.git
+Cloning into vim-colors-solarized...
+remote: Counting objects: 336, done.
+remote: Compressing objects: 100% (189/189), done.
+remote: Total 336 (delta 102), reused 309 (delta 75)
+Receiving objects: 100% (336/336), 92.06 KiB, done.
+Resolving deltas: 100% (102/102), done.
+$ cp vim-colors-solarized/colors/solarized.vim ../colors/</pre>
+<p>最後に.vimrcファイルにこのスキーマを読み込む設定を書く。</p>
+<pre class="">syntax enable
+set background=dark
+colorscheme solarized</pre>
+<p>これでvimを使う準備はOK。どんどんvim使っていこう。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111218234523"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111218/20111218234523.jpg"></a></p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/17/1324168464" title="Unixでwmvファイルを他のファイルフォーマットに変換したい">
+          Unixでwmvファイルを他のファイルフォーマットに変換したい
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/19/1324307879" title="Excelの備忘録">
+          Excelの備忘録
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/12/18/1324219740" data-text="kk_Atakaの日記 - Vimを使い始めるためにインストールから設定まで行った" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/18/1324219740/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/18/1324219740/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/18/1324219740/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Vimを使い始めるためにインストールから設定まで行った"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/12/18/1324219740/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>VimでBundler(プラグイン管理)するvundleインストール手順 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>VimでBundler(プラグイン管理)するvundleインストール手順</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Vim">Vim</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/04/05</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/02/1333369857" title="Subversionでファイルを分けてコミットする">
+          Subversionでファイルを分けてコミットする
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/04/10/1334058674" title="Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編">
+          Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<ul><li><a href="2011-12-18-1324219740">2011-12-18-1324219740</a></li></ul>
+<p>普通に使っているだけだった。プラグインとかも使ってみたい、入れ方メモる。</p>
+<h1>参考サイト</h1>
+<ul><li><a href="http://vim-users.jp/2011/04/hack215/">Vim-users.jp - Hack #215: Vundle で plugin をモダンに管理する</a></li><li><a href="https://github.com/vim-jp/vimdoc-ja/">vim-jp/vimdoc-ja · GitHub</a></li></ul>
+<h1>環境</h1>
+<ul><li>WindowsXP</li><li>Vim 7.3 香り屋版</li><li>msysGit</li></ul>
+<h1>プラグイン管理</h1>
+<p>プラグインを入れようと思った矢先、どうもプラグイン管理をするプラグイン？　がある模様。名前がvundleといって、RubyのGem管理に使われているBundlerに影響を受けたものみたい。Bundlerなら使ったことあるし、それなら入れやすいかも。</p>
+<h2>vundleインストール</h2>
+<p><a href="http://github.com/gmarik/vundle.git">Github</a>にリポジトリがあるのでgitでホームの.vimディレクトリにcloneする。</p>
+<pre class="">$ git clone http://github.com/gmarik/vundle.git ~/.vim/vundle.git
+Cloning into %USERPROFILE%/.vim/vundle.git...
+remote: Counting objects: 2239, done.
+remote: Compressing objects: 100% (1464/1464), done.
+remote: Total 2239 (delta 736), reused 2183 (delta 685)
+Receiving objects: 100% (2239/2239), 269.48 KiB | 66 KiB/s, done.
+Resolving deltas: 100% (736/736), done.</pre>
+<h2>設定</h2>
+<p>_vimrcまたは.vimrcを開き、まず以下の設定を記載。</p>
+<pre class="">&quot; vundle
+set nocompatible
+filetype off
+set rtp+=~/.vim/vundle.git
+call vundle#rc()
+
+filetype plugin indent on</pre>
+<p>一行目のnocompatible……。</p>
+<blockquote><p>NOTE: Viコンパチブルとは全てのオプションがグローバルであることを意味するので、</p><p>ファイル形式識別と'compatible'は同時に使うことはできない。既に'compatible'を設</p><p>定している場合には、それを解除する必要がある。</p></blockquote>
+<p>という事でファイル形式の検出と競合するので無効にされている模様。で、ファイル形式の検出はfiletypeコマンドで設定される。vimはファイル編集の際に必ずファイルタイプを検出し、いい感じのタイプを選んでくれるらしい。大きく分けて下記の3つの設定がある。</p>
+<ul><li>検出自体をするかどうか<ul><li>プラグインを検出するかどうか</li><li>インデントファイルを検出するかどうか</li></ul></li></ul>
+<p>検出自体するかどうかが一番強く、これが無効になると残りも自動的に無効になるようだ。</p>
+<p>上記の.vimrcではこのように変化している。</p>
+<table><tr><th>コマンド</th><th>検出</th><th>プラグイン</th><th>インデント</th></tr><tr><td>:filetype off</td><td>無効</td><td>変化なし</td><td>変化なし</td></tr><tr><td>:filetype plugin indent on</td><td>有効</td><td>有効</td><td>有効</td></tr></table>
+<p>また、:filetypeコマンドで現在の状態を確認する事ができる。</p>
+<pre class="">filetype detection:ON  plugin:ON  indent:OFF</pre>
+<p>rtpがなんなのかわからないけど、とりあえずこれにvundle.gitのパスを追加？　した後vundle#rcを呼んでる。vundle#rcメソッドはvundle.git/autoload/vundle.vimにあった。</p>
+<pre class="">func! vundle#rc(...) abort
+  let g:bundle_dir = len(a:000) &gt; 0 ? expand(a:1    , 1) : expand('$HOME/.vim/bundle', 1)
+  let g:vundle_log = []
+  call vundle#config#init()
+endf</pre>
+<p>vundleの初期化を行っているようだ。</p>
+<h2>プラグインの指定</h2>
+<p>実際にインストールするプラグインはvundle#rc()とfiletypeの間に記載していく。プラグインの指定方法は三つあり、書き方で自動判別してくれる？</p>
+<ul><li>GitHubのリポジトリを指定する場合…ユーザIDとリポジトリ名</li></ul>
+<pre class="">Bundle 'user_name/repository_name'</pre>
+<ul><li>それ以外のGitリポジトリを指定…URLをフルパスで</li></ul>
+<pre class="">Bundle 'git://repository_url'</pre>
+<ul><li><a href="http://vim-scripts.org/vim/tools.html">vim-scripts</a>のリポジトリを指定…plugin名</li></ul>
+<pre class="">Bundle 'plugin_name'</pre>
+<p>今回は補完を行うneocomplecacheというプラグインをインストールしてみる。<a href="https://github.com/Shougo/neocomplcache">Shougo/neocomplcache · GitHub</a> GitHubにあるので……。</p>
+<pre class="">&quot; vundle
+set nocompatible
+filetype off
+set rtp+=~/.vim/vundle.git
+call vundle#rc()
+
+Bundle 'Shougo/neocomplcache'
+
+filetype plugin indent on</pre>
+<p>こうなる。これで:BundleInstallをすればいいんだけどその前に！</p>
+<h2>Windows環境で必須なもの</h2>
+<p><a href="https://github.com/gmarik/vundle/wiki/Vundle-for-Windows">Vundle for Windows · gmarik/vundle Wiki · GitHub</a></p>
+<p>Gitとcurlが必要だったようで。Gitは入っていたがcurlが入っていなかったので入れる。</p>
+<p>……というか、msysGitの中にcurlコマンドがあるのでそれを使えた。もしくは上記のページにあるcmdファイルを作成する。</p>
+<h2>httpで落としたい</h2>
+<p>Git://とかhttps;//が使えない場合、http://で落としたいんだけど、GitHub指定方法だとhttps://でgit cloneしようとしてうまくいかない。</p>
+<p>じゃあフルパス指定したらいけるかなと思ってこうしてみた。</p>
+<pre class="">Bundle 'http://github.com/Shougo/neocomplcache'</pre>
+<p>これでもhttps://でcloneされてしまう。困ったのでソースを見てみたら案外早く解決方法見つかった。.vim/vundle.git/autoload/vundle/config.vimの44行目くらいにプロトコルを指定しているところが。</p>
+<pre class=""> let git_proto = exists('g:vundle_default_git_proto') ? g:vundle_default_gi
+ t_proto : 'https'</pre>
+<p>これをhttpにしてみたらDone!になった！　.vim/bundle/の下にプラグインが！</p>
+<h1>neocomplcache</h1>
+<p>.vim\bundle\neocomplcache\doc\neocomplcache.txtのEXAMPLES *neocomplcache-examples*より下を.vimrcにコピー。で、viを再起動したら補完が！</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/02/1333369857" title="Subversionでファイルを分けてコミットする">
+          Subversionでファイルを分けてコミットする
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/04/10/1334058674" title="Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編">
+          Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/04/05/1333553936" data-text="kk_Atakaの日記 - VimでBundler(プラグイン管理)するvundleインストール手順" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/05/1333553936/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/04/05/1333553936/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/05/1333553936/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - VimでBundler(プラグイン管理)するvundleインストール手順"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/04/05/1333553936/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

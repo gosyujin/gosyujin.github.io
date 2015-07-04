@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Subversionのproxy設定でいつもハマるやつ - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Subversionのproxy設定でいつもハマるやつ</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Git">Git</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Subversion">Subversion</a> ]</i>
+          
+        
+        
+          <span>Published: 2013/09/05</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/09/03/redmine-content-length-error" title="Ruby1.9.3のWebrickで出るCould not determine content-length...エラーを消す方法(2.0.0では解決済)">
+          Ruby1.9.3のWebrickで出るCould not determine content-length...エラーを消す方法(2.0.0では解決済)
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/09/07/jekyll-maintenance-2" title="Jekyllバージョンアップの際に思いのほか手こずった話 てっく煮さん製プラグインの更新に追従したい編">
+          Jekyllバージョンアップの際に思いのほか手こずった話 てっく煮さん製プラグインの更新に追従したい編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#環境'>環境</a></li><li><a href='#結論'>結論</a></li><li><a href='#原因'>原因</a></li></ul></ul><!-- end of tree list --></div>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p><code>git svn</code> しようとしたらエラー。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git svn rebase
+<span class="go">Malformed file: /c/Users/xxx/.subversion/servers:68: Option expected at</span>
+<span class="go">/usr/lib/perl5/site_perl/Git/SVN/Ra.pm line 81</span></code></pre></div>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Windows</li>
+</ul>
+
+<p>svn バージョン等は失念。まあ、多分バージョンはあまり関係ないと思われる？</p>
+
+<h2 id="結論">結論</h2>
+
+<p><code>git-svn</code> の問題ではなく proxy 環境下 においての svn 設定ミスだった。</p>
+
+<h2 id="原因">原因</h2>
+
+<p><code>.subversion/server</code> の該当部分を見に行くとこうなっている。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">[global]</span>
+<span class="gp">#</span> http-proxy-exceptions <span class="o">=</span> *.exception.com, www.internal-site.org
+<span class="go"> http-proxy-host = proxy.xxx.jp</span>
+<span class="go"> http-proxy-port = 8080</span></code></pre></div>
+
+<p>proxy 設定を追加するためにコメントアウトを消したが。</p>
+
+<ul>
+<li>コメントアウト <code>#</code> を <strong>一文字</strong> 消しただけではダメ(上記の状態)</li>
+<li><strong>スペース</strong> も消さなければならない</li>
+</ul>
+
+<p>ただしくはこう。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">[global]</span>
+<span class="gp">#</span> http-proxy-exceptions <span class="o">=</span> *.exception.com, www.internal-site.org
+<span class="go">http-proxy-host = proxy.xxx.jp</span>
+<span class="go">http-proxy-port = 8080</span></code></pre></div>
+
+<p>これ、毎回設定する時にひっかかってるような気がする。</p>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/09/03/redmine-content-length-error" title="Ruby1.9.3のWebrickで出るCould not determine content-length...エラーを消す方法(2.0.0では解決済)">
+          Ruby1.9.3のWebrickで出るCould not determine content-length...エラーを消す方法(2.0.0では解決済)
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/09/07/jekyll-maintenance-2" title="Jekyllバージョンアップの際に思いのほか手こずった話 てっく煮さん製プラグインの更新に追従したい編">
+          Jekyllバージョンアップの際に思いのほか手こずった話 てっく煮さん製プラグインの更新に追従したい編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/09/05/svn-proxy-error-by-git-svn" data-text="kk_Atakaの日記 - Subversionのproxy設定でいつもハマるやつ" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/09/05/svn-proxy-error-by-git-svn/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/09/05/svn-proxy-error-by-git-svn/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/09/05/svn-proxy-error-by-git-svn/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Subversionのproxy設定でいつもハマるやつ"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2013/09/05/svn-proxy-error-by-git-svn/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

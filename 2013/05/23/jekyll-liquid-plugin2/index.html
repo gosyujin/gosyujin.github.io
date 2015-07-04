@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>記事の目次を出力するJekyllプラグインの改良 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>記事の目次を出力するJekyllプラグインの改良</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Jekyll">Jekyll</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Liquid">Liquid</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+        
+        
+          <span>Published: 2013/05/23</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/05/21/jekyll-plugin-githubpages" title="GitHub PagesでJekyllプラグインを使えるようにするには…">
+          GitHub PagesでJekyllプラグインを使えるようにするには…
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/05/27/jekyll-githubpages-analytics-setting" title="Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた">
+          Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#前回までのあらすじ'>前回までのあらすじ</a></li><ul><li><a href='#前回の疑問'>前回の疑問</a></li></ul><li><a href='#今回やったこと'>今回やったこと</a></li><ul><li><a href='#kramdownのidの振り方'>kramdownのidの振り方</a></li><ul><li><a href='#ソース'>ソース</a></li></ul><li><a href='#tree_list.rbのバグ修正'>tree_list.rbのバグ修正</a></li></ul></ul></ul><!-- end of tree list --></div>
+
+<h2 id="前回までのあらすじ">前回までのあらすじ</h2>
+
+<p><a href="http://gosyujin.github.io/2012/10/10/jekyll-liquid-plugin/">Jekyll(Liquid)で記事の目次を出力するプラグインを作ってみた</a></p>
+
+<p>これの続き。昔の話すぎて、忘れないようにメモ。</p>
+
+<h3 id="前回の疑問">前回の疑問</h3>
+
+<blockquote>
+<p>…あれ？　別の環境でやったら hタグに section , section-1 , section-2 … って連番が振られてる！？　なんで！</p>
+</blockquote>
+
+<p>これは原因がわかった。 使っているMarkdownパーサが違うだけだった。</p>
+
+<ul>
+<li><code>rdiscount</code> … idなし</li>
+<li><code>kramdown</code> … idにsection-xが振られる</li>
+</ul>
+
+<h2 id="今回やったこと">今回やったこと</h2>
+
+<ul>
+<li>kramdownで動くようにkramdownいじったりtree_list.rbいじったり</li>
+<li>プラスバグ修正</li>
+</ul>
+
+<blockquote>
+<p>目次から記事へのリンク</p>
+
+<p>(略) めんどいので自動で振ってほしい</p>
+</blockquote>
+
+<h3 id="kramdownのidの振り方">kramdownのidの振り方</h3>
+
+<p>kramdownがhタグにidを振っている方法を調べてみると、</p>
+
+<ul>
+<li>半角文字はそれが <code>そのままid</code> になる</li>
+<li>スペースは <code>ハイフン</code> になる</li>
+<li>全角文字は <code>なくなる</code></li>
+<li>全部全角文字だった場合 <code>section</code> と振られる</li>
+<li>2度目以降のsectionは順に <code>section-x</code> と振られる</li>
+</ul>
+
+<p>こんな感じになっているっぽい。以下は一例。</p>
+
+<table><thead>
+<tr>
+<th>見出しの内容</th>
+<th>hタグのid</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ほげいち</td>
+<td>&lt;h2 id=&quot;section&quot;&gt;ほげ</td>
+</tr>
+<tr>
+<td>ほげに</td>
+<td>&lt;h2 id=&quot;section-2&quot;&gt;ほげに</td>
+</tr>
+<tr>
+<td>ほげさん</td>
+<td>&lt;h2 id=&quot;section-3&quot;&gt;ほげさん</td>
+</tr>
+<tr>
+<td>hoge</td>
+<td>&lt;h2 id=&quot;hoge&quot;&gt;hoge</td>
+</tr>
+<tr>
+<td>piyoとは</td>
+<td>&lt;h2 id=&quot;piyo&quot;&gt;piyoとは</td>
+</tr>
+<tr>
+<td>ほげよん</td>
+<td>&lt;h2 id=&quot;section-4&quot;&gt;ほげよん</td>
+</tr>
+</tbody></table>
+
+<h4 id="ソース">ソース</h4>
+
+<p>実際にソースを見てみよう。 <code>kramdown-0.14.0\lib\kramdown\converter\base.rb</code> に書いてあった。<del>めんどくさいので</del> 今回は全ての見出しがsectionとなってほしいので、以下の行をコメントアウトした。</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># Generate an unique alpha-numeric ID from the the string +str+ for use as a header ID.</span>
+<span class="c1">#</span>
+<span class="c1"># Uses the option +auto_id_prefix+: the value of this option is prepended to every generated</span>
+<span class="c1"># ID.</span>
+<span class="k">def</span> <span class="nf">generate_id</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+  <span class="n">gen_id</span> <span class="o">=</span> <span class="n">str</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/^[^a-zA-Z]+/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>         <span class="c1"># コメントアウト</span>
+  <span class="n">gen_id</span><span class="o">.</span><span class="n">tr!</span><span class="p">(</span><span class="s1">&#39;^a-zA-Z0-9 -&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>               <span class="c1"># コメントアウト</span>
+  <span class="n">gen_id</span><span class="o">.</span><span class="n">tr!</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>                         <span class="c1"># コメントアウト</span>
+  <span class="n">gen_id</span><span class="o">.</span><span class="n">downcase!</span>                             <span class="c1"># コメントアウト</span>
+  <span class="n">gen_id</span> <span class="o">=</span> <span class="s1">&#39;section&#39;</span> <span class="k">if</span> <span class="n">gen_id</span><span class="o">.</span><span class="n">length</span> <span class="o">==</span> <span class="mi">0</span>     <span class="c1"># if 以降をコメントアウト</span>
+  <span class="vi">@used_ids</span> <span class="o">||=</span> <span class="p">{}</span>
+  <span class="k">if</span> <span class="vi">@used_ids</span><span class="o">.</span><span class="n">has_key?</span><span class="p">(</span><span class="n">gen_id</span><span class="p">)</span>
+    <span class="n">gen_id</span> <span class="o">+=</span> <span class="s1">&#39;-&#39;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="vi">@used_ids</span><span class="o">[</span><span class="n">gen_id</span><span class="o">]</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span>
+  <span class="k">else</span>
+    <span class="vi">@used_ids</span><span class="o">[</span><span class="n">gen_id</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">end</span>
+  <span class="vi">@options</span><span class="o">[</span><span class="ss">:auto_id_prefix</span><span class="o">]</span> <span class="o">+</span> <span class="n">gen_id</span>
+<span class="k">end</span></code></pre></div>
+
+<p>これで半角だろうが全部section-xと振られるようになった。</p>
+
+<p>…が、よく考えたら自分のプラグインでこれと同じ処理をしたら良かったんじゃ…。</p>
+
+<h3 id="tree_list-rbのバグ修正">tree_list.rbのバグ修正</h3>
+
+<p>目次に貼ったリンクが正しい見出しに飛んでいるか確認してたら、一個バグ見つけた。</p>
+
+<ul>
+<li>引用部分の見出しにもidが振られるが、tree_listでは文頭にある見出ししか集めてなかった
+
+<ul>
+<li>でも、正直引用部分の見出しは目次にはいらない…</li>
+<li>集めるだけ集めて捨てるか… </li>
+</ul></li>
+</ul>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/05/21/jekyll-plugin-githubpages" title="GitHub PagesでJekyllプラグインを使えるようにするには…">
+          GitHub PagesでJekyllプラグインを使えるようにするには…
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/05/27/jekyll-githubpages-analytics-setting" title="Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた">
+          Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/05/23/jekyll-liquid-plugin2" data-text="kk_Atakaの日記 - 記事の目次を出力するJekyllプラグインの改良" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/05/23/jekyll-liquid-plugin2/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/05/23/jekyll-liquid-plugin2/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/05/23/jekyll-liquid-plugin2/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - 記事の目次を出力するJekyllプラグインの改良"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2013/05/23/jekyll-liquid-plugin2/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

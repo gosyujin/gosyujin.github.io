@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Unix">Unix</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Dropbox">Dropbox</a> ]</i>
+          
+            <i>[ <a href="/tags.html#さくらVPS">さくらVPS</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/10/08</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/10/04/1317660186" title="複数のRuby環境の管理・切替ができるpikを実行できた">
+          複数のRuby環境の管理・切替ができるpikを実行できた
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/10/11/1318334855" title="Windowsのローカル環境にWordPressをインストールした">
+          Windowsのローカル環境にWordPressをインストールした
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<p>DropboxにはEnable LAN syncというオプションがあり、これをONにすると同じLAN内のマシンはインターネットを経由しないで同期ができる。</p>
+<p>f:<a href="http://d.hatena.ne.jp/kk_Ataka/">id:kk_Ataka</a>:20111008190858j:image</p>
+<p>ただし、17500ポートに向けてUDPパケットがやまほど投げているようで、同じLAN内に自分以外のマシンがある状態でこのオプションをONにしていると近隣の方へやまほどパケットを投げまくりで非常に迷惑がかかります……。基本的にDropboxのオプションからEnable LAN sync(LAN同期を有効にする)をOFFにすればよい。</p>
+<p>……のだが、CUIからDropboxをインストールしている場合は少し手順を踏んでこのオプションを切る必要があります。</p>
+<h1>参考サイト</h1>
+<ul><li><a href="http://d.hatena.ne.jp/otn/20110502/p1">「さくらのVPS」ファイアーウォール設定 - それはそれ。これはこれ。</a></li><li><a href="http://blog.7kai.org/2011/04/dropbox-lan-sync-disable/">The Diary of Aska - これは不正アクセスですか？いいえ、Dropbox LAN syncです。</a></li></ul>
+<p>というか、前回の記事<a href="2011-04-23-1303489798">2011-04-23-1303489798</a> でインストールするときに参考にしたサイトにこの問題が書いてあった……。</p>
+<blockquote><p>To stop dropbox from sending LAN Sync broadcasts every 30 seconds over port 17500 (<a href="http://forums.dropbox.com/topic.php?id=16253">http://forums.dropbox.com/topic.php?id=16253</a>) see DropboxAddons/DisableLanSync</p><cite><a href="http://wiki.dropbox.com/TipsAndTricks/TextBasedLinuxInstall#SuppressLANSyncbroadcasts">http://wiki.dropbox.com/TipsAndTricks/TextBasedLinuxInstall#SuppressLANSyncbroadcasts</a></cite></blockquote>
+<h1>必要環境</h1>
+<table><tr><th>Python</th><td>2.6</td></tr></table>
+<h1>スクリプトDL</h1>
+<ul><li><a href="http://wiki.dropbox.com/DropboxAddons/PyDropboxValues">http://wiki.dropbox.com/DropboxAddons/PyDropboxValues</a> から <a href="http://dl.dropbox.com/u/340607/pyDropboxValues.py">pyDropboxValues.py</a> をDLする<ul><li>設定値を表示できる</li></ul></li><li><a href="http://wiki.dropbox.com/DropboxAddons/DisableLanSync">http://wiki.dropbox.com/DropboxAddons/DisableLanSync</a> から <a href="http://dl.dropbox.com/u/340607/dropbox_set_lansync.py">dropbox_set_lansync.py</a> をDLする<ul><li>LAN syncオプションを切り替える</li></ul></li></ul>
+<h1>手順</h1>
+<ul><li>pyDropboxValue.pyで設定をバックアップする</li></ul>
+<pre class="python">$ PYTHON2.6 pyDropboxValues.py _backup
+Backed up 'config.db' to '/home/kk_Ataka/.dropbox/backup_1_config.db'</pre>
+<ol><ul><li>LAN syncオプションを確認する</li></ul></ol>
+<pre class="python">$ PYTHON2.6 pyDropboxValues.py | grep p2p_enable
+p2p_enable = 1 # LAN syncオプションはp2p_enableというらしい。1でON。</pre>
+<ul><li>dropbox_set_lansync.pyでEnable LAN syncオプションをOFFにする</li></ul>
+<pre class="python">$ PYTHON2.6 dropbox_set_lansync.py off # 特にレスポンスは返ってこないが…。</pre>
+<ol><ul><li>LAN syncオプションを確認する</li></ul></ol>
+<pre class="python">$ PYTHON2.6 pyDropboxValues.py | grep p2p_enable
+p2p_enable = 0 # 0になっていればよい。最後にプロセスを再起動するのを忘れないように……。</pre>
+<p>f:<a href="http://d.hatena.ne.jp/kk_Ataka/">id:kk_Ataka</a>:20111008190855j:image</p>
+<ul><li>Dropboxプロセスを再起動する(dropbox.pyは以前DLしているはず)</li></ul>
+<pre class="">$ PYTHON2.6 dropbox.py stop
+Dropbox daemon stopped.
+$ PYTHON2.6 dropbox.py start
+Starting Dropbox...Dropbox isn't running!
+Done!</pre>
+<h1>実行時にエラー？</h1>
+<p>実行しようとするとsqlite3のImportErrorになる？　なんで？　標準で入ってるんじゃないの？</p>
+<pre class="python">$ PYTHON2.6 pyDropboxValues.py
+Traceback (most recent call last):
+  File &quot;pyDropboxValue.py&quot;, line 21, in &lt;module&gt;
+    import sqlite3
+  File &quot;/usr/local/Python-2.6.2/lib/python2.6/sqlite3/__init__.py&quot;, line 24, in &lt;module&gt;
+    from dbapi2 import *
+  File &quot;/usr/local/Python-2.6.2/lib/python2.6/sqlite3/dbapi2.py&quot;, line 27, in &lt;module&gt;
+    from _sqlite3 import *
+ImportError: No module named _sqlite3</pre>
+<p>f:<a href="http://d.hatena.ne.jp/kk_Ataka/">id:kk_Ataka</a>:20111008190856j:image</p>
+<p>→ <a href="http://d.hatena.ne.jp/omiyan/20110108/p1">Python2.6からsqlite3が読み込まれないエラーの解決方法 - ドラあり！*ドラゴンに挑むアリの物語 ** Python使いの日々</a> によるとPython2.6からはsqlite3は標準インストールから外れているらしい。この辺りはわからんね。yumでsqliteを入れなおす。</p>
+<pre class="python">$ sudo yum install sqlite-*</pre>
+<p>f:<a href="http://d.hatena.ne.jp/kk_Ataka/">id:kk_Ataka</a>:20111008190857j:image</p>
+<p>そして、PythonをソースからインストールしなおせばOK！</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/10/04/1317660186" title="複数のRuby環境の管理・切替ができるpikを実行できた">
+          複数のRuby環境の管理・切替ができるpikを実行できた
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/10/11/1318334855" title="Windowsのローカル環境にWordPressをインストールした">
+          Windowsのローカル環境にWordPressをインストールした
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/10/08/1318068887" data-text="kk_Atakaの日記 - さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/08/1318068887/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/10/08/1318068887/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/08/1318068887/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/10/08/1318068887/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

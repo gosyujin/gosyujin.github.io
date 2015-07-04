@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+        
+        
+          <span>Published: 2013/08/26</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/08/23/sphinx-install-python-proxy2" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き">
+          Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/08/28/android-test-tools" title="Androidの自動テストツール、今(2013年)から使うなら何がよいのか">
+          Androidの自動テストツール、今(2013年)から使うなら何がよいのか
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#参考サイト'>参考サイト</a></li><li><a href='#調査'>調査</a></li><li><a href='#todo'>TODO</a></li></ul></ul><!-- end of tree list --></div>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>あるソースコードをコピペして実行しようとしたところ、なんか動かない。(正確にはパッチファイルを適用しようとした)</p>
+
+<p>目grep してみたところ、おかしいところはなさげである。</p>
+
+<h2 id="参考サイト">参考サイト</h2>
+
+<ul>
+<li><a href="http://blog.fenrir-inc.com/jp/2011/06/post_51.html">＆nbsp； は半角スペースではないというお話 (フェンリル デベロッパーズブログ)</a></li>
+<li><a href="http://blog2.k05.biz/2013/05/utf-8-0xc2a0.html">UTF-8の0xC2A0問題 【ブログ掲載のソースをコピペして、動作しないときに疑うべきこと】 某氏の猫空</a></li>
+<li><a href="http://www.softel.co.jp/blogs/tech/archives/769">文字コードC2A0（UTF-8の半角空白）なんてあるんですね at softelメモ</a></li>
+<li><a href="http://www.sitespiral.jp/archives/83.html">Trimでも消えないスペースって？ 文字コードC2A0 サイトスパイラル(Sitespiral)</a></li>
+<li><a href="http://frozentuna.hatenablog.jp/entry/2012/08/08/194135">UTF-8の半角スペースについて - とりあえず落ち着け</a></li>
+<li><a href="http://ja.wikipedia.org/wiki/%E3%83%8E%E3%83%BC%E3%83%96%E3%83%AC%E3%83%BC%E3%82%AF%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9">ノーブレークスペース - Wikipedia</a></li>
+</ul>
+
+<h2 id="調査">調査</h2>
+
+<p>動かないファイルを色々調べてみると以下のようなことがわかった。</p>
+
+<ol>
+<li>ソースコード上の「半角スペースらしき空白」(A) を「半角スペース」(B) (キーボードのスペースキーで出した空白)で検索しても <strong>引っかからない</strong></li>
+<li>この (A) と (B) は別ものらしく <code>:s/(A)/(B)/</code> とかすると置換が実行される</li>
+<li>また、 (A) を (B) に置換した状態だとエラーが出ずに実行できるようになった</li>
+</ol>
+
+<p>「半角スペースらしき空白」が半角スペースではない何かのため、実行できなくなっていた模様。</p>
+
+<p>ということで、この「半角スペースらしき空白」を抽出してバイナリエディタで見てみた。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">a b c</span></code></pre></div>
+
+<p>一応テキトウな文字で挟んでみる。</p>
+
+<ul>
+<li><code>a と b の間</code> が「半角スペースらしき空白」</li>
+<li><code>b と c の間</code> が「半角スペース」</li>
+</ul>
+
+<p>とした。</p>
+
+<p>見てみると…。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">61 C2 A0 62 20 63</span></code></pre></div>
+
+<p><code>61</code> <code>62</code> <code>63</code> はそれぞれ <code>a</code> <code>b</code> <code>c</code> で、 <code>20</code> は <code>半角スペース</code> であるというところまではOK。</p>
+
+<p>残ったのは <code>C2A0</code> 。</p>
+
+<ul>
+<li><a href="http://www.fileformat.info/info/charset/UTF-8/list.htm">Complete Character List for UTF-8</a></li>
+</ul>
+
+<table><thead>
+<tr>
+<th>文字</th>
+<th>備考</th>
+<th>文字コード</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>&quot; &quot;</td>
+<td>SPACE (U+0020)</td>
+<td>20</td>
+</tr>
+<tr>
+<td>----</td>
+<td>-----------------------------</td>
+<td>----</td>
+</tr>
+<tr>
+<td>a</td>
+<td>LATIN SMALL LETTER A (U+0061)</td>
+<td>61</td>
+</tr>
+<tr>
+<td>----</td>
+<td>-----------------------------</td>
+<td>----</td>
+</tr>
+<tr>
+<td>b</td>
+<td>LATIN SMALL LETTER B (U+0062)</td>
+<td>62</td>
+</tr>
+<tr>
+<td>----</td>
+<td>-----------------------------</td>
+<td>----</td>
+</tr>
+<tr>
+<td>c</td>
+<td>LATIN SMALL LETTER C (U+0063)</td>
+<td>63</td>
+</tr>
+<tr>
+<td>----</td>
+<td>-----------------------------</td>
+<td>----</td>
+</tr>
+<tr>
+<td>&quot; &quot;</td>
+<td>NO-BREAK SPACE (U+00A0)</td>
+<td>c2a0</td>
+</tr>
+</tbody></table>
+
+<p>「半角スペースらしき空白」は NO-BREAK SPACE という文字で htmlで使う <code>&amp;nbsp;</code> と同じもの。</p>
+
+<p>表示する分には(レイアウトなどに気を付ける必要はあるものの)特に問題はないが、ソースコードの空白としては不適切。</p>
+
+<p>本文の <code>C2A0</code> を半角スペース <code>20</code> に置換してやる事でソースコードはソースコードとしてよみがえる。</p>
+
+<hr>
+
+<p>ところで、冒頭で「あるソースコード」としたコードだけど、これの出所はEvernoteにストックしておいたものだった。</p>
+
+<p>いったんノートに取り込んでしまうと、Evernote側の仕様でこうなっちゃうのかな？</p>
+
+<p>こういう話もあり↓</p>
+
+<blockquote class="twitter-tweet"><p>Evernoteは半角スペースを複数入力すると、内部的には&amp;nbsp;がちょこちょこ入れられて、enmlなんかにも0xC2 0xA0というバイト列が入るんだな。vimで開いても単なるスペースにしか見えないので気付かなかった</p>&mdash; かと (@orangain) <a href="https://twitter.com/orangain/statuses/361718067010609152">July 29, 2013</a></blockquote>
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>ただ、必ずそうなるわけではなく、何かを経由したときだけ変換される？</p>
+
+<p>もうちょい調べてみないといけないな〜。</p>
+
+<h2 id="todo">TODO</h2>
+
+<p>vi 、 emacs 、他(sedとか？)でうまく変換できるようにしたい。</p>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/08/23/sphinx-install-python-proxy2" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き">
+          Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/08/28/android-test-tools" title="Androidの自動テストツール、今(2013年)から使うなら何がよいのか">
+          Androidの自動テストツール、今(2013年)から使うなら何がよいのか
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/08/26/utf8-space-c2a0" data-text="kk_Atakaの日記 - ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/26/utf8-space-c2a0/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/08/26/utf8-space-c2a0/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/26/utf8-space-c2a0/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2013/08/26/utf8-space-c2a0/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

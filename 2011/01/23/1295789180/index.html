@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>RubyでTwitterにツイートをキメてみる - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>RubyでTwitterにツイートをキメてみる</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Twitter">Twitter</a> ]</i>
+          
+            <i>[ <a href="/tags.html#API">API</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/01/23</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/01/23/1295789120" title="MacBook Air 11インチ欲しい！">
+          MacBook Air 11インチ欲しい！
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/01/25/1295956879" title="RubyでFizzBuzzみじかいのに挑戦した">
+          RubyでFizzBuzzみじかいのに挑戦した
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<ol><li><a href="2010-11-21-1290271210">2010-11-21-1290271210</a></li><li><a href="2010-11-30-1291125511">2010-11-30-1291125511</a></li><li><a href="2010-12-07-1291733295">2010-12-07-1291733295</a></li></ol>
+<p>ターミナルからOAuth認証をキメて、タイムラインを見られるようになりました。最後にターミナルからツイートが出来れば一応Twitterの見る・書くがライブラリ無しでできたことになります。</p>
+<h1>ツイートする方法</h1>
+<ol><li>signatureを作成する。必要な値は以下のとおり。<ol><li>oauth_consumer_key</li><li>oauth_nonce</li><li>oauth_signature</li><li>oauth_signature_method</li><li>oauth_timestamp</li><li>oauth_token</li><li>oauth_version</li><li>status <span style="color:#FF0000;">New!</span></li></ol></li></ol>
+<p>statusっていうのがツイートの本文ですね。signature作成するのにエスケープします。作成後のheaderはこんな感じ。<span class="footnote"><a href="#f1" title="実際はインデントとかなし。" name="fn1">*1</a></span>statusには「確認確認」って入ってます。</p>
+<pre class="">{
+	&quot;oauth_nonce&quot;=&gt;&quot;3c8293f9c5a0295148d428a26edb9f46&quot;, 
+	&quot;oauth_timestamp&quot;=&gt;&quot;1295784908&quot;, 
+	&quot;oauth_signature_method&quot;=&gt;&quot;HMAC-SHA1&quot;, 
+	&quot;oauth_consumer_key&quot;=&gt;&quot;XXXXXXXXXXXXXXXXXXXXXX&quot;, 
+	&quot;oauth_token&quot;=&gt;&quot;99999999-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY&quot;, 
+	&quot;oauth_signature&quot;=&gt;&quot;UKt1BmJ+UWNWrSmBuAyJ40iiCNY=&quot;, 
+	&quot;status&quot;=&gt;&quot;%E7%A2%BA%E8%AA%8D%E7%A2%BA%E8%AA%8D&quot;, 
+	&quot;oauth_version&quot;=&gt;&quot;1.0&quot;
+}</pre>
+<h1>signature作成後</h1>
+<ul><li>signatureを作成したら、headerからstatusを消します</li><li>残ったheaderをアルファベット順に並べ、xxx=yyy<span style="color:#FF0000;">,</span>vvv=zzz……の形で連結します。連結後はこんな感じ</li></ul>
+<pre class="">oauth_consumer_key=XXXXXXXXXXXXXXXXXXXXXX,oauth_nonce=341d852d61cdc3c22e3e847b0ab69d20,oauth_signature=MR5WEJ1qHuE49ozgRYduNJ%2BBiCs%3D,oauth_signature_method=HMAC-SHA1,oauth_timestamp=1295785315,oauth_token=99999999-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY,oauth_version=1.0</pre>
+<ul><li>連結した上記の値をAuthorizationヘッダに入れる。入れた後はこんな感じ。</li></ul>
+<pre class="">&quot;Authorization&quot;=&gt;&quot;OAuth oauth_consumer_key=XXXXXXXXXXXXXXXXXXXXXX,oauth_nonce=341d852d61cdc3c22e3e847b0ab69d20,oauth_signature=MR5WEJ1qHuE49ozgRYduNJ%2BBiCs%3D,oauth_signature_method=HMAC-SHA1,oauth_timestamp=1295785315,oauth_token=99999999-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY,oauth_version=1.0&quot;</pre>
+<ul><li>Authorizationヘッダを作成したら<a href="http://api.twitter.com/1/statuses/home_timeline.json">http://api.twitter.com/1/statuses/home_timeline.json</a>へPOST。また、ツイート本文を「status=本文」の形でくっつける</li></ul>
+<h1>結果</h1>
+<p>以上で、Twitterにツイートが完了しました！　おっぱいきたーー</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20110123215838"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20110123/20110123215838.jpg"></a></p>
+<h1>ソース</h1>
+<p>ソースはこんな感じです。</p>
+<pre class="ruby"># -*- encoding: UTF-8 -*-
+
+require 'openssl'
+require 'uri'
+require 'net/http'
+require 'nkf'
+require 'time'
+
+# 署名
+def sigunature(method, 
+		consumer_secret, 
+		oauth_token_secret, 
+		url, 
+		oauth_header=nil)
+	# sigunature_keyの作成
+	# リクエストトークン時は&quot;CONSUMER_SECRET&amp;&quot;(アンドが入っている)
+	# アクセストークン時は&quot;CONSUMER_SECRET&amp;OAUTH_TOKEN_SECRET&quot;として使用
+	sigunature_key = consumer_secret + &quot;&amp;&quot;
+	if !oauth_token_secret.nil? then
+		sigunature_key += oauth_token_secret
+	end
+
+	param = sort_and_concat(oauth_header)
+
+	# メソッド + URL + パラメータ
+	value = method + &quot;&amp;&quot; + escape(url) + &quot;&amp;&quot; + escape(param)
+	# hmac_sha1
+	sha1 = OpenSSL::HMAC.digest(OpenSSL::Digest::SHA1.new, sigunature_key, value)
+	# base64
+	base64 = [sha1].pack('m').gsub(/\n/, '')
+	return base64
+end
+
+# 文字列のエスケープ(: / = %をエスケープする。. _ -はそのまま)
+def escape(value)
+	URI.escape(value, Regexp.new(&quot;[^a-zA-Z0-9._-]&quot;))
+end
+
+# oauth_headerの情報をアルファベット順に並べ替え &amp; で結合
+def sort_and_concat(oauth_header)
+	oauth_header_array = oauth_header.sort
+	param = &quot;&quot;
+	oauth_header_array.each do |params|
+		for i in 1..params.length
+			param += params[i-1]
+			if i % params.length == 0
+				param += &quot;&amp;&quot;
+			else
+				param += &quot;=&quot;
+			end
+		end
+	end
+	param = param.slice(0, param.length-1)
+end
+
+# -------------------------------------------------------------
+
+update_url = &quot;http://twitter.com/statuses/update.json&quot;
+
+url = update_url
+# コマンドプロンプトはutf8変換
+text = escape(ARGV[0])
+# text = escape(NKF.nkf('-w', ARGV[0]))
+proxy = ARGV[1]
+
+# Twitterで登録したらもらえる
+consumer_key = &quot;XXXXXXXXXXXXXXXXXXX&quot;
+consumer_secret = &quot;YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY&quot;
+# Twitterからもらえるリクエストトークン(最初は使わない)
+oauth_token = &quot;11111111-ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ&quot;
+oauth_token_secret = &quot;VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV&quot;
+
+# oauthパラメータたち(決め打ちのもの)
+oauth_header = {
+	# Consumer Key
+	&quot;oauth_consumer_key&quot; =&gt; consumer_key,
+	# 一意な値
+	&quot;oauth_nonce&quot; =&gt; OpenSSL::Digest::Digest.hexdigest('MD5', &quot;#{Time.now.to_f}#{rand}&quot;), 
+	# 署名方式(HMAC-SHA1)
+	&quot;oauth_signature_method&quot; =&gt; &quot;HMAC-SHA1&quot;,
+	# リクエスト生成時のタイムスタンプのミリ秒
+	&quot;oauth_timestamp&quot; =&gt; Time.now.to_i.to_s, 
+	# バージョン(1.0)
+	&quot;oauth_version&quot; =&gt; &quot;1.0&quot;,
+
+	# アクセストークン
+	&quot;oauth_token&quot; =&gt; oauth_token
+}
+
+# headerにツイート追加
+oauth_header[&quot;status&quot;] = text
+
+# 署名生成
+oauth_header[&quot;oauth_signature&quot;] = sigunature(&quot;POST&quot;,
+					consumer_secret,
+					oauth_token_secret,
+					url,
+					oauth_header)
+
+# headerからツイート削除
+oauth_header.delete(&quot;status&quot;)
+# 署名エンコード
+oauth_header[&quot;oauth_signature&quot;] = escape(oauth_header[&quot;oauth_signature&quot;])
+param = sort_and_concat(oauth_header)
+
+param = param.gsub('&amp;', ',')
+
+header = {
+	&quot;Authorization&quot; =&gt; &quot;OAuth &quot; + param
+}
+
+# POST
+uri = URI.parse(update_url)
+proxy_class = Net::HTTP::Proxy(proxy, 8080)
+http = proxy_class.new(uri.host)
+http.start do |http|
+	res = http.post(uri.path, &quot;status=#{text}&quot;, header)
+
+	if res.code == &quot;200&quot; then
+		print &quot;#{res.code} tweet: #{ARGV[0]}\n&quot;
+	else
+		print &quot;ERROR: #{res.code}\n #{res.body}\n&quot;
+	end
+end</pre>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 実際はインデントとかなし。</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/01/23/1295789120" title="MacBook Air 11インチ欲しい！">
+          MacBook Air 11インチ欲しい！
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/01/25/1295956879" title="RubyでFizzBuzzみじかいのに挑戦した">
+          RubyでFizzBuzzみじかいのに挑戦した
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/01/23/1295789180" data-text="kk_Atakaの日記 - RubyでTwitterにツイートをキメてみる" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/01/23/1295789180/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/01/23/1295789180/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/01/23/1295789180/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - RubyでTwitterにツイートをキメてみる"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/01/23/1295789180/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

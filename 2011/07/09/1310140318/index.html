@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/07/09</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/06/26/1309044393" title="PythonでCOBOLファイルの行頭に連番をふる">
+          PythonでCOBOLファイルの行頭に連番をふる
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/08/01/1312213654" title="BPStudy#47に参加しました">
+          BPStudy#47に参加しました
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<p><a href="2011-05-17-1305560776">2011-05-17-1305560776</a></p>
+<p>あれから色々変えたので追記。前回のTODOは…</p>
+<ol><li>フォルダ名先頭にYYYYMMDD</li><li>フォルダ名に使用できない文字を全角に置換</li><li>フォルダ存在時の対処</li><li>デスクトップに保存したい</li></ol>
+<p>全部消化。とりあえずOutlook開いて添付ファイル付きのメールファイルをデスクトップに保存するだけの簡単なお仕事はできるようになりました！やった！</p>
+<h1>GitHub</h1>
+<p><a href="https://github.com/gosyujin/outlook_for_ruby">gosyujin/outlook_for_ruby · GitHub</a></p>
+<h1>なにやってるかの流れ</h1>
+<ul><li>まず初期化。</li></ul>
+<pre class="ruby">	# MicrosoftOutlookに接続後初期化処理を行う。
+	# MicrosoftOutlookが起動していないと終了する。
+	def initialize
+		begin
+			ol = WIN32OLE::connect(&quot;Outlook.Application&quot;)
+		rescue WIN32OLERuntimeError
+			putsError(&quot;MicrosoftOutlookが起動していません。&quot;)
+			exit
+		else
+			desktopJa = Kconv.tosjis(&quot;デスクトップ&quot;)
+			# NameSpace取得(getNameSpaceの引数は&quot;MAPI&quot;のみ)
+			@nameSpace = ol.getNameSpace(&quot;MAPI&quot;)
+			# 保存パス指定
+			@saveRootPath = &quot;#{ENV[&quot;USERPROFILE&quot;]}\\&quot; + desktopJa + &quot;\\&quot;
+			# 保存パスに作成するディレクトリ作成
+			@saveDir = &quot;&quot;
+			# フォルダ選択番号、ハッシュ
+			@folderNum = -1
+			@folder = Hash.new
+			# メール選択番号、ハッシュ
+			@mailNum = -1
+			@mail = Hash.new
+			# 取得件数のデフォルト値
+			@defaultCount = 20
+		end
+	end</pre>
+<ul><li>初期化した後、トップレベル<span class="footnote"><a href="#f1" title="デフォルトだと個人用フォルダ、保存フォルダみたいな名前かな。ostファイル単位？" name="fn1">*1</a></span>のメールフォルダ全部を取得してます。</li><li>コマンドから選べるように{num => EntryID}のハッシュを作っておきます。{ "1" => "受信トレイのEntryID" }みたいな。</li></ul>
+<pre class="ruby">	# ルートからフォルダの一覧を取得する
+	def folders(count=@defaultCount)
+		folders = @nameSpace.Folders
+		@folderNum = 1
+		folders.each do |f|
+			if count &lt; @folderNum then
+				break
+			end
+			GC.start
+			puts f.Name
+			puts &quot;N | CNT | FolderName&quot;
+			findFolder(f.EntryId)
+		end
+	end</pre>
+<pre class="ruby">	# entoryIdを元にフォルダ名を再帰的に取得する
+	def findFolder(entryId, count=@defaultCount)
+		folder(entryId).Folders.each do |f|
+			if count &lt; @folderNum then
+				break
+			end
+			begin
+				puts &quot;#{@folderNum} | &quot; + 
+				      &quot;#{f.Items.Count}通 | &quot; + 
+				      &quot;#{f.Name}&quot;
+				      # + &quot; | #{f.Parent.Name}&quot;
+				@folder[@folderNum.to_s] = f.EntryId
+				@folderNum += 1
+				findFolder(f.EntryId)
+			rescue =&gt; ex
+				putsError(ex)
+			end
+		end
+	end</pre>
+<ul><li>フォルダ一覧から一つ選んだら、そのフォルダ内のメール一覧を取得します。</li><li>これもコマンドから選べるように{num => EntryID}のハッシュを作っておきます。{ "1" => "とあるメールのEntryID" }みたいな。</li></ul>
+<pre class="ruby">	# entryIdを元に対象フォルダのメール一覧を取得する
+	def mails(entryId, count=@defaultCount)
+		f = @nameSpace.GetFolderFromID(entryId)
+		if f.Items.Count == 0 then
+			raise &quot;フォルダにメールがありません。&quot;
+		end
+		@mailNum = 1
+		puts &quot;N | A | SentOn              | Name       | Subject&quot;
+		f.Items.each do |mail|
+			if count &lt; @mailNum then
+				break
+			end
+			GC.start
+			puts &quot;#{@mailNum} | &quot; +
+						&quot;#{mail.Attachments.Count} | &quot; +
+						&quot;#{mail.SentOn} | &quot; +
+						&quot;#{mail.SenderName.unpack('A10')} | &quot; +
+						&quot;#{mail.Subject.unpack('A35')}&quot;
+			@mail[@mailNum.to_s] = mail.EntryId
+			@mailNum += 1
+		end
+	end</pre>
+<ul><li>なお、メールオブジェクト(MailItem)からは以下のような情報を取得できます。</li></ul>
+<table><tr><th>MailItem#Attachments.Count</th><td>添付ファイルの数</td></tr><tr><th>MailItem#SentOn</th><td>送信時間</td></tr><tr><th>MailItem#SenderName</th><td>送信者名</td></tr><tr><th>MailItem#Subject</th><td>件名</td></tr><tr><th>MailItem#To</th><td>送信先</td></tr><tr><th>MailItem#CC</th><td>CC</td></tr><tr><th>MailItem#Body</th><td>本文</td></tr></table>
+<ul><li>メール一覧から一つ選んだら、デスクトップにディレクトリを作って、その中にメール本文と添付ファイルを保存します。</li></ul>
+<pre class="ruby">	# @saveRootPath下にディレクトリを作成する
+	def mkdir(mail)
+		# 受信日のYYYYMMDD
+		receivedTime = Date.strptime(mail.SentOn, &quot;%Y/%m/%d&quot;).strftime(&quot;%Y%m%d&quot;)
+		@saveDir = &quot;#{@saveRootPath}&quot; + 
+								&quot;#{receivedTime}_#{replace(mail.Subject)}\\&quot;
+		if !File.exist?(@saveDir) then
+			Dir.mkdir(@saveDir)
+		end
+	end</pre>
+<pre class="ruby">	# @saveDir下にSubject.txtファイルを作成しメール内容を書きこむ
+	def saveMail(mail)
+		fullPath = &quot;#{@saveDir}#{self.replace(mail.Subject)}.txt&quot;
+		File.open(fullPath, &quot;w&quot;) do |file|
+			file.write &quot;SENDER      : #{mail.SenderName}&quot; + 
+									&quot;(#{mail.SenderEmailAddress})\n&quot;
+			file.write &quot;TO          : #{mail.To}\n&quot;
+			file.write &quot;CC          : #{mail.CC}\n&quot;
+			file.write &quot;ReceivedTime: #{mail.SentOn}\n&quot;
+			file.write &quot;SUBJECT     : #{mail.Subject}\n&quot;
+			file.write &quot;BODY        : \n#{mail.Body}\n&quot;
+			#puts &quot;■本文保存　　　　:#{fullPath}&quot;
+			puts &quot;■本文保存　　　　:#{self.replace(mail.Subject)}&quot;
+		end
+	end</pre>
+<pre class="ruby">	# @saveDir下に添付ファイルを保存する
+	def saveFile(mail)
+		if mail.Attachments.Count != 0 then
+			mail.Attachments.each do |item|
+				item.SaveAsFile(&quot;#{@saveDir}#{self.replace(item.FileName)}&quot;)
+				puts &quot;■添付ファイル保存:#{item.FileName}&quot;
+				
+				# ファイルが.msgだった場合添付ファイルをぶっこぬき
+				# フォルダ名も変更
+				if item.FileName =~ /.*\.msg/ then 
+					msg = MsgParse.new
+					msg.inputMsg(&quot;#{@saveDir}#{self.replace(item.FileName)}&quot;)
+					fileName = msg.saveFile(@saveDir)
+					renameFolder(mail, fileName)
+				end
+			end
+		else
+			puts &quot;添付ファイルはありません。&quot;
+		end
+	end</pre>
+<ul><li>Attachmentオブジェクトからは以下のような情報を取得できます。</li></ul>
+<table><tr><th>Attachment#SaveAsFile(PATH)</th><td>添付ファイルをPATHへ保存</td></tr></table>
+<ul><li>ぶっこぬきのくだりは次回…。</li></ul>
+<p>今ソース貼ってたら命名とか特にひどい＞＜</p>
+<p>リファクタリングしよー。</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: デフォルトだと個人用フォルダ、保存フォルダみたいな名前かな。ostファイル単位？</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/06/26/1309044393" title="PythonでCOBOLファイルの行頭に連番をふる">
+          PythonでCOBOLファイルの行頭に連番をふる
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/08/01/1312213654" title="BPStudy#47に参加しました">
+          BPStudy#47に参加しました
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/07/09/1310140318" data-text="kk_Atakaの日記 - MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/07/09/1310140318/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/07/09/1310140318/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/07/09/1310140318/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/07/09/1310140318/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

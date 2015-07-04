@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>RubyではてなのWSSE認証をしてはてブにブクマをポストする - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>RubyではてなのWSSE認証をしてはてブにブクマをポストする</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#API">API</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/03/08</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/03/02/1299062938" title="Read it LaterをRubyで取得する">
+          Read it LaterをRubyで取得する
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/04/23/1303489798" title="さくらVPSにDropboxをインストールした">
+          さくらVPSにDropboxをインストールした
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<p>ReadItLaterの続きをやろうと思ったのですが、GitHubにはてブスクリプトをコミットしたので先にまとめる。</p>
+<p>結構前に作ったので、OAuthではなくWSSE認証を使っています。</p>
+<h1>手順</h1>
+<ol><li>X-WSSEヘッダを作成する</li><li>ブックマークするUrl・コメントを記述したxmlデータと、X-WSSEヘッダを含めたリクエストを<a href="http://b.hatena.ne.jp/atom/post">http://b.hatena.ne.jp/atom/post</a>へPOSTする</li></ol>
+<p>手順はこれだけ。次に詳細を…。</p>
+<h1>ヘッダを作成する</h1>
+<p>以下のデータを用意します</p>
+<table><tr><th>Username</th><td>はてなID</td></tr><tr><th>Nonce</th><td>HTTPリクエスト毎に生成したセキュリティ・トークンをBASE64エンコードしたもの<span class="footnote"><a href="#f1" title="一意な値ならとりあえず動くようです。" name="fn1">*1</a></span></td></tr><tr><th>Created</th><td>Nonce作成時のタイムスタンプをISO-8601表記で記述したもの</td></tr><tr><th>PasswordDigest</th><td>「Nonce+Created+はてなのパスワード」をSHA1でダイジェスト化しBASE64エンコードしたもの</td></tr></table>
+<p>これらのデータをX-WSSEヘッダに以下の形式で格納します。</p>
+<pre class="">UsernameToken Username=&quot;USERNAME&quot;, PasswordDigest=&quot;PASSWORDDIGEST&quot;, Nonce=&quot;NONCE&quot;, Created=&quot;CREATED&quot;</pre>
+<h1>POSTする</h1>
+<p>ヘッダは完成したので、次にブックマークする情報を用意します。形式はxmlで以下のようなフォーマットで作成します。<span class="footnote"><a href="#f2" title="ブックマークコメントを[]でくくるとタグになります。[Google]みたいな。" name="fn2">*2</a></span></p>
+<pre class="">&lt;entry xmlns=&quot;http://purl.org/atom/ns#&quot;&gt;
+                &lt;title&gt;dummy&lt;/title&gt;
+                &lt;link rel=&quot;related&quot; type=&quot;text/html&quot; href=&quot;ブックマークするURL&quot; /&gt;
+                &lt;summary type=&quot;text/plain&quot;&gt;ブックマークコメント&lt;/summary&gt;
+&lt;/entry&gt;</pre>
+<p>作成されたヘッダとデータはこんな感じになります。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20110308213639"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20110308/20110308213639.jpg"></a></p>
+<p>最後に作成したヘッダとブックマークデータを<a href="http://b.hatena.ne.jp/atom/post">http://b.hatena.ne.jp/atom/post</a>へポストすると。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20110308213640"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20110308/20110308213640.jpg"></a></p>
+<p>おお。</p>
+<p>正常に作成された場合は、ステータスコードは201が返ってくるようです。</p>
+<h1>ソース</h1>
+<p>Gistは直接貼れるけどGitHubは貼れないのね…。ここにあります。<a href="https://github.com/gosyujin/hatena">gosyujin/hatena · GitHub</a></p>
+<pre class="ruby">require 'rubygems'
+require 'pit'
+require 'time'
+require 'digest/sha1'
+require 'net/http'
+require 'uri'
+require 'nkf'
+
+# wsse認証を行う
+def wsse(hatena_id, password)
+	# 一意な値(仮実装)
+	nonce = [Time.now.to_i.to_s].pack('m').gsub(/\n/, '')
+	# nonce作成時のタイムスタンプをISO-8601表記で記述したもの
+	now = Time.now.utc.iso8601
+	
+	# SHA1ダイジェスト化した文字列をBase64エンコード
+	digest = [Digest::SHA1.digest(nonce + now + password)].pack(&quot;m&quot;).gsub(/\n/, '')
+	
+	{ 'X-WSSE' =&gt; sprintf(
+		%Q&lt;UsernameToken Username=&quot;%s&quot;, PasswordDigest=&quot;%s&quot;, Nonce=&quot;%s&quot;, Created=&quot;%s&quot;&gt;,
+		hatena_id, digest, nonce, now)
+	}
+end
+
+# はてブ登録用xmlを生成する
+def getXml(link, summary)
+	%Q(
+	&lt;entry xmlns=&quot;http://purl.org/atom/ns#&quot;&gt;
+		&lt;title&gt;dummy&lt;/title&gt;
+		&lt;link rel=&quot;related&quot; type=&quot;text/html&quot; href=&quot;#{link}&quot; /&gt;
+		&lt;summary type=&quot;text/plain&quot;&gt;#{summary}&lt;/summary&gt;
+	&lt;/entry&gt;
+	)
+end
+
+b_url = ARGV.shift || abort(&quot;Usage: hatenabookmark.rb &lt;url&gt; &lt;comment&gt;&quot;)
+b_comment = ARGV.shift
+
+# エンドポイント
+url = &quot;http://b.hatena.ne.jp/atom/post&quot;
+
+# ユーザ情報読み込み
+hatena = Pit.get(&quot;hatena&quot;, :require =&gt; {
+	# はてなIDとパスワード
+	&quot;hatena_id&quot; =&gt; &quot;your hatena_id&quot;, 
+	&quot;password&quot; =&gt; &quot;your password&quot;, 
+})
+# pitを使わずにべた書き用
+# hatena = {
+#	hatena_id =&gt; HATENA_ID, 
+#	password = PASSWORD
+# }
+
+# WSSE認証
+header = wsse(hatena[&quot;hatena_id&quot;], hatena[&quot;password&quot;])
+
+uri = URI.parse(url)
+proxy_class = Net::HTTP::Proxy(ENV[&quot;PROXY&quot;], 8080)
+http = proxy_class.new(uri.host)
+http.start do |http|
+	# 読み込んだ文字列をutf-8に変換
+	# b_url = NKF.nkf('-w', b_url)
+	# b_comment = NKF.nkf('-w', b_comment)
+	
+	# エンドポイントへPOST
+	res = http.post(uri.path, getXml(b_url, b_comment), header)
+	if res.code == &quot;201&quot; then
+		print &quot;Bookmark success: #{b_url}\n&quot;
+	else
+		print &quot;#{res.code} Error: #{b_url}\n&quot;
+	end
+end</pre>
+<p>参考にしたサイトにトラックバック打とうと思ったけど前すぎて忘れた＞＜　見つけたら追記します。</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 一意な値ならとりあえず動くようです。</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: ブックマークコメントを[]でくくるとタグになります。[Google]みたいな。</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/03/02/1299062938" title="Read it LaterをRubyで取得する">
+          Read it LaterをRubyで取得する
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/04/23/1303489798" title="さくらVPSにDropboxをインストールした">
+          さくらVPSにDropboxをインストールした
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/03/08/1299588433" data-text="kk_Atakaの日記 - RubyではてなのWSSE認証をしてはてブにブクマをポストする" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/03/08/1299588433/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/03/08/1299588433/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/03/08/1299588433/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - RubyではてなのWSSE認証をしてはてブにブクマをポストする"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/03/08/1299588433/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

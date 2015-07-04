@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Jekyll(Liquid)で記事の目次を出力するプラグインを作ってみた - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Jekyll(Liquid)で記事の目次を出力するプラグインを作ってみた</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Jekyll">Jekyll</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Liquid">Liquid</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/10/10</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/10/01/bundle-exec-bat" title="bundle execを省略したいのでバッチを作った(Windows版)">
+          bundle execを省略したいのでバッチを作った(Windows版)
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/11/12/from-hatena-to-jekyll" title="はてなダイアリーのエントリをJekyllへ移行する">
+          はてなダイアリーのエントリをJekyllへ移行する
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#参考サイト'>参考サイト</a></li><li><a href='#ソース'>ソース</a></li><ul><li><a href='#まだできてない事'>まだできてない事</a></li></ul><li><a href='#作り方'>作り方</a></li><li><a href='#例'>例</a></li></ul></ul><!-- end of tree list --></div>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>Jekyllのプラグイン作成の練習。エントリから見出しを抽出して目次を出力してみたい。</p>
+
+<h2 id="参考サイト">参考サイト</h2>
+
+<ul>
+<li><a href="http://d.hatena.ne.jp/yuum3/20120711/1341998687">最近作った Jekyll (Liquid) のプラグイン - @yuumi3のお仕事日記</a></li>
+</ul>
+
+<h2 id="ソース">ソース</h2>
+
+<ul>
+<li><a href="https://github.com/gosyujin/gosyujin.github.com/blob/source/_plugins/tree_list.rb">gosyujin.github.com/<em>plugins/tree</em>list.rb at master · gosyujin/gosyujin.github.com · GitHub</a></li>
+</ul>
+
+<h3 id="まだできてない事">まだできてない事</h3>
+
+<ul>
+<li>記事中に <code>h1 (#)</code> タグがあるとうまく生成されない
+
+<ul>
+<li>記事タイトルが <code>h1 (#)</code> なので、 <code>h2 (##)</code> 以下の見出しを集めてくるようにしている</li>
+</ul></li>
+<li>目次から記事へのリンク
+
+<ul>
+<li>Markdownでは <code>## &lt;a name=&quot;section&quot;&gt; hoge</code> と記載すればnameを振ってくれるようだけど、めんどいので自動で振ってほしい</li>
+<li><strong>むしろ今はaタグを入れているとレイアウトが崩れる</strong></li>
+<li>…あれ？　別の環境でやったら <code>h</code>タグに <code>section</code> , <code>section-1</code> , <code>section-2</code> ... って連番が振られてる！？　なんで！</li>
+</ul></li>
+</ul>
+
+<h2 id="作り方">作り方</h2>
+
+<p>最小単位はこうなるみたい。(何もしないプラグイン)</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">Jekyll</span>
+  <span class="k">class</span> <span class="nc">SampleTag</span> <span class="o">&lt;</span> <span class="no">Liquid</span><span class="o">::</span><span class="no">Tag</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">tag_name</span><span class="p">,</span> <span class="n">xxx</span><span class="p">,</span> <span class="n">tokens</span><span class="p">)</span>
+      <span class="k">super</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">Liquid</span><span class="o">::</span><span class="no">Template</span><span class="o">.</span><span class="n">register_tag</span><span class="p">(</span><span class="s1">&#39;sample&#39;</span><span class="p">,</span> <span class="no">Jekyll</span><span class="o">::</span><span class="no">SampleTag</span><span class="p">)</span></code></pre></div>
+
+<p>これでMarkdown中に <code>{% sample hogehoge fuga  %}</code> と書くと、initializeメソッドの <code>tag_name</code> にsample、 <code>xxx</code> にhogehoge fuga、 <code>tokens</code> に本文が渡される。</p>
+
+<p>という事でタグにつけた引数や本文を使う場合はinitializeで確保しとく。</p>
+
+<p>renderメソッドでreturnした文字列がそのままページに出力される。</p>
+
+<p>※ 新しくタグを作ったときは、Jekyllを再起動しないと <code>Unknown tag</code> が出続ける。</p>
+
+<h2 id="例">例</h2>
+
+<ul>
+<li>己のJekyll下の <code>_plugins</code> に <code>tree_list.rb</code> を突っ込む</li>
+<li>html(postするMarkdownファイルでもいいし、テンプレートのhtmlでもいい)のどこかに <code>{% tree  %}</code> を埋め込む</li>
+<li><code>$ jekyll --server</code> 実行後localhost:4000にアクセス</li>
+</ul>
+
+<p>これで文中の見出しが目次としてかき集められる。ただし、GitHub Pagesを使っている場合はソースをそのままpushするだけではダメで、対策が必要っぽい。</p>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/10/01/bundle-exec-bat" title="bundle execを省略したいのでバッチを作った(Windows版)">
+          bundle execを省略したいのでバッチを作った(Windows版)
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/11/12/from-hatena-to-jekyll" title="はてなダイアリーのエントリをJekyllへ移行する">
+          はてなダイアリーのエントリをJekyllへ移行する
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/10/10/jekyll-liquid-plugin" data-text="kk_Atakaの日記 - Jekyll(Liquid)で記事の目次を出力するプラグインを作ってみた" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/10/10/jekyll-liquid-plugin/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/10/10/jekyll-liquid-plugin/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/10/10/jekyll-liquid-plugin/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Jekyll(Liquid)で記事の目次を出力するプラグインを作ってみた"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/10/10/jekyll-liquid-plugin/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

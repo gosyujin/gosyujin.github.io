@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Vimコマンドよく使うものと覚えたいコマンドまとめ - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Vimコマンドよく使うものと覚えたいコマンドまとめ</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Unix">Unix</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Vim">Vim</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/12/23</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/22/1324573161" title="SolarisにSubversionをインストールするときのメモ">
+          SolarisにSubversionをインストールするときのメモ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/24/1324741031" title="特定のファイルを探したり除外したり(メモ)">
+          特定のファイルを探したり除外したり(メモ)
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>コマンドモード</h1>
+<table><tr><th>コマンド</th><th>解説</th></tr><tr><td>:w</td><td>保存</td></tr><tr><td>:q</td><td>終了</td></tr><tr><td>:wq</td><td>保存して終了</td></tr><tr><td>:w!</td><td>強制的な保存</td></tr><tr><td>:q!</td><td>強制的な終了</td></tr><tr><td>:w</td><td>ファイル名 任意のファイル名で保存</td></tr><tr><td>:e ファイル名</td><td>複数ファイルを開く</td></tr><tr><td>:br</td><td>前のバッファへ</td></tr><tr><td>:bn</td><td>次のバッファへ</td></tr><tr><td>:ls</td><td>バッファの一覧を表示</td></tr><tr><td>:!コマンド</td><td>コマンドを実行し標準出力に出力<br />(:!ls でファイル一覧を表示)</td></tr><tr><td>:r ファイル</td><td>指定したファイルの内容を現在のファイルに流しこみ</td></tr><tr><td>:r !コマンド</td><td>コマンド実行結果を現在のファイルに流しこみ</td></tr><tr><td>:set number</td><td>行に番号を割り振る</td></tr><tr><td>:set nonumber</td><td>:set numberで割り振った番号を消す</td></tr><tr><td>:任意の数字</td><td>任意の数字の行へカーソルを移動する</td></tr><tr><td>:s/置換前/置換後</td><td>行の一番最初にヒットした文字を置き換える</td></tr><tr><td>:s/置換前/置換後/g</td><td>行全体の文字を置き換える</td></tr><tr><td>:数字,数字s/置換前/置換後/g</td><td>数字の行から数字の行までに<br />存在する全て文字を置き換える</td></tr><tr><td>:%s/置換前/置換後/g</td><td>存在する全ての文字を置き換える</td></tr><tr><td>:%s/置換前/置換後/gc</td><td>存在する全ての文字を置き換える<br />(置換するかしないかを選択)</td></tr></table>
+<h1>カーソル移動系</h1>
+<table><tr><th>コマンド</th><th>解説</th></tr><tr><td>h</td><td>カーソルを左に移動する</td></tr><tr><td>j</td><td>カーソルを下に移動する</td></tr><tr><td>k</td><td>カーソルを上に移動する</td></tr><tr><td>l</td><td>カーソルを右に移動する</td></tr><tr><td>数字 => hjkl</td><td>カーソルを数字分移動する(10j => 10行下)</td></tr><tr><td>0 or ^</td><td>カーソルを行頭に移動する</td></tr><tr><td>$</td><td>カーソルを行末に移動する</td></tr><tr><td>H</td><td>カーソルを画面内の一行目に移動する</td></tr><tr><td>M</td><td>カーソルを画面内の中段行に移動する</td></tr><tr><td>L</td><td>カーソルを画面内の最終行に移動する</td></tr><tr><td>Ctrl + e</td><td>カーソルを一行次に移動する</td></tr><tr><td>Ctrl + y</td><td>カーソルを一行前に移動する</td></tr><tr><td>Ctrl + d</td><td>カーソルを半画面次に移動する</td></tr><tr><td>Ctrl + u</td><td>カーソルを半画面前に移動する</td></tr><tr><td>Ctrl + f</td><td>カーソルを一画面次に移動する</td></tr><tr><td>Ctrl + b</td><td>カーソルを一画面前に移動する</td></tr><tr><td>G</td><td>カーソルの位置をファイルの最後に移動する</td></tr><tr><td>G => G</td><td>カーソルの位置をファイルの先頭に移動する</td></tr><tr><td>数字 => G => G</td><td>カーソルの位置を数字行目に移動する</td></tr><tr><td>z => Enter</td><td>現在のカーソル位置を画面内の一行目とするように移動</td></tr><tr><td>Ctrl + j</td><td>改行する</td></tr><tr><td>w</td><td>次の単語へカーソル位置を移動</td></tr></table>
+<h1>削除系</h1>
+<table><tr><th>コマンド</th><th>解説</th></tr><tr><td>x</td><td>文字を一つ削除する</td></tr><tr><td>d => w</td><td>カーソルの位置の単語を一つ削除する</td></tr><tr><td>d => $</td><td>カーソルの位置から行末まで削除する</td></tr><tr><td>d => d</td><td>行全体を削除する</td></tr><tr><td>数 => d => d</td><td>カーソル位置から数字行を削除する</td></tr></table>
+<h1>モード切替系</h1>
+<table><tr><th>コマンド</th><th>解説</th></tr><tr><td>i</td><td>モード切替、カーソルの位置から文字を入力する</td></tr><tr><td>a</td><td>モード切替、カーソルの位置の一つ後から文字を入力する</td></tr><tr><td>A</td><td>モード切替、行末から文字を入力する</td></tr><tr><td>o</td><td>モード切替、一つ下に新しい行を作り、そこから文字を入力する</td></tr><tr><td>O</td><td>モード切替、一つ上に新しい行を作り、そこから文字を入力する</td></tr></table>
+<h1>コピーペースト系</h1>
+<table><tr><th>コマンド</th><th>解説</th></tr><tr><td>v</td><td>範囲指定可能に</td></tr><tr><td>y => w</td><td>カーソルの位置の単語をコピーする</td></tr><tr><td>y => $</td><td>カーソルの位置から行末までをコピーする</td></tr><tr><td>y => y</td><td>行全体をコピーする</td></tr><tr><td>数 => y => y</td><td>カーソル位置から数字行をコピーする</td></tr><tr><td>p</td><td>ddキー、またはyyキー等でバッファに格納された行の貼り付け</td></tr><tr><td>Shift + p</td><td>pは今のカーソルの下に貼り付け、これは上に貼り付け</td></tr></table>
+<h1>操作取り消し系</h1>
+<table><tr><th>コマンド</th><th>解説</th></tr><tr><td>u</td><td>最後に実行したコマンドの取り消し</td></tr><tr><td>U</td><td>最後に行ったコマンドの行単位の取り消し</td></tr><tr><td>Ctrl + r</td><td>取り消しの取り消し</td></tr></table>
+<h1>置換系</h1>
+<table><tr><th>コマンド</th><th>解説</th></tr><tr><td>r</td><td>一文字置き換える</td></tr><tr><td>R</td><td>一文字以上を置き換える</td></tr><tr><td>c => w</td><td>単語の一部、もしくは全体の置き換え</td></tr><tr><td>~</td><td>カーソル上の文字の大文字⇔小文字変換</td></tr></table>
+<h1>検索系</h1>
+<table><tr><th>コマンド</th><th>解説</th></tr><tr><td>/文字</td><td>順方向に任意の文字を検索</td></tr><tr><td>?文字</td><td>逆方向に任意の文字を検索</td></tr><tr><td>検索後 => n</td><td>検索にヒットしたキーワードの次に現れる。<br />ヒットしたキーワードにカーソル位置を移動</td></tr><tr><td>検索後 => N</td><td>検索にヒットしたキーワードの前に現れる。<br />ヒットしたキーワードにカーソル位置を移動</td></tr><tr><td>%</td><td>(や{や[などの括弧の上にカーソルを置き%キーを押すと、<br />対応する括弧へカーソルが移動する</td></tr></table>
+<h1>画面系</h1>
+<table><tr><th>コマンド</th><th>解説</th></tr><tr><td>Ctrl + g</td><td>"ファイル名" [状態] 現在行/全体行 行 --現在行の割合%--を表示する</td></tr><tr><td>Ctrl + l</td><td>画面をリフレッシュするシステムメッセージに割り込まれた場合に</td></tr></table>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/22/1324573161" title="SolarisにSubversionをインストールするときのメモ">
+          SolarisにSubversionをインストールするときのメモ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/24/1324741031" title="特定のファイルを探したり除外したり(メモ)">
+          特定のファイルを探したり除外したり(メモ)
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/12/23/1324651460" data-text="kk_Atakaの日記 - Vimコマンドよく使うものと覚えたいコマンドまとめ" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/23/1324651460/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/23/1324651460/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/23/1324651460/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Vimコマンドよく使うものと覚えたいコマンドまとめ"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/12/23/1324651460/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

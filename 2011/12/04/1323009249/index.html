@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>複数のRuby環境の管理・切替ができるrvmをインストールした - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>複数のRuby環境の管理・切替ができるrvmをインストールした</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Mac">Mac</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Unix">Unix</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/12/04</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/03/1322922769" title="Macで現在の入力モードを判別しやすくするImageUpをインストールした">
+          Macで現在の入力モードを判別しやすくするImageUpをインストールした
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/05/1323092947" title="RedmineでプラグインインストールしたらTemplateErrorが出た">
+          RedmineでプラグインインストールしたらTemplateErrorが出た
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<p>先にWindowsにてRubyのバージョン管理ができるpikをインストールしていたので、今度はWindows以外にrvmをインストールする。</p>
+<h1>参考サイト</h1>
+<ul><li><a href="https://rvm.beginrescueend.com/rvm/install">https://rvm.beginrescueend.com/rvm/install</a></li><li><a href="http://www.machu.jp/diary/20110521.html#p01">rvm 入門 … 複数バージョンの Ruby と Rails を混在させる - まちゅダイアリー(2011-05-21)</a></li><li><a href="http://d.hatena.ne.jp/mirakui/20100502/1272849327">rvm: 複数のRubyを共存させる最新のやり方 - 昼メシ物語</a></li></ul>
+<h1>まとめ</h1>
+<p>とりあえず以下のコマンドを覚える。</p>
+<ul><li>rvm list known<ul><li>インストールできるRubyの一覧</li></ul></li><li>rvm list<ul><li>インストールしているRubyの一覧</li></ul></li><li>rvm install x.x.x<ul><li>インストール</li></ul></li><li>rvm use x.x.x<ul><li>Rubyの切り替え</li></ul></li></ul>
+<h1>事前準備</h1>
+<ul><li>既にインストールされていたRubyは全部消した。</li></ul>
+<h1>手順</h1>
+<p>インストールのため下記コマンドをうつ。</p>
+<pre class="">$ bash &lt; &lt;(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )</pre>
+<p>ホームディレクトリに.rvmが生成される。list knownでインストールできるRuby一覧が表示される。</p>
+<p><span class="deco" style="color:#FF0000;">(2012/04/07追記)</span>command not foundが出る場合はPATHが通ってない。</p>
+<blockquote><p>Installing RVM to /Users/kk_Ataka/.rvm/</p><p>    Adding rvm PATH line to /Users/kk_Ataka/.bashrc /Users/kk_Ataka/.zshrc.</p><p>    RVM sourcing line found in /Users/kk_Ataka/.bashrc.</p></blockquote>
+<pre class="">$ rvm list known
+# MRI Rubies
+[ruby-]1.8.6[-p420]
+[ruby-]1.8.6-head
+[ruby-]1.8.7[-p352]
+[ruby-]1.8.7-head
+[ruby-]1.9.1-p378
+[ruby-]1.9.1[-p431]
+[ruby-]1.9.1-head
+[ruby-]1.9.2-p180
+[ruby-]1.9.2[-p290]
+[ruby-]1.9.2-head
+[ruby-]1.9.3-preview1
+[ruby-]1.9.3-rc1
+[ruby-]1.9.3[-p0]
+[ruby-]1.9.3-head
+ruby-head
+
+# GoRuby
+goruby
+
+# JRuby
+jruby-1.2.0
+jruby-1.3.1
+jruby-1.4.0
+jruby-1.6.1
+jruby-1.6.2
+jruby-1.6.3
+jruby-1.6.4
+jruby[-1.6.5]
+jruby-head
+
+# Rubinius
+rbx-1.0.1
+rbx-1.1.1
+rbx-1.2.3
+rbx-1.2.4
+rbx[-head]
+rbx-2.0.0pre
+
+# Ruby Enterprise Edition
+ree-1.8.6
+ree[-1.8.7][-2011.03]
+ree-1.8.6-head
+ree-1.8.7-head
+
+# Kiji
+kiji
+
+# MagLev
+maglev[-head]
+maglev-1.0.0
+
+# Mac OS X Snow Leopard Only
+macruby[-0.10]
+macruby-nightly
+macruby-head
+
+# IronRuby -- Not implemented yet.
+ironruby-0.9.3
+ironruby-1.0-rc2
+ironruby-head</pre>
+<p>とりあえず1.8系のために1.8.7、1.9系のために1.9.3をインストールする。installコマンドを使う。</p>
+<pre class="">$ rvm install ruby-1.8.7
+Installing Ruby from source to: /Users/kk_Ataka/.rvm/rubies/ruby-1.8.7-p352, this may take a while depending on your cpu(s)...
+
+ruby-1.8.7-p352 - #fetching
+ruby-1.8.7-p352 - #downloading ruby-1.8.7-p352, this may take a while depending on your connection...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4108k  100 4108k    0     0  1718k      0  0:00:02  0:00:02 --:--:-- 2576k
+ruby-1.8.7-p352 - #extracting ruby-1.8.7-p352 to /Users/kk_Ataka/.rvm/src/ruby-1.8.7-p352
+ruby-1.8.7-p352 - #extracted to /Users/kk_Ataka/.rvm/src/ruby-1.8.7-p352
+Applying patch 'stdout-rouge-fix' (located at /Users/kk_Ataka/.rvm/patches/ruby/1.8.7/stdout-rouge-fix.patch)
+ruby-1.8.7-p352 - #configuring
+ruby-1.8.7-p352 - #compiling
+ruby-1.8.7-p352 - #installing
+Retrieving rubygems-1.8.10
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  243k  100  243k    0     0   533k      0 --:--:-- --:--:-- --:--:-- 1113k
+Extracting rubygems-1.8.10 ...
+Removing old Rubygems files...
+Installing rubygems-1.8.10 for ruby-1.8.7-p352 ...
+Installation of rubygems completed successfully.
+ruby-1.8.7-p352 - adjusting #shebangs for (gem irb erb ri rdoc testrb rake).
+ruby-1.8.7-p352 - #importing default gemsets (/Users/kk_Ataka/.rvm/gemsets/)
+Install of ruby-1.8.7-p352 - #complete</pre>
+<pre class="">$ rvm install ruby-1.9.3
+Installing Ruby from source to: /Users/kk_Ataka/.rvm/rubies/ruby-1.9.3-p0, this may take a while depending on your cpu(s)...
+
+ruby-1.9.3-p0 - #fetching
+ruby-1.9.3-p0 - #downloading ruby-1.9.3-p0, this may take a while depending on your connection...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 9330k  100 9330k    0     0  1775k      0  0:00:05  0:00:05 --:--:-- 2094k
+ruby-1.9.3-p0 - #extracting ruby-1.9.3-p0 to /Users/kk_Ataka/.rvm/src/ruby-1.9.3-p0
+ruby-1.9.3-p0 - #extracted to /Users/kk_Ataka/.rvm/src/ruby-1.9.3-p0
+Fetching yaml-0.1.4.tar.gz to /Users/kk_Ataka/.rvm/archives
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  460k  100  460k    0     0   155k      0  0:00:02  0:00:02 --:--:--  261k
+Extracting yaml-0.1.4.tar.gz to /Users/kk_Ataka/.rvm/src
+Configuring yaml in /Users/kk_Ataka/.rvm/src/yaml-0.1.4.
+Compiling yaml in /Users/kk_Ataka/.rvm/src/yaml-0.1.4.
+Installing yaml to /Users/kk_Ataka/.rvm/usr
+ruby-1.9.3-p0 - #configuring
+ruby-1.9.3-p0 - #compiling
+ruby-1.9.3-p0 - #installing
+Removing old Rubygems files...
+Installing rubygems-1.8.10 for ruby-1.9.3-p0 ...
+Installation of rubygems completed successfully.
+ruby-1.9.3-p0 - adjusting #shebangs for (gem irb erb ri rdoc testrb rake).
+ruby-1.9.3-p0 - #importing default gemsets (/Users/kk_Ataka/.rvm/gemsets/)
+Install of ruby-1.9.3-p0 - #complete</pre>
+<p>gemは最新版？　が入ってしまった。</p>
+<p>※ところで、rvmでインストールしたRubyたちは~/.rvm/rubies下に入れられていく。Ruby切り替え時にパスなんかをセットしてくれるスクリプトが.rvm/scriptの下にあるのでシェル起動時に実行してくれるようにする必要がある。</p>
+<ul><li><a href="http://d.hatena.ne.jp/mirakui/20100502/1272849327">rvm: 複数のRubyを共存させる最新のやり方 - 昼メシ物語</a></li></ul>
+<pre class="">if [[ -s .rvm/scripts/rvm ]] ; then source .rvm/scripts/rvm ; fi</pre>
+<p>インストールしたRubyはlistコマンドで確認できる。</p>
+<pre class="">$ rvm list
+
+rvm rubies
+
+   ruby-1.8.7-p352 [ i686 ]
+   ruby-1.9.3-p0 [ x86_64 ]
+</pre>
+<p>Rubyを切り替えるときはuseコマンドを使う。1.8に切り替え。</p>
+<pre class="">$ rvm use 1.8.7
+Using /Users/kk_Ataka/.rvm/gems/ruby-1.8.7-p352</pre>
+<pre class="">$ rvm list
+
+rvm rubies
+
+=&gt; ruby-1.8.7-p352 [ i686 ]
+   ruby-1.9.3-p0 [ x86_64 ]</pre>
+<pre class="">$ ruby -v
+ruby 1.8.7 (2011-06-30 patchlevel 352) [i686-darwin10.8.0]</pre>
+<p>.rvm/rubies/ruby-1.8.7xxx/bin下のものを使っている。</p>
+<pre class="">$ which ruby
+/Users/kk_Ataka/.rvm/rubies/ruby-1.8.7-p352/bin/ruby</pre>
+<pre class="">$ which gem
+/Users/kk_Ataka/.rvm/rubies/ruby-1.8.7-p352/bin/gem</pre>
+<pre class="">$ gem -v
+1.8.10</pre>
+<p>bundlerとrakeはデフォルトで入っている模様。</p>
+<pre class="">$ gem list
+
+*** LOCAL GEMS ***
+
+bundler (1.0.21 ruby)
+rake (0.9.2)</pre>
+<p>次は1.9に切り替え。</p>
+<pre class="">$ rvm use 1.9.3
+Using /Users/kk_Ataka/.rvm/gems/ruby-1.9.3-p0</pre>
+<pre class="">$ rvm list
+
+rvm rubies
+
+   ruby-1.8.7-p352 [ i686 ]
+=&gt; ruby-1.9.3-p0 [ x86_64 ]
+</pre>
+<pre class="">$ ruby -v
+ruby 1.9.3p0 (2011-10-30 revision 33570) [x86_64-darwin10.8.0]</pre>
+<p>きちんと1.9に切り替わっている。パスも。</p>
+<pre class="">$ which ruby
+/Users/kk_Ataka/.rvm/rubies/ruby-1.9.3-p0/bin/ruby</pre>
+<pre class="">$ which gem
+/Users/kk_Ataka/.rvm/rubies/ruby-1.9.3-p0/bin/gem</pre>
+<pre class="">$ gem -v
+1.8.10</pre>
+<pre class="">$ gem list
+
+*** LOCAL GEMS ***
+
+bundler (1.0.21 ruby)
+rake (0.9.2)</pre>
+<p>rvm listで"=>"の矢印ができていれば切り替え成功。</p>
+<p>切り替えたのに矢印が出ていなかったら、rvm導入前に既にインストールしているRubyが優先的に見られている？<span class="footnote"><a href="#f1" title="ただ、rvm環境以外のRubyとも行き来ができる(rvm system)らしいのでよくわからん。" name="fn1">*1</a></span>　pikでやらかした時みたいにパスがうまく書き換わっていないという凡ミスをしている可能性があるかもしれない。</p>
+<h1>今後</h1>
+<p>rvmには一つのRubyバージョンに対して複数のgem環境を持たせることもできるらしい。1.8.7のtest環境用とかRails動かす用みたいな感じで。これはまた今度学ぶ。</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: ただ、rvm環境以外のRubyとも行き来ができる(rvm system)らしいのでよくわからん。</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/03/1322922769" title="Macで現在の入力モードを判別しやすくするImageUpをインストールした">
+          Macで現在の入力モードを判別しやすくするImageUpをインストールした
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/05/1323092947" title="RedmineでプラグインインストールしたらTemplateErrorが出た">
+          RedmineでプラグインインストールしたらTemplateErrorが出た
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/12/04/1323009249" data-text="kk_Atakaの日記 - 複数のRuby環境の管理・切替ができるrvmをインストールした" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/04/1323009249/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/04/1323009249/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/04/1323009249/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - 複数のRuby環境の管理・切替ができるrvmをインストールした"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/12/04/1323009249/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

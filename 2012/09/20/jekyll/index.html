@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>JekyllをGitHub Pagesに上げるための準備 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>JekyllをGitHub Pagesに上げるための準備</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Jekyll">Jekyll</a> ]</i>
+          
+            <i>[ <a href="/tags.html#StartUp">StartUp</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/09/20</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/09/14/1347595853" title="JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備">
+          JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/09/21/jekyll-pygments" title="Pygmentsを使ってJekyll内記事のコードハイライトを実現する">
+          Pygmentsを使ってJekyll内記事のコードハイライトを実現する
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#github-pagesに登録'>GitHub Pagesに登録</a></li><li><a href='#色々な設定'>色々な設定</a></li><ul><li><a href='#コメント機能'>コメント機能</a></li><li><a href='#アクセス解析'>アクセス解析</a></li></ul></ul></ul><!-- end of tree list --></div>
+
+<h2 id="github-pagesに登録">GitHub Pagesに登録</h2>
+
+<p>GitHubより <code>New Repository</code> を選択。</p>
+
+<p><img src="/static/images/2012-09-20/2012-09-20-1.jpg" alt="img"></p>
+
+<p><code>Repository Name</code> を <code>GitHubのID.github.com</code> と入力しリポジトリ作成。</p>
+
+<p><img src="/static/images/2012-09-20/2012-09-20-2.jpg" alt="img"></p>
+
+<p>前回の記事で作成していたJekyll Bootstrapのプッシュ先を追加し、プッシュ。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git remote add origin git@github.com:gosyujin/gosyujin.github.com.git
+<span class="gp">$</span> git push -u origin master</code></pre></div>
+
+<p>http://gosyujin.github.com にアクセスしても多分404なので。気長に待つ。</p>
+
+<p><img src="/static/images/2012-09-20/2012-09-20-3.jpg" alt="img"></p>
+
+<p>その間にSite Urlに上のUrlでも入れとく。</p>
+
+<p><img src="/static/images/2012-09-20/2012-09-20-4.jpg" alt="img"></p>
+
+<p>そんなこんなでサイトが表示されるようになっているはず。(メールが来たら？)</p>
+
+<h2 id="色々な設定">色々な設定</h2>
+
+<p>まずは <code>_config.yml</code> 。</p>
+
+<p>デフォルトのmarkdownパーサの <code>maruku</code> は日本語をうまくパースしてくれないみたいなので(日本語でリスト表記ができなかった)、 <code>kramdown</code> に変更する。以下の記述を追加。</p>
+
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">markdown</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kramdown</span></code></pre></div>
+
+<p>他、タイトルや名前、TwitterIDなどを編集。</p>
+
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">title</span> <span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kk_Atakaの日記</span>
+<span class="l-Scalar-Plain">tagline</span><span class="p-Indicator">:</span> 
+<span class="l-Scalar-Plain">author</span> <span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">name</span> <span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kk_Ataka</span>
+  <span class="l-Scalar-Plain">email</span> <span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kk_ataka@ring.skr.jp</span>
+  <span class="l-Scalar-Plain">github</span> <span class="p-Indicator">:</span> <span class="l-Scalar-Plain">gosyujin</span>
+  <span class="l-Scalar-Plain">twitter</span> <span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kk_Ataka</span>
+  <span class="l-Scalar-Plain">feedburner</span> <span class="p-Indicator">:</span> <span class="l-Scalar-Plain">feedname</span></code></pre></div>
+
+<p>production_urlをGitHub Pagesに。</p>
+
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">production_url</span> <span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://gosyujin.github.com</span></code></pre></div>
+
+<p>ここから先はJekyll Bootstrapでインストールした時に入ったコメント機能とかアクセス解析の設定。</p>
+
+<h3 id="コメント機能">コメント機能</h3>
+
+<p>デフォルトでは <code>DISQUS</code> というツールを使用している。まず<a href="http://disqus.com/">DISQUS - Elevating the discussion</a>でユーザ登録をする必要がある。(TwitterID等でも可能)</p>
+
+<p><img src="/static/images/2012-09-20/2012-09-20-5.jpg" alt="img"></p>
+
+<p><img src="/static/images/2012-09-20/2012-09-20-6.jpg" alt="img"></p>
+
+<p>アカウントを作ったら自分のサイトを登録。</p>
+
+<p><img src="/static/images/2012-09-20/2012-09-20-7.jpg" alt="img"></p>
+
+<p>ここで入力する <code>shortname</code> を控えておく。</p>
+
+<p><img src="/static/images/2012-09-20/2012-09-20-8.jpg" alt="img"></p>
+
+<p><code>_config.yml</code> にさっきの <code>shortname</code> を記述する。 <code>provider</code> もDISQUSになっている事を確認する。</p>
+
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">comments</span> <span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">provider</span> <span class="p-Indicator">:</span> <span class="l-Scalar-Plain">disqus</span>
+  <span class="l-Scalar-Plain">disqus</span> <span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">short_name</span> <span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kkataka</span>
+  <span class="l-Scalar-Plain">(略)</span></code></pre></div>
+
+<p>これでいけるはず。(だめならUniversalコードを <code>_includes/JB/comments-providers/disqus</code> に貼り付けてみる？)
+<img src="/static/images/2012-09-20/2012-09-20-9.jpg" alt="img"></p>
+
+<p>自分のサイトにコメントが書き込まれると、こんな感じでDISQUSに表示される。</p>
+
+<p><img src="/static/images/2012-09-20/2012-09-20-10.jpg" alt="img"></p>
+
+<p><img src="/static/images/2012-09-20/2012-09-20-11.jpg" alt="img"></p>
+
+<p>現時点で、DISQUSのコメント欄を日本語にするには <code>Admin =&gt; Settings =&gt; Disqus 2012</code> のチェックを外す。DISQUS 2012テーマ(？)はまだ日本語に対応していないらしい。また、 <code>Language</code> はJapaneseにしておくこと。</p>
+
+<h3 id="アクセス解析">アクセス解析</h3>
+
+<p>デフォルトでは <code>Google Analytics</code> を使用している。トラッキング ID(UA-xxxxxxxx-x)を控えて <code>_config.yml</code> に記述する。</p>
+
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">analytics</span> <span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">provider</span> <span class="p-Indicator">:</span> <span class="l-Scalar-Plain">google</span>
+  <span class="l-Scalar-Plain">google</span> <span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">tracking_id</span> <span class="p-Indicator">:</span> <span class="s">&#39;UA-xxxxxxxx-x&#39;</span></code></pre></div>
+
+<p>次はレイアウトの変更とかツイートボタン設置とか。</p>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/09/14/1347595853" title="JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備">
+          JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/09/21/jekyll-pygments" title="Pygmentsを使ってJekyll内記事のコードハイライトを実現する">
+          Pygmentsを使ってJekyll内記事のコードハイライトを実現する
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/09/20/jekyll" data-text="kk_Atakaの日記 - JekyllをGitHub Pagesに上げるための準備" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/09/20/jekyll/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/09/20/jekyll/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/09/20/jekyll/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - JekyllをGitHub Pagesに上げるための準備"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/09/20/jekyll/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

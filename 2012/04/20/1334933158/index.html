@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/04/20</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/17/1334669770" title="Subversionで2ヶ所のリポジトリの同期を取るメモ">
+          Subversionで2ヶ所のリポジトリの同期を取るメモ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/04/22/1335108555" title=" Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo">
+           Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>前回までのあらすじ</h1>
+<ul><li><a href="2011-12-07-1323291938">2011-12-07-1323291938</a></li></ul>
+<p>前回は、ファイル編集する -> alt+tabでウィンドウ切り替える -> プロンプトでrspecコマンドうつ…の繰り返しを改善することができた。</p>
+<p>今回は、コード修正、保存 -> 違うターミナル切り替え -> ZenTestで自動実行された結果を見る…の繰り返しを改善する。テスト結果通知にGrowlを使用する事でいけそう。</p>
+<h1>参考サイト</h1>
+<ul><li><a href="http://d.hatena.ne.jp/gan2/20080413/1208081539">RSpec を autotest で使う - gan2 の Ruby 勉強日記</a></li><li><a href="http://www.edit.ne.jp/~koic/?date=20070731">Railsのテスト環境を改めて- Windows / RSpec / ZenTest / Snarl - Day by day(2007-07-31)</a></li><li><a href="http://d.hatena.ne.jp/amacou/20090606/1244260607">ZenTest(autotest)のバージョン上げたらautotestが動かないので設定を変更する - AorBorF</a></li><li><a href="https://github.com/rspec/rspec/wiki/autotest">autotest · rspec/rspec Wiki · GitHub</a></li><li><a href="http://blog.masashi-fujiwara.net/2010/11/script-test.html">メタフィジクスとフィジクスの間で: テスト駆動開発の環境を整える(rspec + autotest + growl) (2010/11/07に大幅修正あり）</a></li><li><a href="https://github.com/karl/autotest-growl">karl/autotest-growl · GitHub</a></li><li><a href="http://rubyist.g.hatena.ne.jp/rochefort/20100414/p1">autospecの結果をgrowlで通知〜windows編 - うんたらかんたらRuby - Rubyist</a></li><li><a href="http://d.hatena.ne.jp/zariganitosh/20080312/1205305079">autotestのGrowl通知をカスタマイズする - ザリガニが見ていた...。</a></li><li><a href="http://blog.champierre.com/774">autotest + growl で楽々テスト - 僕は発展途上技術者</a></li></ul>
+<h1>環境</h1>
+<ul><li>Windows XP</li><li>Ruby 1.9.3<ul><li>Rubygems 1.8.11</li><li>Bundler 1.0.21</li><li>ZenTest 4.6.2</li><li>autotest-growl 0.2.16(だったか？)</li><li>rspec 2.8.0</li></ul></li><li>Growl for Windows 2.0.9</li></ul>
+<p>Macに置き換えてもいけるかは後で確認。</p>
+<h1>手順</h1>
+<h2>Growls for Windowsインストール</h2>
+<ul><li><a href="http://www.growlforwindows.com/gfw/displays.aspx">Growl for Windows</a> ここから落とす。</li></ul>
+<h2>Gem入手</h2>
+<ul><li>Gemfileファイルを作って以下のgemファイルを記載</li></ul>
+<pre class="">gem 'ZenTest'
+gem 'autotest-growl'</pre>
+<ul><li>bundle install</li></ul>
+<h2>.autotest</h2>
+<ul><li>前回何も記載しなかった.autotestファイルに以下を追記。</li></ul>
+<pre class="">require 'autotest/growl'</pre>
+<h2>実行</h2>
+<pre class="">$ bubdle exec autotest
+loading autotest/rspec2
+
+
+--------------------------------------------------------------------------------
+
+[2J[fC:\rubies\Ruby-193-p0\bin\ruby -rrubygems -S C:/WINDOWS/my/project/sha1/vendor/bundle/ruby/1.9.1/gems/rspec-core-2.8.0/exe/rspec --tty 'C:/WINDOWS/my/project/sha1/spec/sha1_spec.rb'
+.......
+
+Finished in 0.03125 seconds
+7 examples, 0 failures</pre>
+<p>と同時にGrowlポップアップきたこれ！　意外とすぐだった！</p>
+<h1>以下いろいろと失敗の試行錯誤Log</h1>
+<a name="seeall"></a>
+<h2>Windows用でないとダメみたい？</h2>
+<ul><li><a href="http://rubyist.g.hatena.ne.jp/rochefort/20100414/p1">autospecの結果をgrowlで通知〜windows編 - うんたらかんたらRuby - Rubyist</a> autotest-growlをWindows用に修正したgemが。Gemfileのautotest-growlは削除してkarl-autotest-growlとDL先のsourceを追加。</li></ul>
+<pre class="">+ 3 source &quot;http://gems.github.com&quot;
+  8 gem 'ZenTest'
+- 9 gem 'autotest-growl'
++ 9 gem 'karl-autotest-growl'</pre>
+<ul><li>bundle install</li><li>bubdle exec autotest</li></ul>
+<h2>ZenTest実行されなくなった…</h2>
+<pre class="">- 8 gem 'ZenTest'
++ 9 gem 'autotest'
++10 gem 'autotest-growl'
++11 gem 'autotest-fsevent'</pre>
+<p>fseventをインストールするにはDevelopment kitが必要らしい。<a href="2012-02-28-1330436604">2012-02-28-1330436604</a> インストール方法。</p>
+<p>で、.autotestに追加。</p>
+<pre class="">+ require 'autotest/fsevent'</pre>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/17/1334669770" title="Subversionで2ヶ所のリポジトリの同期を取るメモ">
+          Subversionで2ヶ所のリポジトリの同期を取るメモ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/04/22/1335108555" title=" Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo">
+           Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/04/20/1334933158" data-text="kk_Atakaの日記 - ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/20/1334933158/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/04/20/1334933158/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/20/1334933158/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/04/20/1334933158/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>RedmineとApacheを連携させるPassengerをインストールできなかった - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>RedmineとApacheを連携させるPassengerをインストールできなかった</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Solaris">Solaris</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Redmine">Redmine</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/12/15</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/14/1323868360" title="さくらVPSの初期設定メモ">
+          さくらVPSの初期設定メモ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/16/1324086694" title="svn infoコマンドでリビジョン番号を抜き出す">
+          svn infoコマンドでリビジョン番号を抜き出す
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<ul><li>Redmineを自動起動するようにしたい<ul><li>Phusion Passenger(mod_rails for Apache)を使えばApacheと連携できるらしい</li></ul></li></ul>
+<blockquote><p>特徴</p><p>    * Apache単独でRailsアプリケーションを実行可能です。Apacheのモジュールとして実装されており、別途デーモンを起動する必要がありません。tcpポートも使いません。</p><p>    * Railsアプリケーションのデプロイが簡単になります。ファイルをアップロードするだけ。ほぼPHP感覚です。</p><p>    * サーバのメモリを節約できます。Railsインスタンスは必要なタイミングで生成します。また、一定時間アクセスがなければインスタンスを終了させます。</p><cite><a href="http://redmine.jp/tech_note/apache-passenger/">http://redmine.jp/tech_note/apache-passenger/</a></cite></blockquote>
+<p>ふーむ。</p>
+<h1>参考サイト</h1>
+<ul><li><a href="http://redmine.jp/faq/system_management/redmine-auto-start/">Redmineを自動起動したい | Redmine.JP</a></li><li><a href="http://redmine.jp/tech_note/apache-passenger/">Apache上でRuby on Railsアプリケーションを動かす／Passenger(mod_rails for Apache)の利用 | Redmine.JP</a></li><li><a href="http://d.hatena.ne.jp/rx7/20080412/p1">Passenger (mod_rails for Apache) を使ってRedmineを動かしてみたよ！ - RX-7乗りの適当な日々</a></li><li><a href="http://d.hatena.ne.jp/r7kamura/20110212/1297452845">さくらVPS設定その3 Git+Ruby+Gem+Rails+Passenger - ✘╹◡╹✘</a></li></ul>
+<h1>手順</h1>
+<h2>passengerインストール</h2>
+<p>Passengerを使うにはfastthread、daemon_controllerが必要らしい。</p>
+<pre class="">$ gem install --local fastthread-1.0.7.gem
+$ gem install --local daemon_controller-0.2.6.gem
+$ gem install --local passenger-3.0.9.gem</pre>
+<p>※スタンドアロンなマシンだったため。ネットにつながっていればgem install passengerで全部入るはず。</p>
+<h1>passenger-install-apache2-module実行</h1>
+<p>対話形式でApacheのモジュール等を確認・インストールしていく。はじめにpassener-install-apache2-moduleを実行するとこんなメッセージが出てくる。</p>
+<pre class="">$ passenger-install-apache2-module
+Welcome to the Phusion Passenger Apache 2 module installer, v3.0.9.
+
+This installer will guide you through the entire installation process. It
+shouldn't take more than 3 minutes in total.
+
+Here's what you can expect from the installation process:
+
+ 1. The Apache 2 module will be installed for you.
+ 2. You'll learn how to configure Apache.
+ 3. You'll learn how to deploy a Ruby on Rails application.
+
+Don't worry if anything goes wrong. This installer will advise you on how to
+solve any problems.
+
+Press Enter to continue, or Ctrl-C to abort.</pre>
+<ol><li>Apacheモジュールをインストールしたい</li><li>Apacheの設定を知りたい</li><li>Railsアプリのデプロイ方法をしりたい</li></ol>
+<p>の中から一つ選んだらアドバイスしてやるよっと言っている？　のようなので1を選択。必要なソフトウェアがインストールされているかチェックされる。</p>
+<pre class="">Checking for required software...
+
+ * GNU C++ compiler... found at /usr/local/bin/g++
+ * Curl development headers with SSL support... not found
+ * OpenSSL development headers... not found
+ * Zlib development headers... found
+ * Ruby development headers... found
+ * OpenSSL support for Ruby... found
+ * RubyGems... found
+ * Rake... found at /usr/local/bin/rake
+ * rack... found
+ * Apache 2... not found
+ * Apache 2 development headers... not found
+ * Apache Portable Runtime (APR) development headers... not found
+ * Apache Portable Runtime Utility (APU) development headers... not found
+
+Some required software is not installed.
+But don't worry, this installer will tell you how to install them.
+
+Press Enter to continue, or Ctrl-C to abort.</pre>
+<p>結構インストールされていないものが多いな。メッセージでも「いろいろ入っていないものが見受けられるが心配すんな、俺がお前にインストール方法教えてやるよ！」と言われているようのでそのままエンター。</p>
+<pre class="">Installation instructions for required software
+
+ * To install Curl development headers with SSL support:
+   Please download Curl from http://curl.haxx.se/libcurl and make sure you install it with SSL support.
+
+ * To install OpenSSL development headers:
+   Please download it from http://www.openssl.org/
+
+ * To install Apache 2:
+   Please download it from http://httpd.apache.org/
+
+ * To install Apache 2 development headers:
+   Please download it from http://httpd.apache.org/
+
+ * To install Apache Portable Runtime (APR) development headers:
+   Please download it from http://httpd.apache.org/
+   (APR is an integrated part of Apache.)
+
+ * To install Apache Portable Runtime Utility (APU) development headers:
+   Please download it from http://httpd.apache.org/
+   (APR Utility is an integrated part of Apache.)
+
+If the aforementioned instructions didn't solve your problem, then please take
+a look at the Users Guide:
+
+  /usr/local/lib/ruby/gems/1.8/gems/passenger-3.0.9/doc/Users guide Apache.html</pre>
+<p>どこに何があるかUrlなどを教えてくれた。親切！</p>
+<h1>足りないもの集め</h1>
+<h2>Curl</h2>
+<ul><li><a href="http://www.blastwave.org/pkg/pkgcontents.ftd?software=curl&style=brief&state=5&arch=i386">http://www.blastwave.org/pkg/pkgcontents.ftd?software=curl&amp;style=brief&amp;state=5&amp;arch=i386</a> から</li><li>ディストリビューションを選択しパッケージをDL<ul><li>依存ファイルもあるので注意</li></ul></li><li>libidnとかlibssh2が足りなかったのでcurlが実行できない<ul><li>not found状態になっていた</li></ul></li></ul>
+<h2>Apache</h2>
+<ul><li>Apacheはあるはずなんだけどなあ。うまく見てくれてない</li><li>/usr/local/apache2/binにパスを通したらApache 2 development headerはfoundになった<ul><li>え？　Apache 2 development headerだけ？　他は？</li></ul></li></ul>
+<h2>OpenSSL</h2>
+<ul><li>OpenSSL development headersはなぜ入っていないのかわからなかった</li><li>パッケージをpkgaddしただけではダメ？<ul><li>Solarisにopenssl-develみたいなものはある？</li></ul></li><li>この文章を読むとソースから入れればよさそうなのだが…</li></ul>
+<blockquote><p>Does anyone know where I can obtain openssl-devel source or package for</p><p>solaris.  I am trying to compile courier-imap-2.1.1 and it bombs out in</p><p>the make process with the following error:</p><cite><a href="http://www.sunhelp.org/pipermail/sunhelp/2003-September/019267.html">http://www.sunhelp.org/pipermail/sunhelp/2003-September/019267.html</a></cite></blockquote>
+<blockquote><p>You can download complete OpenSSL source from www.openssl.org.</p><cite><a href="http://www.sunhelp.org/pipermail/sunhelp/2003-September/019268.html">http://www.sunhelp.org/pipermail/sunhelp/2003-September/019268.html</a></cite></blockquote>
+<ul><li>configのオプションに --openssldir を指定してみてもダメだった。</li></ul>
+<h1>とかなんとかしてるうちに</h1>
+<p>Rubyが実行できなくなった。lddで調べてみると、シンボルが見つからなくなっている。</p>
+<pre class="">
+        librt.so.1 =&gt;    /usr/lib/librt.so.1
+        libdl.so.1 =&gt;    /usr/lib/libdl.so.1
+        libcrypt_d.so.1 =&gt;       /usr/lib/libcrypt_d.so.1
+        libm.so.2 =&gt;     /usr/lib/libm.so.2
+        libc.so.1 =&gt;     /usr/lib/libc.so.1
+        libgcc_s.so.1 =&gt;         /usr/local/lib//libgcc_s.so.1
+        libaio.so.1 =&gt;   /usr/lib/libaio.so.1
+        libmd.so.1 =&gt;    /usr/lib/libmd.so.1
+        libgen.so.1 =&gt;   /usr/lib/libgen.so.1
+        シンボルが見つかりません: rb_cObject          (./md5.so)
+        シンボルが見つかりません: MD5_Update          (./md5.so)
+        シンボルが見つかりません: MD5_Init            (./md5.so)
+        シンボルが見つかりません: MD5_Finish          (./md5.so)
+        /platform/SPARC-XXXX/lib/libc_psr.so.1
+        /platform/SPARC-XXXX/lib/libmd_psr.so.1</pre>
+<p>md5.soを調べてみる。</p>
+<pre class="">$ cd /usr/local/lib/ruby/1.8/sparc-solaris2.10/digest
+$ ldd -d md5.so
+        librt.so.1 =&gt;    /usr/lib/librt.so.1
+        libdl.so.1 =&gt;    /usr/lib/libdl.so.1
+        libcrypt_d.so.1 =&gt;       /usr/lib/libcrypt_d.so.1
+        libm.so.2 =&gt;     /usr/lib/libm.so.2
+        libc.so.1 =&gt;     /usr/lib/libc.so.1
+        libgcc_s.so.1 =&gt;         /usr/local/lib//libgcc_s.so.1
+        libaio.so.1 =&gt;   /usr/lib/libaio.so.1
+        libmd.so.1 =&gt;    /usr/lib/libmd.so.1
+        libgen.so.1 =&gt;   /usr/lib/libgen.so.1
+        シンボルが見つかりません: rb_cObject          (./md5.so)
+        /platform/SUNW,SPARC-Enterprise-T5120/lib/libc_psr.so.1
+        /platform/SUNW,SPARC-Enterprise-T5120/lib/libmd_psr.so.1</pre>
+<p>Ruby本体の中でなんかやっちゃったのかな？</p>
+<p>結局Rubyを再インストールしたらこのエラーは消えた。</p>
+<h1>今後</h1>
+<ul><li>とりあえず、違うOSでPassenger入れなおしてみる</li></ul>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/14/1323868360" title="さくらVPSの初期設定メモ">
+          さくらVPSの初期設定メモ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/16/1324086694" title="svn infoコマンドでリビジョン番号を抜き出す">
+          svn infoコマンドでリビジョン番号を抜き出す
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/12/15/1323951847" data-text="kk_Atakaの日記 - RedmineとApacheを連携させるPassengerをインストールできなかった" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/15/1323951847/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/15/1323951847/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/15/1323951847/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - RedmineとApacheを連携させるPassengerをインストールできなかった"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/12/15/1323951847/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

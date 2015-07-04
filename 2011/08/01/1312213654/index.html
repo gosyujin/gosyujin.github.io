@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>BPStudy#47に参加しました - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>BPStudy#47に参加しました</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Agile">Agile</a> ]</i>
+          
+            <i>[ <a href="/tags.html#イベント">イベント</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/08/01</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/07/09/1310140318" title="MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2">
+          MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/08/14/1313326346" title="Subversionのauto-props設定ではまった">
+          Subversionのauto-props設定ではまった
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>詳細: <a href="http://atnd.org/events/17717">BPStudy#47 : ATND</a></h1>
+<ul><li>サーバの調達が毎回めんどい上に自由に使えるマシンがないので、仮想で立てられるXenServer見てみたい</li><li>アジャイルには縁のない、ウォーターフォール一直線の日々なのでことはじめ的な話を聞いてみたい</li></ul>
+<p>というわけで久しぶしにBPStudy参加。</p>
+<h1>XenServerによるお手軽開発用サーバ運用 @<a href="http://twitter.com/tokibito">tokibito</a>さん</h1>
+<h2>Webシステムを作るに当たって</h2>
+<ul><li>本番に近い環境、お客さんに見てもらう環境を作りたい</li><li>Wikiや課題管理をしたい</li></ul>
+<p>という事で、開発用のサーバを立てたくなる時がよくあると。ただし…</p>
+<ul><li>費用がかかりすぎては本末転倒なのでコストはかけない</li><li>あれもこれも盛り込みすぎてもダメなので、今必要のないものはいらない</li></ul>
+<p>この2点を念頭に置いて立てる。</p>
+<h2>実際にサーバを立てる</h2>
+<p>色々な方法があるが…</p>
+<ul><li>レンタル？(共用サーバ、専用サーバ、VPSなど)</li><li>自前？</li></ul>
+<p>プロジェクト毎に別の環境(OSなども)を作りたいので共用サーバでは設定的に難しい。1～3ヶ月が1プロジェクトの平均サイクルなので、データセンターなども難しい。じゃあ自前でやろう。</p>
+<h2>自前サーバに導入できるXenServerを選んだ。なぜXenServerなの？</h2>
+<ul><li>対抗はVPS</li><li>メモリ増やしたりとかはVPSより自前の方が融通がきく</li><li><span class="deco" style="font-weight:bold;">XenServerが無料になったので！</span></li></ul>
+<h2>Xen</h2>
+<ul><li>オープンソースのフリーウェア</li><li>サーバの仮想化</li><li>ハードウェアの上で直接動作するOS</li><li>Amazon EC2 とかでも使ってる</li></ul>
+<pre class="">のっけ方
+VM        Xen
+ゲストOS
+  VM      OS OS OS
+ホストOS  XenServer
+  HW         HW</pre>
+<ul><li>Linux、Windowsを動かせる</li></ul>
+<br />
+<h2>インストール方法</h2>
+<ol><li>iso落とす</li><li>XenCenterを管理用端末にインストールする(XenCenterは残念ながらWindows専用)</li><li>ライセンスファイルを取得し、XenCenter経由でライセンスファイルをインストールする</li></ol>
+<h2>XenCenter特徴</h2>
+<ul><li>GUI</li><li>複数管理も楽</li><li>スナップショットとって壊しても戻せる</li><li>VM単位でバックアップが取れる</li><li>まったく同じ構成の環境も簡単に作れる</li><li>リソース割り当てもXenCenterから簡単に</li><li>別のホストにVMをまるごと移動できる</li></ul>
+<h2>めんどい事</h2>
+<ul><li>ネットワークの設定…IPを固定したりホスト名変えたり</li><li>なのでスクリプト組んだ <a href="https://gist.github.com/1113337">https://gist.github.com/1113337</a></li><li>ユーザ管理もめんどい</li></ul>
+<h2>運用管理</h2>
+<ul><li>VMの管理はスプレッドシートとかで原始的にやるしかない</li><li>リソースははじめは少なめに作って足りなかったら管理者に言って！　という方針</li></ul>
+<h2>今後</h2>
+<ul><li>バックアップ強化したい</li></ul>
+<h2>ちなみに</h2>
+<ul><li>XMLRPCのAPIが使える</li><li>なのでWebアプリに組み込んでWebから起動とかバックアップとかできる</li></ul>
+<h1>非アジャイラーにアジャイルという言葉を使わずにアジャイルな見積りについて語ってみた+α @<a href="http://twitter.com/bash0C7">bash0C7</a>さん</h1>
+<h2>プロジェクトとは</h2>
+<ul><li>戦略/ポートフォリオ/プロダクト/リリースにわけられる</li></ul>
+<h2>プロジェクトの成功とは</h2>
+<ul><li>予定通りの期間、予算で最初の定義したフィーチャを実現できている事</li><li>…でもほんと？　それだけ？</li><li>最初に定義したことが必ずしも最高とは限らない<ul><li>すべてうまくいったとしてもメンバーが全員疲弊したら意味ないよね</li></ul></li></ul>
+<h2>失敗する要因</h2>
+<ol><ul><li>…いっぱい！</li><li>原因の一つとして見積もりミス<ul><li>…でも見積もり無駄じゃないか？</li><li>そうでもない。実施価値判断、優先順位付け、体制検討に見積もりは使える</li></ul></li></ul></ol>
+<h2>とりあえず3つ覚えて帰ってくださいね。不確実性コーン、規模と期間、正確さと労力</h2>
+<ol><ul><li>不確実性コーン<ul><li>横軸がウォーターフォールにおける各工程(要件定義とか？)、縦軸が誤差</li><li>プロジェクトの最初の段階は誤差が生じやすい</li><li>が、工程が進むことによって少しずつ誤差は収束する傾向にある(最後でだいばくはつする事もある)</li><li>詳しくはぐぐる</li></ul></li></ul></ol>
+<h2>規模と期間</h2>
+<ul><li>たとえば、東京-大阪間でかかる時間。のぞみだと2時間40分かかる、こだまだともっとかかる＝期間。乗り物(開発者)によって変わる。</li><li>乗り物(開発者)によってかかる時間(規模)を求め比率で出してみる</li><li>ユーザ追加機能は3くらいだから…削除機能は2？　みたいな</li></ul>
+<h2>正確さと労力</h2>
+<ul><li>見積もりに時間かけ過ぎてもいかん。見積りなんか天気予報と同じ。</li><li>どんだけやっても100％にはならないので、適度な所で切り上げることも大事</li></ul>
+<h2>アジャイルな見積もりと計画づくり</h2>
+<ul><li>このあたりの内容は「<a href="http://amzn.to/pc5emT">Agileな見積もりと計画づくり(Amazon)</a>」に乗っている。簡単に絶版になるらしい(！)</li></ul>
+<h2>アジャイルの手法？　というか流れ？</h2>
+<table><tr><th>Product Backlog</th><td>これからやることを積んでおく</td></tr><tr><th>Sprint Backlog</th><td>「これ」を達成するためにやらないといけない「あれ」や「それ」</td></tr><tr><th>Sprint Review</th><td>成果物確認(1週間ごと)</td></tr><tr><th>Test Release</th><td>まずは自分の環境 -> そしてチーム内 -> 最終的にお客さんに見せるように</td></tr><tr><th>Sprint Reviewの内容</th><td>週一の進捗報告。こんなものつくりましたーな成果物デモのみ。コードレビューは別の場で</td></tr></table>
+<ul><li>成果物がないと動かせるものがないので進捗報告がモロに出てしまう…だがそれがいい</li></ul>
+<h2>その他まとまらないメモ</h2>
+<ul><li>MSProjectによる謎の進捗報告<ul><li>耳が痛い</li></ul></li><li>会場にアジャイルやってる人<ul><li>…いない</li></ul></li><li>「慎重にウォーターフォールで開発」<ul><li>…言わんとしてることは分かるけど…</li></ul></li></ul>
+<ul><li>タイムリーにリリース(手っ取り早く適当にうごかす) vs 未来を明らかにする(慎重にすべての事態を調べる)<ul><li>うまく共存できないか　-> 順々に明らかにしていけ</li></ul></li></ul>
+<ul><li>スクラムマスター:スクラムプロセスがうまくいくよう外部からチームを守る<ul><li>-> 具体的にどんな事するんだろう？</li></ul></li></ul>
+<h1>最後に</h1>
+<p>アジャイル導入は環境的にムリダナと思いつつ、何か一部だけでも取り入れられないかなーと思うものの、なかなか難しい。。。とりあえず、アジャイルあんまり関係ないけど「Excel管理」と「ソースファイルに日付入れてバックアップ」やめればっ！？　っつってSubversionとRedmine導入しようとしてみてます。</p>
+<p>また、皆の自由な開発環境<span class="footnote"><a href="#f1" title="入れても使う人いるのかは知らない。" name="fn1">*1</a></span>を手に入れるためXenServerがけっこういい感じというのも知れたのでちょっと導入できるか探ってみようとおもいました。</p>
+<p>そして流れるように懇親会へ…。@<a href="http://twitter.com/haru860">haru860</a>さんの顔認識能力に驚愕；；</p>
+<p>お疲れさまでした。</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 入れても使う人いるのかは知らない。</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/07/09/1310140318" title="MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2">
+          MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/08/14/1313326346" title="Subversionのauto-props設定ではまった">
+          Subversionのauto-props設定ではまった
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/08/01/1312213654" data-text="kk_Atakaの日記 - BPStudy#47に参加しました" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/08/01/1312213654/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/08/01/1312213654/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/08/01/1312213654/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - BPStudy#47に参加しました"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/08/01/1312213654/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

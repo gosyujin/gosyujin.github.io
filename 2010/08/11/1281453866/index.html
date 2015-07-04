@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>JVM勉強会に行ってきました - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>JVM勉強会に行ってきました</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Java">Java</a> ]</i>
+          
+            <i>[ <a href="/tags.html#イベント">イベント</a> ]</i>
+          
+        
+        
+          <span>Published: 2010/08/11</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2010/01/23/1264179525" title="java-ja勉強会に参加しました">
+          java-ja勉強会に参加しました
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2010/11/13/1289639385" title="Hudson勉強会に行ってきました">
+          Hudson勉強会に行ってきました
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<p>ふむ、jojo勉強会以来…？　あれ、java-ja温泉の事って書いてなかったっけか。書いてなかったのか……。</p>
+<p>というわけで行ってまいりましたJVM勉強会。</p>
+<p>VMの中の人まで意識した設計をしたことがなく、ClassLoaderをサンプルでちょこちょこって動かした程度のレベルですが。</p>
+<h1>参考資料</h1>
+<p>とりあえず、会場で持ってる人が割といた、もしくは発表内で話題にあがった本など。</p>
+<ul><li>Java仮想マシン仕様</li><li>ガベージコレクションのアルゴリズムと実装</li><li>デコンパイリングJava</li></ul>
+<p>この辺りを読んでくると、より内容を楽しめた模様。</p>
+<h1>本編</h1>
+<ul><li>@ashigeruさん クラスローダについて<ul><li>クラスローダはfindClass()をオーバライドする</li><li>loadClass()を実行すると委譲先クラスを探しにいく。親から見ていって、なかったら自分でロード<ul><li>親から見ていくので、親が古いライブラリを持っているとそれをロードしてしまう！</li></ul></li><li>某アプリケーションサーバは親を最後に検索する = PARENT_LAST<ul><li>その名のとおり自分のクラスローダを最初に検索するので、親のライブラリの影響を受けにくい</li></ul></li><li>同じ名前のクラスでも定義ローダーが違えば別のもの。Class.getClassLoader()でどこから呼ばれたか確認できる。</li><li>PARENT_LASTの問題点としてドッペルゲンガーという現象。などなど……</li></ul></li></ul>
+<ul><li>@skrbさん Stack on JavaVM<ul><li>JVMとスタックについて</li><li>スタックを使用した逆ポーランド法のアニメーション（わかりやすい！）</li><li>JVMはスタック</li><li>スタックはThreadひとつにつきひとつ<ul><li>中にはプログラムカウンタがひとつ</li><li>フレームの中にはローカル変数とオペランドスタック</li></ul></li><li>JVMの中ではBooleanはIntとして扱われている</li><li>インスタンスはヒープにアロケーションされる</li><li>スタックは二段構え（JavaStackとオペランドスタック）</li></ul></li></ul>
+<ul><li>@kmizuさん わかる！Javaバイトコード－30分でわからない？Javaバイトコード入門<ul><li>Hello Worldの逆アセンブル</li><li>byte,short,char,boolean -> すべてintとして扱われる</li><li>ロード/ストア命令…定数をオペランドスタックにロードする命令</li><li>ロード/ストア命令2…ローカル変数の値をオペランドスタックにロードする命令</li><li>型変換命令…キャストなどint ->longなど</li><li>配列関係の命令</li><li>オブジェクトの生成・操作命令</li><li>モニタ命令</li><li>クラスファイルベリファイア<ul><li>classファイルのフォーマットがJava仮想マシン仕様に従っているかどうかを該当クラスの初期化より前にチェックする。未初期化ローカル変数へのアクセス、型エラー、jasmin……この辺よくわかりませんした＞＜</li></ul></li></ul></li></ul>
+<ul><li>@cactusmanさん GCについて<ul><li>GC<ul><li>ルートを起点として参照できるオブジェクトは生きている</li><li>ルートに到達できないものがGCされる</li></ul></li><li>GCを学ぶ意義としてメモリ領域の効率的な使い方を意識できる</li><li>マーク＆スイープ<ul><li>ルートオブジェクトからたどれるオブジェクトをマークしていく</li><li>マークのないオブジェクトを回収</li><li>メリット：実装は簡単</li><li>デメリット：フラグメンテーション、アロケーション速度、停止時間が長い→マークしている期間</li></ul></li><li>参照カウント<ul><li>自信のオブジェクトが参照されているオブジェクトをカウント</li><li>0になった時点でGC</li><li>メリット：参照が停止されたタイミングで開放、停止時間が短い、参照をたどる必要がない</li><li>デメリット：循環参照を回収できない、カウンターの値の増減処理が重い、実装が難しい</li></ul></li><li>コピー<ul><li>メリット：スループットがいい、メモリ回収と同時にコンパクションを行える(フラグメンテーションが起きない)</li><li>デメリット：ヒープ領域を余分に取る</li></ul></li><li>GCの種類 ScavengeGC - コピーGC</li></ul></li></ul>
+<ul><li>@nekopさん クラスローダリークパターン なにそれおいしいの？<ul><li>ThreadLocalで設定した値はThreadから強参照される</li><li>java.util.loggingのLevelを継承でリーク</li><li>既製ライブラリ　commons-logging</li></ul></li></ul>
+<ul><li>日本オラクルたてのさん なれる！CL 5分間で分かる？ (OC4J)クラスローダ入門<ul><li>OC4Jのおはなし。</li><li>人間クラスローダ養成講座 <- なにこれすごい受けたい！</li><li>クラスローダは親子モデル、親からロードし子は最後。</li><li>基本は1JavaVM1アプリ1ライフサイクルなのだが、現在は多くのアプリ・多くのライブラリが乗っているので、依存やバージョン競合が起こりそう。</li><li>親子関係では足りなくなるのでloadClassの上書きという修羅の道を通った人もいる。</li><li>ポリシーを組み合わせる -> テンプレートで設定。</li><li>OC4JはWebLogicServerへ…そして伝説へ…</li></ul></li></ul>
+<p>GCの仕組みなど普段は中の人にやってもらっていたところが、どんな仕組みになっていたのかなんとなくイメージできたかな…。</p>
+<p>@skrbさんの逆ポーランド方を図示したスライドは超わかりやすかった！　逆ポーランドとスタックは絡めて説明すると感覚的にすごく頭に入ってきやすいと思いました。</p>
+<p>最後に、主催者の@yuroyoroさん、二次会を取りまとめてくださった@yamashiroさん、会場を提供してくださった日本Oracle社さんに感謝。</p>
+<h1>最後の最後に</h1>
+<p>Hello Worldをjavapしてみましょう。</p>
+<pre class="java">public class HelloClassLoader {
+        public static void main(String args[]) {
+                System.out.println(&quot;HelloWorld !!&quot;);
+        }
+}</pre>
+<pre class="">MacBook:java kk_Ataka$ javap -c HelloClassLoader
+Compiled from &quot;HelloClassLoader.java&quot;
+public class HelloClassLoader extends java.lang.Object{
+public HelloClassLoader();
+  Code:
+   0:	aload_0
+   1:	invokespecial	#1; //Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V
+   4:	return
+
+public static void main(java.lang.String[]);
+  Code:
+   0:	getstatic	#2; //Field java/lang/System.out:Ljava/io/PrintStream;
+   3:	ldc	#3; //String HelloWorld !!
+   5:	invokevirtual	#4; //Method java/io/PrintStream.println:(Ljava/lang/String;)V
+   8:	return
+
+}</pre>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2010/01/23/1264179525" title="java-ja勉強会に参加しました">
+          java-ja勉強会に参加しました
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2010/11/13/1289639385" title="Hudson勉強会に行ってきました">
+          Hudson勉強会に行ってきました
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2010/08/11/1281453866" data-text="kk_Atakaの日記 - JVM勉強会に行ってきました" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2010/08/11/1281453866/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2010/08/11/1281453866/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2010/08/11/1281453866/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - JVM勉強会に行ってきました"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2010/08/11/1281453866/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

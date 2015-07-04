@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Jekyllのプラグイン作成で複数ファイルにまたがったタグをどう扱えばいいのかわからない話 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Jekyllのプラグイン作成で複数ファイルにまたがったタグをどう扱えばいいのかわからない話</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Jekyll">Jekyll</a> ]</i>
+          
+        
+        
+          <span>Published: 2013/11/25</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/10/25/sphinx-recommend" title="「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた">
+          「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/12/14/git-dotgit-objects" title="Gitの.git/objectsの中身を追ってみる">
+          Gitの.git/objectsの中身を追ってみる
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#できる'>できる</a></li><li><a href='#できない'>できない</a></li><li><a href='#対応'>対応</a></li></ul></ul><!-- end of tree list --></div>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>Jekyll ではてなダイアリーのような脚注をつけられるプラグインを作った。</p>
+
+<ul>
+<li><a href="https://github.com/gosyujin/gosyujin.github.com/blob/1cac1dbbb34f271ce54ce3a85c69261af3336aec/_plugins/gosyujin.github.com/reference.rb">gosyujin.github.com/_plugins/gosyujin.github.com/reference.rb</a></li>
+</ul>
+
+<p>文中に登場した <code>ref</code> タグの引数を集めて <code>ref_anchor</code> タグが打たれた箇所にリスト出力する、というもの。</p>
+
+<p>こう書くと、</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">- 超スタンダード  {% ref といわれている  %}</span>
+<span class="go">- 誰の PC にも入っている  {% ref といわれている  %}</span>
+<span class="go">- 誰でも簡単に使える  {% ref といわれている  %}</span>
+<span class="go">- きめ細かいデザインが可能</span>
+<span class="go">- 画像やフローの挿入も簡単</span>
+
+<span class="go">(略)</span>
+
+<span class="go"> {% ref_anchor  %}</span></code></pre></div>
+
+<p>こうなる。</p>
+
+<p><img src="http://gosyujin.github.io/static/images/2013-11-25/ref.png" alt="ref"></p>
+
+<p>(略)</p>
+
+<p><img src="http://gosyujin.github.io/static/images/2013-11-25/refanc.png" alt="refanc"></p>
+
+<p>一応、やりたいことはできたんだけど、以下のようなことができなくて力技でなんとかした。</p>
+
+<h2 id="できる">できる</h2>
+
+<p><em>同じ .md ファイル内に</em> <code>ref</code> タグと <code>ref_anchor</code> タグを書くと問題なくいける。</p>
+
+<p>上記あらすじの例がそう。</p>
+
+<h2 id="できない">できない</h2>
+
+<p><code>ref</code> タグは .md ファイル内に。 <code>ref_anchor</code> タグは「記事の一番最後に一つあればいい」ということでテーマ内に書いて集約したい。</p>
+
+<p>と思って、 <em>テーマ( _includes/themes/twitter/post.html )</em> に書いてみたが、これだと脚注が拾えなかった…。</p>
+
+<ul>
+<li><a href="https://github.com/gosyujin/gosyujin.github.com/blob/cbfe075f348e20d17850074af4/_includes/themes/twitter/post.html">_includes/themes/twitter/post.html</a></li>
+</ul>
+
+<p>デバッグしてみると、どうもレンダリングの順番で、 <code>_includes/themes/twitter/post.html(ref_anchor) -&gt; _posts/xxx.md(ref)</code> になっているから拾えないっぽい？</p>
+
+<h2 id="対応">対応</h2>
+
+<p>うまくできる方法もあるのかもしれないけど、とりあえずグローバル変数を使う方法で脚注を拾うことに成功した。</p>
+
+<p>もう一つ、記事と脚注の対応をjson形式とかでどっかにファイルに吐き出して、それを読み込むという手も考えたんだけど、どっちがいいんだろう。</p>
+
+<p>あんまりグローバル変数使いたくないんだけど、他に思いつかなかった。</p>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/10/25/sphinx-recommend" title="「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた">
+          「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/12/14/git-dotgit-objects" title="Gitの.git/objectsの中身を追ってみる">
+          Gitの.git/objectsの中身を追ってみる
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/11/25/jekyll-plugin-reference" data-text="kk_Atakaの日記 - Jekyllのプラグイン作成で複数ファイルにまたがったタグをどう扱えばいいのかわからない話" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/11/25/jekyll-plugin-reference/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/11/25/jekyll-plugin-reference/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/11/25/jekyll-plugin-reference/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Jekyllのプラグイン作成で複数ファイルにまたがったタグをどう扱えばいいのかわからない話"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2013/11/25/jekyll-plugin-reference/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

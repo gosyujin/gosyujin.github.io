@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり) - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり)</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Redmine">Redmine</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/07/17</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/07/12/1342098141" title="Fluentdというログ収集ツールを使ってApacheのログを取得するまで">
+          Fluentdというログ収集ツールを使ってApacheのログを取得するまで
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/08/16/1345124098" title="Sphinxの見出しについて学びなおし">
+          Sphinxの見出しについて学びなおし
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<p>タイトル通り、サービスに登録してよろしく起動してほしい。mongrelを使えばサービスから起動できる……らしいが、名前は聞いたことあるけど、mongrelが何かは知らない……。</p>
+<blockquote><p>Ruby + C(拡張ライブラリ) で書かれた httpd。</p><cite><a href="http://d.hatena.ne.jp/keyword/mongrel">http://d.hatena.ne.jp/keyword/mongrel</a></cite></blockquote>
+<p>なるほど。</p>
+<h1>環境</h1>
+<ul><li>Windows XP</li><li>Ruby 1.9.3<ul><li>Bundler 1.0.21</li><li>Mongrel 1.2.0.pre2</li></ul></li><li>Redmine 1.4</li></ul>
+<h1>手順</h1>
+<h2>前提</h2>
+<ul><li>Redmineの環境構築が完了している事<ul><li>bundle exec ruby script/server -e production で起動できる事</li></ul></li></ul>
+<h2>インストールから起動まで</h2>
+<ul><li>まずはRedmineデフォルトのGemfileにmongrelを追加し、bundle install</li></ul>
+<pre class="">gem &quot;mongrel&quot;</pre>
+<pre class="">$ bundle install
+Fetching source index for http://rubygems.org/
+Using rake (0.9.2.2)
+Using activesupport (2.3.14)
+Using rack (1.1.3)
+Using actionpack (2.3.14)
+Using actionmailer (2.3.14)
+Using activerecord (2.3.14)
+Using activeresource (2.3.14)
+Installing cgi_multipart_eof_fix (2.5.0)
+Using coderay (1.0.6)
+Installing gem_plugin (0.2.3)
+Using i18n (0.4.2)
+Installing mongrel (1.1.5)
+Using mysql2 (0.2.18)
+Using net-ldap (0.3.1)
+Using pg (0.13.2)
+Using rails (2.3.14)
+Using ruby-openid (2.1.8)
+Using sqlite3 (1.3.6)
+Using tzinfo (0.3.33)
+Using bundler (1.0.21)
+Your bundle is complete! It was installed into ./vendor/bundle</pre>
+<ul><li>bundle exec ruby ...で起動…しようとするとエラー</li></ul>
+<pre class="">msvcrt-ruby18.dll が見つからなかったため、このアプリケーションを開始できませんでした。アプリケーションをインストールし直すとこの問題は解決される場合があります。</pre>
+<ul><li><a href="http://gururan.com/20100820/002808">【Ruby1.9】msvcrt-ruby18.dll が見つからなかったため、このアプリケーションを開始できませんでした。・・・とエラーが。。。 | ぐるらん</a> という事らしいので、jsonを消してみることに……ただ、バージョンが違うんだよなあ。</li></ul>
+<pre class="">$ gem list
+...
+json (1.5.4)
+...</pre>
+<pre class="">$ gem uninstall json
+Successfully uninstalled json-1.5.4</pre>
+<ul><li>で、再起動……だめだった！！</li><li><a href="http://simultechnology.blendmix.jp/blog/archives/1248">Windowsでrails3.0をMongrelで動かす | simultechnology.blog</a> によると、さっきいれてた<span class="deco" style="color:#FF0000;">mongrel 1.1.5 はRuby 1.8のモジュールを使っている</span>という事らしい</li><li><span class="deco" style="color:#FF0000;">新しいバージョン(今はプレリリース版)を入れることで解決できる。</span>Gemfileを修正しbundle install</li></ul>
+<pre class="">-gem &quot;mongrel&quot;
++gem &quot;mongrel&quot;, &quot;&gt;= 1.2.0.pre2&quot;</pre>
+<pre class="">$ bundle install
+...
+Installing mongrel (1.2.0.pre2)</pre>
+<ul><li>起動！　起動した！　WEBrickで起動していたのがMongrelに変わった！</li></ul>
+<pre class="">=&gt; Booting WEBrick</pre>
+<pre class="">=&gt; Booting Mongrel</pre>
+<p>に変わった！</p>
+<h1>サービスに登録</h1>
+<ul><li>mongrel_serviceをGemfileに登録</li></ul>
+<pre class="">gem &quot;mongrel_service&quot;</pre>
+<ul><li>インストールできたらmongrel_railsというコマンドが追加される(今回はbundlerでインストールしたので、Redmineのrootまで行ってbundle exec mongrel_rails)</li></ul>
+<pre class="">[C:\redmine-1.4.0]
+$ be mongrel_rails
+Usage: mongrel_rails &lt;command&gt; [options]
+Available commands are:
+
+ - restart
+ - start
+ - stop
+ - service::install
+ - service::remove</pre>
+<ul><li>Serviceに追加</li></ul>
+<table><tr><th>オプション</th><th>意味</th></tr><tr><td>-N</td><td>サービス名</td></tr><tr><td>-c</td><td>Redmineのルート</td></tr><tr><td>-p</td><td>起動ポート</td></tr><tr><td>-e</td><td>Railsの起動モード</td></tr></table>
+<pre class="">$ be mongrel_rails service::install -N &quot;Redmine&quot; -c C:\redmine-1.4.0 -p 3000 -e production
+** Copying native mongrel_service executable...
+Redmine service created.</pre>
+<ul><li>登録に成功したのでWin+rからservices.mscを呼び出して確認……</li><li>あった！<ul><li>スタートアップの種類が手動になっていたので自動に変更</li></ul></li><li>マシン再起動！</li></ul>
+<p><span class="deco" style="color:#FF0000;">起動しない……だと……？</span></p>
+<h2>サービスから起動できなかった</h2>
+<ul><li>Redmineフォルダ内のlogにmongrel.logがあるので見てみると</li></ul>
+<pre class="">C:\RUBY_ROOT\bin\ruby.exe: No such file or directory -- C:/RUBY_ROOT/bin/mongrel_rails (LoadError)</pre>
+<p>うーん。RUBY_ROOTのbin下にmongrel_railsを探しに行ってる？　……でも今回はbundlerで入れたからREDMINE_ROOT/vendor/bundle下を見に行ってほしいんだけどなぁ。</p>
+<p>ちょっと試しにbundlerからmongrel, mongrel_serviceをはずして、gemで直接Mongrelをインストールしてみる。</p>
+<pre class="">$ gem install mongrel --pre
+$ gem install mongrel_service</pre>
+<p>これで</p>
+<ul><li>REDMINE_ROOTのvendor/bundleにMongrelはなくなった<ul><li>つまり、REDMINE_ROOTでbundle exec ruby ...したらWEBRickで起動するようになった</li></ul></li><li>RUBY_ROOTにmongrelが入った</li></ul>
+<p>ということになり、RUBY_ROOTにMongrelがあるので、再起動すればサービスから起動してくれるはず……。</p>
+<p>再々起動…<span class="deco" style="color:#FF0000;">起動した！</span></p>
+<h2>まとめ</h2>
+<ul><li>一応、サービスから起動させる事はできた</li><li>ただし、直接gem installしたものに限る。サービスから起動させるとRUBY_ROOTを見にいってしまうようなのでbundlerで入れるとLoadErrorになってしまう</li></ul>
+<h2>宿題</h2>
+<p>mongrel_railsコマンドのオプションとかでbundlerから起動するように変えられないかな？</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/07/12/1342098141" title="Fluentdというログ収集ツールを使ってApacheのログを取得するまで">
+          Fluentdというログ収集ツールを使ってApacheのログを取得するまで
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/08/16/1345124098" title="Sphinxの見出しについて学びなおし">
+          Sphinxの見出しについて学びなおし
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/07/17/1342535044" data-text="kk_Atakaの日記 - Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり)" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/07/17/1342535044/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/07/17/1342535044/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/07/17/1342535044/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり)"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/07/17/1342535044/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

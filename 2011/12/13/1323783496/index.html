@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>svn updateコマンド以外でリビジョン番号を抜き出す - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>svn updateコマンド以外でリビジョン番号を抜き出す</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Subversion">Subversion</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Unix">Unix</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/12/13</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/12/1323701022" title="ファイルの拡張子を見て適切なコマンドで解凍してくれるスクリプトを組んだ">
+          ファイルの拡張子を見て適切なコマンドで解凍してくれるスクリプトを組んだ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/14/1323868360" title="さくらVPSの初期設定メモ">
+          さくらVPSの初期設定メモ
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<p>svnのリビジョン番号だけ抜き出したい。アップデートなしで！　svn updateするとリビジョンは出てくれるんだけど、アップデート走らせないようにリビジョン番号だけ抜き出したい。</p>
+<pre class="">$ svn up
+リビジョン 111 です</pre>
+<h1><span class="deco" style="color:#FF0000;">続編</span></h1>
+<ul><li><a href="2011-12-16-1324086694">2011-12-16-1324086694</a></li></ul>
+<p><span class="deco" style="color:#FF0000;">以下はとてもめんどくさい方法での実現となります。</span></p>
+<h1>試行錯誤</h1>
+<h2>svn log</h2>
+<p>svn logで表示したリビジョンを抽出する。limit N で出力するログを制御。</p>
+<pre class="">$ /usr/local/bin/svn log --limit 1
+------------------------------------------------------------------------
+r111 | kk_Ataka | 2011-12-17 11:51:11 +0900 ((金), 17 12月 2011) | 3 lines
+
+コミットログ
+...
+...
+</pre>
+<p>まずは最新ログをひとつだけ取得。</p>
+<h2>grep</h2>
+<p>次にリビジョンが記載してある行だけ抽出。</p>
+<pre class="">$ /usr/local/bin/svn log --limit 1 | grep ^r.*lines$
+r111 | kk_Ataka | 2011-12-17 11:51:11 +0900 ((金), 17 12月 2011) | 3 lines</pre>
+<h2>sed</h2>
+<p>最後にその行からsedコマンドで「rXX」だけを抜き出し。</p>
+<pre class="">$ /usr/local/bin/svn log --limit 1 | grep ^r.*lines$ | sed -e &quot;s/^\(r[0-9]*\) .*/\1/g&quot; 
+r111</pre>
+<p>めんどくさ！　なんか使ったことないコマンドから一発で出せる気がする……。</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/12/1323701022" title="ファイルの拡張子を見て適切なコマンドで解凍してくれるスクリプトを組んだ">
+          ファイルの拡張子を見て適切なコマンドで解凍してくれるスクリプトを組んだ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/14/1323868360" title="さくらVPSの初期設定メモ">
+          さくらVPSの初期設定メモ
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/12/13/1323783496" data-text="kk_Atakaの日記 - svn updateコマンド以外でリビジョン番号を抜き出す" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/13/1323783496/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/13/1323783496/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/13/1323783496/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - svn updateコマンド以外でリビジョン番号を抜き出す"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/12/13/1323783496/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

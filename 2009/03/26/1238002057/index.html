@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Eclipseで優先順位の低いパッケージを補完候補から除外してみた - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Eclipseで優先順位の低いパッケージを補完候補から除外してみた</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Java">Java</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Eclipse">Eclipse</a> ]</i>
+          
+        
+        
+          <span>Published: 2009/03/26</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2009/03/17/1237297925" title="チェックボックスの(中略)続き">
+          チェックボックスの(中略)続き
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2009/03/30/1238392970" title="MacbookからCDが取り出せなくなったときの対処法">
+          MacbookからCDが取り出せなくなったときの対処法
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<p>　<a href="http://d.hatena.ne.jp/Yamashiro0217/">id:Yamashiro0217</a>さんのエントリ<a href="http://d.hatena.ne.jp/Yamashiro0217/20090322/1237707686">Eclipse のコード補完 (Complete) で java.awt.List とかを補完候補から除外したい場合の設定 - Yamashiro0217の日記</a>を試した。……確かに、Eclipseの文にも</p>
+<blockquote><p>For example 'java.awt.*' will hide all types from the awt packages.</p></blockquote>
+<p>　って書かれてますね。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20090326020054"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20090326/20090326020054.png"></a></p>
+<p>　↑早速java.awt.*を足してみたら、確かにListがフィルタリングされて除外されてました。すごい！　あとLabelとかも。個人的には、WicketでWebアプリケーションを書いていくなら、java.awt.*の他にjavax.swing.*もフィルタリングすると良いと思います。</p>
+<blockquote><p>「ListViewでエラーが起こる＞＜」</p><p>「ListView listView = new ListView("list", list) {...。別に間違ってないと思うけど、何ていうエラーが出てるの？」</p><p>「コンストラクタにこんな引数はない……かな」</p><p>「？？」</p><p>.</p><p>.</p><p>.</p><p>「あーこれWicketのListViewじゃなくてSwingのListViewをインポートしてますね！」</p><p>ちゃんちゃん</p></blockquote>
+<p>　こんな事を自分も何回かやりましたが、周りでも僕の知る限り何人<span class="footnote"><a href="#f1" title="初めのうちはですけど、初めのうちだからこそ無意識にひっかかるというか。" name="fn1">*1</a></span>かやっていたので。</p>
+<p>　フィルタリングを追加するだけでもかなり教育コストや開発時間を削減できると思うんですよね。<span class="footnote"><a href="#f2" title="あんまりフィルタしすぎるのも考えものですが；" name="fn2">*2</a></span></p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 初めのうちはですけど、初めのうちだからこそ無意識にひっかかるというか。</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: あんまりフィルタしすぎるのも考えものですが；</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2009/03/17/1237297925" title="チェックボックスの(中略)続き">
+          チェックボックスの(中略)続き
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2009/03/30/1238392970" title="MacbookからCDが取り出せなくなったときの対処法">
+          MacbookからCDが取り出せなくなったときの対処法
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2009/03/26/1238002057" data-text="kk_Atakaの日記 - Eclipseで優先順位の低いパッケージを補完候補から除外してみた" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2009/03/26/1238002057/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2009/03/26/1238002057/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2009/03/26/1238002057/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Eclipseで優先順位の低いパッケージを補完候補から除外してみた"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2009/03/26/1238002057/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

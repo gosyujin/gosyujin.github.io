@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Wicket勉強会に参加しました - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Wicket勉強会に参加しました</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Java">Java</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Wicket">Wicket</a> ]</i>
+          
+            <i>[ <a href="/tags.html#イベント">イベント</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/01/12</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2010/12/21/1292940870" title="pixiv Tech Meetingに行ってきました">
+          pixiv Tech Meetingに行ってきました
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/01/23/1295789120" title="MacBook Air 11インチ欲しい！">
+          MacBook Air 11インチ欲しい！
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<ul><li>詳細: <a href="http://atnd.org/events/11066">Wicket勉強会 2011-01 : ATND</a></li></ul>
+<p>TwitterのTL取得ページを自分用に作った程度ですが、二年連続二回目の出席をキメました。バージョン1.3メインで使っていた(いる？)人なので、もう1.5が出るのかーっといったところです。</p>
+<p>1.5になると矢野さんのWicket本の1/3が意味なくなるらしい…。</p>
+<h1>Wicket1.5の新機能 @<a href="http://twitter.com/t_yano">t_yano</a>さん</h1>
+<ul><li>WebRequestCycleが消えた</li><li>steps(), step()も消えた<ul><li>RequestTargetという概念が消えた→IRequestHandlerで代替</li></ul></li><li>UrlCodingStrategy→IRequestMappterで代替</li><li>リクエストのサイクル</li></ul>
+<pre class="">IRequestHandler
+　↑　　　　↓
+--------------------
+IRequestMapper
+--------------------
+　↑　　　　↓
+Request      Url</pre>
+<ul><li>RequestHandlerを使えればWicketの世界に入っていける</li><li>RequestHandlerStack: リクエスト処理の中心でRequestHandlerをスタックとして扱う</li></ul>
+<h2>Urlマウント</h2>
+<ul><li>mountBookmarkablePageが消え、代わりにmountPageになった。</li><li>${}で変数をUrlに埋め込めるようになった</li></ul>
+<pre class="">/mountpath/${year}/
+
+StringValue year = parameter.get(&quot;year&quot;)</pre>
+<ol><ul><li>現状はページのみ。リソースの場合はインデックスで取れる</li></ul></ol>
+<pre class="">/user/t_yano/image/
+
+parameter.get(0) //user
+parameter.get(1) //t_yano</pre>
+<h2>コンポーネントの初期化と設定</h2>
+<ul><li>コンストラクタ？onBeforeRender？<ul><li>onInitialize()が追加された<ul><li>自身が<strong>ページにadd済み</strong>である事を保証。ただし<strong>一度しか呼ばれない</strong></li><li>isVisibleがfalseだったりすると呼ばれない</li></ul></li><li>onConfigure()<ul><li><strong>レンダリング前にかならず呼ばれる</strong>事を保証</li><li><strong>全コンポーネントが揃っている事が保証できる</strong>タイミング</li><li><strong>isVisibleがfalseでも呼ばれる</strong></li></ul></li></ul></li><li>ButtonとかLinkとかPanelに書くもので、Pageに書くものではない</li></ul>
+<h2>コンポーネントの独立性</h2>
+<ul><li>密結合<ul><li>ボタンを押すとあるコンポーネントが消えるという場合…<ul><li>ボタンと消すコンポーネントを連携させないといけなかった</li></ul></li></ul></li></ul>
+<ul><li>IEventSink: イベントを受け取るオブジェクト</li><li>IEventSource: イベントを送信できるオブジェクト<ul><li>あらゆるコンポーネントはIEventSinkかつIEventSource</li></ul></li></ul>
+<ul><li>Page#sendで送れる範囲<ul><li>BREADTH: 子に広げる</li><li>WIDTH: 子から自分まで上がる</li><li>BUBBLE: 自分から親に上がる<ul><li>BREADTHしか使わないんじゃないか？</li></ul></li></ul></li></ul>
+<pre class="">◯　　　　　◯　　◯　　◯
+↓イベント　↑　　↑　　↑
+フ　レ　ー　ム　ワ　ー　ク</pre>
+<ul><li>他のコンポーネントを意識しなくてもよくなった！</li><li>今後はページからではなくコンポーネントから考えよう</li></ul>
+<ul><li>ajaxコンポーネントを更新するaddComponent()メソッドはadd()になった</li></ul>
+<h1>最終的な表示処理は誰のもの？ @<a href="http://twitter.com/t_hyssh">hayassh</a>さん</h1>
+<ul><li>Wicket歴4年</li><li>40人以上のプロジェクトでWicketを使っている</li></ul>
+<h2>こんなときどうするか</h2>
+<ul><li>住所を一行で表示</li><li>郵便番号はXXX-XXXX</li><li>郵便番号と住所は半角スペースひとつあける<ul><li>郵便番号にハイフンを入れる、半角スペースあけで表示するというのは表示側の都合</li></ul></li></ul>
+<h2>上記の処理をWicketのどの部分でやるか？？</h2>
+<ul><li>Component部分でやるか<ul><li>再利用性が高くなる</li><li>拡張性も保たれる</li><li>テスタビリティが低い</li><li>WicketTesterを使用しなければいけない</li></ul></li></ul>
+<ul><li>Comverterでやるか<ul><li>Componentよりテスタビリティが高い</li><li>変換処理だけ考えるので責務がはっきりする</li><li>Stringへの変換しかしない</li><li>Nullの場合にConverterが適用されない</li></ul></li></ul>
+<ul><li>ViewHelperでやるか<ul><li>テスタビリティが高い</li><li>概念が理解されやすい</li><li>CompoundPropertyModelと相性がいい</li><li>再利用性・拡張性が悪い</li></ul></li></ul>
+<h2>入力があればConverter。表示するだけならModelでなんとかする？再利用単位はコンポーネントがいい？</h2>
+<h2>まとめ</h2>
+<ul><li>Componentで行えば再利用性が高まる？</li><li>ただし、ViewHelperはJUnitでテストができる</li></ul>
+<h1>タイトル未定 @<a href="http://twitter.com/tetsuyas">tetsuyas</a>さん</h1>
+<ul><li>大学の教員をやっている</li><li>Shuugi.in - <a href="http://shuugi.in/">shuugi.in　予測市場　選挙・政治予測/経済・投資予測</a> というサービスを作成している</li></ul>
+<h2>Shuugi.inサイトでの事例</h2>
+<ul><li>更新すべきパネルをもち回している。</li><li>OAuth<ul><li>Twitter<ul><li>Twitter4j</li></ul></li><li>はてな<ul><li>oauth-signpostを利用</li><li>OAuthConsumer,OAuthProviderをもち回す</li></ul></li></ul></li><li>ModalWindow内でのページ遷移</li></ul>
+<h1>Wicket1.3から1.4へのマイグレーション時にハマった事 @<a href="http://twitter.com/gishi_yama">gishi_yama</a>さん</h1>
+<ul><li>大学の教員をやっている</li><li>学内のシステムをWicketで開発</li></ul>
+<h2>構成</h2>
+<ul><li>Wicket + Guice + JDBC</li><li>コンポーネントをシンプルに使用</li><li>確認は目視</li></ul>
+<h2>マイグレーション後</h2>
+<ul><li>エラー350近く、ワーニングは5000近く<ul><li>エラーの原因はメソッドの廃止によるものがほとんど</li><li>ワーニングはジェネリクス、Validator</li></ul></li></ul>
+<h2>工数</h2>
+<ul><li>300クラス/3.2万ステップ</li><li>社内SE2人でコード修正、確認など…80H</li></ul>
+<h2>マイグレーションで注意</h2>
+<ul><li>CompundPropertyModelを使用したFileUploadFieldコンポーネント<ul><li>FileUploadFieldにModelを指定しないとエラーになる</li></ul></li><li>ModelをセットしないLinkやFormに対するジェネリクス<ul><li>Link<Void>にする</li></ul></li><li>htmlの書き換え<ul><li>xmlnsを1.3から1.4にかえる</li></ul></li><li>1.4からのコンポーネントに置き換え<ul><li>EnumLabel,onConfigure(),onInitialize()など</li></ul></li><li>1.3から1.4で仕様変更したコンポーネント</li></ul>
+<h2>changelogとかWicketTesterを使いこなせば…</h2>
+<h1>PropertyModelクラスがオブジェクトのフィールド変数を取得する仕組みについて  ravicotさん</h1>
+<h2>アクセサがないのにどう取得しているのか？</h2>
+<ul><li>リフレクションを使っていた</li><li>動的にアクセサを使用していた</li><li>PropertyResolver.getValueを使用している<ul><li>フィールドを取得してアクセサがなければアクセサ作成を試みる！</li></ul></li></ul>
+<h1>Wicket:idを利用しないテンプレートとの対応付け @<a href="http://twitter.com/madogiwa">madogiwa</a>さん</h1>
+<h2>html5だとwicket:idタグは警告される</h2>
+<h2>警告を消すには…</h2>
+<ul><li>xmllnを追加する</li><li>wicket:idを使わなければいいじゃない！</li></ul>
+<h2>どうする</h2>
+<ul><li>フィルターを拡張する</li><li>フィルターを有効にする</li><li>具体的には……<a href="http://d.hatena.ne.jp/mdgw/20101106/p1">Wicketのコンポーネント追加先指定にHTMLのID属性を利用可能にするライブラリを作成してみた - まどぎわBLOG</a></li></ul>
+<ul><li>何か意外と簡単にできるらしい…これはやってみたいかも</li></ul>
+<h1>WicketとFlexの連携 @<a href="http://twitter.com/chimerast">chimerast</a>さん</h1>
+<h2>Wicketのajax系のコンポーネントとFlexの連携</h2>
+<h2>W→F</h2>
+<ul><li>FlexのcreateComplete内でaddCallbackを呼び出し、jsリストに関数を追加</li><li>そしてWicketから呼び出す</li></ul>
+<h2>F→W</h2>
+<ul><li>AbstractDefaultBehavior#renderHead()をオーバライドしjs関数を追加</li><li>Flexから追加した関数を呼び出す</li></ul>
+<h2>テキストエンコーディング</h2>
+<ul><li>F→js<ul><li>特に問題なし</li></ul></li><li>js→W<ul><li>endodeURIComponent()</li></ul></li></ul>
+<h1>感想とか二次会とか</h1>
+<p>大学時代に作ったWicketの遺産が発掘されたので、これ、1.5にあげてみたいと思うなど。何かLTのネタでもできるようにWicketを使っていきたい。</p>
+<p>その後の二次会では主にPHPとかWindowsとかOfficeがディスられてました。また、今回はATNDでのアテンドなのに出席率がめちゃめちゃ良かったとの事でした。</p>
+<h1>最後に</h1>
+<p>長い時間受付をして下さった<a href="http://twitter.com/yoshioterada">yoshioterada</a>さん、会場を提供して下さった日本オラクルさんありがとうございました！</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2010/12/21/1292940870" title="pixiv Tech Meetingに行ってきました">
+          pixiv Tech Meetingに行ってきました
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/01/23/1295789120" title="MacBook Air 11インチ欲しい！">
+          MacBook Air 11インチ欲しい！
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/01/12/1294833920" data-text="kk_Atakaの日記 - Wicket勉強会に参加しました" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/01/12/1294833920/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/01/12/1294833920/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/01/12/1294833920/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Wicket勉強会に参加しました"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/01/12/1294833920/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

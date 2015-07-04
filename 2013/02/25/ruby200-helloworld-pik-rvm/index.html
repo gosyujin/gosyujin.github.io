@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Ruby 2.0.0 をpikとrvm経由でインストール&環境構築 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Ruby 2.0.0 をpikとrvm経由でインストール&環境構築</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#StartUp">StartUp</a> ]</i>
+          
+        
+        
+          <span>Published: 2013/02/25</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/02/19/haskell-helloworld5" title="すごいHaskellたのしく学ぼうでHaskellことはじめ4">
+          すごいHaskellたのしく学ぼうでHaskellことはじめ4
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/03/03/evernote-oauth" title="自作EvernoteスクリプトをOAuth対応する">
+          自作EvernoteスクリプトをOAuth対応する
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#環境1'>環境1</a></li><li><a href='#インストール'>インストール</a></li><ul><li><a href='#環境構築'>環境構築</a></li></ul><li><a href='#環境2'>環境2</a></li><li><a href='#インストール'>インストール</a></li></ul></ul><!-- end of tree list --></div>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>Ruby 2.0.0 がリリースされたので、インストールしつつ、新機能を使ってみる。</p>
+
+<p>…と思ったけど、意外とてこずったので、とりあえずインストールと準備だけ。</p>
+
+<p>後途中にGemの作り方めも。</p>
+
+<h2 id="環境1">環境1</h2>
+
+<ul>
+<li>Windows XP</li>
+<li>Ruby 2.0.0</li>
+<li>pik</li>
+</ul>
+
+<h2 id="インストール">インストール</h2>
+
+<p>まずはインストール。pikなので <code>pik install</code> で。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> pik install ruby 2.0.0
+<span class="go">** Downloading:  http://rubyforge.org/frs/download.php/76807/ruby-2.0.0-p0-i386-mingw32.7z</span>
+<span class="go">   to:  C:\Documents and Settings\user\.pik\downloads\ruby-2.0.0-p0-i386-mingw32.7z</span>
+
+<span class="go">ruby-2.0.0-p0-i386-mingw32.7z: 100% |oooooooooo|   8.9MB/  8.9MB Time: 00:00:57</span>
+
+<span class="go">** Extracting:  C:\Documents and Settings\user\.pik\downloads\ruby-2.0.0-p0-i386-mingw32.7z</span>
+<span class="go">   to:  C:\rubies\Ruby-200-p0</span>
+<span class="go">done</span>
+
+<span class="go">** Adding:  200: ruby 2.0.0p0 (2013-02-24) [i386-mingw32]</span>
+<span class="go"> Located at:  C:\rubies\Ruby-200-p0\bin</span></code></pre></div>
+
+<p>あっさり。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> pik default
+<span class="gp">$</span> ruby -v
+<span class="go">bundler is found: bundle exec ruby -v</span>
+<span class="go">ruby 1.9.3p0 (2011-10-30) [i386-mingw32]</span></code></pre></div>
+
+<p>今は、1.9.3。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> pik list
+<span class="go">  167: jruby 1.6.7 (ruby-1.8.7-p357) (2012-02-22 3e82bc8) (Java HotSpot(TM) Client VM 1.6.0_04)...</span>
+<span class="go">  187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]</span>
+<span class="go">  187: ruby 1.8.7 (2011-06-30 patchlevel 352) [i386-mingw32]</span>
+<span class="go">  192: ruby 1.9.2p290 (2011-07-09) [i386-mingw32]</span>
+<span class="go">* 193: ruby 1.9.3p0 (2011-10-30) [i386-mingw32]</span>
+<span class="go">  200: ruby 2.0.0p0 (2013-02-24) [i386-mingw32]</span>
+<span class="gp">$</span> pik use 200
+<span class="gp">$</span> pik list
+<span class="go">  167: jruby 1.6.7 (ruby-1.8.7-p357) (2012-02-22 3e82bc8) (Java HotSpot(TM) Client VM 1.6.0_04)...</span>
+<span class="go">  187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]</span>
+<span class="go">  187: ruby 1.8.7 (2011-06-30 patchlevel 352) [i386-mingw32]</span>
+<span class="go">  192: ruby 1.9.2p290 (2011-07-09) [i386-mingw32]</span>
+<span class="go">  193: ruby 1.9.3p0 (2011-10-30) [i386-mingw32]</span>
+<span class="go">* 200: ruby 2.0.0p0 (2013-02-24) [i386-mingw32]</span>
+<span class="gp">$</span> ruby -v
+<span class="go">bundler is NOT found or Gemfile is NOT found: ruby -v</span>
+<span class="go">ruby 2.0.0p0 (2013-02-24) [i386-mingw32]</span></code></pre></div>
+
+<p>2.0.0に切り替わった！</p>
+
+<p>gem確認。。。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> gem list
+<span class="go">Failed to load C:/Documents and Settings/user/.gemrc because it doesn&#39;t contain valid YAML hash</span>
+
+<span class="go">*** LOCAL GEMS ***</span>
+
+<span class="go">bigdecimal (1.2.0)</span>
+<span class="go">io-console (0.4.2)</span>
+<span class="go">json (1.7.7)</span>
+<span class="go">minitest (4.3.2)</span>
+<span class="go">psych (2.0.0)</span>
+<span class="go">rake (0.9.6)</span>
+<span class="go">rdoc (4.0.0)</span>
+<span class="go">test-unit (2.0.0.0)</span></code></pre></div>
+
+<p>あれ？なんかエラー出る…。</p>
+
+<p>色々動かしてみたら、どうも <code>空の.gemrc</code> があると、警告が出るようになった様子。出てても問題なさげ？</p>
+
+<ul>
+<li>Ruby 1.9.3
+
+<ul>
+<li>.gemrcなし: 何も出ない</li>
+<li>空.gemrc: 何も出ない</li>
+<li>記載あり.gemrc: 何も出ない</li>
+</ul></li>
+<li>Ruby 2.0.0
+
+<ul>
+<li>.gemrcなし: 何も出ない</li>
+<li>空.gemrc: <code>Failed to load ...</code></li>
+<li>記載あり.gemrc: 何も出ない</li>
+</ul></li>
+</ul>
+
+<p>という事で、今は特に使っていないので、いさぎよく.gemrcを削除。</p>
+
+<h3 id="環境構築">環境構築</h3>
+
+<p>Bundlerだけでも入れておこうかな</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> gem install bundler
+<span class="go">Fetching: bundler-1.2.4.gem (100%)</span>
+<span class="go">Successfully installed bundler-1.2.4</span>
+<span class="go">Parsing documentation for bundler-1.2.4</span>
+<span class="go">Installing ri documentation for bundler-1.2.4</span>
+<span class="go">Done installing documentation for bundler (18 sec).</span>
+<span class="go">1 gem installed</span>
+
+<span class="gp">$</span> ruby -v
+<span class="go">bundler is found: bundle exec ruby -v</span>
+<span class="go">Bundler is not compatible with Ruby 2.0 or Rubygems 2.0.</span>
+<span class="go">Please upgrade to Bundler 1.3 or higher.</span></code></pre></div>
+
+<p>ガーン。Bundler 1.3以降じゃないと対応してないのかー。</p>
+
+<p>あれ？GitHubには24 February 2013に1.3出てるって書かれてる。</p>
+
+<ul>
+<li><a href="https://github.com/carlhuda/bundler">carlhuda/bundler · GitHub</a></li>
+</ul>
+
+<p>まだRubygemsに反映されていないのかな？なら直接入れてみよう。</p>
+
+<p>一旦、旧Bundler削除。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> gem uninstall bundler
+<span class="go">Remove executables:</span>
+<span class="go">        bundle</span>
+
+<span class="go">in addition to the gem? [Yn]  y</span>
+<span class="go">Removing bundle</span>
+<span class="go">Successfully uninstalled bundler-1.2.4</span></code></pre></div>
+
+<p>次に、上記のサイトからbundlerを落としてくる。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git clone http://github.com/carlhuda/bundler.git
+<span class="go">Cloning into &#39;bundler&#39;...</span>
+<span class="go">remote: Counting objects: 28447, done.</span>
+<span class="go">remote: Compressing objects: 100% (9733/9733), done.</span>
+<span class="go">remote: Total 28447 (delta 19095), reused 27460 (delta 18213)Receiving objects:  99% (28163/28447), 2.47 MiB | 2.43 MiB/s</span>
+<span class="go">Receiving objects: 100% (28447/28447), 5.30 MiB | 2.43 MiB/s, done.</span>
+<span class="go">Resolving deltas: 100% (19095/19095), done.</span>
+<span class="go">Checking out files: 100% (214/214), done.</span></code></pre></div>
+
+<p>で、gemを作る。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> gem build bundler.gemspec
+<span class="go">  Successfully built RubyGem</span>
+<span class="go">  Name: bundler</span>
+<span class="go">  Version: 1.3.0</span>
+<span class="go">  File: bundler-1.3.0.gem</span></code></pre></div>
+
+<p><code>bundler-1.3.0.gem</code> ができるので、これをインストール。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> gem install --local bundler-1.3.0.gem
+<span class="go">Successfully installed bundler-1.3.0</span>
+<span class="go">Done installing documentation for bundler (0 sec).</span>
+<span class="go">1 gem installed</span>
+<span class="gp">$</span> bundle -v
+<span class="go">Bundler version 1.3.0</span></code></pre></div>
+
+<p>入った。
+1プロジェクトだけbundle installしてみたけどうまく動いたので、とりあえずOKかな。</p>
+
+<p>次。</p>
+
+<h2 id="環境2">環境2</h2>
+
+<ul>
+<li>CentOS 6.2</li>
+<li>Ruby 2.0.0</li>
+<li>rvm 1.11.6</li>
+</ul>
+
+<h2 id="インストール">インストール</h2>
+
+<p>……する前に。そのままだと <code>rvm list known</code> を見てもruby 1.9.3までしかないので、rvmの更新を行う。</p>
+
+<ul>
+<li><a href="http://kuroigamen.com/51">RVM がかなり古くなってたので、RVM のアップデートに挑戦 - KUROIGAMEN(黒い画面)</a></li>
+</ul>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> rvm -v
+
+<span class="go">rvm 1.11.6 () by Wayne E. Seguin &lt;wayneeseguin@gmail.com&gt;, Michal Papis &lt;mpapis@gmail.com&gt; [https://rvm.beginrescueend.com/]</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> rvm get latest
+<span class="go">Downloading RVM version 1.18.14</span>
+<span class="go">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span>
+<span class="go">                                 Dload  Upload   Total   Spent    Left  Speed</span>
+<span class="go">100   125  100   125    0     0    147      0 --:--:-- --:--:-- --:--:--   193</span>
+<span class="go">100 1490k  100 1490k    0     0   315k      0  0:00:04  0:00:04 --:--:--  493k</span>
+
+<span class="go">Upgrading the RVM installation in /home/kk_Ataka/.rvm/</span>
+<span class="go">    RVM PATH line found in /home/kk_Ataka/.bashrc.</span>
+<span class="go">    RVM sourcing line found in /home/kk_Ataka/.bashrc /home/kk_Ataka/.bash_profile /home/kk_Ataka/.zlogin.</span>
+
+<span class="go">Upgrade Notes:</span>
+
+<span class="go">  * For screen users, please do not forget to read https://rvm.io/workflow/screen/.</span>
+<span class="go">  * If your shell exits on entering a directory with freshly checked out sources</span>
+<span class="go">  * RVM comes with set of default gems including &#39;bundler&#39;, &#39;rake&#39;, &#39;rubygems-bundler&#39; and &#39;rvm&#39; gems,</span>
+<span class="go">    if you do not wish to get this gems install RVM with this flag: --without-gems=&quot;rvm rubygems-bundler&quot;</span>
+<span class="go">    this option is remembered, it&#39;s enough to use it once.</span>
+
+<span class="go">  * If you wish to get more default(global) gems installed, install RVM with this flag: --with-gems=&quot;pry vagrant&quot;</span>
+<span class="go">    this option is remembered, it&#39;s enough to use it once.</span>
+
+<span class="go">  * For first installed ruby RVM will: display rvm requirements, set it as default and use it.</span>
+<span class="go">    To avoid this behavior either use full path to rvm binary or prefix it with `command `.</span>
+
+<span class="go">  * Binary rubies are installed by default if available, you can read about it in help:</span>
+<span class="go">      rvm help install</span>
+<span class="go">      rvm help mount</span>
+
+<span class="go">  * The default umask for multi-user installation got extended to `umask u=rwx,g=rwx,o=rx`,</span>
+<span class="go">    comment it out to avoid automatic updates.</span>
+
+
+<span class="gp">#</span> RVM:  Shell scripts enabling management of multiple ruby environments.
+<span class="gp">#</span> RTFM: https://rvm.io/
+<span class="gp">#</span> HELP: http://webchat.freenode.net/?channels<span class="o">=</span>rvm <span class="o">(</span><span class="c">#rvm on irc.freenode.net)</span>
+<span class="gp">#</span> Cheatsheet: http://cheat.errtheblog.com/s/rvm/
+<span class="gp">#</span> Screencast: http://screencasts.org/episodes/how-to-use-rvm
+
+<span class="gp">#</span> In <span class="k">case</span> of any issues <span class="nb">read </span>output of <span class="s1">&#39;rvm requirements&#39;</span> and/or <span class="s1">&#39;rvm notes&#39;</span>
+
+<span class="go">Upgrade of RVM in /home/kk_Ataka/.rvm/ is complete.</span>
+
+<span class="gp">#</span> kk_Ataka,
+<span class="gp">#</span>
+<span class="gp">#</span>   Thank you <span class="k">for</span> using RVM!
+<span class="gp">#</span>   I sincerely hope that RVM helps to make your life easier and
+<span class="gp">#</span>   more enjoyable!!!
+<span class="gp">#</span>
+<span class="gp">#</span> ~Wayne
+
+<span class="go">RVM reloaded!</span></code></pre></div>
+
+<p>一覧を確認すると……あった。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> rvm list known
+<span class="gp">#</span> MRI Rubies
+<span class="go">[ruby-]1.8.6[-p420]</span>
+<span class="go">[ruby-]1.8.7[-p371]</span>
+<span class="go">[ruby-]1.9.1[-p431]</span>
+<span class="go">[ruby-]1.9.2[-p320]</span>
+<span class="go">[ruby-]1.9.3-p125</span>
+<span class="go">[ruby-]1.9.3-p194</span>
+<span class="go">[ruby-]1.9.3-p286</span>
+<span class="go">[ruby-]1.9.3-p327</span>
+<span class="go">[ruby-]1.9.3-p362</span>
+<span class="go">[ruby-]1.9.3-p374</span>
+<span class="go">[ruby-]1.9.3-p385</span>
+<span class="go">[ruby-]1.9.3-[p392]</span>
+<span class="go">[ruby-]1.9.3-head</span>
+<span class="go">[ruby-]2.0.0-rc1</span>
+<span class="go">[ruby-]2.0.0-rc2</span>
+<span class="go">[ruby-]2.0.0[-p0]</span>
+<span class="go">ruby-head</span>
+
+<span class="gp">#</span> GoRuby
+<span class="go">goruby</span>
+<span class="go">...</span></code></pre></div>
+
+<p>そしてインストール。でもここで止まる……。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> rvm install ruby-2.0.0
+<span class="go">Searching for binary rubies, this might take some time.</span>
+<span class="go">No binary rubies available for: centos/6.2/x86_64/ruby-2.0.0-p0.</span>
+<span class="go">Continuing with compilation. Please read &#39;rvm mount&#39; to get more information on binary rubies.</span>
+<span class="go">Fetching yaml-0.1.4.tar.gz to /home/kk_Ataka/.rvm/archives</span>
+<span class="gp">#</span><span class="c">####################################################################### 100.0%</span>
+<span class="go">Extracting yaml to /home/kk_Ataka/.rvm/src/yaml-0.1.4</span>
+<span class="go">Prepare yaml in /home/kk_Ataka/.rvm/src/yaml-0.1.4.</span>
+<span class="go">Configuring yaml in /home/kk_Ataka/.rvm/src/yaml-0.1.4.</span>
+<span class="go">Compiling yaml in /home/kk_Ataka/.rvm/src/yaml-0.1.4.</span>
+<span class="go">Installing yaml to /home/kk_Ataka/.rvm/usr</span>
+<span class="go">Installing Ruby from source to: /home/kk_Ataka/.rvm/rubies/ruby-2.0.0-p0, this may take a while depending on your cpu(s)...</span>
+<span class="go">ruby-2.0.0-p0 - #downloading ruby-2.0.0-p0, this may take a while depending on your connection...</span>
+<span class="gp">#</span><span class="c">####################################################################### 100.0%</span>
+<span class="go">ruby-2.0.0-p0 - #extracting ruby-2.0.0-p0 to /home/kk_Ataka/.rvm/src/ruby-2.0.0-p0</span>
+<span class="go">ruby-2.0.0-p0 - #extracted to /home/kk_Ataka/.rvm/src/ruby-2.0.0-p0</span>
+<span class="go">ruby-2.0.0-p0 - #configuring</span>
+<span class="go">ruby-2.0.0-p0 - #compiling</span></code></pre></div>
+
+<p>かなり時間がかかったので、どこかで処理が止まっているのかなと思い一回abortさせてしまったが、再度挑戦したらいけた。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> rvm install ruby-2.0.0
+<span class="go">Searching for binary rubies, this might take some time.</span>
+<span class="go">No binary rubies available for: centos/6.2/x86_64/ruby-2.0.0-p0.</span>
+<span class="go">Continuing with compilation. Please read &#39;rvm mount&#39; to get more information on binary rubies.</span>
+<span class="go">Installing Ruby from source to: /home/kk_Ataka/.rvm/rubies/ruby-2.0.0-p0, this may take a while depending on your cpu(s)...</span>
+<span class="go">ruby-2.0.0-p0 - #downloading ruby-2.0.0-p0, this may take a while depending on your connection...</span>
+<span class="go">ruby-2.0.0-p0 - #extracted to /home/kk_Ataka/.rvm/src/ruby-2.0.0-p0 (already extracted)</span>
+<span class="go">ruby-2.0.0-p0 - #configuring</span>
+<span class="go">ruby-2.0.0-p0 - #compiling</span>
+<span class="go">ruby-2.0.0-p0 - #installing </span>
+<span class="go">Retrieving rubygems-2.0.0</span>
+<span class="gp">#</span><span class="c">####################################################################### 100.0%</span>
+<span class="go">Extracting rubygems-2.0.0 ...</span>
+<span class="go">Removing old Rubygems files...</span>
+<span class="go">Installing rubygems-2.0.0 for ruby-2.0.0-p0 ...</span>
+<span class="go">Installation of rubygems completed successfully.</span>
+<span class="go">Saving wrappers to &#39;/home/kk_Ataka/.rvm/bin&#39;.</span>
+<span class="go">ruby-2.0.0-p0 - #adjusting #shebangs for (gem irb erb ri rdoc testrb rake).</span>
+<span class="go">ruby-2.0.0-p0 - #importing default gemsets, this may take time ...</span>
+<span class="go">Install of ruby-2.0.0-p0 - #complete</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> rvm list
+
+<span class="go">rvm rubies</span>
+
+<span class="go">   ruby-1.8.7-p358 [ x86_64 ]</span>
+<span class="go">=* ruby-1.9.2-p318 [ x86_64 ]</span>
+<span class="go">   ruby-1.9.3-p125 [ x86_64 ]</span>
+<span class="go">   ruby-2.0.0-p0 [ x86_64 ]</span>
+
+<span class="gp">#</span> <span class="o">=</span>&gt; - <span class="nv">current</span>
+<span class="gp">#</span> <span class="o">=</span>* - current <span class="o">&amp;&amp;</span> default
+<span class="gp">#</span>  * - default</code></pre></div>
+
+<p>切り替えもできる。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> rvm use ruby-2.0.0
+<span class="go">Using /home/kk_Ataka/.rvm/gems/ruby-2.0.0-p0</span>
+<span class="gp">$</span> ruby -v
+<span class="go">ruby -v</span>
+<span class="go">ruby 2.0.0p0 (2013-02-24 revision 39474) [x86_64-linux]</span>
+<span class="gp">$</span> gem list
+
+<span class="go">*** LOCAL GEMS ***</span>
+
+<span class="go">bigdecimal (1.2.0)</span>
+<span class="go">bundler (1.3.0.pre.8)</span>
+<span class="go">io-console (0.4.2)</span>
+<span class="go">json (1.7.7)</span>
+<span class="go">minitest (4.3.2)</span>
+<span class="go">psych (2.0.0)</span>
+<span class="go">rake (10.0.3, 0.9.6)</span>
+<span class="go">rdoc (4.0.0)</span>
+<span class="go">rubygems-bundler (1.1.0)</span>
+<span class="go">rvm (1.11.3.6)</span>
+<span class="go">test-unit (2.0.0.0)</span></code></pre></div>
+
+<p>あれ？こっちはbundlerのpreが入っとる。</p>
+
+<p>bundle実行した時に警告？が出るなー。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> bundle install
+<span class="go">The source :rubygems is deprecated because HTTP requests are insecure.</span>
+<span class="go">Please change your source to &#39;https://rubygems.org&#39; if possible, or &#39;http://rubygems.org&#39; if not.</span></code></pre></div>
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/02/19/haskell-helloworld5" title="すごいHaskellたのしく学ぼうでHaskellことはじめ4">
+          すごいHaskellたのしく学ぼうでHaskellことはじめ4
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/03/03/evernote-oauth" title="自作EvernoteスクリプトをOAuth対応する">
+          自作EvernoteスクリプトをOAuth対応する
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/02/25/ruby200-helloworld-pik-rvm" data-text="kk_Atakaの日記 - Ruby 2.0.0 をpikとrvm経由でインストール&環境構築" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/02/25/ruby200-helloworld-pik-rvm/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/02/25/ruby200-helloworld-pik-rvm/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/02/25/ruby200-helloworld-pik-rvm/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Ruby 2.0.0 をpikとrvm経由でインストール&環境構築"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2013/02/25/ruby200-helloworld-pik-rvm/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

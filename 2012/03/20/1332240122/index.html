@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Windows環境用にrcovをビルドしなおす手順 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Windows環境用にrcovをビルドしなおす手順</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Windows">Windows</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Jenkins">Jenkins</a> ]</i>
+          
+            <i>[ <a href="/tags.html#Ruby">Ruby</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2012/03/20</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/03/15/1331816663" title="Pro Gitと入門gitでGitの復習 マージ編">
+          Pro Gitと入門gitでGitの復習 マージ編
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/03/27/1332856400" title="simplecovとsimplecov-rcovを使ってJenkinsでカバレッジを確認">
+          simplecovとsimplecov-rcovを使ってJenkinsでカバレッジを確認
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<p>Jenkinsでビルドしていくとともにカバレッジの調査もしたい。rcovというツールでカバレッジを出す事ができるらしい。</p>
+<h1>参考サイト</h1>
+<ul><li><a href="https://github.com/relevance/rcov">relevance/rcov · GitHub</a></li><li><a href="http://rubygems.org/gems/rcov">rcov | RubyGems.org | your community gem host</a></li><li><a href="http://www.freia.jp/taka/blog/762/">2011/09/06 Rubyのrcov-0.9.8 for Windows のビルド - 清水川Web</a></li></ul>
+<h1>先に結論</h1>
+<p>Windows環境ではWindows用に自力でビルドしなければならない！</p>
+<ul><li><a href="http://rubygems.org/gems/rcov">rcov | RubyGems.org | your community gem host</a>よりgemをDL</li><li><a href="http://www.microsoft.com/japan/msdn/vstudio/express/">Microsoft Visual Studio Express</a>からVisual C++ 2010 Express Editionを入手しインストール</li><li>全てのプログラム -> Microsoft Visual Studio 2010 Express -> Visual Studio コマンド プロンプト (2010)を起動。以後ビルドはこのプロンプトで実施する</li><li>%RUBY_HOME%\lib\ruby\1.8\i386-mswin32\のconfig.hのMSC_VERの記述を一旦消す</li></ul>
+<pre class="">#if _MSC_VER != 1200
+#error MSC version unmatch: _MSC_VER: 1200 is expected.
+#endif</pre>
+<ul><li>env.hのFRAMEを以下のように編集</li></ul>
+<pre class="">extern struct FRAME {</pre>
+<pre class="">extern __declspec(dllimport) struct FRAME {</pre>
+<ul><li>gem install！！</li></ul>
+<p>以下は四苦八苦した記録の残骸。</p>
+<h1>手順(本当に順番をメモっているのでいらない操作が多い)</h1>
+<h2>rcovインストール</h2>
+<p>BundlerでGemを管理するのでGemfileにrcovを追加。</p>
+<pre class="">gem 'rcov'</pre>
+<p>追加後、インストール……</p>
+<pre class="">$ bundle install</pre>
+<p>するとエラーが。</p>
+<pre class="">C:/rubies/Ruby/bin/ruby.exe extconf.rb
+creating Makefile
+
+nmake
+'nmake' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+
+
+Gem files will remain installed in C:/project/excel_for_ruby/vendor/bundle/ruby/1.8/gemsResults logged to C:/project/excel_for_ruby/vendor/bundle/ruby/1.8/gems/rcov-1.0.0/ext/rAn error occured while installing rcov (1.0.0), and Bundler cannot continue.
+Make sure that `gem install rcov -v '1.0.0'` succeeds before bundling.</pre>
+<p>bundlingする前にgem install rcov -v '1.0.0'してくれと？　Bundler管理下にはおけないのだろうか。</p>
+<p>じゃあGemfileから記述を消して、ターミナルからgem installするか。</p>
+<pre class="">$ gem install rcov -v '1.0.0'
+
+nmake
+'nmake' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。</pre>
+<p>結局nmakeがないといわれているので、まずnmakeを落とすか。</p>
+<h2>nmakeインストール</h2>
+<p><a href="http://johnbokma.com/perl/make-for-windows.html">Make for Microsoft Windows: NMake</a> のページにyou have to download NMake 1.5 from the Microsoft Knowledge Base, article 132084 page.と記載されているのでリンクをたどりnmakeをDLし、パスが通っているフォルダへ突っ込む。(デフォルトだとnmake15.exeのようにバージョンがファイル名にくっついているっぽいのでnmake.exeにリネームしておく)</p>
+<p>再度。</p>
+<pre class="">$ gem install rcov -v '1.0.0'
+Building native extensions.  This could take a while...
+ERROR:  Error installing rcov:
+        ERROR: Failed to build gem native extension.
+
+C:/rubies/Ruby/bin/ruby.exe extconf.rb
+creating Makefile
+
+nmake
+
+Microsoft (R) Program Maintenance Utility   Version 1.50
+Copyright (c) Microsoft Corp 1988-94. All rights reserved.
+
+        cl -nologo -I. -IC:/rubies/Ruby/lib/ruby/1.8/i386-mswin32 -IC:/rubies/Ru
+by/lib/ruby/1.8/i386-mswin32 -I1.8/ -MD -Zi  -O2b2xg- -G6  -c -Tc1.8//callsite.c
+
+'cl' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+NMAKE : fatal error U1077: 'C:\WINDOWS\system32\cmd.exe' : return code '0x1'
+Stop.
+
+
+Gem files will remain installed in C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.
+0.0 for inspection.
+Results logged to C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.0.0/ext/rcovrt/ge
+m_make.out
+</pre>
+<p>まだ駄目？　clとはC Compilerの事らしい。手に入れるには<a href="http://www.microsoft.com/japan/msdn/vstudio/express/">Microsoft Visual Studio Express</a>からVisual C++ 2010 Express Editionをインストールするくらいしか方法がないみたい。</p>
+<p>......インストール中.......3時間くらいかかった</p>
+<p>で、インストールフォルダにcl.exeが作成されるので、これを実行！</p>
+<pre class="">$ cd C:\Program Files\Microsoft Visual Studio 10.0\VC\bin
+$ cl
+
+mspdb100.dllが見つからなかったため、このアプリケーションを開始できませんでした。</pre>
+<p>なん……だと……やはりコマンドラインから実行するのは無理？</p>
+<p>とりあえずmspdb100.dllを探してみる…と、C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDEにあった。これをclと同じフォルダに持ってくると……。</p>
+<pre class="">$ cl
+Microsoft(R) 32-bit C/C++ Optimizing Compiler Version 16.00.30319.01 for 80x86
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+使い方: cl [ オプション... ] ファイル名... [ /link リンク オプション... ]</pre>
+<p>きたー！　じゃあこのcl.exeとmspdb100.dllをパスの通ってる場所にコピーして……再度gem！</p>
+<pre class="">$ gem install rcov -v '1.0.0'
+Building native extensions.  This could take a while...
+ERROR:  Error installing rcov:
+        ERROR: Failed to build gem native extension.
+
+C:/rubies/Ruby/bin/ruby.exe extconf.rb
+creating Makefile
+
+nmake
+
+Microsoft (R) Program Maintenance Utility   Version 1.50
+Copyright (c) Microsoft Corp 1988-94. All rights reserved.
+
+        cl -nologo -I. -IC:/rubies/Ruby/lib/ruby/1.8/i386-mswin32 -IC:/rubies/Ruby/lib/ruby/1.8/i386-mswin32 -I1.8/ -MD -Zi  -O2b2xg- -G6c -Tc1.8//callsite.c
+fatal error C1510: Cannot load language resource clui.dll.
+NMAKE : fatal error U1077: 'C:\WINDOWS\system32\cmd.exe' : return code '0x4'
+Stop.
+
+
+Gem files will remain installed in C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.0.0 for inspection.
+Results logged to C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.0.0/ext/rcovrt/gem_make.ou</pre>
+<p>エラった！　っけど一歩進んだ？clui.dllがないと。うーん。</p>
+<p>ここで全てのプログラムにMicrosoft Visual Studio 2010 Express -> Visual Studio コマンド プロンプト (2010)というメニューが増えている事に気づく。きちんとVisual Studio用の設定がなされていなかったから失敗したんだ多分！　再度挑戦。</p>
+<pre class="">C:\rubies\Ruby\lib\ruby\gems\1.8\cache&gt;gem install --local rcov-1.0.0.gem
+Building native extensions.  This could take a while...
+ERROR:  Error installing rcov-1.0.0.gem:
+        ERROR: Failed to build gem native extension.
+
+C:/rubies/Ruby/bin/ruby.exe extconf.rb
+creating Makefile
+
+nmake
+
+Microsoft (R) Program Maintenance Utility   Version 1.50
+Copyright (c) Microsoft Corp 1988-94. All rights reserved.
+
+        cl -nologo -I. -IC:/rubies/Ruby/lib/ruby/1.8/i386-mswin32 -IC:/rubies/Ruby/lib/ruby/1.8/i386-mswin32 -I1.8/ -MD -Zi  -O2b2xg- -G6  -c -Tc1.8//callsite.c
+
+cl : コマンド ライン warning D9035 : オプション 'Og-' の使用は現在推奨されていません。今後のバージョンからは削除されます。
+cl : コマンド ライン warning D9002 : 不明なオプション '-G6' を無視します
+callsite.c
+c:\rubies\ruby\lib\ruby\1.8\i386-mswin32\config.h(2) : fatal error C1189: #error :  MSC version unmatch: _MSC_VER: 1200 is expected.
+NMAKE : fatal error U1077: 'C:\WINDOWS\system32\cmd.exe' : return code '0x2'
+Stop.
+
+
+Gem files will remain installed in C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.0.0 for inspection.
+Results logged to C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.0.0/ext/rcovrt/gem_make.out</pre>
+<p>お！　ちょっと進んだ。MSC_VERがアンマッチになっているようなので、これをなおす。c:\rubies\ruby\lib\ruby\1.8\i386-mswin32\のconfig.hを開き編集。</p>
+<pre class="">#if _MSC_VER != 1200
+#error MSC version unmatch: _MSC_VER: 1200 is expected.
+#endif</pre>
+<p>これを一時的に退避させる。んで、再度。</p>
+<pre class="">        cl -nologo -LD -Fercovrt.so callsite.obj rcovrt.obj msvcrt-ruby18.lib  oldnames.lib user32.lib advapi32.lib shell32.lib ws2_32.lib   -link -incremental:no -debug -opt:ref -opt:icf -dll -libpath:&quot;.&quot; -libpath:&quot;C:/rubies/Ruby/lib&quot;  -implib:rcovrt-i386-mswin32.lib -pdb:rcovrt-i386-mswin32.pdb -def:rcovrt-i386-mswin32.def
+   ライブラリ rcovrt-i386-mswin32.lib とオブジェクト rcovrt-i386-mswin32.exp を作成中
+callsite.obj : error LNK2001: 外部シンボル &quot;_ruby_frame&quot; は未解決です。
+rcovrt.obj : error LNK2019: 未解決の外部シンボル _ruby_frame が関数 _coverage_in
+crease_counter_uncached で参照されました。
+rcovrt.so : fatal error LNK1120: 外部参照 1 が未解決です。
+NMAKE : fatal error U1077: 'C:\WINDOWS\system32\cmd.exe' : return code '0x2'
+Stop.
+
+
+Gem files will remain installed in C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.0.0 for inspection.
+Results logged to C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.0.0/ext/rcovrt/gem_make.out</pre>
+<p>おおおなんか見つからないって出てきた……。</p>
+<p><a href="http://www.freia.jp/taka/blog/762/">2011/09/06 Rubyのrcov-0.9.8 for Windows のビルド - 清水川Web</a>という事らしいので、env.hを編集。</p>
+<pre class="">extern struct FRAME {</pre>
+<pre class="">extern __declspec(dllimport) struct FRAME {</pre>
+<p>に。いざ！</p>
+<pre class="">C:\rubies\Ruby\lib\ruby\gems\1.8\cache&gt;gem install --local rcov-1.0.0.gem
+Building native extensions.  This could take a while...
+Successfully installed rcov-1.0.0
+1 gem installed
+Installing ri documentation for rcov-1.0.0...
+Installing RDoc documentation for rcov-1.0.0...</pre>
+<p>きたーーー！</p>
+<p>が、なんかカバレッジの表示のされかたがおかしい？　メソッドの一行目しかグリーンにならないから網羅率が超低くなる。。オプションとかなのかなー。これは早々にRuby1.9でSimplecov使えという事なのだろうか。</p>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/03/15/1331816663" title="Pro Gitと入門gitでGitの復習 マージ編">
+          Pro Gitと入門gitでGitの復習 マージ編
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/03/27/1332856400" title="simplecovとsimplecov-rcovを使ってJenkinsでカバレッジを確認">
+          simplecovとsimplecov-rcovを使ってJenkinsでカバレッジを確認
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/03/20/1332240122" data-text="kk_Atakaの日記 - Windows環境用にrcovをビルドしなおす手順" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/03/20/1332240122/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/03/20/1332240122/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/03/20/1332240122/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Windows環境用にrcovをビルドしなおす手順"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2012/03/20/1332240122/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Sphinxでドキュメントを書くためreST記法に入門した - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/highlight.css">
+    <style>
+      .markdown-body {
+        min-width: 200px;
+        max-width: 790px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    </style>
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <a href="/">kk_Atakaの日記</a>
+    <a href="/archives.html">Archive</a>
+    <a href="/tags.html">Tag</a>
+    <a href="/pages.html">Page</a>
+
+    <article class="markdown-body">
+      <h1>Sphinxでドキュメントを書くためreST記法に入門した</h1>
+      <div class="published">
+       
+          <span>Tags: </span>
+          
+            <i>[ <a href="/tags.html#Sphinx">Sphinx</a> ]</i>
+          
+            <i>[ <a href="/tags.html#reST">reST</a> ]</i>
+          
+            <i>[ <a href="/tags.html#備忘録">備忘録</a> ]</i>
+          
+        
+        
+          <span>Published: 2011/12/02</span>
+        
+      </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/01/1322746718" title="DAT装置の使い方 超簡易版(Solaris)">
+          DAT装置の使い方 超簡易版(Solaris)
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/03/1322922769" title="Macで現在の入力モードを判別しやすくするImageUpをインストールした">
+          Macで現在の入力モードを判別しやすくするImageUpをインストールした
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<h1>あらすじ</h1>
+<p>Sphinxを導入した時にまとめたreST(reStructuredText)記法をアウトプットしよう。まだリファレンス読み込んでおらず、感覚で使っているところもあるので間違った認識もあるかも…そこは学んだら追記しよう。</p>
+<h1>参考</h1>
+<ul><li><a href="http://sphinx.shibu.jp/">Overview — Sphinx v1.0 (hg) documentation</a></li><li><a href="http://docutils.sourceforge.net/rst.html">reStructuredText</a></li></ul>
+<p>基本的にSphinxのサイトに書いてあることを写経してます。</p>
+<h1>注意</h1>
+<p>見出しの文字数より少なくならないように上下囲む、とかテーブルは列・行を合わせるとか結構シビアな書き方が求められるのですが……pre記法にしても揃ってない…！</p>
+<h1>見出し系</h1>
+<p><span class="deco" style="color:#FF0000;">間違って覚えていたので、見出し系については<a href="2012-08-16-1345124098">2012-08-16-1345124098</a>を参照。</span></p>
+<ul><li>h1見出し</li></ul>
+<p>半角イコールで上下を<span class="deco" style="font-weight:bold;">揃えて囲む</span>とh1と同等。</p>
+<pre class="">      =========================
+      rst(reStructuredText)解説
+      =========================</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000832"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000832.jpg"></a></p>
+<p><span class="deco" style="color:#FF0000;">見出しより長くしても問題ないが、見出しより短いと警告される。(Title underline too short.):</span></p>
+<pre class="">      ===========================
+      怒られない
+      ===========================</pre>
+<pre class="">      ==
+      怒られる
+      ==</pre>
+<p><span class="deco" style="color:#FF0000;">以下の見出しも同様。</span></p>
+<ul><li>h2見出し</li></ul>
+<p>下だけ半角イコールでh2と同等。</p>
+<pre class="">      &lt;h2&gt;になる
+      ==========</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000826"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000826.jpg"></a></p>
+<ul><li>h3見出し</li></ul>
+<p>ハイフンで上下囲むとh3と同等。</p>
+<pre class="">      ----------
+      &lt;h3&gt;になる
+      ----------</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000827"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000827.jpg"></a></p>
+<ul><li>h4見出し</li></ul>
+<p>下だけハイフンでh4と同等。</p>
+<pre class="">      &lt;h4&gt;になる
+      ----------</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000828"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000828.jpg"></a></p>
+<h1>リスト系</h1>
+<ul><li>箇条書きリスト</li></ul>
+<p>箇条書きリストの項目。ハイフンで定義。</p>
+<pre class="">      - りんご
+      - きのこ
+              - パワーアップ用
+              - 1UP用
+      - みかん</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231941"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231941.jpg"></a></p>
+<ul><li>数字つきリスト</li></ul>
+<p>数字つきリストの項目。数字・アルファベット等と半角の閉じ括弧で定義。</p>
+<pre class="">      1) りんご
+      2) きのこ
+              a) パワーアップ用
+                      i) 毒きのこ
+              b) 1UP用
+      3) みかん</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231922"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231922.jpg"></a></p>
+<p>また、閉じ括弧 は . でもよい様子。</p>
+<ul><li>数字つきリストの項目2</li></ul>
+<p>シャープで自動発番してくれる。</p>
+<pre class="">      #. りんご
+      #. きのこ
+              #. パワーアップ用
+                      #. 毒きのこ
+              #. 1UP用
+      #. みかん</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231923"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231923.jpg"></a></p>
+<ul><li>定義項目</li></ul>
+<p><span class="deco" style="font-weight:bold;">一個改行して</span>インデント。二個改行してインデントすると字下げになる。</p>
+<pre class="">      キノコ
+              食べてパワーアップする
+      スター
+              一定時間無敵になる</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231924"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231924.jpg"></a></p>
+<h1>装飾系</h1>
+<ul><li>イタリック体</li></ul>
+<p>アスタリスクで囲んでイタリック体。</p>
+<pre class="">      *アスタリスクで囲んでイタリック体*</pre>
+<ul><li>ボールド体</li></ul>
+<p>アスタリスク2つで囲んでボールド体。</p>
+<pre class="">      **アスタリスク2つで囲んでボールド体**</pre>
+<ul><li>そのまま表示</li></ul>
+<p>`` ``で囲んだ文字をそのまま表示。アスタリスクで囲んでもイタリック体にならない。</p>
+<pre class="">      ``*囲んだ文字をそのまま表示*アスタリスクで囲んでもイタリック体にならない``</pre>
+<ul><li>リンク</li></ul>
+<p>リンクにしたい文字の後ろ _ をつけ、 別の場所でリンクの定義をする。リンク内にスペースが必要な時は` `でくくる。普通の文字とリンク文字の間にはスペースあけがいるようだ。</p>
+<pre class="">      リンクその1 ggrks_ と やふれかす_ リンク内にスペースが必要な時はくくる `やふれ　かす`_
+      .. _ggrks: http://www.google.com/
+      .. _やふれかす: http://www.yahoo.co.jp/
+      .. _やふれ　かす: http://www.yahoo.co.jp/</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231925"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231925.jpg"></a></p>
+<ul><li>リンクその2</li></ul>
+<p>こういう書き方もある。</p>
+<pre class="">      `グーグル`__ に
+      __ http://www.google.com/</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231926"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231926.jpg"></a></p>
+<ul><li>リンクその3</li></ul>
+<p>URL直打ちも実はリンクになる。<span class="footnote"><a href="#f1" title="これが一番簡単？" name="fn1">*1</a></span></p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231927"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231927.jpg"></a></p>
+<h1>テーブル</h1>
+<p>半角イコールと半角ハイフンで作れる。イコールで囲んだ行が見出しとなる。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000829"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000829.jpg"></a></p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231928"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231928.jpg"></a></p>
+<p><span class="deco" style="font-weight:bold;">きちんと列と行を揃える</span>必要がある。これがめんどくさいんだよなあ。なんか楽にテーブル組める方法はないんだろうか。</p>
+<p>カラム幅の割合をスペースの量で調整する事もできる。一つ前のテーブルよりも1列目が広い。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000830"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000830.jpg"></a></p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231929"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231929.jpg"></a></p>
+<p>また、半角プラスと半角パイプで枠を作ってテーブルにする事もできる。イコールの上が見出しとなる。これも作るのめんどい？</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000831"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000831.jpg"></a></p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231930"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231930.jpg"></a></p>
+<h1>文章系</h1>
+<ul><li>基本的な事</li></ul>
+<p>途中の改行は無視される。</p>
+<pre class="">          途中の改行は
+          無視される</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231931"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231931.jpg"></a></p>
+<p>二行以上改行してからタブで字下げ。タブを戻したら字下げから復帰。</p>
+<pre class="">          タブでインデントをかけると字下げされる
+
+                  この行字下げしてます
+
+          字下げなおしました</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231932"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231932.jpg"></a></p>
+<p>※二行以上改行してから字下げしないと定義分になる。</p>
+<pre class="">              ※改行してから字下げしないと定義分になる
+                      こんなふうに
+</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231933"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231933.jpg"></a></p>
+<ul><li>整形済みテキスト</li></ul>
+<p>文末にコロン2つ。で次の文章をインデントするといわゆるpreタグに。</p>
+<pre class="">        いわゆる&lt;pre&gt;タグ。今までずっと使ってきてる::
+
+                コロン二つのあと字下げで使う？
+                改行も
+                        字下げも
+                *文字装飾*も**そのまま表示される**
+
+        字下げを戻せば終了</pre>
+<ul><li>脚注</li></ul>
+<p>脚注は [#]_ で定義。別の場所で脚注の説明。</p>
+<pre class="">    脚注 [#]_ はこう
+    連番 [#]_ で触れる
+
+    .. [#] ただしイケメンに限る
+    .. [#] 連番</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231934"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231934.jpg"></a></p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231935"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231935.jpg"></a></p>
+<ul><li>引用</li></ul>
+<p>引用は [引用内容] で定義。</p>
+<pre class="">    引用 [reference]_ はこう
+
+    .. [reference] Google先生より</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231936"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231936.jpg"></a></p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231937"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231937.jpg"></a></p>
+<ul><li>置換</li></ul>
+<table><tr><td>変数</td><td>を定義して、 ..</td><td>変数</td><td>replaceで置換。</td></tr></table>
+<pre class="">    ここ置換してね |rep| 。あとここも |rep| ::
+
+    .. |rep| replace:: ★ちかん★</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231938"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231938.jpg"></a></p>
+<h1>ディレクティブ</h1>
+<ul><li>コンテンツ表示</li></ul>
+<p>Sphinxページ最上部にコンテンツ一覧を表示できる。:</p>
+<pre class="">      .. contents::</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231939"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231939.jpg"></a></p>
+<ul><li>ナビゲーション</li></ul>
+<p>スタート > 全ての... > MS > Excel のような表記を表現できる。:</p>
+<pre class="">      スタート &gt; 全ての... &gt; MS &gt; Excel のような表記を :menuselection:`スタート --&gt; 全ての... --&gt; MS --&gt; Excel` こう表記できる</pre>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231940"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231940.jpg"></a></p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: これが一番簡単？</p></div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/01/1322746718" title="DAT装置の使い方 超簡易版(Solaris)">
+          DAT装置の使い方 超簡易版(Solaris)
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/03/1322922769" title="Macで現在の入力モードを判別しやすくするImageUpをインストールした">
+          Macで現在の入力モードを判別しやすくするImageUpをインストールした
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/12/02/1322839748" data-text="kk_Atakaの日記 - Sphinxでドキュメントを書くためreST記法に入門した" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/02/1322839748/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/02/1322839748/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/02/1322839748/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Sphinxでドキュメントを書くためreST記法に入門した"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+// var hatena_bookmark_anywhere_limit = 10; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+// var hatena_bookmark_anywhere_url = http://gosyujin.github.io/2011/12/02/1322839748/; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://raw.github.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </article>
+    <hr />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+
