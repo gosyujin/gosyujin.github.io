@@ -16,7 +16,8 @@ module Jekyll
       # exclude .htn file
       return if File.extname(context.environments[0]["page"]["path"]) == ".htn"
 
-      tree =  '<h2 class="content_tree">目次</h2>'
+      tree =  '<div class="content_tree_wrapper">'
+      tree <<  '<h2 class="content_tree">目次</h2>'
       tree << '<div class="content_tree_list">'
       tree << '<ul><!-- start tree list -->'
 
@@ -80,6 +81,7 @@ module Jekyll
       end
 
       tree << '</ul><!-- end of tree list -->'
+      tree << '</div>'
       tree << '</div>'
     end
 
