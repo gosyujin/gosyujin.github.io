@@ -5,10 +5,10 @@ title : Archives
 
 {% assign lists = site.posts %}
 
-<h2>Calendar</h2>
+## Calendar
 
 {% include calendar.html %}
 
-<h2>Entries</h2>
+## Entries
 
 {% include list.html %}
