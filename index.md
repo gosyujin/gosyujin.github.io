@@ -11,6 +11,7 @@ title: Index
 - [Twitter](https://twitter.com/kk_ataka)
 - [GitHub](https://github.com/gosyujin)
 - [Slideshare](http://www.slideshare.net/kk_Ataka)
+- [らいふろぐ(Sphinx)](http://gosyujin.github.io/life/)
 
 ## Recent Entries
 

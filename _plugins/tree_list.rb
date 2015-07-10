@@ -60,12 +60,17 @@ module Jekyll
             # xx(yy)はxx-yyだが、xx(yy)zzはxx-yy-zz
             # はじめに行末の閉じカッコを消す
             title_link.gsub!(/\)$/, "")
+            # スラッシュも消える
+            title_link.gsub!(/\//, "")
 
             # 残りはハイフンに
             title_link.gsub!(/ /, "-")
+            title_link.gsub!(/:/, "-")
             title_link.gsub!(/\)/, "-")
             title_link.gsub!(/\(/, "-")
             title_link.gsub!(/\./, "-")
+            # ハイフンが続く場合は一つに
+            title_link.gsub!(/-+/, "-")
             tree << "<li><a href='##{title_link.downcase}'>#{title}</a></li>"
 
             total_sharp_count += 1
