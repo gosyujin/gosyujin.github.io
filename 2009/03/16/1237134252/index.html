@@ -27,7 +27,6 @@
           <li><a href="/">kk_Atakaの日記</a></li>
           <li class="main-nav"><a href="/archives.html">Archive</a>
           <li class="main-nav"><a href="/tags.html">Tag</a>
-          <li class="main-nav"><a href="/pages.html">Page</a>
         </ul>
       </nav>
     </div>
@@ -239,7 +238,7 @@
 <p>　列を変えるボタンのソースとかはおいといて……、とりあえず</p>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20090316004745"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20090316/20090316004745.png"></a></p>
 <p>　の画面は実現できます。普通のListViewでコレクションを表示していくのと違う点は、</p>
-<ol><ol><li>ListViewがGridView</li><li>--表示するオブジェクトがModel(かList)ではなく、DataProvider</li><li>--populateEmptyItemの処理</li><li>--カラム数をセット</li><li>wicket:idでちょこっと</li></ol></ol>
+<ul><ol><li>ListViewがGridView</li><li>--表示するオブジェクトがModel(かList)ではなく、DataProvider</li><li>--populateEmptyItemの処理</li><li>--カラム数をセット</li><li>wicket:idでちょこっと</li></ol></ul>
 <p>　このくらいです。</p>
 <p>　まず、ListViewがGridView。これはそういうコンポーネントがあるのかぁ的な感じでゴリゴリ変えていきます。</p>
 <p>　次に、GridViewに変えた事で引数にModelとかListが使えなくなりました……。代わりにDataProviderというものを突っ込んでやらないといけないらしい……。DataProviderはこんな感じ。listはDBから取得してきたという体で生成した選択項目全部のリストです。</p>
@@ -274,7 +273,7 @@
 				item.add(new Label(&quot;value&quot;, bean.getName()));
 			以下略</pre>
 <p>　JavaでWicket:idを生成しているのは、</p>
-<ol><ul><li>GridViewのrows<ul><li>-populateItem内のCheckのcheck</li><li>-populateItem内のLabelのvalue</li></ul></li></ul></ol>
+<ul><ul><li>GridViewのrows<ul><li>-populateItem内のCheckのcheck</li><li>-populateItem内のLabelのvalue</li></ul></li></ul></ul>
 <p>　の三つなんですが、この三つをListView的な感じでバインドしていっても、</p>
 <pre class="">WicketMessage: Unable to find component with id 'check' in [MarkupContainer [Component id = 1, page = sampleWicket.view.gridView.SampleGridView, path = 2:form:checkGroup:rows:1.Item, isVisible = true, isVersioned = false]]. This means that you declared wicket:id=check in your markup, but that you either did not add the component to your page at all, or that the hierarchy does not match.</pre>
 <p>　checkがない！　と怒られてしまいます。</p>
