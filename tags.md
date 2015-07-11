@@ -6,15 +6,17 @@ title: Tags
 ## Tag cloud
 
 <div class="tag_box inline">
-{% for tag in site.tags | sort %}
+{% assign sorted_tags = site.tags | sort %}
+{% for tag in sorted_tags %}
   {% assign t = tag[0] %}
-  <code><a href="/tags.html#{{ t }}">{{ t }}<sub>{{ site.tags[t].size }}</sub></a></code>
+  <code><a href="/tags.html#{{ t }}">{{ t }} <sub>{{ site.tags[t].size }}</sub></a></code>
 {% endfor %}
 </div>
 
 ## Entries
 
-{% for tag in site.tags | sort %}
+{% assign sorted_tags = site.tags | sort %}
+{% for tag in sorted_tags %}
   <h3 id="{{ tag[0] }}">{{ tag[0] }}</h3>
 
   {% assign lists = tag[1] %}
