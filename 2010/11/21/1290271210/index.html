@@ -92,7 +92,7 @@
 <ul><li>ページ下部の新しいアプリケーションを追加 を選択</li></ul>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20101120230314"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101120/20101120230314.png"></a></p>
 <p>後で編集もできるのでとりあえず入力しておく。下記の2項目はとりあえず</p>
-<ul><ul><li>アプリケーションの種類: クライアントアプリケーション</li><li>標準のアクセスタイプ: Read & Write</li></ul></ul>
+<ol><ul><li>アプリケーションの種類: クライアントアプリケーション</li><li>標準のアクセスタイプ: Read & Write</li></ul></ol>
 <p>にしておく。</p>
 <ul><li>登録したら、consumer_keyとconsumer_secretをもらえるので控えておく</li></ul>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20101120232314"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101120/20101120232314.png"></a></p>
@@ -102,9 +102,9 @@
 <table><tr><th>oauth_consumer_key</th><td>Twitterからもらったconsumer_key</td></tr><tr><th>oauth_nonce</th><td>一意な値(にする必要があるが、とりあえず適当でもよいみたい)</td></tr><tr><th>oauth_signature</th><td>認証するための暗号</td></tr><tr><th>oauth_signature_method</th><td>認証方式(色々あるようだが、Twitterでは"HMAC-SHA1"固定)</td></tr><tr><th>oauth_timestamp</th><td>今のタイムスタンプ(ミリ秒)</td></tr><tr><th>oauth_version</th><td>バージョン(必須ではないが、付ける場合は"1.0")</td></tr></table>
 <p>consumer_key, nonce, signature_method, timestamp, versionの生成は難しくないのですが、問題はsignature。signature生成は大きく3つの流れを踏む事になります。</p>
 <ul><li>認証用の値を生成する(以下の3つの値を&で連結する←この&は<span style="font-weight:bold;">エスケープしない</span>)</li></ul>
-<ul><ol><li>http_methodの種類("GET"か"POST"。今回は"GET")</li><li>"<a href="http://twitter.com/oauth/request_token">http://twitter.com/oauth/request_token</a>"をエスケープしたもの</li><li>上記のパラメータから<span style="font-weight:bold;">oauth_signatureを抜かしたパラメータ</span>を<span style="font-weight:bold;">アルファベット順</span>に並べて<span style="font-weight:bold;">xxx=yyy&vvv=zzz……</span>の形で連結した値を<span style="font-weight:bold;">エスケープしたもの</span></li></ol></ul>
+<ol><ol><li>http_methodの種類("GET"か"POST"。今回は"GET")</li><li>"<a href="http://twitter.com/oauth/request_token">http://twitter.com/oauth/request_token</a>"をエスケープしたもの</li><li>上記のパラメータから<span style="font-weight:bold;">oauth_signatureを抜かしたパラメータ</span>を<span style="font-weight:bold;">アルファベット順</span>に並べて<span style="font-weight:bold;">xxx=yyy&vvv=zzz……</span>の形で連結した値を<span style="font-weight:bold;">エスケープしたもの</span></li></ol></ol>
 <ul><li>署名キーを生成する</li></ul>
-<ul><ol><li>リクエストトークンを発行してもらうときは<span style="font-weight:bold;">"consumer_secret&"</span>(consumer_secretのおしりに&を連結する)</li></ol></ul>
+<ol><ol><li>リクエストトークンを発行してもらうときは<span style="font-weight:bold;">"consumer_secret&"</span>(consumer_secretのおしりに&を連結する)</li></ol></ol>
 <ul><li>キーを元に値をHMAC-SHA1方式で暗号化した値をbase64形式でエンコードする</li></ul>
 <p>……認証に失敗したとき、どこのステップで間違ってるのかわからなかったので非常に苦労しました。幸いsignatureを生成してくれるページ <a href="http://cgi.geocities.jp/ydevnet/techblog/sample/signature.html">OAuth Signature生成サンプル</a> があるので、ここで作成した値と同じ状況を作って比較しました。</p>
 <table><tr><th>OAuth type</th><td>2-legged OAuth</td></tr><tr><th>URL</th><td><a href="http://twitter.com/oauth/request_token">http://twitter.com/oauth/request_token</a></td></tr><tr><th>parameters</th><td>なし</td></tr><tr><th>consumer key</th><td>Twitterからもらったconsumer_key</td></tr><tr><th>consumer secret</th><td>Twitterからもらったconsumer_secret</td></tr><tr><th>version</th><td>1.0</td></tr><tr><th>timestamp</th><td>nowを押して発行されたtimestampをソースに逆移植する</td></tr><tr><th>nonce</th><td>randomを押して発行されたnonceをソースに逆移植する</td></tr><tr><th>signature method</th><td>HMAC-SHA1固定</td></tr></table>
@@ -385,197 +385,198 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2010/11/21/1290271
 
   <ul>
     
-      
-      <li><a href="/tags.html#日記">日記<sub>11</sub></a></li>
     
       
-      <li><a href="/tags.html#Java">Java<sub>11</sub></a></li>
+      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Wicket">Wicket<sub>6</sub></a></li>
+      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Eclipse">Eclipse<sub>1</sub></a></li>
+      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Mac">Mac<sub>7</sub></a></li>
+      <li><a href="/tags.html#Ansible">Ansible <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#備忘録">備忘録<sub>76</sub></a></li>
+      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Firefox">Firefox<sub>2</sub></a></li>
+      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Oracle">Oracle<sub>5</sub></a></li>
+      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#SQL">SQL<sub>3</sub></a></li>
+      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#java-ja">java-ja<sub>4</sub></a></li>
+      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#イベント">イベント<sub>21</sub></a></li>
+      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Ruby">Ruby<sub>71</sub></a></li>
+      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Twitter">Twitter<sub>4</sub></a></li>
+      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#API">API<sub>8</sub></a></li>
+      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#JavaScript">JavaScript<sub>1</sub></a></li>
+      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Git">Git<sub>16</sub></a></li>
+      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Unix">Unix<sub>13</sub></a></li>
+      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Dropbox">Dropbox<sub>2</sub></a></li>
+      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#さくらVPS">さくらVPS<sub>3</sub></a></li>
+      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Redmine">Redmine<sub>9</sub></a></li>
+      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Windows">Windows<sub>25</sub></a></li>
+      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Python">Python<sub>4</sub></a></li>
+      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Agile">Agile<sub>2</sub></a></li>
+      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
     
       
-      <li><a href="/tags.html#Subversion">Subversion<sub>9</sub></a></li>
+      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Solaris">Solaris<sub>12</sub></a></li>
+      <li><a href="/tags.html#Jekyll">Jekyll <sub>19</sub></a></li>
     
       
-      <li><a href="/tags.html#SQLite3">SQLite3<sub>1</sub></a></li>
+      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
     
       
-      <li><a href="/tags.html#Sinatra">Sinatra<sub>2</sub></a></li>
+      <li><a href="/tags.html#Liquid">Liquid <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Heroku">Heroku<sub>5</sub></a></li>
+      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Lokka">Lokka<sub>1</sub></a></li>
+      <li><a href="/tags.html#Mac">Mac <sub>7</sub></a></li>
     
       
-      <li><a href="/tags.html#Sphinx">Sphinx<sub>12</sub></a></li>
+      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#reST">reST<sub>2</sub></a></li>
+      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Application">Application<sub>1</sub></a></li>
+      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Shell">Shell<sub>1</sub></a></li>
+      <li><a href="/tags.html#Python">Python <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#StartUp">StartUp<sub>6</sub></a></li>
+      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Vim">Vim<sub>3</sub></a></li>
+      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#VB">VB<sub>1</sub></a></li>
+      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#Haml">Haml<sub>1</sub></a></li>
+      <li><a href="/tags.html#Ruby">Ruby <sub>71</sub></a></li>
     
       
-      <li><a href="/tags.html#Evernote">Evernote<sub>2</sub></a></li>
+      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Jenkins">Jenkins<sub>7</sub></a></li>
+      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Rails">Rails<sub>4</sub></a></li>
+      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#SlideShare">SlideShare<sub>1</sub></a></li>
+      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#TDD">TDD<sub>1</sub></a></li>
+      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#RSpec">RSpec<sub>1</sub></a></li>
+      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Fluentd">Fluentd<sub>3</sub></a></li>
+      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
     
       
-      <li><a href="/tags.html#Jekyll">Jekyll<sub>19</sub></a></li>
+      <li><a href="/tags.html#Sphinx">Sphinx <sub>12</sub></a></li>
     
       
-      <li><a href="/tags.html#Bundle">Bundle<sub>1</sub></a></li>
+      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Liquid">Liquid<sub>2</sub></a></li>
+      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#Haskell">Haskell<sub>5</sub></a></li>
+      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#OAuth">OAuth<sub>1</sub></a></li>
+      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Selenium">Selenium<sub>2</sub></a></li>
+      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#iPhone">iPhone<sub>4</sub></a></li>
+      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#IE">IE<sub>1</sub></a></li>
+      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
     
       
-      <li><a href="/tags.html#Test">Test<sub>1</sub></a></li>
+      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Chef">Chef<sub>2</sub></a></li>
+      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#iOS">iOS<sub>3</sub></a></li>
+      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Android">Android<sub>2</sub></a></li>
+      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
     
       
-      <li><a href="/tags.html#MySql">MySql<sub>1</sub></a></li>
+      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#GitHub">GitHub<sub>2</sub></a></li>
+      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Translate">Translate<sub>2</sub></a></li>
+      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#node.js">node.js<sub>1</sub></a></li>
+      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hubot">Hubot<sub>1</sub></a></li>
+      <li><a href="/tags.html#reST">reST <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Ansible">Ansible<sub>1</sub></a></li>
+      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang<sub>2</sub></a></li>
+      <li><a href="/tags.html#イベント">イベント <sub>21</sub></a></li>
     
       
-      <li><a href="/tags.html#Hugo">Hugo<sub>1</sub></a></li>
+      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+    
+      
+      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
     
   </ul>
 
