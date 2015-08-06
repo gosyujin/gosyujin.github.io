@@ -36,17 +36,17 @@ files.each do |file|
     doc = Nokogiri::HTML(f.read)
 
     # hatena first line
-    # ex: *[Java][Android]title hogehoge
+    # ex: *
     title = "*"
 
     # get blog tags
-    # ex: <a href="/tags.html#Java-ref">Java <span>11</span></a>
-    doc.xpath('//i/a').each do |tags|
+    # ex: *[Java][Android]
+    doc.xpath('//code/a[@class="tag"]').each do |tags|
       title << "[#{tags.text.split(' ')[0]}]"
     end
 
-    # get blog title
-    # ex: <h1>blog title hogehoge </h1>
+    # get blog title = h1
+    # ex: *[Java][Android]BlogTitle
     doc.xpath('//h1').each do |h1|
       title << h1.text
     end
