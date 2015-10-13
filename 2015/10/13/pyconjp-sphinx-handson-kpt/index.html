@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <title>JenkinsでAdmin権限を持つユーザのパスワードを全て忘れた時の復旧方法 - kk_Atakaの日記</title>
+    <title>PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp - kk_Atakaの日記</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
     <link rel="stylesheet" href="/static/css/home.css">
@@ -33,18 +33,20 @@
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2012/06/19/1340106125">JenkinsでAdmin権限を持つユーザのパスワードを全て忘れた時の復旧方法</a></h1>
+        <h1><a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags.html#Jenkins" class="tag">Jenkins</a></code> ]</span>
+              <span>[ <code><a href="/tags.html#Sphinx" class="tag">Sphinx</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#備忘録" class="tag">備忘録</a></code> ]</span>
+              <span>[ <code><a href="/tags.html#Python" class="tag">Python</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#イベント" class="tag">イベント</a></code> ]</span>
             
           
           
-            <span>Published: 2012/06/19</span>
+            <span>Published: 2015/10/13</span>
           
         </div>
 
@@ -54,8 +56,8 @@
   <ul>
     
       <li class="prev">
-        <a href="/2012/06/03/1338724924" title="TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました">
-          TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました
+        <a href="/2015/09/24/ansible-meetup-201509" title="Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp">
+          Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp
         </a>
       </li>
     
@@ -63,59 +65,118 @@
       <a href="/archives.html">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2012/07/12/1342098141" title="Fluentdというログ収集ツールを使ってApacheのログを取得するまで">
-          Fluentdというログ収集ツールを使ってApacheのログを取得するまで
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
 </div>
 
 
-
+<div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#振り返りkpt'>振り返りKPT</a></li><ul><li><a href='#keep'>Keep</a></li><li><a href='#problem'>Problem</a></li><li><a href='#try'>Try</a></li></ul><li><a href='#その他の感想'>その他の感想</a></li></ul></ul><!-- end of tree list --></div></div>
 
 <div class="content">
-<h1>あらすじ</h1>
-<ul><li>ローカルで動かしているJenkinsでAdministrator権限を持っているユーザ、およびそのパスワードを忘れたので、色々な事ができなくなった</li><li>また、Administrator権限を持つユーザがいない = Jenkinsの管理画面が開けなくなった事で権限復旧もできなくなった</li></ul>
-<h1>環境</h1>
-<ul><li>Windows XP</li><li>Jenkins 1.470<ul><li>ユーザ情報: Jenkinsのユーザデータベース</li><li>権限管理: 行列による権限設定</li><li>ローカルで運用している</li><li>JenkinsはWindowsサービスに登録している</li></ul></li></ul>
-<h1>原因と解決手順</h1>
-<h2>気づき</h2>
-<ul><li>プラグインを入れようと思ったら、なんでかJenkinsの管理リンクが見当たらなくなった</li><li>管理画面のアドレスは /manage なので直にアクセスしてみる</li><li>Firefoxだとこんなエラーが出た<span class="footnote"><a href="#f1" title="なので、はじめは格納しているデータが壊れちゃったのかと思った" name="fn1">*1</a></span></li></ul>
-<pre class="">！　内容符号化 (Content-Encoding) に問題があります
-　　不正または不明な形式で圧縮されているため、ページを表示できません。
+<h2 id="あらすじ">あらすじ</h2>
 
-　・この問題を Web サイトの管理者に報告してください。
-　[再試行]</pre>
-<ul><li>試しにChromeでもやってみたがこう</li></ul>
-<pre class="">このウェブページにアクセスできません
+<p>さる10/9のPyConJP 2015 Tutorial day(1日目)にて行われたSphinxハンズオンにTAとして参加しました。</p>
 
-http://localhost:8080/manage のウェブページは一時的に停止しているか、
-新しい http://localhost:8080/manage に移動した可能性があります。
+<p>ので振り返りメモ。</p>
 
-エラー 330 (net::ERR_CONTENT_DECODING_FAILED): 不明なエラーです。</pre>
-<ul><li>まさかのIE6。ログイン画面からレイアウト崩れてて(さすがにサポートしてないよなぁ)とか思いつつアクセスすると…</li></ul>
-<pre class="">アクセスできません
-kk_Ataka には、Administer パーミッションがありません。</pre>
-<p><span class="deco" style="font-weight:bold;">なんだと！？</span>　…でも管理画面にいけないんだから、権限も振れないよ。どうしよう。</p>
-<h2>解決策</h2>
-<ul><li>とりあえず、Jenkinsのディレクトリをユーザ名(kk_Atakaなど)で検索してみた…<span class="footnote"><a href="#f2" title="権限設定などを記載しているファイルがある可能性を願って。" name="fn2">*2</a></span></li><li>すると引っかかったのはJenkinsのルートにある <span class="deco" style="color:#FF0000;">config.xml</span> と大量の build.xml<ul><li>build.xml は実行したユーザを情報として持っているらしい。が、今回は関係ない</li></ul></li><li>config.xml を見てみる<ul><li><span class="deco" style="color:#FF0000;">authorizationStrategy</span> タグの中に permission タグがあり、ここに <span class="deco" style="color:#FF0000;">hudson.model.Computer.Configure:kk_Ataka</span> みたいに権限を設定してそうな箇所を発見！</li><li>同じ設定(ユーザ情報、権限管理など)で安定稼動している他のJenkinsのconfig.xmlと目grepをかけてみる</li><li>いかにもAdministrator権限を司っていそうな設定を発見！　そして、これが書かれていなかった！</li></ul></li></ul>
-<pre class="">&lt;permission&gt;hudson.model.Hudson.Administer:USER&lt;/permission&gt;</pre>
-<ul><li>念のため、サービスからJenkinsをいったん停止し、上記タグを追加後、起動</li><li>アクセスできた！</li></ul>
-<h2>最後に</h2>
-<ul><li>上述の権限管理の所、全体のAdministratorを全てチェック空にすると今回の状況が再現できるらしい(イメージはプロジェクト単位の権限設定)</li></ul>
-<p>f:<a href="http://d.hatena.ne.jp/kk_Ataka/">id:kk_Ataka</a>:20120619203011j:image</p>
-<ul><li>Administrator権限を持つユーザが0のJenkinsって運用的には有りなんだろうか<ul><li>プラグイン増やさない、アップグレードしない場合とかなら有り？</li></ul></li><li>今回の復旧手段はかなり荒業っぽいなぁ<ul><li>第三者がひょいひょい己にAdministrator権限付加できて良い？<ul><li>Unixとかならファイルのパーミッションとかきちんと設定できるから大丈夫？</li><li>ローカルならでは？</li></ul></li></ul></li></ul>
-<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: なので、はじめは格納しているデータが壊れちゃったのかと思った</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: 権限設定などを記載しているファイルがある可能性を願って。</p></div>
+<ul>
+<li><a href="https://pycon.jp/2015/ja/schedule/presentation/74/">プレゼンテーション：Sphinxハンズオン | PyCon JP 2015 in TOKYO</a>
+
+<ul>
+<li>講師: 清水川さん</li>
+<li>TA: 渋川さん、自分</li>
+</ul></li>
+</ul>
+
+<blockquote class="twitter-tweet" lang="ja"><p lang="ja" dir="ltr">Sphinx hands-on!! at <a href="https://twitter.com/hashtag/PyConJP?src=hash">#PyConJP</a> by <a href="https://twitter.com/hashtag/sphinxjp?src=hash">#sphinxjp</a> (@ プラザ平成 in 江東区, 東京都 w/ <a href="https://twitter.com/takanory">@takanory</a>) <a href="https://t.co/0xK38ataBA">https://t.co/0xK38ataBA</a> <a href="http://t.co/zkC4ZJJ5zf">pic.twitter.com/zkC4ZJJ5zf</a></p>&mdash; Takayuki Shimizukawa (@shimizukawa) <a href="https://twitter.com/shimizukawa/status/652300407063080960">2015, 10月 9</a></blockquote>
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<h2 id="振り返りkpt">振り返りKPT</h2>
+
+<h3 id="keep">Keep</h3>
+
+<ol>
+<li>会場には遅刻せず余裕を持って到着できた
+
+<ul>
+<li>会場が開場する前に着いちゃって途方に暮れてるところ、<a href="https://twitter.com/takanory">@takanory</a>さんに拾ってもらった。ありがとうございました</li>
+<li>りんかい線？が遅れてたみたい</li>
+</ul></li>
+<li>教室設営も余裕を持ってできた
+
+<ul>
+<li>…が、1点確認漏れあり、詳しくはpで</li>
+</ul></li>
+</ol>
+
+<h3 id="problem">Problem</h3>
+
+<ol>
+<li>教室設営の時間でPCとプロジェクタの接続確認までやっておけばよかった
+
+<ul>
+<li>ハンズオン開始後にプロジェクタに接続したらまったく映らず</li>
+<li>スタッフの方が早急に代替機を用意してくれたので無事オンタイムで進められた</li>
+</ul></li>
+<li>質問にパッと答えるのが難しかった
+
+<ul>
+<li>質問は過去に自分がググった記憶があるものも多かった</li>
+<li>そのため、解決するためのググるワードおよびサイト(sphinx-users.jpの逆引きページに書いてあったな、とか)はおぼろげにわかる</li>
+<li>しかし、すぐ出てこない</li>
+<li>あせる</li>
+</ul></li>
+<li>Sphinx Tシャツ持っていくの忘れた
+
+<ul>
+<li>去年のSphinxCon JPで買ったTシャツ、ここで着なくていつ着るんだ！清水川さんが着替えてるのを見て後悔</li>
+</ul></li>
+</ol>
+
+<h3 id="try">Try</h3>
+
+<ul>
+<li>準備はプロジェクタつなげるまで
+
+<ul>
+<li>まあありがち</li>
+</ul></li>
+<li>もっとSphinxを使おう</li>
+<li>PyConJPの別日も参加してみたい</li>
+</ul>
+
+<h2 id="その他の感想">その他の感想</h2>
+
+<ul>
+<li>ハンズオン参加者の方は大きく分けて「プロダクトガンガン作っているがドキュメントがない=書ける(良い)環境を作りたい」「Officeつらいので代替ツールの導入を考えたい」という2派が多かった
+
+<ul>
+<li>1GBのWordというすさまじいドキュメントの修正をしているという話も…</li>
+</ul></li>
+<li>こんな機能もあるよ <a href="http://docs.sphinx-users.jp/websupport.html">Sphinxウェブサポート — Sphinx 1.3.2 ドキュメント</a></li>
+<li>歴史的経緯は渋川さんが知り尽くしている
+
+<ul>
+<li>Pythonのドキュメント、Sphinx以前はどうなっていたの？という質問に対してスッ…と以下のページ</li>
+</ul></li>
+</ul>
+
+<blockquote class="twitter-tweet" lang="ja"><p lang="ja" dir="ltr">Sphinx以前の世界 <a href="https://t.co/3vghEcKtod">https://t.co/3vghEcKtod</a> <a href="https://twitter.com/hashtag/sphinxjp?src=hash">#sphinxjp</a></p>&mdash; 渋川よしき (@shibu_jp) <a href="https://twitter.com/shibu_jp/status/652292850655232000">2015, 10月 9</a></blockquote>
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 </div>
 
 <div class="pagination">
   <ul>
     
       <li class="prev">
-        <a href="/2012/06/03/1338724924" title="TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました">
-          TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました
+        <a href="/2015/09/24/ansible-meetup-201509" title="Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp">
+          Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp
         </a>
       </li>
     
@@ -123,10 +184,8 @@ kk_Ataka には、Administer パーミッションがありません。</pre>
       <a href="/archives.html">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2012/07/12/1342098141" title="Fluentdというログ収集ツールを使ってApacheのログを取得するまで">
-          Fluentdというログ収集ツールを使ってApacheのログを取得するまで
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
@@ -137,17 +196,17 @@ kk_Ataka には、Administer パーミッションがありません。</pre>
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2012/06/19/1340106125" data-text="kk_Atakaの日記 - JenkinsでAdmin権限を持つユーザのパスワードを全て忘れた時の復旧方法" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt" data-text="kk_Atakaの日記 - PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/06/19/1340106125/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/06/19/1340106125/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/06/19/1340106125/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - JenkinsでAdmin権限を持つユーザのパスワードを全て忘れた時の復旧方法"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
 	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
@@ -159,7 +218,7 @@ kk_Ataka には、Administer パーミッションがありません。</pre>
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/06/19/1340106125/"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
