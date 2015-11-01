@@ -35,12 +35,8 @@ task :circle do
       git add -A ;\
       git status -s > /tmp/gitstatus ;\
       cat /tmp/gitstatus ;\
-      if [ -s /tmp/gitstatus ]; then \
-        git commit -m 'Commit at CircleCI' ;\
-        git push origin master ;\
-      else \
-        echo 'no change source' ;\
-      fi"
+      git commit -m 'Commit at CircleCI' ;\
+      git push origin master"
 end
 
 
