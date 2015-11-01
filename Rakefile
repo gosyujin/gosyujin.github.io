@@ -23,6 +23,7 @@ end
 
 desc "Begin CircleCI"
 task :circle do
+  sh "jekyll build"
   sh "git clone -b master git@github.com:gosyujin/gosyujin.github.io.git ~/gh-pages"
   sh "rm -rf ~/gh-pages/*"
   sh "cp -R _site/* ~/gh-pages"
