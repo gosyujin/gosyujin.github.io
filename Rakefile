@@ -12,29 +12,12 @@ CONFIG = {
 # Usage: rake deploy
 desc "Begin a push static file to GitHub"
 task :deploy do
-  puts "Build..."
-  sh "rm -rf _site/*"
-  sh "jekyll build"
-
-  # push source branch (source file)
-  puts "Push to source branch of GitHub"
+  # push
   sh "git push origin source:source"
 
-  puts "Change directory _site"
-  cd "_site" do
-    puts "Push to master branch of GitHub"
-    sh "git add *"
-    message = "deploy at #{Time.now}"
-    begin
-      sh "git commit -m \"#{message}\""
-      # push master branch (html)
-      sh "git push -f origin master:master"
-    rescue Exception => e
-      puts "! Error - git command abort"
-      exit -1
-    end
-  end
   # convert
+  sh "rm -rf _site/*"
+  sh "jekyll build"
   sh "ruby _scripts/convert_html_to_hatena.rb"
 end
 
