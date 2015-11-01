@@ -35,12 +35,8 @@ task :circle do
   sh "git status -s > /tmp/gitstatus"
   sh "ls -l /tmp/gitstatus"
   sh "cat /tmp/gitstatus"
-  sh "if [ -s /tmp/gitstatus ]; then"
-  sh "  git commit -m 'Commit at CircleCI'"
-  sh "  git push origin master"
-  sh "else"
-  sh "  echo 'no change source'"
-  sh "fi"
+  sh "git commit -m 'Commit at CircleCI'"
+  sh "git push origin master"
 end
 
 # Usage: rake post title="A Title" [date="2012-02-09"]
