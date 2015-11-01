@@ -91,13 +91,13 @@
 <ul><li>CentOS 6.2</li><li>Ruby 1.9.3</li><li>RubyGems 1.8.21</li></ul>
 <h1>手順</h1>
 <p>とりあえずbundlerで動かしてみるためにGemfileを作成。</p>
-<pre class="">$ cat Gemfile
+<pre>$ cat Gemfile
 source :rubygems
 source &quot;http://rubygems.org&quot;
 
 gem 'fluentd'</pre>
 <p>インストール。</p>
-<pre class="">$ bundle install --path ./vendor/bundle
+<pre>$ bundle install --path ./vendor/bundle
 Fetching gem metadata from http://rubygems.org/....
 Fetching gem metadata from http://rubygems.org/....
 Installing iobuffer (1.1.2) with native extensions
@@ -113,10 +113,10 @@ Your bundle is complete! It was installed into ./vendor/bundle</pre>
 <h1>実行</h1>
 <p><a href="http://fluentd.org/doc/install.html#confirm-installation">Installation — fluentd v0.10 documentation</a> を参考に。</p>
 <ul><li>設定ファイルなどのテンプレートを指定先に作ってくれる。</li></ul>
-<pre class="">$ bundle exec fluentd --setup ./fluent
+<pre>$ bundle exec fluentd --setup ./fluent
 Installed ./fluent/fluent.conf.</pre>
 <ul><li>コンフィグファイル指定+traceモードで起動</li></ul>
-<pre class="">$ bundle exec fluentd -c ./fluent/fluent.conf -vv &amp;
+<pre>$ bundle exec fluentd -c ./fluent/fluent.conf -vv &amp;
 [1] 12973
 2012-07-10 21:37:47 +0900: fluent/supervisor.rb:153:supervise: starting fluentd-0.10.24
 2012-07-10 21:37:47 +0900: fluent/supervisor.rb:235:read_config: reading config file path=&quot;./fluent/fluent.conf&quot;
@@ -149,7 +149,7 @@ Installed ./fluent/fluent.conf.</pre>
 2012-07-10 21:37:47 +0900: plugin/in_forward.rb:60:listen: listening fluent socket on 0.0.0.0:24224
 2012-07-10 21:37:47 +0900: plugin/in_http.rb:74:start: listening http on 0.0.0.0:8888</pre>
 <ul><li>ログを送ってみる</li></ul>
-<pre class="">$ echo '{&quot;json&quot;:&quot;message&quot;}' | bundle exec fluent-cat debug.test
+<pre>$ echo '{&quot;json&quot;:&quot;message&quot;}' | bundle exec fluent-cat debug.test
 2012-07-10 21:40:02 +0900: plugin/in_forward.rb:139:initialize: accepted fluent socket object_id=14145560
 2012-07-10 21:40:02 +0900 debug.test: {&quot;json&quot;:&quot;message&quot;}
 2012-07-10 21:40:02 +0900: plugin/in_forward.rb:180:on_close: closed fluent socket object_id=14145560</pre>
@@ -157,7 +157,7 @@ Installed ./fluent/fluent.conf.</pre>
 <h1>Apacheのログを集めてみる</h1>
 <p>集めるログ……自鯖のApacheのログをfluentdで集めてみよう。</p>
 <ul><li>コンフィグファイルにはじめからコメントアウトされている設定があったので、これを利用</li></ul>
-<pre class="">## File input                                                                                                                                 
+<pre>## File input                                                                                                                                 
 ## read apache logs with tag=apache.access                                                                                                    
 &lt;source&gt;
   type tail
@@ -167,19 +167,19 @@ Installed ./fluent/fluent.conf.</pre>
 &lt;/source&gt;</pre>
 <ul><li>typeにはInput Pluginを指定するらしい。種類はhttp, tail, forward, execなど<ul><li><a href="http://fluentd.org/doc/plugin.html#input-plugins">Plugins — fluentd v0.10 documentation</a></li></ul></li><li>format(必須)はLogのフォーマットを指定。今回はApacheのログなのでapache</li><li>path(必須)はLogのパスかな</li><li>tag(必須)はfluentd内で使うタグ？ myapp.accessみたいにドットで分けるらしい</li></ul>
 <p>上記の条件にマッチしたものを、今度はmatchタグに従ってoutputしている……のかな？</p>
-<pre class="">## match tag=apache.access and write to file                                                                                                  
+<pre>## match tag=apache.access and write to file                                                                                                  
 &lt;match apache.access&gt;
   type file
   path /home/kk_Ataka/log
 &lt;/match&gt;</pre>
 <p>では動かしてみよう。</p>
-<pre class="">$ sudo bundle exec fluentd -c fluent/fluent.conf</pre>
+<pre>$ sudo bundle exec fluentd -c fluent/fluent.conf</pre>
 <p>Apacheへアクセス。(Redmineがいるので、Redmineホームにアクセスしてみる)</p>
 <p>…。</p>
 <p>…。</p>
 <h1>結果</h1>
 <h2>Apacheの方でいつもどおり作られたログ</h2>
-<pre class="">xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET / HTTP/1.1&quot; 200 4371
+<pre>xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET / HTTP/1.1&quot; 200 4371
 xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET /themes/alternate/stylesheets/application.css?1339785657 HTTP/1.1&quot; 304 -
 xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET /javascripts/controls.js?1339785657 HTTP/1.1&quot; 304 -
 xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET /javascripts/effects.js?1339785657 HTTP/1.1&quot; 304 -
@@ -190,7 +190,7 @@ xxx.xxx.xxx.xxx - - [10/Jul/2012:22:20:30 +0900] &quot;GET /stylesheets/scm.css?
 ::1 - - [10/Jul/2012:22:20:36 +0900] &quot;OPTIONS * HTTP/1.0&quot; 200 -</pre>
 <p>見慣れたもんが出ました。</p>
 <h2>fluentdで作られたログ</h2>
-<pre class="">2012-07-10T22:20:30+09:00       apache.access   {&quot;host&quot;:&quot;xxx.xxx.xxx.xxx&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/&quot;,&quot;code&quot;:&quot;200&quot;,&quot;size&quot;:&quot;4371&quot;}
+<pre>2012-07-10T22:20:30+09:00       apache.access   {&quot;host&quot;:&quot;xxx.xxx.xxx.xxx&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/&quot;,&quot;code&quot;:&quot;200&quot;,&quot;size&quot;:&quot;4371&quot;}
 2012-07-10T22:20:30+09:00       apache.access   {&quot;host&quot;:&quot;xxx.xxx.xxx.xxx&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/themes/alternate/stylesheets/application.css?1339785657&quot;,&quot;code&quot;:&quot;304&quot;,&quot;size&quot;:&quot;-&quot;}
 2012-07-10T22:20:30+09:00       apache.access   {&quot;host&quot;:&quot;xxx.xxx.xxx.xxx&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/javascripts/controls.js?1339785657&quot;,&quot;code&quot;:&quot;304&quot;,&quot;size&quot;:&quot;-&quot;}
 2012-07-10T22:20:30+09:00       apache.access   {&quot;host&quot;:&quot;xxx.xxx.xxx.xxx&quot;,&quot;user&quot;:&quot;-&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/javascripts/effects.js?1339785657&quot;,&quot;code&quot;:&quot;304&quot;,&quot;size&quot;:&quot;-&quot;}

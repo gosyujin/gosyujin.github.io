@@ -86,39 +86,39 @@
 <h1>マージ</h1>
 <h2>前準備</h2>
 <p>ここでブランチ用にリポジトリを作りなおした。</p>
-<pre class="">$ cat field.html
+<pre>$ cat field.html
 &lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;</pre>
 <p>というファイルを作成し、chapter1というブランチを切る。</p>
-<pre class="">$ git branch chapter1
+<pre>$ git branch chapter1
 
 $ git branch
    chapter1
  * master</pre>
 <p>ブランチはこうなるはず。</p>
-<pre class=""> *master/chapter1/HEAD
+<pre> *master/chapter1/HEAD
  ↓
  ↓
  ○
 　</pre>
 <p>次にchapter2を作成し、ブランチ切り替え。</p>
-<pre class="">$ git checkout -b chapter2law chapter1
+<pre>$ git checkout -b chapter2law chapter1
 Switched to a new branch 'chapter2law'
 </pre>
 <p>文言を追加し、コミット。</p>
-<pre class="">$ cat field.html
+<pre>$ cat field.html
 &lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
 &lt;h2&gt;誰も僕を責めることはできない&lt;/h2&gt;
 
 $ git commit -a -m &quot;Add chapter2 law route&quot;</pre>
 <p>ブランチはこうなるはず。chapter2lawに切り替えているのでHEADもこちらへ。</p>
-<pre class="">master/chapter1
+<pre>master/chapter1
 ↓　*chapter2law/HEAD
 ↓　↓
 ↓┌○
 ○┘
 　</pre>
 <p>同様にchapter3lawも作る。</p>
-<pre class="">$ git checkout -b chapter3law chapter2law
+<pre>$ git checkout -b chapter3law chapter2law
 Switched to a new branch 'chapter3law'
 
 $ cat field.html
@@ -127,7 +127,7 @@ $ cat field.html
 &lt;h3&gt;欺き欺かれて&lt;/h3&gt;
 
 $ git commit -a -m &quot;Add chapter3 law route&quot;</pre>
-<pre class="">master/chapter1
+<pre>master/chapter1
 ↓　chapter2law
 ↓　↓　*chapter3law/HEAD
 ↓　↓　↓
@@ -135,18 +135,18 @@ $ git commit -a -m &quot;Add chapter3 law route&quot;</pre>
 ○┘
 　</pre>
 <p>ここでchapter1から派生させて、馬鹿な事はやめるんだッ！　と新しいブランチを作成。</p>
-<pre class="">$ git checkout -b chapter2chaos chapter1
+<pre>$ git checkout -b chapter2chaos chapter1
 Switched to a new branch 'chapter2chaos'</pre>
 <p>chapter1を元にcheckout -bしたのでファイルの中身を見るとh1タグしかない状態に戻っている。</p>
-<pre class="">$ cat field.html
+<pre>$ cat field.html
 &lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;</pre>
 <p>また文言を追加しコミット。</p>
-<pre class="">$ cat field.html
+<pre>$ cat field.html
 &lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
 &lt;h2&gt;思いどおりにいかないのが世の中なんて割り切りたくないから&lt;/h2&gt;
 
 $ git commit -a -m &quot;Add chapter2 chaos route&quot;</pre>
-<pre class="">master/chapter1
+<pre>master/chapter1
 ↓　chapter2law
 ↓　↓　chapter3law
 ↓　↓　↓
@@ -156,7 +156,7 @@ $ git commit -a -m &quot;Add chapter2 chaos route&quot;</pre>
 　　↑
 　　*chapter2chaos/HEAD</pre>
 <p>この調子でchapter3neutralとchapter3chaosブランチを作る。</p>
-<pre class="">$ git checkout -b chapter3neutral chapter2chaos
+<pre>$ git checkout -b chapter3neutral chapter2chaos
 Switched to a new branch 'chapter3neutral'
 
 $ cat field.html
@@ -175,7 +175,7 @@ $ cat field.html
 &lt;h3&gt;駆り立てるのは野心と欲望、横たわるのは犬と豚&lt;/h3&gt;
 
 $ git commit -a -m &quot;Add chapter3 chaos route&quot;</pre>
-<pre class="">master/chapter1
+<pre>master/chapter1
 ↓　chapter2law
 ↓　↓　chapter3law
 ↓　↓　↓
@@ -189,7 +189,7 @@ $ git commit -a -m &quot;Add chapter3 chaos route&quot;</pre>
 　　↑　*chapter3chaos/HEAD
 　　chapter2chaos</pre>
 <p>logコマンドで見てみる。あってるかな。</p>
-<pre class="">$ git log --graph --date-order --all --date=short -C -M --pretty=format:&quot;%h&quot;\ %ad\ %cn\ %Cgreen%d%Cre
+<pre>$ git log --graph --date-order --all --date=short -C -M --pretty=format:&quot;%h&quot;\ %ad\ %cn\ %Cgreen%d%Cre
 set\ %s
  * 2078f0a 2012-03-07 kk_Ataka  (HEAD, chapter3chaos) Add chapter3 chaos route
  | * 427a08c 2012-03-07 kk_Ataka  (chapter3neutral) Add chapter3 neutral route
@@ -203,13 +203,13 @@ set\ %s
  * 338a929 2012-03-07 kk_Ataka  First commit</pre>
 <h2>いよいよマージ</h2>
 <p>最後に今わかれているlaw,chaos,neutralのブランチをchapter4にマージする。まずは久々にmasterブランチに戻る。</p>
-<pre class="">$ git checkout master
+<pre>$ git checkout master
 Switched to branch 'master'
 
 $ cat field.html
 &lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;</pre>
 <p>merge [branch]コマンドでまずchapter3lawをマージ。</p>
-<pre class="">$ git merge chapter3law
+<pre>$ git merge chapter3law
 Updating 9d2e5d1..3dc258a
 Fast-forward
  field.html |    2 ++
@@ -222,13 +222,13 @@ $ cat field.html
 <p>マージ元のブランチ(master)がマージ先のブランチ(chapter3law)の親である場合、"直接到達できる"という事なので、masterブランチをそのままchapter3lawまですすめられた。</p>
 <p>本来は、ここでchapter3lawブランチは削除するらしい(masterにすべてマージされたからもう必要ないであろうということ？)が、記念に残しておく。</p>
 <p>次にchaosルートも取り込む。コマンドは同じだが、出力が少し違う。</p>
-<pre class="">$ git merge chapter3chaos
+<pre>$ git merge chapter3chaos
 Auto-merging field.html
 CONFLICT (content): Merge conflict in field.html
 Automatic merge failed; fix conflicts and then commit the result.</pre>
 <p>コンフリクトが起きたようだ。競合を解決してくださいとファイルが編集されるのでステータスも変わる。しかもメッセージもいつもと違う。Unmerged pathとか出る。</p>
 <p>いつもの。</p>
-<pre class="">$ git status
+<pre>$ git status
 # On branch master
 # Untracked files:
 #   (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
@@ -236,7 +236,7 @@ Automatic merge failed; fix conflicts and then commit the result.</pre>
 #       README
 nothing added to commit but untracked files present (use &quot;git add&quot; to track)</pre>
 <p>今回の。</p>
-<pre class="">$ git status
+<pre>$ git status
 # On branch master
 # Unmerged paths:
 #   (use &quot;git add/rm &lt;file&gt;...&quot; as appropriate to mark resolution)
@@ -245,7 +245,7 @@ nothing added to commit but untracked files present (use &quot;git add&quot; to 
 #
 no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</pre>
 <p>ファイルを見てみる。</p>
-<pre class="">$ cat field.html
+<pre>$ cat field.html
 &lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
 &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 &lt;h2&gt;誰も僕を責めることはできない&lt;/h2&gt;
@@ -255,19 +255,19 @@ no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&q
 &lt;h3&gt;駆り立てるのは野心と欲望、横たわるのは犬と豚&lt;/h3&gt;
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; chapter3chaos</pre>
 <p>今マージしたchapter3law=master=HEADとchapter3chaosで競合。とりあえずそのまま追記追記するように。</p>
-<pre class="">$ cat field.html
+<pre>$ cat field.html
 &lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
 &lt;h2&gt;誰も僕を責めることはできない&lt;/h2&gt;
 &lt;h3&gt;欺き欺かれて&lt;/h3&gt;
 &lt;h2&gt;思いどおりにいかないのが世の中なんて割り切りたくないから&lt;/h2&gt;
 &lt;h3&gt;駆り立てるのは野心と欲望、横たわるのは犬と豚&lt;/h3&gt;</pre>
 <p>最後にニュートラルなんだけど、また競合しそう……。</p>
-<pre class="">$ git merge chapter3neutral
+<pre>$ git merge chapter3neutral
 Auto-merging field.html
 CONFLICT (content): Merge conflict in field.html
 Automatic merge failed; fix conflicts and then commit the result.</pre>
 <p>ああやっぱり。</p>
-<pre class="">$ cat field.html
+<pre>$ cat field.html
 &lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
 &lt;h2&gt;誰も僕を責めることはできない&lt;/h2&gt;
 &lt;h3&gt;欺き欺かれて&lt;/h3&gt;
@@ -278,7 +278,7 @@ Automatic merge failed; fix conflicts and then commit the result.</pre>
 &lt;h3&gt;すくいきれないもの&lt;/h3&gt;
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; chapter3neutral</pre>
 <p>とりあえず競合を消して最後の文言を。</p>
-<pre class="">$ cat field.html
+<pre>$ cat field.html
 &lt;h1&gt;僕にその手を汚せというのか&lt;/h1&gt;
 &lt;h2&gt;誰も僕を責めることはできない&lt;/h2&gt;
 &lt;h3&gt;欺き欺かれて&lt;/h3&gt;
@@ -302,7 +302,7 @@ $ git commit -a -m &quot;Add chapter4 title&quot;
 [master f83bfdb] Add chapter4 title
  1 files changed, 1 insertions(+), 0 deletions(-)</pre>
 <p>最後にグラフを見てみる。</p>
-<pre class="">$ git log --graph --date-order --all --date=short -C -M --pretty=format:&quot;%h&quot;\ %ad\ %cn\ %Cgreen%d%Cre
+<pre>$ git log --graph --date-order --all --date=short -C -M --pretty=format:&quot;%h&quot;\ %ad\ %cn\ %Cgreen%d%Cre
 set\ %s
  * f83bfdb 2012-03-07 kk_Ataka  (HEAD, master, chapter4) Add chapter4 title
  *   134d7a8 2012-03-07 kk_Ataka  Merge conflict
@@ -322,7 +322,7 @@ set\ %s
  * 4e0ebaa 2012-03-07 kk_Ataka  Add chapter 1
  * 338a929 2012-03-07 kk_Ataka  First commit</pre>
 <p>こうなってるか。</p>
-<pre class="">chapter1
+<pre>chapter1
 ↓　chapter2law
 ↓　↓　chapter3law　　　 master/chapter4/HEAD
 ↓　↓　↓　　　　　　　　↓

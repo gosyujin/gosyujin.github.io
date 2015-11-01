@@ -90,11 +90,11 @@
 <p>コミットの基を変更すると。</p>
 <h2>パターン1 一般的な？場合(前方移植(forward-port))</h2>
 <p>Git道場で繰り返したパターンに近いかな。こういうブランチを作る。</p>
-<pre class="">       1---2---3(topic)
+<pre>       1---2---3(topic)
       /
 A---B---C---D(master)</pre>
 <p>まずは1-5行目にそれぞれ1-5と入力したファイルを用意。</p>
-<pre class="">$ touch num
+<pre>$ touch num
 $ git add num
 $ git commit -am&quot;first commit&quot;
 [master (root-commit) fa9eabc] first commit
@@ -111,7 +111,7 @@ $ git g
  * 15f636f  (HEAD, master) Add line number
  * fa9eabc  first commit</pre>
 <p>次にtopicブランチを作成しを育てる。</p>
-<pre class="">$ vi num
+<pre>$ vi num
 $ cat num
 1 git add
 2
@@ -152,7 +152,7 @@ $ git g
  * 15f636f  (master) Add line number
  * fa9eabc  first commit</pre>
 <p>masterに戻り、同じくファイルを編集。</p>
-<pre class="">$ git chm
+<pre>$ git chm
 Switched to branch 'master'
 
 $ vi num
@@ -187,11 +187,11 @@ C  * 0b91a9f  Add message line 5
 B  * 15f636f  Add line number
 A  * fa9eabc  first commit</pre>
 <p>各コミットをABCD123とすると、こう。</p>
-<pre class="">       1---2---3(topic)
+<pre>       1---2---3(topic)
       /
 A---B---C---D(master)</pre>
 <p>そして、topicブランチの変更をmasterブランチへ"かぶせる"</p>
-<pre class="">$ git ch topic
+<pre>$ git ch topic
 Switched to branch 'topic'
 
 $ git rebase master
@@ -226,19 +226,19 @@ If you would prefer to skip this patch, instead run &quot;git rebase --skip&quot
 To restore the original branch and stop rebasing run &quot;git rebase --abort&quot;.</pre>
 <p>途中でコンフリクトしたけど、内部ではこうなっている。HEADは今ここ。</p>
 <ul><li>topicブランチの一つ目の変更をmasterブランチに適用</li></ul>
-<pre class="">       1---2---3(topic)
+<pre>       1---2---3(topic)
       /
 A---B---C---D(master)---1'(HEAD)</pre>
 <ul><li>topicブランチの二つ目の変更をmasterブランチに適用</li></ul>
-<pre class="">       1---2---3(topic)
+<pre>       1---2---3(topic)
       /
 A---B---C---D(master)---1'---2'(HEAD)</pre>
 <ul><li>topicブランチの三つ目の変更をmasterブランチに適用しようとしてコンフリクト</li></ul>
-<pre class="">       1---2---3(topic)
+<pre>       1---2---3(topic)
       /
 A---B---C---D(master)---1'---2'---3'(HEAD)</pre>
 <p>コンフリクト発生時、グラフはこうなっている。</p>
-<pre class="">$ git g
+<pre>$ git g
  * cf6c3d6  (HEAD) Add message line 2
  * 38f8aff  Add message line 1
  * 93b8e52  (master) Add message line 4
@@ -251,12 +251,12 @@ A---B---C---D(master)---1'---2'---3'(HEAD)</pre>
  * fa9eabc  first commit</pre>
 <p>Add message line 1と2がmasterブランチから生えてる、イコールmasterブランチにtopicブランチの変更(二つ)がコミットされている。一個ずつ変更を適用してコミットとしているので、もとのtopicブランチとSHA1値が変わっている。</p>
 <p>最後の変更をコミットしようとしたらコンフリクトしたので、直す。</p>
-<pre class="">$ vi num
+<pre>$ vi num
 $ git add num
 $ git rebase --continue
 Applying: Add message line 3</pre>
 <p>rebaseが無事終了。グラフを見てみると…。</p>
-<pre class="">$ git g
+<pre>$ git g
  * 7ab5db8  (HEAD, topic) Add message line 3
  * cf6c3d6  Add message line 2
  * 38f8aff  Add message line 1
@@ -265,26 +265,26 @@ Applying: Add message line 3</pre>
  * 15f636f  Add line number
  * fa9eabc  first commit</pre>
 <p>masterブランチとtopicブランチが一直線になった。旧topicブランチは変更が適用されたという事で削除されている。最終的にはこうなる。</p>
-<pre class="">A---B---C---D(master)---1'---2'---3'(HEAD, topic)</pre>
+<pre>A---B---C---D(master)---1'---2'---3'(HEAD, topic)</pre>
 <p>一連の流れのreflogはこんな感じ。</p>
-<pre class="">7ab5db8 HEAD@{0}: rebase: Add message line 3           # 一つずつ変更を適用
+<pre>7ab5db8 HEAD@{0}: rebase: Add message line 3           # 一つずつ変更を適用
 cf6c3d6 HEAD@{1}: rebase: Add message line 2           # 一つずつ変更を適用
 38f8aff HEAD@{2}: rebase: Add message line 1           # 一つずつ変更を適用
 93b8e52 HEAD@{3}: checkout: moving from topic to 93b8e52... # rebaseが勝手に無名ブランチ(masterの所)へcheckout
 2588a24 HEAD@{4}: checkout: moving from master to topic     # rebaseのため自力でcheckoutした</pre>
 <h2>パターン2 rebaseしたいブランチに依存しているブランチがある場合</h2>
 <p>これを見てまたrebase怖いと思ってしまった。内容を見てみる。</p>
-<pre class="">           x---y(subdev)
+<pre>           x---y(subdev)
           /
    1---2---3(dev)
   /
 A---B---C(master)</pre>
 <p>こういうブランチがあった時に、devをrebaseするとどうなるかという事。なるかどうかは別にして、git rebase master devで下記のようになってくれるとうれしい。</p>
-<pre class="">                             x'---y'(subdev)
+<pre>                             x'---y'(subdev)
                             /
 A---B---C(master)---1'---2'---3'(dev)</pre>
 <p>だが、実態はそうではない。以下で試してみる。まず準備。</p>
-<pre class="">#devブランチを作成
+<pre>#devブランチを作成
 $ git chb dev
 $ touch newfeature
 $ git add newfeature
@@ -308,7 +308,7 @@ $ git commit -am &quot;Modify num&quot;
 $ echo &quot;feature add 2&quot; &gt;&gt; num
 $ git commit -am &quot;Modify num 2&quot;</pre>
 <p>で、今のグラフ。</p>
-<pre class="">$ git g
+<pre>$ git g
   y * ebdc7e7  (subdev) Add message line 3(sub module)
 C   | * 18ac45f  (HEAD, master) Modify num 2
 B   | * a43a699  Modify num
@@ -321,13 +321,13 @@ B   | * a43a699  Modify num
     |/
 A   * 3aec83c  (nobra) Add message nobra</pre>
 <p>rebase開始。</p>
-<pre class="">$ git rebase master dev
+<pre>$ git rebase master dev
 First, rewinding head to replay your work on top of it...
 Applying: Add newfeature
 Applying: Add message line 1
 Applying: Add message line 2</pre>
 <p>グラフはこうなる。</p>
-<pre class="">$ git g
+<pre>$ git g
  3'  * 948e1a4  (HEAD, dev) Add message line 2
  2'  * 0bc3e36  Add message line 1
  1'  * ae15a29  Add newfeature
@@ -340,14 +340,14 @@ B    * | a43a699  Modify num
      |/
 A    * 3aec83c  (nobra) Add message nobra</pre>
 <p>(ブランチが)すごく…多いです。こうなった。</p>
-<pre class="">           x---y(subdev)
+<pre>           x---y(subdev)
           /
    1---2--
   /
 A---B---C(master)---1'---2'---3'(dev)</pre>
 <p>dev(1,2,3)はきちんと適用された。が、subdev(x,y)は適用されていない。ので1,2,x,yは残っている。(3はdevをrebaseし、subdevから到達できないのでいつもどおり削除されている)</p>
 <p>むむむ。しかし、修正内容さえ分かっていればコンフリクトしても冷静に直せばきちんとrebaseできるか。dev(3')にsubdev(y)をrebaseする。</p>
-<pre class="">$ git rebase dev subdev
+<pre>$ git rebase dev subdev
 First, rewinding head to replay your work on top of it...
 Applying: Add message line 2(sub module)
 Using index info to reconstruct a base tree...

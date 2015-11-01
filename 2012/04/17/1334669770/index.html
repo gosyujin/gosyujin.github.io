@@ -87,15 +87,15 @@
 <h1>差分のdumpとってload(失敗)</h1>
 <h2>Aサーバ</h2>
 <ul><li>進んでいる分のダンプを取る。<ul><li>rオプションでダンプを取るリビジョンを指定できる。一つだけだとそのリビジョンだけ。(222ならリビジョン222)範囲指定する場合はAAA:BBBとする</li></ul></li></ul>
-<pre class="">$ svnadmin dump リポジトリパス(/home/xxx/yyyなど) -r 111:222 --incremental &gt; repo.dump</pre>
+<pre>$ svnadmin dump リポジトリパス(/home/xxx/yyyなど) -r 111:222 --incremental &gt; repo.dump</pre>
 <ul><li>これをなんらかの方法でBサーバへ移動する(ftpでもUSBでも)</li></ul>
 <h2>Bサーバ</h2>
 <ul><li>svnadmin loadコマンドで差分ダンプファイルを流しこむ。<ul><li>リビジョンがかぶっているとエラー(リビジョン111未満のもの)</li></ul></li></ul>
-<pre class="">$ svnadmin load リポジトリパス(/home/xxx/yyyなど) &lt; repo.dump
+<pre>$ svnadmin load リポジトリパス(/home/xxx/yyyなど) &lt; repo.dump
 &lt;&lt;&lt; オリジナルのリビジョン 111 に基づき、新しいトランザクションを開始しました
      * パスを追加しています : trunk/xxx ...svnadmin: ファイルが既に存在します: ファイルシステム 'リポジトリパス', トランザクション xxx-xx, パス 'trunk/xxx'</pre>
-<ol><ul><li>112からダンプしたファイルをloadする…とうまくいく予定だったのだが、なんかファイルのチェックサムが違うといわれた……。</li></ul></ol>
-<pre class="">$ svnadmin load リポジトリパス(/home/xxx/yyyなど) &lt; repo.dump
+<ul><ul><li>112からダンプしたファイルをloadする…とうまくいく予定だったのだが、なんかファイルのチェックサムが違うといわれた……。</li></ul></ul>
+<pre>$ svnadmin load リポジトリパス(/home/xxx/yyyなど) &lt; repo.dump
 &lt;&lt;&lt; オリジナルのリビジョン 112 に基づき、新しいトランザクションを開始しました
      * パスを編集しています : trunk/xxx/a.sh ... 完了しました。
 
@@ -111,7 +111,7 @@
 <h1>hotcopy(成功)</h1>
 <blockquote><p>このサブコマンドは、すべてのフック、設定ファイル、そしてもちろんデータベースファイルを含む、リポジトリの完全な「ホット」バックアップを作成します。</p><cite><a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.4-final/svn.ref.svnadmin.c.hotcopy.html">http://www.caldron.jp/~nabetaro/svn/svnbook-1.4-final/svn.ref.svnadmin.c.hotcopy.html</a></cite></blockquote>
 <p>ただし可搬性に乏しいとの事。今回は同マシン、OS、Subversionバージョンなので大丈夫だと思う。まずAサーバでコピー。</p>
-<pre class="">$ svnadmin hotcopy リポジトリパス(/home/xxx/yyyなど) コピー先のリポジトリパス
+<pre>$ svnadmin hotcopy リポジトリパス(/home/xxx/yyyなど) コピー先のリポジトリパス
 a /home/xxx/yyy OK
 a /home/xxx/yyy/hooks OK
 a /home/xxx/yyy/hooks/start-commit.tmpl 3K

@@ -97,7 +97,7 @@
 <ul><li>WindowsならRubyInstaller + DevKit</li><li>MacならRVM<ul><li>自分でも少しまとめている <a href="2011-12-04-1323009249">2011-12-04-1323009249</a></li></ul></li></ul>
 <h2>Redmineインストール</h2>
 <ul><li>公式を参考に<ul><li>自分でも少しまとめている <a href="2011-05-01-1304204171">2011-05-01-1304204171</a></li><li>同じく <a href="2011-09-07-1315401886">2011-09-07-1315401886</a></li></ul></li><li>rmagickを除外する</li></ul>
-<pre class="">bundle install -without development test rmagick -path vendor/bundle</pre>
+<pre>bundle install -without development test rmagick -path vendor/bundle</pre>
 <h2>Rubyデバッグ環境</h2>
 <ul><li>ruby-debug-ide…だがこの環境ではうまく動かなくなってしまった</li><li>ruby-debug-base19が必要らしいが、そのまま落としてきても動かない<ul><li>preオプションを入れる</li></ul></li></ul>
 <p>>|?|</p>
@@ -123,7 +123,7 @@
 <ul><li>Windows XP</li><li>Ruby 1.8.7</li><li>Redmine 1.0.0.stable (SQLite)</li></ul>
 <h2>手順</h2>
 <ul><li>はじめにRedmine Pluginのスケルトンを作成する。名前はdelete_menuとした</li></ul>
-<pre class="">$ cd REDMINE_ROOT
+<pre>$ cd REDMINE_ROOT
 $ ruby script\generate redmine_plugin delete_menu
 ./script/../config/../vendor/rails/railties/lib/rails/gem_dependency.rb:119:Warning: Gem::Dependency#version_requirements is deprecated and will be removed on or after August 2010.  Use #requirement
       create  vendor/plugins/redmine_delete_menu/app/controllers
@@ -144,7 +144,7 @@ $ ruby script\generate redmine_plugin delete_menu
       create  vendor/plugins/redmine_delete_menu/config/locales/en.yml
       create  vendor/plugins/redmine_delete_menu/test/test_helper.rb</pre>
 <ul><li>vendor/pluginにredmine_delete_menuというフォルダができている</li></ul>
-<pre class="">$ ls
+<pre>$ ls
 ...
 redmine_delete_menu/
 ...
@@ -159,7 +159,7 @@ app/        config/     init.rb*    lib/</pre>
 +  delete_menu_item :top_menu, :help
  end</pre>
 <ul><li>そして起動</li></ul>
-<pre class="">$ cd REDMINE_ROOT
+<pre>$ cd REDMINE_ROOT
 $ ruby script\server -e production
 =&gt; Booting WEBrick
 =&gt; Rails 2.3.5 application starting on http://0.0.0.0:3000
@@ -175,11 +175,11 @@ $ ruby script\server -e production
 <ul><li>Windows XP</li><li>Ruby 1.9.3</li><li>Redmine 1.4.0.stable (SQLite)</li></ul>
 <h2>手順その2</h2>
 <ul><li>いきなりgenerateしようとしたらbundle installしろと言われた</li></ul>
-<pre class="">$ ruby script\generate redmine_plugin delete_menu
+<pre>$ ruby script\generate redmine_plugin delete_menu
 Some gems may need to be installed or updated.
 Please run `bundle install --without development test`.</pre>
 <ul><li>なのでbundle install</li></ul>
-<pre class="">$ bundle install --without development test --path ./vendor/bundle
+<pre>$ bundle install --without development test --path ./vendor/bundle
 Fetching source index for http://rubygems.org/
 Installing rake (0.9.2.2)
 Installing activesupport (2.3.14)
@@ -196,7 +196,7 @@ Installing pg (0.13.2)
 Installing rails (2.3.14)
 Installing rmagick (2.13.1) with native extensions</pre>
 <ul><li>rmagickが入らず止まりっぱなし……そういえば、rmagickは使わなければwithoutしてしまってもいいです的な事を言われていた気がするのでそれをプラス</li></ul>
-<pre class="">$ bundle install --without development test rmagick --path ./vendor/bundle
+<pre>$ bundle install --without development test rmagick --path ./vendor/bundle
 Fetching source index for http://rubygems.org/
 Using rake (0.9.2.2)
 Using activesupport (2.3.14)
@@ -217,7 +217,7 @@ Installing tzinfo (0.3.33)
 Using bundler (1.0.21)
 Your bundle is complete! It was installed into ./vendor/bundle</pre>
 <ul><li>再度。先ほどbundlerを使ったのでbundle exec</li></ul>
-<pre class="">$ bundle exec ruby script\generate redmine_plugin delete_menu
+<pre>$ bundle exec ruby script\generate redmine_plugin delete_menu
 C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/activesupport-2.3.14/lib/active_support/inflector.rb:3:in `&lt;top (required)&gt;': iconv will be deprecated in the future, use String#encode instead.
 NOTE: Gem.source_index is deprecated, use Specification. It will be removed on or after 2011-11-01.
 Gem.source_index called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/rails-2.3.14/lib/rails/gem_dependency.rb:21.
@@ -262,7 +262,7 @@ Gem::SourceIndex#each called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems
 +  delete_menu_item :top_menu, :help
  end</pre>
 <ul><li>で、起動。ここでもbundle exec</li></ul>
-<pre class="">$ bundle exec ruby script\server -e production
+<pre>$ bundle exec ruby script\server -e production
 C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/activesupport-2.3.14/lib/active_support/inflector.rb:3:in `&lt;top (required)&gt;': iconv will be deprecated in the future, use String#encode instead.
 =&gt; Booting WEBrick
 =&gt; Rails 2.3.14 application starting on http://0.0.0.0:3000

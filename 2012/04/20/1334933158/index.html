@@ -92,14 +92,14 @@
 <ul><li><a href="http://www.growlforwindows.com/gfw/displays.aspx">Growl for Windows</a> ここから落とす。</li></ul>
 <h2>Gem入手</h2>
 <ul><li>Gemfileファイルを作って以下のgemファイルを記載</li></ul>
-<pre class="">gem 'ZenTest'
+<pre>gem 'ZenTest'
 gem 'autotest-growl'</pre>
 <ul><li>bundle install</li></ul>
 <h2>.autotest</h2>
 <ul><li>前回何も記載しなかった.autotestファイルに以下を追記。</li></ul>
-<pre class="">require 'autotest/growl'</pre>
+<pre>require 'autotest/growl'</pre>
 <h2>実行</h2>
-<pre class="">$ bubdle exec autotest
+<pre>$ bubdle exec autotest
 loading autotest/rspec2
 
 
@@ -115,19 +115,19 @@ Finished in 0.03125 seconds
 <a name="seeall"></a>
 <h2>Windows用でないとダメみたい？</h2>
 <ul><li><a href="http://rubyist.g.hatena.ne.jp/rochefort/20100414/p1">autospecの結果をgrowlで通知〜windows編 - うんたらかんたらRuby - Rubyist</a> autotest-growlをWindows用に修正したgemが。Gemfileのautotest-growlは削除してkarl-autotest-growlとDL先のsourceを追加。</li></ul>
-<pre class="">+ 3 source &quot;http://gems.github.com&quot;
+<pre>+ 3 source &quot;http://gems.github.com&quot;
   8 gem 'ZenTest'
 - 9 gem 'autotest-growl'
 + 9 gem 'karl-autotest-growl'</pre>
 <ul><li>bundle install</li><li>bubdle exec autotest</li></ul>
 <h2>ZenTest実行されなくなった…</h2>
-<pre class="">- 8 gem 'ZenTest'
+<pre>- 8 gem 'ZenTest'
 + 9 gem 'autotest'
 +10 gem 'autotest-growl'
 +11 gem 'autotest-fsevent'</pre>
 <p>fseventをインストールするにはDevelopment kitが必要らしい。<a href="2012-02-28-1330436604">2012-02-28-1330436604</a> インストール方法。</p>
 <p>で、.autotestに追加。</p>
-<pre class="">+ require 'autotest/fsevent'</pre>
+<pre>+ require 'autotest/fsevent'</pre>
 </div>
 
 <div class="pagination">

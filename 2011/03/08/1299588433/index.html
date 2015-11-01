@@ -85,10 +85,10 @@
 <p>以下のデータを用意します</p>
 <table><tr><th>Username</th><td>はてなID</td></tr><tr><th>Nonce</th><td>HTTPリクエスト毎に生成したセキュリティ・トークンをBASE64エンコードしたもの<span class="footnote"><a href="#f1" title="一意な値ならとりあえず動くようです。" name="fn1">*1</a></span></td></tr><tr><th>Created</th><td>Nonce作成時のタイムスタンプをISO-8601表記で記述したもの</td></tr><tr><th>PasswordDigest</th><td>「Nonce+Created+はてなのパスワード」をSHA1でダイジェスト化しBASE64エンコードしたもの</td></tr></table>
 <p>これらのデータをX-WSSEヘッダに以下の形式で格納します。</p>
-<pre class="">UsernameToken Username=&quot;USERNAME&quot;, PasswordDigest=&quot;PASSWORDDIGEST&quot;, Nonce=&quot;NONCE&quot;, Created=&quot;CREATED&quot;</pre>
+<pre>UsernameToken Username=&quot;USERNAME&quot;, PasswordDigest=&quot;PASSWORDDIGEST&quot;, Nonce=&quot;NONCE&quot;, Created=&quot;CREATED&quot;</pre>
 <h1>POSTする</h1>
 <p>ヘッダは完成したので、次にブックマークする情報を用意します。形式はxmlで以下のようなフォーマットで作成します。<span class="footnote"><a href="#f2" title="ブックマークコメントを[]でくくるとタグになります。[Google]みたいな。" name="fn2">*2</a></span></p>
-<pre class="">&lt;entry xmlns=&quot;http://purl.org/atom/ns#&quot;&gt;
+<pre>&lt;entry xmlns=&quot;http://purl.org/atom/ns#&quot;&gt;
                 &lt;title&gt;dummy&lt;/title&gt;
                 &lt;link rel=&quot;related&quot; type=&quot;text/html&quot; href=&quot;ブックマークするURL&quot; /&gt;
                 &lt;summary type=&quot;text/plain&quot;&gt;ブックマークコメント&lt;/summary&gt;

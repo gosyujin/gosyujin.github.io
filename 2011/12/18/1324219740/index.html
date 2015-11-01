@@ -84,9 +84,9 @@
 <ul><li><a href="http://d.hatena.ne.jp/osyo-manga/20111201/1322665228">【Vim Advent Calendar 2011】Vim の開発環境【1日目】 - C++でゲームプログラミング</a></li><li><a href="http://d.hatena.ne.jp/arcright/20100207/1265551998">Vimをソースからインストール - WapBox</a></li><li><a href="http://sites.google.com/site/vimdocja/various-html">http://sites.google.com/site/vimdocja/various-html</a></li><li><a href="http://www.hazama.nu/t2o2/archives/002696.shtml">さくらインターネットの共用サーバに vim をインストールする - talk to oneself 2</a></li><li><a href="http://blog.ville.jp/2011/03/11/536">最新のvimをインストールする | 村式流 イッパシエンジニアへの道</a></li><li><a href="http://ystyle.jpn.org/geekstyle/archives/9">vimインストール «  GeekStyle</a></li></ul>
 <h1>ダウンロード</h1>
 <p>はじめにVimをgetする。</p>
-<pre class="">$ wget ftp://ftp.vim.org/pub/vim/unix/vim-7.3.tar.bz2</pre>
+<pre>$ wget ftp://ftp.vim.org/pub/vim/unix/vim-7.3.tar.bz2</pre>
 <p>次にvim7.3の最新のパッチファイルを確認して、ftp://ftp.vim.org/pub/vim/patches/7.3/からダウンロードする。今382だった。</p>
-<pre class="">$ cd vim73
+<pre>$ cd vim73
 $ mkdir patches
 $ curl -O 'ftp://ftp.vim.org/pub/vim/patches/7.3/7.3.[001-382]'
 $ cd ../
@@ -104,12 +104,12 @@ patching file src/version.c
 <p>configureで色々オプションを指定する必要があるよう。</p>
 <table><tr><th>--disable-selinux</th><td>Don't check for SELinux support.</td></tr><tr><th>--enable-xim</th><td>Include XIM input support.</td></tr><tr><th>--enable-multibyte</th><td>Include multibyte editing support.</td></tr><tr><th>--enable-fontset</th><td>Include X fontset output support.</td></tr><tr><th>--enable-rubyinterp=OPTS</th><td>Include Ruby interpreter.  default=no OPTS=no/yes/dynamic</td></tr><tr><th>--enable-pythoninterp=OPTS</th><td>Include Python interpreter. default=no OPTS=no/yes/dynamic</td></tr><tr><th>--with-features=TYPE</th><td>TYPE: tiny, small, normal, big or huge (default: normal)</td></tr></table>
 <p>うーん。xim(X Input Method)とX fontsetはいらないのかも？</p>
-<pre class="">$ ./configure --disable-selinux --enable-multibyte --enable-rubyinterp --enable-pythoninterp --with-features=huge
+<pre>$ ./configure --disable-selinux --enable-multibyte --enable-rubyinterp --enable-pythoninterp --with-features=huge
 $ make
 $ sudo make install</pre>
 <h1>設定ファイル</h1>
 <p>$HOME/_vimrcもしくは.vimrcファイルの中に書きこんでいく。とりあえずこんなものを設定してみた。なお、.vimrcファイルではダブルクォーテーションがコメントとなる。</p>
-<pre class="">&quot;オートインデント
+<pre>&quot;オートインデント
 set autoindent
 &quot;バックアップディレクトリ
 set backupdir=/tmp/vimbackup
@@ -128,7 +128,7 @@ set shiftwidth=2</pre>
 <p>vim　カラースキーマなどでググると色々出てくる。もしくはvimをインストールした場所(/usr/local/share/vimなど)/vim73/colorsの下にもある。このファイルを$HOME/vimfiles/colorsもしくは$HOME/.vim/colorsに放り込む。</p>
 <ul><li><a href="http://ethanschoonover.com/solarized">Solarized - Ethan Schoonover</a></li><li><a href="http://ethanschoonover.com/solarized/vim-colors-solarized">README - Ethan Schoonover</a></li></ul>
 <p>今回はSolarizedを入れてみる。</p>
-<pre class="">$ mkdir -p .vim/bundle
+<pre>$ mkdir -p .vim/bundle
 $ mkdir .vim/colors
 $ cd .vim/bundle/
 $ git clone git://github.com/altercation/vim-colors-solarized.git
@@ -140,7 +140,7 @@ Receiving objects: 100% (336/336), 92.06 KiB, done.
 Resolving deltas: 100% (102/102), done.
 $ cp vim-colors-solarized/colors/solarized.vim ../colors/</pre>
 <p>最後に.vimrcファイルにこのスキーマを読み込む設定を書く。</p>
-<pre class="">syntax enable
+<pre>syntax enable
 set background=dark
 colorscheme solarized</pre>
 <p>これでvimを使う準備はOK。どんどんvim使っていこう。</p>

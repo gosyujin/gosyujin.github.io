@@ -77,14 +77,14 @@
 
 <div class="content">
 <p>SubversionでExcelファイルをコミットしようとするとエラーが発生。</p>
-<pre class="">ファイル 'C:\～～～\なんとか管理表.xls' の MIMEタイプ属性はバイナリです</pre>
+<pre>ファイル 'C:\～～～\なんとか管理表.xls' の MIMEタイプ属性はバイナリです</pre>
 <p>んーなんでだっけー？.xlsファイルのmime-typeを指定してないからかなー？ という事でconfigファイルにmime-type指定。<a href="http://trac.symfony-project.org/wiki/SymfonyRepositoryTips">SymfonyRepositoryTips - symfony - Trac</a> ここを参考に。</p>
-<pre class=""> *.xls = svn:mime-type=application/vnd.ms-excel</pre>
+<pre> *.xls = svn:mime-type=application/vnd.ms-excel</pre>
 <p>しかしエラーは変わらず。なんでだー。というか今までは別にmime-type指定しなくてもいけてた気がするのに…と、ここまでやってconfigをよく見ると</p>
-<pre class=""> *.xls = svn:mime-type=application/vnd.ms-excel
+<pre> *.xls = svn:mime-type=application/vnd.ms-excel
  * = svn:eol-style=native</pre>
 <p>こうなってた。全部のファイルにeol-style=nativeしている！！<span class="footnote"><a href="#f1" title="自分でやったんだけど" name="fn1">*1</a></span>　とあるファイル種別<span class="deco" style="font-weight:bold;">以外</span>、みたいな指定はできない？　っぽいので、横着せずに一拡張子毎に設定を書いてうまく行きました。 </p>
-<pre class=""> *.xls = svn:mime-type=application/vnd.ms-excel
+<pre> *.xls = svn:mime-type=application/vnd.ms-excel
  *.sh = svn:eol-style=native</pre>
 <div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 自分でやったんだけど</p></div>
 </div>

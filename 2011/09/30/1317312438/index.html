@@ -85,10 +85,10 @@
 <ul><li>選んだメール(本文と添付ファイル)をまとめてDLしてくるだけの簡単なお仕事はできるようになった<ul><li><a href="2011-05-17-1305560776">2011-05-17-1305560776</a></li><li><a href="2011-07-09-1310140318">2011-07-09-1310140318</a></li><li><a href="2011-08-23-1314103220">2011-08-23-1314103220</a></li></ul></li></ul>
 <p>しかし、社内セキュリティGWの設定？　のためかzipとかexeとか怪しい拡張子が付いている添付ファイルは一旦msgファイルに固められるという仕様のためそのままでは添付ファイルが見れない。</p>
 <p>こういうメールが</p>
-<pre class="">メール
+<pre>メール
 ┗添付ファイル.zip</pre>
 <p>届いた時にはこうなっている </p>
-<pre class="">メール
+<pre>メール
 ┗ラップ.msg(＼あやしいファイルだから注意してDLしてね／)
 　┗本来の添付ファイル.zip</pre>
 <p>なんとかRubyからmsgファイル内を解析して添付ファイルを引っこ抜いて保存ができまいか…というのが今回の問題。</p>
@@ -99,7 +99,7 @@
 <p>あと、msgparserはJavaライブラリなので当初はJRubyで書けば何とかなるかなと思ってました。簡単なサンプルは <a href="http://www.rgagnon.com/javadetails/java-0613.html">Read an Outlook MSG file - Real&#39;s Java How-to</a> このページのような感じ。が、今まで書いたコードをJRubyで実行すると失敗してしまったので方向転換；；　RubyからJavaVMを操作できるrjbというライブラリを使う事に。</p>
 <h1>ダウンロード・インストール</h1>
 <ul><li>msgparser<ul><li><a href="http://auxilii.com/msgparser/Page.php?id=16000">msgparser - Downloads...</a> よりmsgparserをDL<ul><li><a href="http://poi.apache.org/poifs/">Apache POI - POIFS - Java implementation of the OLE 2 Compound Document format</a>や<a href="http://www.freeutils.net/source/jtnef/">JTNEF - Java TNEF package</a>とかが必要になるのですが、上記のmsgparse.zipの中に全部入ってます<span class="footnote"><a href="#f1" title="complete package including source code, binaries and third party librariesと書いてあった" name="fn1">*1</a></span></li></ul></li><li>distよりmasparser-X.XX.jarを、libよりpoi-X.X-YYYYMMDD.jarとtnef-X.X.X.jarを取得し、同じプロジェクト内にコピー。とりあえずlibフォルダを作ってそこに入れました</li></ul></li><li>rjb<ul><li>gemで。ただし、当然というかJavaが入っていないと失敗する模様。環境変数JAVA_HOMEも設定している必要があるみたい</li></ul></li></ul>
-<pre class="">gem install rjb</pre>
+<pre>gem install rjb</pre>
 <h1>ソース</h1>
 <p>ソース全体は <a href="https://github.com/gosyujin/outlook_for_ruby">gosyujin/outlook_for_ruby · GitHub</a> 。msgParse.rbが本体、ライブラリがlibに入っています。</p>
 <p>使い方としてはMsgParseをnewしてinputMsgで.msgファイルのパス指定、saveFileで添付ファイルぶっこぬいて出力先に保存としたい。こんな感じで。</p>

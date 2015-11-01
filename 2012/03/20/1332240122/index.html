@@ -87,22 +87,22 @@
 <h1>先に結論</h1>
 <p>Windows環境ではWindows用に自力でビルドしなければならない！</p>
 <ul><li><a href="http://rubygems.org/gems/rcov">rcov | RubyGems.org | your community gem host</a>よりgemをDL</li><li><a href="http://www.microsoft.com/japan/msdn/vstudio/express/">Microsoft Visual Studio Express</a>からVisual C++ 2010 Express Editionを入手しインストール</li><li>全てのプログラム -> Microsoft Visual Studio 2010 Express -> Visual Studio コマンド プロンプト (2010)を起動。以後ビルドはこのプロンプトで実施する</li><li>%RUBY_HOME%\lib\ruby\1.8\i386-mswin32\のconfig.hのMSC_VERの記述を一旦消す</li></ul>
-<pre class="">#if _MSC_VER != 1200
+<pre>#if _MSC_VER != 1200
 #error MSC version unmatch: _MSC_VER: 1200 is expected.
 #endif</pre>
 <ul><li>env.hのFRAMEを以下のように編集</li></ul>
-<pre class="">extern struct FRAME {</pre>
-<pre class="">extern __declspec(dllimport) struct FRAME {</pre>
+<pre>extern struct FRAME {</pre>
+<pre>extern __declspec(dllimport) struct FRAME {</pre>
 <ul><li>gem install！！</li></ul>
 <p>以下は四苦八苦した記録の残骸。</p>
 <h1>手順(本当に順番をメモっているのでいらない操作が多い)</h1>
 <h2>rcovインストール</h2>
 <p>BundlerでGemを管理するのでGemfileにrcovを追加。</p>
-<pre class="">gem 'rcov'</pre>
+<pre>gem 'rcov'</pre>
 <p>追加後、インストール……</p>
-<pre class="">$ bundle install</pre>
+<pre>$ bundle install</pre>
 <p>するとエラーが。</p>
-<pre class="">C:/rubies/Ruby/bin/ruby.exe extconf.rb
+<pre>C:/rubies/Ruby/bin/ruby.exe extconf.rb
 creating Makefile
 
 nmake
@@ -114,7 +114,7 @@ Gem files will remain installed in C:/project/excel_for_ruby/vendor/bundle/ruby/
 Make sure that `gem install rcov -v '1.0.0'` succeeds before bundling.</pre>
 <p>bundlingする前にgem install rcov -v '1.0.0'してくれと？　Bundler管理下にはおけないのだろうか。</p>
 <p>じゃあGemfileから記述を消して、ターミナルからgem installするか。</p>
-<pre class="">$ gem install rcov -v '1.0.0'
+<pre>$ gem install rcov -v '1.0.0'
 
 nmake
 'nmake' は、内部コマンドまたは外部コマンド、
@@ -123,7 +123,7 @@ nmake
 <h2>nmakeインストール</h2>
 <p><a href="http://johnbokma.com/perl/make-for-windows.html">Make for Microsoft Windows: NMake</a> のページにyou have to download NMake 1.5 from the Microsoft Knowledge Base, article 132084 page.と記載されているのでリンクをたどりnmakeをDLし、パスが通っているフォルダへ突っ込む。(デフォルトだとnmake15.exeのようにバージョンがファイル名にくっついているっぽいのでnmake.exeにリネームしておく)</p>
 <p>再度。</p>
-<pre class="">$ gem install rcov -v '1.0.0'
+<pre>$ gem install rcov -v '1.0.0'
 Building native extensions.  This could take a while...
 ERROR:  Error installing rcov:
         ERROR: Failed to build gem native extension.
@@ -153,19 +153,19 @@ m_make.out
 <p>まだ駄目？　clとはC Compilerの事らしい。手に入れるには<a href="http://www.microsoft.com/japan/msdn/vstudio/express/">Microsoft Visual Studio Express</a>からVisual C++ 2010 Express Editionをインストールするくらいしか方法がないみたい。</p>
 <p>......インストール中.......3時間くらいかかった</p>
 <p>で、インストールフォルダにcl.exeが作成されるので、これを実行！</p>
-<pre class="">$ cd C:\Program Files\Microsoft Visual Studio 10.0\VC\bin
+<pre>$ cd C:\Program Files\Microsoft Visual Studio 10.0\VC\bin
 $ cl
 
 mspdb100.dllが見つからなかったため、このアプリケーションを開始できませんでした。</pre>
 <p>なん……だと……やはりコマンドラインから実行するのは無理？</p>
 <p>とりあえずmspdb100.dllを探してみる…と、C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDEにあった。これをclと同じフォルダに持ってくると……。</p>
-<pre class="">$ cl
+<pre>$ cl
 Microsoft(R) 32-bit C/C++ Optimizing Compiler Version 16.00.30319.01 for 80x86
 Copyright (C) Microsoft Corporation.  All rights reserved.
 
 使い方: cl [ オプション... ] ファイル名... [ /link リンク オプション... ]</pre>
 <p>きたー！　じゃあこのcl.exeとmspdb100.dllをパスの通ってる場所にコピーして……再度gem！</p>
-<pre class="">$ gem install rcov -v '1.0.0'
+<pre>$ gem install rcov -v '1.0.0'
 Building native extensions.  This could take a while...
 ERROR:  Error installing rcov:
         ERROR: Failed to build gem native extension.
@@ -188,7 +188,7 @@ Gem files will remain installed in C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.
 Results logged to C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.0.0/ext/rcovrt/gem_make.ou</pre>
 <p>エラった！　っけど一歩進んだ？clui.dllがないと。うーん。</p>
 <p>ここで全てのプログラムにMicrosoft Visual Studio 2010 Express -> Visual Studio コマンド プロンプト (2010)というメニューが増えている事に気づく。きちんとVisual Studio用の設定がなされていなかったから失敗したんだ多分！　再度挑戦。</p>
-<pre class="">C:\rubies\Ruby\lib\ruby\gems\1.8\cache&gt;gem install --local rcov-1.0.0.gem
+<pre>C:\rubies\Ruby\lib\ruby\gems\1.8\cache&gt;gem install --local rcov-1.0.0.gem
 Building native extensions.  This could take a while...
 ERROR:  Error installing rcov-1.0.0.gem:
         ERROR: Failed to build gem native extension.
@@ -214,11 +214,11 @@ Stop.
 Gem files will remain installed in C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.0.0 for inspection.
 Results logged to C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.0.0/ext/rcovrt/gem_make.out</pre>
 <p>お！　ちょっと進んだ。MSC_VERがアンマッチになっているようなので、これをなおす。c:\rubies\ruby\lib\ruby\1.8\i386-mswin32\のconfig.hを開き編集。</p>
-<pre class="">#if _MSC_VER != 1200
+<pre>#if _MSC_VER != 1200
 #error MSC version unmatch: _MSC_VER: 1200 is expected.
 #endif</pre>
 <p>これを一時的に退避させる。んで、再度。</p>
-<pre class="">        cl -nologo -LD -Fercovrt.so callsite.obj rcovrt.obj msvcrt-ruby18.lib  oldnames.lib user32.lib advapi32.lib shell32.lib ws2_32.lib   -link -incremental:no -debug -opt:ref -opt:icf -dll -libpath:&quot;.&quot; -libpath:&quot;C:/rubies/Ruby/lib&quot;  -implib:rcovrt-i386-mswin32.lib -pdb:rcovrt-i386-mswin32.pdb -def:rcovrt-i386-mswin32.def
+<pre>        cl -nologo -LD -Fercovrt.so callsite.obj rcovrt.obj msvcrt-ruby18.lib  oldnames.lib user32.lib advapi32.lib shell32.lib ws2_32.lib   -link -incremental:no -debug -opt:ref -opt:icf -dll -libpath:&quot;.&quot; -libpath:&quot;C:/rubies/Ruby/lib&quot;  -implib:rcovrt-i386-mswin32.lib -pdb:rcovrt-i386-mswin32.pdb -def:rcovrt-i386-mswin32.def
    ライブラリ rcovrt-i386-mswin32.lib とオブジェクト rcovrt-i386-mswin32.exp を作成中
 callsite.obj : error LNK2001: 外部シンボル &quot;_ruby_frame&quot; は未解決です。
 rcovrt.obj : error LNK2019: 未解決の外部シンボル _ruby_frame が関数 _coverage_in
@@ -232,10 +232,10 @@ Gem files will remain installed in C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.
 Results logged to C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.0.0/ext/rcovrt/gem_make.out</pre>
 <p>おおおなんか見つからないって出てきた……。</p>
 <p><a href="http://www.freia.jp/taka/blog/762/">2011/09/06 Rubyのrcov-0.9.8 for Windows のビルド - 清水川Web</a>という事らしいので、env.hを編集。</p>
-<pre class="">extern struct FRAME {</pre>
-<pre class="">extern __declspec(dllimport) struct FRAME {</pre>
+<pre>extern struct FRAME {</pre>
+<pre>extern __declspec(dllimport) struct FRAME {</pre>
 <p>に。いざ！</p>
-<pre class="">C:\rubies\Ruby\lib\ruby\gems\1.8\cache&gt;gem install --local rcov-1.0.0.gem
+<pre>C:\rubies\Ruby\lib\ruby\gems\1.8\cache&gt;gem install --local rcov-1.0.0.gem
 Building native extensions.  This could take a while...
 Successfully installed rcov-1.0.0
 1 gem installed

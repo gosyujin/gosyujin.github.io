@@ -88,17 +88,17 @@
 <h1>手順</h1>
 <h2>Lokka入手、インストール</h2>
 <p>LokkaをGitHubからCloneして、Bundle install。--withoutオプションでmysql, postgresql, sqliteから使わないDBを指定できる。</p>
-<pre class="">$ git clone git://github.com/komagata/lokka.git$ cd lokka
+<pre>$ git clone git://github.com/komagata/lokka.git$ cd lokka
 $ bundle install ./vendor/bundle --without development mysql sqlite</pre>
 <p>ん、何かエラッた。</p>
-<pre class="">Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native extension.
+<pre>Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native extension.
 (略)
 Gem files will remain installed in /home/kk_Ataka/github/lokka/vendor/bundle/ruby/1.9.1/bundler/gems/do-d7cb262d89a1/do_postgres for inspection.
 Results logged to /home/kk_Ataka/github/lokka/vendor/bundle/ruby/1.9.1/bundler/gems/do-d7cb262d89a1/do_postgres/ext/do_postgres/gem_make.out
 An error occured while installing do_postgres (0.10.6), and Bundler cannot continue.
 Make sure that `gem install do_postgres -v '0.10.6'` succeeds before bundling.</pre>
 <p>do_postgresがbundlerだとインストールできてない…？</p>
-<pre class="">$ gem install do_postgres
+<pre>$ gem install do_postgres
 Fetching: addressable-2.2.6.gem (100%)
 Fetching: data_objects-0.10.7.gem (100%)
 Fetching: do_postgres-0.10.7.gem (100%)
@@ -115,7 +115,7 @@ necessary libraries and/or headers.  Check the mkmf.log file for more
 details.  You may need configuration options.</pre>
 <p>postgresが入っていなかったので入れる。</p>
 <p><span class="deco" style="color:#FF0000;">※やっぱりSQLite3でやることにしたため以下はメモ。</span></p>
-<pre class="">$ sudo yum install postgresql-devel
+<pre>$ sudo yum install postgresql-devel
 (略)
 $ cd ~/.rvm/gems/ruby-1.9.3-p0/gems/do_postgres-0.10.7/ext/do_postgres
 $ ruby extconf.rb
@@ -138,7 +138,7 @@ $ make install
 installing default do_postgres libraries</pre>
 <p><span class="deco" style="color:#FF0000;">メモここまで。</span></p>
 <p>Lokkaのディレクトリに戻って再度bundle install...。</p>
-<pre class="">Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native extension.
+<pre>Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native extension.
 
         /home/kk_Ataka/.rvm/rubies/ruby-1.9.3-p0/bin/ruby extconf.rb
 extconf.rb:10: Use RbConfig instead of obsolete and deprecated Config.
@@ -159,14 +159,14 @@ An error occured while installing nokogiri (1.5.0), and Bundler cannot continue.
 Make sure that `gem install nokogiri -v '1.5.0'` succeeds before bundling.
 </pre>
 <p>nokogiriはlibxml2が必要なのか。</p>
-<pre class="">$ sudo yum install libxml2-devel</pre>
+<pre>$ sudo yum install libxml2-devel</pre>
 <p>libxsltもか。</p>
-<pre class="">$ sudo yum install libxslt-devel</pre>
+<pre>$ sudo yum install libxslt-devel</pre>
 <p>んで満を持してBundle。</p>
-<pre class="">$ bundle install ./vendor/bundle --without development mysql postgres</pre>
+<pre>$ bundle install ./vendor/bundle --without development mysql postgres</pre>
 <h2>もろもろの設定、ローカルで起動</h2>
 <p>database.default.ymlファイルをコピーしてdatabase.ymlを作成。そしてDBセットアップから起動。</p>
-<pre class="">$ cp database.default.yml database.yml
+<pre>$ cp database.default.yml database.yml
 $ bundle exec rake db:setup
 $ bundle exec rackup</pre>
 <p><a href="http://localhost:9292">http://localhost:9292</a>にアクセスし、TestSiteが表示されたらOK！</p>
@@ -175,10 +175,10 @@ $ bundle exec rackup</pre>
 <ul><li>初期IDとパスワードがtest/testなのでAdmin loginよりログインして変更する</li><li>プラグインは<a href="http://lokka.org/plugins">Plugins - Lokka</a>から欲しいものをDLする。public/plugin/に置けばいいらしいが…？</li></ul>
 <h1>Herokuにpush</h1>
 <p>Gitでpushする手順は<a href="http://d.hatena.ne.jp/kk_Ataka/20111126/1322240459">前回の記事を参照</a>。その後、Heroku側のDBセットアップを。</p>
-<pre class="">$ bundle exec heroku rake db:setup</pre>
+<pre>$ bundle exec heroku rake db:setup</pre>
 <h2>Herokuのタイムゾーン</h2>
 <p>Herokuのタイムゾーンが日本になっていない。日本に住んでいるのでブログ更新したら更新日は日本時間で出てほしいなと思ったが、これはconfig:addで設定でけるよう。</p>
-<pre class="">$ bundle exec heroku config:add TZ=Asia/Tokyo</pre>
+<pre>$ bundle exec heroku config:add TZ=Asia/Tokyo</pre>
 </div>
 
 <div class="pagination">

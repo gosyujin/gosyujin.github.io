@@ -89,13 +89,13 @@
 <h1>手順</h1>
 <h2>passengerインストール</h2>
 <p>Passengerを使うにはfastthread、daemon_controllerが必要らしい。</p>
-<pre class="">$ gem install --local fastthread-1.0.7.gem
+<pre>$ gem install --local fastthread-1.0.7.gem
 $ gem install --local daemon_controller-0.2.6.gem
 $ gem install --local passenger-3.0.9.gem</pre>
 <p>※スタンドアロンなマシンだったため。ネットにつながっていればgem install passengerで全部入るはず。</p>
 <h1>passenger-install-apache2-module実行</h1>
 <p>対話形式でApacheのモジュール等を確認・インストールしていく。はじめにpassener-install-apache2-moduleを実行するとこんなメッセージが出てくる。</p>
-<pre class="">$ passenger-install-apache2-module
+<pre>$ passenger-install-apache2-module
 Welcome to the Phusion Passenger Apache 2 module installer, v3.0.9.
 
 This installer will guide you through the entire installation process. It
@@ -113,7 +113,7 @@ solve any problems.
 Press Enter to continue, or Ctrl-C to abort.</pre>
 <ol><li>Apacheモジュールをインストールしたい</li><li>Apacheの設定を知りたい</li><li>Railsアプリのデプロイ方法をしりたい</li></ol>
 <p>の中から一つ選んだらアドバイスしてやるよっと言っている？　のようなので1を選択。必要なソフトウェアがインストールされているかチェックされる。</p>
-<pre class="">Checking for required software...
+<pre>Checking for required software...
 
  * GNU C++ compiler... found at /usr/local/bin/g++
  * Curl development headers with SSL support... not found
@@ -134,7 +134,7 @@ But don't worry, this installer will tell you how to install them.
 
 Press Enter to continue, or Ctrl-C to abort.</pre>
 <p>結構インストールされていないものが多いな。メッセージでも「いろいろ入っていないものが見受けられるが心配すんな、俺がお前にインストール方法教えてやるよ！」と言われているようのでそのままエンター。</p>
-<pre class="">Installation instructions for required software
+<pre>Installation instructions for required software
 
  * To install Curl development headers with SSL support:
    Please download Curl from http://curl.haxx.se/libcurl and make sure you install it with SSL support.
@@ -173,7 +173,7 @@ a look at the Users Guide:
 <ul><li>configのオプションに --openssldir を指定してみてもダメだった。</li></ul>
 <h1>とかなんとかしてるうちに</h1>
 <p>Rubyが実行できなくなった。lddで調べてみると、シンボルが見つからなくなっている。</p>
-<pre class="">
+<pre>
         librt.so.1 =&gt;    /usr/lib/librt.so.1
         libdl.so.1 =&gt;    /usr/lib/libdl.so.1
         libcrypt_d.so.1 =&gt;       /usr/lib/libcrypt_d.so.1
@@ -190,7 +190,7 @@ a look at the Users Guide:
         /platform/SPARC-XXXX/lib/libc_psr.so.1
         /platform/SPARC-XXXX/lib/libmd_psr.so.1</pre>
 <p>md5.soを調べてみる。</p>
-<pre class="">$ cd /usr/local/lib/ruby/1.8/sparc-solaris2.10/digest
+<pre>$ cd /usr/local/lib/ruby/1.8/sparc-solaris2.10/digest
 $ ldd -d md5.so
         librt.so.1 =&gt;    /usr/lib/librt.so.1
         libdl.so.1 =&gt;    /usr/lib/libdl.so.1

@@ -83,25 +83,25 @@
 <h1>原因と解決手順</h1>
 <h2>気づき</h2>
 <ul><li>プラグインを入れようと思ったら、なんでかJenkinsの管理リンクが見当たらなくなった</li><li>管理画面のアドレスは /manage なので直にアクセスしてみる</li><li>Firefoxだとこんなエラーが出た<span class="footnote"><a href="#f1" title="なので、はじめは格納しているデータが壊れちゃったのかと思った" name="fn1">*1</a></span></li></ul>
-<pre class="">！　内容符号化 (Content-Encoding) に問題があります
+<pre>！　内容符号化 (Content-Encoding) に問題があります
 　　不正または不明な形式で圧縮されているため、ページを表示できません。
 
 　・この問題を Web サイトの管理者に報告してください。
 　[再試行]</pre>
 <ul><li>試しにChromeでもやってみたがこう</li></ul>
-<pre class="">このウェブページにアクセスできません
+<pre>このウェブページにアクセスできません
 
 http://localhost:8080/manage のウェブページは一時的に停止しているか、
 新しい http://localhost:8080/manage に移動した可能性があります。
 
 エラー 330 (net::ERR_CONTENT_DECODING_FAILED): 不明なエラーです。</pre>
 <ul><li>まさかのIE6。ログイン画面からレイアウト崩れてて(さすがにサポートしてないよなぁ)とか思いつつアクセスすると…</li></ul>
-<pre class="">アクセスできません
+<pre>アクセスできません
 kk_Ataka には、Administer パーミッションがありません。</pre>
 <p><span class="deco" style="font-weight:bold;">なんだと！？</span>　…でも管理画面にいけないんだから、権限も振れないよ。どうしよう。</p>
 <h2>解決策</h2>
 <ul><li>とりあえず、Jenkinsのディレクトリをユーザ名(kk_Atakaなど)で検索してみた…<span class="footnote"><a href="#f2" title="権限設定などを記載しているファイルがある可能性を願って。" name="fn2">*2</a></span></li><li>すると引っかかったのはJenkinsのルートにある <span class="deco" style="color:#FF0000;">config.xml</span> と大量の build.xml<ul><li>build.xml は実行したユーザを情報として持っているらしい。が、今回は関係ない</li></ul></li><li>config.xml を見てみる<ul><li><span class="deco" style="color:#FF0000;">authorizationStrategy</span> タグの中に permission タグがあり、ここに <span class="deco" style="color:#FF0000;">hudson.model.Computer.Configure:kk_Ataka</span> みたいに権限を設定してそうな箇所を発見！</li><li>同じ設定(ユーザ情報、権限管理など)で安定稼動している他のJenkinsのconfig.xmlと目grepをかけてみる</li><li>いかにもAdministrator権限を司っていそうな設定を発見！　そして、これが書かれていなかった！</li></ul></li></ul>
-<pre class="">&lt;permission&gt;hudson.model.Hudson.Administer:USER&lt;/permission&gt;</pre>
+<pre>&lt;permission&gt;hudson.model.Hudson.Administer:USER&lt;/permission&gt;</pre>
 <ul><li>念のため、サービスからJenkinsをいったん停止し、上記タグを追加後、起動</li><li>アクセスできた！</li></ul>
 <h2>最後に</h2>
 <ul><li>上述の権限管理の所、全体のAdministratorを全てチェック空にすると今回の状況が再現できるらしい(イメージはプロジェクト単位の権限設定)</li></ul>

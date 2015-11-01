@@ -87,7 +87,7 @@
 <p>プラグインを入れようと思った矢先、どうもプラグイン管理をするプラグイン？　がある模様。名前がvundleといって、RubyのGem管理に使われているBundlerに影響を受けたものみたい。Bundlerなら使ったことあるし、それなら入れやすいかも。</p>
 <h2>vundleインストール</h2>
 <p><a href="http://github.com/gmarik/vundle.git">Github</a>にリポジトリがあるのでgitでホームの.vimディレクトリにcloneする。</p>
-<pre class="">$ git clone http://github.com/gmarik/vundle.git ~/.vim/vundle.git
+<pre>$ git clone http://github.com/gmarik/vundle.git ~/.vim/vundle.git
 Cloning into %USERPROFILE%/.vim/vundle.git...
 remote: Counting objects: 2239, done.
 remote: Compressing objects: 100% (1464/1464), done.
@@ -96,7 +96,7 @@ Receiving objects: 100% (2239/2239), 269.48 KiB | 66 KiB/s, done.
 Resolving deltas: 100% (736/736), done.</pre>
 <h2>設定</h2>
 <p>_vimrcまたは.vimrcを開き、まず以下の設定を記載。</p>
-<pre class="">&quot; vundle
+<pre>&quot; vundle
 set nocompatible
 filetype off
 set rtp+=~/.vim/vundle.git
@@ -111,9 +111,9 @@ filetype plugin indent on</pre>
 <p>上記の.vimrcではこのように変化している。</p>
 <table><tr><th>コマンド</th><th>検出</th><th>プラグイン</th><th>インデント</th></tr><tr><td>:filetype off</td><td>無効</td><td>変化なし</td><td>変化なし</td></tr><tr><td>:filetype plugin indent on</td><td>有効</td><td>有効</td><td>有効</td></tr></table>
 <p>また、:filetypeコマンドで現在の状態を確認する事ができる。</p>
-<pre class="">filetype detection:ON  plugin:ON  indent:OFF</pre>
+<pre>filetype detection:ON  plugin:ON  indent:OFF</pre>
 <p>rtpがなんなのかわからないけど、とりあえずこれにvundle.gitのパスを追加？　した後vundle#rcを呼んでる。vundle#rcメソッドはvundle.git/autoload/vundle.vimにあった。</p>
-<pre class="">func! vundle#rc(...) abort
+<pre>func! vundle#rc(...) abort
   let g:bundle_dir = len(a:000) &gt; 0 ? expand(a:1    , 1) : expand('$HOME/.vim/bundle', 1)
   let g:vundle_log = []
   call vundle#config#init()
@@ -122,13 +122,13 @@ endf</pre>
 <h2>プラグインの指定</h2>
 <p>実際にインストールするプラグインはvundle#rc()とfiletypeの間に記載していく。プラグインの指定方法は三つあり、書き方で自動判別してくれる？</p>
 <ul><li>GitHubのリポジトリを指定する場合…ユーザIDとリポジトリ名</li></ul>
-<pre class="">Bundle 'user_name/repository_name'</pre>
+<pre>Bundle 'user_name/repository_name'</pre>
 <ul><li>それ以外のGitリポジトリを指定…URLをフルパスで</li></ul>
-<pre class="">Bundle 'git://repository_url'</pre>
+<pre>Bundle 'git://repository_url'</pre>
 <ul><li><a href="http://vim-scripts.org/vim/tools.html">vim-scripts</a>のリポジトリを指定…plugin名</li></ul>
-<pre class="">Bundle 'plugin_name'</pre>
+<pre>Bundle 'plugin_name'</pre>
 <p>今回は補完を行うneocomplecacheというプラグインをインストールしてみる。<a href="https://github.com/Shougo/neocomplcache">Shougo/neocomplcache · GitHub</a> GitHubにあるので……。</p>
-<pre class="">&quot; vundle
+<pre>&quot; vundle
 set nocompatible
 filetype off
 set rtp+=~/.vim/vundle.git
@@ -145,9 +145,9 @@ filetype plugin indent on</pre>
 <h2>httpで落としたい</h2>
 <p>Git://とかhttps;//が使えない場合、http://で落としたいんだけど、GitHub指定方法だとhttps://でgit cloneしようとしてうまくいかない。</p>
 <p>じゃあフルパス指定したらいけるかなと思ってこうしてみた。</p>
-<pre class="">Bundle 'http://github.com/Shougo/neocomplcache'</pre>
+<pre>Bundle 'http://github.com/Shougo/neocomplcache'</pre>
 <p>これでもhttps://でcloneされてしまう。困ったのでソースを見てみたら案外早く解決方法見つかった。.vim/vundle.git/autoload/vundle/config.vimの44行目くらいにプロトコルを指定しているところが。</p>
-<pre class=""> let git_proto = exists('g:vundle_default_git_proto') ? g:vundle_default_gi
+<pre> let git_proto = exists('g:vundle_default_git_proto') ? g:vundle_default_gi
  t_proto : 'https'</pre>
 <p>これをhttpにしてみたらDone!になった！　.vim/bundle/の下にプラグインが！</p>
 <h1>neocomplcache</h1>

@@ -78,7 +78,7 @@
 <div class="content">
 <h1>前回までのあらすじ</h1>
 <p><a href="2011-11-28-1322482230">2011-11-28-1322482230</a>で出たRubyオプションのエラー。</p>
-<pre class="">$ bundle exec ruby app.rb
+<pre>$ bundle exec ruby app.rb
 ruby: invalid switch in RUBYOPT: -a (RuntimeError)</pre>
 <p>この-aオプションはどこから出てきたのかというと、"Documents and Settings"のaだという事がわかった。</p>
 <h1>結論</h1>
@@ -87,12 +87,12 @@ ruby: invalid switch in RUBYOPT: -a (RuntimeError)</pre>
 <h1>調査</h1>
 <p>試しに以下のディレクトリに設置したRubyを使用しようとしたところ、下記のエラーが。(whichとか使えてるのはnyaosを使っているからです)</p>
 <ul><li>C:\rubies\Ru by\</li></ul>
-<pre class="">$ which ruby
+<pre>$ which ruby
 C:\rubies\Ru by\bin\ruby.exe
 $ bundle exec ruby myapp.rb
 ruby: illegal switch in RUBYOPT: -b (RuntimeError)</pre>
 <ul><li>C:\rubies\R uby\</li></ul>
-<pre class="">$ which ruby
+<pre>$ which ruby
 C:\rubies\R uby\bin\ruby.exe
 $ bundle exec ruby myapp.rb
 ruby: illegal switch in RUBYOPT: -u (RuntimeError)</pre>
@@ -101,7 +101,7 @@ ruby: illegal switch in RUBYOPT: -u (RuntimeError)</pre>
 <p>という事は、pik install時にデフォルトでDocuments and Settingsに入れられるのは避けなければならん。pikのhistoryにそれっぽいことが書いてあった。</p>
 <blockquote><p>=== 0.2.8 / 2010-06-22</p><h1>BACKWARD COMPATIBILITY CHANGE</h1><p>  pik will now install new rubies to %USERPROFILE%\rubies\, instead of %PIK_BIN%\pik\ this was necessary to all for installation into %PROGRAMFILES% dir. If you'd like to keep the old path, run:</p><p>    >pik config install_dir=C:\path\to\pik</p><cite><a href="https://github.com/vertiginous/pik/blob/master/History.txt">https://github.com/vertiginous/pik/blob/master/History.txt</a></cite></blockquote>
 <p>なるほど。pik configコマンドでパスを指定するのか。</p>
-<pre class="">$ pik config install_dir=C:\rubies\
+<pre>$ pik config install_dir=C:\rubies\
 $ pik config
 ** CURRENT CONFIGURATION **
 
@@ -113,7 +113,7 @@ $ pik config
 ---
 install_dir: C:\rubies\</pre>
 <p>install_dirがセットされた。次にinstall。Rubyはとりあえず1.9.1を指定。</p>
-<pre class="">$ pik install ruby 1.9.1
+<pre>$ pik install ruby 1.9.1
 ** Downloading:  http://rubyforge.org/frs/download.php/72076/ruby-1.9.1-p430-i386-mingw32.7z
    to:  C:\Documents and Settings\USERNAME\.pik\downloads\ruby-1.9.1-p430-i386-mingw32.7z
 
@@ -126,7 +126,7 @@ done
 ** Adding:  191: ruby 1.9.1p430 (2010-08-16 revision 28998) [i386-mingw32]
  Located at:  C:\rubies\Ruby-191-p430\bin</pre>
 <p>ダウンロードはUSERPROFILEか。でもインストール先はちゃんとinstall_dirになってる。</p>
-<pre class="">$ pik list
+<pre>$ pik list
  * 187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]
    187: ruby 1.8.7 (2011-06-30 patchlevel 352) [i386-mingw32]
    191: ruby 1.9.1p430 (2010-08-16 revision 28998) [i386-mingw32]
@@ -142,7 +142,7 @@ C:\rubies\Ruby-191-p430\bin\ruby.exe
 $ ruby -v
 ruby 1.9.1p430 (2010-08-16 revision 28998) [i386-mingw32]</pre>
 <p>1.9.1確認。%USERPROFILE%\.pik\config.ymlも更新されてた。</p>
-<pre class="">--- 
+<pre>--- 
 &quot;187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]&quot;: 
   :path: !ruby/object:Pathname 
     path: C:/rubies/Ruby/bin
@@ -159,7 +159,7 @@ ruby 1.9.1p430 (2010-08-16 revision 28998) [i386-mingw32]</pre>
 :install_dir: !ruby/object:Pathname 
   path: c:\rubies\</pre>
 <p>最後に実行してみ…なんじゃこりゃあーー！</p>
-<pre class="">$ bundle exec ruby test.rb
+<pre>$ bundle exec ruby test.rb
 Error loading gem paths on load path in gem_prelude
 can't modify frozen string
 &lt;internal:gem_prelude&gt;:69:in `force_encoding'
@@ -184,7 +184,7 @@ can't modify frozen string
         from C:\rubies\Ruby-191-p430\bin\ruby.exe:0:in `require'</pre>
 <ul><li><a href="http://saikyoline.jp/weblog/2011/09/10/013622.html">Ruby 1.9.1とrvmとエラー。 » サイキョウライン</a></li><li><a href="http://d.hatena.ne.jp/sasaplus1/20110522/1306074417">Rubyのインストールとか - 四角革命前夜</a></li><li><a href="http://www.ruby-forum.com/topic/1832630">[Ruby 1.9 - Bug #4809</a>[Open] ruby1.9.1で GEM HOME をセットしていると常にエラーが発生する - Ruby Forum]</li></ul>
 <p>Ruby1.9.1の現象らしい…。1.9.2に切り替えて…。</p>
-<pre class="">$ bundle exec ruby myapp.rb
+<pre>$ bundle exec ruby myapp.rb
 [2011-11-29 13:45:14] INFO  WEBrick 1.3.1
 [2011-11-29 13:45:14] INFO  ruby 1.9.2 (2011-07-09) [i386-mingw32]
 == Sinatra/1.3.1 has taken the stage on 4567 for development with backup from WEBrick

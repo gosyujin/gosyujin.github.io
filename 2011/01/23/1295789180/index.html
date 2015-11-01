@@ -84,7 +84,7 @@
 <h1>ツイートする方法</h1>
 <ol><li>signatureを作成する。必要な値は以下のとおり。<ol><li>oauth_consumer_key</li><li>oauth_nonce</li><li>oauth_signature</li><li>oauth_signature_method</li><li>oauth_timestamp</li><li>oauth_token</li><li>oauth_version</li><li>status <span style="color:#FF0000;">New!</span></li></ol></li></ol>
 <p>statusっていうのがツイートの本文ですね。signature作成するのにエスケープします。作成後のheaderはこんな感じ。<span class="footnote"><a href="#f1" title="実際はインデントとかなし。" name="fn1">*1</a></span>statusには「確認確認」って入ってます。</p>
-<pre class="">{
+<pre>{
 	&quot;oauth_nonce&quot;=&gt;&quot;3c8293f9c5a0295148d428a26edb9f46&quot;, 
 	&quot;oauth_timestamp&quot;=&gt;&quot;1295784908&quot;, 
 	&quot;oauth_signature_method&quot;=&gt;&quot;HMAC-SHA1&quot;, 
@@ -96,9 +96,9 @@
 }</pre>
 <h1>signature作成後</h1>
 <ul><li>signatureを作成したら、headerからstatusを消します</li><li>残ったheaderをアルファベット順に並べ、xxx=yyy<span style="color:#FF0000;">,</span>vvv=zzz……の形で連結します。連結後はこんな感じ</li></ul>
-<pre class="">oauth_consumer_key=XXXXXXXXXXXXXXXXXXXXXX,oauth_nonce=341d852d61cdc3c22e3e847b0ab69d20,oauth_signature=MR5WEJ1qHuE49ozgRYduNJ%2BBiCs%3D,oauth_signature_method=HMAC-SHA1,oauth_timestamp=1295785315,oauth_token=99999999-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY,oauth_version=1.0</pre>
+<pre>oauth_consumer_key=XXXXXXXXXXXXXXXXXXXXXX,oauth_nonce=341d852d61cdc3c22e3e847b0ab69d20,oauth_signature=MR5WEJ1qHuE49ozgRYduNJ%2BBiCs%3D,oauth_signature_method=HMAC-SHA1,oauth_timestamp=1295785315,oauth_token=99999999-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY,oauth_version=1.0</pre>
 <ul><li>連結した上記の値をAuthorizationヘッダに入れる。入れた後はこんな感じ。</li></ul>
-<pre class="">&quot;Authorization&quot;=&gt;&quot;OAuth oauth_consumer_key=XXXXXXXXXXXXXXXXXXXXXX,oauth_nonce=341d852d61cdc3c22e3e847b0ab69d20,oauth_signature=MR5WEJ1qHuE49ozgRYduNJ%2BBiCs%3D,oauth_signature_method=HMAC-SHA1,oauth_timestamp=1295785315,oauth_token=99999999-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY,oauth_version=1.0&quot;</pre>
+<pre>&quot;Authorization&quot;=&gt;&quot;OAuth oauth_consumer_key=XXXXXXXXXXXXXXXXXXXXXX,oauth_nonce=341d852d61cdc3c22e3e847b0ab69d20,oauth_signature=MR5WEJ1qHuE49ozgRYduNJ%2BBiCs%3D,oauth_signature_method=HMAC-SHA1,oauth_timestamp=1295785315,oauth_token=99999999-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY,oauth_version=1.0&quot;</pre>
 <ul><li>Authorizationヘッダを作成したら<a href="http://api.twitter.com/1/statuses/home_timeline.json">http://api.twitter.com/1/statuses/home_timeline.json</a>へPOST。また、ツイート本文を「status=本文」の形でくっつける</li></ul>
 <h1>結果</h1>
 <p>以上で、Twitterにツイートが完了しました！　おっぱいきたーー</p>

@@ -100,7 +100,7 @@
 <ul><li>(グラフが)とても…カオスです</li></ul>
 <h2>実習後</h2>
 <ul><li>再び講義。その後、同じNumbersファイルを(まっさらにしてから)やり直し</li><li>さっきはpullでリポジトリから取得していたと思うけど、今回は必ずpull --rebaseする事<ul><li>コミットを直列にならべる事が目的</li></ul></li></ul>
-<pre class="">git pull --rebase
+<pre>git pull --rebase
 git add 
 git rebase --continue</pre>
 <ul><li>rebaseとは<ul><li>(ざっくりと)コミットをかぶせる<ul><li>リモートの最新コミットにローカルの共通コミットから先のコミットが被せられる(onto)</li><li>まっすぐになるので誰が何コミットしたかわかりやすい</li><li>コンフリクトした場合、無名ブランチがチェックアウトされた状態になる</li></ul></li></ul></li><li>一方でmergeは<ul><li>コミットを統合する(基本的にマージコミットが生まれる=見た感じ複雑)<ul><li>リモートに新しいコミットがあると失敗する</li><li>変更履歴が残るので、後で調査がしやすい</li></ul></li></ul></li><li>どちらがいいかは状況次第<ul><li>他人がコミットしている事を意識する</li><li>ローカルブランチでは作業履歴を残すためmergeの方がいいかも</li></ul></li></ul>
@@ -112,46 +112,46 @@ git rebase --continue</pre>
 <p>糞長いので先にまとめ。</p>
 <h2>pull</h2>
 <p>以下のふたつのリポジトリがあったとき</p>
-<pre class="">A
+<pre>A
 (FIRST)---(NUMBERADD)
           origin/master</pre>
-<pre class="">B
+<pre>B
 (FIRST)---(hello world)---(hello git)---(bye svn)
 origin/master</pre>
 <p>Bがpullするとこういう歴史が出来る。</p>
-<pre class="">          (NUMBERADD)----------------------------(merge)
+<pre>          (NUMBERADD)----------------------------(merge)
          /                                       /
 (FIRST)---(hello world)---(hello git)---(bye svn)</pre>
 <h2>pull --rebase</h2>
 <p>同じく。</p>
-<pre class="">A
+<pre>A
 (FIRST)---(NUMBERADD)
           origin/master</pre>
-<pre class="">B
+<pre>B
 (FIRST)---(hello world)---(hello git)---(bye svn)
 origin/master</pre>
 <p>Bがpull --rebaseするとこういう歴史ができる。</p>
-<pre class="">          (NUMBERADD)---(hello world merge)
+<pre>          (NUMBERADD)---(hello world merge)
          /              no branch
 (FIRST)---(hello world)---(hello git)---(bye svn)</pre>
-<pre class="">          (NUMBERADD)---(hello world merge)---(hello git merge)
+<pre>          (NUMBERADD)---(hello world merge)---(hello git merge)
          /                                    no branch
 (FIRST)---(hello world)---(hello git)---(bye svn)</pre>
-<pre class="">          (NUMBERADD)---(hello world merge)---(hello git merge)---(bye svn merge)
+<pre>          (NUMBERADD)---(hello world merge)---(hello git merge)---(bye svn merge)
          /                                                        no branch
 (FIRST)---(hello world)---(hello git)---(bye svn)</pre>
-<pre class="">          (NUMBERADD)---(hello world merge)---(hello git merge)---(bye svn merge)
+<pre>          (NUMBERADD)---(hello world merge)---(hello git merge)---(bye svn merge)
          /                                                        master
 (FIRST)--</pre>
 <p>整形して、</p>
-<pre class="">(FIRST)---(NUMBERADD)---(hello world merge)---(hello git merge)---(bye svn merge)
+<pre>(FIRST)---(NUMBERADD)---(hello world merge)---(hello git merge)---(bye svn merge)
                                                                   master</pre>
 <p>以下に実際にやってみたログ。</p>
 <h1>pull</h1>
 <p>dojo1さんとdojo2さんでdojo.gitリポジトリに書き込んでいく。空のnumファイルをfirst commit後……。</p>
 <h2>dojo1</h2>
 <p>dojo1さんが準備。</p>
-<pre class="">$ cat num
+<pre>$ cat num
  1
  2
  3
@@ -161,28 +161,28 @@ $ git coa -m &quot;1から5までnumberふり&quot;
 [master 27734d8] 1から5までnumberふり
  1 files changed, 5 insertions(+), 0 deletions(-)</pre>
 <p>グラフはこんな感じ。</p>
-<pre class="">$ git g
+<pre>$ git g
  * 27734d8 2012-04-22 kk_Ataka  (HEAD, master) 1から5までnumberふり
  * 9f20959 2012-04-22 kk_Ataka  (origin/master) first commit</pre>
 <h2>dojo2</h2>
 <p>dojo2さん。cloneしたときはこんなグラフ。</p>
-<pre class="">$ git g
+<pre>$ git g
  * 9f20959 2012-04-22 kk_Ataka  (HEAD, origin/master, origin/HEAD) first commit</pre>
 <p>ここに27734d8をプルする前にローカルで色々育てる。</p>
-<pre class="">$ vim num
+<pre>$ vim num
 $ git coa -m &quot;hello world追加&quot;
 $ vim num
 $ git coa -m &quot;hello git追加&quot;
 $ vim num
 $ git coa -m &quot;bye svn追加&quot;</pre>
 <p>グラフはこう。</p>
-<pre class="">$ git g
+<pre>$ git g
  * 817be9c 2012-04-22 kk_Ataka  (HEAD, master) bye svn追加
  * 66d89ab 2012-04-22 kk_Ataka  hello git追加
  * cb71f84 2012-04-22 kk_Ataka  hello world追加
  * 9f20959 2012-04-22 kk_Ataka  (origin/master, origin/HEAD) first commit</pre>
 <p>この状態でプルすると…</p>
-<pre class="">$ git pull
+<pre>$ git pull
 remote: Counting objects: 5, done.
 remote: Total 3 (delta 0), reused 0 (delta 0)
 Unpacking objects: 100% (3/3), done.
@@ -200,7 +200,7 @@ $ git g
  |/
  * 9f20959 2012-04-22 kk_Ataka  first commit</pre>
 <p>first commit以降のブランチがdojo1さんが編集したものと自分が育てたものに分岐。これを解消してやり、コミット。</p>
-<pre class=""> git coa -m &quot;コンフリクトを解消し、メッセージにnumberをふった&quot;
+<pre> git coa -m &quot;コンフリクトを解消し、メッセージにnumberをふった&quot;
 [master d21349d] コンフリクトを解消し、メッセージにnumberをふった
 [22:57:18 kk_Ataka@www15203u (master&gt;)~/github/dojo2]
 $ git g
@@ -214,7 +214,7 @@ $ git g
  * 9f20959 2012-04-22 kk_Ataka  first commit</pre>
 <h2>dojo1に戻り</h2>
 <p>dojo1に戻りプルして一行追加しコミット&プッシュ。</p>
-<pre class="">$ git pull
+<pre>$ git pull
 remote: Counting objects: 16, done.
 remote: Compressing objects: 100% (4/4), done.
 remote: Total 12 (delta 0), reused 0 (delta 0)
@@ -247,10 +247,10 @@ To /home/kk_Ataka/github/./dojo.git/
    d21349d..eeeab6f  master -&gt; master</pre>
 <h2>同じ頃dojo2では</h2>
 <p>その隙にdojo2は少しローカルで育て中。(ただし、今度はコンフリクトさせないように)</p>
-<pre class="">$ vi num
+<pre>$ vi num
 $ git coa -m &quot;bye svnは削除&quot;</pre>
 <p>そしてさっきのdojo1の更新をプル。</p>
-<pre class="">$ git pull
+<pre>$ git pull
 remote: Counting objects: 5, done.
 remote: Total 3 (delta 0), reused 0 (delta 0)
 Unpacking objects: 100% (3/3), done.
@@ -279,17 +279,17 @@ $ git g
 <h1>pull --rebase</h1>
 <p>pull --rebaseではどうか。下記の状態まで戻る。</p>
 <h2>dojo1</h2>
-<pre class="">$ git g
+<pre>$ git g
  * 49622c6 2012-04-22 kk_Ataka  (HEAD, origin/master, master) 1から5までnumberふり
  * ec12cb5 2012-04-22 kk_Ataka  first commit</pre>
 <h2>dojo2</h2>
-<pre class="">$ git  g
+<pre>$ git  g
  * 3a940bc 2012-04-22 kk_Ataka  (HEAD, master) bye svn追加
  * 763cbaa 2012-04-22 kk_Ataka  hello git追加
  * d6c6c98 2012-04-22 kk_Ataka  hello world追加
  * ec12cb5 2012-04-22 kk_Ataka  (origin/master, origin/HEAD) first commit</pre>
 <p>ここでpull --rebaseを使う。</p>
-<pre class="">$ git pull --rebase
+<pre>$ git pull --rebase
 remote: Counting objects: 5, done.
 remote: Total 3 (delta 0), reused 0 (delta 0)
 Unpacking objects: 100% (3/3), done.
@@ -310,11 +310,11 @@ To restore the original branch and stop rebasing run &quot;git rebase --abort&qu
 </pre>
 <p>盛大にコンフリクトする。改めて見るとrebase --continue, --skip, --abortを使いなさいって書いてあるな。</p>
 <p>で、今のrebaseが始まったとき、ブランチはどこにいるのかというと……。</p>
-<pre class="">$ git br
+<pre>$ git br
  * (no branch) 49622c6 1から5までnumberふり
    master      3a940bc [ahead 3, behind 1] bye svn追加</pre>
 <p>ここ。無名ブランチ。この496...はどこかというと……。</p>
-<pre class="">$ git g
+<pre>$ git g
  * 3a940bc 2012-04-22 kk_Ataka  (master) bye svn追加
  * 763cbaa 2012-04-22 kk_Ataka  hello git追加
  * d6c6c98 2012-04-22 kk_Ataka  hello world追加
@@ -322,7 +322,7 @@ To restore the original branch and stop rebasing run &quot;git rebase --abort&qu
  |/
  * ec12cb5 2012-04-22 kk_Ataka  first commit</pre>
 <p>dojo1さんがプッシュしていた所。なにはともあれまず、リポジトリにプッシュされていたものを優先する。このdojo1さんの変更に対して、d6c6c98、763cbaa、3a940bcとひとつずつrebaseしていく。問題を解決したらrebase --continue。無名ブランチにいるのでコミットしちゃダメ。</p>
-<pre class="">$ vim num
+<pre>$ vim num
 競合解消…
 $ git add num
 $ git rebase --continue
@@ -335,7 +335,7 @@ CONFLICT (content): Merge conflict in num
 Failed to merge in the changes.
 Patch failed at 0002 hello git追加</pre>
 <p>ひとつ解消したらふたつ目でまたコンフリクトした。今どこにいるかというと……。</p>
-<pre class="">$ git br
+<pre>$ git br
  * (no branch) 781c723 hello world追加
    master      3a940bc [ahead 3, behind 1] bye svn追加
 $ git g
@@ -347,7 +347,7 @@ $ git g
  |/
  * ec12cb5 2012-04-22 kk_Ataka  first commit</pre>
 <p>コンフリクトを解消しつつ無名ブランチで突き進んでいる。</p>
-<pre class="">$ vim num
+<pre>$ vim num
 競合解消…
 $ git add num
 $ git rebase --continue
@@ -360,7 +360,7 @@ CONFLICT (content): Merge conflict in num
 Failed to merge in the changes.
 Patch failed at 0003 bye svn追加</pre>
 <p>どんどん無名ブランチを進めていく。</p>
-<pre class="">$ git br
+<pre>$ git br
  * (no branch) 8fb0d5e hello git追加
    master      3a940bc [ahead 3, behind 1] bye svn追加
 $ git g
@@ -373,13 +373,13 @@ $ git g
  |/
  * ec12cb5 2012-04-22 kk_Ataka  first commit</pre>
 <p>解消。</p>
-<pre class="">$ vim num
+<pre>$ vim num
 競合解消…
 $ git add num
 $ git rebase --continue
 Applying: bye svn追加</pre>
 <p>これで全てのコミットの変更がdojo1さんの変更の上に適用された。で、今どこにいるかというと。</p>
-<pre class="">$ git br
+<pre>$ git br
  * master 96897da [ahead 3] bye svn追加
 $ git g
  * 96897da 2012-04-22 kk_Ataka  (HEAD, master) bye svn追加

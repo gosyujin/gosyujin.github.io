@@ -79,32 +79,32 @@
 <p><span class="deco" style="color:#FF0000;">解決編 - <a href="2011-11-29-1322569582">2011-11-29-1322569582</a></span></p>
 <h1>あらすじ</h1>
 <ul><li>デフォルトのRubyからpikでインストールしたRubyに切り替えた後bundle exec rubyをしたら下記のようなエラーが出た</li></ul>
-<pre class="">$ bundle exec ruby app.rb
+<pre>$ bundle exec ruby app.rb
 ruby: invalid switch in RUBYOPT: -a (RuntimeError)</pre>
 <p>ン？　なんだこれ。</p>
 <h1>調査</h1>
 <ul><li>pikでインストールしたRubyはバージョン等関係なしにことごとくこけた<ul><li>1.8.7 patch352</li><li>1.9.3</li></ul></li><li>デフォルトでインストールしたRubyでは無事起動した / 下記ログ<ul><li>1.8.7 patch330</li></ul></li></ul>
-<pre class="">$ bundle exec ruby app.rb
+<pre>$ bundle exec ruby app.rb
 [2011-11-28 19:31:55] INFO  WEBrick 1.3.1
 [2011-11-28 19:31:55] INFO  ruby 1.8.7 (2010-12-23) [i386-mswin32]
 == Sinatra/1.3.1 has taken the stage on 4567 for development with backup from WEBrick
 [2011-11-28 19:31:55] INFO  WEBrick::HTTPServer#start: pid=964 port=4567</pre>
 <p>1.8.7同士でもこけたのと成功したのに分かれたので、gemが足りないのかなーとか思ったが、Bundlerでgem installし、ソースではgemを使っていないプロジェクトを作ってもダメだった。同じエラーだー。</p>
-<pre class="">$ mkdir sample
+<pre>$ mkdir sample
 $ cd sample</pre>
 <p>Gemfile作成。</p>
-<pre class="">source :rubygems
+<pre>source :rubygems
 source &quot;http://rubygems.org&quot;
 
 gem 'pit' # 適当に</pre>
 <p>test.rb作成。</p>
-<pre class="">puts &quot;Hello World!&quot;</pre>
+<pre>puts &quot;Hello World!&quot;</pre>
 <p>実行…。</p>
-<pre class="">$ bundle install ./vendor/bundle
+<pre>$ bundle install ./vendor/bundle
 $ bundle exec ruby test.rb
 ruby: invalid switch in RUBYOPT: -a (RuntimeError)</pre>
 <p>bundleを使わなければ通る。</p>
-<pre class="">$ ruby test.rb
+<pre>$ ruby test.rb
 Hello World!</pre>
 <p>bundle exec rubyでこけてるのかなー？</p>
 <h1>ふりだしに戻る</h1>
@@ -117,7 +117,7 @@ Hello World!</pre>
 <p>オプションがどんな原因に結びついているかわからなかったので、デフォルトRubyとpikRubyの相違点を探してみる事に。</p>
 <ul><li>パッチバージョンが違っていた</li><li>インストールパスが違っていた</li></ul>
 <p>インストールパスかぁ。%USERPROFILE%/.pik/config.ymlにインストール先の定義が書いてあったのを見つけた。Ruby1.8.7 330が自分で入れたRubyで1.8.7 352と1.9.3がpikで入れたRuby。</p>
-<pre class="">--- 
+<pre>--- 
 &quot;187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]&quot;: 
   :path: !ruby/object:Pathname 
     path: C:/ruby/bin
@@ -129,7 +129,7 @@ Hello World!</pre>
     path: C:/Documents and Settings/USERNAME/.pik/rubies/Ruby-193-p0/bin
 --- {}</pre>
 <p>並べて見てみると"Documents and Settings"が何か非常にイヤ～な感じだったのでちょっと動かしてみた。</p>
-<pre class="">--- 
+<pre>--- 
 &quot;187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]&quot;: 
   :path: !ruby/object:Pathname 
     path: C:/ruby/bin
@@ -141,7 +141,7 @@ Hello World!</pre>
     path: C:/Documents and Settings/USERNAME/.pik/rubies/Ruby-193-p0/bin
 --- {}</pre>
 <p>Cドライブ直下に移動。さて…</p>
-<pre class="">$ bundle exec ruby test.rb
+<pre>$ bundle exec ruby test.rb
 Hello World!</pre>
 <p>！？　うーん動いた…。</p>
 <h1>一旦まとめ</h1>

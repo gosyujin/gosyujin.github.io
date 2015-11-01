@@ -88,7 +88,7 @@
 <ul><li>WindowsXP</li><li>Ruby 1.8.7</li><li>Rails 3.2.1</li></ul>
 <h1>準備</h1>
 <ul><li>はじめにbundleでrailsをインストールする……が、なんかエラーが。</li></ul>
-<pre class="">Gem::InstallError: The 'json' native gem requires installed build
+<pre>Gem::InstallError: The 'json' native gem requires installed build
 tools.
 
 Please update your PATH to include build tools or download the DevKit
@@ -97,7 +97,7 @@ at 'http://github.com/oneclick/rubyinstaller/wiki/Development-Kit'
 An error occured while installing json (1.6.5), and Bundler cannot continue.
 Make sure that `gem install json -v '1.6.5'` succeeds before bundling.</pre>
 <p>bundleするまえにjsonをインストールしてくれと言われた。ので、そのとおりにgem install……。</p>
-<pre class="">$ gem install json -v '1.6.5'
+<pre>$ gem install json -v '1.6.5'
 ERROR:  Error installing json:
         The 'json' native gem requires installed build tools.
 
@@ -108,14 +108,14 @@ at 'http://github.com/oneclick/rubyinstaller/wiki/Development-Kit'</pre>
 <p>どれ落とせばいいんだろうと思ったら、</p>
 <blockquote><p>for the legacy RubyInstaller v1.8.6 use the DevKit-3.4.5 available at our archive downloads page. For RubyInstaller versions 1.8.7, 1.9.2, and 1.9.3 use the DevKit 4.5.2 from our main downloads page.</p></blockquote>
 <p>という事らしいので4.5.2をDLしexeを実行。さらに以下を実行。</p>
-<pre class="">$ cd &lt;DEVKIT_INSTALL_DIR&gt;
+<pre>$ cd &lt;DEVKIT_INSTALL_DIR&gt;
 $ ruby dk.rb init
 
 Initialization complete! Please review and modify the auto-generated
 'config.yml' file to ensure it contains the root directories to all
 of the installed Rubies you want enhanced by the DevKit.</pre>
 <p>config.ymlが生成されるので例に従ってRubyのパスを記述。</p>
-<pre class="">  8 # Example:
+<pre>  8 # Example:
   9 #
  10 # ---
  11 # - C:/ruby19trunk
@@ -124,7 +124,7 @@ of the installed Rubies you want enhanced by the DevKit.</pre>
  14 ---
 +15 - C:\rubies\Ruby-187-p352</pre>
 <p>で、インストール。</p>
-<pre class="">$ ruby dk.rb review
+<pre>$ ruby dk.rb review
 Based upon the settings in the 'config.yml' file generated
 from running 'ruby dk.rb init' and any of your customizations,
 DevKit functionality will be injected into the following Rubies
@@ -136,13 +136,13 @@ $ ruby dk.rb install
 [INFO] Updating convenience notice gem override for 'C:/rubies/Ruby-187-p352'
 [INFO] Installing 'C:/rubies/Ruby-187-p352/lib/ruby/site_ruby/devkit.rb'</pre>
 <p>満を持してbundle install再び。</p>
-<pre class="">…
+<pre>…
 Installing json (1.6.5) with native extensions
 …</pre>
 <p>オッケー。</p>
 <h1>アプリケーション作成</h1>
 <ul><li>rails new アプリ名で作成</li></ul>
-<pre class="">$ bundle exec rails new sampleapp
+<pre>$ bundle exec rails new sampleapp
       create
       create  README.rdoc
       create  Rakefile
@@ -156,7 +156,7 @@ Installing json (1.6.5) with native extensions
 <h1>DB設定</h1>
 <p>これはRedmineでやった事ある。</p>
 <ul><li>config/database.ymlを編集……し……？</li></ul>
-<pre class="">  6 development:
+<pre>  6 development:
   7   adapter: sqlite3
   8   database: db/development.sqlite3
   9   pool: 5
@@ -164,10 +164,10 @@ Installing json (1.6.5) with native extensions
 <p>あれ？　もうよろしくされてるじゃん。</p>
 <h1>バージョン等</h1>
 <ul><li>rail -vでRailsのバージョン</li></ul>
-<pre class="">$ bundle exec rails -v
+<pre>$ bundle exec rails -v
 Rails 3.2.1</pre>
 <ul><li>rake aboutでRailが使っているライブラリ</li></ul>
-<pre class="">$ bundle exec rake about
+<pre>$ bundle exec rake about
 About your application's environment
 Ruby version              1.8.7 (i386-mingw32)
 RubyGems version          1.8.12
@@ -178,7 +178,7 @@ Active Record version     3.2.1
 …</pre>
 <h1>とりあえず起動</h1>
 <ul><li>rails sまたはrails serverで起動。rails s -p ポート番号でポート指定可能</li></ul>
-<pre class="">$ bundle exec rails s
+<pre>$ bundle exec rails s
 =&gt; Booting WEBrick
 =&gt; Rails 3.2.1 application starting in development on http://0.0.0.0:3000
 =&gt; Call with -d to detach

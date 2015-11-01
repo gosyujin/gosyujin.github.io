@@ -83,19 +83,19 @@
 <ul><li><a href="http://d.hatena.ne.jp/griffith181/20090302/1235980536">ffmpegでWMVをMP4に変換 - YouのMacとかプログラムとか映像編集とか</a></li></ul>
 <h1>インストール</h1>
 <p>ソースをgit clone で取得してくる。</p>
-<pre class="">$ git clone git://source.ffmpeg.org/ffmpeg.git ffmpeg
+<pre>$ git clone git://source.ffmpeg.org/ffmpeg.git ffmpeg
 Cloning into ffmpeg...
 remote: Counting objects: 192168, done.
 remote: Compressing objects: 100% (43840/43840), done.
 remote: Total 192168 (delta 150640), reused 188926 (delta 148049)
 Receiving objects: 100% (192168/192168), 49.63 MiB | 278 KiB/s, done.
 Resolving deltas: 100% (150640/150640), done.</pre>
-<pre class="">$ ./configure --disable-yasm
+<pre>$ ./configure --disable-yasm
 $ make
 $ sudo make install</pre>
 <h1>使い方</h1>
 <p>基本的に-iオプションでインプットファイルを選択すれば使えるはずなのだが……。</p>
-<pre class="">$ ffmpeg -i input.wmv -acodec copy output.mp3
+<pre>$ ffmpeg -i input.wmv -acodec copy output.mp3
 ffmpeg version N-35890-g83b4671, Copyright (c) 2000-2011 the FFmpeg developers
   built on Dec 17 2011 22:36:09 with gcc 4.1.2 20080704 (Red Hat 4.1.2-48)
   configuration: --disable-yasm
@@ -127,7 +127,7 @@ video:0kB audio:28464kB global headers:0kB muxing overhead 0.001513%
 </pre>
 <p>エラーは出ていないが、再生ができない。多分copyだとダメなのかな…。</p>
 <p>試しに他のフォーマットで変換してみたら、mp4だとうまくいった。</p>
-<pre class="">$ ffmpeg -i input.wmv output.mp4
+<pre>$ ffmpeg -i input.wmv output.mp4
 ffmpeg version N-35890-g83b4671, Copyright (c) 2000-2011 the FFmpeg developers
   built on Dec 17 2011 22:36:09 with gcc 4.1.2 20080704 (Red Hat 4.1.2-48)
   configuration: --disable-yasm
@@ -148,7 +148,7 @@ encoder 'aac' is experimental and might produce bad results.
 Add '-strict experimental' if you want to use it.
 </pre>
 <p>ん、-strict experimentalを付けないとだめらしい。</p>
-<pre class="">$ ffmpeg ｰn -i input.wmv -strict experimental output.mp4
+<pre>$ ffmpeg ｰn -i input.wmv -strict experimental output.mp4
 ffmpeg version N-35890-g83b4671, Copyright (c) 2000-2011 the FFmpeg developers
   built on Dec 17 2011 22:36:09 with gcc 4.1.2 20080704 (Red Hat 4.1.2-48)
   configuration: --disable-yasm

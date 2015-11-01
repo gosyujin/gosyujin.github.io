@@ -85,13 +85,13 @@
 <ul><li><a href="https://github.com/fluent/fluentd">fluent/fluentd · GitHub</a></li><li><a href="http://d.hatena.ne.jp/tagomoris/20120715/1342368392">Fluentdでparser用の正規表現を書く・試す - tagomorisのメモ置き場</a></li><li><a href="http://blog.ksauzz.com/?p=37">fluent pluginの作成 » ksauzz weblog</a></li></ul>
 <h1>今できてる事とできてない事</h1>
 <p>BundlerでFluentdをインストールし、</p>
-<pre class="">$ bundle exec fluentd -c /hoge/fluent.conf -p /hoge/plugin </pre>
+<pre>$ bundle exec fluentd -c /hoge/fluent.conf -p /hoge/plugin </pre>
 <p>を実行した時……</p>
 <ul><li>gem installで入れたfluentdのプラグインはちゃんとロードできる<ul><li>Gemにしちゃえばロードできる</li></ul></li><li>プラグインディレクトリ直下(-p /hoge/plugin)にササッと作ってみたプラグインもロードでき、動いた<ul><li>直下に放り込めばロードできる</li></ul></li></ul>
-<pre class="">/hoge/plugin
+<pre>/hoge/plugin
 └in_hoge.rb              # これはロードできる</pre>
 <ul><li><span class="deco" style="color:#FF0000;">gem未満、ササッと作った以上のプラグインがロードできない</span><ul><li>fluent-pluginっぽいディレクトリ構成にした程度のもの。まだローカルに置いてあるだけでgemには成り切れていない</li></ul></li></ul>
-<pre class="">/hoge/plugin
+<pre>/hoge/plugin
 ├in_hoge.rb              # これはロードできる
 └fluent-plugin-hogehoge
 　├lib
@@ -107,7 +107,7 @@
 <ul><li>なかった場合はもう少し色々な場所の探索にチャレンジする<ul><li><span class="deco" style="color:#FF0000;">$LOAD_PATHと、gem installしたディレクトリ直下のどこかにlib/fluent/plugin/<type>_<name>.rb</span>が存在するか</li></ul></li></ul>
 <h1>解決策</h1>
 <ol><li>fluentd自体の$LOAD_PATHに追加<ul><li>本体に毎回修正かけるの？</li></ul></li><li>in_hogehoge.rbをロードしてくれる場所へコピー(デフォルトプラグイン(/etc/fluent/plugin)など)<ul><li>コピペ？</li></ul></li><li>さっさと作ってgem installできるようにもっていく<ul><li>うーん…</li></ul></li><li>オプション-pを複数指定する<ul><li>上の場合は -p /hoge/plugin -p /hoge/plugin/fluent-plugin-hogehoge/lib/fluent/plugin としてやればよい<ul><li>fluentd本体でわざわざlib/fluent/plugin下を探すようにコーディングされてるのにこんな指定の仕方するものかな？　何か違う気がする……下みたいに未完成のプラグインが増えていくとオプションガンガン長くなっていく？</li></ul></li></ul></li></ol>
-<pre class="">/hoge/plugin
+<pre>/hoge/plugin
 ├in_hoge.rb
 ├fluent-plugin-hogehoge
 │└lib
@@ -127,13 +127,13 @@
 <p>以下、調査ログ。</p>
 <h1>調査ログ</h1>
 <p>セットアップをすると指定したディレクトリにconfigファイルとpluginディレクトリができる。</p>
-<pre class="">$ fluentd -s fluentd-hoge
+<pre>$ fluentd -s fluentd-hoge
 Installed fluentd-hoge/fluent.conf.
 $ ls fluentd-hoge/
 fluent.conf  plugin</pre>
 <p>pluginディレクトリにそのままプラグイン(rbファイル)を入れておくと、起動時に読み込まれる。</p>
 <h1>bundle gemコマンドを使ってプラグインを作っていく</h1>
-<pre class="">$ cd plugin # プラグインを作るからとりあえずpluginディレクトリに移動する
+<pre>$ cd plugin # プラグインを作るからとりあえずpluginディレクトリに移動する
 $ bundle gem fluent-plugin-hogehoge
       create  fluent-plugin-hogehoge/Gemfile
       create  fluent-plugin-hogehoge/Rakefile
@@ -148,7 +148,7 @@ Initializating git repo in /略/fluent-hoge/plugin/fluent-plugin-hogehoge</pre>
 <blockquote><p>Installing custom plugins</p><p>To install a plugin, put a ruby script to /etc/fluent/plugin directory.</p><p>Or you can create gem package that includes lib/fluent/plugin/<TYPE>_<NAME>.rb file.</p><p>TYPE is in for input plugins, out for output plugins and buf for buffer plugins.</p><p>It’s like lib/fluent/plugin/out_mail.rb.</p><p>The packaged gem can be distributed and installed using RubyGems.</p><p>See Searching plugins.</p><cite><a href="http://fluentd.org/doc/devel.html">http://fluentd.org/doc/devel.html</a></cite></blockquote>
 <ul><li>プラグインは/etc/fluent/pluginにインストールするといいよ<ul><li>また、-pオプションを指定すればfluent-hoge/plugin下も呼んでくれる</li></ul></li><li>Gem packageを作る場合はパッケージの下にlib/fluent/plugin/<TYPE>_<NAME>.rbって名前にしておいてね<ul><li>他の方が作ったプラグイン＠GitHubを見ていると確かにそうなっていた！</li></ul></li><li><TYPE>はinputプラグインならin、outputプラグインならoutといったように<ul><li>このルールは後ほど効いてくる</li></ul></li></ul>
 <p>ってわけでディレクトリはこんな構成に。</p>
-<pre class="">fluent-hoge/
+<pre>fluent-hoge/
 ├(略)
 ├fluent.conf
 └plugin/　…　(1)
@@ -190,7 +190,7 @@ end</pre>
   type inputs
 &lt;/source&gt;</pre>
 <p>この状態で起動！</p>
-<pre class="">/usr/local/bin/fluentd -c /略/fluent-hoge/fluent.conf -p /略/fluent-hoge/plugin/
+<pre>/usr/local/bin/fluentd -c /略/fluent-hoge/fluent.conf -p /略/fluent-hoge/plugin/
 2012-09-07 19:57:48 +0900: starting fluentd-0.10.25
 2012-09-07 19:57:48 +0900: reading config file path=&quot;/略/fluent-hoge/fluent.conf&quot;
 2012-09-07 19:57:48 +0900: adding source type=&quot;forward&quot;
@@ -199,7 +199,7 @@ end</pre>
 2012-09-07 19:57:48 +0900: process finished code=256
 2012-09-07 19:57:48 +0900: process died within 1 second. exit.</pre>
 <p>失敗した…。inputsっていうプラグインなぞないって言われた。でも、プラグイン本体(in_inputs.rb)をplugin直下(ディレクトリ構成の(1)の部分)に持ってくると…</p>
-<pre class="">/usr/local/bin/fluentd -c /略/fluent-hoge/fluent.conf -p /略/fluent-hoge/plugin/
+<pre>/usr/local/bin/fluentd -c /略/fluent-hoge/fluent.conf -p /略/fluent-hoge/plugin/
 2012-09-07 20:02:28 +0900: starting fluentd-0.10.25
 2012-09-07 20:02:28 +0900: reading config file path=&quot;/略/fluent-hoge/fluent.conf&quot;
 2012-09-07 20:02:28 +0900: adding source type=&quot;forward&quot;
@@ -290,11 +290,11 @@ puts &quot;!try_load_plugin:#{lp}&quot;
         }
       end</pre>
 <p>実行結果はこうなる。</p>
-<pre class="">$ /usr/local/bin/fluentd -c /略/fluent-hoge/fluent.conf -p /略/fluent-hoge/plugin/
+<pre>$ /usr/local/bin/fluentd -c /略/fluent-hoge/fluent.conf -p /略/fluent-hoge/plugin/
 2012-09-07 19:37:32 +0900: starting fluentd-0.10.25
 2012-09-07 19:37:32 +0900: reading config file path=&quot;/略/fluent-hoge/fluent.conf&quot;</pre>
 <p>→はじめはfluent本体のpluginを呼んでる。</p>
-<pre class="">!load_plugins:/usr/local/lib/ruby/gems/1.9.1/gems/fluentd-0.10.25/lib/fluent/plugin
+<pre>!load_plugins:/usr/local/lib/ruby/gems/1.9.1/gems/fluentd-0.10.25/lib/fluent/plugin
 !load_plugin_dir:/usr/local/lib/ruby/gems/1.9.1/gems/fluentd-0.10.25/lib/fluent/plugin
 !load_plugin_dir:.
 !load_plugin_dir:..
@@ -321,26 +321,26 @@ puts &quot;!try_load_plugin:#{lp}&quot;
 !load_plugin_dir:out_stream.rb
 !load_plugin_dir:out_test.rb</pre>
 <p>→gemはない。</p>
-<pre class="">!load_gem_plugins:[]</pre>
+<pre>!load_gem_plugins:[]</pre>
 <p>→ここから他のpluginディレクトリ。まずは/etc/fluent/plugin。</p>
-<pre class="">!load_plugin_dir:/etc/fluent/plugin
+<pre>!load_plugin_dir:/etc/fluent/plugin
 !load_plugin_dir:.
 !load_plugin_dir:..</pre>
 <p>→そして-pオプションで指定したディレクトリ。</p>
-<pre class="">!load_plugin_dir:/略/fluent-hoge/plugin
+<pre>!load_plugin_dir:/略/fluent-hoge/plugin
 !load_plugin_dir:.
 !load_plugin_dir:..
 !load_plugin_dir:fluent-plugin-hogehoge
 !load_plugin_dir:simple_thread_plugin.rb</pre>
 <p><span class="deco" style="color:#FF0000;">あれ？ディレクトリの上さらっと舐めるだけ？</span></p>
 <p>ここからtypeがaddされている。みつかったものは特に何も表示されず次へ次へ……。</p>
-<pre class="">2012-09-07 20:16:24 +0900: adding source type=&quot;forward&quot;
+<pre>2012-09-07 20:16:24 +0900: adding source type=&quot;forward&quot;
 2012-09-07 20:16:24 +0900: adding source type=&quot;thread&quot;
 2012-09-07 20:16:24 +0900: adding source type=&quot;tail&quot;
 2012-09-07 20:16:24 +0900: 'pos_file PATH' parameter is not set to a 'tail' source.
 2012-09-07 20:16:24 +0900: this parameter is highly recommended to save the position to resume tailing.</pre>
 <p>で、今回見つかってないtypeが出てくると、try_load_pluginが呼ばれる。</p>
-<pre class="">2012-09-07 20:16:24 +0900: adding source type=&quot;inputs&quot;
+<pre>2012-09-07 20:16:24 +0900: adding source type=&quot;inputs&quot;
 !try_load_plugin:input, inputs
 !try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/http_parser.rb-0.5.3/lib
 !try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/msgpack-0.4.7/lib

@@ -79,23 +79,23 @@
 <h1>特定のファイル群を一括で何かする</h1>
 <h2>状況</h2>
 <p>.cblファイルをコンパイルした後、同一ディレクトリにできる拡張子なしのファイルを別のディレクトリにコピーしたい…という。</p>
-<pre class="">/tmp
+<pre>/tmp
 ┣file01.cbl
 ┣file02.cbl
 ┣file01
 ┗file02</pre>
 <p>file01とfile02を/usr/local/userに移動したい。</p>
 <h2>コマンド</h2>
-<pre class="">find /tmp/* ! -name &quot;*.cbl&quot; | xargs -i mv {} /usr/local/user</pre>
+<pre>find /tmp/* ! -name &quot;*.cbl&quot; | xargs -i mv {} /usr/local/user</pre>
 <ul><li>nameの前に!で条件の否定ができる(知らなかった)</li><li>findコマンドでfile01, file02を引っかけたあと、xargsでmvコマンド実行する</li><li>iオプションを使用する事でfindの結果を{}にもってこれる</li></ul>
 <h1>特定のファイル群を一括で何かする その2</h1>
 <h2>状況</h2>
 <p>ファイル検索でリポジトリ内の .svn ファイルを除外したいなーと思った。</p>
 <h2>コマンド</h2>
-<pre class="">find ./ -name &quot;.svn&quot; -prune -o -print</pre>
+<pre>find ./ -name &quot;.svn&quot; -prune -o -print</pre>
 <p>この結果に xargs をつけると除外はできたの……だが、どうも</p>
-<pre class="">! -name &quot;XXX&quot;</pre>
-<pre class="">-name &quot;XXX&quot; -prune</pre>
+<pre>! -name &quot;XXX&quot;</pre>
+<pre>-name &quot;XXX&quot; -prune</pre>
 <p>は挙動が違う模様……以下メモ。</p>
 <ul><li>pruneオプションは引数より下のディレクトリやファイルを捜査しない</li><li>oオプション はor演算子と同じ</li><li>ワイルドカード指定で隠しファイルは検索できない</li></ul>
 <p>とりあえずここまで。</p>

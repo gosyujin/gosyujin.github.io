@@ -82,7 +82,7 @@
 <ul><li>実用Git</li><li><a href="http://www8.atwiki.jp/git_jp/pub/Documentation.ja/tutorial-2.html">git チュートリアル：パート２</a></li><li><a href="http://keijinsonyaban.blogspot.jp/2011/05/git.html">見えないチカラ: 【翻訳】Gitをボトムアップから理解する</a></li><li><a href="http://git-scm.com/book/ja/Git%E3%81%AE%E5%86%85%E5%81%B4-Git%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88">Git</a></li></ul>
 <h1>やってみる</h1>
 <p>まずは、空のREADMEファイルを作ってFirst commit。</p>
-<pre class="">$ git init
+<pre>$ git init
 Initialized empty Git repository in /tmp/repos/.git/
 $ touch README
 $ git add README
@@ -99,7 +99,7 @@ $ git log --graph --date-order --all --date=short -C -M --pretty=format:&quot;%h
 <ul><li>rev-parse コマンドはタグとかブランチとかHEAD、HEAD^^など指定したらそのコミットのSHA1が返ってくる<ul><li>最初のコミットオブジェクトは <span class="deco" style="color:#0000FF;">b0d99b3</span></li></ul></li><li>cat-file コマンドでコミットオブジェクトの内容を確認できる<ul><li>コミットオブジェクトに関連付いているツリーオブジェクトは <span class="deco" style="color:#FF0000;">543b9be</span></li></ul></li><li>ls-tree コマンドで上のツリーオブジェクトにぶら下がっているツリーオブジェクト、ブロブオブジェクトを確認できる<ul><li>今は直下にREADMEファイルしかないから <span class="deco" style="color:#00FF00;">e69de29</span></li></ul></li><li>コミットすると.git/objects/の下に3つファイルが作られる<ul><li>SHA1の先頭2桁でディレクトリを作り、その下に残りのSHA1でファイル作成</li></ul></li></ul>
 <h2>ゆっくり</h2>
 <p>READMEを編集してみる。</p>
-<pre class="">$ echo &quot;このリポジトリはテスト用です&quot; &gt; README 
+<pre>$ echo &quot;このリポジトリはテスト用です&quot; &gt; README 
 $ git status
 # On branch master
 # Changes not staged for commit:
@@ -113,7 +113,7 @@ no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&q
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20120829192354"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20120829/20120829192354.jpg"></a></p>
 <h2>addしたとき</h2>
 <p>ここでREADMEファイルをadd。</p>
-<pre class="">$ git add README
+<pre>$ git add README
 $ git status
 # On branch master
 # Changes to be committed:
@@ -125,7 +125,7 @@ $ git status
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20120829192355"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20120829/20120829192355.jpg"></a></p>
 <p><span class="deco" style="color:#00FF00;">リポジトリにコミットされているREADME e69de29</span> の他に<span class="deco" style="color:#666600;">de7e855 というオブジェクトがステージされている</span>。おまけに.git/objectsの下にも。</p>
 <ul><li>addした時点で、gitリポジトリの中に入れ込まれている？</li><li>リセットしても.git/objectsの下からは消えない(ただ、この状態でほったらかしておくとどこからも参照されないからいずれgcされて死ぬ？)</li></ul>
-<pre class="">$ git reset HEAD README
+<pre>$ git reset HEAD README
 Unstaged changes after reset:
 M	README
 $ git status
@@ -146,7 +146,7 @@ $ git cat-file -p de7e8558
 このリポジトリはテスト用です</pre>
 <h2>commitしたとき</h2>
 <p>もう一回addして今度はコミット。</p>
-<pre class="">$ git add README
+<pre>$ git add README
 $ git commit -m &quot;README追記&quot;
 [master 30eab42] README追記
  1 file changed, 1 insertion(+)</pre>

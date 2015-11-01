@@ -89,7 +89,7 @@
 <table><tr><th>記法</th><th>意味</th></tr><tr><td>^</td><td>指定したコミットの1番目の親</td></tr><tr><td>^番号</td><td>指定したコミットのN番目の親</td></tr><tr><td>~</td><td>指定したコミットの1世代前の親</td></tr><tr><td>~世代</td><td>指定したコミットのN世代前の親</td></tr></table>
 <p>という事らしい……が、番目と世代は何が違うんだろう？　とりあえずこんな歴史があるとして、masterから戻ってみる。</p>
 <h2>確認</h2>
-<pre class=""> * b467307 2012-04-05 kk_Ataka  (HEAD, origin/master, master) Add get_sheetname.rb(convert exe file b
+<pre> * b467307 2012-04-05 kk_Ataka  (HEAD, origin/master, master) Add get_sheetname.rb(convert exe file b
  | * b025b6b 2012-04-05 kk_Ataka  (1.0stable, fileignore) Ignore docx files
  * |   90aaa1c 2012-04-04 kk_Ataka  Merge branch 'studyissue'
  |\ \
@@ -103,21 +103,21 @@
  * 0563594 2012-04-04 kk_Ataka  1.0stable
  * 3d2f6bb 2012-04-04 kk_Ataka  First commit</pre>
 <p>まず一番目の親を指定……。</p>
-<pre class="">$ git checkout HEAD^
+<pre>$ git checkout HEAD^
 ...
 HEAD is now at 90aaa1c... Merge branch 'studyissue'</pre>
 <p>うん、指定できてる。んじゃ一旦masterに戻って、次はキャレット連発で。二つ前を指定できるはず。</p>
-<pre class="">$ git checkout HEAD^^
+<pre>$ git checkout HEAD^^
 ...
 HEAD is now at 2d387ba... Add concat function (test pending...)</pre>
 <p>読み通り。じゃあ次は^NでN番目の親を指定してみる。</p>
-<pre class="">$ git checkout HEAD^2
+<pre>$ git checkout HEAD^2
 error: pathspec 'HEAD^2' did not match any file(s) known to git.</pre>
 <p>あ、あれ？</p>
-<pre class="">$ git checkout HEAD^3
+<pre>$ git checkout HEAD^3
 error: pathspec 'HEAD^3' did not match any file(s) known to git.</pre>
 <p>ん？</p>
-<pre class="">$ git checkout HEAD^1
+<pre>$ git checkout HEAD^1
 ...
 HEAD is now at 90aaa1c... Merge branch 'studyissue'</pre>
 <p>これはできるの？　ふーむ。</p>
@@ -125,7 +125,7 @@ HEAD is now at 90aaa1c... Merge branch 'studyissue'</pre>
 <p>(以下略)</p>
 <br />
 <p>結局こうなった。</p>
-<pre class=""> * b467307       master(HEAD)
+<pre> * b467307       master(HEAD)
  | * b025b6b   
  * |   90aaa1c   HEAD^     HEAD^1 HEAD~     HEAD~1
  |\ \  
@@ -150,7 +150,7 @@ HEAD is now at 90aaa1c... Merge branch 'studyissue'</pre>
 <p>親が複数ある状況を作らないといけないという事かな。</p>
 <h2>再度チャレンジ</h2>
 <p>少し適当にコミットしてマージして親が2つある状況を作った。</p>
-<pre class=""> *   8dc8247 2012-04-10 kk_Ataka  (HEAD, master) Merge branch 'mergedbranch'
+<pre> *   8dc8247 2012-04-10 kk_Ataka  (HEAD, master) Merge branch 'mergedbranch'
  |\
  * | ca6b93d 2012-04-10 kk_Ataka  (mergedbranch2) temp
  * | 7819449 2012-04-10 kk_Ataka  temp
@@ -159,18 +159,18 @@ HEAD is now at 90aaa1c... Merge branch 'studyissue'</pre>
  |/
  | * b025b6b 2012-04-05 kk_Ataka  (1.0stable, fileignore) Ignore docx files
  * |   90aaa1c 2012-04-04 kk_Ataka  Merge branch 'studyissue'</pre>
-<pre class="">$ git ch HEAD^
+<pre>$ git ch HEAD^
 ...
 HEAD is now at ca6b93d... temp</pre>
 <p>これはできると。んで、問題の^2は……</p>
-<pre class="">$ git ch HEAD^2
+<pre>$ git ch HEAD^2
 ...
 HEAD is now at 074c658... temp</pre>
 <p>できた！　ってことは、二つのブランチしかマージしていないから、^3はエラーになるはず……。</p>
-<pre class="">$ git ch HEAD^3
+<pre>$ git ch HEAD^3
 error: pathspec 'HEAD^3' did not match any file(s) known to git.</pre>
 <p>おー。</p>
-<pre class=""> *   8dc8247     master(HEAD)
+<pre> *   8dc8247     master(HEAD)
  |\
  * | ca6b93d     HEAD^    HEAD^1  HEAD~    HEAD~1
  * | 7819449     HEAD^^           HEAD~~   HEAD~2

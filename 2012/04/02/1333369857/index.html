@@ -82,7 +82,7 @@
 <ul><li><a href="http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.svn.c.changelist.html">svn changelist</a></li><li><a href="http://d.hatena.ne.jp/namutaka/20110125/1295964889">SVNでchangelistに所属していないファイルを扱う方法  - namutakaの日記</a></li><li><a href="http://www-aos.eps.s.u-tokyo.ac.jp/~takagi/subversion.html#sec16">http://www-aos.eps.s.u-tokyo.ac.jp/~takagi/subversion.html#sec16</a></li><li><a href="http://blog.cgfm.jp/garyu/archives/83">svnで間違ったコミットをmergeで戻すコマンドのメモ | 我流天性 がらくた屋</a></li></ul>
 <h1>方法</h1>
 <p>なんかいっぱいファイルがあるとする。</p>
-<pre class="">$  ls
+<pre>$  ls
 a001.html            a019.html            a037.html            a055.html            a073.html            a091.html
 a002.html            a020.html            a038.html            a056.html            a074.html            a092.html
 a003.html            a021.html            a039.html            a057.html            a075.html            a093.html
@@ -102,7 +102,7 @@ a016.html            a034.html            a052.html            a070.html        
 a017.html            a035.html            a053.html            a071.html            a089.html
 a018.html            a036.html            a054.html            a072.html            a090.html</pre>
 <p>で、全部管理下。</p>
-<pre class="">$  svn  st
+<pre>$  svn  st
 A              .
 A              a048.html
 A              a084.html
@@ -114,18 +114,18 @@ A              a088.html
 略</pre>
 <p>順番としては、index,  link,  menu,  productを一回目にコミット、その後はaxxx.htmlファイルを20個ずつコミットしていく全6回のコミット作業をしたい。</p>
 <p>毎回</p>
-<pre class="">$  svn  commit  a001.html  a002.html  a003.html  ...  </pre>
+<pre>$  svn  commit  a001.html  a002.html  a003.html  ...  </pre>
 <p>とするのはめんどうくさいしミスもしそうなのでこれを上手くコミットしたい。いろいろありそうだけど、とりあえずいけそうだと思ったのはchangelist(cl)コマンドを使ってコミット毎にグループを作り、グループ単位で作業していくという戦法。</p>
 <h2>Changelist作成</h2>
 <p>changelist(cl)コマンドで特定のファイルをグループにできる。</p>
-<pre class="">$  svn  cl  CHANGE_LIST_NAME  FILE1  FILE2  ...  </pre>
-<pre class="">$  svn  cl  mainpage  index.html  link.html  menu.html  product.html
+<pre>$  svn  cl  CHANGE_LIST_NAME  FILE1  FILE2  ...  </pre>
+<pre>$  svn  cl  mainpage  index.html  link.html  menu.html  product.html
 パス  'index.html'  は変更リスト  'mainpage'  に属しています。
 パス  'link.html'  は変更リスト  'mainpage'  に属しています。
 パス  'menu.html'  は変更リスト  'mainpage'  に属しています。
 パス  'product.html'  は変更リスト  'mainpage'  に属しています。</pre>
 <p>これでindex,  link,  menu,  productはmainpageというグループに所属した。うーん。ここのファイル指定が手作業になっちゃうとあまり意味がないような気もするが……。ステータスを見るとちゃんと他のファイルｔ区別されている。</p>
-<pre class="">$  svn  st
+<pre>$  svn  st
 A              .
 A              a048.html
 略
@@ -137,13 +137,13 @@ A              menu.html
 A              link.html
 A              index.html</pre>
 <p>以後、index.htmlたちはchangelist  mainpageとして指定する事ができる。今回は連番なので一括で指定もできるがファイル名に統一性がない場合は一個ずつ指定するしかないかな。</p>
-<pre class="">$  svn  cl  a021-40  a0{21..40}.html
+<pre>$  svn  cl  a021-40  a0{21..40}.html
 パス  'a021.html'  は変更リスト  'a021-40'  に属しています。
 パス  'a022.html'  は変更リスト  'a021-40'  に属しています。
 パス  'a023.html'  は変更リスト  'a021-40'  に属しています。
 略</pre>
 <p>略。でchangelistが6つできた。</p>
-<pre class="">$  svn  st
+<pre>$  svn  st
 ---  変更リスト  'a001-20':
 A              a001.html
 略
@@ -164,9 +164,9 @@ A              a076.html
 略</pre>
 <h2>Commit</h2>
 <p>commitコマンドに--changelistオプションを指定。</p>
-<pre class="">$  svn  commit  --changelist  CHECK_LIST_NAME</pre>
+<pre>$  svn  commit  --changelist  CHECK_LIST_NAME</pre>
 <p>changelistを指定すると……</p>
-<pre class="">$  svn  commit  --changelist  mainpage
+<pre>$  svn  commit  --changelist  mainpage
           1
           2    --  この行以下は無視されます  --
           3
@@ -175,9 +175,9 @@ A              a076.html
           6    A        checklistdir/link.html
           7    A        checklistdir/index.html</pre>
 <p>そのグループのファイルだけが選択される。一回コミットするとchangelistはなくなるが、--keep-changelistsオプションを使えば残したままにできる。</p>
-<pre class="">$  svn  commit  --cl  mainpage  --keep-changelists</pre>
+<pre>$  svn  commit  --cl  mainpage  --keep-changelists</pre>
 <p>ステータスを見ると残っている！　ただし、ファイルの変更はないのでAとかMとかはついていない。</p>
-<pre class="">$  svn  st
+<pre>$  svn  st
 略
 ---  変更リスト  'mainpage':
                 product.html

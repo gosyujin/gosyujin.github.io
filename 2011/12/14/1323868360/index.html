@@ -85,27 +85,27 @@
 <ul><li><a href="http://blog.myfinder.jp/2010/09/vpsssh.html">myfinder&#39;s blog: さくらのVPSを借りたら真っ先にやるべきssh設定</a></li><li><a href="http://d.hatena.ne.jp/h-yano/20080225/1203952174">sshで「Permission denied (publickey,gssapi-with-mic).」が出た時 - 今日とは違う明日</a></li><li><a href="http://d.hatena.ne.jp/rubellum/20100901/1283321253">「さくらのVPS」借りてみた（作業ユーザー作成，SSH設定） - rubellum&#39;s blog</a></li><li><a href="http://havelog.ayumusato.com/develop/server/e135-sakura-vps-setup1.html">とあるさくらのVPS (1) ユーザーとSSHを設定 ::ハブろぐ</a></li></ul>
 <h1>サーバ</h1>
 <p>ユーザを作成する。</p>
-<pre class=""># useradd kk_Ataka
+<pre># useradd kk_Ataka
 # passwd  kk_Ataka</pre>
 <p>ユーザをwheelグループに。</p>
-<pre class=""># usermod -G wheel kk_Ataka</pre>
+<pre># usermod -G wheel kk_Ataka</pre>
 <h1>クライアント</h1>
 <p>鍵を作る。</p>
-<pre class="">$ ssh-keygen -t rsa</pre>
+<pre>$ ssh-keygen -t rsa</pre>
 <p>鍵をサーバに送る。(既に作ってある場合は~/.ssh/にあるid_rsa.pubを)</p>
-<pre class="">$ scp id_rsa.pub USER@ADDRESS:PATH</pre>
+<pre>$ scp id_rsa.pub USER@ADDRESS:PATH</pre>
 <p>※ポート変えた場合はscpコマンドに -P ポート番号 をつける。</p>
-<pre class="">$ scp -P PORT id_rsa.pub USER@ADDRESS:PATH</pre>
+<pre>$ scp -P PORT id_rsa.pub USER@ADDRESS:PATH</pre>
 <h1>再びサーバ</h1>
 <h2>SSHの設定</h2>
 <p>鍵を受け取ったらホームディレクトリに.sshディレクトリを作りコピー。</p>
-<pre class="">$ mkdir .ssh
+<pre>$ mkdir .ssh
 $ mv id_rsa.pub .ssh/authorized_keys</pre>
 <p>権限を変更。</p>
-<pre class="">$ chmod 700 ~demo/.ssh
+<pre>$ chmod 700 ~demo/.ssh
 $ chmod 600 ~demo/.ssh/authorized_keys</pre>
 <p>sshd_configファイルを編集。</p>
-<pre class=""># vi /etc/ssh/sshd_config</pre>
+<pre># vi /etc/ssh/sshd_config</pre>
 <p>>|?|</p>
 <p># 使用ポートをデフォルトから変更</p>
 <p>Port XXXXX </p>
@@ -117,15 +117,15 @@ $ chmod 600 ~demo/.ssh/authorized_keys</pre>
 <p>UsePAM no</p>
 <table><tr><td><</td></tr></table>
 <p>編集したら再起動。<span class="footnote"><a href="#f1" title="もしくはservice sshd restart？" name="fn1">*1</a></span></p>
-<pre class=""># /etc/init.d/sshd restart</pre>
+<pre># /etc/init.d/sshd restart</pre>
 <h2>sudoコマンド</h2>
 <p>wheelグループがsudoコマンド使えるように。</p>
-<pre class=""># visudo</pre>
-<pre class="">%wheel  ALL=(ALL)       ALL  </pre>
+<pre># visudo</pre>
+<pre>%wheel  ALL=(ALL)       ALL  </pre>
 <p>rootアカウントをロック。</p>
-<pre class=""># passwd -l root  </pre>
+<pre># passwd -l root  </pre>
 <p>アンロックするにはuオプション。</p>
-<pre class=""># passwd -u root</pre>
+<pre># passwd -u root</pre>
 <div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: もしくはservice sshd restart？</p></div>
 </div>
 

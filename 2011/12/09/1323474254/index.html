@@ -82,13 +82,13 @@
 <p>不意に.Zファイルがやってきて解凍の仕方を調べてしまった。あとだいたいオプションを忘れるのでメモ。対象ファイルは以下。</p>
 <ol><li>.zip</li><li>.Z</li><li>.gz</li><li>.bz2</li><li>.tar.gz</li><li>.tgz</li><li>.tar.bz2</li><li>.tbz</li><li>.tar.Z</li></ol>
 <p>こんなファイルを固めたり解凍したり。</p>
-<pre class="">extracted
+<pre>extracted
 ┣direct/
 ┃┗ls.txt # man ls &gt;&gt; ls.txt
 ┣slink
 ┣tar.txt  # man tar &gt;&gt; tar.txt
 ┗zip.txt  # man zip &gt;&gt; zip.txt</pre>
-<pre class="">tar
+<pre>tar
 ┗sample.tar
 $ tar tvf sample.tar ../extracted
 drwxr-xr-x 9999/9999      0 12月  8日 19:14 2011年 ../extracted/
@@ -99,19 +99,19 @@ drwxr-xr-x 9999/9999      0 12月  8日 19:37 2011年 ../extracted/direct/
 -rw-r--r-- 9999/9999  40835 12月  8日 19:11 2011年 ../extracted/zip.txt</pre>
 <h1>zip(unzip) 拡張子: zip</h1>
 <ul><li>圧縮<ul><li>zip 圧縮後のファイル名 [ファイル ファイル]</li></ul></li></ul>
-<pre class="">$ zip ../compressed/c.zip *
+<pre>$ zip ../compressed/c.zip *
   adding: direct/ (stored 0%)
   adding: slink (deflated 71%)
   adding: tar.txt (deflated 71%)
   adding: zip.txt (deflated 67%)</pre>
-<pre class="">$ zip -r ../compressed/c.zip *
+<pre>$ zip -r ../compressed/c.zip *
   adding: direct/ (stored 0%)
   adding: direct/ls.txt (deflated 75%)
   adding: slink (deflated 71%)
   adding: tar.txt (deflated 71%)
   adding: zip.txt (deflated 67%)</pre>
 <ul><li>解凍<ul><li>unzip 解凍ファイル.zip -d 解凍パス</li></ul></li></ul>
-<pre class="">$ unzip ../compressed/c.zip -d ../compressed/output/zip/
+<pre>$ unzip ../compressed/c.zip -d ../compressed/output/zip/
 Archive:  ../compressed/c.zip
    creating: ../compressed/output/zip/direct/
   inflating: ../compressed/output/zip/direct/ls.txt
@@ -121,82 +121,82 @@ Archive:  ../compressed/c.zip
 <p>rでディレクトリの下も含めてまとめて。解凍時にdでパス指定</p>
 <h1>compress(uncompress) 拡張子: Z, tar.Z</h1>
 <ul><li>圧縮<ul><li>compress -fv [ファイル ファイル]</li></ul></li></ul>
-<pre class="">$ compress -fv *
+<pre>$ compress -fv *
 direct: 圧縮: 86.32% -- 通常ファイルではありません: 変更されていません。
 slink: 圧縮: 60.13% -- slink.Z と置換しました。
 tar.txt: 圧縮: 60.13% -- tar.txt.Z と置換しました。
 zip.txt: 圧縮: 57.45% -- zip.txt.Z と置換しました。</pre>
-<pre class="">$ compress -v sample.tar
+<pre>$ compress -v sample.tar
 sample.tar: 圧縮: 60.78% -- sample.tar.Z と置換しました。</pre>
 <ul><li>解凍<ul><li>compress -dv [ファイル ファイル]</li><li>uncompress -v [ファイル ファイル]</li></ul></li></ul>
-<pre class="">$ compress -dv *
+<pre>$ compress -dv *
 direct.Z: ファイルもディレクトリもありません。
 slink.Z:  -- slink と置換しました。
 tar.txt.Z:  -- tar.txt と置換しました。
 zip.txt.Z:  -- zip.txt と置換しました</pre>
-<pre class="">$ uncompress -v *
+<pre>$ uncompress -v *
 direct.Z: ファイルもディレクトリもありません。
 slink.Z:  -- slink と置換しました。
 tar.txt.Z:  -- tar.txt と置換しました。
 zip.txt.Z:  -- zip.txt と置換しました。</pre>
-<pre class="">$ compress -dv sample.tar.Z
+<pre>$ compress -dv sample.tar.Z
 sample.tar.Z:  -- sample.tar と置換しました。</pre>
-<pre class="">$ uncompress -v sample.tar.Z
+<pre>$ uncompress -v sample.tar.Z
 sample.tar.Z:  -- sample.tar と置換しました</pre>
 <p>そのファイル自体が置換される？　fは強制(圧縮しても小さくならない、ファイルが既に存在する場合も上書き)、vは冗長、dは解凍？</p>
 <h1>gzip(gunzip) 拡張子: gz, tar.gz, tgz</h1>
 <ul><li>圧縮<ul><li>gzip [ファイル ファイル]</li></ul></li></ul>
-<pre class="">$ gzip -rv *
+<pre>$ gzip -rv *
 direct/ls.txt:   75.2% -- replaced with direct/ls.txt.gz
 slink:   71.3% -- replaced with slink.gz
 tar.txt:         71.3% -- replaced with tar.txt.gz
 zip.txt:         66.7% -- replaced with zip.txt.gz</pre>
-<pre class="">$ gzip -v sample.tar
+<pre>$ gzip -v sample.tar
 sample.tar:      72.2% -- replaced with sample.tar.gz</pre>
 <ul><li>解凍<ul><li>gzip -d [ファイル ファイル]</li><li>gunzip [ファイル ファイル]</li></ul></li></ul>
-<pre class="">$ gzip -rdv *
+<pre>$ gzip -rdv *
 direct/ls.txt.gz:        75.2% -- replaced with direct/ls.txt
 slink.gz:        71.3% -- replaced with slink
 tar.txt.gz:      71.3% -- replaced with tar.txt
 zip.txt.gz:      66.7% -- replaced with zip.txt</pre>
-<pre class="">$ gunzip -rv *
+<pre>$ gunzip -rv *
 direct/ls.txt.gz:        75.2% -- replaced with direct/ls.txt
 slink.gz:        71.3% -- replaced with slink
 tar.txt.gz:      71.3% -- replaced with tar.txt
 zip.txt.gz:      66.7% -- replaced with zip.txt</pre>
-<pre class="">$ gzip -dv sample.tar.gz
+<pre>$ gzip -dv sample.tar.gz
 sample.tar.gz:   72.2% -- replaced with sample.tar</pre>
-<pre class="">$ gunzip -v sample.tar.gz
+<pre>$ gunzip -v sample.tar.gz
 sample.tar.gz:   72.2% -- replaced with sample.tar</pre>
 <p>そのファイル自体が置換される？　fは強制。vは冗長。dで解凍。</p>
 <h1>bzip2(bunzip2) 拡張子: bz2, tar.bz2, tbz</h1>
 <ul><li>圧縮<ul><li>bzip2 [ファイル ファイル]</li></ul></li></ul>
-<pre class="">$ bzip2 -v *
+<pre>$ bzip2 -v *
 bzip2: Input file direct is a directory.
   slink:    4.001:1,  1.999 bits/byte, 75.01% saved, 39133 in, 9780 out.
   tar.txt:  4.001:1,  1.999 bits/byte, 75.01% saved, 39133 in, 9780 out.
   zip.txt:  3.355:1,  2.384 bits/byte, 70.19% saved, 40835 in, 12171 out.</pre>
-<pre class="">$ bzip2 -v sample.tar
+<pre>$ bzip2 -v sample.tar
   sample.tar:  4.165:1,  1.921 bits/byte, 75.99% saved, 121856 in, 29256 ou
 t.</pre>
 <ul><li>解凍<ul><li>bzip2 -d [ファイル ファイル]</li><li>bunzip2 [ファイル ファイル]</li></ul></li></ul>
-<pre class="">$ bzip2 -dv *
+<pre>$ bzip2 -dv *
 bzip2: Input file direct is a directory.
   slink.bz2:   done
   tar.txt.bz2: done
   zip.txt.bz2: done</pre>
-<pre class="">$ bunzip2 -v *
+<pre>$ bunzip2 -v *
 bunzip2: Input file direct is a directory.
   slink.bz2:   done
   tar.txt.bz2: done
   zip.txt.bz2: done</pre>
-<pre class="">$ bzip2 -dv sample.tar.bz2
+<pre>$ bzip2 -dv sample.tar.bz2
   sample.tar.bz2: done</pre>
-<pre class="">$ bunzip2 -v sample.tar.bz2
+<pre>$ bunzip2 -v sample.tar.bz2
   sample.tar.bz2: done</pre>
 <p>そのファイル自体が置換される？　fは強制。vは冗長。dで解凍。ディレクトリの下は指定しないとダメ？</p>
 <h1>圧縮結果(参考)</h1>
-<pre class="">-rw-r--r--   1 test    test      47784 12月  8日  21:38 sample.tar.Z
+<pre>-rw-r--r--   1 test    test      47784 12月  8日  21:38 sample.tar.Z
 -rw-r--r--   1 test    test      29256 12月  8日  21:41 sample.tar.bz2
 -rw-r--r--   1 test    test      33934 12月  8日  21:21 sample.tar.gz</pre>
 <p>今回の結果だと、ファイルサイズはおおむね Z > gz > bz2 になっている。</p>

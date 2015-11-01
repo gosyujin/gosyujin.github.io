@@ -112,7 +112,7 @@ end</pre>
 <pre class="ruby">require './app.rb'
 run Sinatra::Application</pre>
 <p><span class="deco" style="color:#FF0000;">※ちょっと先の話になるけど、始めは1行目をrequire 'app.rb'としていた。それでもローカルでは問題なくロードして動作してたし。が、Herokuにデプロイすると下記のようなログを吐きエラーとなった。</span></p>
-<pre class="">2011-11-23T08:10:02+00:00 heroku[web.1]: State changed from created to starting
+<pre>2011-11-23T08:10:02+00:00 heroku[web.1]: State changed from created to starting
 2011-11-23T08:10:03+00:00 heroku[web.1]: Starting process with command `thin -p 54821 -e production -R /home/heroku_rack/heroku.ru start`
 2011-11-23T08:10:04+00:00 app[web.1]: &lt;internal:lib/rubygems/custom_require&gt;:29:in `require': no such file to load -- .app.rb (LoadError)
 2011-11-23T08:10:04+00:00 app[web.1]:      from &lt;internal:lib/rubygems/custom_require&gt;:29:in `require'
@@ -122,12 +122,12 @@ run Sinatra::Application</pre>
 <ul><li><a href="http://d.hatena.ne.jp/ruedap/20110531/ruby_require_load_path">Rubyでrbファイルをrequireするときはドットを打つと良さそう - アインシュタインの電話番号☎</a></li><li><a href="http://www.ruby-lang.org/ja/news/2010/08/18/ruby-1-9-2-is-released/#label-8">Ruby 1.9.2ãªãªã¼ã¹</a></li></ul>
 <h2>Gitの管理下に</h2>
 <p>で、戻ってきて…次にgitの管理対象におく。(今はまだやる必要ないけど、先にすませとく)bundle系のファイルはignoreしておく。</p>
-<pre class="">$ git init
+<pre>$ git init
 $ vi .gitignore
 .bundle
 vendor</pre>
 <p>ここまでのプロジェクト構成はこう。</p>
-<pre class="">heroku_sample
+<pre>heroku_sample
 ┣.bundle/
 ┣.git/
 ┣.gitignore
@@ -139,7 +139,7 @@ vendor</pre>
 <h1>ローカルで動作確認</h1>
 <h2>Sinatra起動</h2>
 <p>ちょっとローカルで動作確認。<span class="footnote"><a href="#f1" title="この時はRuby1.8.7でやっていた。後ほど1.9代へ変更" name="fn1">*1</a></span></p>
-<pre class="">$ bundle exec ruby app.rb
+<pre>$ bundle exec ruby app.rb
 [2011-11-23 13:51:52] INFO  WEBrick 1.3.1
 [2011-11-23 13:51:52] INFO  ruby 1.8.7 (2011-06-30) [i686-darwin10.8.0]
 == Sinatra/1.3.1 has taken the stage on 4567 for development with backup from WEBrick
@@ -153,7 +153,7 @@ vendor</pre>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20111126014003"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111126/20111126014003.jpg"></a></p>
 <h2>プロジェクト作成</h2>
 <p>先ほどgemで入れたherokuでHerokuにプロジェクトを作成する。その際、メールアドレスとパスワードの入力が求められる。あとsshキーが必要になるっぽい。</p>
-<pre class="">$ bundle exec heroku create heroku_sample
+<pre>$ bundle exec heroku create heroku_sample
 Enter your Heroku credentials.
 Email: メールアドレス入れる
 Password: パスワード入れる
@@ -161,7 +161,7 @@ Found existing public key: /Users/kk_Ataka/.ssh/id_rsa.pub
 Uploading ssh public key /Users/kk_Ataka/.ssh/id_rsa.pub
  !   Name must start with a letter and can only contain lowercase letters, numbers, and dashes</pre>
 <p>ん？　名前は小文字と数字とダッシュだけ？　んじゃ適当に…。</p>
-<pre class="">$ bundle exec heroku create tycoon-gosyujin
+<pre>$ bundle exec heroku create tycoon-gosyujin
 Creating tycoon-gosyujin... done, stack is bamboo-mri-1.9.2
 http://tycoon-gosyujin.heroku.com/ | git@heroku.com:tycoon-gosyujin.git
 Git remote heroku added</pre>
@@ -169,7 +169,7 @@ Git remote heroku added</pre>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20111126014001"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111126/20111126014001.jpg"></a></p>
 <h2>GitでHerokuへpush</h2>
 <p>そしたらGitのローカルリポジトリにcommitしたのち、Herokuへpushする。(gitコマンドエイリアス使ってます)</p>
-<pre class="">$ git add ./
+<pre>$ git add ./
 $ git com 'First commit.'
 $ git push heroku master
 Counting objects: 774, done.

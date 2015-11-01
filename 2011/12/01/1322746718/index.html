@@ -84,32 +84,32 @@
 <p>使用するコマンドはmt(磁気テープの制御)とtar。まずはmt。</p>
 <h2>テープの状態表示</h2>
 <ul><li>-fオプションでテープデバイスの指定</li><li>/dev/rmt/0はテープデバイスのパス</li></ul>
-<pre class="">$ mt -f /dev/rmt/0 status</pre>
+<pre>$ mt -f /dev/rmt/0 status</pre>
 <h2>テープの巻き戻し</h2>
 <p>今回は使わなかった。</p>
-<pre class="">$ mt -f /dev/rmt/0 rewind</pre>
+<pre>$ mt -f /dev/rmt/0 rewind</pre>
 <h2>テープの取り出し</h2>
 <p>データの取り出しではなく、DAT装置からの取り出し。</p>
-<pre class="">$ mt -f /dev/rmt/0 offline</pre>
+<pre>$ mt -f /dev/rmt/0 offline</pre>
 <p>ここからtar。</p>
 <ul><li>fオプションはtarファイル引数の指定。<ul><li>fを省略した場合は$TAPE(設定されている場合)</li><li>$TAPEもない場合は/etc/default/tarを見に行く<span class="footnote"><a href="#f1" title="必ずf指定してたからこれは知らなかった" name="fn1">*1</a></span></li></ul></li><li>vオプションはファイル名の出力</li></ul>
 <h2>テープの内容を表示</h2>
 <ul><li>tオプションは指定されたtarファイルの内容一覧表示</li></ul>
-<pre class="">$ tar tvf /dev/rmt/0</pre>
+<pre>$ tar tvf /dev/rmt/0</pre>
 <p>tオプションで表示される内容はこんな感じ。</p>
-<pre class="">$ tar tf test.tar
+<pre>$ tar tf test.tar
 test/aaa.txt
 ...</pre>
 <p>vオプションと併用すると詳細に。</p>
-<pre class="">$ tar tvf openssl-xxx.tar
+<pre>$ tar tvf openssl-xxx.tar
 -rw-r--r--   9/9    99999  3月 19日 22:22 2011年 test/aaa.txt
 ...</pre>
 <h2>テープへ書き込み</h2>
 <ul><li>cオプションは作成</li></ul>
-<pre class="">$ tar cvf /dev/rmt/0 FILE</pre>
+<pre>$ tar cvf /dev/rmt/0 FILE</pre>
 <h2>テープ内データの取り出し</h2>
 <ul><li>xオプションはファイルの抽出、復元。テープに入ったデータがそのまま復元される</li></ul>
-<pre class="">$ tar xvf /dev/rmt/0</pre>
+<pre>$ tar xvf /dev/rmt/0</pre>
 <p>テープに/tmp/AAA.tarが書き込まれている場合、上記コマンドを実行すると/tmp/下に復元する。</p>
 <div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 必ずf指定してたからこれは知らなかった</p></div>
 </div>

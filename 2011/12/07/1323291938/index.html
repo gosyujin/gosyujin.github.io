@@ -86,11 +86,11 @@
 <h1>手順</h1>
 <h2>ZenTest導入</h2>
 <p>まずはZenTestをgemで導入……しようと思ったらgem自体のアップデートを要求された。</p>
-<pre class="">gem update --system</pre>
+<pre>gem update --system</pre>
 <p>アップした後はgem 1.8.10となった。gemを最新にしたらZenTestを導入。</p>
-<pre class="">gem install ZenTest</pre>
+<pre>gem install ZenTest</pre>
 <p>次にソースファイルを用意。Growlで何かしら通知するファイルを作りたかったのでそんな感じの名前に。</p>
-<pre class="">growl_for_ruby
+<pre>growl_for_ruby
 ┣.autotest
 ┣autotest
 ┃┗discover.rb
@@ -107,14 +107,14 @@
 <p>テストコード。rspecの書き方にならってテストを書いていく。注意しないといけないのは、テストコードはspecフォルダ以下に入れないと読み込んでくれない。<span class="footnote"><a href="#f1" title="ただし、どこかの設定で場所は変えられると書いてあった気がする。" name="fn1">*1</a></span></p>
 <h2>テスト実行</h2>
 <p>一つ新しいプロンプトを開き、プロジェクトルートへ移動。そしてautotest実行。</p>
-<pre class="">$ autotest
+<pre>$ autotest
 loading autotest/rspec2
 C:\ruby1.8\bin\ruby -rrubygems -S C:/ruby1.8/lib/ruby/gems/1.8/gems/rspec-core-2.5.1/bin/rspec --tty 'C:/xx/growl_for_ruby/spec/growl_spec.rb'</pre>
 <p>成功すると待ち状態になり。以後はコードを保存する毎？　にrspecコマンドが走ってくれる！</p>
 <h2>その他</h2>
 <p>どうもRubyのPATHにスペースが入っているとLoad Errorとなる様子。<del datetime="2011-12-08T06:05:38+09:00">またお前か。</del>ここでもデフォルトパスでインストールした弊害が……。</p>
 <p>と、もう一つ。autotestの他にrspecにautospecというコマンドがあるらしく、こちらを叩いてもOK"だった"らしい。今は以下のようなメッセージが出る。訳は <a href="http://d.hatena.ne.jp/smellman/20110310/1299727933">autospecと打ったら罵られてしまった件について - すめるまん Broken Diary</a> に記載されています。</p>
-<pre class="">************************************************************
+<pre>************************************************************
 REMOVAL NOTICE: you are using behaviour that has been
 removed from rspec-2.
 

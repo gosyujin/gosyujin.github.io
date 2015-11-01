@@ -91,8 +91,8 @@
 <ul><li>Redmineの環境構築が完了している事<ul><li>bundle exec ruby script/server -e production で起動できる事</li></ul></li></ul>
 <h2>インストールから起動まで</h2>
 <ul><li>まずはRedmineデフォルトのGemfileにmongrelを追加し、bundle install</li></ul>
-<pre class="">gem &quot;mongrel&quot;</pre>
-<pre class="">$ bundle install
+<pre>gem &quot;mongrel&quot;</pre>
+<pre>$ bundle install
 Fetching source index for http://rubygems.org/
 Using rake (0.9.2.2)
 Using activesupport (2.3.14)
@@ -116,29 +116,29 @@ Using tzinfo (0.3.33)
 Using bundler (1.0.21)
 Your bundle is complete! It was installed into ./vendor/bundle</pre>
 <ul><li>bundle exec ruby ...で起動…しようとするとエラー</li></ul>
-<pre class="">msvcrt-ruby18.dll が見つからなかったため、このアプリケーションを開始できませんでした。アプリケーションをインストールし直すとこの問題は解決される場合があります。</pre>
+<pre>msvcrt-ruby18.dll が見つからなかったため、このアプリケーションを開始できませんでした。アプリケーションをインストールし直すとこの問題は解決される場合があります。</pre>
 <ul><li><a href="http://gururan.com/20100820/002808">【Ruby1.9】msvcrt-ruby18.dll が見つからなかったため、このアプリケーションを開始できませんでした。・・・とエラーが。。。 | ぐるらん</a> という事らしいので、jsonを消してみることに……ただ、バージョンが違うんだよなあ。</li></ul>
-<pre class="">$ gem list
+<pre>$ gem list
 ...
 json (1.5.4)
 ...</pre>
-<pre class="">$ gem uninstall json
+<pre>$ gem uninstall json
 Successfully uninstalled json-1.5.4</pre>
 <ul><li>で、再起動……だめだった！！</li><li><a href="http://simultechnology.blendmix.jp/blog/archives/1248">Windowsでrails3.0をMongrelで動かす | simultechnology.blog</a> によると、さっきいれてた<span class="deco" style="color:#FF0000;">mongrel 1.1.5 はRuby 1.8のモジュールを使っている</span>という事らしい</li><li><span class="deco" style="color:#FF0000;">新しいバージョン(今はプレリリース版)を入れることで解決できる。</span>Gemfileを修正しbundle install</li></ul>
-<pre class="">-gem &quot;mongrel&quot;
+<pre>-gem &quot;mongrel&quot;
 +gem &quot;mongrel&quot;, &quot;&gt;= 1.2.0.pre2&quot;</pre>
-<pre class="">$ bundle install
+<pre>$ bundle install
 ...
 Installing mongrel (1.2.0.pre2)</pre>
 <ul><li>起動！　起動した！　WEBrickで起動していたのがMongrelに変わった！</li></ul>
-<pre class="">=&gt; Booting WEBrick</pre>
-<pre class="">=&gt; Booting Mongrel</pre>
+<pre>=&gt; Booting WEBrick</pre>
+<pre>=&gt; Booting Mongrel</pre>
 <p>に変わった！</p>
 <h1>サービスに登録</h1>
 <ul><li>mongrel_serviceをGemfileに登録</li></ul>
-<pre class="">gem &quot;mongrel_service&quot;</pre>
+<pre>gem &quot;mongrel_service&quot;</pre>
 <ul><li>インストールできたらmongrel_railsというコマンドが追加される(今回はbundlerでインストールしたので、Redmineのrootまで行ってbundle exec mongrel_rails)</li></ul>
-<pre class="">[C:\redmine-1.4.0]
+<pre>[C:\redmine-1.4.0]
 $ be mongrel_rails
 Usage: mongrel_rails &lt;command&gt; [options]
 Available commands are:
@@ -150,17 +150,17 @@ Available commands are:
  - service::remove</pre>
 <ul><li>Serviceに追加</li></ul>
 <table><tr><th>オプション</th><th>意味</th></tr><tr><td>-N</td><td>サービス名</td></tr><tr><td>-c</td><td>Redmineのルート</td></tr><tr><td>-p</td><td>起動ポート</td></tr><tr><td>-e</td><td>Railsの起動モード</td></tr></table>
-<pre class="">$ be mongrel_rails service::install -N &quot;Redmine&quot; -c C:\redmine-1.4.0 -p 3000 -e production
+<pre>$ be mongrel_rails service::install -N &quot;Redmine&quot; -c C:\redmine-1.4.0 -p 3000 -e production
 ** Copying native mongrel_service executable...
 Redmine service created.</pre>
 <ul><li>登録に成功したのでWin+rからservices.mscを呼び出して確認……</li><li>あった！<ul><li>スタートアップの種類が手動になっていたので自動に変更</li></ul></li><li>マシン再起動！</li></ul>
 <p><span class="deco" style="color:#FF0000;">起動しない……だと……？</span></p>
 <h2>サービスから起動できなかった</h2>
 <ul><li>Redmineフォルダ内のlogにmongrel.logがあるので見てみると</li></ul>
-<pre class="">C:\RUBY_ROOT\bin\ruby.exe: No such file or directory -- C:/RUBY_ROOT/bin/mongrel_rails (LoadError)</pre>
+<pre>C:\RUBY_ROOT\bin\ruby.exe: No such file or directory -- C:/RUBY_ROOT/bin/mongrel_rails (LoadError)</pre>
 <p>うーん。RUBY_ROOTのbin下にmongrel_railsを探しに行ってる？　……でも今回はbundlerで入れたからREDMINE_ROOT/vendor/bundle下を見に行ってほしいんだけどなぁ。</p>
 <p>ちょっと試しにbundlerからmongrel, mongrel_serviceをはずして、gemで直接Mongrelをインストールしてみる。</p>
-<pre class="">$ gem install mongrel --pre
+<pre>$ gem install mongrel --pre
 $ gem install mongrel_service</pre>
 <p>これで</p>
 <ul><li>REDMINE_ROOTのvendor/bundleにMongrelはなくなった<ul><li>つまり、REDMINE_ROOTでbundle exec ruby ...したらWEBRickで起動するようになった</li></ul></li><li>RUBY_ROOTにmongrelが入った</li></ul>

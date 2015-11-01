@@ -85,11 +85,11 @@
 <h1>あらすじ</h1>
 <dl><dt>今あると幸せになれるもの</dt><dd>チケットのCSVエクスポート機能。ただし、履歴つきで。これがあるといわゆるバグとかPJ課題の管理がRedmineで一元化できExcelの呪縛から解き放てられる……</dd></dl>
 <p>既に履歴つきCSVエクスポートプラグインは存在しているようです。<a href="http://d.hatena.ne.jp/suer/20101003/1286120294">履歴付チケット一覧出力プラグインを書いてみた - すえひろがりっっっっ!</a>　ただ、履歴の出方が1履歴毎に列を更新なんですよね。。</p>
-<pre class="">No, ... ,履歴
+<pre>No, ... ,履歴
 1, ... ,#1の履歴,#2の履歴,#3の履歴
 2, ... ,#1の履歴,#2の履歴</pre>
 <p>今自分が抱えている縛り的にはこう出てほしい。</p>
-<pre class="">No, ... ,履歴
+<pre>No, ... ,履歴
 1, ... ,&quot;#1の履歴
 #2の履歴,
 #3の履歴&quot;
@@ -103,16 +103,16 @@
 <ul><li>WindowsXP</li><li>Redmine 1.0.0<span class="footnote"><a href="#f1" title="[http://redmine.jp/guide/RedmineInstall/:title=Redmineのインストール | Redmine.JP]　に準拠。" name="fn1">*1</a></span><ul><li>Ruby 1.8.7</li><li>Rails 2.3.5</li><li>Rack 1.0.1</li></ul></li><li>SQLite3 バージョン失念</li></ul>
 <h1>プラグインのスケルトン作成</h1>
 <p>まずはプラグインのスケルトンというものを作成する。テンプレートみたいなもの？　以下のコマンドで自動生成してくれます。<span class="footnote"><a href="#f2" title="途中でコマンドプロンプトからConsole2というフリーソフトに切り替えたのでパスの区切りが\だったり/だったりしてます。" name="fn2">*2</a></span></p>
-<pre class="">&gt;ruby script\generate redmine_plugin extendCsv</pre>
+<pre>&gt;ruby script\generate redmine_plugin extendCsv</pre>
 <p>するといきなりエラー。</p>
-<pre class="">!!! The bundled mysql.rb driver has been removed from Rails 2.2. Please install
+<pre>!!! The bundled mysql.rb driver has been removed from Rails 2.2. Please install
 the mysql gem and try again: gem install mysql.</pre>
 <p>さらに、</p>
-<pre class="">LIBMYSQL.dll が見つからなかったため、このアプリケーションを開始できませんでした。…</pre>
+<pre>LIBMYSQL.dll が見つからなかったため、このアプリケーションを開始できませんでした。…</pre>
 <p>libmysqlが必要らしい。なんでmysqlなんだろう？　SQLite3使うようにしてなかったっけ？</p>
 <p>(略)</p>
 <p>あーわかった。config/database.ymlがこうなっていた。</p>
-<pre class="">production:
+<pre>production:
   adapter: sqlite3
   database: db/redmine
  
@@ -124,7 +124,7 @@ development:
   password:
   encoding: utf8</pre>
 <p>productionは変えていたけどdevelopmentはデフォルト=MySQLのままだった。開発時はdevelopmentモードを使うようになっているからmysql探し出したのか。変えてみた。</p>
-<pre class="">production:
+<pre>production:
   adapter: sqlite3
   database: db/redmine
  
@@ -132,8 +132,8 @@ development:
   adapter: sqlite3
   database: db/redminedev</pre>
 <p>再度。</p>
-<pre class="">&gt;ruby script\generate redmine_plugin extendCsv</pre>
-<pre class="">C:\redmine-1.0.0&gt;ruby script\generate redmine_plugin extendCsv
+<pre>&gt;ruby script\generate redmine_plugin extendCsv</pre>
+<pre>C:\redmine-1.0.0&gt;ruby script\generate redmine_plugin extendCsv
       create  vendor/plugins/redmine_extend_csv/app/controllers
       create  vendor/plugins/redmine_extend_csv/app/helpers
       create  vendor/plugins/redmine_extend_csv/app/models
@@ -152,7 +152,7 @@ development:
       create  vendor/plugins/redmine_extend_csv/config/locales/en.yml
       create  vendor/plugins/redmine_extend_csv/test/test_helper.rb</pre>
 <p>vendor/plugins下にスケルトンができた。この「vendor/plugins/今回作成したディレクトリ」というのがプラグインのルートになるようです。</p>
-<pre class="">C:\redmine-1.0.0\vendor\plugins&gt;dir
+<pre>C:\redmine-1.0.0\vendor\plugins&gt;dir
 
 2011/09/06  09:24    &lt;DIR&gt;          .
 2011/09/06  09:24    &lt;DIR&gt;          ..
@@ -163,15 +163,15 @@ development:
 <h1>init.rbの作成</h1>
 <p>プラグイン名、作者名などを記述できるが今は特になにも設定せず。後でプラグインを表示さす時に戻って来ます。</p>
 <p>ここで一回起動してみる。</p>
-<pre class="">&gt;ruby script\server</pre>
+<pre>&gt;ruby script\server</pre>
 <p>オプションに-e productionをつけないとdevelopmentモードで起動する。その前に、DBの初期化をしていない場合は初期化を……。(RAILS_ENV=productionを除外)</p>
-<pre class="">&gt;rake db:migrate
+<pre>&gt;rake db:migrate
 &gt;rake redmine:load_default_data</pre>
 <p>そしてRedmine起動 -> 管理 -> プラグインを見に行くと…あった！(写真なし)</p>
 <h1>補足:SQLite3あれこれ</h1>
 <p>ちょっとSQLite3も使ってみる。コンソールから見ることもないだろうとexeはDLしていなかったので今回初。</p>
 <ul><li>まずexe版SQLite3をDL</li><li>実行</li></ul>
-<pre class=""># Redmineのconfig/database.ymlで定義し作成したDBへ接続
+<pre># Redmineのconfig/database.ymlで定義し作成したDBへ接続
 &gt;sqlite3.exe REDMINE_DB_FILE
 SQLite version 3.7.7.1 2011-06-28 17:39:05
 Enter &quot;.help&quot; for instructions
@@ -179,7 +179,7 @@ Enter SQL statements terminated with a &quot;;&quot;</pre>
 <p>今回はとりあえず下記の2つのコマンドを覚えて帰る。</p>
 <table><tr><th>.table</th><td>テーブル一覧を取得する</td></tr><tr><th>pragma_table_info(TABLE)</th><td>テーブルのカラム情報を取得する</td></tr></table>
 <ul><li>.table</li></ul>
-<pre class="">sqlite&gt; .table
+<pre>sqlite&gt; .table
 attachments                          news
 auth_sources                         open_id_authentication_associations
 boards                               open_id_authentication_nonces
@@ -204,7 +204,7 @@ journals                             wiki_redirects
 member_roles                         wikis
 members                              workflows</pre>
 <ul><li>pragma_table_info(TABLE)</li></ul>
-<pre class="">sqlite&gt; pragma table_info(issues);
+<pre>sqlite&gt; pragma table_info(issues);
 0|id|INTEGER|1||1
 1|tracker_id|integer|1|0|0
 2|project_id|integer|1|0|0
@@ -228,7 +228,7 @@ members                              workflows</pre>
 20|lft|integer|0|NULL|0
 21|rgt|integer|0|NULL|0</pre>
 <p>今回欲しいテーブルはissues, journals, journal_detailsの3つでOKのはずなので<span class="footnote"><a href="#f3" title="チケットの履歴がjournalテーブルで管理されているのを探すのに手間取ったんだけど、どう探すのがクールなんだろう。チケット画面遷移したときのログで探して辿り着いたんだけど。" name="fn3">*3</a></span>これをちょっとメモしておく。</p>
-<pre class="">sqlite&gt; pragma table_info(issues);
+<pre>sqlite&gt; pragma table_info(issues);
  0|id              |INTEGER     |1|    |1
  1|tracker_id      |integer     |1|0   |0
  2|project_id      |integer     |1|0   |0

@@ -83,7 +83,7 @@
 <p>ググってみると、F1キーをぶちぬくという方法も割とメジャーらしいのですが、いずれ返却しなければいけないPCのため物理的な方法は却下。なので無効化する方向でいきます。レジストリをいじってなんとかする。Accessの履歴といい、なんでMicrosoft製品は何かしようとしたらレジストリいじらないといけないんだ…。</p>
 <h1>手順</h1>
 <p>Windowsキー+r -> regedit でレジストリエディタ起動、まずは下記パスを掘っていく。</p>
-<pre class="">HKEY_CURRENT_USER
+<pre>HKEY_CURRENT_USER
 ┗Software
 　┗Policies
 　　┗Microsoft
@@ -91,7 +91,7 @@
 <p>Officeフォルダ直下になにかしら数字フォルダがあるかもしれないが、これはOfficeのバージョン。</p>
 <ul><li>12.0 = Office2007</li></ul>
 <p>という事らしい。今回は2007なので12.0を掘る。ここから下の階層はなければ作成する。(作成したい階層で右クリック -> 新規 -> キー)</p>
-<pre class="">HKEY_CURRENT_USER
+<pre>HKEY_CURRENT_USER
 ┗Software
 　┗Policies
 　　┗Microsoft
@@ -100,7 +100,7 @@
 　　　　　┗Excel
 　　　　　　┗DisabledShortcutKeysCheckBoxes</pre>
 <p>DisabledShortcutKeysCheckBoxesを作り、DisabledShortcutKeysCheckBoxesで右クリック -> 新規 -> 文字列値を選択しF1Key(わかればなんでもよい)と入力。作成したF1Keyをダブルクリックし</p>
-<pre class="">112,0</pre>
+<pre>112,0</pre>
 <p>と入力しOK押下。</p>
 <p>Excelを再起動するとF1キーを押しても何も起こらなくなった！！　よし！</p>
 </div>

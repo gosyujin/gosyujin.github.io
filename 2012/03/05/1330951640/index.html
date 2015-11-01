@@ -86,7 +86,7 @@
 <ul><li><a href="http://progit.org/">Git - Book</a></li><li>入門git</li></ul>
 <h1>リポジトリの作成</h1>
 <p>リポジトリにしたいディレクトリの中でinitコマンドで作成 or init ディレクトリ で生成。</p>
-<pre class="">$ git init
+<pre>$ git init
 Initialized empty Git repository in c:/project/testRemote/test/.git/</pre>
 <p>以後は基本的にリポジトリの中で作業。</p>
 <h1>コンフィグ</h1>
@@ -95,34 +95,34 @@ Initialized empty Git repository in c:/project/testRemote/test/.git/</pre>
 <table><tr><th>ファイル</th><th>Windows(msysGit)では</th><th>範囲</th><th>優先度</th><th>configコマンドでの設定方法</th></tr><tr><td>/etc/gitconfig</td><td>(msysのルート)/etc/gitconfig</td><td>システム全体</td><td>低</td><td>--system</td></tr><tr><td>~/.gitconfig</td><td>%USERPROFILE%\.gitconfig</td><td>あるユーザ</td><td>中</td><td>--global</td></tr><tr><td>(リポジトリ内).git/config</td><td>(リポジトリ内).git/config</td><td>そのリポジトリ</td><td>高</td><td>(指定なし)</td></tr></table>
 <h2>コンフィグの一覧を見る</h2>
 <p>そのリポジトリのコンフィグを見る。</p>
-<pre class="">$ git config --list
+<pre>$ git config --list
 user.name=kk_Ataka
 ...</pre>
 <p>あるユーザのコンフィグを見る。</p>
-<pre class="">$ git config --list --global</pre>
+<pre>$ git config --list --global</pre>
 <p>システム全体のコンフィグを見る。</p>
-<pre class="">$ git config --list --system</pre>
+<pre>$ git config --list --system</pre>
 <h2>コンフィグの確認(特定の)</h2>
-<pre class="">$ git config user.name
+<pre>$ git config user.name
 kk_Ataka</pre>
 <h2>コンフィグの編集</h2>
-<pre class="">$ git config --global user.name &quot;kk_Ataka&quot;
+<pre>$ git config --global user.name &quot;kk_Ataka&quot;
 $ git config --global user.email &quot;test@example.com&quot;</pre>
 <h1>リポジトリ作成</h1>
 <p>.git ファイルを作成し、その中にGitリポジトリのスケルトンが格納される。→スケルトン？</p>
 <h2>リポジトリを作成する</h2>
-<pre class="">$ git init testdir
+<pre>$ git init testdir
 Initialized empty Git repository in c:/project/testdir/.git/</pre>
 <h1>リポジトリのクローン</h1>
 <p>既存のリポジトリを歴史毎ごっそり持ってくる。プロトコルにはhttp,https,git等がある。</p>
 <h2>既存リポジトリのクローン</h2>
-<pre class="">$ git clone http://github.com/gosyujin/excel_for_ruby.git
+<pre>$ git clone http://github.com/gosyujin/excel_for_ruby.git
 Cloning into excel_for_ruby...
 remote: Counting objects: 22, done.
 remote: Compressing objects: 100% (13/13), done.
 remote: Total 22 (delta 2), reused 21 (delta 1)
 Unpacking objects: 100% (22/22), done.</pre>
-<pre class="">$ cd excel_for_ruby\
+<pre>$ cd excel_for_ruby\
 $ git log
 commit b6cd9964b1e586d8be280acd40c9719f6cc045c0
 Author: kk_Ataka &lt;kk_ataka@---.---.jp&gt;
@@ -132,12 +132,12 @@ Date:   Sun Dec 25 17:36:53 2011 +0900
 <h1>状態確認</h1>
 <h2>作業ツリーの状態確認</h2>
 <ul><li>変更なし</li></ul>
-<pre class="">$ git status
+<pre>$ git status
 # On branch master
 nothing to commit (working directory clean)</pre>
 <ul><li>変更あり</li><li>Untracked files</li></ul>
 <p>まだGitに追跡されていないファイル。(＝前回コミット時になかったファイル)これからaddする必要がある。赤く表示される。</p>
-<pre class="">$ git status
+<pre>$ git status
 # On branch master
 # Untracked files:
 #   (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
@@ -146,14 +146,14 @@ nothing to commit (working directory clean)</pre>
 nothing added to commit but untracked files present (use &quot;git add&quot; to track)</pre>
 <ul><li>new file</li></ul>
 <p>addで新しく追跡開始されたファイルmenu.htmlがステージされている。緑で表示される。</p>
-<pre class=""># On branch master
+<pre># On branch master
 # Changes to be committed:
 #   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)
 #
 #       new file:   menu.html</pre>
 <ul><li>modified</li></ul>
 <p>既に追跡されているファイルが変更された。赤で表示される。これからaddでステージする。</p>
-<pre class="">$ git status
+<pre>$ git status
 # On branch master
 # Changed but not updated:
 #   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
@@ -166,11 +166,11 @@ no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&q
 <h2>リポジトリに追加(追跡の開始)</h2>
 <h2>ステージング</h2>
 <p>追跡の開始ともいうらしい。ディレクトリを指定すると、その下を再帰的に追跡する。</p>
-<pre class="">$ git add index.html</pre>
+<pre>$ git add index.html</pre>
 <h1>ファイル比較</h1>
 <h2>ファイルの比較</h2>
 <ul><li>作業ツリーの内容とステージングエリアの比較</li></ul>
-<pre class="">$ git status
+<pre>$ git status
 # On branch master
 # Changed but not updated:
 #   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
@@ -179,7 +179,7 @@ no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&q
 #       modified:   index.html
 #
 no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</pre>
-<pre class="">$ git diff
+<pre>$ git diff
 diff --git a/index.html b/index.html
 index a633da3..bc2a94f 100644
 --- a/index.html
@@ -196,7 +196,7 @@ index a633da3..bc2a94f 100644
    &lt;/body&gt;
  &lt;/html&gt;</pre>
 <ul><li>ステージされた内容と直近のコミットの比較</li></ul>
-<pre class="">$ git add index.html
+<pre>$ git add index.html
 $ git status
 # On branch master
 # Changes to be committed:
@@ -206,7 +206,7 @@ $ git status
 #
 $ git diff</pre>
 <p>add してdiff すると出力はなし。--cached, --stagedオプションをつけるとステージされた内容との比較を取る。</p>
-<pre class="">$ git diff --cached
+<pre>$ git diff --cached
 diff --git a/index.html b/index.html
 index a633da3..bc2a94f 100644
 --- a/index.html
@@ -239,7 +239,7 @@ index a633da3..bc2a94f 100644
    &lt;/body&gt;
  &lt;/html&gt;</pre>
 <p>ステージした後に編集。</p>
-<pre class="">$ git status
+<pre>$ git status
 # On branch master
 # Changes to be committed:
 #   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)
@@ -252,7 +252,7 @@ index a633da3..bc2a94f 100644
 #
 #       modified:   index.html</pre>
 <p>これをdiff, diff --stagedで比較すると……。</p>
-<pre class="">$ git diff
+<pre>$ git diff
 diff --git a/index.html b/index.html
 index bc2a94f..341bb47 100644
 --- a/index.html
@@ -286,7 +286,7 @@ index a633da3..bc2a94f 100644
 <h1>ファイル削除(追跡除外)</h1>
 <h2>ファイルの削除(追跡の除外)</h2>
 <p>通常のrmだと作業ツリーからファイルを消しただけ。</p>
-<pre class="">$ rm VERSION
+<pre>$ rm VERSION
 
 $ git status
 # On branch master
@@ -298,7 +298,7 @@ $ git status
 #
 no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</pre>
 <p>git rm 後にcommitする事で追跡対象から除外する。</p>
-<pre class="">$ git rm VERSION
+<pre>$ git rm VERSION
 rm 'VERSION'
 
 $ git status
@@ -319,8 +319,8 @@ nothing to commit (working directory clean)</pre>
 <h1>コミット</h1>
 <h2>コミットを行う</h2>
 <p>ログ記述のためにgit config core.editorや環境変数EDITORに適切なエディタが設定されている必要がある。VIなど</p>
-<pre class="">$ git commit index.html</pre>
-<pre class=""> 1
+<pre>$ git commit index.html</pre>
+<pre> 1
  2 # Please enter the commit message for your changes. Lines starting
  3 # with '#' will be ignored, and an empty message aborts the commit.
  4 # On branch master
@@ -330,7 +330,7 @@ nothing to commit (working directory clean)</pre>
  8 #       modified:   index.html
  9 #</pre>
 <p>commit -v でdiffを確認する事も出来る。</p>
-<pre class=""> 1
+<pre> 1
  2 # Please enter the commit message for your changes. Lines starting
  3 # with '#' will be ignored, and an empty message aborts the commit.
  4 # Explicit paths specified without -i nor -o; assuming --only paths...
@@ -353,18 +353,18 @@ nothing to commit (working directory clean)</pre>
 21    &lt;body&gt;
 22      &lt;h1&gt;Hello&lt;/h1&gt;
 23 +    &lt;p&gt;Hello world !!&lt;/p&gt;</pre>
-<pre class="">[master (root-commit) 4b5c302] First commit.
+<pre>[master (root-commit) 4b5c302] First commit.
  1 files changed, 8 insertions(+), 0 deletions(-)
  create mode 100644 index.html</pre>
 <h2>コミットを行う(コミットログまでワンライナー)</h2>
 <p>commit -mでコミットログを指定できる。-mを打つ毎に改行される</p>
-<pre class="">$ git commit -m &quot;Modified index.html title&quot; -m &quot;Added menu.html&quot;
+<pre>$ git commit -m &quot;Modified index.html title&quot; -m &quot;Added menu.html&quot;
 [master eaa9ebc] Modified index.html title
  2 files changed, 6 insertions(+), 1 deletions(-)
  create mode 100644 menu.html</pre>
 <h2>追跡ファイルのステージを省略</h2>
 <p>addを省く。</p>
-<pre class="">$ git status
+<pre>$ git status
 # On branch master
 # Changed but not updated:
 #   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
@@ -373,14 +373,14 @@ nothing to commit (working directory clean)</pre>
 #       modified:   menu.html
 #
 no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</pre>
-<pre class="">$ git commit -a -m &quot;Added head tag&quot;
+<pre>$ git commit -a -m &quot;Added head tag&quot;
 [master 1d4d741] Added head tag
  1 files changed, 2 insertions(+), 0 deletions(-)</pre>
-<pre class="">$ git status
+<pre>$ git status
 # On branch master
 nothing to commit (working directory clean)</pre>
 <p>追跡可能じゃないとできない？</p>
-<pre class="">$ touch VERSION
+<pre>$ touch VERSION
 
 $ git commit -a -m &quot;Added VERSION file&quot;
 # On branch master
@@ -391,7 +391,7 @@ $ git commit -a -m &quot;Added VERSION file&quot;
 nothing added to commit but untracked files present (use &quot;git add&quot; to track)</pre>
 <h1>コミットのやり直し</h1>
 <p>誤ってtypoしたままコミットしてしまった。</p>
-<pre class="">$ cat README
+<pre>$ cat README
 Haloo Wold
 
 $ git commit -a -m &quot;Typo commit&quot;
@@ -411,7 +411,7 @@ Date:   Tue Feb 21 13:10:02 2012 +0900
 
     Deleted VERSION file</pre>
 <p>コミットした後commit --amendで前回のコミット直前からやり直せる？</p>
-<pre class="">$ vi README
+<pre>$ vi README
 $ git add README
 $ git commit --amend
 
@@ -428,7 +428,7 @@ Date:   Tue Feb 21 13:10:02 2012 +0900
     Deleted VERSION file</pre>
 <h1>ステージのやり直し</h1>
 <p>ステージングエリアに入れたファイルを取り消したいときはresetコマンドを使う。</p>
-<pre class="">$ git status
+<pre>$ git status
 # On branch master
 # Changed but not updated:
 #   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
@@ -448,10 +448,10 @@ $ git status
 #       modified:   README
 #</pre>
 <p>ここでステージングエリアに入れたREADMEファイルをreset。</p>
-<pre class="">$ git reset HEAD README
+<pre>$ git reset HEAD README
 Unstaged changes after reset:
 M       README</pre>
-<pre class="">$ git status
+<pre>$ git status
 # On branch master
 # Changed but not updated:
 #   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
@@ -463,7 +463,7 @@ no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&q
 <p>HEADってなんじゃらほい？　今自分が作業じているローカルブランチへのポインタ。上から見ていくと今はmasterから動いていないので作業しているブランチはmasterのまま=HEADもmaster。</p>
 <h1>変更の取り消し</h1>
 <p>SubversionでいうところのRevertであっている？　編集したファイルを直前のコミットの状態まで戻す。実はずっとgit statusコマンド打っていたときに出ていた。</p>
-<pre class="">$ git diff README
+<pre>$ git diff README
 diff --git a/README b/README
 index 27f338f..557db03 100644
 --- a/README
@@ -482,7 +482,7 @@ $ git status
 #
 no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</pre>
 <p>checkout -- <file>で戻せるようだ。</p>
-<pre class="">$ git checkout -- README
+<pre>$ git checkout -- README
 
 $ git diff README
 
@@ -491,22 +491,22 @@ Hello Wrld</pre>
 <h1>リモート関連</h1>
 <h2>(リモート)リポジトリの作成</h2>
 <p>作業ディレクトリがいらない場合はinit --bareオプションをつける。ディレクトリ名に.gitをつけるのは慣例……だったかな？　何かに書いてあった気がする。</p>
-<pre class="">$ git init --bare remote1.git
+<pre>$ git init --bare remote1.git
 Initialized empty Git repository in c:/project/testRemote/remote1.git/</pre>
 <h2>リモートリポジトリの追加</h2>
 <p>追加はremote add [shortname] [url]で行う。以後、gitコマンドからはshortnameで指定できるようになる。</p>
-<pre class="">$ git remote add rem1 c:/project/testRemote/remote1</pre>
+<pre>$ git remote add rem1 c:/project/testRemote/remote1</pre>
 <p>ここでURLを間違えていた事に気づく。(.git忘れた)が、同じshortnameにaddしても既にあるよって言われてしまうので削除しないといけない。</p>
-<pre class="">$ git remote add rem1 c:/project/testRemote/remote1.git
+<pre>$ git remote add rem1 c:/project/testRemote/remote1.git
 fatal: remote rem1 already exists.</pre>
 <p>また、Windows？msysGit？を使っている場合は、Windows感覚でパスを打ちこむとエスケープされる。</p>
-<pre class="">$ git remote add rem1 c:\project\testRemote\remote1.git
+<pre>$ git remote add rem1 c:\project\testRemote\remote1.git
 
 $ git remote -v
 rem1    c:projecttestRemoteremote1.git (fetch)
 rem1    c:projecttestRemoteremote1.git (push)</pre>
 <p>円マークを重ねるのとスラッシュとでは表記は変わるけど違いはないようだ。</p>
-<pre class="">$ git remote add rem1 c:/project/testRemote/remote1.git
+<pre>$ git remote add rem1 c:/project/testRemote/remote1.git
 
 $ git remote add rem2 c:\\project\\testRemote\\remote2.git
 
@@ -517,34 +517,34 @@ rem2    c:\project\testRemote\remote2.git (fetch)
 rem2    c:\project\testRemote\remote2.git (push)</pre>
 <h2>リモートリポジトリのリネーム</h2>
 <p>remote rename [shortname_now] [shortname_after]でいける。</p>
-<pre class="">$ git remote rename rem1 remo
+<pre>$ git remote rename rem1 remo
 
 $ git remote
 rem2
 remo</pre>
 <h2>リモートリポジトリの削除</h2>
 <p>remote rm [shortname]</p>
-<pre class="">$ git remote rm rem1</pre>
+<pre>$ git remote rm rem1</pre>
 <h2>リモートリポジトリの確認</h2>
 <p>リポジトリからcloneしてきた場合はoriginという名前が付けられる。Gitがデフォルトでつけるshortname。よくgit push origin masterとかで出てくるorigin。</p>
-<pre class="">$ git remote -v
+<pre>$ git remote -v
 origin  http://github.com/gosyujin/evernote_for_ruby.git (fetch)
 origin  http://github.com/gosyujin/evernote_for_ruby.git (push)</pre>
 <p>git initでローカルに作成したリポジトリだとoriginもないので何も表示されない。</p>
-<pre class="">$ git remote
+<pre>$ git remote
 </pre>
 <p>addした後はそのリポジトリのshortnameが列挙される。</p>
-<pre class="">$ git remote
+<pre>$ git remote
 rem1
 rem2</pre>
 <p>remote -vでURLも。</p>
-<pre class="">$ git remote -v
+<pre>$ git remote -v
 rem1    c:/project/testRemote/remote1.git (fetch)
 rem1    c:/project/testRemote/remote1.git (push)
 rem2    c:\project\testRemote\remote2.git (fetch)
 rem2    c:\project\testRemote\remote2.git (push)</pre>
 <p>remote show [shortname]でより詳しく。</p>
-<pre class="">$ git remote show rem1
+<pre>$ git remote show rem1
  * remote rem1
    Fetch URL: c:/project/testRemote/remote1.git
    Push  URL: c:/project/testRemote/remote1.git
@@ -555,13 +555,13 @@ rem2    c:\project\testRemote\remote2.git (push)</pre>
      master pushes to master (up to date)</pre>
 <h2>リモートリポジトリからデータ取得(フェッチ、プル)</h2>
 <p>リモートにあるデータの内、まだ持っていないものを取得できる。fetchコマンドを使う。</p>
-<pre class="">$ git fetch rem1
+<pre>$ git fetch rem1
 
 $ git fetch rem2</pre>
 <p>空のリポジトリからfetchしているので特に何も起こらなかった……。cloneした後(最近fetchした後)からの変更を取得できる。ただし、これだと取得しただけなのでfetch後マージをしてやる必要がある。フェッチ、マージを一気にやってくれるgit pullというコマンドもある。</p>
 <h2>リモートリポジトリへのデータ登録(プッシュ)</h2>
 <p>ローカルにコミットしたデータをプッシュ。という事でpushコマンドを使用。push [shortname] [branch]でプッシュ先とプッシュするブランチを指定。</p>
-<pre class="">$ git push rem1 master
+<pre>$ git push rem1 master
 Counting objects: 26, done.
 Delta compression using up to 2 threads.
 Compressing objects: 100% (22/22), done.

@@ -83,43 +83,43 @@
 <ul><li><a href="http://www.syuhitu.org/other/package/package.html">パッケージの作成</a></li><li><a href="http://www.nognog.com/techmemo/Solaris_Package_Creation_HOWTO.php">うにっくすさんの覚え書き - Solaris - オリジナルパッケージの作成</a></li><li><a href="http://blogs.oracle.com/yappri/entry/create_solaris_package">http://blogs.oracle.com/yappri/entry/create_solaris_package</a></li></ul>
 <h1>インストール後のファイルを作成する</h1>
 <p>作業用ディレクトリに移動する。</p>
-<pre class="">$ cd /tmp/kk_Ataka</pre>
+<pre>$ cd /tmp/kk_Ataka</pre>
 <p>次にインストール後のファイル構成を作る。今回はこんなパッケージを作る。</p>
-<pre class="">/home/kk_Ataka/testpkg
+<pre>/home/kk_Ataka/testpkg
 /home/kk_Ataka/testpkg/readme.txt</pre>
 <p>実際に作る。</p>
-<pre class="">$ mkdir /home/kk_Ataka/testpkg
+<pre>$ mkdir /home/kk_Ataka/testpkg
 $ touch /home/kk_Ataka/testpkg/readme.txt</pre>
 <p>あと、パッケージ名を考えておく。今回はTESTPKGでいいかな。</p>
 <h1>Prototypeファイルを作成する</h1>
 <p>以下のような内容のファイルを作成し保存する。名前は適当でよいので今回はtext.txtとした。これはまだPrototypeファイルではない。</p>
-<pre class="">/home/
+<pre>/home/
 /home/kk_Ataka/
 /home/kk_Ataka/testpkg/
 /home/kk_Ataka/testpkg/readme.txt</pre>
 <p>次に下記コマンドを実行する。</p>
-<pre class="">pkgproto &lt; test.txt &gt; Prototype</pre>
+<pre>pkgproto &lt; test.txt &gt; Prototype</pre>
 <p>成功したら、カレントディレクトリにPrototypeというファイルが出来ている。中身はこんなもん。</p>
-<pre class="">d none /home 0755 root root
+<pre>d none /home 0755 root root
 d none /home/kk_Ataka 0755 kk_Ataka users
 d none /home/kk_Ataka/testpkg 0755 kk_Ataka users
 f none /home/kk_Ataka/testpkg/readme.txt 0644 kk_Ataka users</pre>
 <p>左がファイルのタイプ？(d:ディレクトリ、f:ファイル)　noneはなんだろう？作成するファイル、権限、ユーザ名、グループ名かな。</p>
 <p>PrototypeファイルができたらPrototypeファイルの先頭に以下を追加する。</p>
-<pre class="">i pkginfo</pre>
+<pre>i pkginfo</pre>
 <p>なのでこうなる。</p>
-<pre class="">i pkginfo
+<pre>i pkginfo
 d none /home 0755 root root
 d none /home/kk_Ataka 0755 kk_Ataka users
 d none /home/kk_Ataka/testpkg 0755 kk_Ataka users
 f none /home/kk_Ataka/testpkg/readme.txt 0644 kk_Ataka users</pre>
 <h2>どっちがいいのか？</h2>
 <p>ちなみに、test.txtを一番最下層のファイルのみにするとこうなるが、どっちの方がいいんだろう。後で試してみる。</p>
-<pre class="">/home/kk_Ataka/testpkg/readme.txt</pre>
-<pre class="">f none /home/kk_Ataka/testpkg/readme.txt 0644 kk_Ataka users</pre>
+<pre>/home/kk_Ataka/testpkg/readme.txt</pre>
+<pre>f none /home/kk_Ataka/testpkg/readme.txt 0644 kk_Ataka users</pre>
 <h1>pkginfoファイルを作成する</h1>
 <p>pkginfoファイルを作成する。中身はパッケージの情報。</p>
-<pre class="">PKG=&quot;TESTPKG&quot;
+<pre>PKG=&quot;TESTPKG&quot;
 NAME=&quot;This is a Test Package.&quot;
 ARCH=&quot;sparc&quot;
 VERSION=&quot;1.0&quot;
@@ -127,7 +127,7 @@ CATEGORY=&quot;system&quot;</pre>
 <table><tr><th>PKG</th><td>必須</td><td>パッケージ名称</td></tr><tr><th>NAME</th><td>必須</td><td>パッケージの名前</td></tr><tr><th>ARCH</th><td>必須</td><td>アーキテクチャ sparc, i386など</td></tr><tr><th>VERSION</th><td>必須</td><td>バージョン</td></tr><tr><th>CATEGORY</th><td>必須</td><td>カテゴリ application, systemなどがあるらしい</td></tr></table>
 <h1>パッケージ作成</h1>
 <p>Prototypeファイルとpkginfoファイルを使いパッケージを作成する。</p>
-<pre class="">$ pkgmk -r / -d .
+<pre>$ pkgmk -r / -d .
 ## prototype ファイルから pkgmap を作成中です。
 ## pkginfo ファイルを処理中です。
     警告: パラメータ &lt;PSTAMP&gt; の値は &quot;xxx999999999999999999&quot; に設定されます。
@@ -141,14 +141,14 @@ CATEGORY=&quot;system&quot;</pre>
 ## 制御スクリプトの妥当性検査中です。
 ## パッケージ処理は完了しました。</pre>
 <p>pkginfoに設定する項目が足りないせいか警告は出たが問題なさげ。ともかくこれでパッケージはできた！</p>
-<pre class="">$ pwd
+<pre>$ pwd
 /tmp/kk_Ataka
 $ ls
 Prototype   TESTPKG/    pkginfo     test.txt</pre>
 <h1>パッケージを一つにまとめる</h1>
 <p>今のままではTESTPKGというディレクトリなので、これをパッケージ(.pkg)としてまとめる。以下のコマンドを使用する。</p>
-<pre class="">$ pkgtrans . TESTPKG.pkg</pre>
-<pre class="">$ pkgtrans . TESTPKG.pkg
+<pre>$ pkgtrans . TESTPKG.pkg</pre>
+<pre>$ pkgtrans . TESTPKG.pkg
 
 The following packages are available:
   1  TESTPKG     This is a Test Package.
@@ -163,7 +163,7 @@ Prototype     TESTPKG/      TESTPKG.pkg   pkginfo       test.txt</pre>
 <p>TESTPKGがTESTPKG.pkgにまとまった。</p>
 <h1>パッケージをインストールする</h1>
 <p>最後にインストール。root権限で。</p>
-<pre class=""># pkgadd -d TESTPKG.pkg</pre>
+<pre># pkgadd -d TESTPKG.pkg</pre>
 <p>以上。</p>
 </div>
 
