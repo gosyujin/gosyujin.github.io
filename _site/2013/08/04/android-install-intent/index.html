@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <div class="header">
+      <nav>
+        <ul>
+          <li><a href="/">kk_Atakaの日記</a></li>
+          <li class="main-nav"><a href="/archives.html">Archive</a>
+          <li class="main-nav"><a href="/tags.html">Tag</a>
+        </ul>
+      </nav>
+    </div>
+
+    <div id="container">
+      <article class="markdown-body">
+        <h1><a href="/2013/08/04/android-install-intent">Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件</a></h1>
+        <div class="published">
+          
+            <span>Tags: </span>
+            
+              <span>[ <code><a href="/tags.html#Java" class="tag">Java</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Android" class="tag">Android</a></code> ]</span>
+            
+          
+          
+            <span>Published: 2013/08/04</span>
+          
+        </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/07/18/ios-backup-restore" title="iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段">
+          iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/08/07/jekyll-maintenance-1" title="Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編">
+          Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#結論'>結論</a></li><li><a href='#環境'>環境</a></li><ul><li><a href='#ソースの中身'>ソースの中身</a></li></ul><li><a href='#現象'>現象</a></li><ul><li><a href='#再現性調査'>再現性調査</a></li><li><a href='#再現方法'>再現方法</a></li><li><a href='#ソース修正'>ソース修正</a></li><li><a href='#操作時のフラグ'>操作時のフラグ</a></li><li><a href='#フラグ一覧-抜粋'>フラグ一覧(抜粋)</a></li></ul><li><a href='#解決方法'>解決方法</a></li></ul></ul><!-- end of tree list --></div></div>
+
+<div class="content">
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>Androidアプリにおいて、Eclipseからビルドしていた時は想定通り動いていたのに、リリース署名をしたアプリ(apkファイル)をインストールした場合だけ動作が想定していないものになった。</p>
+
+<p>具体的には、Activityがむちゃくちゃたまる現象が起こるということで非常に困った。</p>
+
+<h2 id="結論">結論</h2>
+
+<p>起動のさせ方により、起動時のIntentフラグが変わる。これはAndroid内部で知らぬ間にやられてしまう。</p>
+
+<p>onCreate時などでIntentのフラグをチェックして何とかするしかない。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>AndroidDeveloperTools Build: v21.1.0-569685</li>
+</ul>
+
+<h3 id="ソースの中身">ソースの中身</h3>
+
+<ul>
+<li>メインのActivityには <code>action.Main</code> と <code>category.LAUNCHER</code> しか設定していない。
+
+<ul>
+<li>AndroidManifest.xmlはプロジェクト作成時ほぼそのまま</li>
+</ul></li>
+</ul>
+
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;uses-sdk</span>
+    <span class="na">android:minSdkVersion=</span><span class="s">&quot;13&quot;</span>
+    <span class="na">android:targetSdkVersion=</span><span class="s">&quot;14&quot;</span> <span class="nt">/&gt;</span>
+
+  <span class="nt">&lt;application</span>
+    <span class="na">android:allowBackup=</span><span class="s">&quot;true&quot;</span>
+    <span class="na">android:icon=</span><span class="s">&quot;@drawable/ic_launcher&quot;</span>
+    <span class="na">android:label=</span><span class="s">&quot;@string/app_name&quot;</span>
+    <span class="na">android:theme=</span><span class="s">&quot;@style/AppTheme&quot;</span> <span class="nt">&gt;</span>
+    <span class="nt">&lt;activity</span>
+      <span class="na">android:name=</span><span class="s">&quot;com.example.testproject.MainActivity&quot;</span>
+      <span class="na">android:label=</span><span class="s">&quot;@string/app_name&quot;</span> <span class="nt">&gt;</span>
+      <span class="nt">&lt;intent-filter&gt;</span>
+        <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.action.MAIN&quot;</span> <span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.category.LAUNCHER&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/intent-filter&gt;</span>
+    <span class="nt">&lt;/activity&gt;</span>
+    (略)</code></pre></div>
+
+<ul>
+<li>FLAG設定は特に記載せず
+
+<ul>
+<li>メインのActivity(MainActivity.java)もほぼそのまま</li>
+</ul></li>
+</ul>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MainActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+      <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onCreateOptionsMenu</span><span class="o">(</span><span class="n">Menu</span> <span class="n">menu</span><span class="o">)</span> <span class="o">{</span>
+       <span class="n">getMenuInflater</span><span class="o">().</span><span class="na">inflate</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">menu</span><span class="o">.</span><span class="na">main</span><span class="o">,</span> <span class="n">menu</span><span class="o">);</span>
+       <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<p>単純にHelo Worldを表示するだけのサンプルプログラム。</p>
+
+<h2 id="現象">現象</h2>
+
+<p><strong>特定の手順</strong> を踏んだ時だけ MainActivity のスタックが溜まりまくり、Hello World画面→Hello World画面→Hello World画面→Hello World画面...とバックキーを押しまくっても一向にホーム画面が現れなくなる。</p>
+
+<p>また、以下のような状況でもある。</p>
+
+<ul>
+<li>この現象は起こらない時は全然起こらないし、起こったと思ったらすぐなおることもある</li>
+<li>Eclipse経由でビルドしていた時はなんともなかったのに、apk経由でインストールした途端急に起こり始めた</li>
+</ul>
+
+<h3 id="再現性調査">再現性調査</h3>
+
+<p>とりあえずいろいろな状況で <code>adb.exe shell dumpsys activity activities</code> を使いタスクのHistを確認しまくってみた。</p>
+
+<p>以下は正常時のHist。このMainActivityが一個だけ。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">* TaskRecord{418cbab0 #42 A com.example.testproject}</span>
+<span class="go">  affinity=com.example.testproject</span>
+<span class="go">  intent={act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.example.testproject/.MainActivity bnds=[120,254][240,404]}</span>
+<span class="go">  realActivity=com.example.testproject/.MainActivity</span>
+<span class="go">  * Hist #1: ActivityRecord{41448a70 com.example.testproject/.MainActivity}</span>
+<span class="go">      packageName=com.example.testproject processName=com.example.testproject</span>
+<span class="go">      launchedFromUid=10064 app=ProcessRecord{41545a80 23603:com.example.testproject/10159}</span>
+<span class="go">      Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.example.testproject/.MainActivity bnds=[120,254][240,404] }</span>
+<span class="go">      frontOfTask=true task=TaskRecord{418cbab0 #42 A com.example.testproject}</span>
+<span class="go">      taskAffinity=com.example.testproject</span>
+<span class="go">      realActivity=com.example.testproject/.MainActivity</span>
+<span class="go">      base=/data/app/com.example.testproject-1.apk/data/app/com.example.testproject-1.apk data=/data/data/com.example.testproject</span>
+<span class="go">      thumbHolder=TaskRecord{418cbab0 #42 A com.example.testproject}</span>
+<span class="go">  TaskRecord{418cbab0 #42 A com.example.testproject}</span>
+<span class="go">    Run #1: ActivityRecord{41448a70 com.example.testproject/.MainActivity}</span>
+<span class="go">  mResumedActivity: ActivityRecord{41448a70 com.example.testproject/.MainActivity}</span>
+<span class="go">  mFocusedActivity: ActivityRecord{41448a70 com.example.testproject/.MainActivity}</span>
+<span class="go">* Recent #0: TaskRecord{418cbab0 #42 A com.example.testproject}</span>
+<span class="go">  affinity=com.example.testproject</span>
+<span class="go">  intent={act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.example.testproject/.MainActivity bnds=[120,254][240,404]}</span>
+<span class="go">  realActivity=com.example.testproject/.MainActivity</span>
+<span class="go">  intent={act=android.intent.action.DELETE dat=package:com.example.testproject#com.example.testproject.MainActivity flg=0x10800000 cmp=com.android.packageinstaller/.UninstallerActivity}</span></code></pre></div>
+
+<p>溜まりまくる場合のHist。MainActivityがやまほど生まれてる。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">* TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">  affinity=com.example.testproject</span>
+<span class="go">  intent={act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 pkg=com.example.testproject cmp=com.example.testproject/.MainActivity}</span>
+<span class="go">  realActivity=com.example.testproject/.MainActivity</span>
+<span class="go">  * Hist #8: ActivityRecord{416dcb20 com.example.testproject/.MainActivity}</span>
+<span class="go">      packageName=com.example.testproject processName=com.example.testproject</span>
+<span class="go">      launchedFromUid=10064 app=ProcessRecord{414f9d80 27069:com.example.testproject/10159}</span>
+<span class="go">      Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10600000 cmp=com.example.testproject/.MainActivity bnds=[0,405][120,555] }</span>
+<span class="go">      frontOfTask=false task=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">      taskAffinity=com.example.testproject</span>
+<span class="go">      realActivity=com.example.testproject/.MainActivity</span>
+<span class="go">      base=/data/app/com.example.testproject-1.apk/data/app/com.example.testproject-1.apk data=/data/data/com.example.testproject</span>
+<span class="go">      thumbHolder=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">  * Hist #7: ActivityRecord{41604ef8 com.example.testproject/.MainActivity}</span>
+<span class="go">      packageName=com.example.testproject processName=com.example.testproject</span>
+<span class="go">      launchedFromUid=10064 app=ProcessRecord{414f9d80 27069:com.example.testproject/10159}</span>
+<span class="go">      Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10600000 cmp=com.example.testproject/.MainActivity bnds=[0,405][120,555] }</span>
+<span class="go">      frontOfTask=false task=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">      taskAffinity=com.example.testproject</span>
+<span class="go">      realActivity=com.example.testproject/.MainActivity</span>
+<span class="go">      base=/data/app/com.example.testproject-1.apk/data/app/com.example.testproject-1.apk data=/data/data/com.example.testproject</span>
+<span class="go">      thumbHolder=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">  * Hist #6: ActivityRecord{41562120 com.example.testproject/.MainActivity}</span>
+<span class="go">      packageName=com.example.testproject processName=com.example.testproject</span>
+<span class="go">      launchedFromUid=10064 app=ProcessRecord{414f9d80 27069:com.example.testproject/10159}</span>
+<span class="go">      Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10600000 cmp=com.example.testproject/.MainActivity bnds=[0,405][120,555] }</span>
+<span class="go">      frontOfTask=false task=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">      taskAffinity=com.example.testproject</span>
+<span class="go">      realActivity=com.example.testproject/.MainActivity</span>
+<span class="go">      base=/data/app/com.example.testproject-1.apk/data/app/com.example.testproject-1.apk data=/data/data/com.example.testproject</span>
+<span class="go">      thumbHolder=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">  * Hist #5: ActivityRecord{41451680 com.example.testproject/.MainActivity}</span>
+<span class="go">      packageName=com.example.testproject processName=com.example.testproject</span>
+<span class="go">      launchedFromUid=10064 app=ProcessRecord{414f9d80 27069:com.example.testproject/10159}</span>
+<span class="go">      Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10600000 cmp=com.example.testproject/.MainActivity bnds=[0,405][120,555] }</span>
+<span class="go">      frontOfTask=false task=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">      taskAffinity=com.example.testproject</span>
+<span class="go">      realActivity=com.example.testproject/.MainActivity</span>
+<span class="go">      base=/data/app/com.example.testproject-1.apk/data/app/com.example.testproject-1.apk data=/data/data/com.example.testproject</span>
+<span class="go">      thumbHolder=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">  * Hist #4: ActivityRecord{41554ec0 com.example.testproject/.MainActivity}</span>
+<span class="go">      packageName=com.example.testproject processName=com.example.testproject</span>
+<span class="go">      launchedFromUid=10064 app=ProcessRecord{414f9d80 27069:com.example.testproject/10159}</span>
+<span class="go">      Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10600000 cmp=com.example.testproject/.MainActivity }</span>
+<span class="go">      frontOfTask=false task=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">      taskAffinity=com.example.testproject</span>
+<span class="go">      realActivity=com.example.testproject/.MainActivity</span>
+<span class="go">      base=/data/app/com.example.testproject-1.apk/data/app/com.example.testproject-1.apk data=/data/data/com.example.testproject</span>
+<span class="go">      thumbHolder=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">  * Hist #3: ActivityRecord{416f12c0 com.example.testproject/.MainActivity}</span>
+<span class="go">      packageName=com.example.testproject processName=com.example.testproject</span>
+<span class="go">      launchedFromUid=10064 app=ProcessRecord{414f9d80 27069:com.example.testproject/10159}</span>
+<span class="go">      Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10600000 cmp=com.example.testproject/.MainActivity }</span>
+<span class="go">      frontOfTask=false task=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">      taskAffinity=com.example.testproject</span>
+<span class="go">      realActivity=com.example.testproject/.MainActivity</span>
+<span class="go">      base=/data/app/com.example.testproject-1.apk/data/app/com.example.testproject-1.apk data=/data/data/com.example.testproject</span>
+<span class="go">      thumbHolder=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">  * Hist #2: ActivityRecord{413febd0 com.example.testproject/.MainActivity}</span>
+<span class="go">      packageName=com.example.testproject processName=com.example.testproject</span>
+<span class="go">      launchedFromUid=10078 app=ProcessRecord{414f9d80 27069:com.example.testproject/10159}</span>
+<span class="go">      Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 pkg=com.example.testproject cmp=com.example.testproject/.MainActivity }</span>
+<span class="go">      frontOfTask=true task=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">      taskAffinity=com.example.testproject</span>
+<span class="go">      realActivity=com.example.testproject/.MainActivity</span>
+<span class="go">      base=/data/app/com.example.testproject-1.apk/data/app/com.example.testproject-1.apk data=/data/data/com.example.testproject</span>
+<span class="go">      thumbHolder=TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">  TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">    Run #8: ActivityRecord{416dcb20 com.example.testproject/.MainActivity}</span>
+<span class="go">  TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">    Run #6: ActivityRecord{41604ef8 com.example.testproject/.MainActivity}</span>
+<span class="go">    Run #5: ActivityRecord{41562120 com.example.testproject/.MainActivity}</span>
+<span class="go">    Run #4: ActivityRecord{41451680 com.example.testproject/.MainActivity}</span>
+<span class="go">    Run #3: ActivityRecord{41554ec0 com.example.testproject/.MainActivity}</span>
+<span class="go">    Run #2: ActivityRecord{416f12c0 com.example.testproject/.MainActivity}</span>
+<span class="go">    Run #1: ActivityRecord{413febd0 com.example.testproject/.MainActivity}</span>
+<span class="go">  mResumedActivity: ActivityRecord{416dcb20 com.example.testproject/.MainActivity}</span>
+<span class="go">  mFocusedActivity: ActivityRecord{416dcb20 com.example.testproject/.MainActivity}</span>
+<span class="go">  * Recent #0: TaskRecord{41446350 #45 A com.example.testproject}</span>
+<span class="go">    affinity=com.example.testproject</span>
+<span class="go">    intent={act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 pkg=com.example.testproject cmp=com.example.testproject/.MainActivity}</span>
+<span class="go">    realActivity=com.example.testproject/.MainActivity</span>
+<span class="go">    intent={act=android.intent.action.DELETE dat=package:com.example.testproject#com.example.testproject.MainActivity flg=0x10800000 cmp=com.android.packageinstaller/.UninstallerActivity}</span></code></pre></div>
+
+<h3 id="再現方法">再現方法</h3>
+
+<p>以下の操作で再現がとれた。</p>
+
+<ol>
+<li><strong>apkを作成する</strong></li>
+<li>apkをAndroid端末に送る</li>
+<li>ファイルマネージャアプリなどからapkを選択しインストールする</li>
+<li>「アプリケーションをインストールしました 完了/開く」画面で <strong>「開く」</strong> を選択しアプリを起動</li>
+<li>ホームキーでホーム画面に戻る( <strong>バックキーでアプリ終了</strong> させた場合は正常時の挙動に移行)</li>
+<li>再びアプリ起動</li>
+<li>ホームキー、アプリ起動を繰り返す</li>
+</ol>
+
+<p>どうやら <strong>「apk経由でインストール」</strong> し、 <strong>「そのままアプリを開いた」</strong> ときだけ変になる模様。</p>
+
+<p>そして上記のdumpファイルから正常時とおかしい時を比較すると、 <code>Intentのフラグ</code> 設定が異なっているみたい。</p>
+
+<h3 id="ソース修正">ソース修正</h3>
+
+<p>MainActivityにonResumeメソッドとIntentのフラグを出力するToastを追加してみた。</p>
+
+<p>dumpファイルのフラグは16進で出力されているが、ソースからフラグを取得してみる( <code>getIntent().getFlags()</code> )と10進で格納されているようなので、16進に変換している。(268435456→10000000)</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+<span class="o">+</span>     <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;FLAG:&quot;</span> <span class="o">+</span> <span class="n">Integer</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span><span class="n">getIntent</span><span class="o">().</span><span class="na">getFlags</span><span class="o">()),</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+      <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
+   <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onCreateOptionsMenu</span><span class="o">(</span><span class="n">Menu</span> <span class="n">menu</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">getMenuInflater</span><span class="o">().</span><span class="na">inflate</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">menu</span><span class="o">.</span><span class="na">main</span><span class="o">,</span> <span class="n">menu</span><span class="o">);</span>
+      <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="nd">@Override</span>
+<span class="o">+</span>   <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onResume</span><span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>     <span class="kd">super</span><span class="o">.</span><span class="na">onResume</span><span class="o">();</span>
+<span class="o">+</span>     <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;FLAG:&quot;</span> <span class="o">+</span> <span class="n">Integer</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span><span class="n">getIntent</span><span class="o">().</span><span class="na">getFlags</span><span class="o">()),</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+<span class="o">+</span>   <span class="o">}</span></code></pre></div>
+
+<p>すると、以下のようなフラグが出力された。dumpを見ても同じ値になっているな。</p>
+
+<h3 id="操作時のフラグ">操作時のフラグ</h3>
+
+<table><thead>
+<tr>
+<th>インストール方法</th>
+<th>操作</th>
+<th>フラグ</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>正常時</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>----------------</td>
+<td>--------------------------------------------</td>
+<td>-----------</td>
+</tr>
+<tr>
+<td>Eclipse Run</td>
+<td>ビルド後起動</td>
+<td><code>10000000</code></td>
+</tr>
+<tr>
+<td></td>
+<td>バックキーでいったんアプリ終了→アプリ起動</td>
+<td><code>10020000</code></td>
+</tr>
+<tr>
+<td>apkインストール</td>
+<td>インストール後「完了」→アプリ起動</td>
+<td><code>10020000</code></td>
+</tr>
+<tr>
+<td></td>
+<td>バックキーで終了後タスク履歴から呼びだした時</td>
+<td><code>10304000</code></td>
+</tr>
+<tr>
+<td>----------------</td>
+<td>--------------------------------------------</td>
+<td>----------</td>
+</tr>
+<tr>
+<td>おかしい時</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>----------------</td>
+<td>--------------------------------------------</td>
+<td>----------</td>
+</tr>
+<tr>
+<td>apkインストール</td>
+<td>インストール後、即「開く」</td>
+<td><code>10000000</code></td>
+</tr>
+<tr>
+<td></td>
+<td>その後、ホームキー→アプリ起動</td>
+<td><code>10600000</code> ...</td>
+</tr>
+</tbody></table>
+
+<p>ふーむ。呼び方によってフラグの値が変わっている…。だが、そういうこともあるらしい。</p>
+
+<ul>
+<li><a href="http://ahoworld.blog58.fc2.com/?m&amp;no=378">とまと日記 android shell am コマンド</a></li>
+</ul>
+
+<p>これがなんなのか…。javadocから照らし合わせてみよう。</p>
+
+<h3 id="フラグ一覧-抜粋">フラグ一覧(抜粋)</h3>
+
+<table><thead>
+<tr>
+<th>フラグ(16進)</th>
+<th>ばらし</th>
+<th>フラグ(10進)</th>
+<th>値</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>正常時</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>-------------</td>
+<td>--------</td>
+<td>------------</td>
+<td>--------------------------------------</td>
+</tr>
+<tr>
+<td><code>10200000</code></td>
+<td>10000000</td>
+<td>268435456</td>
+<td><code>FLAG_ACTIVITY_NEW_TASK</code></td>
+</tr>
+<tr>
+<td></td>
+<td>00200000</td>
+<td>002097152</td>
+<td><code>FLAG_ACTIVITY_RESET_TASK_IF_NEEDED</code></td>
+</tr>
+<tr>
+<td><code>10304000</code></td>
+<td>10000000</td>
+<td>268435456</td>
+<td><code>FLAG_ACTIVITY_NEW_TASK</code></td>
+</tr>
+<tr>
+<td></td>
+<td>00200000</td>
+<td>002097152</td>
+<td><code>FLAG_ACTIVITY_RESET_TASK_IF_NEEDED</code></td>
+</tr>
+<tr>
+<td></td>
+<td>00100000</td>
+<td>001048576</td>
+<td><code>FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY</code></td>
+</tr>
+<tr>
+<td></td>
+<td>00004000</td>
+<td>000016384</td>
+<td>？</td>
+</tr>
+<tr>
+<td>-------------</td>
+<td>--------</td>
+<td>------------</td>
+<td>--------------------------------------</td>
+</tr>
+<tr>
+<td>おかしい時</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>-------------</td>
+<td>--------</td>
+<td>------------</td>
+<td>--------------------------------------</td>
+</tr>
+<tr>
+<td><code>10600000</code></td>
+<td>10000000</td>
+<td>268435456</td>
+<td><code>FLAG_ACTIVITY_NEW_TASK</code></td>
+</tr>
+<tr>
+<td></td>
+<td>00400000</td>
+<td>004194304</td>
+<td><code>FLAG_ACTIVITY_BROUGHT_TO_FRONT</code></td>
+</tr>
+<tr>
+<td></td>
+<td>00200000</td>
+<td>002097152</td>
+<td><code>FLAG_ACTIVITY_RESET_TASK_IF_NEEDED</code></td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>参考: <a href="http://www.androidjavadoc.com/2.3/constant-values.html#android.content.Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED">Constant Field Values</a></li>
+</ul>
+
+<p>両者を比較すると、 apk経由のときだけ <code>FLAG_ACTIVITY_BROUGHT_TO_FRONT</code> というフラグがあるなー。なんじゃこりゃ。</p>
+
+<ul>
+<li><a href="https://developer.android.com/reference/android/content/Intent.html#FLAG_ACTIVITY_BROUGHT_TO_FRONT">Intent ｜ Android Developers</a></li>
+</ul>
+
+<blockquote>
+<p>This flag is not normally set by application code, but set for you by the system as described in the launchMode documentation for the singleTask mode.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://www.saturn.dti.ne.jp/npaka/android/LaunchMode/">Androidメモ</a></li>
+</ul>
+
+<blockquote>
+<p>既存アクティビティ(singleTask)を最前面に呼び出す。システムによって設定される。</p>
+</blockquote>
+
+<p>やはり！Androidの中の人が勝手にセットしているっぽいなー。これが悪さをしているのか？</p>
+
+<h2 id="解決方法">解決方法</h2>
+
+<p><code>FLAG_ACTIVITY_BROUGHT_TO_FRONT</code> でググったらandroid group japanのメーリングリストが引っかかった！ほぼ同じ現象。</p>
+
+<ul>
+<li><a href="http://www.mailinglistarchive.com/html/android-group-japan@googlegroups.com/2012-09/msg00445.html">Re: [android-group-japan: 20121] apkインストー ル時のホームボタン挙動の変化について</a></li>
+</ul>
+
+<blockquote>
+<p>ブラウザからinstallして起動したときと、ランチャーから起動した時では、</p>
+
+<p>起動するときのIntentが微妙に異なります。</p>
+
+<p>その為、ランチャーから起動した場合の、「既に起動していたら二重起動しない」という</p>
+
+<p>仕組みが動作しません。</p>
+
+<blockquote>
+<p>この状態でapkを作成し、適当なサーバに配置した上で、ブラウザからインストールし、インストール完了時に「開く」を選んで、そのまま起動します。
+Activity1の起動後、Activity2へ遷移します。
+その後、ホームボタンでホーム画面へ移動し、アイコンをタップして復帰します。</p>
+</blockquote>
+
+<p>この時には、Activity stackは以下のようになっています。</p>
+
+<p>Activity1-&gt;Activity2-&gt;Activity1&#39;</p>
+
+<p>二重起動されたActivity1&#39;では、起動IntentにFLAG<em>ACTIVITY</em>BROUGHT<em>TO</em>FRONTがセットされるようなので、</p>
+</blockquote>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+  <span class="k">if</span> <span class="o">((</span><span class="n">getIntent</span><span class="o">().</span><span class="na">getFlags</span><span class="o">()</span> <span class="o">&amp;</span> <span class="n">Intent</span><span class="o">.</span><span class="na">FLAG_ACTIVITY_BROUGHT_TO_FRONT</span><span class="o">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">finish</span><span class="o">();</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<blockquote>
+<p>のようにすると、所望の動作になると思います。</p>
+</blockquote>
+
+<p>なるほど。今Activityにセットされているフラグに <code>FLAG_ACTIVITY_BROUGHT_TO_FRONT</code> が含まれていたら終われってことか。</p>
+
+<p>確かにこれならHistも増えない。</p>
+
+<p>…んでも、こんなケースまったく想定してなかったし、スマートフォンアプリにおけるテストで気を付けるところとか、本とかにまとまってないのかな。</p>
+
+<p>みんなはどうやって要点抑えてるんだろう。社内ノウハウ集的なものがあるのかな？</p>
+
+<hr>
+
+<p>以下、いろいろ考えた結果のボツ案。できるのかもしれないけどギブした。</p>
+
+<ul>
+<li>onCreate時にフラグを書きかえる</li>
+<li>Activity#onUserLeaveHint(ホームキータップ)時にフラグを書きかえ(これだとそのまま処理続けられるし) </li>
+</ul>
+
+</div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/07/18/ios-backup-restore" title="iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段">
+          iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/08/07/jekyll-maintenance-1" title="Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編">
+          Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/08/04/android-install-intent" data-text="kk_Atakaの日記 - Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/04/android-install-intent/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/08/04/android-install-intent/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/04/android-install-intent/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+var hatena_bookmark_anywhere_limit = 999; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/04/android-install-intent/"; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      </article>
+
+      <aside class="markdown-body sidebar">
+  <h2>Link</h2>
+
+  <ul>
+    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
+    <li>kk_Atakaの日記(同じ内容)</li>
+    <ul>
+      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
+      <li><a href="http://gosyujin.github.io/">GitHub Pages(Jekyll)</a></li>
+    </ul>
+    <li><a href="http://gosyujin.github.io/life/">らいふろぐ(Sphinx)</a></li>
+    <li><a href="https://twitter.com/kk_ataka">Twitter@kk_Ataka</a></li>
+    <li><a href="https://github.com/gosyujin">GitHub@gosyujin</a></li>
+    <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare@kk_Ataka</a></li>
+    <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
+    <li><a href="http://f.hatena.ne.jp/kk_Ataka/">はてなフォト</a></li>
+    <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
+    <li><a href="http://atnd.org/users/13915">ATND</a></li>
+  </ul>
+
+  <h2>Recent Entries</h2>
+
+  
+  
+  
+<ul>
+  
+    
+      <li>
+        <span>2015/10/13</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/09/24</span>
+        
+          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/08/06</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+        
+        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/07/13</span>
+        
+          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+        
+        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/06/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Hugo">Hugo</a></code> ]</span>
+        
+        <a href="/2015/06/30/hugo-helloworld">Hugoを使ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/06/30/hugo-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/06/30/hugo-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/05/26</span>
+        
+          <span>[ <code><a href="/tags.html#Jenkins">Jenkins</a></code> ]</span>
+        
+        <a href="/2015/05/26/jenkins-environment-path">実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/04/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2015/04/30/golang-helloworld">golangでサーバのファイルをゆっくりダウンロードするツール作ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/04/30/golang-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/04/30/golang-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/03/14</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/02/28</span>
+        
+          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+        
+        <a href="/2015/02/28/excel-by-ruby">rubyXLを使ってExcelを操作したい</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/02/28/excel-by-ruby/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/02/28/excel-by-ruby/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/01/25</span>
+        
+          <span>[ <code><a href="/tags.html#日記">日記</a></code> ]</span>
+        
+        <a href="/2015/01/25/kpt-2014">2014年kpt</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/01/25/kpt-2014/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/01/25/kpt-2014/" />
+        </a>
+      </li>
+    
+  
+</ul>
+
+
+  <h2>Tags</h2>
+
+  <ul>
+    
+    
+      
+      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+    
+      
+      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+    
+      
+      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Mac">Mac <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ruby">Ruby <sub>71</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sphinx">Sphinx <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#イベント">イベント <sub>23</sub></a></li>
+    
+      
+      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+    
+      
+      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+    
+  </ul>
+
+</aside>
+
+
+    </div>
+    <hr class="clearfix" />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

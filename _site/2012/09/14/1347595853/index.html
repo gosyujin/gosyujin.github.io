@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <div class="header">
+      <nav>
+        <ul>
+          <li><a href="/">kk_Atakaの日記</a></li>
+          <li class="main-nav"><a href="/archives.html">Archive</a>
+          <li class="main-nav"><a href="/tags.html">Tag</a>
+        </ul>
+      </nav>
+    </div>
+
+    <div id="container">
+      <article class="markdown-body">
+        <h1><a href="/2012/09/14/1347595853">JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備</a></h1>
+        <div class="published">
+          
+            <span>Tags: </span>
+            
+              <span>[ <code><a href="/tags.html#Ruby" class="tag">Ruby</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#StartUp" class="tag">StartUp</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Jekyll" class="tag">Jekyll</a></code> ]</span>
+            
+          
+          
+            <span>Published: 2012/09/14</span>
+          
+        </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/09/13/1347508570" title="Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…">
+          Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/09/20/jekyll" title="JekyllをGitHub Pagesに上げるための準備">
+          JekyllをGitHub Pagesに上げるための準備
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<div class="content">
+<h1>あらすじ</h1>
+<ul><li>はてな記法、綺麗に出力できて今までお気に入りだったんだけど、欠点として、はてなでしか使わないという問題が</li><li>他にも文章書く時にreSTとかMarkdownを使うと捗るが、結局アウトプットするのは個人でははてなが多い……<span class="footnote"><a href="#f1" title="個人でない場合はExcelとか" name="fn1">*1</a></span></li><li>そもそもはてな記法は基本はてなじゃなきゃ見れない</li><li>なら最初から…？</li></ul>
+<p>うーん。他の記法使う時がきたのか。</p>
+<h1>Jekyllとは</h1>
+<blockquote><p>Jekyll is a simple, blog aware, static site generator.</p><cite><a href="https://github.com/mojombo/jekyll/wiki">https://github.com/mojombo/jekyll/wiki</a></cite></blockquote>
+<p>静的サイトのジェネレーターなのね。 HTML, Markdown, textile なんでもござれ。</p>
+<h1>参考サイト</h1>
+<ul><li><a href="https://github.com/mojombo/jekyll">mojombo/jekyll · GitHub</a></li><li><a href="http://mattn.kaoriya.net/software/lang/ruby/20090409185248.htm">Big Sky :: Jekyllで始める簡単ブログ</a></li><li><a href="http://melborne.github.com/2012/05/13/first-step-of-jekyll/">30分のチュートリアルでJekyllを理解する</a></li><li><a href="http://tokkonopapa.github.com/blog/2011/12/28/easy-usage-of-jekyll-on-github/">jekyllで作る簡単GitHub Pages - T.I.D.</a></li><li><a href="http://d.hatena.ne.jp/yuum3/20120620/1340180894">Jekyll は軽快なブログソフトなので乗り換えてみた - @yuumi3のお仕事日記</a></li><li><a href="http://d.hatena.ne.jp/takuti/20110724/1311464070">Jekyllであそぼう！ - takutism</a></li><li><a href="http://dsuket.hatenablog.com/entry/2012/03/06/191459">静的サイト生成ツール Jekyll を使って、bootstrapサイトを作ってみたよ - webとかmacとかやってみようか R</a></li><li><a href="http://d.hatena.ne.jp/seinzumtode/20120426/1335402322">Jekyllをはじめる - how to code something</a></li></ul>
+<h1>環境</h1>
+<ul><li>CentOS 6.2 と、WindowsXP</li><li>Ruby 1.9.2<ul><li>Bundler 1.1.4</li></ul></li><li>Git 1.7.9.6</li><li>Jekyll 0.11.2</li><li>RedCloth 4.2.9</li></ul>
+<h1>いきなり動かす</h1>
+<p>本来は決まったディレクトリを作ったり、コンフィグファイルを作ったり、レイアウトファイルを作ったりしていく……のだけど、Jekyll Bootstrapを使えばいきなりフルセットで動かす事ができる。</p>
+<p>取得はGitで。</p>
+<pre>$ git clone http://github.com/plusjade/jekyll-bootstrap.git JEKYLL_HOME</pre>
+<p>JekyllはBundlerでインストールするので移動してGemfileを作成。そしてjekyllコマンドで実行！</p>
+<pre>$ cd JEKYLL_HOME
+$ vi Gemfile
+$ cat Gemfile
+source :rubygems
+source &quot;http://rubygems.org&quot;
+
+gem 'jekyll'
+gem 'RedCloth'
+
+$ bundle install --path vendor/bundle
+$ bundle exec jekyll --server</pre>
+<p>これで、<a href="http://localhost:4000">http://localhost:4000</a> にアクセスしてみると超カッコいいサンプルページが出来上がっている。CentOSは以上。</p>
+<h1>ハマり for Windows</h1>
+<p>ところで、Windows XPで同じ事やっても_site下に静的ファイルが全然できなかった。……まあ、そもそもXP使うなって話？</p>
+<p>結果としては、<span class="deco" style="color:#FF0000;">RedCloth-4.2.9-x86-mingw32直下のspecディレクトリを削除したら生成されるようになった。</span>静的ファイル生成の流れを追っていくと、</p>
+<ul><li>jekyll/bin/jekyll内でsite.processメソッドが呼ばれている</li><li>jekyll/lib/jekyll/site.rbのprocessメソッドからread,readからread_directoriesメソッドが呼ばれている</li><li>read_directoriesメソッドは以下のようになっている</li></ul>
+<pre class="ruby">     def read_directories(dir = '')
+       base = File.join(self.source, dir)
+       entries = Dir.chdir(base) { filter_entries(Dir['*']) }
+       self.read_posts(dir)
+
+       entries.each do |f|
+         f_abs = File.join(base, f)
+         f_rel = File.join(dir, f)
+         if File.directory?(f_abs)
+           next if self.dest.sub(/\/$/, '') == f_abs
+           read_directories(f_rel)
+         elsif !File.symlink?(f_abs)
+           first3 = File.open(f_abs) { |fd| fd.read(3) }
+           if first3 == &quot;---&quot;
+#＼yaml！／
+             # file appears to have a YAML header so process it as a page
+             pages &lt;&lt; Page.new(self, self.source, dir, f)
+           else
+             # otherwise treat it as a static file
+             static_files &lt;&lt; StaticFile.new(self, self.source, dir, f)
+           end
+         end
+       end
+     end</pre>
+<ul><li>読み込むファイルをputs して眺めていると、＼yaml！／のところでRedCloth-4.2.9-x86-mingw32\spec\fixtures\basic.ymlを呼んだ瞬間止まっている模様……</li><li>まあ、specファイルだしなくてもいいよね？　削除、で、動いたという事で<span class="footnote"><a href="#f2" title="なんでbasic.ymlを読もうとして止まったかまでは調べてないです……" name="fn2">*2</a></span></li></ul>
+<p>で、動かす(Windows)。</p>
+<pre>$ be jekyll --server
+Configuration from C:/HOGE/jekyll/_config.yml
+Auto-regenerating enabled: C:/HOGE/project/jekyll -&gt; C:/HOGE/project/jekyll/_site
+[2012-09-12 23:50:51] regeneration: 983 files changed
+[2012-09-12 23:50:54] INFO  WEBrick 1.3.1
+[2012-09-12 23:50:54] INFO  ruby 1.9.2 (2011-07-09) [i386-mingw32]
+[2012-09-12 23:50:54] INFO  WEBrick::HTTPServer#start: pid=5944 port=4000
+
+ ___________________________________________________________________________
+| Maruku tells you:
++---------------------------------------------------------------------------
+| Unclosed span (waiting for [&quot;_&quot;])
+| ---------------------------------------------------------------------------
+| Included file 'sig.markdown' not found in _includes directoryEOF
+| -------------------------------------------------------------|--------------
+|                                                              +--- Byte 61
+| Shown bytes [0 to 61] of 61:
+| &gt;Included file 'sig.markdown' not found in _includes directory
+|
+| At line 2
+|       text     |Included file 'sig.markdown' not found in _includes directory|
+|      empty --&gt; ||
+|       text     |This _is_ cool|
+|
+|
+| Elements read in span:
+|
+| Current string:
+|   &quot;includes directory&quot;
++---------------------------------------------------------------------------
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/errors_management.rb:49:in `maruku_error'
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/input/parse_span_better.rb:222:in `read_span'
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/input/parse_span_better.rb:423:in `read_em'
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/input/parse_span_better.rb:202:in `read_span'
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/input/parse_span_better.rb:46:in `parse_span_better'
+\___________________________________________________________________________
+</pre>
+<p>エラーは出てるけど、これで <a href="http://localhost:4000">http://localhost:4000</a>にアクセスするとページが見れる！</p>
+<p>sig ... 署名？　あんまりよくないけど、空っぽでも存在さえすれば怒られないっぽい。</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 個人でない場合はExcelとか</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: なんでbasic.ymlを読もうとして止まったかまでは調べてないです……</p></div>
+</div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/09/13/1347508570" title="Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…">
+          Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/09/20/jekyll" title="JekyllをGitHub Pagesに上げるための準備">
+          JekyllをGitHub Pagesに上げるための準備
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/09/14/1347595853" data-text="kk_Atakaの日記 - JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/09/14/1347595853/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/09/14/1347595853/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/09/14/1347595853/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+var hatena_bookmark_anywhere_limit = 999; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/09/14/1347595853/"; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      </article>
+
+      <aside class="markdown-body sidebar">
+  <h2>Link</h2>
+
+  <ul>
+    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
+    <li>kk_Atakaの日記(同じ内容)</li>
+    <ul>
+      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
+      <li><a href="http://gosyujin.github.io/">GitHub Pages(Jekyll)</a></li>
+    </ul>
+    <li><a href="http://gosyujin.github.io/life/">らいふろぐ(Sphinx)</a></li>
+    <li><a href="https://twitter.com/kk_ataka">Twitter@kk_Ataka</a></li>
+    <li><a href="https://github.com/gosyujin">GitHub@gosyujin</a></li>
+    <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare@kk_Ataka</a></li>
+    <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
+    <li><a href="http://f.hatena.ne.jp/kk_Ataka/">はてなフォト</a></li>
+    <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
+    <li><a href="http://atnd.org/users/13915">ATND</a></li>
+  </ul>
+
+  <h2>Recent Entries</h2>
+
+  
+  
+  
+<ul>
+  
+    
+      <li>
+        <span>2015/10/13</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/09/24</span>
+        
+          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/08/06</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+        
+        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/07/13</span>
+        
+          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+        
+        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/06/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Hugo">Hugo</a></code> ]</span>
+        
+        <a href="/2015/06/30/hugo-helloworld">Hugoを使ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/06/30/hugo-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/06/30/hugo-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/05/26</span>
+        
+          <span>[ <code><a href="/tags.html#Jenkins">Jenkins</a></code> ]</span>
+        
+        <a href="/2015/05/26/jenkins-environment-path">実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/04/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2015/04/30/golang-helloworld">golangでサーバのファイルをゆっくりダウンロードするツール作ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/04/30/golang-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/04/30/golang-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/03/14</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/02/28</span>
+        
+          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+        
+        <a href="/2015/02/28/excel-by-ruby">rubyXLを使ってExcelを操作したい</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/02/28/excel-by-ruby/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/02/28/excel-by-ruby/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/01/25</span>
+        
+          <span>[ <code><a href="/tags.html#日記">日記</a></code> ]</span>
+        
+        <a href="/2015/01/25/kpt-2014">2014年kpt</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/01/25/kpt-2014/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/01/25/kpt-2014/" />
+        </a>
+      </li>
+    
+  
+</ul>
+
+
+  <h2>Tags</h2>
+
+  <ul>
+    
+    
+      
+      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+    
+      
+      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+    
+      
+      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Mac">Mac <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ruby">Ruby <sub>71</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sphinx">Sphinx <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#イベント">イベント <sub>23</sub></a></li>
+    
+      
+      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+    
+      
+      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+    
+  </ul>
+
+</aside>
+
+
+    </div>
+    <hr class="clearfix" />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

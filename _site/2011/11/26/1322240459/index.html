@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <div class="header">
+      <nav>
+        <ul>
+          <li><a href="/">kk_Atakaの日記</a></li>
+          <li class="main-nav"><a href="/archives.html">Archive</a>
+          <li class="main-nav"><a href="/tags.html">Tag</a>
+        </ul>
+      </nav>
+    </div>
+
+    <div id="container">
+      <article class="markdown-body">
+        <h1><a href="/2011/11/26/1322240459">HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた</a></h1>
+        <div class="published">
+          
+            <span>Tags: </span>
+            
+              <span>[ <code><a href="/tags.html#Ruby" class="tag">Ruby</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#備忘録" class="tag">備忘録</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Sinatra" class="tag">Sinatra</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Heroku" class="tag">Heroku</a></code> ]</span>
+            
+          
+          
+            <span>Published: 2011/11/26</span>
+          
+        </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/11/24/1322138944" title="複数のRuby環境の管理・切替ができるpikを実行できた nyaos編">
+          複数のRuby環境の管理・切替ができるpikを実行できた nyaos編
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/11/27/1322329546" title="LokkaをインストールしてHerokuにデプロイした">
+          LokkaをインストールしてHerokuにデプロイした
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<div class="content">
+<h1>あらすじ</h1>
+<p>いよいよHerokuをはじめる。</p>
+<h1>参考サイト</h1>
+<ul><li><a href="http://d.hatena.ne.jp/ruedap/20110209/ruby_heroku_twitter_bot">Herokuを使って1日1回名言をツイートするTwitter Botの作り方 - アインシュタインの電話番号☎</a></li><li><a href="http://studyheroku.wiki.fc2.com/wiki/Heroku%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">Herokuコマンド - study_heroku</a></li><li><a href="http://kuranuki.sonicgarden.jp/2009/05/rubypaasherokurails.html">Ruby版PaaSの&quot;Heroku&quot;で無料Railsホスティング環境を手に入れよう - Social Change!</a></li></ul>
+<h1>事前準備</h1>
+<ul><li>Ruby 1.9.3</li><li>Git 1.7.3</li><li>rvm 1.9.2</li><li>gem 1.8.10<ul><li>gem管理にbundlerを使いたい</li></ul></li></ul>
+<h1>プロジェクト作成</h1>
+<h2>Bundler準備</h2>
+<p>プロジェクトフォルダ(heroku_sample)を作成し、その中にGemfileファイルを作成する。gem 'heroku'は後ほどHerokuに対してプロジェクトを作ったりするのに使用する。</p>
+<pre class="ruby">$ mkdir heroku_sample
+$ cd heroku_sample
+$ vi Gemfile
+source :rubygems
+source 'http://rubygems.org'
+
+gem 'sinatra'
+gem 'heroku'</pre>
+<p>bundleでインストール。場所は任意で。今回はカレントのvendor/bundleにインストール。</p>
+<pre class="ruby">$ bundle install ./vendor/bundle</pre>
+<h2>Sinatra準備</h2>
+<p>SinatraでHello World!!できるようにサンプルファイルapp.rbを作成。</p>
+<pre class="ruby">$ vi app.rb
+require 'rubygems'
+require 'sinatra'
+
+get '/' do
+  &quot;Hello World!&quot;
+end</pre>
+<p>Rackアプリケーションとして起動するためconfig.ruファイルを作成する。</p>
+<pre class="ruby">require './app.rb'
+run Sinatra::Application</pre>
+<p><span class="deco" style="color:#FF0000;">※ちょっと先の話になるけど、始めは1行目をrequire 'app.rb'としていた。それでもローカルでは問題なくロードして動作してたし。が、Herokuにデプロイすると下記のようなログを吐きエラーとなった。</span></p>
+<pre>2011-11-23T08:10:02+00:00 heroku[web.1]: State changed from created to starting
+2011-11-23T08:10:03+00:00 heroku[web.1]: Starting process with command `thin -p 54821 -e production -R /home/heroku_rack/heroku.ru start`
+2011-11-23T08:10:04+00:00 app[web.1]: &lt;internal:lib/rubygems/custom_require&gt;:29:in `require': no such file to load -- .app.rb (LoadError)
+2011-11-23T08:10:04+00:00 app[web.1]:      from &lt;internal:lib/rubygems/custom_require&gt;:29:in `require'
+2011-11-23T08:10:04+00:00 app[web.1]:      from config.ru:1:in `block (3 levels) in &lt;main&gt;'
+...</pre>
+<p><span class="deco" style="color:#FF0000;">ん？　`require': no such file to load -- .app.rb (LoadError)ってなんでapp.rbでロードエラーしてんの？　何か設定し忘れ？　――HerokuのRubyはデフォルトで1.9.2になっているということがわかった。そして、Ruby1.9.2からロードパスにカレントディレクトリが含まれなくなったらしく。カレントディレクトリのファイルは./で明示的に教えてあげないといけないようなのでした。うーんRuby1.9.2からの仕様だったのか。1.8ばっかり使ってたからしらなんだ。</span></p>
+<ul><li><a href="http://d.hatena.ne.jp/ruedap/20110531/ruby_require_load_path">Rubyでrbファイルをrequireするときはドットを打つと良さそう - アインシュタインの電話番号☎</a></li><li><a href="http://www.ruby-lang.org/ja/news/2010/08/18/ruby-1-9-2-is-released/#label-8">Ruby 1.9.2ãªãªã¼ã¹</a></li></ul>
+<h2>Gitの管理下に</h2>
+<p>で、戻ってきて…次にgitの管理対象におく。(今はまだやる必要ないけど、先にすませとく)bundle系のファイルはignoreしておく。</p>
+<pre>$ git init
+$ vi .gitignore
+.bundle
+vendor</pre>
+<p>ここまでのプロジェクト構成はこう。</p>
+<pre>heroku_sample
+┣.bundle/
+┣.git/
+┣.gitignore
+┣Gemfile
+┣Gemfile.lock
+┣config.ru
+┣app.rb
+┗vendor/</pre>
+<h1>ローカルで動作確認</h1>
+<h2>Sinatra起動</h2>
+<p>ちょっとローカルで動作確認。<span class="footnote"><a href="#f1" title="この時はRuby1.8.7でやっていた。後ほど1.9代へ変更" name="fn1">*1</a></span></p>
+<pre>$ bundle exec ruby app.rb
+[2011-11-23 13:51:52] INFO  WEBrick 1.3.1
+[2011-11-23 13:51:52] INFO  ruby 1.8.7 (2011-06-30) [i686-darwin10.8.0]
+== Sinatra/1.3.1 has taken the stage on 4567 for development with backup from WEBrick
+[2011-11-23 13:51:52] INFO  WEBrick::HTTPServer#start: pid=50924 port=4567</pre>
+<p><a href="http://localhost:4567">http://localhost:4567</a>にアクセスしてHello World!!できていればローカルでは成功。</p>
+<h1>Herokuへデプロイ</h1>
+<h2>Sign up</h2>
+<p><a href="http://www.heroku.com">http://www.heroku.com</a>にアクセスし、sign upを選択。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111126014002"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111126/20111126014002.jpg"></a></p>
+<p>メールアドレスを登録し送られてきたメールからHerokuへ再度アクセスしパスワードを登録。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111126014003"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111126/20111126014003.jpg"></a></p>
+<h2>プロジェクト作成</h2>
+<p>先ほどgemで入れたherokuでHerokuにプロジェクトを作成する。その際、メールアドレスとパスワードの入力が求められる。あとsshキーが必要になるっぽい。</p>
+<pre>$ bundle exec heroku create heroku_sample
+Enter your Heroku credentials.
+Email: メールアドレス入れる
+Password: パスワード入れる
+Found existing public key: /Users/kk_Ataka/.ssh/id_rsa.pub
+Uploading ssh public key /Users/kk_Ataka/.ssh/id_rsa.pub
+ !   Name must start with a letter and can only contain lowercase letters, numbers, and dashes</pre>
+<p>ん？　名前は小文字と数字とダッシュだけ？　んじゃ適当に…。</p>
+<pre>$ bundle exec heroku create tycoon-gosyujin
+Creating tycoon-gosyujin... done, stack is bamboo-mri-1.9.2
+http://tycoon-gosyujin.heroku.com/ | git@heroku.com:tycoon-gosyujin.git
+Git remote heroku added</pre>
+<p>お、できたできた。HerokuにアクセスしてMy Appsを見に行くとプロジェクトができてた。ちなみに、現在HerokuのサーバのRubyデフォルトバージョンは1.9.2の模様。これはherokuコマンドで1.8などに変えられるみたい。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111126014001"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111126/20111126014001.jpg"></a></p>
+<h2>GitでHerokuへpush</h2>
+<p>そしたらGitのローカルリポジトリにcommitしたのち、Herokuへpushする。(gitコマンドエイリアス使ってます)</p>
+<pre>$ git add ./
+$ git com 'First commit.'
+$ git push heroku master
+Counting objects: 774, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (679/679), done.
+Writing objects: 100% (774/774), 1.94 MiB, done.
+Total 774 (delta 49), reused 0 (delta 0)
+
+-----&gt; Heroku receiving push
+-----&gt; Ruby/Sinatra app detected
+-----&gt; Gemfile detected, running Bundler version 1.0.7
+       Unresolved dependencies detected; Installing...
+       Using --without development:test
+       Fetching source index for http://rubygems.org/
+       Fetching source index for http://rubygems.org/
+       Installing addressable (2.2.6)
+       Installing launchy (2.0.5)
+       Installing mime-types (1.17.2)
+       Installing rest-client (1.6.7)
+       Installing rubyzip (0.9.4)
+       Installing term-ansicolor (1.0.7)
+       Installing heroku (2.14.0)
+       Installing pit (0.0.6)
+       Installing rack (1.3.5)
+       Installing rack-protection (1.1.4)
+       Installing tilt (1.3.3)
+       Installing sinatra (1.3.1)
+       Using bundler (1.0.7)
+       Your bundle is complete! It was installed into ./.bundle/gems/
+-----&gt; Compiled slug size is 1.9MB
+-----&gt; Launching... done, v4
+       http://tycoon-gosyujin.heroku.com deployed to Heroku
+
+To git@heroku.com:tycoon-gosyujin.git
+ * [new branch]      master -&gt; master
+</pre>
+<p>無事にデプロイが成功したようなので、Webページへアクセス。</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: この時はRuby1.8.7でやっていた。後ほど1.9代へ変更</p></div>
+</div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/11/24/1322138944" title="複数のRuby環境の管理・切替ができるpikを実行できた nyaos編">
+          複数のRuby環境の管理・切替ができるpikを実行できた nyaos編
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/11/27/1322329546" title="LokkaをインストールしてHerokuにデプロイした">
+          LokkaをインストールしてHerokuにデプロイした
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/11/26/1322240459" data-text="kk_Atakaの日記 - HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/11/26/1322240459/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/11/26/1322240459/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/11/26/1322240459/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+var hatena_bookmark_anywhere_limit = 999; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/11/26/1322240459/"; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      </article>
+
+      <aside class="markdown-body sidebar">
+  <h2>Link</h2>
+
+  <ul>
+    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
+    <li>kk_Atakaの日記(同じ内容)</li>
+    <ul>
+      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
+      <li><a href="http://gosyujin.github.io/">GitHub Pages(Jekyll)</a></li>
+    </ul>
+    <li><a href="http://gosyujin.github.io/life/">らいふろぐ(Sphinx)</a></li>
+    <li><a href="https://twitter.com/kk_ataka">Twitter@kk_Ataka</a></li>
+    <li><a href="https://github.com/gosyujin">GitHub@gosyujin</a></li>
+    <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare@kk_Ataka</a></li>
+    <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
+    <li><a href="http://f.hatena.ne.jp/kk_Ataka/">はてなフォト</a></li>
+    <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
+    <li><a href="http://atnd.org/users/13915">ATND</a></li>
+  </ul>
+
+  <h2>Recent Entries</h2>
+
+  
+  
+  
+<ul>
+  
+    
+      <li>
+        <span>2015/10/13</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/09/24</span>
+        
+          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/08/06</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+        
+        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/07/13</span>
+        
+          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+        
+        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/06/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Hugo">Hugo</a></code> ]</span>
+        
+        <a href="/2015/06/30/hugo-helloworld">Hugoを使ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/06/30/hugo-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/06/30/hugo-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/05/26</span>
+        
+          <span>[ <code><a href="/tags.html#Jenkins">Jenkins</a></code> ]</span>
+        
+        <a href="/2015/05/26/jenkins-environment-path">実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/04/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2015/04/30/golang-helloworld">golangでサーバのファイルをゆっくりダウンロードするツール作ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/04/30/golang-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/04/30/golang-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/03/14</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/02/28</span>
+        
+          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+        
+        <a href="/2015/02/28/excel-by-ruby">rubyXLを使ってExcelを操作したい</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/02/28/excel-by-ruby/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/02/28/excel-by-ruby/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/01/25</span>
+        
+          <span>[ <code><a href="/tags.html#日記">日記</a></code> ]</span>
+        
+        <a href="/2015/01/25/kpt-2014">2014年kpt</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/01/25/kpt-2014/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/01/25/kpt-2014/" />
+        </a>
+      </li>
+    
+  
+</ul>
+
+
+  <h2>Tags</h2>
+
+  <ul>
+    
+    
+      
+      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+    
+      
+      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+    
+      
+      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Mac">Mac <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ruby">Ruby <sub>71</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sphinx">Sphinx <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#イベント">イベント <sub>23</sub></a></li>
+    
+      
+      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+    
+      
+      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+    
+  </ul>
+
+</aside>
+
+
+    </div>
+    <hr class="clearfix" />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

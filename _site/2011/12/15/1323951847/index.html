@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>RedmineとApacheを連携させるPassengerをインストールできなかった - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <div class="header">
+      <nav>
+        <ul>
+          <li><a href="/">kk_Atakaの日記</a></li>
+          <li class="main-nav"><a href="/archives.html">Archive</a>
+          <li class="main-nav"><a href="/tags.html">Tag</a>
+        </ul>
+      </nav>
+    </div>
+
+    <div id="container">
+      <article class="markdown-body">
+        <h1><a href="/2011/12/15/1323951847">RedmineとApacheを連携させるPassengerをインストールできなかった</a></h1>
+        <div class="published">
+          
+            <span>Tags: </span>
+            
+              <span>[ <code><a href="/tags.html#Ruby" class="tag">Ruby</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Solaris" class="tag">Solaris</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#備忘録" class="tag">備忘録</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Redmine" class="tag">Redmine</a></code> ]</span>
+            
+          
+          
+            <span>Published: 2011/12/15</span>
+          
+        </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/14/1323868360" title="さくらVPSの初期設定メモ">
+          さくらVPSの初期設定メモ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/16/1324086694" title="svn infoコマンドでリビジョン番号を抜き出す">
+          svn infoコマンドでリビジョン番号を抜き出す
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<div class="content">
+<h1>あらすじ</h1>
+<ul><li>Redmineを自動起動するようにしたい<ul><li>Phusion Passenger(mod_rails for Apache)を使えばApacheと連携できるらしい</li></ul></li></ul>
+<blockquote><p>特徴</p><p>    * Apache単独でRailsアプリケーションを実行可能です。Apacheのモジュールとして実装されており、別途デーモンを起動する必要がありません。tcpポートも使いません。</p><p>    * Railsアプリケーションのデプロイが簡単になります。ファイルをアップロードするだけ。ほぼPHP感覚です。</p><p>    * サーバのメモリを節約できます。Railsインスタンスは必要なタイミングで生成します。また、一定時間アクセスがなければインスタンスを終了させます。</p><cite><a href="http://redmine.jp/tech_note/apache-passenger/">http://redmine.jp/tech_note/apache-passenger/</a></cite></blockquote>
+<p>ふーむ。</p>
+<h1>参考サイト</h1>
+<ul><li><a href="http://redmine.jp/faq/system_management/redmine-auto-start/">Redmineを自動起動したい | Redmine.JP</a></li><li><a href="http://redmine.jp/tech_note/apache-passenger/">Apache上でRuby on Railsアプリケーションを動かす／Passenger(mod_rails for Apache)の利用 | Redmine.JP</a></li><li><a href="http://d.hatena.ne.jp/rx7/20080412/p1">Passenger (mod_rails for Apache) を使ってRedmineを動かしてみたよ！ - RX-7乗りの適当な日々</a></li><li><a href="http://d.hatena.ne.jp/r7kamura/20110212/1297452845">さくらVPS設定その3 Git+Ruby+Gem+Rails+Passenger - ✘╹◡╹✘</a></li></ul>
+<h1>手順</h1>
+<h2>passengerインストール</h2>
+<p>Passengerを使うにはfastthread、daemon_controllerが必要らしい。</p>
+<pre>$ gem install --local fastthread-1.0.7.gem
+$ gem install --local daemon_controller-0.2.6.gem
+$ gem install --local passenger-3.0.9.gem</pre>
+<p>※スタンドアロンなマシンだったため。ネットにつながっていればgem install passengerで全部入るはず。</p>
+<h1>passenger-install-apache2-module実行</h1>
+<p>対話形式でApacheのモジュール等を確認・インストールしていく。はじめにpassener-install-apache2-moduleを実行するとこんなメッセージが出てくる。</p>
+<pre>$ passenger-install-apache2-module
+Welcome to the Phusion Passenger Apache 2 module installer, v3.0.9.
+
+This installer will guide you through the entire installation process. It
+shouldn't take more than 3 minutes in total.
+
+Here's what you can expect from the installation process:
+
+ 1. The Apache 2 module will be installed for you.
+ 2. You'll learn how to configure Apache.
+ 3. You'll learn how to deploy a Ruby on Rails application.
+
+Don't worry if anything goes wrong. This installer will advise you on how to
+solve any problems.
+
+Press Enter to continue, or Ctrl-C to abort.</pre>
+<ol><li>Apacheモジュールをインストールしたい</li><li>Apacheの設定を知りたい</li><li>Railsアプリのデプロイ方法をしりたい</li></ol>
+<p>の中から一つ選んだらアドバイスしてやるよっと言っている？　のようなので1を選択。必要なソフトウェアがインストールされているかチェックされる。</p>
+<pre>Checking for required software...
+
+ * GNU C++ compiler... found at /usr/local/bin/g++
+ * Curl development headers with SSL support... not found
+ * OpenSSL development headers... not found
+ * Zlib development headers... found
+ * Ruby development headers... found
+ * OpenSSL support for Ruby... found
+ * RubyGems... found
+ * Rake... found at /usr/local/bin/rake
+ * rack... found
+ * Apache 2... not found
+ * Apache 2 development headers... not found
+ * Apache Portable Runtime (APR) development headers... not found
+ * Apache Portable Runtime Utility (APU) development headers... not found
+
+Some required software is not installed.
+But don't worry, this installer will tell you how to install them.
+
+Press Enter to continue, or Ctrl-C to abort.</pre>
+<p>結構インストールされていないものが多いな。メッセージでも「いろいろ入っていないものが見受けられるが心配すんな、俺がお前にインストール方法教えてやるよ！」と言われているようのでそのままエンター。</p>
+<pre>Installation instructions for required software
+
+ * To install Curl development headers with SSL support:
+   Please download Curl from http://curl.haxx.se/libcurl and make sure you install it with SSL support.
+
+ * To install OpenSSL development headers:
+   Please download it from http://www.openssl.org/
+
+ * To install Apache 2:
+   Please download it from http://httpd.apache.org/
+
+ * To install Apache 2 development headers:
+   Please download it from http://httpd.apache.org/
+
+ * To install Apache Portable Runtime (APR) development headers:
+   Please download it from http://httpd.apache.org/
+   (APR is an integrated part of Apache.)
+
+ * To install Apache Portable Runtime Utility (APU) development headers:
+   Please download it from http://httpd.apache.org/
+   (APR Utility is an integrated part of Apache.)
+
+If the aforementioned instructions didn't solve your problem, then please take
+a look at the Users Guide:
+
+  /usr/local/lib/ruby/gems/1.8/gems/passenger-3.0.9/doc/Users guide Apache.html</pre>
+<p>どこに何があるかUrlなどを教えてくれた。親切！</p>
+<h1>足りないもの集め</h1>
+<h2>Curl</h2>
+<ul><li><a href="http://www.blastwave.org/pkg/pkgcontents.ftd?software=curl&style=brief&state=5&arch=i386">http://www.blastwave.org/pkg/pkgcontents.ftd?software=curl&amp;style=brief&amp;state=5&amp;arch=i386</a> から</li><li>ディストリビューションを選択しパッケージをDL<ul><li>依存ファイルもあるので注意</li></ul></li><li>libidnとかlibssh2が足りなかったのでcurlが実行できない<ul><li>not found状態になっていた</li></ul></li></ul>
+<h2>Apache</h2>
+<ul><li>Apacheはあるはずなんだけどなあ。うまく見てくれてない</li><li>/usr/local/apache2/binにパスを通したらApache 2 development headerはfoundになった<ul><li>え？　Apache 2 development headerだけ？　他は？</li></ul></li></ul>
+<h2>OpenSSL</h2>
+<ul><li>OpenSSL development headersはなぜ入っていないのかわからなかった</li><li>パッケージをpkgaddしただけではダメ？<ul><li>Solarisにopenssl-develみたいなものはある？</li></ul></li><li>この文章を読むとソースから入れればよさそうなのだが…</li></ul>
+<blockquote><p>Does anyone know where I can obtain openssl-devel source or package for</p><p>solaris.  I am trying to compile courier-imap-2.1.1 and it bombs out in</p><p>the make process with the following error:</p><cite><a href="http://www.sunhelp.org/pipermail/sunhelp/2003-September/019267.html">http://www.sunhelp.org/pipermail/sunhelp/2003-September/019267.html</a></cite></blockquote>
+<blockquote><p>You can download complete OpenSSL source from www.openssl.org.</p><cite><a href="http://www.sunhelp.org/pipermail/sunhelp/2003-September/019268.html">http://www.sunhelp.org/pipermail/sunhelp/2003-September/019268.html</a></cite></blockquote>
+<ul><li>configのオプションに --openssldir を指定してみてもダメだった。</li></ul>
+<h1>とかなんとかしてるうちに</h1>
+<p>Rubyが実行できなくなった。lddで調べてみると、シンボルが見つからなくなっている。</p>
+<pre>
+        librt.so.1 =&gt;    /usr/lib/librt.so.1
+        libdl.so.1 =&gt;    /usr/lib/libdl.so.1
+        libcrypt_d.so.1 =&gt;       /usr/lib/libcrypt_d.so.1
+        libm.so.2 =&gt;     /usr/lib/libm.so.2
+        libc.so.1 =&gt;     /usr/lib/libc.so.1
+        libgcc_s.so.1 =&gt;         /usr/local/lib//libgcc_s.so.1
+        libaio.so.1 =&gt;   /usr/lib/libaio.so.1
+        libmd.so.1 =&gt;    /usr/lib/libmd.so.1
+        libgen.so.1 =&gt;   /usr/lib/libgen.so.1
+        シンボルが見つかりません: rb_cObject          (./md5.so)
+        シンボルが見つかりません: MD5_Update          (./md5.so)
+        シンボルが見つかりません: MD5_Init            (./md5.so)
+        シンボルが見つかりません: MD5_Finish          (./md5.so)
+        /platform/SPARC-XXXX/lib/libc_psr.so.1
+        /platform/SPARC-XXXX/lib/libmd_psr.so.1</pre>
+<p>md5.soを調べてみる。</p>
+<pre>$ cd /usr/local/lib/ruby/1.8/sparc-solaris2.10/digest
+$ ldd -d md5.so
+        librt.so.1 =&gt;    /usr/lib/librt.so.1
+        libdl.so.1 =&gt;    /usr/lib/libdl.so.1
+        libcrypt_d.so.1 =&gt;       /usr/lib/libcrypt_d.so.1
+        libm.so.2 =&gt;     /usr/lib/libm.so.2
+        libc.so.1 =&gt;     /usr/lib/libc.so.1
+        libgcc_s.so.1 =&gt;         /usr/local/lib//libgcc_s.so.1
+        libaio.so.1 =&gt;   /usr/lib/libaio.so.1
+        libmd.so.1 =&gt;    /usr/lib/libmd.so.1
+        libgen.so.1 =&gt;   /usr/lib/libgen.so.1
+        シンボルが見つかりません: rb_cObject          (./md5.so)
+        /platform/SUNW,SPARC-Enterprise-T5120/lib/libc_psr.so.1
+        /platform/SUNW,SPARC-Enterprise-T5120/lib/libmd_psr.so.1</pre>
+<p>Ruby本体の中でなんかやっちゃったのかな？</p>
+<p>結局Rubyを再インストールしたらこのエラーは消えた。</p>
+<h1>今後</h1>
+<ul><li>とりあえず、違うOSでPassenger入れなおしてみる</li></ul>
+</div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/12/14/1323868360" title="さくらVPSの初期設定メモ">
+          さくらVPSの初期設定メモ
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/12/16/1324086694" title="svn infoコマンドでリビジョン番号を抜き出す">
+          svn infoコマンドでリビジョン番号を抜き出す
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/12/15/1323951847" data-text="kk_Atakaの日記 - RedmineとApacheを連携させるPassengerをインストールできなかった" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/15/1323951847/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/15/1323951847/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/15/1323951847/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - RedmineとApacheを連携させるPassengerをインストールできなかった"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+var hatena_bookmark_anywhere_limit = 999; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/12/15/1323951847/"; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      </article>
+
+      <aside class="markdown-body sidebar">
+  <h2>Link</h2>
+
+  <ul>
+    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
+    <li>kk_Atakaの日記(同じ内容)</li>
+    <ul>
+      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
+      <li><a href="http://gosyujin.github.io/">GitHub Pages(Jekyll)</a></li>
+    </ul>
+    <li><a href="http://gosyujin.github.io/life/">らいふろぐ(Sphinx)</a></li>
+    <li><a href="https://twitter.com/kk_ataka">Twitter@kk_Ataka</a></li>
+    <li><a href="https://github.com/gosyujin">GitHub@gosyujin</a></li>
+    <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare@kk_Ataka</a></li>
+    <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
+    <li><a href="http://f.hatena.ne.jp/kk_Ataka/">はてなフォト</a></li>
+    <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
+    <li><a href="http://atnd.org/users/13915">ATND</a></li>
+  </ul>
+
+  <h2>Recent Entries</h2>
+
+  
+  
+  
+<ul>
+  
+    
+      <li>
+        <span>2015/10/13</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/09/24</span>
+        
+          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/08/06</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+        
+        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/07/13</span>
+        
+          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+        
+        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/06/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Hugo">Hugo</a></code> ]</span>
+        
+        <a href="/2015/06/30/hugo-helloworld">Hugoを使ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/06/30/hugo-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/06/30/hugo-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/05/26</span>
+        
+          <span>[ <code><a href="/tags.html#Jenkins">Jenkins</a></code> ]</span>
+        
+        <a href="/2015/05/26/jenkins-environment-path">実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/04/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2015/04/30/golang-helloworld">golangでサーバのファイルをゆっくりダウンロードするツール作ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/04/30/golang-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/04/30/golang-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/03/14</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/02/28</span>
+        
+          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+        
+        <a href="/2015/02/28/excel-by-ruby">rubyXLを使ってExcelを操作したい</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/02/28/excel-by-ruby/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/02/28/excel-by-ruby/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/01/25</span>
+        
+          <span>[ <code><a href="/tags.html#日記">日記</a></code> ]</span>
+        
+        <a href="/2015/01/25/kpt-2014">2014年kpt</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/01/25/kpt-2014/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/01/25/kpt-2014/" />
+        </a>
+      </li>
+    
+  
+</ul>
+
+
+  <h2>Tags</h2>
+
+  <ul>
+    
+    
+      
+      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+    
+      
+      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+    
+      
+      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Mac">Mac <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ruby">Ruby <sub>71</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sphinx">Sphinx <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#イベント">イベント <sub>23</sub></a></li>
+    
+      
+      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+    
+      
+      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+    
+  </ul>
+
+</aside>
+
+
+    </div>
+    <hr class="clearfix" />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+
