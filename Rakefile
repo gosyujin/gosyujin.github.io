@@ -21,6 +21,27 @@ task :deploy do
   sh "ruby _scripts/convert_html_to_hatena.rb"
 end
 
+desc "Begin CircleCI"
+task :circle do
+  sh "git clone -b master git@github.com:gosyujin/gosyujin.github.io.git ~/gh-pages"
+  sh "rm -rf ~/gh-pages/*"
+  sh "cp -R _site/* ~/gh-pages"
+  sh "cp -R circle.yml.gh-pages ~/gh-pages/circle.yml"
+
+  sh "cd ~/gh-pages"
+
+  sh "git add -A"
+  sh "git status -s > /tmp/gitstatus"
+  sh "ls -l /tmp/gitstatus"
+  sh "cat /tmp/gitstatus"
+  sh "if [ -s /tmp/gitstatus ]; then"
+  sh "  git commit -m 'Commit at CircleCI'"
+  sh "  git push origin master"
+  sh "else"
+  sh "  echo 'no change source'"
+  sh "fi"
+end
+
 # Usage: rake post title="A Title" [date="2012-02-09"]
 desc "Begin a new post in #{CONFIG['posts']}"
 task :post do

@@ -1,0 +1,22 @@
+general:
+  branches:
+    only:
+      - source
+
+dependencies:
+  pre:
+    - git config --global user.name "CircleCI"
+    - git config --global user.email "circleci@example.com"
+    - gem install bundler
+  override:
+    - bundle install jekyll
+
+test:
+  override:
+    - exit
+
+deployment:
+  master:
+    branch: source
+    commands:
+      - sh make.sh circle
