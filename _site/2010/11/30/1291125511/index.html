@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>RubyでTwitterのOAuth認証をしてみる その2 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <div class="header">
+      <nav>
+        <ul>
+          <li><a href="/">kk_Atakaの日記</a></li>
+          <li class="main-nav"><a href="/archives.html">Archive</a>
+          <li class="main-nav"><a href="/tags.html">Tag</a>
+        </ul>
+      </nav>
+    </div>
+
+    <div id="container">
+      <article class="markdown-body">
+        <h1><a href="/2010/11/30/1291125511">RubyでTwitterのOAuth認証をしてみる その2</a></h1>
+        <div class="published">
+          
+            <span>Tags: </span>
+            
+              <span>[ <code><a href="/tags.html#Ruby" class="tag">Ruby</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Twitter" class="tag">Twitter</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#API" class="tag">API</a></code> ]</span>
+            
+          
+          
+            <span>Published: 2010/11/30</span>
+          
+        </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2010/11/21/1290271210" title="RubyでTwitterのOAuth認証をしてみる">
+          RubyでTwitterのOAuth認証をしてみる
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2010/12/07/1291733295" title="RubyでTwitterのタイムラインを取得してみる">
+          RubyでTwitterのタイムラインを取得してみる
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<div class="content">
+<p><a href="http://d.hatena.ne.jp/kk_Ataka/20101121/1290271210">前回のエントリ</a> では、リクエストトークンまで発行してもらえました。だもんで今回は前回に続いてアクセストークンを発行してもらいます。アクセストークン発行の流れとしては、</p>
+<ol><li>今もらったリクエストトークンを付加して <a href="http://twitter.com/oauth/authorize">http://twitter.com/oauth/authorize</a> へアクセスする</li><li>画面に表示されるPINコード(oauth_verifier)を控える</li><li>リクエストトークンとPINコードをを付加して <a href="http://twitter.com/oauth/access_token">http://twitter.com/oauth/access_token</a> へアクセスする</li></ol>
+<p>行きます。</p>
+<h1>PINコードを発行してもらう</h1>
+<p>リクエストトークンを発行してもらうと、 </p>
+<pre>oauth_token=XXXXXXXXXX&amp;oauth_token_secret=YYYYYYYYYYYYYYYYYYYYYYYYYYYY&amp;oauth_callback_confirmed=true</pre>
+<p>という文字列がbodyに埋まってきたはず。<span class="footnote"><a href="#f1" title="この時のoauth_tokenとoauth_token_secretは一時的なものらしいので、アクセストークンがもらえれば忘れても良いようです。" name="fn1">*1</a></span></p>
+<p>この中から oauth_tokenを抜き出し、 <a href="http://twitter.com/oauth/authorize">http://twitter.com/oauth/authorize</a> にパラメータとしてくっつけます。こんな感じ。</p>
+<p><a href="http://twitter.com/oauth/authorize?oauth_token=XXXXXXXXXX">http://twitter.com/oauth/authorize?oauth_token=XXXXXXXXXX</a></p>
+<p>アドレスが正しければ、以下のような画面が出るはず。<span class="footnote"><a href="#f2" title="Twitterにログインしていなければ、ログイン画面がまず出たはず。" name="fn2">*2</a></span>アプリケーションからのアクセスを許可しますか？　と尋ねられるので許可するを選択。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20101130220734"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101130/20101130220734.jpg"></a></p>
+<p>許可すると、PINコードが画面に表示されるのでこれを控えておく。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20101130220731"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101130/20101130220731.jpg"></a></p>
+<h1>再度signatureを作成する</h1>
+<p>このPINコードを"oauth_verify"として。先ほどURLに貼っつけたoauth_tokenを"oauth_token"としてパラメータとして持たせます。</p>
+<p>そして、ここでもう一度signatureを作成を作成します。注意点としては、</p>
+<ol><li>今まで使っていたoauth_signatureは一旦消して、以下のパラメータで新たにつくり直す<ol><li>oauth_consumer_key</li><li>oauth_nonce</li><li>oauth_signature_method</li><li>oauth_timestamp</li><li>oauth_version</li><li>oauth_token <span style="color:#FF0000;">New!</span></li><li>oauth_verifier <span style="color:#FF0000;">New!</span></li></ol></li><li>URLは"<a href="http://twitter.com/oauth/access_token">http://twitter.com/oauth/access_token</a>"をエスケープしたもの</li><li>暗号化用のキーは"consumer_secret&oauth_token_secret"<span class="footnote"><a href="#f3" title="リクエストトークンを作るときは"consumer_secret&"でした" name="fn3">*3</a></span></li></ol>
+<p>この3点でしょうか。</p>
+<p>signatureが作成できたら、前回と同様にアルファベット順に並べて連結し、URLのおしりにくっつけます。URLはこんな感じになります。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20101130223243"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101130/20101130223243.jpg"></a></p>
+<p>成功したら、oauth_token, oauth_token_secret,  user_id, screen_nameが返ってきます。これ俺や！！</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20101130220728"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101130/20101130220728.jpg"></a></p>
+<p>ここで返してもらったoauth_tokenとoauth_token_secretは本物なので大切にとっておく！　というわけで、次は自分のTimelineを取得します！</p>
+<p>ソースはこんな感じ。</p>
+<pre class="ruby">require 'openssl'
+require 'uri'
+require 'net/http'
+
+# signature作成
+def signature(method, consumer_secret, oauth_token_secret, url, oauth_header)
+	# signature_keyの作成
+	# リクエストトークン時は&quot;CONSUMER_SECRET&amp;&quot;(アンドが入っている)
+	# アクセストークン時は&quot;CONSUMER_SECRET&amp;OAUTH_TOKEN_SECRET&quot;として使用
+	signature_key = consumer_secret + &quot;&amp;&quot;
+	if !oauth_token_secret.nil? then
+		signature_key += oauth_token_secret
+	end
+
+	# oauth_headerのパラメータをソートして連結
+	param = sort_and_concat(oauth_header)
+
+	# httpメソッドとURLとパラメータを&amp;で連結する
+	value = method + &quot;&amp;&quot; + escape(url) + &quot;&amp;&quot; + escape(param)
+	# hmac_sha1
+	sha1 = OpenSSL::HMAC.digest(OpenSSL::Digest::SHA1.new, signature_key, value)
+	# base64
+	base64 = [sha1].pack('m').gsub(/\n/, '')
+	return base64
+end
+
+# 文字列のエスケープ(: / = %をエスケープする。. _ -はそのまま)
+def escape(value)
+	URI.escape(value, Regexp.new(&quot;[^a-zA-Z0-9._-]&quot;))
+end
+
+# oauth_headerの情報をアルファベット順に並べ替え &amp; で結合
+def sort_and_concat(oauth_header)
+	oauth_header_array = oauth_header.sort
+	param = &quot;&quot;
+	oauth_header_array.each do |params|
+		for i in 1..params.length
+			param += params[i-1]
+			if i % params.length == 0
+				param += &quot;&amp;&quot;
+			else
+				param += &quot;=&quot;
+			end
+		end
+	end
+	param = param.slice(0, param.length-1)
+end
+
+# リクエストトークン取得用のURL
+request_token_url = &quot;http://twitter.com/oauth/request_token&quot;
+# PINコード取得用URL
+authorize_url = &quot;http://twitter.com/oauth/authorize&quot;
+# アクセストークン取得用のURL
+access_token_url = &quot;http://twitter.com/oauth/access_token&quot;
+
+# Twitterで登録したらもらえる
+consumer_key = &quot;XXXXXXXXXXXXXXXXXXXXX&quot;
+consumer_secret = &quot;YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY&quot;
+
+# Twitterからもらえるアクセストークン(最初は使わない)
+oauth_token = &quot;&quot;
+oauth_token_secret = &quot;&quot;
+
+# oauthパラメータたち
+oauth_header = {
+	# Consumer Key
+	&quot;oauth_consumer_key&quot; =&gt; consumer_key,
+	# 一意な値(今回は適当に実装)
+	&quot;oauth_nonce&quot; =&gt; &quot;AAAAAAAA&quot;,
+	# 署名方式(HMAC-SHA1)
+	&quot;oauth_signature_method&quot; =&gt; &quot;HMAC-SHA1&quot;,
+	# リクエスト生成時のタイムスタンプ(ミリ秒)
+	&quot;oauth_timestamp&quot; =&gt; Time.now.to_i.to_s,
+	# バージョン(1.0)
+	&quot;oauth_version&quot; =&gt; &quot;1.0&quot;,
+}
+
+# signature作成
+oauth_header[&quot;oauth_signature&quot;] = signature(&quot;GET&quot;, 
+					consumer_secret, 
+					nil, 
+					request_token_url, 
+					oauth_header)
+
+# GETする
+uri = URI.parse(request_token_url)
+proxy_class = Net::HTTP::Proxy(ARGV[0], 8080)
+http = proxy_class.new(uri.host)
+http.start do |http|
+	# oauth_headerのパラメータをソートして連結
+	param = sort_and_concat(oauth_header)
+
+	res = http.get(uri.path + &quot;?#{param}&quot;)
+
+	if res.code == &quot;200&quot; then
+		# 返ってきた値を分割
+		params = res.body.split(&quot;&amp;&quot;)
+		params.each do |param|
+			# さらに=で分割し前部分をkey、後方部分をvalueに格納
+			key,value = param.split(&quot;=&quot;)
+
+			# リクエストトークンを格納
+			if (&quot;oauth_token&quot; == key) then
+				oauth_token = value
+			elsif (&quot;oauth_token_secret&quot; == key) then
+				oauth_token_secret = value
+			end
+		end
+
+		# プロンプトにPINコード取得用URL表示
+		print &quot;#{authorize_url}?oauth_token=#{oauth_token}\n&quot;
+		print &quot;Input PIN Code. Input...\n&quot;
+
+		# PINコード入力待ち
+		oauth_verifier = STDIN.gets
+		# 改行コード(\n)取り除き
+		oauth_verifier = oauth_verifier.slice(0, oauth_verifier.length-1)
+
+		# ヘッダにアクセストークンとPINコード追加
+		oauth_header[&quot;oauth_token&quot;] = oauth_token
+		oauth_header[&quot;oauth_verifier&quot;] = oauth_verifier
+		
+		# いったんoauth_signature削除
+		oauth_header.delete(&quot;oauth_signature&quot;)
+
+		# 再びsignature作成
+		oauth_header[&quot;oauth_signature&quot;] = signature(&quot;GET&quot;, 
+							consumer_secret, 
+							oauth_token_secret, 
+							access_token_url, 
+							oauth_header)
+
+		# oauth_headerのパラメータをソートして連結
+		param = sort_and_concat(oauth_header)
+
+		# GETする
+		uri = URI.parse(access_token_url)
+		proxy_class = Net::HTTP::Proxy(ARGV[0], 8080)
+		http = proxy_class.new(uri.host)
+		http.start do |http|
+			res = http.get(uri.path + &quot;?#{param}&quot;)
+			if res.code ==&quot;200&quot; then
+				print &quot;#{res.code}\n&quot;
+				print &quot;#{res.body}\n&quot;
+			else
+				print &quot;ERROR: #{res.code}\n&quot;
+			end
+		end
+	else
+		print &quot;ERROR: #{res.code}\n&quot;
+	end
+end</pre>
+<p>処理の流れとしては、oauth_tokenを貼りつけた<a href="http://twitter.com/oauth/authorize">http://twitter.com/oauth/authorize</a>のアドレスを出力するので、(お手数ですが)ブラウザからアクセスしてもらう。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20101130220736"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101130/20101130220736.jpg"></a></p>
+<p>ブラウザに表示されたPINコードを貼っつけてもらって、これをoauth_verifierとし、アクセストークンを発行してもらう。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20101130220728"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101130/20101130220728.jpg"></a></p>
+<p>PINコードの所はいちいちブラウザから行かないようにすることもできそうなんですが……。</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: この時のoauth_tokenとoauth_token_secretは一時的なものらしいので、アクセストークンがもらえれば忘れても良いようです。</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: Twitterにログインしていなければ、ログイン画面がまず出たはず。</p><p class="footnote"><a href="#fn3" name="f3">*3</a>: リクエストトークンを作るときは"consumer_secret&"でした</p></div>
+</div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2010/11/21/1290271210" title="RubyでTwitterのOAuth認証をしてみる">
+          RubyでTwitterのOAuth認証をしてみる
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2010/12/07/1291733295" title="RubyでTwitterのタイムラインを取得してみる">
+          RubyでTwitterのタイムラインを取得してみる
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2010/11/30/1291125511" data-text="kk_Atakaの日記 - RubyでTwitterのOAuth認証をしてみる その2" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2010/11/30/1291125511/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2010/11/30/1291125511/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2010/11/30/1291125511/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - RubyでTwitterのOAuth認証をしてみる その2"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+var hatena_bookmark_anywhere_limit = 999; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2010/11/30/1291125511/"; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      </article>
+
+      <aside class="markdown-body sidebar">
+  <h2>Link</h2>
+
+  <ul>
+    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
+    <li>kk_Atakaの日記(同じ内容)</li>
+    <ul>
+      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
+      <li><a href="http://gosyujin.github.io/">GitHub Pages(Jekyll)</a></li>
+    </ul>
+    <li><a href="http://gosyujin.github.io/life/">らいふろぐ(Sphinx)</a></li>
+    <li><a href="https://twitter.com/kk_ataka">Twitter@kk_Ataka</a></li>
+    <li><a href="https://github.com/gosyujin">GitHub@gosyujin</a></li>
+    <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare@kk_Ataka</a></li>
+    <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
+    <li><a href="http://f.hatena.ne.jp/kk_Ataka/">はてなフォト</a></li>
+    <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
+    <li><a href="http://atnd.org/users/13915">ATND</a></li>
+  </ul>
+
+  <h2>Recent Entries</h2>
+
+  
+  
+  
+<ul>
+  
+    
+      <li>
+        <span>2015/10/13</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/09/24</span>
+        
+          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/08/06</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+        
+        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/07/13</span>
+        
+          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+        
+        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/06/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Hugo">Hugo</a></code> ]</span>
+        
+        <a href="/2015/06/30/hugo-helloworld">Hugoを使ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/06/30/hugo-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/06/30/hugo-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/05/26</span>
+        
+          <span>[ <code><a href="/tags.html#Jenkins">Jenkins</a></code> ]</span>
+        
+        <a href="/2015/05/26/jenkins-environment-path">実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/04/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2015/04/30/golang-helloworld">golangでサーバのファイルをゆっくりダウンロードするツール作ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/04/30/golang-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/04/30/golang-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/03/14</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/02/28</span>
+        
+          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+        
+        <a href="/2015/02/28/excel-by-ruby">rubyXLを使ってExcelを操作したい</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/02/28/excel-by-ruby/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/02/28/excel-by-ruby/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/01/25</span>
+        
+          <span>[ <code><a href="/tags.html#日記">日記</a></code> ]</span>
+        
+        <a href="/2015/01/25/kpt-2014">2014年kpt</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/01/25/kpt-2014/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/01/25/kpt-2014/" />
+        </a>
+      </li>
+    
+  
+</ul>
+
+
+  <h2>Tags</h2>
+
+  <ul>
+    
+    
+      
+      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+    
+      
+      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+    
+      
+      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Mac">Mac <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ruby">Ruby <sub>71</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sphinx">Sphinx <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#イベント">イベント <sub>23</sub></a></li>
+    
+      
+      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+    
+      
+      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+    
+  </ul>
+
+</aside>
+
+
+    </div>
+    <hr class="clearfix" />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

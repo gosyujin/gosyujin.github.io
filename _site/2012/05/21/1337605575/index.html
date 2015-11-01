@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <div class="header">
+      <nav>
+        <ul>
+          <li><a href="/">kk_Atakaの日記</a></li>
+          <li class="main-nav"><a href="/archives.html">Archive</a>
+          <li class="main-nav"><a href="/tags.html">Tag</a>
+        </ul>
+      </nav>
+    </div>
+
+    <div id="container">
+      <article class="markdown-body">
+        <h1><a href="/2012/05/21/1337605575">SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした</a></h1>
+        <div class="published">
+          
+            <span>Tags: </span>
+            
+              <span>[ <code><a href="/tags.html#SlideShare" class="tag">SlideShare</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Heroku" class="tag">Heroku</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Ruby" class="tag">Ruby</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#API" class="tag">API</a></code> ]</span>
+            
+          
+          
+            <span>Published: 2012/05/21</span>
+          
+        </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/28/1335575351" title="BPStudy#57に参加しました #bpstudy">
+          BPStudy#57に参加しました #bpstudy
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/05/28/1338209339" title="Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red">
+          Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<div class="content">
+<h1>あらすじ</h1>
+<p>slideshareを社内から閲覧する事を禁じられているので、ワンクッションおいてスライドのpptを落とせるようにしたい</p>
+<h1>参考サイト</h1>
+<ul><li><a href="http://www.slideshare.net/developers/documentation#get_slideshow">SlideShare » Developer Documentation</a></li></ul>
+<p>とりあえず公式サイトを抑えておけばいけそう。</p>
+<h1>流れ</h1>
+<h2>API申請</h2>
+<ul><li>slideshare -> Developer & APIのページからApply for API keyに移動</li><li>ログイン or 新規アカウント作成</li><li>Name、E-Mail、How do you want to use the API?を入力し送信。頑張って英文書く。</li></ul>
+<pre>I want to get slideshare's slide from API.</pre>
+<ul><li>送信されたメールに貼られている<span class="deco" style="font-weight:bold;">API Key</span>と<span class="deco" style="font-weight:bold;">Shared Secret</span>を控える</li></ul>
+<h2>パラメータ</h2>
+<ul><li>slideshare -> Documentationを見ながら必要なパラメータを調べる</li></ul>
+<table><tr><th>api_key</th><td>さっきのAPI Key</td></tr><tr><th>ts</th><td>タイムスタンプ<span class="footnote"><a href="#f1" title="Set this to the current time in Unix TimeStamp format, to the nearest second(?)." name="fn1">*1</a></span></td></tr><tr><th>hash</th><td>さっきのShared Secretとこれから取得するtsでハッシュを作る<span class="footnote"><a href="#f2" title="Set this to the SHA1 hash of the concatenation of the shared secret and the timestamp (ts). i.e. SHA1 (sharedsecret + timestamp). The order of the terms in the concatenation is important." name="fn2">*2</a></span></td></tr><tr><th>(username)</th><td>登録ID</td></tr><tr><th>(password)</th><td>パスワード</td></tr></table>
+<p>全然関係ないけど、Documentationのページ内にあるi.e.って単語を初めて見たのでググってみた。<a href="http://www.masahiko.info/life/archives/000799.html">論文中の「e.g.」「i.e.」の意味は何？ － Diary@一色政彦WebSite</a> that is ... すなわちとかそういう意味らしい。e.g.で例えば、for example的な。</p>
+<h1>ソース</h1>
+<p>ソースはこんな感じ。</p>
+<pre class="ruby">require 'openssl'
+require 'uri'
+require 'net/http'
+
+url = 'http://www.slideshare.net/api/2/get_slideshow'
+param = Hash.new
+param[&quot;slideshow_url&quot;] = 'http://www.slideshare.net/gishi/wicket-presentation'
+param[&quot;api_key&quot;] = 'XXXXXXXX'
+param[&quot;sharedsecret&quot;] = 'XXXXXXXX'
+# ts
+param[&quot;ts&quot;] = Time.now.to_i.to_s
+# hash
+param[&quot;hash&quot;] = Digest::SHA1.hexdigest(param[&quot;sharedsecret&quot;]+param[&quot;ts&quot;])
+
+uri = URI.parse(url)
+Net::HTTP.new(uri.host).start do |http|
+#Net::HTTP.new(uri.host, 80, ENV[&quot;PROXY&quot;], 8080).start do |http|
+  uri_param = param.sort.map {|i|i.join('=')}.join('&amp;')
+  
+  res = http.get(uri.path + '?' + uri_param)
+  puts res.body
+end</pre>
+<p>成功するとこんな感じの内容が返ってくる。</p>
+<pre class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;Slideshow&gt;
+  &lt;ID&gt;579496&lt;/ID&gt;
+  &lt;Title&gt;Wicket&amp;#20307;&amp;#39443;&amp;#35527;&lt;/Title&gt;
+  &lt;Description&gt;&amp;#31532;1&amp;#22238;Wicket&amp;#21193;&amp;#24375;&amp;#20250;&amp;#12398;&amp;#12521;&amp;#12452;&amp;#12488;&amp;#12491;&amp;#12531;&amp;#12464;&amp;#12488;&amp;#12540;&amp;#12463;&amp;#30330;&amp;#34920;&amp;#36039;&amp;#26009;&lt;/Description&gt;
+  &lt;Status&gt;2&lt;/Status&gt;
+  &lt;Username&gt;gishi&lt;/Username&gt;
+  &lt;URL&gt;http://www.slideshare.net/gishi/wicket-presentation&lt;/URL&gt;
+  &lt;ThumbnailURL&gt;http://cdn.slidesharecdn.com/wicket-1220375587470160-8-thumbnail&lt;/ThumbnailURL&gt;
+  &lt;ThumbnailSmallURL&gt;http://cdn.slidesharecdn.com/wicket-1220375587470160-8-thumbnail-2&lt;/ThumbnailSmallURL&gt;
+  &lt;Embed&gt;&amp;lt;div style=&amp;quot;width:425px&amp;quot; id=&amp;quot;__ss_579496&amp;quot;&amp;gt;&amp;lt;strong style=&amp;quot;display:block;margin:12px 0 4px&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;http://www.slideshare.net/gishi/wicket-presentation&amp;quot; title=&amp;quot;Wicket&amp;#20307;&amp;#39443;&amp;#35527;&amp;quot;&amp;gt;Wicket&amp;#20307;&amp;#39443;&amp;#35527;&amp;lt;/a&amp;gt;&amp;lt;/strong&amp;gt;&amp;lt;object id=&amp;quot;__sse579496&amp;quot; width=&amp;quot;425&amp;quot; height=&amp;quot;355&amp;quot;&amp;gt;&amp;lt;param name=&amp;quot;movie&amp;quot; value=&amp;quot;http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=wicket-1220375587470160-8&amp;amp;stripped_title=wicket-presentation&amp;amp;userName=gishi&amp;quot; /&amp;gt;&amp;lt;param name=&amp;quot;allowFullScreen&amp;quot; value=&amp;quot;true&amp;quot;/&amp;gt;&amp;lt;param name=&amp;quot;allowScriptAccess&amp;quot; value=&amp;quot;always&amp;quot;/&amp;gt;&amp;lt;param name=&amp;quot;wmode&amp;quot; value=&amp;quot;transparent&amp;quot;/&amp;gt;&amp;lt;embed name=&amp;quot;__sse579496&amp;quot; src=&amp;quot;http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=wicket-1220375587470160-8&amp;amp;stripped_title=wicket-presentation&amp;amp;userName=gishi&amp;quot; type=&amp;quot;application/x-shockwave-flash&amp;quot; allowscriptaccess=&amp;quot;always&amp;quot; allowfullscreen=&amp;quot;true&amp;quot; wmode=&amp;quot;transparent&amp;quot; width=&amp;quot;425&amp;quot; height=&amp;quot;355&amp;quot;&amp;gt;&amp;lt;/embed&amp;gt;&amp;lt;/object&amp;gt;&amp;lt;div style=&amp;quot;padding:5px 0 12px&amp;quot;&amp;gt;View more &amp;lt;a href=&amp;quot;http://www.slideshare.net/&amp;quot;&amp;gt;presentations&amp;lt;/a&amp;gt; from &amp;lt;a href=&amp;quot;http://www.slideshare.net/gishi&amp;quot;&amp;gt;Hiroto Yamakawa&amp;lt;/a&amp;gt;.&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&lt;/Embed&gt;
+  &lt;Created&gt;Tue Sep 02 10:14:12 -0500 2008&lt;/Created&gt;
+  &lt;Updated&gt;Tue Sep 02 10:16:15 -0500 2008&lt;/Updated&gt;
+  &lt;Language&gt;ja&lt;/Language&gt;
+  &lt;Format&gt;ppt&lt;/Format&gt;
+  &lt;Download&gt;1&lt;/Download&gt;
+  &lt;DownloadUrl&gt;http://s3.amazonaws.com/ppt-download/wicket-1220375587470160-8.ppt?response-content-disposition=attachment&amp;amp;Signature=ABs151smgWZ9213%2FyFq81fnMc6A%3D&amp;amp;Expires=1328606581&amp;amp;AWSAccessKeyId=AKIAJLJT267DEGKZDHEQ&lt;/DownloadUrl&gt;
+  &lt;SlideshowType&gt;0&lt;/SlideshowType&gt;
+  &lt;InContest&gt;0&lt;/InContest&gt;
+&lt;/Slideshow&gt;</pre>
+<p>おー取れた。んで、xmlの中のDownloadUrlからpptをゲットできた！　これをSinatraでWebアプリケーションにしてHerokuにデプロイすれば職場から行けるかな！？</p>
+<p>→いけた！　自分の中ではお役立ち。<a href="http://tycoon-slidedown.heroku.com/">http://tycoon-slidedown.heroku.com/</a></p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: Set this to the current time in Unix TimeStamp format, to the nearest second(?).</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: Set this to the SHA1 hash of the concatenation of the shared secret and the timestamp (ts). i.e. SHA1 (sharedsecret + timestamp). The order of the terms in the concatenation is important.</p></div>
+</div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/04/28/1335575351" title="BPStudy#57に参加しました #bpstudy">
+          BPStudy#57に参加しました #bpstudy
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2012/05/28/1338209339" title="Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red">
+          Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2012/05/21/1337605575" data-text="kk_Atakaの日記 - SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/05/21/1337605575/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/05/21/1337605575/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/05/21/1337605575/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+var hatena_bookmark_anywhere_limit = 999; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/05/21/1337605575/"; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      </article>
+
+      <aside class="markdown-body sidebar">
+  <h2>Link</h2>
+
+  <ul>
+    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
+    <li>kk_Atakaの日記(同じ内容)</li>
+    <ul>
+      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
+      <li><a href="http://gosyujin.github.io/">GitHub Pages(Jekyll)</a></li>
+    </ul>
+    <li><a href="http://gosyujin.github.io/life/">らいふろぐ(Sphinx)</a></li>
+    <li><a href="https://twitter.com/kk_ataka">Twitter@kk_Ataka</a></li>
+    <li><a href="https://github.com/gosyujin">GitHub@gosyujin</a></li>
+    <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare@kk_Ataka</a></li>
+    <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
+    <li><a href="http://f.hatena.ne.jp/kk_Ataka/">はてなフォト</a></li>
+    <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
+    <li><a href="http://atnd.org/users/13915">ATND</a></li>
+  </ul>
+
+  <h2>Recent Entries</h2>
+
+  
+  
+  
+<ul>
+  
+    
+      <li>
+        <span>2015/10/13</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/09/24</span>
+        
+          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/08/06</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+        
+        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/07/13</span>
+        
+          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+        
+        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/06/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Hugo">Hugo</a></code> ]</span>
+        
+        <a href="/2015/06/30/hugo-helloworld">Hugoを使ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/06/30/hugo-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/06/30/hugo-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/05/26</span>
+        
+          <span>[ <code><a href="/tags.html#Jenkins">Jenkins</a></code> ]</span>
+        
+        <a href="/2015/05/26/jenkins-environment-path">実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/04/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2015/04/30/golang-helloworld">golangでサーバのファイルをゆっくりダウンロードするツール作ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/04/30/golang-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/04/30/golang-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/03/14</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/02/28</span>
+        
+          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+        
+        <a href="/2015/02/28/excel-by-ruby">rubyXLを使ってExcelを操作したい</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/02/28/excel-by-ruby/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/02/28/excel-by-ruby/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/01/25</span>
+        
+          <span>[ <code><a href="/tags.html#日記">日記</a></code> ]</span>
+        
+        <a href="/2015/01/25/kpt-2014">2014年kpt</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/01/25/kpt-2014/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/01/25/kpt-2014/" />
+        </a>
+      </li>
+    
+  
+</ul>
+
+
+  <h2>Tags</h2>
+
+  <ul>
+    
+    
+      
+      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+    
+      
+      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+    
+      
+      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Mac">Mac <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ruby">Ruby <sub>71</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sphinx">Sphinx <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#イベント">イベント <sub>23</sub></a></li>
+    
+      
+      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+    
+      
+      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+    
+  </ul>
+
+</aside>
+
+
+    </div>
+    <hr class="clearfix" />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+
