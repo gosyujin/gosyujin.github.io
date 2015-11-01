@@ -9,6 +9,7 @@ dependencies:
     - git config --global user.email "circleci@example.com"
     - gem install bundler
   override:
+    - bundle install rake
     - bundle install jekyll
 
 test:
@@ -19,4 +20,4 @@ deployment:
   master:
     branch: source
     commands:
-      - sh make.sh circle
+      - bundle exec rake circle
