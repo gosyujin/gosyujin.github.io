@@ -35,18 +35,13 @@ task :circle do
       git add -A ;\
       git status -s > /tmp/gitstatus ;\
       cat /tmp/gitstatus ;\
-      git commit -m 'Commit at CircleCI' ;\
-      git push origin master"
+      if [ -s /tmp/gitstatus ]; then ;\
+        git commit -m 'Commit at CircleCI' ;\
+        git push origin master ;\
+      else ;\
+        echo 'no change source' ;\
+      fi"
 end
-
-
-  if [ -s /tmp/gitstatus ]; then
-    git commit -m 'Commit at CircleCI'
-    git push origin gh-pages
-  else
-    echo 'no change source'
-  fi
-fi
 
 # Usage: rake post title="A Title" [date="2012-02-09"]
 desc "Begin a new post in #{CONFIG['posts']}"
