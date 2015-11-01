@@ -24,23 +24,22 @@ end
 desc "Begin CircleCI"
 task :circle do
   sh "jekyll build"
-  sh "ls _site"
   sh "git clone -b master git@github.com:gosyujin/gosyujin.github.io.git ~/gh-pages"
-  sh "ls ~/gh-pages"
-#  sh "rm -rf ~/gh-pages/*"
-#  sh "cp -R _site/* ~/gh-pages"
-  sh "cp -R circle.yml.gh-pages ~/gh-pages/circle.yml"
+  sh "ls ~/gh-pages ;\
+      # rm -rf ~/gh-pages/* ;\
+      cp -R _site/* ~/gh-pages ;\
 
-  sh "cd ~/gh-pages ; git branch"
+      cp -R circle.yml.gh-pages ~/gh-pages/circle.yml ;\
 
-  sh "git branch"
-  sh "git checkout master"
-  sh "git add -A"
-  sh "git status -s > /tmp/gitstatus"
-  sh "ls -l /tmp/gitstatus"
-  sh "cat /tmp/gitstatus"
-  sh "git commit -m 'Commit at CircleCI'"
-  sh "git push origin master"
+      cd ~/gh-pages ;\
+
+      git branch ;\
+      git add -A ;\
+      git status -s > /tmp/gitstatus ;\
+      ls -l /tmp/gitstatus ;\
+      cat /tmp/gitstatus ;\
+      git commit -m 'Commit at CircleCI' ;\
+      git push origin master"
 end
 
 # Usage: rake post title="A Title" [date="2012-02-09"]
