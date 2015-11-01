@@ -25,10 +25,8 @@ desc "Begin CircleCI"
 task :circle do
   sh "jekyll build"
   sh "git clone -b master git@github.com:gosyujin/gosyujin.github.io.git ~/gh-pages"
-  sh "ls ~/gh-pages ;\
-      # rm -rf ~/gh-pages/* ;\
+  sh "rm -rf ~/gh-pages/* ;\
       cp -R _site/* ~/gh-pages ;\
-
       cp -R circle.yml.gh-pages ~/gh-pages/circle.yml ;\
 
       cd ~/gh-pages ;\
@@ -36,11 +34,23 @@ task :circle do
       git branch ;\
       git add -A ;\
       git status -s > /tmp/gitstatus ;\
-      ls -l /tmp/gitstatus ;\
       cat /tmp/gitstatus ;\
-      git commit -m 'Commit at CircleCI' ;\
-      git push origin master"
+      if [ -s /tmp/gitstatus ]; then \
+        git commit -m 'Commit at CircleCI' ;\
+        git push origin master ;\
+      else \
+        echo 'no change source' ;\
+      fi"
 end
+
+
+  if [ -s /tmp/gitstatus ]; then
+    git commit -m 'Commit at CircleCI'
+    git push origin gh-pages
+  else
+    echo 'no change source'
+  fi
+fi
 
 # Usage: rake post title="A Title" [date="2012-02-09"]
 desc "Begin a new post in #{CONFIG['posts']}"
