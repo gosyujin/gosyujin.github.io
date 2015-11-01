@@ -25,12 +25,15 @@ desc "Begin CircleCI"
 task :circle do
   sh "jekyll build"
   sh "git clone -b master git@github.com:gosyujin/gosyujin.github.io.git ~/gh-pages"
+  sh "ls ~/gh-pages"
   sh "rm -rf ~/gh-pages/*"
   sh "cp -R _site/* ~/gh-pages"
   sh "cp -R circle.yml.gh-pages ~/gh-pages/circle.yml"
 
   sh "cd ~/gh-pages"
 
+  sh "git branch"
+  sh "git checkout master"
   sh "git add -A"
   sh "git status -s > /tmp/gitstatus"
   sh "ls -l /tmp/gitstatus"
