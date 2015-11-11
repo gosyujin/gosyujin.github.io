@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Selenium WebDriverでFirefoxがロードできなくなった - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <div class="header">
+      <nav>
+        <ul>
+          <li><a href="/">kk_Atakaの日記</a></li>
+          <li class="main-nav"><a href="/archives.html">Archive</a>
+          <li class="main-nav"><a href="/tags.html">Tag</a>
+        </ul>
+      </nav>
+    </div>
+
+    <div id="container">
+      <article class="markdown-body">
+        <h1><a href="/2013/03/18/selenium-firefox-loaderror">Selenium WebDriverでFirefoxがロードできなくなった</a></h1>
+        <div class="published">
+          
+            <span>Tags: </span>
+            
+              <span>[ <code><a href="/tags.html#Selenium" class="tag">Selenium</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Firefox" class="tag">Firefox</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Ruby" class="tag">Ruby</a></code> ]</span>
+            
+          
+          
+            <span>Published: 2013/03/18</span>
+          
+        </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/03/07/selenium-ie-iphone-browser" title="IEとかiPhoneWebView上でSeleniumを走らせる">
+          IEとかiPhoneWebView上でSeleniumを走らせる
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/04/01/chef-helloworld" title=" 入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで">
+           入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --></ul></ul><!-- end of tree list --></div></div>
+
+<div class="content">
+<h2 id="あらすじ">あらすじ</h2>
+
+<p><code>Selenium IDE</code> でテストケースを作成し、WebDriver形式でエクスポートしたRSpecファイルを <code>Firefox</code> で実行すると、 <code>invalid byte sequence</code> エラーが表示されるようになった。</p>
+
+<p>どこさわったからこうなったのかわからん……。</p>
+
+<p>(以下では、WebDriver.for時にテスト用のprofileを指定している) </p>
+
+<figure class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> rspec test.rb
+<span class="go">F</span>
+
+<span class="go">Failures:</span>
+
+<span class="go">  1) test</span>
+<span class="go">     Failure/Error: @driver = Selenium::WebDriver.for :firefox, :profile =&gt; profile</span>
+<span class="go">     ArgumentError:</span>
+<span class="go">       invalid byte sequence in UTF-8</span>
+<span class="go">     # ./test.rb:13:in `block (2 levels) in &lt;top (required)&gt;&#39;</span></code></pre></figure>
+
+<p>profileの中かな？　とか思っていたけど。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Ruby 1.9.3
+
+<ul>
+<li>RubyGems 2.0.1</li>
+<li>bundler (1.3.1)</li>
+<li>childprocess (0.3.9)</li>
+<li>diff-lcs (1.2.1)</li>
+<li>ffi (1.4.0)</li>
+<li>multi_json (1.6.1)</li>
+<li>rspec (2.13.0)</li>
+<li>rspec-core (2.13.0)</li>
+<li>rspec-expectations (2.13.0)</li>
+<li>rspec-mocks (2.13.0)</li>
+<li>rubyzip (0.9.9)</li>
+<li>selenium-webdriver (2.31.0)</li>
+<li>websocket (1.0.7)</li>
+</ul></li>
+<li>Firefox 19.0.2 (x86 en-US)
+
+<ul>
+<li>プロファイルは <code>C:/Selenium/</code> のものを使用 ( <code>firefox.exe -ProfileManager</code> から)</li>
+<li>Selenium IDE 1.1.0</li>
+<li>Selenium IDE: Ruby Formatters 1.1.0</li>
+</ul></li>
+</ul>
+
+<p>※ IEのDriverを使うと、正常に起動できる</p>
+
+<h2 id="原因">原因</h2>
+
+<p>とりあえず、WebDriver.for :firefox (vendor/bundle/ruby/1.9.1/gems/selenium-webdriver-2.31.0/lib/selenium/webdriver/common/driver.rb) から順々に処理を追っていったら……。</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"> <span class="k">def</span> <span class="nf">for</span><span class="p">(</span><span class="n">browser</span><span class="p">,</span> <span class="n">opts</span> <span class="o">=</span> <span class="p">{})</span>
+   <span class="n">listener</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:listener</span><span class="p">)</span>
+
+   <span class="n">bridge</span> <span class="o">=</span> <span class="k">case</span> <span class="n">browser</span>
+            <span class="k">when</span> <span class="ss">:firefox</span><span class="p">,</span> <span class="ss">:ff</span>
+              <span class="no">Firefox</span><span class="o">::</span><span class="no">Bridge</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span></code></pre></figure>
+
+<p>どうも、レジストリを読み込むところ (vendor/bundle/ruby/1.9.1/gems/selenium-webdriver-2.31.0/lib/selenium/webdriver/firefox/binary.rb) の <code>reg.keys[0]</code> で処理が止まっていることがわかった。</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">   <span class="k">def</span> <span class="nf">windows_registry_path</span>
+     <span class="nb">require</span> <span class="s1">&#39;win32/registry&#39;</span>
+
+     <span class="n">lm</span> <span class="o">=</span> <span class="no">Win32</span><span class="o">::</span><span class="no">Registry</span><span class="o">::</span><span class="no">HKEY_LOCAL_MACHINE</span>
+     <span class="n">lm</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;SOFTWARE</span><span class="se">\\</span><span class="s2">Mozilla</span><span class="se">\\</span><span class="s2">Mozilla Firefox&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">reg</span><span class="o">|</span>
+<span class="c1"># ここ</span>
+       <span class="n">main</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;SOFTWARE</span><span class="se">\\</span><span class="s2">Mozilla</span><span class="se">\\</span><span class="s2">Mozilla Firefox</span><span class="se">\\</span><span class="si">#{</span><span class="n">reg</span><span class="o">.</span><span class="n">keys</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="si">}</span><span class="se">\\</span><span class="s2">Main&quot;</span><span class="p">)</span>
+       <span class="k">if</span> <span class="n">entry</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">find</span> <span class="p">{</span> <span class="o">|</span><span class="n">key</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">data</span><span class="o">|</span> <span class="n">key</span> <span class="o">=~</span> <span class="sr">/pathtoexe/i</span> <span class="p">}</span>
+         <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">last</span>
+       <span class="k">end</span>
+     <span class="k">end</span>
+   <span class="k">rescue</span> <span class="no">LoadError</span>
+     <span class="c1"># older JRuby or IronRuby does not have win32/registry</span>
+   <span class="k">rescue</span> <span class="no">Win32</span><span class="o">::</span><span class="no">Registry</span><span class="o">::</span><span class="no">Error</span>
+   <span class="k">end</span></code></pre></figure>
+
+<p><code>HKEY_LOCAL_MACHINE/SOFTWARE/Mozilla/Mozilla Firefox/hogehoge/Main</code> を開こうとして力尽きている模様。。</p>
+
+<p>もしかしてこのレジストリ情報が存在しない？</p>
+
+<p><code>regedit</code> で確認してみる。</p>
+
+<figure class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">マイ コンピュータ</span>
+<span class="go">|</span>
+<span class="go">`HKEY_LOCAL_MACHINE</span>
+<span class="go"> |</span>
+<span class="go"> `SOFTWARE</span>
+<span class="go">  |</span>
+<span class="go">  `Mozilla</span>
+<span class="go">   |</span>
+<span class="go">   |`Firefox</span>
+<span class="go">   |`MaintenanceService</span>
+<span class="go">   |`Mozilla Firefox</span>
+<span class="go">   | |</span>
+<span class="go">   | `19.0.2 (en-US)</span>
+<span class="go">   |  |</span>
+<span class="go">   |  |`Main</span>
+<span class="go">   |  `Uninstall</span>
+<span class="go">   `Mozilla Firefox 19.0.2</span></code></pre></figure>
+
+<p><code>19.0.2 (en-US)</code> が <code>reg.keys[0]</code> に該当してる部分だなあ。</p>
+
+<h2 id="解決策">解決策</h2>
+
+<p>WebDriverのソースを直接ベタ書きすると、一応起動させる事ができた。</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">   <span class="n">lm</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;SOFTWARE</span><span class="se">\\</span><span class="s2">Mozilla</span><span class="se">\\</span><span class="s2">Mozilla Firefox&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">reg</span><span class="o">|</span>
+<span class="o">-</span>    <span class="n">main</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;SOFTWARE</span><span class="se">\\</span><span class="s2">Mozilla</span><span class="se">\\</span><span class="s2">Mozilla Firefox</span><span class="se">\\</span><span class="si">#{</span><span class="n">reg</span><span class="o">.</span><span class="n">keys</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="si">}</span><span class="se">\\</span><span class="s2">Main&quot;</span><span class="p">)</span>
+<span class="o">+</span>    <span class="n">main</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;SOFTWARE</span><span class="se">\\</span><span class="s2">Mozilla</span><span class="se">\\</span><span class="s2">Mozilla Firefox</span><span class="se">\\</span><span class="s2">19.0.2 \(en-US\)</span><span class="se">\\</span><span class="s2">Main&quot;</span><span class="p">)</span>
+     <span class="k">if</span> <span class="n">entry</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">find</span> <span class="p">{</span> <span class="o">|</span><span class="n">key</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">data</span><span class="o">|</span> <span class="n">key</span> <span class="o">=~</span> <span class="sr">/pathtoexe/i</span> <span class="p">}</span></code></pre></figure>
+
+<p>一応、Firefoxをアンインストールしてレジストリも消してから17.0に落としたり、18.0に上げたり、19.0に戻したりしたけど、全部上記の箇所で引っかかってた。</p>
+
+<p>ベタ書くと動く。</p>
+
+<p>うーん、なんでいきなりレジストリが読めなくなったのかきっかけがわからん。</p>
+
+</div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/03/07/selenium-ie-iphone-browser" title="IEとかiPhoneWebView上でSeleniumを走らせる">
+          IEとかiPhoneWebView上でSeleniumを走らせる
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/04/01/chef-helloworld" title=" 入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで">
+           入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/03/18/selenium-firefox-loaderror" data-text="kk_Atakaの日記 - Selenium WebDriverでFirefoxがロードできなくなった" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/03/18/selenium-firefox-loaderror/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/03/18/selenium-firefox-loaderror/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/03/18/selenium-firefox-loaderror/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Selenium WebDriverでFirefoxがロードできなくなった"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+var hatena_bookmark_anywhere_limit = 999; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/03/18/selenium-firefox-loaderror/"; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      </article>
+
+      <aside class="markdown-body sidebar">
+  <h2>Link</h2>
+
+  <ul>
+    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
+    <li>kk_Atakaの日記(同じ内容)</li>
+    <ul>
+      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
+      <li><a href="http://gosyujin.github.io/">GitHub Pages(Jekyll)</a></li>
+    </ul>
+    <li>Sphinxドキュメント</li>
+    <ul>
+      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
+      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
+    </ul>
+    <li><a href="https://twitter.com/kk_ataka">Twitter@kk_Ataka</a></li>
+    <li><a href="https://github.com/gosyujin">GitHub@gosyujin</a></li>
+    <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare@kk_Ataka</a></li>
+    <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
+    <li><a href="http://f.hatena.ne.jp/kk_Ataka/">はてなフォト</a></li>
+    <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
+    <li><a href="http://atnd.org/users/13915">ATND</a></li>
+  </ul>
+
+  <h2>Recent Entries</h2>
+
+  
+  
+  
+<ul>
+  
+    
+      <li>
+        <span>2015/11/01</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/10/13</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/09/24</span>
+        
+          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/08/06</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+        
+        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/07/13</span>
+        
+          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+        
+        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/06/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Hugo">Hugo</a></code> ]</span>
+        
+        <a href="/2015/06/30/hugo-helloworld">Hugoを使ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/06/30/hugo-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/06/30/hugo-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/05/26</span>
+        
+          <span>[ <code><a href="/tags.html#Jenkins">Jenkins</a></code> ]</span>
+        
+        <a href="/2015/05/26/jenkins-environment-path">実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/04/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2015/04/30/golang-helloworld">golangでサーバのファイルをゆっくりダウンロードするツール作ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/04/30/golang-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/04/30/golang-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/03/14</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/02/28</span>
+        
+          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+        
+        <a href="/2015/02/28/excel-by-ruby">rubyXLを使ってExcelを操作したい</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/02/28/excel-by-ruby/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/02/28/excel-by-ruby/" />
+        </a>
+      </li>
+    
+  
+</ul>
+
+
+  <h2>Tags</h2>
+
+  <ul>
+    
+    
+      
+      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+    
+      
+      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+    
+      
+      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Mac">Mac <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ruby">Ruby <sub>71</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sphinx">Sphinx <sub>14</sub></a></li>
+    
+      
+      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#イベント">イベント <sub>24</sub></a></li>
+    
+      
+      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+    
+      
+      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+    
+  </ul>
+
+</aside>
+
+
+    </div>
+    <hr class="clearfix" />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

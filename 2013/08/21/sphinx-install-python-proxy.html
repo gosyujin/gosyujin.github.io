@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <div class="header">
+      <nav>
+        <ul>
+          <li><a href="/">kk_Atakaの日記</a></li>
+          <li class="main-nav"><a href="/archives.html">Archive</a>
+          <li class="main-nav"><a href="/tags.html">Tag</a>
+        </ul>
+      </nav>
+    </div>
+
+    <div id="container">
+      <article class="markdown-body">
+        <h1><a href="/2013/08/21/sphinx-install-python-proxy">Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話</a></h1>
+        <div class="published">
+          
+            <span>Tags: </span>
+            
+              <span>[ <code><a href="/tags.html#Python" class="tag">Python</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Sphinx" class="tag">Sphinx</a></code> ]</span>
+            
+          
+          
+            <span>Published: 2013/08/21</span>
+          
+        </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/08/20/rails3-log-not-colorize" title="Rails3のログ出力にANSIカラーコードを使用しない設定">
+          Rails3のログ出力にANSIカラーコードを使用しない設定
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/08/23/sphinx-install-python-proxy2" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き">
+          Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --></ul></ul><!-- end of tree list --></div></div>
+
+<div class="content">
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>Sphinx を導入しようとして Python周りの環境を整えていたら easy_install がやたら失敗したりして困った。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Windows 7</li>
+<li>Python 2.7</li>
+</ul>
+
+<h2 id="python-インストール">Python インストール</h2>
+
+<p>…は、以前入れるだけ入れていた 2.7 があったので割愛。</p>
+
+<p>Sphinx-Users.jp のインストール手順では 2.6 が使われていたので、 2.7 でも大丈夫そう。</p>
+
+<p>環境変数 <code>PATH</code> に以下のパスを追加。</p>
+
+<ul>
+<li><code>C:\Python27</code>
+
+<ul>
+<li>Pythonのコマンドが含まれるフォルダ</li>
+</ul></li>
+<li><code>C:\Python27\Scripts</code>
+
+<ul>
+<li>次に説明するeasy_installコマンドや、Sphinxのコマンドが格納されるフォルダ</li>
+</ul></li>
+</ul>
+
+<h2 id="easyinstall-インストール-distributesetup-py">easy<em>install インストール(distribute</em>setup.py)</h2>
+
+<p>Ruby でいうところの Bundler のようなもの？</p>
+
+<ul>
+<li><a href="http://www.freia.jp/taka/docs/pyhack4/setuptools/index.html">setuptools - 清水川Web</a></li>
+</ul>
+
+<p>setuptoolsの互換パッケージを導入。</p>
+
+<ul>
+<li><a href="http://python-distribute.org/">python-distribute.org</a> から <code>distribute_setup.py</code> をDLし実行。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> python distribute_setup.py
+<span class="go">Downloading http://pypi.python.org/packages/source/d/distribute/distribute-0.6.49.tar.gz</span>
+<span class="go">Extracting in c:\users\USER\appdata\local\temp\tmp00_lbf</span>
+<span class="go">Now working in c:\users\USER\appdata\local\temp\tmp00_lbf\distribute-0.6.49</span>
+<span class="go">Installing Distribute</span>
+<span class="go">Before install bootstrap.</span>
+<span class="go">Scanning installed packages</span>
+<span class="go">Setuptools installation detected at c:\python27\lib\site-packages</span>
+<span class="go">Non-egg installation</span>
+<span class="go">Moving elements out of the way...</span>
+<span class="go">Already patched.</span>
+<span class="go">c:\python27\lib\site-packages\setuptools-0.6c11-py2.7.egg-info already patched.</span>
+<span class="go">running install</span>
+<span class="go">running bdist_egg</span>
+<span class="go">running egg_info</span>
+
+<span class="go">(略)</span>
+
+<span class="go">After install bootstrap.</span>
+<span class="go">C:\Python27\Lib\site-packages\setuptools-0.6c11-py2.7.egg-info already exists</span></code></pre></figure>
+
+<p>これで、 <code>PYTHON/Scripts</code> 下に <code>easy_install</code> コマンドが入る。</p>
+
+<h3 id="実行時に-urllib2-urlerror-エラー">実行時に urllib2.URLError エラー</h3>
+
+<p>ところで、初回に distribute_setup.py を実行するとこんなエラーになった。(原因はわかってない)</p>
+
+<p>状況はこんな感じ。</p>
+
+<ul>
+<li>proxyが必要な環境</li>
+<li>環境変数 <code>HTTP_PROXY</code> は設定している</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> <span class="nb">echo</span> %http_proxy%
+<span class="go">http://PROXY_URL:PORT/</span>
+<span class="gp">$</span> python distribute_setup.py
+<span class="go">Downloading http://pypi.python.org/packages/source/d/distribute/distribute-0.6.49.tar.gz</span>
+<span class="go">Traceback (most recent call last):</span>
+<span class="go">  File &quot;distribute_setup.py&quot;, line 564, in &lt;module&gt;</span>
+<span class="go">    sys.exit(main())</span>
+<span class="go">  File &quot;distribute_setup.py&quot;, line 560, in main</span>
+<span class="go">    tarball = download_setuptools(download_base=options.download_base)</span>
+<span class="go">  File &quot;distribute_setup.py&quot;, line 219, in download_setuptools</span>
+<span class="go">    src = urlopen(url)</span>
+<span class="go">  File &quot;C:\Python27\lib\urllib2.py&quot;, line 126, in urlopen</span>
+<span class="go">    return _opener.open(url, data, timeout)</span>
+<span class="go">  File &quot;C:\Python27\lib\urllib2.py&quot;, line 400, in open</span>
+<span class="go">    response = meth(req, response)</span>
+<span class="go">  File &quot;C:\Python27\lib\urllib2.py&quot;, line 513, in http_response</span>
+<span class="go">    &#39;http&#39;, request, response, code, msg, hdrs)</span>
+<span class="go">  File &quot;C:\Python27\lib\urllib2.py&quot;, line 432, in error</span>
+<span class="go">    result = self._call_chain(*args)</span>
+<span class="go">  File &quot;C:\Python27\lib\urllib2.py&quot;, line 372, in _call_chain</span>
+<span class="go">    result = func(*args)</span>
+<span class="go">  File &quot;C:\Python27\lib\urllib2.py&quot;, line 619, in http_error_302</span>
+<span class="go">    return self.parent.open(new, timeout=req.timeout)</span>
+<span class="go">  File &quot;C:\Python27\lib\urllib2.py&quot;, line 394, in open</span>
+<span class="go">    response = self._open(req, data)</span>
+<span class="go">  File &quot;C:\Python27\lib\urllib2.py&quot;, line 412, in _open</span>
+<span class="go">    &#39;_open&#39;, req)</span>
+<span class="go">  File &quot;C:\Python27\lib\urllib2.py&quot;, line 372, in _call_chain</span>
+<span class="go">    result = func(*args)</span>
+<span class="go">  File &quot;C:\Python27\lib\urllib2.py&quot;, line 1207, in https_open</span>
+<span class="go">    return self.do_open(httplib.HTTPSConnection, req)</span>
+<span class="go">  File &quot;C:\Python27\lib\urllib2.py&quot;, line 1174, in do_open</span>
+<span class="go">    raise URLError(err)</span>
+<span class="go">urllib2.URLError: &lt;urlopen error [Errno 11004] getaddrinfo failed&gt;</span></code></pre></figure>
+
+<p>ん？Pythonは <code>HTTP_PROXY</code> じゃダメなの？</p>
+
+<p>こんな話もあるようだが…。</p>
+
+<ul>
+<li><a href="http://d.hatena.ne.jp/orangeclover/20121020/1350689017">blockdiagシリーズのseqdiagとactdiagが、[Errno 10060]のダウンロードエラーでeasy_installのインストールに失敗する - みちしるべ</a></li>
+</ul>
+
+<p>今回は URL 直接指定でもエラーが変わらなかった。</p>
+
+<p>色々試行錯誤し、 <strong>とりあえず環境を一回きれいにしてみようと <code>HTTP_PROXY</code> もクリアした</strong> 状態でダメ元で実行してみた…らいけた…だと…。</p>
+
+<figure class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> <span class="nb">set </span><span class="nv">http_proxy</span><span class="o">=</span>
+<span class="gp">$</span> python distribute_setup.py
+<span class="go">Downloading http://pypi.python.org/packages/source/d/distribute/distribute-0.6.49.tar.gz</span>
+<span class="go">Extracting in c:\users\USER\appdata\local\temp\tmp00_lbf</span>
+
+<span class="go">(略)</span>
+
+<span class="go">After install bootstrap.</span>
+<span class="go">C:\Python27\Lib\site-packages\setuptools-0.6c11-py2.7.egg-info already exists</span></code></pre></figure>
+
+<p>後述する、 Sphinx インストール時も同じエラーでハマったんだけどこの方法(環境変数クリア)で解決した。</p>
+
+<p>proxy必要な環境で、proxyを明示的に指定してないのになんでつながるの？どっか見てる？こわい。</p>
+
+<p>というわけで、ちょっと urllib のドキュメントを調べる…。</p>
+
+<ul>
+<li><a href="http://docs.python.jp/2/library/urllib.html#module-urllib">20.5. urllib — URL による任意のリソースへのアクセス — Python 2.7ja1 documentation</a></li>
+</ul>
+
+<blockquote>
+<p>Windows 環境では、プロキシを指定する環境変数が設定されていない場合、プロキシの設定値はレジストリの Internet Settings セクションから取得されます。</p>
+</blockquote>
+
+<ul>
+<li><a href="http://docs.python.jp/2/library/urllib2.html#module-urllib2">20.6. urllib2 — URL を開くための拡張可能なライブラリ — Python 2.7ja1 documentation</a></li>
+</ul>
+
+<blockquote>
+<p>このクラスはプロキシを通過してリクエストを送らせます。引数 proxies を与える場合、プロトコル名からプロキシの URL へ対応付ける辞書でなくてはなりません。標準では、プロキシのリストを環境変数 <protocol>_proxy から読み出します。</p>
+
+<p>プロキシ環境変数が設定されていない場合は、 Windows 環境では、レジストリのインターネット設定セクションからプロキシ設定を手に入れ、 Mac OS X 環境では、 OS X システム設定フレームワーク (System Configuration Framework) からプロキシ情報を取得します。</p>
+</blockquote>
+
+<p>なに？レジストリ見てんの？</p>
+
+<p>というわけでレジストリから <code>Internet Settings</code> を探すと、</p>
+
+<ul>
+<li>HKEY_USERS
+
+<ul>
+<li>S-1-5-21-xxxxxxxx-xxxxxxxx...</li>
+<li>Software
+
+<ul>
+<li>Microsoft</li>
+<li>Windows
+
+<ul>
+<li>CurrentVersion</li>
+<li>Internet Settings</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>ここに <code>ProxyServer</code> という値があった！</p>
+
+<p>どうやらこれはIEのインターネットオプションから設定する値らしい。</p>
+
+<p>※ HKEY_USERSの下のS-xxx文字列</p>
+
+<blockquote>
+<p>HKEY_USERS以下には、次のようなサブキーが存在します。</p>
+
+<table><thead>
+<tr>
+<th>サブキー</th>
+<th>サブキーを参照するユーザー</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>.DEFAULT</td>
+<td>プロファイルがロードされていないユーザーが参照する。</td>
+</tr>
+<tr>
+<td>----------------------------------------------</td>
+<td>-----------------------------------------------------</td>
+</tr>
+<tr>
+<td>S-1-5-18</td>
+<td>SYSTEMが参照する。</td>
+</tr>
+<tr>
+<td>----------------------------------------------</td>
+<td>-----------------------------------------------------</td>
+</tr>
+<tr>
+<td>S-1-5-19</td>
+<td>LOCAL SERVICEが参照する。</td>
+</tr>
+<tr>
+<td>----------------------------------------------</td>
+<td>-----------------------------------------------------</td>
+</tr>
+<tr>
+<td>S-1-5-20</td>
+<td>NETWORK SERVICEが参照する</td>
+</tr>
+<tr>
+<td>----------------------------------------------</td>
+<td>-----------------------------------------------------</td>
+</tr>
+<tr>
+<td>S-1-5-21-XXXXXXXXXX-XXXXXXXXXX-XXXXXXXXXX-XXXX</td>
+<td>特定のユーザーが参照する。SIDの最後の4文字はRIDであり、各ユーザーはこれで識別される。 RIDを除いた残りのSIDは、コンピュータのSIDである。</td>
+</tr>
+</tbody></table>
+</blockquote>
+
+<p>なるほど。これを見にきたから <code>HTTP_PROXY</code> をクリアしてもOKだったわけか。</p>
+
+<p>でも、 <strong>なんで環境変数 <code>HTTP_PROXY</code> に値を入れている状態</strong> だとインストール失敗したんだろう？( 環境変数 <code>HTTP_PROXY</code> と レジストリ <code>ProxyServer</code> はまったく同じ値)</p>
+
+<p>ここから先中身を追ってみないと分からないか…。</p>
+
+<h2 id="sphinx-インストール">Sphinx インストール</h2>
+
+<p>やっと Sphinx。</p>
+
+<p>easy<em>install で入れる。当環境では `HTTP</em>PROXY` を事前にクリアする必要があった。</p>
+
+<figure class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> <span class="nb">set </span><span class="nv">http_proxy</span><span class="o">=</span>
+<span class="gp">$</span> Scripts<span class="se">\e</span>asy_install sphinx
+<span class="go">Searching for sphinx</span>
+<span class="go">Reading http://pypi.python.org/simple/sphinx/</span>
+<span class="go">Best match: Sphinx 1.2b1</span>
+<span class="go">Downloading https://pypi.python.org/packages/2.7/S/Sphinx/Sphinx-1.2b1-py2.7.egg#md5=60fbf057bc586dce8ceb55a404f5a9be</span>
+<span class="go">Processing Sphinx-1.2b1-py2.7.egg</span>
+<span class="go">creating c:\python27\lib\site-packages\Sphinx-1.2b1-py2.7.egg</span>
+<span class="go">Extracting Sphinx-1.2b1-py2.7.egg to c:\python27\lib\site-packages</span>
+<span class="go">Adding Sphinx 1.2b1 to easy-install.pth file</span>
+<span class="go">Installing sphinx-apidoc-script.py script to C:\Python27\Scripts</span>
+<span class="go">Installing sphinx-apidoc.exe script to C:\Python27\Scripts</span>
+<span class="go">Installing sphinx-apidoc.exe.manifest script to C:\Python27\Scripts</span>
+<span class="go">Installing sphinx-build-script.py script to C:\Python27\Scripts</span>
+<span class="go">Installing sphinx-build.exe script to C:\Python27\Scripts</span>
+<span class="go">Installing sphinx-build.exe.manifest script to C:\Python27\Scripts</span>
+<span class="go">Installing sphinx-quickstart-script.py script to C:\Python27\Scripts</span>
+<span class="go">Installing sphinx-quickstart.exe script to C:\Python27\Scripts</span>
+<span class="go">Installing sphinx-quickstart.exe.manifest script to C:\Python27\Scripts</span>
+<span class="go">Installing sphinx-autogen-script.py script to C:\Python27\Scripts</span>
+<span class="go">Installing sphinx-autogen.exe script to C:\Python27\Scripts</span>
+<span class="go">Installing sphinx-autogen.exe.manifest script to C:\Python27\Scripts</span>
+
+<span class="go">Installed c:\python27\lib\site-packages\sphinx-1.2b1-py2.7.egg</span>
+<span class="go">Processing dependencies for sphinx</span>
+<span class="go">Searching for docutils&gt;=0.7</span>
+<span class="go">Reading http://pypi.python.org/simple/docutils/</span>
+<span class="go">Best match: docutils 0.11</span>
+<span class="go">Downloading https://pypi.python.org/packages/source/d/docutils/docutils-0.11.tar.gz#md5=20ac380a18b369824276864d98ec0ad6</span>
+<span class="go">Processing docutils-0.11.tar.gz</span>
+<span class="go">Writing c:\users\USER\appdata\local\temp\easy_install-kytfku\docutils-0.11\setup.cfg</span>
+<span class="go">Running docutils-0.11\setup.py -q bdist_egg --dist-dir c:\users\USER\appdata\local\temp\easy_install-kytfku\docutils-0.11\egg-dist-tmp-l7szgx</span>
+<span class="go">warning: no files found matching &#39;MANIFEST&#39;</span>
+<span class="go">warning: no files found matching &#39;*&#39; under directory &#39;extras&#39;</span>
+<span class="go">warning: no previously-included files matching &#39;.cvsignore&#39; found under directory &#39;*&#39;</span>
+<span class="go">warning: no previously-included files matching &#39;*.pyc&#39; found under directory &#39;*&#39;</span>
+<span class="go">warning: no previously-included files matching &#39;*~&#39; found under directory &#39;*&#39;</span>
+<span class="go">warning: no previously-included files matching &#39;.DS_Store&#39; found under directory &#39;*&#39;</span>
+<span class="go">zip_safe flag not set; analyzing archive contents...</span>
+<span class="go">docutils.parsers.rst.directives.misc: module references __file__</span>
+<span class="go">docutils.writers.docutils_xml: module references __path__</span>
+<span class="go">docutils.writers.html4css1.__init__: module references __file__</span>
+<span class="go">docutils.writers.latex2e.__init__: module references __file__</span>
+<span class="go">docutils.writers.odf_odt.__init__: module references __file__</span>
+<span class="go">docutils.writers.pep_html.__init__: module references __file__</span>
+<span class="go">docutils.writers.s5_html.__init__: module references __file__</span>
+<span class="go">Adding docutils 0.11 to easy-install.pth file</span>
+<span class="go">Installing rst2html.py script to C:\Python27\Scripts</span>
+<span class="go">Installing rst2latex.py script to C:\Python27\Scripts</span>
+<span class="go">Installing rst2man.py script to C:\Python27\Scripts</span>
+<span class="go">Installing rst2odt.py script to C:\Python27\Scripts</span>
+<span class="go">Installing rst2odt_prepstyles.py script to C:\Python27\Scripts</span>
+<span class="go">Installing rst2pseudoxml.py script to C:\Python27\Scripts</span>
+<span class="go">Installing rst2s5.py script to C:\Python27\Scripts</span>
+<span class="go">Installing rst2xetex.py script to C:\Python27\Scripts</span>
+<span class="go">Installing rst2xml.py script to C:\Python27\Scripts</span>
+<span class="go">Installing rstpep2html.py script to C:\Python27\Scripts</span>
+
+<span class="go">Installed c:\python27\lib\site-packages\docutils-0.11-py2.7.egg</span>
+<span class="go">Searching for Jinja2&gt;=2.3</span>
+<span class="go">Reading http://pypi.python.org/simple/Jinja2/</span>
+<span class="go">Best match: Jinja2 2.7.1</span>
+<span class="go">Downloading https://pypi.python.org/packages/source/J/Jinja2/Jinja2-2.7.1.tar.gz#md5=282aed153e69f970d6e76f78ed9d027a</span>
+<span class="go">Processing Jinja2-2.7.1.tar.gz</span>
+<span class="go">Writing c:\users\USER\appdata\local\temp\easy_install-ewpoxa\Jinja2-2.7.1\setup.cfg</span>
+<span class="go">Running Jinja2-2.7.1\setup.py -q bdist_egg --dist-dir c:\users\USER\appdata\local\temp\easy_install-ewpoxa\Jinja2-2.7.1\egg-dist-tmp-xvfdqy</span>
+<span class="go">warning: no files found matching &#39;*&#39; under directory &#39;custom_fixers&#39;</span>
+<span class="go">warning: no previously-included files matching &#39;*&#39; found under directory &#39;docs\_build&#39;</span>
+<span class="go">warning: no previously-included files matching &#39;*.pyc&#39; found under directory &#39;jinja2&#39;</span>
+<span class="go">warning: no previously-included files matching &#39;*.pyc&#39; found under directory &#39;docs&#39;</span>
+<span class="go">warning: no previously-included files matching &#39;*.pyo&#39; found under directory &#39;jinja2&#39;</span>
+<span class="go">warning: no previously-included files matching &#39;*.pyo&#39; found under directory &#39;docs&#39;</span>
+<span class="go">Adding jinja2 2.7.1 to easy-install.pth file</span>
+
+<span class="go">Installed c:\python27\lib\site-packages\jinja2-2.7.1-py2.7.egg</span>
+<span class="go">Searching for Pygments&gt;=1.2</span>
+<span class="go">Reading http://pypi.python.org/simple/Pygments/</span>
+<span class="go">Best match: Pygments 1.6</span>
+<span class="go">Downloading https://pypi.python.org/packages/2.7/P/Pygments/Pygments-1.6-py2.7.egg#md5=1e1e52b1e434502682aab08938163034</span>
+<span class="go">Processing Pygments-1.6-py2.7.egg</span>
+<span class="go">creating c:\python27\lib\site-packages\Pygments-1.6-py2.7.egg</span>
+<span class="go">Extracting Pygments-1.6-py2.7.egg to c:\python27\lib\site-packages</span>
+<span class="go">Adding Pygments 1.6 to easy-install.pth file</span>
+<span class="go">Installing pygmentize-script.py script to C:\Python27\Scripts</span>
+<span class="go">Installing pygmentize.exe script to C:\Python27\Scripts</span>
+<span class="go">Installing pygmentize.exe.manifest script to C:\Python27\Scripts</span>
+
+<span class="go">Installed c:\python27\lib\site-packages\pygments-1.6-py2.7.egg</span>
+<span class="go">Searching for markupsafe</span>
+<span class="go">Reading http://pypi.python.org/simple/markupsafe/</span>
+<span class="go">Best match: MarkupSafe 0.18</span>
+<span class="go">Downloading https://pypi.python.org/packages/source/M/MarkupSafe/MarkupSafe-0.18.tar.gz#md5=f8d252fd05371e51dec2fe9a36890687</span>
+<span class="go">Processing MarkupSafe-0.18.tar.gz</span>
+<span class="go">Writing c:\users\USER\appdata\local\temp\easy_install-3qrqxg\MarkupSafe-0.18\setup.cfg</span>
+<span class="go">Running MarkupSafe-0.18\setup.py -q bdist_egg --dist-dir c:\users\USER\appdata\local\temp\easy_install-3qrqxg\MarkupSafe-0.18\egg-dist-tmp-jj55bb</span>
+<span class="go">==========================================================================</span>
+<span class="go">WARNING: The C extension could not be compiled, speedups are not enabled.</span>
+<span class="go">Failure information, if any, is above.</span>
+<span class="go">Retrying the build without the C extension now.</span>
+
+<span class="go">==========================================================================</span>
+<span class="go">WARNING: The C extension could not be compiled, speedups are not enabled.</span>
+<span class="go">Plain-Python installation succeeded.</span>
+<span class="go">==========================================================================</span>
+<span class="go">Adding markupsafe 0.18 to easy-install.pth file</span>
+
+<span class="go">Installed c:\python27\lib\site-packages\markupsafe-0.18-py2.7.egg</span>
+<span class="go">Finished processing dependencies for sphinx</span></code></pre></figure>
+
+<p>とりあえずインストールまで。</p>
+
+<p>設定までしようと思ったけど、思わぬ所でハマってしまった…。</p>
+
+<hr>
+
+<h2 id="おまけ-easyinstall-インストール-ezsetup-py">おまけ easy<em>install インストール(ez</em>setup.py)</h2>
+
+<p>すごいはまった挙句、結局ローカルに落としてインストールした時の記録。</p>
+
+<p>多分 distrybute<em>setup.py と同様、 `HTTP</em>PROXY` をクリアすれば IE の proxy 設定を参照しにいって無事にインストールされるのではないかと思われる。</p>
+
+<p>しかし、こちらは現在メンテナンスされていないらしい。</p>
+
+<ul>
+<li><a href="http://sphinx-users.jp/gettingstarted/install_windows.html">Windowsへのインストール :: ドキュメンテーションツール スフィンクス Sphinx-users.jp</a></li>
+</ul>
+
+<p><code>ez_setup.py</code> をダウンロードし、実行すると以下のようなエラー。</p>
+
+<figure class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> python ez_setup.py
+<span class="go">Downloading http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg</span>
+<span class="go">Traceback (most recent call last):</span>
+<span class="go">  File &quot;ez_setup.py&quot;, line 278, in &lt;module&gt;</span>
+<span class="go">    main(sys.argv[1:])</span>
+<span class="go">  File &quot;ez_setup.py&quot;, line 210, in main</span>
+<span class="go">    egg = download_setuptools(version, delay=0)</span>
+<span class="go">  File &quot;ez_setup.py&quot;, line 158, in download_setuptools</span>
+<span class="go">    src = urllib2.urlopen(url)</span>
+<span class="go">  File &quot;C:\python27\lib\urllib2.py&quot;, line 127, in urlopen</span>
+<span class="go">    return _opener.open(url, data, timeout)</span>
+<span class="go">  File &quot;C:\python27\lib\urllib2.py&quot;, line 410, in open</span>
+<span class="go">    response = meth(req, response)</span>
+<span class="go">  File &quot;C:\python27\lib\urllib2.py&quot;, line 523, in http_response</span>
+<span class="go">    &#39;http&#39;, request, response, code, msg, hdrs)</span>
+<span class="go">  File &quot;C:\python27\lib\urllib2.py&quot;, line 442, in error</span>
+<span class="go">    result = self._call_chain(*args)</span>
+<span class="go">  File &quot;C:\python27\lib\urllib2.py&quot;, line 382, in _call_chain</span>
+<span class="go">    result = func(*args)</span>
+<span class="go">  File &quot;C:\python27\lib\urllib2.py&quot;, line 629, in http_error_302</span>
+<span class="go">    return self.parent.open(new, timeout=req.timeout)</span>
+<span class="go">  File &quot;C:\python27\lib\urllib2.py&quot;, line 404, in open</span>
+<span class="go">    response = self._open(req, data)</span>
+<span class="go">  File &quot;C:\python27\lib\urllib2.py&quot;, line 422, in _open</span>
+<span class="go">    &#39;_open&#39;, req)</span>
+<span class="go">  File &quot;C:\python27\lib\urllib2.py&quot;, line 382, in _call_chain</span>
+<span class="go">    result = func(*args)</span>
+<span class="go">  File &quot;C:\python27\lib\urllib2.py&quot;, line 1222, in https_open</span>
+<span class="go">    return self.do_open(httplib.HTTPSConnection, req)</span>
+<span class="go">  File &quot;C:\python27\lib\urllib2.py&quot;, line 1184, in do_open</span>
+<span class="go">    raise URLError(err)</span>
+<span class="go">urllib2.URLError: &lt;urlopen error [Errno 11004] getaddrinfo failed&gt;</span></code></pre></figure>
+
+<p>Downloading のurlにブラウザからアクセスするとダウンロードできるので、多分proxyの設定が適切になされていない。</p>
+
+<p>「urllib2 proxy」で調べると ProxyHandler を使えばよいということ(というか、環境変数 <code>HTTP_PROXY</code> (設定済み) を呼んでくれそうな気がするんだけど)なので、 ez_setup.py の中で明示的に proxy を指定してみた。</p>
+
+<ul>
+<li><a href="http://docs.python.jp/2/library/urllib2.html#urllib2.urlopen">20.6. urllib2 ? URL を開くための拡張可能なライブラリ ? Python 2.7ja1 documentation</a></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">+</span> <span class="n">proxy_handler</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">ProxyHandler</span><span class="p">({</span><span class="s">&#39;http&#39;</span><span class="p">:</span> <span class="s">&#39;http://PROXY:PORT/&#39;</span><span class="p">})</span>
+<span class="o">+</span> <span class="n">opener</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">proxy_handler</span><span class="p">)</span>
+<span class="o">+</span> <span class="n">src</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">src</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></code></pre></figure>
+
+<p>が、エラー変わらず。 proxy が原因じゃないのか。今度は Errno でググってみた。</p>
+
+<ul>
+<li><a href="http://ss9neco.blog.fc2.com/category3-1.html">ss_9&#39;s log　 Python</a></li>
+</ul>
+
+<blockquote>
+<p>その際、proxy環境の場合は、</p>
+
+<blockquote>
+<p>＃ export http_proxy=http://[proxy名]:[ポート番号]</p>
+</blockquote>
+
+<p>にてproxy環境を整えてください。</p>
+</blockquote>
+
+<p>お、やっぱり環境変数から呼んでくれるみたい。そして、</p>
+
+<blockquote>
+<p>また、ez_setupを取得して、以下のようなurllib2のエラーが出た時は、</p>
+
+<p>urllib2.URLError:</p>
+
+<p>setuptoolsをez_setupと同じディレクトリに置いてください。</p>
+
+<blockquote>
+<p>＃ sudo wget http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg#md5=fe1f997bc722265116870bc7919059ea</p>
+</blockquote>
+</blockquote>
+
+<p>ということなので、この setuptools <code>setuptools-0.6c11-py2.7.egg</code> をDLし再び実行すると無事にインストールできた。</p>
+
+<figure class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> python ez_setup.py
+<span class="go">Processing setuptools-0.6c11-py2.7.egg</span>
+<span class="go">Copying setuptools-0.6c11-py2.7.egg to c:\python27\lib\site-packages</span>
+<span class="go">Adding setuptools 0.6c11 to easy-install.pth file</span>
+<span class="go">Installing easy_install-script.py script to C:\Python27\Scripts</span>
+<span class="go">Installing easy_install.exe script to C:\Python27\Scripts</span>
+<span class="go">Installing easy_install.exe.manifest script to C:\Python27\Scripts</span>
+<span class="go">Installing easy_install-2.7-script.py script to C:\Python27\Scripts</span>
+<span class="go">Installing easy_install-2.7.exe script to C:\Python27\Scripts</span>
+<span class="go">Installing easy_install-2.7.exe.manifest script to C:\Python27\Scripts</span>
+
+<span class="go">Installed c:\python27\lib\site-packages\setuptools-0.6c11-py2.7.egg</span>
+<span class="go">Processing dependencies for setuptools==0.6c11</span>
+<span class="go">Finished processing dependencies for setuptools==0.6c11</span></code></pre></figure>
+
+<p>実行できた。</p>
+
+<figure class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> easy_install --help
+
+<span class="go">Global options:</span>
+<span class="go">  --verbose (-v)  run verbosely (default)</span>
+<span class="go">  --quiet (-q)    run quietly (turns verbosity off)</span>
+<span class="go">  --dry-run (-n)  don&#39;t actually do anything</span>
+<span class="go">  --help (-h)     show detailed help message</span>
+<span class="go">  --no-user-cfg   ignore pydistutils.cfg in your home directory</span>
+
+<span class="go">Options for &#39;easy_install&#39; command:</span>
+<span class="go">  --prefix                       installation prefix</span>
+<span class="go">  --zip-ok (-z)                  install package as a zipfile</span>
+<span class="go">  --multi-version (-m)           make apps have to require() a version</span>
+<span class="go">  --upgrade (-U)                 force upgrade (searches PyPI for latest</span>
+<span class="go">                                 versions)</span>
+<span class="go">  --install-dir (-d)             install package to DIR</span>
+<span class="go">  --script-dir (-s)              install scripts to DIR</span>
+<span class="go">  --exclude-scripts (-x)         Don&#39;t install scripts</span>
+<span class="go">  --always-copy (-a)             Copy all needed packages to install dir</span>
+<span class="go">  --index-url (-i)               base URL of Python Package Index</span>
+<span class="go">  --find-links (-f)              additional URL(s) to search for packages</span>
+<span class="go">  --delete-conflicting (-D)      no longer needed; don&#39;t use this</span>
+<span class="go">  --ignore-conflicts-at-my-risk  no longer needed; don&#39;t use this</span>
+<span class="go">  --build-directory (-b)         download/extract/build in DIR; keep the</span>
+<span class="go">                                 results</span>
+<span class="go">  --optimize (-O)                also compile with optimization: -O1 for</span>
+<span class="go">                                 &quot;python -O&quot;, -O2 for &quot;python -OO&quot;, and -O0 to</span>
+<span class="go">                                 disable [default: -O0]</span>
+<span class="go">  --record                       filename in which to record list of installed</span>
+<span class="go">                                 files</span>
+<span class="go">  --always-unzip (-Z)            don&#39;t install as a zipfile, no matter what</span>
+<span class="go">  --site-dirs (-S)               list of directories where .pth files work</span>
+<span class="go">  --editable (-e)                Install specified packages in editable form</span>
+<span class="go">  --no-deps (-N)                 don&#39;t install dependencies</span>
+<span class="go">  --allow-hosts (-H)             pattern(s) that hostnames must match</span>
+<span class="go">  --local-snapshots-ok (-l)      allow building eggs from local checkouts</span>
+
+<span class="go">usage: easy_install-script.py [options] requirement_or_url ...</span>
+<span class="go">   or: easy_install-script.py --help</span></code></pre></figure>
+
+</div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/08/20/rails3-log-not-colorize" title="Rails3のログ出力にANSIカラーコードを使用しない設定">
+          Rails3のログ出力にANSIカラーコードを使用しない設定
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/08/23/sphinx-install-python-proxy2" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き">
+          Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy" data-text="kk_Atakaの日記 - Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+var hatena_bookmark_anywhere_limit = 999; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy/"; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      </article>
+
+      <aside class="markdown-body sidebar">
+  <h2>Link</h2>
+
+  <ul>
+    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
+    <li>kk_Atakaの日記(同じ内容)</li>
+    <ul>
+      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
+      <li><a href="http://gosyujin.github.io/">GitHub Pages(Jekyll)</a></li>
+    </ul>
+    <li>Sphinxドキュメント</li>
+    <ul>
+      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
+      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
+    </ul>
+    <li><a href="https://twitter.com/kk_ataka">Twitter@kk_Ataka</a></li>
+    <li><a href="https://github.com/gosyujin">GitHub@gosyujin</a></li>
+    <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare@kk_Ataka</a></li>
+    <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
+    <li><a href="http://f.hatena.ne.jp/kk_Ataka/">はてなフォト</a></li>
+    <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
+    <li><a href="http://atnd.org/users/13915">ATND</a></li>
+  </ul>
+
+  <h2>Recent Entries</h2>
+
+  
+  
+  
+<ul>
+  
+    
+      <li>
+        <span>2015/11/01</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/10/13</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/09/24</span>
+        
+          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/08/06</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+        
+        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/07/13</span>
+        
+          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+        
+        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/06/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Hugo">Hugo</a></code> ]</span>
+        
+        <a href="/2015/06/30/hugo-helloworld">Hugoを使ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/06/30/hugo-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/06/30/hugo-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/05/26</span>
+        
+          <span>[ <code><a href="/tags.html#Jenkins">Jenkins</a></code> ]</span>
+        
+        <a href="/2015/05/26/jenkins-environment-path">実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/04/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2015/04/30/golang-helloworld">golangでサーバのファイルをゆっくりダウンロードするツール作ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/04/30/golang-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/04/30/golang-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/03/14</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/02/28</span>
+        
+          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+        
+        <a href="/2015/02/28/excel-by-ruby">rubyXLを使ってExcelを操作したい</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/02/28/excel-by-ruby/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/02/28/excel-by-ruby/" />
+        </a>
+      </li>
+    
+  
+</ul>
+
+
+  <h2>Tags</h2>
+
+  <ul>
+    
+    
+      
+      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+    
+      
+      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+    
+      
+      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Mac">Mac <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ruby">Ruby <sub>71</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sphinx">Sphinx <sub>14</sub></a></li>
+    
+      
+      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#イベント">イベント <sub>24</sub></a></li>
+    
+      
+      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+    
+      
+      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+    
+  </ul>
+
+</aside>
+
+
+    </div>
+    <hr class="clearfix" />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+
