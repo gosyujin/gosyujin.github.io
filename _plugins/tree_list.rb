@@ -65,6 +65,7 @@ module Jekyll
 
             # 残りはハイフンに
             title_link.gsub!(/ /, "-")
+            title_link.gsub!(/@/, "-")
             title_link.gsub!(/:/, "-")
             title_link.gsub!(/\)/, "-")
             title_link.gsub!(/\(/, "-")
