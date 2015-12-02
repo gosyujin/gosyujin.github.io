@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Wicketでn行m列で折り返すリストを作る - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <div class="header">
+      <nav>
+        <ul>
+          <li><a href="/">kk_Atakaの日記</a></li>
+          <li class="main-nav"><a href="/archives.html">Archive</a>
+          <li class="main-nav"><a href="/tags.html">Tag</a>
+        </ul>
+      </nav>
+    </div>
+
+    <div id="container">
+      <article class="markdown-body">
+        <h1><a href="/2009/03/16/1237134252">Wicketでn行m列で折り返すリストを作る</a></h1>
+        <div class="published">
+          
+            <span>Tags: </span>
+            
+              <span>[ <code><a href="/tags.html#Java" class="tag">Java</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Wicket" class="tag">Wicket</a></code> ]</span>
+            
+          
+          
+            <span>Published: 2009/03/16</span>
+          
+        </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2009/03/12/1236788607" title="CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較">
+          CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2009/03/17/1237297925" title="チェックボックスの(中略)続き">
+          チェックボックスの(中略)続き
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<div class="content">
+<p>　Wicket本が未だに入荷しないので一つ書く。Wicket奮闘記第二弾。困り度的には、最悪1列表示で妥協すれば良かったのでそんなに高くない。</p>
+<p>　ただのリストじゃなくて、要素が何個か横に続き、n個で折り返す……というサンプル。イメージとしては、mixiのマイミクとかマイコミュニティみたいな感じかなぁ。相変わらずバージョンは1.3なのです。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20090316004745"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20090316/20090316004745.png"></a></p>
+<p>　こんな感じ。横に2つで折り返し。</p>
+<p>　どういう風に実現するかすごい困ったけれど、調べてみるとGridViewというコンポーネントがあったのでこれは使えそうだと。以下Javaソース。</p>
+<pre class="java">//	テーブルのcolspanに設定する数
+	private int column;
+	private List&lt;SampleObjectModelBean&gt; selected;
+	
+	public SampleGridView() {
+//		行の設定
+		column = 2;
+//		DBから何らかのリスト一覧を持ってきたという体で
+		final List&lt;SampleObjectModelBean&gt; list = GenerateBeanUtility.GenerateSampleObjectModelBean();
+//		自分が取得している項目という体で
+		selected = new ArrayList&lt;SampleObjectModelBean&gt;();
+		selected.add(list.get(2));
+		selected.add(list.get(5));
+		
+//		DataProvider 規則的に回すもの
+		IDataProvider dataProvider = new IDataProvider() {
+			private static final long serialVersionUID = -9120134891423038532L;
+			public Iterator&lt;SampleObjectModelBean&gt; iterator(int first, int count) {
+				return list.iterator();
+			}
+			public int size() {
+				return list.size();
+			}
+			public IModel model(Object object) {
+				return new Model((Serializable)object);
+			}
+			public void detach() {
+			}
+		};
+		
+		final Form form = new Form(&quot;form&quot;);
+		this.add(form);
+
+		final CheckGroup checkGroup = new CheckGroup(&quot;checkGroup&quot;, new PropertyModel(this, &quot;selected&quot;));
+		form.add(checkGroup);
+
+		final WebMarkupContainer colspanWMC = new WebMarkupContainer(&quot;colspanWMC&quot;);
+//		テーブルのcolspan属性を動的にしてやる
+		colspanWMC.add(new SimpleAttributeModifier(&quot;colspan&quot;, String.valueOf(column)));
+		checkGroup.add(colspanWMC);
+
+		final GridView gridView = new GridView(&quot;rows&quot;, dataProvider) {
+			private static final long serialVersionUID = 3658408852637870671L;
+//			ListViewと同様のpopulateItem
+			@Override
+			protected void populateItem(Item item) {
+				SampleObjectModelBean bean = (SampleObjectModelBean)item.getModelObject();
+				item.add(new Check(&quot;check&quot;, item.getModel()));
+				item.add(new Label(&quot;value&quot;, bean.getName()));
+			}
+//			空だった場合
+			@Override
+			protected void populateEmptyItem(Item item) {
+				item.add(new Check(&quot;check&quot;).setVisible(false));
+				item.add(new Label(&quot;value&quot;, &quot;Empty&quot;));
+			}
+		};
+//		カラムの数をセット
+		gridView.setColumns(column);
+		checkGroup.add(gridView);
+
+		final WebMarkupContainer listWMC = new WebMarkupContainer(&quot;listWMC&quot;);
+		listWMC.setOutputMarkupId(true);
+		this.add(listWMC);
+
+//		選択したものを表示
+		ListView listView = new ListView(&quot;resultList&quot;, selected) {
+			private static final long serialVersionUID = 2797947925339607450L;
+			@Override
+			protected void populateItem(ListItem listItem) {
+				SampleObjectModelBean bean = (SampleObjectModelBean)listItem.getModelObject();
+				listItem.add(new Label(&quot;name&quot;, bean.getName()));
+				listItem.add(new Label(&quot;outline&quot;, bean.getOutline()));
+			}
+		};
+		listWMC.add(listView);
+
+//		選択決定ボタン
+		AjaxButton button = new AjaxButton(&quot;button&quot;) {
+			private static final long serialVersionUID = 7635585733674755967L;
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form form) {
+				target.addComponent(listWMC);
+			}
+		};
+		form.add(button);
+		
+//		列を増やしてみる
+		AjaxLink incLink = new AjaxLink(&quot;incLink&quot;) {
+			private static final long serialVersionUID = 7734634038402851693L;
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				if (column &lt; list.size()) {
+					column++;
+				}
+				colspanWMC.add(new SimpleAttributeModifier(&quot;colspan&quot;, String.valueOf(column)));
+				gridView.setColumns(column);
+				target.addComponent(form);
+			}
+		};
+		this.add(incLink);
+		
+//		列を減らしてみる
+		AjaxLink decLink = new AjaxLink(&quot;decLink&quot;) {
+			private static final long serialVersionUID = -3611671121498659140L;
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				if (column &gt; 1) {
+					column--;
+				}
+				colspanWMC.add(new SimpleAttributeModifier(&quot;colspan&quot;, String.valueOf(column)));
+				gridView.setColumns(column);
+				target.addComponent(form);
+			}
+		};
+		this.add(decLink);
+	}
+	
+	public List&lt;SampleObjectModelBean&gt; getSelected() {
+		return selected;
+	}
+	public void setSelected(List&lt;SampleObjectModelBean&gt; selected) {
+		this.selected = selected;
+	}</pre>
+<p>　で、html。</p>
+<pre class="html">	&lt;h1&gt;GridViewを用いてテーブルをn列で折り返した選択フォーム(例:mixiのコミュニティ一覧みたいな)&lt;/h1&gt;
+	&lt;form wicket:id=&quot;form&quot;&gt;
+		&lt;input type=&quot;submit&quot; wicket:id=&quot;button&quot; /&gt;
+		&lt;table cellspacing=&quot;0&quot; cellpadding=&quot;2&quot; border=&quot;1&quot;&gt;
+			&lt;span wicket:id=&quot;checkGroup&quot;&gt;
+				&lt;tr&gt;
+					&lt;th wicket:id=&quot;colspanWMC&quot;&gt;なんとか一覧&lt;/th&gt;
+				&lt;/tr&gt;
+				&lt;tr wicket:id=&quot;rows&quot;&gt;
+					&lt;td wicket:id=&quot;cols&quot;&gt;
+						&lt;input type=&quot;checkbox&quot; wicket:id=&quot;check&quot; /&gt;
+						&lt;span wicket:id=&quot;value&quot; /&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+			&lt;/span&gt;
+		&lt;/table&gt;
+	&lt;/form&gt;
+	&lt;h1&gt;(おまけ)列を動的に変えてみる&lt;/h1&gt;
+	&lt;ul&gt;
+		&lt;li&gt;&lt;a href=&quot;#&quot; wicket:id=&quot;decLink&quot;&gt;列減らす&lt;/a&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;a href=&quot;#&quot; wicket:id=&quot;incLink&quot;&gt;列増やす&lt;/a&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;h1&gt;選択したもの&lt;/h1&gt;
+	&lt;span wicket:id=&quot;listWMC&quot;&gt;
+		&lt;dl wicket:id=&quot;resultList&quot;&gt;
+			&lt;dt wicket:id=&quot;name&quot;&gt;&lt;/dt&gt;
+			&lt;dd class=&quot;recital&quot; wicket:id=&quot;outline&quot;&gt;&lt;/dd&gt;
+		&lt;/dl&gt;
+	&lt;/span&gt;</pre>
+<p>　列を変えるボタンのソースとかはおいといて……、とりあえず</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20090316004745"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20090316/20090316004745.png"></a></p>
+<p>　の画面は実現できます。普通のListViewでコレクションを表示していくのと違う点は、</p>
+<ul><ol><li>ListViewがGridView</li><li>--表示するオブジェクトがModel(かList)ではなく、DataProvider</li><li>--populateEmptyItemの処理</li><li>--カラム数をセット</li><li>wicket:idでちょこっと</li></ol></ul>
+<p>　このくらいです。</p>
+<p>　まず、ListViewがGridView。これはそういうコンポーネントがあるのかぁ的な感じでゴリゴリ変えていきます。</p>
+<p>　次に、GridViewに変えた事で引数にModelとかListが使えなくなりました……。代わりにDataProviderというものを突っ込んでやらないといけないらしい……。DataProviderはこんな感じ。listはDBから取得してきたという体で生成した選択項目全部のリストです。</p>
+<pre class="java">		IDataProvider dataProvider = new IDataProvider() {
+			private static final long serialVersionUID = -9120134891423038532L;
+			public Iterator&lt;SampleObjectModelBean&gt; iterator(int first, int count) {
+				return list.iterator();
+			}
+			public int size() {
+				return list.size();
+			}
+			public IModel model(Object object) {
+				return new Model((Serializable)object);
+			}
+			public void detach() {
+			}
+		};</pre>
+<p>　とりあえずこんな感じで動きました。iteratorメソッドには引数が二つあったりするんですが、次回は使います。今回は使わなくても動いた……。<span class="footnote"><a href="#f1" title="不都合が起こるパターンもあるのだろうか？" name="fn1">*1</a></span></p>
+<p>　これで、回すのに必要なものは揃ったので、populateItemをオーバライドしますが、populateItemとは別にpopulateEmptyItemというメソッドもオーバライドしないといけません。理由は後述。</p>
+<p>　次にテーブルを何列で折り返したいかをsetColumnsメソッドで指定します。今回は頭の方で2に設定しているので、n行2列のテーブルに出来るはずです。しかし、列を指定した事でテーブルに空白が出来る可能性が起こってしまいます。2列のテーブルなら、リストが奇数の場合最後の行が1列しか埋まりません；</p>
+<p>　ここでpopulateEmptyItemの出番です。テーブルがまだ全部埋まっていないのに要素が終わってしまった場合、これが呼ばれます。</p>
+<p><a href="http://f.hatena.ne.jp/kk_Ataka/20090316004745"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20090316/20090316004745.png"></a></p>
+<p>　Emptyと表示しているところがpopulateEmptyItemが呼ばれている箇所です。めでたしめでたし。</p>
+<p>　最後にwicket:id。</p>
+<pre class="java">		final GridView gridView = new GridView(&quot;rows&quot;, dataProvider) {
+			private static final long serialVersionUID = 3658408852637870671L;
+//			ListViewと同様のpopulateItem
+			@Override
+			protected void populateItem(Item item) {
+				SampleObjectModelBean bean = (SampleObjectModelBean)item.getModelObject();
+				item.add(new Check(&quot;check&quot;, item.getModel()));
+				item.add(new Label(&quot;value&quot;, bean.getName()));
+			以下略</pre>
+<p>　JavaでWicket:idを生成しているのは、</p>
+<ul><ul><li>GridViewのrows<ul><li>-populateItem内のCheckのcheck</li><li>-populateItem内のLabelのvalue</li></ul></li></ul></ul>
+<p>　の三つなんですが、この三つをListView的な感じでバインドしていっても、</p>
+<pre>WicketMessage: Unable to find component with id 'check' in [MarkupContainer [Component id = 1, page = sampleWicket.view.gridView.SampleGridView, path = 2:form:checkGroup:rows:1.Item, isVisible = true, isVersioned = false]]. This means that you declared wicket:id=check in your markup, but that you either did not add the component to your page at all, or that the hierarchy does not match.</pre>
+<p>　checkがない！　と怒られてしまいます。</p>
+<p>　なんで＞＜　と調べてみると、どうも、</p>
+<pre class="html">				&lt;tr wicket:id=&quot;rows&quot;&gt;
+					&lt;td wicket:id=&quot;cols&quot;&gt;
+						&lt;input type=&quot;checkbox&quot; wicket:id=&quot;check&quot; /&gt;
+						&lt;span wicket:id=&quot;value&quot; /&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;</pre>
+<p>　rows(=GridView)の下にcolsというidを振らないといけないらしい。GridViewクラスの中にも</p>
+<pre class="java">		Item rowItem = newRowItem(newChildId(), row);
+		RepeatingView rowView = new RepeatingView(&quot;cols&quot;);
+		rowItem.add(rowView);
+		add(rowItem);</pre>
+<p>　こんな記述があって、どうもcolsを振っているらしい！　振れば動く！</p>
+<p>　最後はらしいらしいが続いてますが、一応これでmixiのマイピクみたいなテーブルも作れそうです。</p>
+<p>　この記事を書くに当たって、<a href="http://hamachan.info/excel/gyoretu.html">行と列の覚え方</a>で行と列のわかりやすい覚え方を知りました。</p>
+<p>　行と列わからないんです＞＜　でもこれで忘れない！</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 不都合が起こるパターンもあるのだろうか？</p></div>
+</div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2009/03/12/1236788607" title="CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較">
+          CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2009/03/17/1237297925" title="チェックボックスの(中略)続き">
+          チェックボックスの(中略)続き
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2009/03/16/1237134252" data-text="kk_Atakaの日記 - Wicketでn行m列で折り返すリストを作る" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2009/03/16/1237134252/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2009/03/16/1237134252/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2009/03/16/1237134252/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Wicketでn行m列で折り返すリストを作る"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+var hatena_bookmark_anywhere_limit = 999; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2009/03/16/1237134252/"; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      </article>
+
+      <aside class="markdown-body sidebar">
+  <h2>Link</h2>
+
+  <ul>
+    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
+    <li>kk_Atakaの日記(同じ内容)</li>
+    <ul>
+      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
+      <li><a href="http://gosyujin.github.io/">GitHub Pages(Jekyll)</a></li>
+    </ul>
+    <li>Sphinxドキュメント</li>
+    <ul>
+      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
+      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
+    </ul>
+    <li><a href="https://twitter.com/kk_ataka">Twitter@kk_Ataka</a></li>
+    <li><a href="https://github.com/gosyujin">GitHub@gosyujin</a></li>
+    <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare@kk_Ataka</a></li>
+    <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
+    <li><a href="http://f.hatena.ne.jp/kk_Ataka/">はてなフォト</a></li>
+    <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
+    <li><a href="http://atnd.org/users/13915">ATND</a></li>
+  </ul>
+
+  <h2>Recent Entries</h2>
+
+  
+  
+  
+<ul>
+  
+    
+      <li>
+        <span>2015/12/01</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/12/01/sphinxconjp-2015">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/11/01</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/10/13</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/09/24</span>
+        
+          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/08/06</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+        
+        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/07/13</span>
+        
+          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+        
+        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/06/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Hugo">Hugo</a></code> ]</span>
+        
+        <a href="/2015/06/30/hugo-helloworld">Hugoを使ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/06/30/hugo-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/06/30/hugo-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/05/26</span>
+        
+          <span>[ <code><a href="/tags.html#Jenkins">Jenkins</a></code> ]</span>
+        
+        <a href="/2015/05/26/jenkins-environment-path">実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/04/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2015/04/30/golang-helloworld">golangでサーバのファイルをゆっくりダウンロードするツール作ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/04/30/golang-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/04/30/golang-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/03/14</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
+        </a>
+      </li>
+    
+  
+</ul>
+
+
+  <h2>Tags</h2>
+
+  <ul>
+    
+    
+      
+      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+    
+      
+      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+    
+      
+      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Mac">Mac <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ruby">Ruby <sub>71</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sphinx">Sphinx <sub>15</sub></a></li>
+    
+      
+      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#イベント">イベント <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+    
+      
+      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+    
+  </ul>
+
+</aside>
+
+
+    </div>
+    <hr class="clearfix" />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

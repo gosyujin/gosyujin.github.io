@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <div class="header">
+      <nav>
+        <ul>
+          <li><a href="/">kk_Atakaの日記</a></li>
+          <li class="main-nav"><a href="/archives.html">Archive</a>
+          <li class="main-nav"><a href="/tags.html">Tag</a>
+        </ul>
+      </nav>
+    </div>
+
+    <div id="container">
+      <article class="markdown-body">
+        <h1><a href="/2013/05/27/jekyll-githubpages-analytics-setting">Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた</a></h1>
+        <div class="published">
+          
+            <span>Tags: </span>
+            
+              <span>[ <code><a href="/tags.html#Jekyll" class="tag">Jekyll</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#Ruby" class="tag">Ruby</a></code> ]</span>
+            
+          
+          
+            <span>Published: 2013/05/27</span>
+          
+        </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/05/23/jekyll-liquid-plugin2" title="記事の目次を出力するJekyllプラグインの改良">
+          記事の目次を出力するJekyllプラグインの改良
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/06/05/ios-over-the-air" title="Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある">
+          Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#結論'>結論</a></li><li><a href='#参考サイト'>参考サイト</a></li><li><a href='#ハマり'>ハマり</a></li><ul><li><a href='#前提-github-pagesの運用形態'>前提: GitHub Pagesの運用形態</a></li><li><a href='#analyticsの設定はどう読み込まれているのか'>analyticsの設定はどう読み込まれているのか</a></li></ul><li><a href='#蛇足'>蛇足</a></li><ul><li><a href='#ディレクトリ構成'>ディレクトリ構成</a></li><li><a href='#include-jbsetup'>include JB/setup</a></li><li><a href='#include-themestwitterdefault-html-'>include themes/twitter/default.html </a></li><li><a href='#まとめ'>まとめ</a></li></ul></ul></ul><!-- end of tree list --></div></div>
+
+<div class="content">
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>Jekyllで指定していたGoogle Analyticsの設定が効かなくなっていた。</p>
+
+<p>他のGitHub Pages@Jekyllでは正しくGoogle Analyticsが動いているのに…。</p>
+
+<h2 id="結論">結論</h2>
+
+<ul>
+<li>前回 GitHub Pages の運用形態を変えていた ... <a href="http://gosyujin.github.io/2013/05/21/jekyll-plugin-githubpages/">GitHub PagesでJekyllプラグインを使えるようにするには…</a>
+
+<ul>
+<li>変更前: <code>master</code> ブランチにコンテンツを配備し、GitHubにデプロイしてもらう</li>
+<li>変更後: <code>source</code> ブランチを作成しコンテンツを移動。ローカルでビルドした静的ファイルを <code>master</code> ブランチにpush</li>
+</ul></li>
+<li>それによる <strong>オプション指定の凡ミス</strong></li>
+</ul>
+
+<p>おぉ…。</p>
+
+<h2 id="参考サイト">参考サイト</h2>
+
+<ul>
+<li><a href="http://tokkono.cute.coocan.jp/blog/slow/index.php/programming/making-blog-with-jekyll/">WordPressよりjekyllで本格的ブログを作りたくなる、かもしれないまとめ ｜ ゆっくりと…</a></li>
+<li><a href="http://melborne.github.io/2012/05/13/first-step-of-jekyll/">30分のチュートリアルでJekyllを理解する</a></li>
+<li><a href="http://css.studiomohawk.com/jekyll/2011/06/11/jekyll/">Jekyll ｜ CSS Radar ｜ Little Books For Front End Developers</a></li>
+<li><a href="https://github.com/Shopify/liquid/wiki/Liquid-for-Designers">Liquid for Designers · Shopify/liquid Wiki · GitHub</a></li>
+<li><a href="https://github.com/plusjade/jekyll-bootstrap">plusjade/jekyll-bootstrap · GitHub</a></li>
+</ul>
+
+<h2 id="ハマり">ハマり</h2>
+
+<h3 id="前提-github-pagesの運用形態">前提: GitHub Pagesの運用形態</h3>
+
+<p>指定のブランチに以下のようなファイル群を置いておく事で、GitHub Pagesができる。</p>
+
+<ol>
+<li>Jekyllのコンテンツ
+
+<ul>
+<li>Jekyllに必要なファイルをpushしておけば、GitHubがよろしくデプロイしておいてくれる</li>
+</ul></li>
+<li>静的ファイル
+
+<ul>
+<li>そのまま表示される</li>
+</ul></li>
+</ol>
+
+<p>Jekyllのコンテンツをpushして、後はおまかせするだけの運用は便利だけど、 <strong>自作プラグインが動かない</strong> という問題がある。</p>
+
+<p>プラグインを動作させるためには、以下のように、あらかじめローカルでビルドした静的ファイルをpushしなければならない。</p>
+
+<ul>
+<li><code>master</code> 以外の別ブランチ(仮に <code>source</code> ブランチ)を作成し、そこでJekyllのコンテンツを管理する</li>
+<li>ローカルの <code>source</code> ブランチで編集を終えたら、 <code>jekyll build</code> </li>
+<li>生成された成果物を <code>master</code> ブランチにpushする
+
+<ul>
+<li>ローカルでbuildしているので、プラグインが動作した状態で静的ファイルが出来ている</li>
+<li>こんな感じの手法をとっているのがOctopress</li>
+</ul></li>
+</ul>
+
+<p>この情報をもとに、Rakefileにdeployコマンドを作った。</p>
+
+<p>https://github.com/gosyujin/gosyujin.github.com/blob/source/Rakefile</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># Usage: rake deploy</span>
+<span class="n">desc</span> <span class="s2">&quot;Begin a push static file to GitHub&quot;</span>
+<span class="n">task</span> <span class="ss">:deploy</span> <span class="k">do</span>
+  <span class="n">sh</span> <span class="s2">&quot;jekyll build&quot;</span>
+  <span class="nb">puts</span> <span class="s2">&quot;! Push to source branch of GitHub&quot;</span>
+  <span class="n">sh</span> <span class="s2">&quot;git push origin source:source&quot;</span>
+<span class="p">(</span><span class="err">略</span><span class="p">)</span></code></pre></div>
+
+<h3 id="analyticsの設定はどう読み込まれているのか">analyticsの設定はどう読み込まれているのか</h3>
+
+<p><code>_includes/JB/analytics</code> を見ると、analyticsを読み込むには以下の条件を満たす必要がある。</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">site</span><span class="o">.</span><span class="n">safe</span> <span class="ow">and</span> <span class="n">site</span><span class="o">.</span><span class="n">JB</span><span class="o">.</span><span class="n">analytics</span><span class="o">.</span><span class="n">provider</span> <span class="ow">and</span> <span class="n">page</span><span class="o">.</span><span class="n">JB</span><span class="o">.</span><span class="n">analytics</span> <span class="o">!=</span> <span class="kp">false</span> <span class="sx">%}</span>
+
+<span class="sx">{% case site.JB.analytics.provider %}</span>
+<span class="p">{</span><span class="o">%</span> <span class="k">when</span> <span class="sx">%}</span>
+<span class="sx">  {% include JB/analytics-providers/google %}</span>
+<span class="p">(</span><span class="err">略</span><span class="p">)</span></code></pre></div>
+
+<p>大事なのは、 <strong>site.safe がtrue</strong> である事。</p>
+
+<p>このsafeオプションがtrueになっている条件を見落としてた。trueじゃないとanalytics読み込みはなされない。</p>
+
+<p>しかし…。</p>
+
+<p>※ safeはデフォルトではfalse</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> bundle <span class="nb">exec </span>jekyll --help
+<span class="go">    jekyll</span>
+<span class="go">(略)</span>
+<span class="go">    --safe </span>
+<span class="go">        Safe mode (defaults to false)</span></code></pre></div>
+
+<p>※ https://help.github.com/articles/pages-don-t-build-unable-to-run-jekyll 本家のhelpでも <code>--safe</code> オプションよろしく！とのこと。</p>
+
+<p>GitHubがJekyllのコンテンツをデプロイする際は、必ず <code>--safe</code> がつけられる。(そのため、自作プラグインが動かなくなる)</p>
+
+<p>しかし、safeがfalseじゃないと自作のプラグインを動かせないので、 <code>_includes/JB/analytics</code> から <code>if site.safe</code> の条件を削除する事で対応。</p>
+
+<p>ローカルで埋め込んだ後で、pushすればいい。</p>
+
+<hr>
+
+<p>以下、どこが原因かわからなかったので、Jekyll Bootstrapのデフォルトファイルを読んでいった結果。</p>
+
+<h2 id="蛇足">蛇足</h2>
+
+<h3 id="ディレクトリ構成">ディレクトリ構成</h3>
+
+<p>Jekyll Bootstrapを落としてくるとファイル構成はこう。</p>
+
+<ul>
+<li>404.html</li>
+<li>README.md</li>
+<li>Rakefile</li>
+<li>_config.yml</li>
+<li>_includes/</li>
+<li>_layouts/</li>
+<li>_plugins/</li>
+<li>_posts/</li>
+<li>_site/</li>
+<li>archive.html</li>
+<li>assets/</li>
+<li>atom.xml</li>
+<li>categories.html</li>
+<li>changelog.md</li>
+<li>index.md</li>
+<li>pages.html</li>
+<li>rss.xml</li>
+<li>sitemap.txt</li>
+<li>tags.html</li>
+</ul>
+
+<p>その中の <code>_layouts</code> ディレクトリの中にテンプレート的なファイルがある。</p>
+
+<ul>
+<li>_layouts/
+
+<ul>
+<li>default.html</li>
+<li>page.html</li>
+<li>post.html</li>
+</ul></li>
+</ul>
+
+<p>htmlを見てみると…。</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">cat</span> <span class="n">_layouts</span><span class="o">/</span><span class="n">default</span><span class="o">.</span><span class="n">html</span>
+<span class="o">---</span>
+<span class="n">theme</span> <span class="p">:</span>
+  <span class="nb">name</span> <span class="p">:</span> <span class="n">twitter</span>
+<span class="o">---</span>
+<span class="p">{</span><span class="o">%</span> <span class="kp">include</span> <span class="no">JB</span><span class="o">/</span><span class="n">setup</span> <span class="sx">%}</span>
+<span class="sx">{% include themes/twitter/default.html %}</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">cat</span> <span class="n">_layouts</span><span class="o">/</span><span class="n">page</span><span class="o">.</span><span class="n">html</span> 
+<span class="o">---</span>
+<span class="ss">layout</span><span class="p">:</span> <span class="n">default</span>
+<span class="o">---</span>
+<span class="p">{</span><span class="o">%</span> <span class="kp">include</span> <span class="no">JB</span><span class="o">/</span><span class="n">setup</span> <span class="sx">%}</span>
+<span class="sx">{% include themes/twitter/page.html %}</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">cat</span> <span class="n">_layouts</span><span class="o">/</span><span class="n">post</span><span class="o">.</span><span class="n">html</span> 
+<span class="o">---</span>
+<span class="ss">layout</span><span class="p">:</span> <span class="n">default</span>
+<span class="o">---</span>
+<span class="p">{</span><span class="o">%</span> <span class="kp">include</span> <span class="no">JB</span><span class="o">/</span><span class="n">setup</span> <span class="sx">%}</span>
+<span class="sx">{% include themes/twitter/post.html %}</span></code></pre></div>
+
+<p>こんな感じ。はじめのハイフンで囲まれたエリアはyaml front matter？ http://jekyllrb.com/docs/frontmatter/</p>
+
+<p>続いて、<code>JB/setup</code> と <code>themes/twitter/default.html</code> <code>page.html</code> <code>post.html</code> をインクルードしている。</p>
+
+<p><code>layout: default</code> と書かれている page.html と post.html は default.html を親にしている事がわかる。</p>
+
+<h3 id="include-jb-setup">include JB/setup</h3>
+
+<p><em>layout/default.html 一つ目の include である <code>JB/setup</code> を見てみる。 include なだけあって、 `</em>includes` ディレクトリにある。</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">{</span><span class="o">%</span> <span class="n">capture</span> <span class="n">jbcache</span> <span class="sx">%}</span>
+<span class="sx">  &lt;!--</span>
+<span class="sx">  - Dynamically set liquid variables for working with URLs/paths</span>
+<span class="sx">  --&gt;</span>
+<span class="sx">  {% if site.JB.setup.provider == %}</span>
+    <span class="p">{</span><span class="o">%</span> <span class="kp">include</span> <span class="n">custom</span><span class="o">/</span><span class="n">setup</span> <span class="sx">%}</span>
+<span class="sx">  {% else %}</span>
+    <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">site</span><span class="o">.</span><span class="n">safe</span> <span class="ow">and</span> <span class="n">site</span><span class="o">.</span><span class="n">JB</span><span class="o">.</span><span class="n">BASE_PATH</span> <span class="ow">and</span> <span class="n">site</span><span class="o">.</span><span class="n">JB</span><span class="o">.</span><span class="n">BASE_PATH</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span> <span class="sx">%}</span>
+<span class="sx">      {% assign BASE_PATH = site.JB.BASE_PATH %}</span>
+      <span class="p">{</span><span class="o">%</span> <span class="n">assign</span> <span class="no">HOME_PATH</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">JB</span><span class="o">.</span><span class="n">BASE_PATH</span> <span class="sx">%}</span>
+<span class="sx">    {% else %}</span>
+      <span class="p">{</span><span class="o">%</span> <span class="n">assign</span> <span class="no">BASE_PATH</span> <span class="o">=</span> <span class="kp">nil</span> <span class="sx">%}</span>
+<span class="sx">      {% assign HOME_PATH = %}</span>
+    <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="sx">%}</span>
+
+<span class="sx">    {% if site.JB.ASSET_PATH %}</span>
+      <span class="p">{</span><span class="o">%</span> <span class="n">assign</span> <span class="no">ASSET_PATH</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">JB</span><span class="o">.</span><span class="n">ASSET_PATH</span> <span class="sx">%}</span>
+<span class="sx">    {% else %}</span>
+      <span class="p">{</span><span class="o">%</span> <span class="n">capture</span> <span class="no">ASSET_PATH</span> <span class="sx">%}/assets/themes/{% endcapture %}</span>
+    <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="sx">%}</span>
+<span class="sx">  {% endif %}</span>
+<span class="p">{</span><span class="o">%</span> <span class="n">endcapture</span> <span class="sx">%}{% assign jbcache = nil %}</span></code></pre></div>
+
+<p>site.JB.hogehogeの設定を確認して、パス設定などしているよう。</p>
+
+<p>この <code>site.JB.hogehoge</code> っていうのは <code>_config.yml</code> に定義しているパラメータだよね。こんな感じで定義されている。</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">JB</span> <span class="p">:</span>
+  <span class="n">version</span> <span class="p">:</span> <span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span>
+  <span class="no">BASE_PATH</span> <span class="p">:</span> <span class="kp">false</span>
+  <span class="no">ASSET_PATH</span> <span class="p">:</span> <span class="kp">false</span>
+  <span class="ss">archive_path</span><span class="p">:</span> <span class="sr">/archive.html</span>
+<span class="sr">  categories_path : /</span><span class="n">categories</span><span class="o">.</span><span class="n">html</span>
+  <span class="n">tags_path</span> <span class="p">:</span> <span class="sr">/tags.html</span>
+<span class="sr">  atom_path : /</span><span class="n">atom</span><span class="o">.</span><span class="n">xml</span>
+  <span class="n">rss_path</span> <span class="p">:</span> <span class="sr">/rss.xml</span>
+<span class="sr">  (略)</span></code></pre></div>
+
+<p>どんな値になっているのか確認のため、 <code>JB/setup</code> の先頭に以下のような出力を足してみる。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">safe {{site.safe}} &lt;br&gt;</span>
+<span class="go">site.JB {{site.JB}} &lt;br&gt;</span>
+<span class="go">provider {{site.JB.setup.provider}} &lt;br&gt;</span>
+<span class="go">base {{site.JB.BASE_PATH}} &lt;br&gt;</span>
+<span class="go">asset {{site.JB.ASSET_PATH}} &lt;br&gt;</span>
+<span class="go">page name {{ page.theme.name }}</span>
+<span class="go">{% capture jbcache %}</span>
+<span class="go">略</span></code></pre></div>
+
+<p>で、実行結果。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">safe false </span>
+<span class="go">site.JB {&quot;version&quot;=&gt;&quot;0.3.0&quot;, &quot;BASE_PATH&quot;=&gt;false, &quot;ASSET_PATH&quot;=&gt;false, &quot;archive_path&quot;=&gt;&quot;/archive.html&quot;, &quot;categories_path&quot;=&gt;&quot;/categories.html&quot;, &quot;tags_path&quot;=&gt;&quot;/tags.html&quot;, &quot;atom_path&quot;=&gt;&quot;/atom.xml&quot;, &quot;rss_path&quot;=&gt;&quot;/rss.xml&quot;, &quot;comments&quot;=&gt;{&quot;provider&quot;=&gt;&quot;disqus&quot;, &quot;disqus&quot;=&gt;{&quot;short_name&quot;=&gt;&quot;jekyllbootstrap&quot;}, &quot;livefyre&quot;=&gt;{&quot;site_id&quot;=&gt;123}, &quot;intensedebate&quot;=&gt;{&quot;account&quot;=&gt;&quot;123abc&quot;}, &quot;facebook&quot;=&gt;{&quot;appid&quot;=&gt;123, &quot;num_posts&quot;=&gt;5, &quot;width&quot;=&gt;580, &quot;colorscheme&quot;=&gt;&quot;light&quot;}}, &quot;analytics&quot;=&gt;{&quot;provider&quot;=&gt;&quot;google&quot;, &quot;google&quot;=&gt;{&quot;tracking_id&quot;=&gt;&quot;UA-123-12&quot;}, &quot;getclicky&quot;=&gt;{&quot;site_id&quot;=&gt;nil}, &quot;mixpanel&quot;=&gt;{&quot;token&quot;=&gt;&quot;_MIXPANEL_TOKEN_&quot;}}, &quot;sharing&quot;=&gt;{&quot;provider&quot;=&gt;false}} </span>
+<span class="go">provider </span>
+<span class="go">base false </span>
+<span class="go">asset false </span>
+<span class="go">page name twitter</span></code></pre></div>
+
+<p>なるほど。実行結果的にはifの最後を通っているようなので、 ASSET_PATH の設定をしている事になる。</p>
+
+<p><code>ASSET_PATH = /assets/themes/twitter</code> となった。</p>
+
+<h3 id="include-themes-twitter-default-html">include themes/twitter/default.html</h3>
+
+<p>_layouts/default.html の二つ目の include。一部を除き、htmlがつらつらと…。</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>{{ page.title }}<span class="nt">&lt;/title&gt;</span>
+    {% if page.description %}<span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;description&quot;</span> <span class="na">content=</span><span class="s">&quot;{{ page.description }}&quot;</span><span class="nt">&gt;</span>{% endif %}
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;author&quot;</span> <span class="na">content=</span><span class="s">&quot;kk_Ataka&quot;</span><span class="nt">&gt;</span>
+
+    <span class="c">&lt;!-- Enable responsive viewport --&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content=</span><span class="s">&quot;width=device-width, initial-scale=1.0&quot;</span><span class="nt">&gt;</span>
+(略)
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container-narrow&quot;</span><span class="nt">&gt;</span>
+
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+        {{ content }}
+      <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;hr&gt;</span></code></pre></div>
+
+<p>動的に表示させたい部分はliquidで埋め込んでいる。<code>{{ }}</code> とか <code>{% %}</code> で始まる部分がそう。</p>
+
+<p>で、 <code>content</code> 部分に子？の内容が埋め込まれるのか。</p>
+
+<h3 id="まとめ">まとめ</h3>
+
+<p>rake post title=hoge として作った _posts/2013-xx-yy-hoge.md を表示するためには、こんな風に埋め込みしていっている？</p>
+
+<p><img src="/static/images/2013-05-27/jekyll-page.png" alt="jekyll-page"></p>
+
+</div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2013/05/23/jekyll-liquid-plugin2" title="記事の目次を出力するJekyllプラグインの改良">
+          記事の目次を出力するJekyllプラグインの改良
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/06/05/ios-over-the-air" title="Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある">
+          Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/05/27/jekyll-githubpages-analytics-setting" data-text="kk_Atakaの日記 - Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/05/27/jekyll-githubpages-analytics-setting/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/05/27/jekyll-githubpages-analytics-setting/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/05/27/jekyll-githubpages-analytics-setting/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+var hatena_bookmark_anywhere_limit = 999; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/05/27/jekyll-githubpages-analytics-setting/"; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      </article>
+
+      <aside class="markdown-body sidebar">
+  <h2>Link</h2>
+
+  <ul>
+    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
+    <li>kk_Atakaの日記(同じ内容)</li>
+    <ul>
+      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
+      <li><a href="http://gosyujin.github.io/">GitHub Pages(Jekyll)</a></li>
+    </ul>
+    <li>Sphinxドキュメント</li>
+    <ul>
+      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
+      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
+    </ul>
+    <li><a href="https://twitter.com/kk_ataka">Twitter@kk_Ataka</a></li>
+    <li><a href="https://github.com/gosyujin">GitHub@gosyujin</a></li>
+    <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare@kk_Ataka</a></li>
+    <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
+    <li><a href="http://f.hatena.ne.jp/kk_Ataka/">はてなフォト</a></li>
+    <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
+    <li><a href="http://atnd.org/users/13915">ATND</a></li>
+  </ul>
+
+  <h2>Recent Entries</h2>
+
+  
+  
+  
+<ul>
+  
+    
+      <li>
+        <span>2015/12/01</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/12/01/sphinxconjp-2015">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/11/01</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/10/13</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/09/24</span>
+        
+          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/08/06</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+        
+        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/07/13</span>
+        
+          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+        
+        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/06/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Hugo">Hugo</a></code> ]</span>
+        
+        <a href="/2015/06/30/hugo-helloworld">Hugoを使ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/06/30/hugo-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/06/30/hugo-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/05/26</span>
+        
+          <span>[ <code><a href="/tags.html#Jenkins">Jenkins</a></code> ]</span>
+        
+        <a href="/2015/05/26/jenkins-environment-path">実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/04/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2015/04/30/golang-helloworld">golangでサーバのファイルをゆっくりダウンロードするツール作ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/04/30/golang-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/04/30/golang-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/03/14</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
+        </a>
+      </li>
+    
+  
+</ul>
+
+
+  <h2>Tags</h2>
+
+  <ul>
+    
+    
+      
+      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+    
+      
+      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+    
+      
+      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Mac">Mac <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ruby">Ruby <sub>71</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sphinx">Sphinx <sub>15</sub></a></li>
+    
+      
+      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#イベント">イベント <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+    
+      
+      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+    
+  </ul>
+
+</aside>
+
+
+    </div>
+    <hr class="clearfix" />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

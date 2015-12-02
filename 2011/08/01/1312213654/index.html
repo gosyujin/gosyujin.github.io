@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>BPStudy#47に参加しました - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <div class="header">
+      <nav>
+        <ul>
+          <li><a href="/">kk_Atakaの日記</a></li>
+          <li class="main-nav"><a href="/archives.html">Archive</a>
+          <li class="main-nav"><a href="/tags.html">Tag</a>
+        </ul>
+      </nav>
+    </div>
+
+    <div id="container">
+      <article class="markdown-body">
+        <h1><a href="/2011/08/01/1312213654">BPStudy#47に参加しました</a></h1>
+        <div class="published">
+          
+            <span>Tags: </span>
+            
+              <span>[ <code><a href="/tags.html#Agile" class="tag">Agile</a></code> ]</span>
+            
+              <span>[ <code><a href="/tags.html#イベント" class="tag">イベント</a></code> ]</span>
+            
+          
+          
+            <span>Published: 2011/08/01</span>
+          
+        </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/07/09/1310140318" title="MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2">
+          MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/08/14/1313326346" title="Subversionのauto-props設定ではまった">
+          Subversionのauto-props設定ではまった
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+<div class="content">
+<h1>詳細: <a href="http://atnd.org/events/17717">BPStudy#47 : ATND</a></h1>
+<ul><li>サーバの調達が毎回めんどい上に自由に使えるマシンがないので、仮想で立てられるXenServer見てみたい</li><li>アジャイルには縁のない、ウォーターフォール一直線の日々なのでことはじめ的な話を聞いてみたい</li></ul>
+<p>というわけで久しぶしにBPStudy参加。</p>
+<h1>XenServerによるお手軽開発用サーバ運用 @<a href="http://twitter.com/tokibito">tokibito</a>さん</h1>
+<h2>Webシステムを作るに当たって</h2>
+<ul><li>本番に近い環境、お客さんに見てもらう環境を作りたい</li><li>Wikiや課題管理をしたい</li></ul>
+<p>という事で、開発用のサーバを立てたくなる時がよくあると。ただし…</p>
+<ul><li>費用がかかりすぎては本末転倒なのでコストはかけない</li><li>あれもこれも盛り込みすぎてもダメなので、今必要のないものはいらない</li></ul>
+<p>この2点を念頭に置いて立てる。</p>
+<h2>実際にサーバを立てる</h2>
+<p>色々な方法があるが…</p>
+<ul><li>レンタル？(共用サーバ、専用サーバ、VPSなど)</li><li>自前？</li></ul>
+<p>プロジェクト毎に別の環境(OSなども)を作りたいので共用サーバでは設定的に難しい。1～3ヶ月が1プロジェクトの平均サイクルなので、データセンターなども難しい。じゃあ自前でやろう。</p>
+<h2>自前サーバに導入できるXenServerを選んだ。なぜXenServerなの？</h2>
+<ul><li>対抗はVPS</li><li>メモリ増やしたりとかはVPSより自前の方が融通がきく</li><li><span class="deco" style="font-weight:bold;">XenServerが無料になったので！</span></li></ul>
+<h2>Xen</h2>
+<ul><li>オープンソースのフリーウェア</li><li>サーバの仮想化</li><li>ハードウェアの上で直接動作するOS</li><li>Amazon EC2 とかでも使ってる</li></ul>
+<pre>のっけ方
+VM        Xen
+ゲストOS
+  VM      OS OS OS
+ホストOS  XenServer
+  HW         HW</pre>
+<ul><li>Linux、Windowsを動かせる</li></ul>
+<br />
+<h2>インストール方法</h2>
+<ol><li>iso落とす</li><li>XenCenterを管理用端末にインストールする(XenCenterは残念ながらWindows専用)</li><li>ライセンスファイルを取得し、XenCenter経由でライセンスファイルをインストールする</li></ol>
+<h2>XenCenter特徴</h2>
+<ul><li>GUI</li><li>複数管理も楽</li><li>スナップショットとって壊しても戻せる</li><li>VM単位でバックアップが取れる</li><li>まったく同じ構成の環境も簡単に作れる</li><li>リソース割り当てもXenCenterから簡単に</li><li>別のホストにVMをまるごと移動できる</li></ul>
+<h2>めんどい事</h2>
+<ul><li>ネットワークの設定…IPを固定したりホスト名変えたり</li><li>なのでスクリプト組んだ <a href="https://gist.github.com/1113337">https://gist.github.com/1113337</a></li><li>ユーザ管理もめんどい</li></ul>
+<h2>運用管理</h2>
+<ul><li>VMの管理はスプレッドシートとかで原始的にやるしかない</li><li>リソースははじめは少なめに作って足りなかったら管理者に言って！　という方針</li></ul>
+<h2>今後</h2>
+<ul><li>バックアップ強化したい</li></ul>
+<h2>ちなみに</h2>
+<ul><li>XMLRPCのAPIが使える</li><li>なのでWebアプリに組み込んでWebから起動とかバックアップとかできる</li></ul>
+<h1>非アジャイラーにアジャイルという言葉を使わずにアジャイルな見積りについて語ってみた+α @<a href="http://twitter.com/bash0C7">bash0C7</a>さん</h1>
+<h2>プロジェクトとは</h2>
+<ul><li>戦略/ポートフォリオ/プロダクト/リリースにわけられる</li></ul>
+<h2>プロジェクトの成功とは</h2>
+<ul><li>予定通りの期間、予算で最初の定義したフィーチャを実現できている事</li><li>…でもほんと？　それだけ？</li><li>最初に定義したことが必ずしも最高とは限らない<ul><li>すべてうまくいったとしてもメンバーが全員疲弊したら意味ないよね</li></ul></li></ul>
+<h2>失敗する要因</h2>
+<ul><ul><li>…いっぱい！</li><li>原因の一つとして見積もりミス<ul><li>…でも見積もり無駄じゃないか？</li><li>そうでもない。実施価値判断、優先順位付け、体制検討に見積もりは使える</li></ul></li></ul></ul>
+<h2>とりあえず3つ覚えて帰ってくださいね。不確実性コーン、規模と期間、正確さと労力</h2>
+<ul><ul><li>不確実性コーン<ul><li>横軸がウォーターフォールにおける各工程(要件定義とか？)、縦軸が誤差</li><li>プロジェクトの最初の段階は誤差が生じやすい</li><li>が、工程が進むことによって少しずつ誤差は収束する傾向にある(最後でだいばくはつする事もある)</li><li>詳しくはぐぐる</li></ul></li></ul></ul>
+<h2>規模と期間</h2>
+<ul><li>たとえば、東京-大阪間でかかる時間。のぞみだと2時間40分かかる、こだまだともっとかかる＝期間。乗り物(開発者)によって変わる。</li><li>乗り物(開発者)によってかかる時間(規模)を求め比率で出してみる</li><li>ユーザ追加機能は3くらいだから…削除機能は2？　みたいな</li></ul>
+<h2>正確さと労力</h2>
+<ul><li>見積もりに時間かけ過ぎてもいかん。見積りなんか天気予報と同じ。</li><li>どんだけやっても100％にはならないので、適度な所で切り上げることも大事</li></ul>
+<h2>アジャイルな見積もりと計画づくり</h2>
+<ul><li>このあたりの内容は「<a href="http://amzn.to/pc5emT">Agileな見積もりと計画づくり(Amazon)</a>」に乗っている。簡単に絶版になるらしい(！)</li></ul>
+<h2>アジャイルの手法？　というか流れ？</h2>
+<table><tr><th>Product Backlog</th><td>これからやることを積んでおく</td></tr><tr><th>Sprint Backlog</th><td>「これ」を達成するためにやらないといけない「あれ」や「それ」</td></tr><tr><th>Sprint Review</th><td>成果物確認(1週間ごと)</td></tr><tr><th>Test Release</th><td>まずは自分の環境 -> そしてチーム内 -> 最終的にお客さんに見せるように</td></tr><tr><th>Sprint Reviewの内容</th><td>週一の進捗報告。こんなものつくりましたーな成果物デモのみ。コードレビューは別の場で</td></tr></table>
+<ul><li>成果物がないと動かせるものがないので進捗報告がモロに出てしまう…だがそれがいい</li></ul>
+<h2>その他まとまらないメモ</h2>
+<ul><li>MSProjectによる謎の進捗報告<ul><li>耳が痛い</li></ul></li><li>会場にアジャイルやってる人<ul><li>…いない</li></ul></li><li>「慎重にウォーターフォールで開発」<ul><li>…言わんとしてることは分かるけど…</li></ul></li></ul>
+<ul><li>タイムリーにリリース(手っ取り早く適当にうごかす) vs 未来を明らかにする(慎重にすべての事態を調べる)<ul><li>うまく共存できないか　-> 順々に明らかにしていけ</li></ul></li></ul>
+<ul><li>スクラムマスター:スクラムプロセスがうまくいくよう外部からチームを守る<ul><li>-> 具体的にどんな事するんだろう？</li></ul></li></ul>
+<h1>最後に</h1>
+<p>アジャイル導入は環境的にムリダナと思いつつ、何か一部だけでも取り入れられないかなーと思うものの、なかなか難しい。。。とりあえず、アジャイルあんまり関係ないけど「Excel管理」と「ソースファイルに日付入れてバックアップ」やめればっ！？　っつってSubversionとRedmine導入しようとしてみてます。</p>
+<p>また、皆の自由な開発環境<span class="footnote"><a href="#f1" title="入れても使う人いるのかは知らない。" name="fn1">*1</a></span>を手に入れるためXenServerがけっこういい感じというのも知れたのでちょっと導入できるか探ってみようとおもいました。</p>
+<p>そして流れるように懇親会へ…。@<a href="http://twitter.com/haru860">haru860</a>さんの顔認識能力に驚愕；；</p>
+<p>お疲れさまでした。</p>
+<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 入れても使う人いるのかは知らない。</p></div>
+</div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2011/07/09/1310140318" title="MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2">
+          MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2011/08/14/1313326346" title="Subversionのauto-props設定ではまった">
+          Subversionのauto-props設定ではまった
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2011/08/01/1312213654" data-text="kk_Atakaの日記 - BPStudy#47に参加しました" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/08/01/1312213654/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/08/01/1312213654/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/08/01/1312213654/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - BPStudy#47に参加しました"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+var hatena_bookmark_anywhere_limit = 999; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/08/01/1312213654/"; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      </article>
+
+      <aside class="markdown-body sidebar">
+  <h2>Link</h2>
+
+  <ul>
+    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
+    <li>kk_Atakaの日記(同じ内容)</li>
+    <ul>
+      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
+      <li><a href="http://gosyujin.github.io/">GitHub Pages(Jekyll)</a></li>
+    </ul>
+    <li>Sphinxドキュメント</li>
+    <ul>
+      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
+      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
+    </ul>
+    <li><a href="https://twitter.com/kk_ataka">Twitter@kk_Ataka</a></li>
+    <li><a href="https://github.com/gosyujin">GitHub@gosyujin</a></li>
+    <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare@kk_Ataka</a></li>
+    <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
+    <li><a href="http://f.hatena.ne.jp/kk_Ataka/">はてなフォト</a></li>
+    <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
+    <li><a href="http://atnd.org/users/13915">ATND</a></li>
+  </ul>
+
+  <h2>Recent Entries</h2>
+
+  
+  
+  
+<ul>
+  
+    
+      <li>
+        <span>2015/12/01</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/12/01/sphinxconjp-2015">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/11/01</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/10/13</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/09/24</span>
+        
+          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/08/06</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+        
+        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/07/13</span>
+        
+          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+        
+        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/06/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Hugo">Hugo</a></code> ]</span>
+        
+        <a href="/2015/06/30/hugo-helloworld">Hugoを使ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/06/30/hugo-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/06/30/hugo-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/05/26</span>
+        
+          <span>[ <code><a href="/tags.html#Jenkins">Jenkins</a></code> ]</span>
+        
+        <a href="/2015/05/26/jenkins-environment-path">実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/04/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2015/04/30/golang-helloworld">golangでサーバのファイルをゆっくりダウンロードするツール作ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/04/30/golang-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/04/30/golang-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/03/14</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
+        </a>
+      </li>
+    
+  
+</ul>
+
+
+  <h2>Tags</h2>
+
+  <ul>
+    
+    
+      
+      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+    
+      
+      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+    
+      
+      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Mac">Mac <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ruby">Ruby <sub>71</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sphinx">Sphinx <sub>15</sub></a></li>
+    
+      
+      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#イベント">イベント <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+    
+      
+      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+    
+  </ul>
+
+</aside>
+
+
+    </div>
+    <hr class="clearfix" />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+

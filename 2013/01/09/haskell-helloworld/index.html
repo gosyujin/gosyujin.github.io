@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>プログラミングHaskellでHaskellことはじめ - kk_Atakaの日記</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/github-markdown.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="icon" href="/static/favicon.ico">
+  </head>
+  <body>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34929069-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+    <div class="header">
+      <nav>
+        <ul>
+          <li><a href="/">kk_Atakaの日記</a></li>
+          <li class="main-nav"><a href="/archives.html">Archive</a>
+          <li class="main-nav"><a href="/tags.html">Tag</a>
+        </ul>
+      </nav>
+    </div>
+
+    <div id="container">
+      <article class="markdown-body">
+        <h1><a href="/2013/01/09/haskell-helloworld">プログラミングHaskellでHaskellことはじめ</a></h1>
+        <div class="published">
+          
+            <span>Tags: </span>
+            
+              <span>[ <code><a href="/tags.html#Haskell" class="tag">Haskell</a></code> ]</span>
+            
+          
+          
+            <span>Published: 2013/01/09</span>
+          
+        </div>
+
+
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/12/31/kpt-2012" title="2012年KPT">
+          2012年KPT
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/01/21/haskell-helloworld2" title="すごいHaskellたのしく学ぼうでHaskellことはじめ">
+          すごいHaskellたのしく学ぼうでHaskellことはじめ
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#参考'>参考</a></li><li><a href='#インストール'>インストール</a></li><ul><li><a href='#hugs'>Hugs</a></li><li><a href='#ghc'>GHC</a></li></ul><li><a href='#ghciのコマンド'>ghciのコマンド</a></li><li><a href='#変数'>変数</a></li><li><a href='#hello-world'>Hello World</a></li><li><a href='#階数を求める'>階数を求める</a></li><li><a href='#標準ライブラリを使う'>標準ライブラリを使う</a></li><ul><li><a href='#head'>head</a></li><li><a href='#tail'>tail</a></li><li><a href='#!!-n'>!! n</a></li><li><a href='#take-n'>take n</a></li><li><a href='#drop-n'>drop n</a></li><li><a href='#length'>length</a></li><li><a href='#sum'>sum</a></li><li><a href='#product'>product</a></li><li><a href='#++'>++</a></li><li><a href='#reverse'>reverse</a></li><li><a href='#'div''>'div'</a></li></ul><li><a href='#練習問題'>練習問題</a></li></ul></ul><!-- end of tree list --></div></div>
+
+<div class="content">
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>やりたいことがあるのだけど、調べていたらHaskellでやってみました系の記事が多い気がしたので読めるようになりたい！</p>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li>プログラミングHaskell</li>
+</ul>
+
+<p>※ とても良書だと思うのだけど、超初心者が挑むには早すぎたので、以下の簡単なライブラリを使用してみた後は「すごいHaskell」にいったん移行しました。</p>
+
+<p>(本の中の記述が数学記号で書かれているのが予想外にキツい。記号の意味はわかるんだけど、 <code>Haskellでの書き方が</code> わからないので脳内で数学記号をHaskellに戻して…をやっていると全く進まなかった…。一周目はまず無心で写経しないとダメなタイプ)</p>
+
+<h2 id="インストール">インストール</h2>
+
+<p><a href="http://www.haskell.org/haskellwiki/Haskell%E5%85%A5%E9%96%80_5%E3%82%B9%E3%83%86%E3%83%83%E3%83%97">Haskell入門 5ステップ - HaskellWiki</a> によると、HaskellはGHCかHugsのどちらかで行けるよう。</p>
+
+<p>ただし、Hugsはもうメンテナンスされていないみたい。</p>
+
+<h3 id="hugs">Hugs</h3>
+
+<p><a href="http://cvs.haskell.org/Hugs/pages/downloading.htm">Downloading Hugs</a> からDL。Windows版は.exeなのでそのままインストール。</p>
+
+<h3 id="ghc">GHC</h3>
+
+<p><a href="http://www.haskell.org/ghc/">The Glasgow Haskell Compiler</a> からDL。これもWindows版は.exeがあるのでそのままインストールできる。</p>
+
+<p>※ これよりもHaskellPlatformも入れた方が良いらしい。オールインワン的な？</p>
+
+<p>Downloadページには <code>Bundled packages and cabal-install</code> と書かれている。cabalとは</p>
+
+<blockquote>
+<p>Cabal is a system for building and packaging Haskell libraries and programs. </p>
+</blockquote>
+
+<p>パッケージを作る…とかはまだ必要ないと思うけど。<a href="http://www.haskell.org/cabal/">The Haskell Cabal</a> からDLできるのだが、setupファイルが.hsで、Haskellファイルのようなので、Haskellを入れてからsetupする感じか。まだいらない。</p>
+
+<h2 id="ghciのコマンド">ghciのコマンド</h2>
+
+<p>コロンから始まるいろいろなコマンドでファイルをロードしたり、ghciを終了したりできる。まずは脱出できるように。</p>
+
+<h2 id="変数">変数</h2>
+
+<p>小文字から始まればよいみたい。意外なのはシングルクォーテーションが使えること。まじか。</p>
+
+<p>test.hsとして、関数をこう定義する。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">double</span> <span class="n">x&#39;</span> <span class="ow">=</span> <span class="n">x&#39;</span> <span class="o">+</span> <span class="n">x&#39;</span></code></pre></div>
+
+<p>ghciから呼ぶ。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="kt">:</span><span class="n">load</span> <span class="n">test</span><span class="o">.</span><span class="n">hs</span>
+<span class="p">[</span><span class="mi">1</span> <span class="kr">of</span> <span class="mi">1</span><span class="p">]</span> <span class="kt">Compiling</span> <span class="kt">Main</span>             <span class="p">(</span> <span class="n">test</span><span class="o">.</span><span class="n">hs</span><span class="p">,</span> <span class="n">interpreted</span> <span class="p">)</span>
+<span class="kt">Ok</span><span class="p">,</span> <span class="n">modules</span> <span class="n">loaded</span><span class="kt">:</span> <span class="kt">Main</span><span class="o">.</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">double</span> <span class="mi">13</span>
+<span class="mi">26</span></code></pre></div>
+
+<p>呼べる！</p>
+
+<h2 id="hello-world">Hello World</h2>
+
+<p>以下ghcとghciを使ってやっていく。</p>
+
+<p>インストールが完了したらコマンドプロンプトを起動し、 <code>ghci</code> と入力。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="o">&gt;</span> <span class="n">ghci</span>
+<span class="kt">GHCi</span><span class="p">,</span> <span class="n">version</span> <span class="mf">7.6</span><span class="o">.</span><span class="mi">1</span><span class="kt">:</span> <span class="n">http</span><span class="kt">://</span><span class="n">www</span><span class="o">.</span><span class="n">haskell</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">ghc</span><span class="o">/</span>  <span class="kt">:?</span> <span class="n">for</span> <span class="n">help</span>
+<span class="kt">Loading</span> <span class="n">package</span> <span class="n">ghc</span><span class="o">-</span><span class="n">prim</span> <span class="o">...</span> <span class="n">linking</span> <span class="o">...</span> <span class="n">done</span><span class="o">.</span>
+<span class="kt">Loading</span> <span class="n">package</span> <span class="n">integer</span><span class="o">-</span><span class="n">gmp</span> <span class="o">...</span> <span class="n">linking</span> <span class="o">...</span> <span class="n">done</span><span class="o">.</span>
+<span class="kt">Loading</span> <span class="n">package</span> <span class="n">base</span> <span class="o">...</span> <span class="n">linking</span> <span class="o">...</span> <span class="n">done</span><span class="o">.</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span></code></pre></div>
+
+<p>とりあえずよくわからないが、Hello World。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="s">&quot;Hello World&quot;</span>
+<span class="s">&quot;Hello World&quot;</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">putStrLn</span> <span class="s">&quot;Hello World&quot;</span>
+<span class="kt">Hello</span> <span class="kt">World</span></code></pre></div>
+
+<p>ファイルに記述してコンパイルして実行させる事もできる。 <code>hello.hs</code> ファイルを作って以下のように記述する。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">main</span> <span class="ow">=</span> <span class="n">putStrLn</span> <span class="s">&quot;Hello World&quot;</span></code></pre></div>
+
+<p>コンパイル。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> c -o hello hello.hs
+<span class="go">[1 of 1] Compiling Main             ( hello.hs, hello.o )</span>
+<span class="go">Linking hello.exe ...</span></code></pre></div>
+
+<p>成功したらhello.exeというファイルができているので実行してみる。</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> hello.exe
+<span class="go">Hello World</span></code></pre></div>
+
+<h2 id="階数を求める">階数を求める</h2>
+
+<p><code>fac.hs</code> として以下のようなファイルを作る。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">fac</span> <span class="n">n</span> <span class="ow">=</span> <span class="kr">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="kr">then</span> <span class="mi">1</span> <span class="kr">else</span> <span class="n">n</span> <span class="o">*</span> <span class="n">fac</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></code></pre></div>
+
+<p>なんか、右辺はなんとなく読めるな。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="o">$</span> <span class="n">ghci</span>
+<span class="kt">GHCi</span><span class="p">,</span> <span class="n">version</span> <span class="mf">7.6</span><span class="o">.</span><span class="mi">1</span><span class="kt">:</span> <span class="n">http</span><span class="kt">://</span><span class="n">www</span><span class="o">.</span><span class="n">haskell</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">ghc</span><span class="o">/</span>  <span class="kt">:?</span> <span class="n">for</span> <span class="n">help</span>
+<span class="kt">Loading</span> <span class="n">package</span> <span class="n">ghc</span><span class="o">-</span><span class="n">prim</span> <span class="o">...</span> <span class="n">linking</span> <span class="o">...</span> <span class="n">done</span><span class="o">.</span>
+<span class="kt">Loading</span> <span class="n">package</span> <span class="n">integer</span><span class="o">-</span><span class="n">gmp</span> <span class="o">...</span> <span class="n">linking</span> <span class="o">...</span> <span class="n">done</span><span class="o">.</span>
+<span class="kt">Loading</span> <span class="n">package</span> <span class="n">base</span> <span class="o">...</span> <span class="n">linking</span> <span class="o">...</span> <span class="n">done</span><span class="o">.</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="kt">:</span><span class="n">load</span> <span class="n">fac</span><span class="o">.</span><span class="n">hs</span>
+<span class="p">[</span><span class="mi">1</span> <span class="kr">of</span> <span class="mi">1</span><span class="p">]</span> <span class="kt">Compiling</span> <span class="kt">Main</span>             <span class="p">(</span> <span class="n">fac</span><span class="o">.</span><span class="n">hs</span><span class="p">,</span> <span class="n">interpreted</span> <span class="p">)</span>
+<span class="kt">Ok</span><span class="p">,</span> <span class="n">modules</span> <span class="n">loaded</span><span class="kt">:</span> <span class="kt">Main</span><span class="o">.</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">fac</span> <span class="mi">2</span>
+<span class="mi">2</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">fac</span> <span class="mi">3</span>
+<span class="mi">6</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">fac</span> <span class="mi">4</span>
+<span class="mi">24</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">fac</span> <span class="mi">42</span>
+<span class="mi">1405006117752879898543142606244511569936384000000000</span></code></pre></div>
+
+<h2 id="標準ライブラリを使う">標準ライブラリを使う</h2>
+
+<h3 id="head">head</h3>
+
+<p>リストの先頭を取得。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">head</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="mi">2</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">head</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="mi">4</span></code></pre></div>
+
+<h3 id="tail">tail</h3>
+
+<p>リストから先頭の要素を取り除く。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">tail</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">tail</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span></code></pre></div>
+
+<h3 id="n">!! n</h3>
+
+<p>リストのn番目の要素を取得。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span> <span class="o">!!</span> <span class="mi">2</span>
+<span class="mi">3</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span> <span class="o">!!</span> <span class="mi">7</span>
+<span class="o">***</span> <span class="kt">Exception:</span> <span class="kt">Prelude</span><span class="o">.</span><span class="p">(</span><span class="o">!!</span><span class="p">)</span><span class="kt">:</span> <span class="n">index</span> <span class="n">too</span> <span class="n">large</span></code></pre></div>
+
+<h3 id="take-n">take n</h3>
+
+<p>リストの先頭からn個の要素を取得する。多く指定してもよい。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">take</span> <span class="mi">1</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">take</span> <span class="mi">4</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">take</span> <span class="mi">9</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span></code></pre></div>
+
+<h3 id="drop-n">drop n</h3>
+
+<p>先頭からn個の要素を削除する。多く指定してもよい。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">drop</span> <span class="mi">1</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">drop</span> <span class="mi">3</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">drop</span> <span class="mi">9</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="kt">[]</span></code></pre></div>
+
+<h3 id="length">length</h3>
+
+<p>要素のサイズを取得する。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">length</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="mi">2</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">length</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="mi">5</span></code></pre></div>
+
+<h3 id="sum">sum</h3>
+
+<p>リストの要素の和を返す。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">sum</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="mi">10</span></code></pre></div>
+
+<h3 id="product">product</h3>
+
+<p>リストの要素の積を返す。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">product</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span>
+<span class="mi">64</span></code></pre></div>
+
+<h3 id=">++</h3>
+
+<p>リストの連結を行う。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">++</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span></code></pre></div>
+
+<h3 id="reverse">reverse</h3>
+
+<p>リストの要素を逆転させる。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">reverse</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span></code></pre></div>
+
+<h3 id="39-div-39">&#39;div&#39;</h3>
+
+<p><del>divはできなかった。</del> くくるのはシングルクォーテーションじゃなくてバッククォートだった！</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="mi">2</span> <span class="n">&#39;div&#39;</span> <span class="mi">1</span>
+
+<span class="o">&lt;</span><span class="n">interactive</span><span class="o">&gt;:</span><span class="mi">25</span><span class="kt">:</span><span class="mi">3</span><span class="kt">:</span>
+    <span class="kt">Syntax</span> <span class="ne">error</span> <span class="n">on</span> <span class="n">&#39;div&#39;</span>
+    <span class="kt">Perhaps</span> <span class="n">you</span> <span class="n">intended</span> <span class="n">to</span> <span class="n">use</span> <span class="o">-</span><span class="kt">XTemplateHaskell</span></code></pre></div>
+
+<h2 id="練習問題">練習問題</h2>
+
+<p>2章の練習問題にあったリストの最後を取得する。</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">head</span> <span class="p">(</span><span class="n">reverse</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<span class="mi">5</span></code></pre></div>
+
+</div>
+
+<div class="pagination">
+  <ul>
+    
+      <li class="prev">
+        <a href="/2012/12/31/kpt-2012" title="2012年KPT">
+          2012年KPT
+        </a>
+      </li>
+    
+    <li>
+      <a href="/archives.html">Archive</a>
+    </li>
+    
+      <li class="next">
+        <a href="/2013/01/21/haskell-helloworld2" title="すごいHaskellたのしく学ぼうでHaskellことはじめ">
+          すごいHaskellたのしく学ぼうでHaskellことはじめ
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+<div class="social-module">
+    <br>
+  <!-- Tweet Button -->
+  <a href="https://twitter.com/share"
+     data-url="http://gosyujin.github.io/2013/01/09/haskell-helloworld" data-text="kk_Atakaの日記 - プログラミングHaskellでHaskellことはじめ" data-related="kk_Ataka"
+     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark Users -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/01/09/haskell-helloworld/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/01/09/haskell-helloworld/" />
+    </a>
+  <!-- Hatena Bookmark Button -->
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/01/09/haskell-helloworld/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - プログラミングHaskellでHaskellことはじめ"
+     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
+    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
+	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+    </a>
+  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
+  <script type= "text/javascript">/*<![CDATA[*/
+var hatena_bookmark_anywhere_limit = 999; // 表示する件数
+// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
+// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/01/09/haskell-helloworld/"; // 表示するURL 未指定の場合、現在のページ
+/*]]>*/</script>
+  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
+  <div id="hatena_bookmark_anywhere"></div>
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      </article>
+
+      <aside class="markdown-body sidebar">
+  <h2>Link</h2>
+
+  <ul>
+    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
+    <li>kk_Atakaの日記(同じ内容)</li>
+    <ul>
+      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
+      <li><a href="http://gosyujin.github.io/">GitHub Pages(Jekyll)</a></li>
+    </ul>
+    <li>Sphinxドキュメント</li>
+    <ul>
+      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
+      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
+    </ul>
+    <li><a href="https://twitter.com/kk_ataka">Twitter@kk_Ataka</a></li>
+    <li><a href="https://github.com/gosyujin">GitHub@gosyujin</a></li>
+    <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare@kk_Ataka</a></li>
+    <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
+    <li><a href="http://f.hatena.ne.jp/kk_Ataka/">はてなフォト</a></li>
+    <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
+    <li><a href="http://atnd.org/users/13915">ATND</a></li>
+  </ul>
+
+  <h2>Recent Entries</h2>
+
+  
+  
+  
+<ul>
+  
+    
+      <li>
+        <span>2015/12/01</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/12/01/sphinxconjp-2015">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/11/01</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/10/13</span>
+        
+          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/09/24</span>
+        
+          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+        
+        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/08/06</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+        
+        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/07/13</span>
+        
+          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+        
+        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/06/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+          <span>[ <code><a href="/tags.html#Hugo">Hugo</a></code> ]</span>
+        
+        <a href="/2015/06/30/hugo-helloworld">Hugoを使ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/06/30/hugo-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/06/30/hugo-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/05/26</span>
+        
+          <span>[ <code><a href="/tags.html#Jenkins">Jenkins</a></code> ]</span>
+        
+        <a href="/2015/05/26/jenkins-environment-path">実行ユーザの違いでJenkinsのホームディレクトリが変わって困った話</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/05/26/jenkins-environment-path/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/04/30</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2015/04/30/golang-helloworld">golangでサーバのファイルをゆっくりダウンロードするツール作ってみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/04/30/golang-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/04/30/golang-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
+        <span>2015/03/14</span>
+        
+          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+        
+        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
+        </a>
+      </li>
+    
+  
+</ul>
+
+
+  <h2>Tags</h2>
+
+  <ul>
+    
+    
+      
+      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+    
+      
+      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+    
+      
+      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Mac">Mac <sub>7</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+    
+      
+      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Ruby">Ruby <sub>71</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Sphinx">Sphinx <sub>15</sub></a></li>
+    
+      
+      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+    
+      
+      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+    
+      
+      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+    
+      
+      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+    
+      
+      <li><a href="/tags.html#イベント">イベント <sub>25</sub></a></li>
+    
+      
+      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+    
+      
+      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+    
+  </ul>
+
+</aside>
+
+
+    </div>
+    <hr class="clearfix" />
+    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
+  <body>
+</html>
+
