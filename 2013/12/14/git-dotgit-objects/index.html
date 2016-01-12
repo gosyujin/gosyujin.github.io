@@ -74,7 +74,7 @@
 <div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#参考'>参考</a></li><li><a href='#結論'>結論</a></li><ul><li><a href='#git-add-したとき'>git add したとき</a></li><li><a href='#git-commit-したとき'>git commit したとき</a></li><li><a href='#git-rm-したとき'>git rm したとき</a></li></ul><li><a href='#実際にやってみる'>実際にやってみる</a></li><ul><li><a href='#前準備'>前準備</a></li><li><a href='#git-add-でファイルを追加'>git add でファイルを追加</a></li><ul><li><a href='#操作手順'>操作手順</a></li></ul><li><a href='#git-commit-でファイルコミット'>git commit でファイルコミット</a></li><ul><li><a href='#操作手順'>操作手順</a></li></ul><li><a href='#親が複数あるとき'>親が複数あるとき</a></li><li><a href='#リポジトリからファイルを消したとき'>リポジトリからファイルを消したとき</a></li></ul><li><a href='#課題'>課題</a></li><li><a href='#メモ'>メモ</a></li><ul><li><a href='#cat-file'>cat-file</a></li><li><a href='#hash-object'>hash-object</a></li><li><a href='#rev-parse'>rev-parse</a></li><li><a href='#ls-tree'>ls-tree</a></li><li><a href='#ls-files'>ls-files</a></li><li><a href='#show-'>show </a></li></ul></ul></ul><!-- end of tree list --></div></div>
 
 <div class="content">
-<h2 id="あらすじ">あらすじ</h2>
+<h2 id=">あらすじ</h2>
 
 <p>この記事は <a href="http://qiita.com/advent-calendar/2013/git">Git Advent Calendar 2013</a> の 14 日目の記事です。</p>
 
@@ -89,7 +89,7 @@
 
 <p>最近 Subversion を使うことが多く、めっきり Git を使っていないので、復習として <code>.git/objects</code> の中身を追ってみた。</p>
 
-<h2 id="参考">参考</h2>
+<h2 id=">参考</h2>
 
 <ul>
 <li>Pro Git 9章 <a href="http://git-scm.com/book/ja/Git%E3%81%AE%E5%86%85%E5%81%B4">Git - Gitの内側</a></li>
@@ -98,13 +98,13 @@
 <li><a href="http://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0CCkQFjAA&amp;url=http%3A%2F%2Fkeijinsonyaban.blogspot.com%2F2011%2F05%2Fgit.html&amp;ei=-_eWUoJ1gYyTBc-LgPgE&amp;usg=AFQjCNGwMB97m7YLFQppj0QjaPOrpz9Hzw&amp;bvm=bv.57155469,d.dGI&amp;cad=rja">見えないチカラ: 【翻訳】Gitをボトムアップから理解する</a></li>
 </ul>
 
-<h2 id="結論">結論</h2>
+<h2 id=">結論</h2>
 
 <p>とりあえず <em>add さえしていれば</em> 、ファイルを救える。</p>
 
 <p>以下、 <code>.git/objects</code> 下で起こる事。</p>
 
-<h3 id="git-add-したとき">git add したとき</h3>
+<h3 id="git-add">git add したとき</h3>
 
 <ul>
 <li><code>$ git add</code> した瞬間、 add したファイルが <code>.git/objects</code> 下に生成される
@@ -132,7 +132,7 @@
 </ul></li>
 </ul>
 
-<h3 id="git-commit-したとき">git commit したとき</h3>
+<h3 id="git-commit">git commit したとき</h3>
 
 <ul>
 <li><code>$ git commit</code> すると、 2 つ以上のファイルが <code>.git/objects</code> 下に生成される
@@ -177,7 +177,7 @@
 
 <p><code>tree</code> オブジェクト(ディレクトリ) は続く限り繰り返される。</p>
 
-<h3 id="git-rm-したとき">git rm したとき</h3>
+<h3 id="git-rm">git rm したとき</h3>
 
 <ul>
 <li>何も起こらない</li>
@@ -190,9 +190,9 @@
 
 <p>ここから先、実際にごちゃごちゃ Git をいじってみて心で理解する。</p>
 
-<h2 id="実際にやってみる">実際にやってみる</h2>
+<h2 id=">実際にやってみる</h2>
 
-<h3 id="前準備">前準備</h3>
+<h3 id=">前準備</h3>
 
 <p>test 用ディレクトリを作成。</p>
 
@@ -284,9 +284,9 @@
 <span class="gp">#</span> On branch master
 <span class="go">nothing to commit (working directory clean)</span></code></pre></div>
 
-<h3 id="git-add-でファイルを追加">git add でファイルを追加</h3>
+<h3 id="git-add">git add でファイルを追加</h3>
 
-<h4 id="操作手順">操作手順</h4>
+<h4 id=">操作手順</h4>
 
 <p>Git で管理するファイルは <code>.git/objects</code> ディレクトリ下で管理される。</p>
 
@@ -374,11 +374,11 @@
 <li>tag</li>
 </ul>
 
-<h3 id="git-commit-でファイルコミット">git commit でファイルコミット</h3>
+<h3 id="git-commit">git commit でファイルコミット</h3>
 
 <p>いよいよコミットしてみる。</p>
 
-<h4 id="操作手順">操作手順</h4>
+<h4 id=">操作手順</h4>
 
 <div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git commit -m <span class="s2">&quot;README first commit&quot;</span>
 <span class="go">[master (root-commit) c111230] README first commit</span>
@@ -495,7 +495,7 @@
 
 <p><code>blob</code> はファイルの内容なのでとりあえず特筆する点なし。</p>
 
-<h3 id="親が複数あるとき">親が複数あるとき</h3>
+<h3 id=">親が複数あるとき</h3>
 
 <p>merge したときなど、親を複数持つときもあるんじゃなかろうか。</p>
 
@@ -555,7 +555,7 @@
 
 <p>2つある！</p>
 
-<h3 id="リポジトリからファイルを消したとき">リポジトリからファイルを消したとき</h3>
+<h3 id=">リポジトリからファイルを消したとき</h3>
 
 <p>消したらどうなるんだろう。</p>
 
@@ -630,7 +630,7 @@
 
 <p>というか、よく考えたら <code>git rm</code> したからってオブジェクトが消えたらチェックアウトで戻せなくなるな。</p>
 
-<h2 id="課題">課題</h2>
+<h2 id=">課題</h2>
 
 <p>まだよくわかってない。</p>
 
@@ -652,7 +652,7 @@
 </ul></li>
 </ol>
 
-<h2 id="メモ">メモ</h2>
+<h2 id=">メモ</h2>
 
 <p>今回使った色々なコマンド。</p>
 
@@ -819,16 +819,28 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/12/14/git-dot
   
     
       <li>
+        <span>2016/01/12</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        </a>
+      </li>
+    
+      <li>
         <span>2015/12/01</span>
         
           <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
         
           <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
         </a>
       </li>
     
@@ -944,18 +956,6 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/12/14/git-dot
         </a>
       </li>
     
-      <li>
-        <span>2015/03/14</span>
-        
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
-        
-        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
-        </a>
-      </li>
-    
   
 </ul>
 
@@ -1008,7 +1008,7 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/12/14/git-dot
       <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+      <li><a href="/tags.html#Golang">Golang <sub>3</sub></a></li>
     
       
       <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>

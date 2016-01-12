@@ -76,13 +76,13 @@
 <div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#環境'>環境</a></li><ul><li><a href='#サーバの内容'>サーバの内容</a></li><li><a href='#上記-index-html-にアクセスした結果'>上記 index.html にアクセスした結果</a></li></ul><li><a href='#解法'>解法</a></li><ul><li><a href='#キャッシュポリシーの変更'>キャッシュポリシーの変更</a></li><ul><li><a href='#使用前'>使用前</a></li><li><a href='#使用後'>使用後</a></li></ul><li><a href='#キャッシュ容量を-0-に'>キャッシュ容量を 0 に</a></li><li><a href='#キャッシュ全消し'>キャッシュ全消し</a></li><li><a href='#ネットワーク情報を監視できるライブラリ'>ネットワーク情報を監視できるライブラリ</a></li></ul><li><a href='#結果'>結果</a></li><li><a href='#todo'>TODO</a></li><li><a href='#おまけ-ホームで終了した場合にアプリを終わらせる'>おまけ: ホームで終了した場合にアプリを終わらせる</a></li></ul></ul><!-- end of tree list --></div></div>
 
 <div class="content">
-<h2 id="あらすじ">あらすじ</h2>
+<h2 id=">あらすじ</h2>
 
 <p>とあるWebサーバのファイルの内容を変えたとき、 UIWebView 経由でアクセスすると更新が反映されない現象が起こった。</p>
 
 <p>また、戻るボタンも更新ボタンもなにもつけていなかったため、その状況でどうやったらキャッシュを捨てて新しいファイルを取得できるかわからなかった。</p>
 
-<h2 id="環境">環境</h2>
+<h2 id=">環境</h2>
 
 <ul>
 <li>サーバ
@@ -97,7 +97,7 @@
 </ul></li>
 </ul>
 
-<h3 id="サーバの内容">サーバの内容</h3>
+<h3 id=">サーバの内容</h3>
 
 <p>変更したファイル <code>index.html</code></p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">- &lt;p&gt;Hell World&lt;/p&gt;
@@ -105,7 +105,7 @@
 </code></pre></div>
 <p>とりあえず更新がわかるようにテキトウな文言で。</p>
 
-<h3 id="上記-index-html-にアクセスした結果">上記 index.html にアクセスした結果</h3>
+<h3 id="index-html">上記 index.html にアクセスした結果</h3>
 
 <ul>
 <li>iPhone Safari
@@ -134,19 +134,19 @@
 
 <p>Safari は確実に更新されたため、恐らく UIWebView が Safari とは違う風にキャッシュを持っていて、それが悪さをしているんじゃなかろうかと推測。</p>
 
-<h2 id="解法">解法</h2>
+<h2 id=">解法</h2>
 
 <p>というわけで、ソース内で明示的にキャッシュを削除すれば、クリーンな状態を保てるのでは。</p>
 
-<h3 id="キャッシュポリシーの変更">キャッシュポリシーの変更</h3>
+<h3 id=">キャッシュポリシーの変更</h3>
 
-<h4 id="使用前">使用前</h4>
+<h4 id=">使用前</h4>
 
 <blockquote>
 <p>NSURLRequest *request = [NSURLRequest requestWithURL:url];</p>
 </blockquote>
 
-<h4 id="使用後">使用後</h4>
+<h4 id=">使用後</h4>
 
 <blockquote>
 <p>NSURLRequest *request = [NSURLRequest requestWithURL:url
@@ -173,7 +173,7 @@
 
 <p>キャッシュを無視するには <code>NSURLRequestReloadIgnoringLocalCacheData</code> を使えばよい。</p>
 
-<h3 id="キャッシュ容量を-0-に">キャッシュ容量を 0 に</h3>
+<h3 id="0">キャッシュ容量を 0 に</h3>
 
 <ul>
 <li><a href="http://www.yoheim.net/blog.php?q=20120912">[XCODE] UIWebViewでHTML,CSS,JSなどをキャッシュさせない方法 - YoheiM .NET</a></li>
@@ -181,7 +181,7 @@
 
 <div class="highlight"><pre><code class="language-objective-c" data-lang="objective-c"><span class="p">[[</span><span class="bp">NSURLCache</span> <span class="n">sharedURLCache</span><span class="p">]</span> <span class="nl">setMemoryCapacity</span><span class="p">:</span><span class="mi">0</span><span class="p">];</span></code></pre></div>
 
-<h3 id="キャッシュ全消し">キャッシュ全消し</h3>
+<h3 id=">キャッシュ全消し</h3>
 
 <ul>
 <li><a href="http://sarudeki.jp/fernweh/uiwebview/">知ってると楽になるUIWebView関連6つのTips｜学習A4デスノート @ Cocos2d-x とかの勉強メモ</a></li>
@@ -192,14 +192,14 @@
 
 <p>を呼べばキャッシュを全消しできるよう。</p>
 
-<h3 id="ネットワーク情報を監視できるライブラリ">ネットワーク情報を監視できるライブラリ</h3>
+<h3 id=">ネットワーク情報を監視できるライブラリ</h3>
 
 <ul>
 <li><a href="http://cocoadays.blogspot.jp/2011/05/ios_25.html">Cocoaの日々: [iOS] ネットワーク接続状況取得ライブラリを公開</a></li>
 <li><a href="https://github.com/dev5tec/FBNetworkReachability">dev5tec/FBNetworkReachability · GitHub</a></li>
 </ul>
 
-<h2 id="結果">結果</h2>
+<h2 id=">結果</h2>
 
 <p>今回は強引に <code>UIWebView#shouldStartLoadWithRequest:navigationType:</code> で毎回キャッシュを削除するようにした。</p>
 
@@ -230,7 +230,7 @@
 <li>iOS 7 ではどうなっているのか</li>
 </ul>
 
-<h2 id="おまけ-ホームで終了した場合にアプリを終わらせる">おまけ: ホームで終了した場合にアプリを終わらせる</h2>
+<h2 id=">おまけ: ホームで終了した場合にアプリを終わらせる</h2>
 
 <p>また、上記の対応をしただけだと、 iPhone をホームボタンで終了した後、再度アプリを起動すると未更新のまま同じ画面が出てしまう…。</p>
 
@@ -353,16 +353,28 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/09/25/ios-uiw
   
     
       <li>
+        <span>2016/01/12</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        </a>
+      </li>
+    
+      <li>
         <span>2015/12/01</span>
         
           <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
         
           <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
         </a>
       </li>
     
@@ -478,18 +490,6 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/09/25/ios-uiw
         </a>
       </li>
     
-      <li>
-        <span>2015/03/14</span>
-        
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
-        
-        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
-        </a>
-      </li>
-    
   
 </ul>
 
@@ -542,7 +542,7 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/09/25/ios-uiw
       <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+      <li><a href="/tags.html#Golang">Golang <sub>3</sub></a></li>
     
       
       <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>

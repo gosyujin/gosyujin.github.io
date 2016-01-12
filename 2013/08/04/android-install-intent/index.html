@@ -76,25 +76,25 @@
 <div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#結論'>結論</a></li><li><a href='#環境'>環境</a></li><ul><li><a href='#ソースの中身'>ソースの中身</a></li></ul><li><a href='#現象'>現象</a></li><ul><li><a href='#再現性調査'>再現性調査</a></li><li><a href='#再現方法'>再現方法</a></li><li><a href='#ソース修正'>ソース修正</a></li><li><a href='#操作時のフラグ'>操作時のフラグ</a></li><li><a href='#フラグ一覧-抜粋'>フラグ一覧(抜粋)</a></li></ul><li><a href='#解決方法'>解決方法</a></li></ul></ul><!-- end of tree list --></div></div>
 
 <div class="content">
-<h2 id="あらすじ">あらすじ</h2>
+<h2 id=">あらすじ</h2>
 
 <p>Androidアプリにおいて、Eclipseからビルドしていた時は想定通り動いていたのに、リリース署名をしたアプリ(apkファイル)をインストールした場合だけ動作が想定していないものになった。</p>
 
 <p>具体的には、Activityがむちゃくちゃたまる現象が起こるということで非常に困った。</p>
 
-<h2 id="結論">結論</h2>
+<h2 id=">結論</h2>
 
 <p>起動のさせ方により、起動時のIntentフラグが変わる。これはAndroid内部で知らぬ間にやられてしまう。</p>
 
 <p>onCreate時などでIntentのフラグをチェックして何とかするしかない。</p>
 
-<h2 id="環境">環境</h2>
+<h2 id=">環境</h2>
 
 <ul>
 <li>AndroidDeveloperTools Build: v21.1.0-569685</li>
 </ul>
 
-<h3 id="ソースの中身">ソースの中身</h3>
+<h3 id=">ソースの中身</h3>
 
 <ul>
 <li>メインのActivityには <code>action.Main</code> と <code>category.LAUNCHER</code> しか設定していない。
@@ -149,7 +149,7 @@
 
 <p>単純にHelo Worldを表示するだけのサンプルプログラム。</p>
 
-<h2 id="現象">現象</h2>
+<h2 id=">現象</h2>
 
 <p><strong>特定の手順</strong> を踏んだ時だけ MainActivity のスタックが溜まりまくり、Hello World画面→Hello World画面→Hello World画面→Hello World画面...とバックキーを押しまくっても一向にホーム画面が現れなくなる。</p>
 
@@ -160,7 +160,7 @@
 <li>Eclipse経由でビルドしていた時はなんともなかったのに、apk経由でインストールした途端急に起こり始めた</li>
 </ul>
 
-<h3 id="再現性調査">再現性調査</h3>
+<h3 id=">再現性調査</h3>
 
 <p>とりあえずいろいろな状況で <code>adb.exe shell dumpsys activity activities</code> を使いタスクのHistを確認しまくってみた。</p>
 
@@ -275,7 +275,7 @@
 <span class="go">    realActivity=com.example.testproject/.MainActivity</span>
 <span class="go">    intent={act=android.intent.action.DELETE dat=package:com.example.testproject#com.example.testproject.MainActivity flg=0x10800000 cmp=com.android.packageinstaller/.UninstallerActivity}</span></code></pre></div>
 
-<h3 id="再現方法">再現方法</h3>
+<h3 id=">再現方法</h3>
 
 <p>以下の操作で再現がとれた。</p>
 
@@ -293,7 +293,7 @@
 
 <p>そして上記のdumpファイルから正常時とおかしい時を比較すると、 <code>Intentのフラグ</code> 設定が異なっているみたい。</p>
 
-<h3 id="ソース修正">ソース修正</h3>
+<h3 id=">ソース修正</h3>
 
 <p>MainActivityにonResumeメソッドとIntentのフラグを出力するToastを追加してみた。</p>
 
@@ -320,7 +320,7 @@
 
 <p>すると、以下のようなフラグが出力された。dumpを見ても同じ値になっているな。</p>
 
-<h3 id="操作時のフラグ">操作時のフラグ</h3>
+<h3 id=">操作時のフラグ</h3>
 
 <table><thead>
 <tr>
@@ -394,7 +394,7 @@
 
 <p>これがなんなのか…。javadocから照らし合わせてみよう。</p>
 
-<h3 id="フラグ一覧-抜粋">フラグ一覧(抜粋)</h3>
+<h3 id=">フラグ一覧(抜粋)</h3>
 
 <table><thead>
 <tr>
@@ -514,7 +514,7 @@
 
 <p>やはり！Androidの中の人が勝手にセットしているっぽいなー。これが悪さをしているのか？</p>
 
-<h2 id="解決方法">解決方法</h2>
+<h2 id=">解決方法</h2>
 
 <p><code>FLAG_ACTIVITY_BROUGHT_TO_FRONT</code> でググったらandroid group japanのメーリングリストが引っかかった！ほぼ同じ現象。</p>
 
@@ -682,16 +682,28 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/04/android
   
     
       <li>
+        <span>2016/01/12</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        </a>
+      </li>
+    
+      <li>
         <span>2015/12/01</span>
         
           <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
         
           <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
         </a>
       </li>
     
@@ -807,18 +819,6 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/04/android
         </a>
       </li>
     
-      <li>
-        <span>2015/03/14</span>
-        
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
-        
-        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
-        </a>
-      </li>
-    
   
 </ul>
 
@@ -871,7 +871,7 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/04/android
       <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+      <li><a href="/tags.html#Golang">Golang <sub>3</sub></a></li>
     
       
       <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>

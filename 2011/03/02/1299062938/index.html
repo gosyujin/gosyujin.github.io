@@ -82,7 +82,7 @@
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20110302190610"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20110302/20110302190610.png"></a></p>
 <ul><li>APIの概要は<a href="http://readitlaterlist.com/api/docs/">http://readitlaterlist.com/api/docs/</a>に載っているので、基本的にはこれを見ながらできる…はず。</li></ul>
 <h1>記事をGetする</h1>
-<p>以下のパラメータを生成し、URLのおしりに?AAA=BBB&CCC=DDD...形式でくっつけて<a href="https://readitlaterlist.com/v2/get">https://readitlaterlist.com/v2/get</a>に送ります。<span class="footnote"><a href="#f2" title="順不同でもよい" name="fn2">*2</a></span>パラメータは他にもあるけど、とりあえずこれだけあれば取得はできます。</p>
+<p>以下のパラメータを生成し、URLのおしりに?AAA=BBB&amp;CCC=DDD...形式でくっつけて<a href="https://readitlaterlist.com/v2/get">https://readitlaterlist.com/v2/get</a>に送ります。<span class="footnote"><a href="#f2" title="順不同でもよい" name="fn2">*2</a></span>パラメータは他にもあるけど、とりあえずこれだけあれば取得はできます。</p>
 <table><tr><th>apikey(必須)</th><td>今生成したapikey</td></tr><tr><th>username(必須)</th><td>Read It Laterのアカウント</td></tr><tr><th>password(必須)</th><td>パスワード</td></tr><tr><th>format</th><td>レスポンスのフォーマット。jsonかxmlが選択できる。デフォルトはjson</td></tr></table>
 <p>パスワードが丸見えなのでショルダーハックとかされるとアレですが…。</p>
 <h1>ソースコード</h1>
@@ -126,7 +126,7 @@ end</pre>
 <p>すると、こんな感じに返ってきます。</p>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20110302190611"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20110302/20110302190611.jpg"></a></p>
 <p>json形式では、こんなフォーマットで返ってくるみたい。</p>
-<blockquote><p>{</p><p>　　"status":"1",			// 1=normal, 2=no changes since your provided 'since'</p><p>　　"since":"1245626956',		// timestamp of this response</p><p>　　"list":{</p><p>　　　"93817":{</p><p>　　　　"item_id":"93817"		    // unique id identifying the url</p><p>　　　　"url":"<a href="http://url.com">http://url.com</a>",</p><p>　　　　"title":"Page Title",</p><p>　　　　"time_updated":"1245626956",       // time the item was last added/changed</p><p>　　　　"time_added":"1245626956",	    // time item was added to list</p><p>　　　　"tags":"comma,seperated,list",</p><p>　　　　"state":"0",                       // 0=unread, 1=read</p><p>　　　},</p><p>...</p><cite><a href="http://readitlaterlist.com/api/docs/#get">http://readitlaterlist.com/api/docs/#get</a></cite></blockquote>
+<blockquote><p>{</p><p>　　&quot;status&quot;:&quot;1&quot;,			// 1=normal, 2=no changes since your provided &#39;since&#39;</p><p>　　&quot;since&quot;:&quot;1245626956&#39;,		// timestamp of this response</p><p>　　&quot;list&quot;:{</p><p>　　　&quot;93817&quot;:{</p><p>　　　　&quot;item_id&quot;:&quot;93817&quot;		    // unique id identifying the url</p><p>　　　　&quot;url&quot;:&quot;<a href="http://url.com">http://url.com</a>&quot;,</p><p>　　　　&quot;title&quot;:&quot;Page Title&quot;,</p><p>　　　　&quot;time_updated&quot;:&quot;1245626956&quot;,       // time the item was last added/changed</p><p>　　　　&quot;time_added&quot;:&quot;1245626956&quot;,	    // time item was added to list</p><p>　　　　&quot;tags&quot;:&quot;comma,seperated,list&quot;,</p><p>　　　　&quot;state&quot;:&quot;0&quot;,                       // 0=unread, 1=read</p><p>　　　},</p><p>...</p><cite><a href="http://readitlaterlist.com/api/docs/#get">http://readitlaterlist.com/api/docs/#get</a></cite></blockquote>
 <p>さしあたり、欲しいのはlist内のurl,titleくらいなんだけど、これどうやって取得するんだろう。うまい方法が思い浮かばなかったので、一旦listのkeyを全部取得してkey分forを回すというあまりイケてない方法に。parse以降をこう変えました。</p>
 <pre class="ruby">                # jsonparseでparseしてもらう
                 jsonparse = JsonParser.new.parse(json)
@@ -252,16 +252,28 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/03/02/1299062
   
     
       <li>
+        <span>2016/01/12</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        </a>
+      </li>
+    
+      <li>
         <span>2015/12/01</span>
         
           <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
         
           <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
         </a>
       </li>
     
@@ -377,18 +389,6 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/03/02/1299062
         </a>
       </li>
     
-      <li>
-        <span>2015/03/14</span>
-        
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
-        
-        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
-        </a>
-      </li>
-    
   
 </ul>
 
@@ -441,7 +441,7 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/03/02/1299062
       <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+      <li><a href="/tags.html#Golang">Golang <sub>3</sub></a></li>
     
       
       <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>

@@ -82,10 +82,10 @@
 <ol><li><a href="2010-11-21-1290271210">2010-11-21-1290271210</a></li><li><a href="2010-11-30-1291125511">2010-11-30-1291125511</a></li></ol>
 <p>前回までで、なんとかOAuth認証を突破する事ができました。目標は達成できたっちゃあできたんですが……せっかくなので、取得したアクセストークンを使ってTwitterからタイムラインを取得してみます！</p>
 <h1>タイムラインの取得方法</h1>
-<ol><li>signatureを作成する</li><li>以下のパラメータをアルファベット順にxxx=yyy&vvv=zzz……の形で連結した値を<a href="http://api.twitter.com/1/statuses/home_timeline.json">http://api.twitter.com/1/statuses/home_timeline.json</a>のおしりにくっつけてGET or POST<ol><li>oauth_consumer_key</li><li>oauth_nonce</li><li>oauth_signature</li><li>oauth_signature_method</li><li>oauth_timestamp</li><li>oauth_token</li><li>oauth_version</li></ol></li></ol>
+<ol><li>signatureを作成する</li><li>以下のパラメータをアルファベット順にxxx=yyy&amp;vvv=zzz……の形で連結した値を<a href="http://api.twitter.com/1/statuses/home_timeline.json">http://api.twitter.com/1/statuses/home_timeline.json</a>のおしりにくっつけてGET or POST<ol><li>oauth_consumer_key</li><li>oauth_nonce</li><li>oauth_signature</li><li>oauth_signature_method</li><li>oauth_timestamp</li><li>oauth_token</li><li>oauth_version</li></ol></li></ol>
 <p>取得はこれで完了。</p>
 <p>signatureの作成方法は今までと同じで、</p>
-<ol><li>認証用の値を生成する(以下の3つの値を&で連結する)<ol><li>"GET"</li><li>"<a href="http://api.twitter.com/1/statuses/home_timeline.json">http://api.twitter.com/1/statuses/home_timeline.json</a>"をエスケープしたもの</li><li>oauth_signature以外のパラメータ<span class="footnote"><a href="#f1" title="oauth_consumer_key, oauth_nonce, oauth_signature_method, oauth_timestamp, oauth_token, oauth_versionの6個っすねー。oauth_tokenを忘れずに。" name="fn1">*1</a></span>をアルファベット順に並べてxxx=yyy&vvv=zzz……の形で連結した値をエスケープしたもの</li></ol></li><li>署名キーを生成する<ol><li>"consumer_secret&oauth_token_secret"</li></ol></li><li>キーを元に値をHMAC-SHA1方式で暗号化した値をbase64形式でエンコードする</li></ol>
+<ol><li>認証用の値を生成する(以下の3つの値を&amp;で連結する)<ol><li>&quot;GET&quot;</li><li>&quot;<a href="http://api.twitter.com/1/statuses/home_timeline.json">http://api.twitter.com/1/statuses/home_timeline.json</a>&quot;をエスケープしたもの</li><li>oauth_signature以外のパラメータ<span class="footnote"><a href="#f1" title="oauth_consumer_key, oauth_nonce, oauth_signature_method, oauth_timestamp, oauth_token, oauth_versionの6個っすねー。oauth_tokenを忘れずに。" name="fn1">*1</a></span>をアルファベット順に並べてxxx=yyy&amp;vvv=zzz……の形で連結した値をエスケープしたもの</li></ol></li><li>署名キーを生成する<ol><li>&quot;consumer_secret&amp;oauth_token_secret&quot;</li></ol></li><li>キーを元に値をHMAC-SHA1方式で暗号化した値をbase64形式でエンコードする</li></ol>
 <p>です。OAuth認証して獲得したアクセストークン、oauth_tokenとoauth_token_secretを随所で使います。そして作成したsignatureと他のパラメータを<a href="http://api.twitter.com/1/statuses/home_timeline.json">http://api.twitter.com/1/statuses/home_timeline.json</a>のおしりにくっつけて(今回は)GETリクエスト。</p>
 <h1>戻ってきたタイムライン</h1>
 <p>タイムラインらしきものはjsonという形式のデータで戻って来ます。home_timeline.jsonのjson部分をxmlとかrssに変えるとxml形式のタイムライン、rss形式のタイムラインが返ってくるようですが今回はこのjsonを何とかしてみます。</p>
@@ -360,16 +360,28 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2010/12/07/1291733
   
     
       <li>
+        <span>2016/01/12</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        </a>
+      </li>
+    
+      <li>
         <span>2015/12/01</span>
         
           <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
         
           <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
         </a>
       </li>
     
@@ -485,18 +497,6 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2010/12/07/1291733
         </a>
       </li>
     
-      <li>
-        <span>2015/03/14</span>
-        
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
-        
-        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
-        </a>
-      </li>
-    
   
 </ul>
 
@@ -549,7 +549,7 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2010/12/07/1291733
       <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+      <li><a href="/tags.html#Golang">Golang <sub>3</sub></a></li>
     
       
       <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>

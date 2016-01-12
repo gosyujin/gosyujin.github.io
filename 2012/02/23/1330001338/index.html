@@ -85,12 +85,12 @@
 <h1>上記の原因</h1>
 <p>cloneできない問題はJenkins実行時にgit.exeにパスが通ってなかった、設定していなかったという非常に残念なものだった。Jenkins実践入門にも手順が書いてあった。<span class="footnote"><a href="#f1" title="環境がアレだったので、proxyの設定とかその辺も探してしまった。" name="fn1">*1</a></span></p>
 <h1>Jenkinsの「ビルド実行」でGitリポジトリのソースのテストをする</h1>
-<ul><li>Jenkinsの管理 => プラグインの管理 => Jenkins GIT plugin をインストール</li><li>新規ジョブ作成 => フリースタイル・プロジェクト でプロジェクト作成</li><li>ソースコードシステム<ul><li>Gitを選択</li><li>リポジトリを入力<ul><li>C:\project\excel_for_ruby</li></ul></li></ul></li><li>ビルド<ul><li>Windowsバッチコマンドの実行<ul><li>rspecを実行できるように記述する</li></ul></li></ul></li></ul>
+<ul><li>Jenkinsの管理 =&gt; プラグインの管理 =&gt; Jenkins GIT plugin をインストール</li><li>新規ジョブ作成 =&gt; フリースタイル・プロジェクト でプロジェクト作成</li><li>ソースコードシステム<ul><li>Gitを選択</li><li>リポジトリを入力<ul><li>C:\project\excel_for_ruby</li></ul></li></ul></li><li>ビルド<ul><li>Windowsバッチコマンドの実行<ul><li>rspecを実行できるように記述する</li></ul></li></ul></li></ul>
 <pre>cd &quot;C:\project\excel_for_ruby&quot;
 rspec -fs spec\*</pre>
 <p>これでビルドするとはじめのcloneできないエラー。</p>
 <pre>Error cloning remote repo 'origin' : Could not clone C:\project\excel_for_ruby</pre>
-<ul><li>Jenkinsから見たGitのパスを設定<ul><li>Jenkinsの管理 => システムの設定<ul><li>Gitのパスを追加するフォームがあるのでこれを追加</li><li>Nameもなんでもいいから入力する(Defaultにした)</li></ul></li></ul></li></ul>
+<ul><li>Jenkinsから見たGitのパスを設定<ul><li>Jenkinsの管理 =&gt; システムの設定<ul><li>Gitのパスを追加するフォームがあるのでこれを追加</li><li>Nameもなんでもいいから入力する(Defaultにした)</li></ul></li></ul></li></ul>
 <h1>GitでCommitしたらJenkinsがビルドをしてくれるようにする</h1>
 <p>「wget ビルド実行パス」というコマンドをGitのフックスクリプトに記述すればコミット時にビルド実行できるらしい。とりあえずWindows用のwgetを取得。<a href="http://users.ugent.be/~bpuype/wget/">WGET 1.11.4 for Windows (win32)</a></p>
 <p>プロジェクト内の.git/hooks/post-commitを編集。</p>
@@ -216,16 +216,28 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/02/23/1330001
   
     
       <li>
+        <span>2016/01/12</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        </a>
+      </li>
+    
+      <li>
         <span>2015/12/01</span>
         
           <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
         
           <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
         </a>
       </li>
     
@@ -341,18 +353,6 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/02/23/1330001
         </a>
       </li>
     
-      <li>
-        <span>2015/03/14</span>
-        
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
-        
-        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
-        </a>
-      </li>
-    
   
 </ul>
 
@@ -405,7 +405,7 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/02/23/1330001
       <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+      <li><a href="/tags.html#Golang">Golang <sub>3</sub></a></li>
     
       
       <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>

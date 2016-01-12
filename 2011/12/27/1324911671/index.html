@@ -121,14 +121,14 @@ require 'thrift/types'
 require 'Evernote/EDAM/user_store'
 (略)</pre>
 <p>File.expand_path(File.dirname(__FILE__))は出力するとそれぞれこのようになる。</p>
-<p>>|?|</p>
-<p>> puts __FILE__</p>
-<p>#=> ./myEvernote.rb</p>
-<p>> puts File.dirname(__FILE__)</p>
-<p>#=> .</p>
-<p>> puts File.expand_path(File.dirname(__FILE__))</p>
-<p>#=> C:/project/evernotexxx</p>
-<table><tr><td><</td></tr></table>
+<p>&gt;|?|</p>
+<p>&gt; puts __FILE__</p>
+<p>#=&gt; ./myEvernote.rb</p>
+<p>&gt; puts File.dirname(__FILE__)</p>
+<p>#=&gt; .</p>
+<p>&gt; puts File.expand_path(File.dirname(__FILE__))</p>
+<p>#=&gt; C:/project/evernotexxx</p>
+<table><tr><td>&lt;</td></tr></table>
 <p>プロジェクトディレクトリを指定できる。そして、</p>
 <pre class="ruby">$LOAD_PATH.push(&quot;#{dir}/lib/ruby&quot;)</pre>
 <p>で組み込み変数$LOAD_PATH<span class="footnote"><a href="#f1" title="requireがファイルを読み込むときに検索するディレクトリの名前を含む配列 - たのしいRuby 第三版 P373" name="fn1">*1</a></span>にプロジェクト内のlib/rubyを含めている。これで読み込める。</p>
@@ -201,7 +201,7 @@ Types.Notebook getNotebook(string authenticationToken, Types.Guid guid)</pre>
     noteStoreProtocol = Thrift::BinaryProtocol.new(noteStoreTransport)
     @noteStore = Evernote::EDAM::NoteStore::NoteStore::Client.new(noteStoreProtocol)</pre>
 <p>で、最後にNoteStoreを作成する。shardIdを指定する必要がある。shardIdは何かっていうと…。</p>
-<blockquote><p>The name of the virtual server that manages the state of this user. This value is used internally to determine which system should service requests about this user's data. It is also used to construct the appropriate URL to make requests from the NoteStore.</p></blockquote>
+<blockquote><p>The name of the virtual server that manages the state of this user. This value is used internally to determine which system should service requests about this user&#39;s data. It is also used to construct the appropriate URL to make requests from the NoteStore.</p></blockquote>
 <p>ユーザ状態を管理する仮想サーバ名？</p>
 <h1>ノートブックを取得していく。</h1>
 <p>準備はできたのでノートブックを取得していく。今のEvernote(砂場)の構造はこう。</p>
@@ -278,10 +278,10 @@ pp @e.getNote(@NotebookGuid)</pre>
 <h2>EDAM(Evernote Data Access and Management)</h2>
 <ul><li><a href="http://d.hatena.ne.jp/soutaro/20110910/1315645433">Evernote Synchronization via EDAMを読みました - soutaroにっき</a></li></ul>
 <h2>UserStoreとは</h2>
-<blockquote><p>The UserStore service is primarily used by EDAM clients to establish authentication via username and password over a trusted connection (e.g. SSL). A client's first call to this interface should be checkVersion() to ensure that the client's software is up to date. </p></blockquote>
+<blockquote><p>The UserStore service is primarily used by EDAM clients to establish authentication via username and password over a trusted connection (e.g. SSL). A client&#39;s first call to this interface should be checkVersion() to ensure that the client&#39;s software is up to date. </p></blockquote>
 <p>ユーザ名やパスワードを信頼された接続上で認証するためEDAMクライアントで利用される。はじめにcheckVersion()メソッドを呼び、クライアントのソフトのバージョンが最新である事を保障すべき。</p>
 <h2>NoteStoreとは</h2>
-<blockquote><p>The NoteStore service is used by EDAM clients to exchange information about the collection of notes in an account. This is primarily used for synchronization, but could also be used by a "thin" client without a full local cache.</p><p>All functions take an "authenticationToken" parameter, which is the value returned by the UserStore which permits access to the account. This parameter is mandatory for all functions. </p></blockquote>
+<blockquote><p>The NoteStore service is used by EDAM clients to exchange information about the collection of notes in an account. This is primarily used for synchronization, but could also be used by a &quot;thin&quot; client without a full local cache.</p><p>All functions take an &quot;authenticationToken&quot; parameter, which is the value returned by the UserStore which permits access to the account. This parameter is mandatory for all functions. </p></blockquote>
 <p>アカウントのノート収集情報を交換、同期するためEDAMクライアントで利用される。(ローカルキャッシュのない新クライアントでも使われた)全ての機能はauthenticationTokenのパラメータを使用する。これはアクセス認証が通ったアカウントのUserStoreの値を使用する。</p>
 <div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: requireがファイルを読み込むときに検索するディレクトリの名前を含む配列 - たのしいRuby 第三版 P373</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: キャメルケースを多用してる…？　と思ったけど、xxx_yyyZzzzみたいなメソッドもあるなあ。どっちにあわせれば…</p><p class="footnote"><a href="#fn3" name="f3">*3</a>: Evernote::EDAM::Limits::EDAM_GUID_REGEX</p></div>
 </div>
@@ -393,16 +393,28 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/12/27/1324911
   
     
       <li>
+        <span>2016/01/12</span>
+        
+          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+        
+        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        </a>
+      </li>
+    
+      <li>
         <span>2015/12/01</span>
         
           <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
         
           <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
         </a>
       </li>
     
@@ -518,18 +530,6 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/12/27/1324911
         </a>
       </li>
     
-      <li>
-        <span>2015/03/14</span>
-        
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
-        
-        <a href="/2015/03/14/jekyll-changed-bindaddress">Jekyllがデフォルトでは外部から繋がらなくなってたよ</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/03/14/jekyll-changed-bindaddress/" />
-        </a>
-      </li>
-    
   
 </ul>
 
@@ -582,7 +582,7 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/12/27/1324911
       <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>2</sub></a></li>
+      <li><a href="/tags.html#Golang">Golang <sub>3</sub></a></li>
     
       
       <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
