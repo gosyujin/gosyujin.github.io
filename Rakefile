@@ -96,3 +96,7 @@ task :page do
     post.puts ""
   end
 end # task :page
+
+task :draft do
+  sh "git clone git@gist.github.com:abae40a146d7c7608093.git _drafts"
+end
