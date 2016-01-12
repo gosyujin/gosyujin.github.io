@@ -111,7 +111,7 @@
 			@defaultCount = 20
 		end
 	end</pre>
-<ul><li>初期化した後、トップレベル<span class="footnote"><a href="#f1" title="デフォルトだと個人用フォルダ、保存フォルダみたいな名前かな。ostファイル単位？" name="fn1">*1</a></span>のメールフォルダ全部を取得してます。</li><li>コマンドから選べるように{num =&gt; EntryID}のハッシュを作っておきます。{ &quot;1&quot; =&gt; &quot;受信トレイのEntryID&quot; }みたいな。</li></ul>
+<ul><li>初期化した後、トップレベル<span class="footnote"><a href="#f1" title="デフォルトだと個人用フォルダ、保存フォルダみたいな名前かな。ostファイル単位？" name="fn1">*1</a></span>のメールフォルダ全部を取得してます。</li><li>コマンドから選べるように{num => EntryID}のハッシュを作っておきます。{ "1" => "受信トレイのEntryID" }みたいな。</li></ul>
 <pre class="ruby">	# ルートからフォルダの一覧を取得する
 	def folders(count=@defaultCount)
 		folders = @nameSpace.Folders
@@ -145,7 +145,7 @@
 			end
 		end
 	end</pre>
-<ul><li>フォルダ一覧から一つ選んだら、そのフォルダ内のメール一覧を取得します。</li><li>これもコマンドから選べるように{num =&gt; EntryID}のハッシュを作っておきます。{ &quot;1&quot; =&gt; &quot;とあるメールのEntryID&quot; }みたいな。</li></ul>
+<ul><li>フォルダ一覧から一つ選んだら、そのフォルダ内のメール一覧を取得します。</li><li>これもコマンドから選べるように{num => EntryID}のハッシュを作っておきます。{ "1" => "とあるメールのEntryID" }みたいな。</li></ul>
 <pre class="ruby">	# entryIdを元に対象フォルダのメール一覧を取得する
 	def mails(entryId, count=@defaultCount)
 		f = @nameSpace.GetFolderFromID(entryId)

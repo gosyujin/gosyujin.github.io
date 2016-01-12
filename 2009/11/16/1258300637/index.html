@@ -78,10 +78,10 @@
 <div class="content">
 <p>　まずは基本的な句のまとめから。</p>
 <h1>論理演算子の優先順位</h1>
-<ul><li>NOT &gt; AND &gt; OR</li></ul>
+<ul><li>NOT > AND > OR</li></ul>
 <p>　本当はもっと演算子の優先順位はあるけど、とりあえず引っかかったところだけ。ANDの方がORよりも早いです。</p>
 <h1>WHERE句</h1>
-<ul><li>文字、日付は&#39;(シングルクォーテーション)で囲む</li><li>文字列の大文字小文字は区別される</li><li>日付データのデフォルト値はDD-MON-RR</li><li>WHERE句では列別名は使えない！<ul><li>ただし、ORDER BY句では使用できる！<span class="footnote"><a href="#f1" title="これなんでなんだろう？　処理の順番とか優先順位的なものがあるのかな？" name="fn1">*1</a></span></li></ul></li></ul>
+<ul><li>文字、日付は'(シングルクォーテーション)で囲む</li><li>文字列の大文字小文字は区別される</li><li>日付データのデフォルト値はDD-MON-RR</li><li>WHERE句では列別名は使えない！<ul><li>ただし、ORDER BY句では使用できる！<span class="footnote"><a href="#f1" title="これなんでなんだろう？　処理の順番とか優先順位的なものがあるのかな？" name="fn1">*1</a></span></li></ul></li></ul>
 <p>　例。普通のSQL文です。。</p>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20091106011618"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091106/20091106011618.png"></a></p>
 <p>　id列をXYZと名前付けてこいつをWHERE句で使おうとすると…。</p>
@@ -89,7 +89,7 @@
 <p>　エラーになります。しかし、name列をXYZと名前付けてORDER BY句で使おうとすると…。</p>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20091106011756"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091106/20091106011756.png"></a></p>
 <p>　使えます！</p>
-<h1>BETWEEN &#39;○&#39; AND &#39;△&#39;</h1>
+<h1>BETWEEN '○' AND '△'</h1>
 <p>　○～△で合致するものを探す。こんなテーブルで…</p>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20091106010119"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091106/20091106010119.png"></a></p>
 <p>　nameが1から9で合致するものを探す。</p>
@@ -97,18 +97,18 @@
 <p>　1から2で合致するもの。</p>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20091106010121"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091106/20091106010121.png"></a></p>
 <p><span class="footnote"><a href="#f2" title="何か、文字列でBETWEEN使ってるシーンをどこかで見た事ある気がするんだけど幻覚かなぁ。" name="fn2">*2</a></span></p>
-<h1>name (NOT) IN(&#39;AA&#39;, &#39;BB&#39;)</h1>
-<p>　AA、BBいずれかに合致すれば取得します。下図の場合はname列の中からY&#39;s IかY&#39;s II<span class="footnote"><a href="#f3" title="以前使ったシングルクォーテーション重ねと代替引用符を使用しています。" name="fn3">*3</a></span>に合致する値を探してくるので、</p>
+<h1>name (NOT) IN('AA', 'BB')</h1>
+<p>　AA、BBいずれかに合致すれば取得します。下図の場合はname列の中からY's IかY's II<span class="footnote"><a href="#f3" title="以前使ったシングルクォーテーション重ねと代替引用符を使用しています。" name="fn3">*3</a></span>に合致する値を探してくるので、</p>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20091116003449"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091116/20091116003449.jpg"></a></p>
 <p>　こうなります。</p>
-<p>　一方、NOTは合致しないものを取得します。Y&#39;s IとY&#39;s II以外の値を取得します。</p>
+<p>　一方、NOTは合致しないものを取得します。Y's IとY's II以外の値を取得します。</p>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20091116003450"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091116/20091116003450.jpg"></a></p>
-<h1>name LIKE &#39;%AA%&#39;</h1>
+<h1>name LIKE '%AA%'</h1>
 <p>　(任意の文字列)AA(任意の文字列)に合致するものを探します。他には_(アンダーバー)があります。</p>
-<p>　NAME = &#39;%AA%&#39;のように=で比較してしまうと完全なる%AA%この文字列と合致するものを探します。</p>
-<h1>name LIKE &#39;%A\_A%&#39; ESCAPE &#39;\&#39;</h1>
-<p>　(任意の文字列)A_A(任意の文字列)を探したい時にname LIKE &#39;%A_A%&#39;としてしまうと、_はワイルドカードと判断されてしまうのでエスケープ。</p>
-<h1>name &gt;= &#39;SQL&#39;</h1>
+<p>　NAME = '%AA%'のように=で比較してしまうと完全なる%AA%この文字列と合致するものを探します。</p>
+<h1>name LIKE '%A\_A%' ESCAPE '\'</h1>
+<p>　(任意の文字列)A_A(任意の文字列)を探したい時にname LIKE '%A_A%'としてしまうと、_はワイルドカードと判断されてしまうのでエスケープ。</p>
+<h1>name >= 'SQL'</h1>
 <p>　指定文字よりも文字コードが前のものに合致(？)。SQLは満たすとして、○SQK、○SP、○S、×SQM、×SR、×Tとなります。</p>
 <h1>name IS (NOT) NULL</h1>
 <p>　name = NULLではUNKNOWNが返ってくるのでNULLは取得できません。また、値が設定されていないカラムはNULLとされるので、検索するにはIS NULLしかありません。=で比較してしまうと結果は不定となってしまうようです。</p>

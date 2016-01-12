@@ -76,7 +76,7 @@
 <div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#前回までのあらすじ'>前回までのあらすじ</a></li><li><a href='#結論'>結論</a></li><ul><li><a href='#レジストリ-ie-の設定-から'>レジストリ( IE の設定)から</a></li><li><a href='#環境変数から'>環境変数から</a></li></ul><li><a href='#内部の処理'>内部の処理</a></li><ul><li><a href='#環境変数-`http_proxy`-を設定している、ieのプロキシを設定している場合'>環境変数 `HTTP_PROXY` を設定している、IEのプロキシを設定している場合</a></li><li><a href='#環境変数-`http_proxy`-を設定していない、ieのプロキシを設定している場合'>環境変数 `HTTP_PROXY` を設定していない、IEのプロキシを設定している場合</a></li></ul></ul></ul><!-- end of tree list --></div></div>
 
 <div class="content">
-<h2 id=">前回までのあらすじ</h2>
+<h2 id="前回までのあらすじ">前回までのあらすじ</h2>
 
 <ul>
 <li><a href="http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy/">Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話</a></li>
@@ -94,13 +94,13 @@
 
 <p>なんでか気になったので調べた。</p>
 
-<h2 id=">結論</h2>
+<h2 id="結論">結論</h2>
 
 <p>http <strong>以外</strong> の proxy 設定をしていなかったから。というマヌケなオチ。</p>
 
 <p>次から気をつけよう。</p>
 
-<h3 id="ie">レジストリ( IE の設定)から</h3>
+<h3 id="レジストリ-ie-の設定-から">レジストリ( IE の設定)から</h3>
 
 <p>IE の 設定では、 <code>ツール &gt; インターネットオプション &gt; 接続 &gt; LAN の設定 &gt; 詳細設定</code> の Secure にも proxy の設定が入れていた。</p>
 
@@ -110,7 +110,7 @@
 
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">[(</span><span class="s">&#39;http&#39;</span><span class="p">,</span> <span class="s">&#39;http://PROXY:PORT/&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;https&#39;</span><span class="p">,</span> <span class="s">&#39;https://PROXY:PORT/&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;ftp&#39;</span><span class="p">,</span> <span class="s">&#39;ftp://PROXY:PORT&#39;</span><span class="p">)]</span></code></pre></div>
 
-<h3 id=">環境変数から</h3>
+<h3 id="環境変数から">環境変数から</h3>
 
 <p>一方、環境変数には <code>HTTP_PROXY</code> しか指定していなかった。 <code>proxies</code> を出力するとこう。</p>
 
@@ -118,11 +118,11 @@
 
 <p>なので、環境変数に <code>HTTPS_PROXY</code> : <code>https://PROXY:PORT/</code> を追加すると無事に easy_install できた！</p>
 
-<h2 id=">内部の処理</h2>
+<h2 id="内部の処理">内部の処理</h2>
 
 <p>内部がどうなっているのか見てみよう。</p>
 
-<h3 id="http_proxy-ie">環境変数 <code>HTTP_PROXY</code> を設定している、IEのプロキシを設定している場合</h3>
+<h3 id="環境変数-http_proxy-を設定している、ieのプロキシを設定している場合">環境変数 <code>HTTP_PROXY</code> を設定している、IEのプロキシを設定している場合</h3>
 
 <p>この場合、環境変数 <code>HTTP_PROXY</code> が使われる。</p>
 
@@ -176,7 +176,7 @@
 
 <p>これで <code>HTTP_PROXY</code> が見つかって <code>proxies</code> にぶちこまれてる。</p>
 
-<h3 id="http_proxy-ie">環境変数 <code>HTTP_PROXY</code> を設定していない、IEのプロキシを設定している場合</h3>
+<h3 id="環境変数-http_proxy-を設定していない、ieのプロキシを設定している場合">環境変数 <code>HTTP_PROXY</code> を設定していない、IEのプロキシを設定している場合</h3>
 
 <p>この場合、 IE の proxy 設定をレジストリから探しに行く。</p>
 

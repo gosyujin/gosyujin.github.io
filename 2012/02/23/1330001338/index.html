@@ -85,12 +85,12 @@
 <h1>上記の原因</h1>
 <p>cloneできない問題はJenkins実行時にgit.exeにパスが通ってなかった、設定していなかったという非常に残念なものだった。Jenkins実践入門にも手順が書いてあった。<span class="footnote"><a href="#f1" title="環境がアレだったので、proxyの設定とかその辺も探してしまった。" name="fn1">*1</a></span></p>
 <h1>Jenkinsの「ビルド実行」でGitリポジトリのソースのテストをする</h1>
-<ul><li>Jenkinsの管理 =&gt; プラグインの管理 =&gt; Jenkins GIT plugin をインストール</li><li>新規ジョブ作成 =&gt; フリースタイル・プロジェクト でプロジェクト作成</li><li>ソースコードシステム<ul><li>Gitを選択</li><li>リポジトリを入力<ul><li>C:\project\excel_for_ruby</li></ul></li></ul></li><li>ビルド<ul><li>Windowsバッチコマンドの実行<ul><li>rspecを実行できるように記述する</li></ul></li></ul></li></ul>
+<ul><li>Jenkinsの管理 => プラグインの管理 => Jenkins GIT plugin をインストール</li><li>新規ジョブ作成 => フリースタイル・プロジェクト でプロジェクト作成</li><li>ソースコードシステム<ul><li>Gitを選択</li><li>リポジトリを入力<ul><li>C:\project\excel_for_ruby</li></ul></li></ul></li><li>ビルド<ul><li>Windowsバッチコマンドの実行<ul><li>rspecを実行できるように記述する</li></ul></li></ul></li></ul>
 <pre>cd &quot;C:\project\excel_for_ruby&quot;
 rspec -fs spec\*</pre>
 <p>これでビルドするとはじめのcloneできないエラー。</p>
 <pre>Error cloning remote repo 'origin' : Could not clone C:\project\excel_for_ruby</pre>
-<ul><li>Jenkinsから見たGitのパスを設定<ul><li>Jenkinsの管理 =&gt; システムの設定<ul><li>Gitのパスを追加するフォームがあるのでこれを追加</li><li>Nameもなんでもいいから入力する(Defaultにした)</li></ul></li></ul></li></ul>
+<ul><li>Jenkinsから見たGitのパスを設定<ul><li>Jenkinsの管理 => システムの設定<ul><li>Gitのパスを追加するフォームがあるのでこれを追加</li><li>Nameもなんでもいいから入力する(Defaultにした)</li></ul></li></ul></li></ul>
 <h1>GitでCommitしたらJenkinsがビルドをしてくれるようにする</h1>
 <p>「wget ビルド実行パス」というコマンドをGitのフックスクリプトに記述すればコミット時にビルド実行できるらしい。とりあえずWindows用のwgetを取得。<a href="http://users.ugent.be/~bpuype/wget/">WGET 1.11.4 for Windows (win32)</a></p>
 <p>プロジェクト内の.git/hooks/post-commitを編集。</p>
