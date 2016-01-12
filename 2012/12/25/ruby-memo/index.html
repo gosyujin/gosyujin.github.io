@@ -76,11 +76,11 @@
 <div class="content">
 <p>この投稿はRuby Advent Calendar 2012の16日目の記事としてQiitaに投稿したものです。</p>
 
-<h2 id=">はじめに</h2>
+<h2 id="はじめに">はじめに</h2>
 
 <p>あんまりRuby関係ないんですが、一応、The RSpec Bookを読んでいて知ったのがきっかけなので…。</p>
 
-<h2 id=">あらすじ</h2>
+<h2 id="あらすじ">あらすじ</h2>
 
 <p>The RSpec Book のletの解説には以下のように記述されています。</p>
 
@@ -97,11 +97,11 @@
 
 <p>これをメモ化というそうです。で、メモ化って？</p>
 
-<h2 id=">一番簡単なメモ化</h2>
+<h2 id="一番簡単なメモ化">一番簡単なメモ化</h2>
 
 <p>調べてみると、だいたいフィボナッチ数を求める例が多い。なのでn番目のフィボナッチ数を求めるメソッドを書いてみる。</p>
 
-<h3 id=">普通に書いた場合</h3>
+<h3 id="普通に書いた場合">普通に書いた場合</h3>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
   <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="k">then</span>
@@ -115,7 +115,7 @@
 
 <p>これを <code>メモ化</code> してみる。</p>
 
-<h3 id=">メモ化した場合</h3>
+<h3 id="メモ化した場合">メモ化した場合</h3>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># こっちは変わらず</span>
 <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
@@ -132,7 +132,7 @@
 
 <p>実行すると、最初の一発目は同じくらい遅いんだけど、一回実行すればキャッシュとして <code>@cache</code> に格納されるので二回目以降はバク速で求められる。</p>
 
-<h2 id=">||= とは</h2>
+<h2 id="とは">||= とは</h2>
 
 <p>上の例の <code>@cache[n] ||= f(n)</code> は <code>@cache[n] = @cache[n] || f(n)</code> と同義。@cache[n]が真ならば@cache[n]を返す。偽ならnのフィボナッチ数を求める。 <strong>@cache[n]が真ならば、f(n)は評価しない、実行しない</strong> 。だから早い。</p>
 
