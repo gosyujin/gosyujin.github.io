@@ -126,53 +126,53 @@ end</pre>
 <h2>プラグインをデバッグしたい場合</h2>
 <ul><li>fluentdコマンド実行するときに-vvオプションを指定する事でデバッグメッセージが表示できる。</li><li>デバッグにはstdoutかcopyが役に立つ<ul><li>stdoutはマッチしたイベントをコンソールに出力する</li><li>copyはマッチしたイベントを複数のプラグインにコピーできる<ul><li>stdoutと一緒に使う事ができる</li></ul></li></ul></li></ul>
 <h1>Configファイル</h1>
-<p>>|?|</p>
+<p>&gt;|?|</p>
 <p># Inputプラグイン指定</p>
 <p><source></p>
 <p>  type simple_in</p>
 <p></source></p>
-<p># Fluent::Engine.emit("simple.output", Fluent::Engine.now, {"simple" => "simout"})</p>
+<p># Fluent::Engine.emit(&quot;simple.output&quot;, Fluent::Engine.now, {&quot;simple&quot; =&gt; &quot;simout&quot;})</p>
 <p># simple.outputタグ指定した方はsimple_output(Outputプラグイン)出力にマッチする</p>
 <p><match simple.output></p>
 <p>  type simple_out</p>
 <p></match></p>
 <p>#</p>
 <p>## match tag=debug.** and dump to console</p>
-<p># Fluent::Engine.emit("debug.debug", Fluent::Engine.now, {"simple" => "debudebu"})  </p>
+<p># Fluent::Engine.emit(&quot;debug.debug&quot;, Fluent::Engine.now, {&quot;simple&quot; =&gt; &quot;debudebu&quot;})  </p>
 <p># debug.debugタグ指定した方はstdout出力にマッチする</p>
 <p><match debug.**></p>
 <p>  type stdout</p>
 <p></match></p>
-<table><tr><td><</td></tr></table>
+<table><tr><td>&lt;</td></tr></table>
 <p>これを実行すると…。</p>
-<p>>|?|</p>
+<p>&gt;|?|</p>
 <p>$ bundle exec fluentd -c /home/kk_Ataka/fluentd/fluent.conf -p /home/kk_Ataka/fluentd/plugin/</p>
 <p>2012-08-17 22:19:41 +0900: starting fluentd-0.10.24</p>
-<p>2012-08-17 22:19:41 +0900: reading config file path="/home/kk_Ataka/fluentd/fluent.conf"</p>
+<p>2012-08-17 22:19:41 +0900: reading config file path=&quot;/home/kk_Ataka/fluentd/fluent.conf&quot;</p>
 <p>(略)</p>
 <p>2012-08-17 22:19:41 +0900: following tail of /usr/local/apache2/logs/access_log</p>
 <p>2012-08-17 22:19:41 +0900: following tail of /usr/local/apache2/logs/error_log</p>
-<p>2012-08-17 22:19:41 +0900 debug.debug: {"simple":"debudebu"}</p>
-<p>simple_out: 1345209581 - {"simple"=>"simout"}</p>
-<p>2012-08-17 22:19:42 +0900 debug.debug: {"simple":"debudebu"}</p>
-<p>simple_out: 1345209582 - {"simple"=>"simout"}</p>
-<p>2012-08-17 22:19:43 +0900 debug.debug: {"simple":"debudebu"}</p>
-<p>simple_out: 1345209583 - {"simple"=>"simout"}</p>
-<p>2012-08-17 22:19:44 +0900 debug.debug: {"simple":"debudebu"}</p>
-<p>simple_out: 1345209584 - {"simple"=>"simout"}</p>
-<p>2012-08-17 22:19:45 +0900 debug.debug: {"simple":"debudebu"}</p>
-<p>simple_out: 1345209585 - {"simple"=>"simout"}</p>
-<p>2012-08-17 22:19:46 +0900 debug.debug: {"simple":"debudebu"}</p>
-<p>simple_out: 1345209586 - {"simple"=>"simout"}</p>
-<table><tr><td><</td></tr></table>
+<p>2012-08-17 22:19:41 +0900 debug.debug: {&quot;simple&quot;:&quot;debudebu&quot;}</p>
+<p>simple_out: 1345209581 - {&quot;simple&quot;=&gt;&quot;simout&quot;}</p>
+<p>2012-08-17 22:19:42 +0900 debug.debug: {&quot;simple&quot;:&quot;debudebu&quot;}</p>
+<p>simple_out: 1345209582 - {&quot;simple&quot;=&gt;&quot;simout&quot;}</p>
+<p>2012-08-17 22:19:43 +0900 debug.debug: {&quot;simple&quot;:&quot;debudebu&quot;}</p>
+<p>simple_out: 1345209583 - {&quot;simple&quot;=&gt;&quot;simout&quot;}</p>
+<p>2012-08-17 22:19:44 +0900 debug.debug: {&quot;simple&quot;:&quot;debudebu&quot;}</p>
+<p>simple_out: 1345209584 - {&quot;simple&quot;=&gt;&quot;simout&quot;}</p>
+<p>2012-08-17 22:19:45 +0900 debug.debug: {&quot;simple&quot;:&quot;debudebu&quot;}</p>
+<p>simple_out: 1345209585 - {&quot;simple&quot;=&gt;&quot;simout&quot;}</p>
+<p>2012-08-17 22:19:46 +0900 debug.debug: {&quot;simple&quot;:&quot;debudebu&quot;}</p>
+<p>simple_out: 1345209586 - {&quot;simple&quot;=&gt;&quot;simout&quot;}</p>
+<table><tr><td>&lt;</td></tr></table>
 <p>1秒刻みでプラグインに記述した内容が出力される。こっちが標準のstdout出力。</p>
-<p>>|?|</p>
-<p>2012-08-17 22:19:46 +0900 debug.debug: {"simple":"debudebu"}</p>
-<table><tr><td><</td></tr></table>
+<p>&gt;|?|</p>
+<p>2012-08-17 22:19:46 +0900 debug.debug: {&quot;simple&quot;:&quot;debudebu&quot;}</p>
+<table><tr><td>&lt;</td></tr></table>
 <p>こっちが自分で記述したOutputプラグイン書式の出力。</p>
-<p>>|?|</p>
-<p>simple_out: 1345209586 - {"simple"=>"simout"}</p>
-<table><tr><td><</td></tr></table>
+<p>&gt;|?|</p>
+<p>simple_out: 1345209586 - {&quot;simple&quot;=&gt;&quot;simout&quot;}</p>
+<table><tr><td>&lt;</td></tr></table>
 </div>
 
 <div class="pagination">

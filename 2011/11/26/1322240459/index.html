@@ -88,7 +88,7 @@
 <ul><li>Ruby 1.9.3</li><li>Git 1.7.3</li><li>rvm 1.9.2</li><li>gem 1.8.10<ul><li>gem管理にbundlerを使いたい</li></ul></li></ul>
 <h1>プロジェクト作成</h1>
 <h2>Bundler準備</h2>
-<p>プロジェクトフォルダ(heroku_sample)を作成し、その中にGemfileファイルを作成する。gem 'heroku'は後ほどHerokuに対してプロジェクトを作ったりするのに使用する。</p>
+<p>プロジェクトフォルダ(heroku_sample)を作成し、その中にGemfileファイルを作成する。gem &#39;heroku&#39;は後ほどHerokuに対してプロジェクトを作ったりするのに使用する。</p>
 <pre class="ruby">$ mkdir heroku_sample
 $ cd heroku_sample
 $ vi Gemfile
@@ -111,14 +111,14 @@ end</pre>
 <p>Rackアプリケーションとして起動するためconfig.ruファイルを作成する。</p>
 <pre class="ruby">require './app.rb'
 run Sinatra::Application</pre>
-<p><span class="deco" style="color:#FF0000;">※ちょっと先の話になるけど、始めは1行目をrequire 'app.rb'としていた。それでもローカルでは問題なくロードして動作してたし。が、Herokuにデプロイすると下記のようなログを吐きエラーとなった。</span></p>
+<p><span class="deco" style="color:#FF0000;">※ちょっと先の話になるけど、始めは1行目をrequire &#39;app.rb&#39;としていた。それでもローカルでは問題なくロードして動作してたし。が、Herokuにデプロイすると下記のようなログを吐きエラーとなった。</span></p>
 <pre>2011-11-23T08:10:02+00:00 heroku[web.1]: State changed from created to starting
 2011-11-23T08:10:03+00:00 heroku[web.1]: Starting process with command `thin -p 54821 -e production -R /home/heroku_rack/heroku.ru start`
 2011-11-23T08:10:04+00:00 app[web.1]: &lt;internal:lib/rubygems/custom_require&gt;:29:in `require': no such file to load -- .app.rb (LoadError)
 2011-11-23T08:10:04+00:00 app[web.1]:      from &lt;internal:lib/rubygems/custom_require&gt;:29:in `require'
 2011-11-23T08:10:04+00:00 app[web.1]:      from config.ru:1:in `block (3 levels) in &lt;main&gt;'
 ...</pre>
-<p><span class="deco" style="color:#FF0000;">ん？　`require': no such file to load -- .app.rb (LoadError)ってなんでapp.rbでロードエラーしてんの？　何か設定し忘れ？　――HerokuのRubyはデフォルトで1.9.2になっているということがわかった。そして、Ruby1.9.2からロードパスにカレントディレクトリが含まれなくなったらしく。カレントディレクトリのファイルは./で明示的に教えてあげないといけないようなのでした。うーんRuby1.9.2からの仕様だったのか。1.8ばっかり使ってたからしらなんだ。</span></p>
+<p><span class="deco" style="color:#FF0000;">ん？　`require&#39;: no such file to load -- .app.rb (LoadError)ってなんでapp.rbでロードエラーしてんの？　何か設定し忘れ？　――HerokuのRubyはデフォルトで1.9.2になっているということがわかった。そして、Ruby1.9.2からロードパスにカレントディレクトリが含まれなくなったらしく。カレントディレクトリのファイルは./で明示的に教えてあげないといけないようなのでした。うーんRuby1.9.2からの仕様だったのか。1.8ばっかり使ってたからしらなんだ。</span></p>
 <ul><li><a href="http://d.hatena.ne.jp/ruedap/20110531/ruby_require_load_path">Rubyでrbファイルをrequireするときはドットを打つと良さそう - アインシュタインの電話番号☎</a></li><li><a href="http://www.ruby-lang.org/ja/news/2010/08/18/ruby-1-9-2-is-released/#label-8">Ruby 1.9.2ãªãªã¼ã¹</a></li></ul>
 <h2>Gitの管理下に</h2>
 <p>で、戻ってきて…次にgitの管理対象におく。(今はまだやる必要ないけど、先にすませとく)bundle系のファイルはignoreしておく。</p>

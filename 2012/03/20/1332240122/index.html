@@ -86,7 +86,7 @@
 <ul><li><a href="https://github.com/relevance/rcov">relevance/rcov · GitHub</a></li><li><a href="http://rubygems.org/gems/rcov">rcov | RubyGems.org | your community gem host</a></li><li><a href="http://www.freia.jp/taka/blog/762/">2011/09/06 Rubyのrcov-0.9.8 for Windows のビルド - 清水川Web</a></li></ul>
 <h1>先に結論</h1>
 <p>Windows環境ではWindows用に自力でビルドしなければならない！</p>
-<ul><li><a href="http://rubygems.org/gems/rcov">rcov | RubyGems.org | your community gem host</a>よりgemをDL</li><li><a href="http://www.microsoft.com/japan/msdn/vstudio/express/">Microsoft Visual Studio Express</a>からVisual C++ 2010 Express Editionを入手しインストール</li><li>全てのプログラム -> Microsoft Visual Studio 2010 Express -> Visual Studio コマンド プロンプト (2010)を起動。以後ビルドはこのプロンプトで実施する</li><li>%RUBY_HOME%\lib\ruby\1.8\i386-mswin32\のconfig.hのMSC_VERの記述を一旦消す</li></ul>
+<ul><li><a href="http://rubygems.org/gems/rcov">rcov | RubyGems.org | your community gem host</a>よりgemをDL</li><li><a href="http://www.microsoft.com/japan/msdn/vstudio/express/">Microsoft Visual Studio Express</a>からVisual C++ 2010 Express Editionを入手しインストール</li><li>全てのプログラム -&gt; Microsoft Visual Studio 2010 Express -&gt; Visual Studio コマンド プロンプト (2010)を起動。以後ビルドはこのプロンプトで実施する</li><li>%RUBY_HOME%\lib\ruby\1.8\i386-mswin32\のconfig.hのMSC_VERの記述を一旦消す</li></ul>
 <pre>#if _MSC_VER != 1200
 #error MSC version unmatch: _MSC_VER: 1200 is expected.
 #endif</pre>
@@ -112,7 +112,7 @@ nmake
 
 Gem files will remain installed in C:/project/excel_for_ruby/vendor/bundle/ruby/1.8/gemsResults logged to C:/project/excel_for_ruby/vendor/bundle/ruby/1.8/gems/rcov-1.0.0/ext/rAn error occured while installing rcov (1.0.0), and Bundler cannot continue.
 Make sure that `gem install rcov -v '1.0.0'` succeeds before bundling.</pre>
-<p>bundlingする前にgem install rcov -v '1.0.0'してくれと？　Bundler管理下にはおけないのだろうか。</p>
+<p>bundlingする前にgem install rcov -v &#39;1.0.0&#39;してくれと？　Bundler管理下にはおけないのだろうか。</p>
 <p>じゃあGemfileから記述を消して、ターミナルからgem installするか。</p>
 <pre>$ gem install rcov -v '1.0.0'
 
@@ -187,7 +187,7 @@ Stop.
 Gem files will remain installed in C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.0.0 for inspection.
 Results logged to C:/rubies/Ruby/lib/ruby/gems/1.8/gems/rcov-1.0.0/ext/rcovrt/gem_make.ou</pre>
 <p>エラった！　っけど一歩進んだ？clui.dllがないと。うーん。</p>
-<p>ここで全てのプログラムにMicrosoft Visual Studio 2010 Express -> Visual Studio コマンド プロンプト (2010)というメニューが増えている事に気づく。きちんとVisual Studio用の設定がなされていなかったから失敗したんだ多分！　再度挑戦。</p>
+<p>ここで全てのプログラムにMicrosoft Visual Studio 2010 Express -&gt; Visual Studio コマンド プロンプト (2010)というメニューが増えている事に気づく。きちんとVisual Studio用の設定がなされていなかったから失敗したんだ多分！　再度挑戦。</p>
 <pre>C:\rubies\Ruby\lib\ruby\gems\1.8\cache&gt;gem install --local rcov-1.0.0.gem
 Building native extensions.  This could take a while...
 ERROR:  Error installing rcov-1.0.0.gem:

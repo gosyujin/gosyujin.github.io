@@ -95,7 +95,7 @@ $ sudo make install</pre>
 ┗site-lisp      # Emacsのバージョン関係なく使える？</pre>
 <h1>設定ファイル</h1>
 <p>設定ファイルは以下のファイルのうち、優先順位に従って一つ読み込まれる</p>
-<ul><li>~/.emacs.el > ~/.emacs > ~/.emacs.d/init.el > ~/.emacs.d/init</li></ul>
+<ul><li>~/.emacs.el &gt; ~/.emacs &gt; ~/.emacs.d/init.el &gt; ~/.emacs.d/init</li></ul>
 <h1>前準備</h1>
 <h2>キーバインド</h2>
 <p>本とかネットなどに書いてある書式。この通りに押すとミニバッファに出力される</p>
@@ -108,9 +108,9 @@ $ sudo make install</pre>
 <p>例えば</p>
 <ul><li>C-v 次の画面に進む</li><li>M-v 前の画面に戻る</li></ul>
 <p>というコマンドがあり、C-vは普通に使えるが、M-vを押すと「&#402;」を出してしまう。<span class="footnote"><a href="#f1" title="一応、デフォルトでもescを押してからvとすると前の画面に戻るができるが、連打もできないししんどい。" name="fn1">*1</a></span></p>
-<p>メタキーとして使うにはターミナルの環境設定 => 設定 => キーボードタブの「メタキーとしてoptionキーを使用」にチェックを入れる</p>
+<p>メタキーとして使うにはターミナルの環境設定 =&gt; 設定 =&gt; キーボードタブの「メタキーとしてoptionキーを使用」にチェックを入れる</p>
 <h1>ファイル操作</h1>
-<p>$ emacs FILE_NAME でもファイルを作る&開く事はできるが、ここはemacsを起動した状態からファイルを開く。</p>
+<p>$ emacs FILE_NAME でもファイルを作る&amp;開く事はできるが、ここはemacsを起動した状態からファイルを開く。</p>
 <table><tr><th>キー</th><th>動作</th><th>備考</th></tr><tr><td>C-x C-f</td><td>ファイルを開く</td><td>ミニバッファからファイル名を入力できる(Tabで補完もきく)。<span class="footnote"><a href="#f2" title="存在しないファイル名を指定した場合はバッファが作成される。" name="fn2">*2</a></span></td></tr><tr><td>C-x C-s</td><td>ファイルを保存</td><td>変更を実際のファイルに書き込む</td></tr><tr><td>C-x s</td><td>開いている全てのファイルを保存</td><td>変更を実際のファイルに書き込むy/n等で1つずつ確認して保存できる</td></tr><tr><td>C-x C-w</td><td>ファイルを別名保存</td><td>ファイルを別名保存する</td></tr><tr><td>C-x i</td><td>別ファイルの内容を流し込む</td><td>指定した別ファイルの内容を流し込む</td></tr><tr><td>C-x RET f</td><td>文字コード、改行コード変換</td><td>ミニバッファから文字コード、改行コードを変更できる、後述</td></tr><tr><td>C-x b</td><td>バッファ切替</td><td>現在保持しているバッファの中から開くファイルを切り替える</td></tr><tr><td>C-x →</td><td>バッファ切替</td><td>順番にバッファのファイルを切り替える</td></tr><tr><td>C-x ←</td><td>バッファ切替</td><td>順番にバッファのファイルを切り替える</td></tr><tr><td>C-x k</td><td>バッファ消去</td><td>現在保持しているバッファの中から消去するファイルを選択する</td></tr></table>
 <h2>文字コード、改行コード操作</h2>
 <p>C-x RET f で文字コード、改行コードを変更できる。ミニバッファに</p>
@@ -119,7 +119,7 @@ $ sudo make install</pre>
 <table><tr><th>コマンド</th><th>動作</th></tr><tr><td>utf-8</td><td>utf-8に変換</td></tr><tr><td>utf-8-dos</td><td>utf-8に変換し、改行コードをCR+LF(Windows)に変換</td></tr><tr><td>utf-8-unix</td><td>utf-8に変換し、改行コードをLFに変換</td></tr><tr><td>utf-8-mac</td><td>utf-8に変換し、改行コードをCRに変換</td></tr><tr><td>sjis</td><td>sjisに変換</td></tr><tr><td>sjis-dos</td><td>sjisに変換し、改行コードをCR+LF(Windows)に変換</td></tr><tr><td>sjis-unix</td><td>sjisに変換し、改行コードをLFに変換</td></tr><tr><td>sjis-mac</td><td>sjisに変換し、改行コードをCRに変換</td></tr></table>
 <h1>カーソル操作</h1>
 <p>ファイル内を移動する。</p>
-<table><tr><th>キー</th><th>動作</th><th>備考</th></tr><tr><td>C-f</td><td>一文字進む</td><td>-</td></tr><tr><td>C-b</td><td>一文字戻る</td><td>-</td></tr><tr><td>C-n</td><td>一行進む</td><td>-</td></tr><tr><td>C-p</td><td>一行戻る</td><td>-</td></tr><tr><td>C-a</td><td>行頭へ</td><td>-</td></tr><tr><td>C-e</td><td>行末へ</td><td>-</td></tr><tr><td>C-v</td><td>一画面下へ</td><td>-</td></tr><tr><td>M-v</td><td>一画面上へ</td><td>-</td></tr><tr><td>M-<(M-S-,)</td><td>バッファの先頭へ</td><td>-</td></tr><tr><td>M->(M-S-.)</td><td>バッファの終端へ</td><td>-</td></tr><tr><td>M-g M-g</td><td>指定した行番号へ</td><td>Goto line: と表示され、入力した行番号へジャンプする</td></tr></table>
+<table><tr><th>キー</th><th>動作</th><th>備考</th></tr><tr><td>C-f</td><td>一文字進む</td><td>-</td></tr><tr><td>C-b</td><td>一文字戻る</td><td>-</td></tr><tr><td>C-n</td><td>一行進む</td><td>-</td></tr><tr><td>C-p</td><td>一行戻る</td><td>-</td></tr><tr><td>C-a</td><td>行頭へ</td><td>-</td></tr><tr><td>C-e</td><td>行末へ</td><td>-</td></tr><tr><td>C-v</td><td>一画面下へ</td><td>-</td></tr><tr><td>M-v</td><td>一画面上へ</td><td>-</td></tr><tr><td>M-&lt;(M-S-,)</td><td>バッファの先頭へ</td><td>-</td></tr><tr><td>M-&gt;(M-S-.)</td><td>バッファの終端へ</td><td>-</td></tr><tr><td>M-g M-g</td><td>指定した行番号へ</td><td>Goto line: と表示され、入力した行番号へジャンプする</td></tr></table>
 <pre>--
 M-&lt;(M-S-,)
 

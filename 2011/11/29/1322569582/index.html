@@ -80,7 +80,7 @@
 <p><a href="2011-11-28-1322482230">2011-11-28-1322482230</a>で出たRubyオプションのエラー。</p>
 <pre>$ bundle exec ruby app.rb
 ruby: invalid switch in RUBYOPT: -a (RuntimeError)</pre>
-<p>この-aオプションはどこから出てきたのかというと、"Documents and Settings"のaだという事がわかった。</p>
+<p>この-aオプションはどこから出てきたのかというと、&quot;Documents and Settings&quot;のaだという事がわかった。</p>
 <h1>結論</h1>
 <ul><li><span class="deco" style="color:#FF0000;">Rubyのインストールパスにスペースを含めない</span></li><li><span class="deco" style="color:#FF0000;">pikでRubyをインストールする前にpik config install_dir=XXXでパス指定する</span></li></ul>
 <p>先に結論を書くと、やっぱりこうだった。以下、調査ログ。</p>
@@ -99,7 +99,7 @@ ruby: illegal switch in RUBYOPT: -u (RuntimeError)</pre>
 <p>あぁやっぱりかー。</p>
 <h1>pikの設定変更</h1>
 <p>という事は、pik install時にデフォルトでDocuments and Settingsに入れられるのは避けなければならん。pikのhistoryにそれっぽいことが書いてあった。</p>
-<blockquote><p>=== 0.2.8 / 2010-06-22</p><h1>BACKWARD COMPATIBILITY CHANGE</h1><p>  pik will now install new rubies to %USERPROFILE%\rubies\, instead of %PIK_BIN%\pik\ this was necessary to all for installation into %PROGRAMFILES% dir. If you'd like to keep the old path, run:</p><p>    >pik config install_dir=C:\path\to\pik</p><cite><a href="https://github.com/vertiginous/pik/blob/master/History.txt">https://github.com/vertiginous/pik/blob/master/History.txt</a></cite></blockquote>
+<blockquote><p>=== 0.2.8 / 2010-06-22</p><h1>BACKWARD COMPATIBILITY CHANGE</h1><p>  pik will now install new rubies to %USERPROFILE%\rubies\, instead of %PIK_BIN%\pik\ this was necessary to all for installation into %PROGRAMFILES% dir. If you&#39;d like to keep the old path, run:</p><p>    &gt;pik config install_dir=C:\path\to\pik</p><cite><a href="https://github.com/vertiginous/pik/blob/master/History.txt">https://github.com/vertiginous/pik/blob/master/History.txt</a></cite></blockquote>
 <p>なるほど。pik configコマンドでパスを指定するのか。</p>
 <pre>$ pik config install_dir=C:\rubies\
 $ pik config
