@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <title>文字リテラルで'を使用する場合 - kk_Atakaの日記</title>
+    <title>Monitor - kk_Atakaの日記</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
     <link rel="stylesheet" href="/static/css/home.css">
@@ -34,141 +34,41 @@
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2009/10/31/1257000092">文字リテラルで'を使用する場合</a></h1>
+        <h1><a href="/monitor.html">Monitor</a></h1>
         <div class="published">
           
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags.html#Oracle" class="tag">Oracle</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags.html#SQL" class="tag">SQL</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2009/10/31</span>
           
         </div>
 
 
 
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2009/10/19/1255949562" title="PL/SQLとSQLの種類">
-          PL/SQLとSQLの種類
-        </a>
-      </li>
-    
-    <li>
-      <a href="/archives.html">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2009/11/01/1257053470" title="Oracle Database 10g Express Editionを導入します">
-          Oracle Database 10g Express Editionを導入します
-        </a>
-      </li>
-    
-  </ul>
+<h2 id="mackerel">Mackerel</h2>
+
+<h3 id="img">Img</h3>
+
+<div align="center">
+  <a href="https://mackerel.io/orgs/gosyujin/hosts/2AVg9zVvBeJ/-/graphs/filesystem">
+    <img src="https://mackerel.io/embed/orgs/gosyujin/hosts/2AVg9zVvBeJ.png?graph=filesystem&amp;period=24h0m" height="200" width="300">
+  </a>
+  <a href="https://mackerel.io/orgs/gosyujin/hosts/2AVg9zVvBeJ/-/graphs/loadavg5">
+    <img src="https://mackerel.io/embed/orgs/gosyujin/hosts/2AVg9zVvBeJ.png?graph=loadavg5&amp;period=24h0m" height="200" width="300">
+  </a>
 </div>
 
+<h3 id="monitor">Monitor</h3>
 
-
-
-<div class="content">
-<p>　シングルクォーテーションがクセモノな&#39;<span style="font-weight:bold;">Y&#39;s II</span>&#39; をきちんと挿入・表示させる。</p>
-<h1>シングルクォーテーションを重ねる</h1>
-<pre>insert into sample values(2, 'Y''s II')</pre>
-<p>　まず基本。シングルクォーテーションを重ねればOK。</p>
-<h1>代替引用符を使用する</h1>
-<p>　もしくは、Oracle 10gからサポートされた代替引用符(q or Q)で、任意の文字を引用符として使用する。</p>
-<pre>insert into sample values(3, q'aY's IIa')
-insert into sample values(3, q'%Y's II%')</pre>
-<p>　上はaで挟がった中がリテラルになり、下は%で挟がった中がリテラルになる。ちなみに任意の文字と指定文字が重なってしまった場合でも、</p>
-<pre>insert into sample values(3, q'sY's IIs')</pre>
-<p>　問題ない。頭とおしりできちんと見とるんかな。</p>
-<h1>091117追記</h1>
-<p>　どうやら、</p>
-<pre>insert into sample values(3, q'[Y's II]')
-insert into sample values(3, q'(Y's II)')</pre>
-<p>　こういう表記も良いらしい。(というか、こっちが主流？)文字や記号だと同じもので挟まないといけないのに、かっこは開きと閉じで対応させる様子。また、</p>
-<pre>insert into sample values(3, q'YY's IIY')</pre>
-<p>　これはダメだった。多分イースのイーの部分(Y&#39;)が終わりと見なされているから？　記号系では、</p>
-<pre>insert into sample values(3, q'&amp;Y's II&amp;')</pre>
-<p>　アンパサンドにすると、置換を求められた。</p>
+<div align="center">
+  <iframe src="https://mackerel.io/embed/orgs/gosyujin/hosts/2AVg9zVvBeJ?graph=filesystem&amp;period=24h0m" height="200" width="300" frameborder="0"></iframe>
+  <iframe src="https://mackerel.io/embed/orgs/gosyujin/hosts/2AVg9zVvBeJ?graph=loadavg5&amp;period=24h0m" height="200" width="300" frameborder="0"></iframe>
+  <hr />
+  <iframe src="https://mackerel.io/embed/orgs/gosyujin/hosts/2AVg9zVvBeJ?graph=cpu&amp;period=24h0m" height="200" width="300" frameborder="0"></iframe>
+  <iframe src="https://mackerel.io/embed/orgs/gosyujin/hosts/2AVg9zVvBeJ?graph=memory&amp;period=24h0m" height="200" width="300" frameborder="0"></iframe>
+  <hr />
+  <iframe src="https://mackerel.io/embed/orgs/gosyujin/hosts/2AVg9zVvBeJ?graph=interface&amp;period=24h0m" height="200" width="300" frameborder="0"></iframe>
+  <iframe src="https://mackerel.io/embed/orgs/gosyujin/hosts/2AVg9zVvBeJ?graph=disk&amp;period=24h0m" height="200" width="300" frameborder="0"></iframe>
 </div>
 
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2009/10/19/1255949562" title="PL/SQLとSQLの種類">
-          PL/SQLとSQLの種類
-        </a>
-      </li>
-    
-    <li>
-      <a href="/archives.html">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2009/11/01/1257053470" title="Oracle Database 10g Express Editionを導入します">
-          Oracle Database 10g Express Editionを導入します
-        </a>
-      </li>
-    
-  </ul>
-</div>
-
-
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2009/10/31/1257000092" data-text="kk_Atakaの日記 - 文字リテラルで'を使用する場合" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2009/10/31/1257000092/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2009/10/31/1257000092/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2009/10/31/1257000092/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - 文字リテラルで'を使用する場合"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2009/10/31/1257000092/"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+<p>MarkerelのAPI keyは <a href="https://mackerel.io/orgs/gosyujin">Mackerelオーガニゼーショントップページの概要</a> で取得できる、同じページのAPIキータブからも取得できる</p>
 
 
       </article>
