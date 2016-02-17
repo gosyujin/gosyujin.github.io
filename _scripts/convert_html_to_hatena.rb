@@ -62,7 +62,7 @@ files.each do |file|
       con.children.xpath('//div[@class="pagination"]').remove
       # remove disqus script
       con.children.xpath('//div[@id="disqus_thread"]').remove
-      con.children.xpath('//script').remove
+      con.children.xpath('//script[@type="text/javascript"]').remove
       con.children.xpath('//noscript').remove
       con.children.xpath('//a[@class="dsq-brlink"]').remove
       # remove social module
