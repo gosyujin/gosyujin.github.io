@@ -114,10 +114,7 @@ BulkRenamer ver.0.1
 - v0.2になっているのは一回試した後だから
 - 本来の流れ的にはブツ(bulkrenamer)を更新してreleasesに新しいバージョンを登録後、この操作を行う
 
-```
--  version "v0.2"
-+  version "v0.3"
-```
+<script src="https://gist.github.com/gosyujin/5c5ee96c7cc405405749.js"></script>
 
 `brew update`
 
