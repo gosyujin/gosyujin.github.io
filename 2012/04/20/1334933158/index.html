@@ -3,9 +3,17 @@
   <head>
     <title>ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした - kk_Atakaの日記</title>
     <meta charset="utf-8">
+    <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
     <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/toc.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/js/jquery.tocLight.js"></script>
+    <script type="text/javascript">
+       $(function() {
+         $.toc.clickHideButton();
+       });
+    </script>
   </head>
   <body>
     <script type="text/javascript">
@@ -25,25 +33,25 @@
       <nav>
         <ul>
           <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives.html">Archive</a>
-          <li class="main-nav"><a href="/tags.html">Tag</a>
-          <li class="main-nav"><a href="/monitor.html">Monitor</a>
+          <li class="main-nav"><a href="/archives/">Archive</a>
+          <li class="main-nav"><a href="/tags/">Tag</a>
+          <li class="main-nav"><a href="/monitor/">Monitor</a>
         </ul>
       </nav>
     </div>
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2012/04/20/1334933158">ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした</a></h1>
+        <h1><a href="/2012/04/20/1334933158/">ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags.html#Ruby" class="tag">Ruby</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Ruby" class="tag">Ruby</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#Windows" class="tag">Windows</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Windows" class="tag">Windows</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#備忘録" class="tag">備忘録</a></code> ]</span>
+              <span>[ <code><a href="/tags/#備忘録" class="tag">備忘録</a></code> ]</span>
             
           
           
@@ -57,17 +65,17 @@
   <ul>
     
       <li class="prev">
-        <a href="/2012/04/17/1334669770" title="Subversionで2ヶ所のリポジトリの同期を取るメモ">
+        <a href="/2012/04/17/1334669770/" title="Subversionで2ヶ所のリポジトリの同期を取るメモ">
           Subversionで2ヶ所のリポジトリの同期を取るメモ
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2012/04/22/1335108555" title=" Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo">
+        <a href="/2012/04/22/1335108555/" title=" Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo">
            Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo
         </a>
       </li>
@@ -76,30 +84,104 @@
 </div>
 
 
-
-
 <div class="content">
-<h1>前回までのあらすじ</h1>
-<ul><li><a href="2011-12-07-1323291938">2011-12-07-1323291938</a></li></ul>
+<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>Contents</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">Growls for Windowsインストール</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">Gem入手</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">.autotest</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-4">
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">実行</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-5">
+              <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">Windows用でないとダメみたい？</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-6">
+              <a href="#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">ZenTest実行されなくなった…</span></a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><h1>前回までのあらすじ</h1>
+<ul>
+  <li>
+    <a href="http://d.hatena.ne.jp/kk_Ataka/20111207/1323291938">2011-12-07-1323291938</a>
+  </li>
+</ul>
 <p>前回は、ファイル編集する -&gt; alt+tabでウィンドウ切り替える -&gt; プロンプトでrspecコマンドうつ…の繰り返しを改善することができた。</p>
 <p>今回は、コード修正、保存 -&gt; 違うターミナル切り替え -&gt; ZenTestで自動実行された結果を見る…の繰り返しを改善する。テスト結果通知にGrowlを使用する事でいけそう。</p>
 <h1>参考サイト</h1>
-<ul><li><a href="http://d.hatena.ne.jp/gan2/20080413/1208081539">RSpec を autotest で使う - gan2 の Ruby 勉強日記</a></li><li><a href="http://www.edit.ne.jp/~koic/?date=20070731">Railsのテスト環境を改めて- Windows / RSpec / ZenTest / Snarl - Day by day(2007-07-31)</a></li><li><a href="http://d.hatena.ne.jp/amacou/20090606/1244260607">ZenTest(autotest)のバージョン上げたらautotestが動かないので設定を変更する - AorBorF</a></li><li><a href="https://github.com/rspec/rspec/wiki/autotest">autotest · rspec/rspec Wiki · GitHub</a></li><li><a href="http://blog.masashi-fujiwara.net/2010/11/script-test.html">メタフィジクスとフィジクスの間で: テスト駆動開発の環境を整える(rspec + autotest + growl) (2010/11/07に大幅修正あり）</a></li><li><a href="https://github.com/karl/autotest-growl">karl/autotest-growl · GitHub</a></li><li><a href="http://rubyist.g.hatena.ne.jp/rochefort/20100414/p1">autospecの結果をgrowlで通知〜windows編 - うんたらかんたらRuby - Rubyist</a></li><li><a href="http://d.hatena.ne.jp/zariganitosh/20080312/1205305079">autotestのGrowl通知をカスタマイズする - ザリガニが見ていた...。</a></li><li><a href="http://blog.champierre.com/774">autotest + growl で楽々テスト - 僕は発展途上技術者</a></li></ul>
+<ul>
+  <li>
+    <a href="http://d.hatena.ne.jp/gan2/20080413/1208081539">RSpec を autotest で使う - gan2 の Ruby 勉強日記</a>
+  </li>
+  <li>
+    <a href="http://www.edit.ne.jp/~koic/?date=20070731">Railsのテスト環境を改めて- Windows / RSpec / ZenTest / Snarl - Day by day(2007-07-31)</a>
+  </li>
+  <li>
+    <a href="http://d.hatena.ne.jp/amacou/20090606/1244260607">ZenTest(autotest)のバージョン上げたらautotestが動かないので設定を変更する - AorBorF</a>
+  </li>
+  <li>
+    <a href="https://github.com/rspec/rspec/wiki/autotest">autotest · rspec/rspec Wiki · GitHub</a>
+  </li>
+  <li>
+    <a href="http://blog.masashi-fujiwara.net/2010/11/script-test.html">メタフィジクスとフィジクスの間で: テスト駆動開発の環境を整える(rspec + autotest + growl) (2010/11/07に大幅修正あり）</a>
+  </li>
+  <li>
+    <a href="https://github.com/karl/autotest-growl">karl/autotest-growl · GitHub</a>
+  </li>
+  <li>
+    <a href="http://rubyist.g.hatena.ne.jp/rochefort/20100414/p1">autospecの結果をgrowlで通知〜windows編 - うんたらかんたらRuby - Rubyist</a>
+  </li>
+  <li>
+    <a href="http://d.hatena.ne.jp/zariganitosh/20080312/1205305079">autotestのGrowl通知をカスタマイズする - ザリガニが見ていた...。</a>
+  </li>
+  <li>
+    <a href="http://blog.champierre.com/774">autotest + growl で楽々テスト - 僕は発展途上技術者</a>
+  </li>
+</ul>
 <h1>環境</h1>
-<ul><li>Windows XP</li><li>Ruby 1.9.3<ul><li>Rubygems 1.8.11</li><li>Bundler 1.0.21</li><li>ZenTest 4.6.2</li><li>autotest-growl 0.2.16(だったか？)</li><li>rspec 2.8.0</li></ul></li><li>Growl for Windows 2.0.9</li></ul>
+<ul>
+  <li>Windows XP</li>
+  <li>Ruby 1.9.3<ul><li>Rubygems 1.8.11</li><li>Bundler 1.0.21</li><li>ZenTest 4.6.2</li><li>autotest-growl 0.2.16(だったか？)</li><li>rspec 2.8.0</li></ul></li>
+  <li>Growl for Windows 2.0.9</li>
+</ul>
 <p>Macに置き換えてもいけるかは後で確認。</p>
 <h1>手順</h1>
-<h2>Growls for Windowsインストール</h2>
-<ul><li><a href="http://www.growlforwindows.com/gfw/displays.aspx">Growl for Windows</a> ここから落とす。</li></ul>
-<h2>Gem入手</h2>
-<ul><li>Gemfileファイルを作って以下のgemファイルを記載</li></ul>
+<h2 id="tocAnchor-1-1">Growls for Windowsインストール</h2>
+<ul>
+  <li><a href="http://www.growlforwindows.com/gfw/displays.aspx">Growl for Windows</a> ここから落とす。</li>
+</ul>
+<h2 id="tocAnchor-1-2">Gem入手</h2>
+<ul>
+  <li>Gemfileファイルを作って以下のgemファイルを記載</li>
+</ul>
 <pre>gem 'ZenTest'
 gem 'autotest-growl'</pre>
-<ul><li>bundle install</li></ul>
-<h2>.autotest</h2>
-<ul><li>前回何も記載しなかった.autotestファイルに以下を追記。</li></ul>
+<ul>
+  <li>bundle install</li>
+</ul>
+<h2 id="tocAnchor-1-3">.autotest</h2>
+<ul>
+  <li>前回何も記載しなかった.autotestファイルに以下を追記。</li>
+</ul>
 <pre>require 'autotest/growl'</pre>
-<h2>実行</h2>
+<h2 id="tocAnchor-1-4">実行</h2>
 <pre>$ bubdle exec autotest
 loading autotest/rspec2
 
@@ -113,20 +195,25 @@ Finished in 0.03125 seconds
 7 examples, 0 failures</pre>
 <p>と同時にGrowlポップアップきたこれ！　意外とすぐだった！</p>
 <h1>以下いろいろと失敗の試行錯誤Log</h1>
-<a name="seeall"></a>
-<h2>Windows用でないとダメみたい？</h2>
-<ul><li><a href="http://rubyist.g.hatena.ne.jp/rochefort/20100414/p1">autospecの結果をgrowlで通知〜windows編 - うんたらかんたらRuby - Rubyist</a> autotest-growlをWindows用に修正したgemが。Gemfileのautotest-growlは削除してkarl-autotest-growlとDL先のsourceを追加。</li></ul>
-<pre>+ 3 source &quot;http://gems.github.com&quot;
+<a name="seeall" id="seeall"></a>
+<h2 id="tocAnchor-1-5">Windows用でないとダメみたい？</h2>
+<ul>
+  <li><a href="http://rubyist.g.hatena.ne.jp/rochefort/20100414/p1">autospecの結果をgrowlで通知〜windows編 - うんたらかんたらRuby - Rubyist</a> autotest-growlをWindows用に修正したgemが。Gemfileのautotest-growlは削除してkarl-autotest-growlとDL先のsourceを追加。</li>
+</ul>
+<pre>+ 3 source "http://gems.github.com"
   8 gem 'ZenTest'
 - 9 gem 'autotest-growl'
 + 9 gem 'karl-autotest-growl'</pre>
-<ul><li>bundle install</li><li>bubdle exec autotest</li></ul>
-<h2>ZenTest実行されなくなった…</h2>
+<ul>
+  <li>bundle install</li>
+  <li>bubdle exec autotest</li>
+</ul>
+<h2 id="tocAnchor-1-6">ZenTest実行されなくなった…</h2>
 <pre>- 8 gem 'ZenTest'
 + 9 gem 'autotest'
 +10 gem 'autotest-growl'
 +11 gem 'autotest-fsevent'</pre>
-<p>fseventをインストールするにはDevelopment kitが必要らしい。<a href="2012-02-28-1330436604">2012-02-28-1330436604</a> インストール方法。</p>
+<p>fseventをインストールするにはDevelopment kitが必要らしい。<a href="http://d.hatena.ne.jp/kk_Ataka/20120228/1330436604">2012-02-28-1330436604</a> インストール方法。</p>
 <p>で、.autotestに追加。</p>
 <pre>+ require 'autotest/fsevent'</pre>
 </div>
@@ -135,17 +222,17 @@ Finished in 0.03125 seconds
   <ul>
     
       <li class="prev">
-        <a href="/2012/04/17/1334669770" title="Subversionで2ヶ所のリポジトリの同期を取るメモ">
+        <a href="/2012/04/17/1334669770/" title="Subversionで2ヶ所のリポジトリの同期を取るメモ">
           Subversionで2ヶ所のリポジトリの同期を取るメモ
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2012/04/22/1335108555" title=" Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo">
+        <a href="/2012/04/22/1335108555/" title=" Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo">
            Git道場#1に参加しました と、pullとpull --rebase備忘録 #gitdojo
         </a>
       </li>
@@ -158,16 +245,16 @@ Finished in 0.03125 seconds
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2012/04/20/1334933158" data-text="kk_Atakaの日記 - ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2012/04/20/1334933158/" data-text="kk_Atakaの日記 - ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/20/1334933158/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/04/20/1334933158/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/20/1334933158//">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/04/20/1334933158//" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/20/1334933158/"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/04/20/1334933158//"
      data-hatena-bookmark-title="kk_Atakaの日記 - ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
@@ -180,7 +267,7 @@ Finished in 0.03125 seconds
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/04/20/1334933158/"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/04/20/1334933158//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
@@ -254,142 +341,142 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/04/20/1334933
       <li>
         <span>2016/03/05</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Homebrew">Homebrew</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Homebrew">Homebrew</a></code> ]</span>
         
-        <a href="/2016/03/05/go-bin-install-from-homebrew">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
+        <a href="/2016/03/05/go-bin-install-from-homebrew/">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//" />
         </a>
       </li>
     
       <li>
         <span>2016/02/17</span>
         
-          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Mac">Mac</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Mac">Mac</a></code> ]</span>
         
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan">El Capitan上に古いpumaをインストールすると失敗する</a>
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">El Capitan上に古いpumaをインストールすると失敗する</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/19</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
+        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/12</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <a href="/2016/01/12/golang-nicony/">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony//" />
         </a>
       </li>
     
       <li>
         <span>2015/12/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt/">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/11/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt/">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/10/13</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt/">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/09/24</span>
         
-          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ansible">Ansible</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <a href="/2015/09/24/ansible-meetup-201509/">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//" />
         </a>
       </li>
     
       <li>
         <span>2015/08/06</span>
         
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Jekyll">Jekyll</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Liquid">Liquid</a></code> ]</span>
         
-        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <a href="/2015/08/06/jekyll-tag-sort/">Jekyllで出力するタグをソートする 解決編</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//" />
         </a>
       </li>
     
       <li>
         <span>2015/07/13</span>
         
-          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Markdown">Markdown</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+          <span>[ <code><a href="/tags/#reST">reST</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Wiki">Wiki</a></code> ]</span>
         
-        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <a href="/2015/07/13/lightweight-markup-language-history/">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//" />
         </a>
       </li>
     
@@ -403,205 +490,205 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/04/20/1334933
     
     
       
-      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+      <li><a href="/tags/#API">API <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+      <li><a href="/tags/#Android">Android <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+      <li><a href="/tags/#Dropbox">Dropbox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>4</sub></a></li>
+      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Homebrew">Homebrew <sub>1</sub></a></li>
+      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
     
       
-      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
     
       
-      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
     
       
-      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Mac">Mac <sub>8</sub></a></li>
+      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+      <li><a href="/tags/#Python">Python <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#Ruby">Ruby <sub>72</sub></a></li>
+      <li><a href="/tags/#Ruby">Ruby <sub>72</sub></a></li>
     
       
-      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
     
       
-      <li><a href="/tags.html#Sphinx">Sphinx <sub>16</sub></a></li>
+      <li><a href="/tags/#Sphinx">Sphinx <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
     
       
-      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
     
       
-      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#イベント">イベント <sub>26</sub></a></li>
+      <li><a href="/tags/#イベント">イベント <sub>26</sub></a></li>
     
       
-      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
     
       
-      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
     
   </ul>
 

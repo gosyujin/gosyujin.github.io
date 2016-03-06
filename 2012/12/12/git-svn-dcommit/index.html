@@ -3,9 +3,17 @@
   <head>
     <title>git-svnインストールからgit svn dcommit完了までの手順 - kk_Atakaの日記</title>
     <meta charset="utf-8">
+    <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
     <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/toc.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/js/jquery.tocLight.js"></script>
+    <script type="text/javascript">
+       $(function() {
+         $.toc.clickHideButton();
+       });
+    </script>
   </head>
   <body>
     <script type="text/javascript">
@@ -25,23 +33,23 @@
       <nav>
         <ul>
           <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives.html">Archive</a>
-          <li class="main-nav"><a href="/tags.html">Tag</a>
-          <li class="main-nav"><a href="/monitor.html">Monitor</a>
+          <li class="main-nav"><a href="/archives/">Archive</a>
+          <li class="main-nav"><a href="/tags/">Tag</a>
+          <li class="main-nav"><a href="/monitor/">Monitor</a>
         </ul>
       </nav>
     </div>
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2012/12/12/git-svn-dcommit">git-svnインストールからgit svn dcommit完了までの手順</a></h1>
+        <h1><a href="/2012/12/12/git-svn-dcommit/">git-svnインストールからgit svn dcommit完了までの手順</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags.html#Git" class="tag">Git</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Git" class="tag">Git</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#Subversion" class="tag">Subversion</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Subversion" class="tag">Subversion</a></code> ]</span>
             
           
           
@@ -55,17 +63,17 @@
   <ul>
     
       <li class="prev">
-        <a href="/2012/11/12/from-hatena-to-jekyll" title="はてなダイアリーのエントリをJekyllへ移行する">
+        <a href="/2012/11/12/from-hatena-to-jekyll/" title="はてなダイアリーのエントリをJekyllへ移行する">
           はてなダイアリーのエントリをJekyllへ移行する
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2012/12/25/ruby-memo" title="メモ化を知った">
+        <a href="/2012/12/25/ruby-memo/" title="メモ化を知った">
           メモ化を知った
         </a>
       </li>
@@ -74,14 +82,46 @@
 </div>
 
 
-<div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#環境'>環境</a></li><li><a href='#手順'>手順</a></li><ul><li><a href='#perl-svn-core'>perl(SVN::Core)</a></li><li><a href='#perl-term-readkey'>perl(Term::ReadKey)</a></li></ul><li><a href='#動作確認'>動作確認</a></li></ul></ul><!-- end of tree list --></div></div>
-
 <div class="content">
-<h2 id="あらすじ">あらすじ</h2>
+<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>Contents</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">環境</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">手順</span></a>
+              <ul>
+                <li class="toc_level-2 toc_section-4">
+                  <a href="#tocAnchor-1-3-1"><span class="tocnumber">3.1</span> <span class="toctext">perl(SVN::Core)</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-5">
+                  <a href="#tocAnchor-1-3-2"><span class="tocnumber">3.2</span> <span class="toctext">perl(Term::ReadKey)</span></a>
+                </li>
+              </ul>
+            </li>
+            <li class="toc_level-1 toc_section-6">
+              <a href="#tocAnchor-1-6"><span class="tocnumber">4</span> <span class="toctext">動作確認</span></a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><h2 id="tocAnchor-1-1">あらすじ</h2>
 
 <p>CentOSのインストール時に入れたGitにはgit-svnが入っていない(？)ので、一から入れようとしたが、ネットに繋がっていない環境だと結構依存とかがめんどくさかったのでメモ。</p>
 
-<h2 id="環境">環境</h2>
+<h2 id="tocAnchor-1-2">環境</h2>
 
 <ul>
 <li>CentOS 6.2</li>
@@ -92,8 +132,12 @@
 </ul></li>
 </ul>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git svn 
-<span class="go">git: &#39;svn&#39; is not a git command. See &#39;git --help&#39;.</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ git svn 
+git: 'svn' is not a git command. See 'git --help'.</code>
+  </pre>
+</figure>
 
 <ul>
 <li>svn 1.6.11 (r934486)</li>
@@ -102,7 +146,7 @@
 
 <p>yumとかで入れられると一発っぽいんだけどなー。</p>
 
-<h2 id="手順">手順</h2>
+<h2 id="tocAnchor-1-3">手順</h2>
 
 <p>まずは、git-svnのrpmをDLしてくる。</p>
 
@@ -112,13 +156,17 @@
 
 <p>インストールしたいPCに持ってきて、rpmコマンド。 <code>perl(SVN::Core)</code> と、 <code>perl(Term:ReadKey)</code> がないと言われる。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> rpm -ivh git-svn-1.7.1-2.el6_0.1.noarch.rpm
-<span class="go">警告: git-svn-1.7.1-2.el6_0.1.noarch.rpm: ヘッダ V3 RSA/SHA256 Signature, key ID c105b9de: NOKEY</span>
-<span class="go">エラー: 依存性の欠如:</span>
-<span class="go">        perl(SVN::Core) は git-svn-1.7.1-2.el6_0.1.noarch に必要とされています</span>
-<span class="go">        perl(Term::ReadKey) は git-svn-1.7.1-2.el6_0.1.noarch に必要とされています</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console"># rpm -ivh git-svn-1.7.1-2.el6_0.1.noarch.rpm
+警告: git-svn-1.7.1-2.el6_0.1.noarch.rpm: ヘッダ V3 RSA/SHA256 Signature, key ID c105b9de: NOKEY
+エラー: 依存性の欠如:
+        perl(SVN::Core) は git-svn-1.7.1-2.el6_0.1.noarch に必要とされています
+        perl(Term::ReadKey) は git-svn-1.7.1-2.el6_0.1.noarch に必要とされています</code>
+  </pre>
+</figure>
 
-<h3 id="perl-svn-core">perl(SVN::Core)</h3>
+<h3 id="tocAnchor-1-3-1">perl(SVN::Core)</h3>
 
 <p>SVN::Coreは <code>subversion-perl</code> というパッケージから入れられるよう。</p>
 
@@ -129,39 +177,51 @@
 
 <p>subversion-perlをDLしてインストール。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> rpm -ivh subversion-perl-1.6.11-7.el6.i686.rpm
-<span class="go">警告: subversion-perl-1.6.11-7.el6.i686.rpm: ヘッダ V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY</span>
-<span class="go">エラー: 依存性の欠如:</span>
-<span class="go">        subversion = 1.6.11-7.el6 は subversion-perl-1.6.11-7.el6.i686 に必要と されています</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console"># rpm -ivh subversion-perl-1.6.11-7.el6.i686.rpm
+警告: subversion-perl-1.6.11-7.el6.i686.rpm: ヘッダ V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY
+エラー: 依存性の欠如:
+        subversion = 1.6.11-7.el6 は subversion-perl-1.6.11-7.el6.i686 に必要と されています</code>
+  </pre>
+</figure>
 
 <p>あれ？Subversion入ってるのに見つけられてない？Subversionを入れ直してみる？</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> rpm -ivh subversion-1.6.11-7.el6.i686.rpm
-<span class="go">警告: subversion-1.6.11-7.el6.i686.rpm: ヘッダ V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY</span>
-<span class="go">準備中...                ########################################### [100%]</span>
-<span class="go">        ファイル /usr/bin/svnserve (パッケージ subversion-1.6.11-7.el6.i686 から) は、パッケージ subversion-1.6.11-2.el6_1.4.i686 からのファイルと競合しています。</span>
-<span class="go">略</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console"># rpm -ivh subversion-1.6.11-7.el6.i686.rpm
+警告: subversion-1.6.11-7.el6.i686.rpm: ヘッダ V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY
+準備中...                ########################################### [100%]
+        ファイル /usr/bin/svnserve (パッケージ subversion-1.6.11-7.el6.i686 から) は、パッケージ subversion-1.6.11-2.el6_1.4.i686 からのファイルと競合しています。
+略</code>
+  </pre>
+</figure>
 
 <p>やっぱインストール済み…1.6.11-2.el6<em>1</em>4…だと…。このrelease番号？ってsvn --versionじゃ確認できないの？</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> svn --version
-<span class="go">svn, バージョン 1.6.11 (r934486)</span>
-<span class="go">   コンパイル日時: Sep 27 2011, 14:59:40</span>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console"># svn --version
+svn, バージョン 1.6.11 (r934486)
+   コンパイル日時: Sep 27 2011, 14:59:40
 
-<span class="go">   Copyright (C) 2000-2009 CollabNet.</span>
-<span class="go">   Subversion is open source software, see http://subversion.tigris.org/</span>
-<span class="go">   This product includes software developed by CollabNet (http://www.Collab.Net/).</span>
+   Copyright (C) 2000-2009 CollabNet.
+   Subversion is open source software, see http://subversion.tigris.org/
+   This product includes software developed by CollabNet (http://www.Collab.Net/).
 
-<span class="go">   以下のリポジトリアクセス (RA) モジュールが利用できます:</span>
+   以下のリポジトリアクセス (RA) モジュールが利用できます:
 
-<span class="go">   * ra_neon : Neon を利用して WebDAV (DeltaV) プロトコルでリポジトリにアクセスするモジュール。</span>
-<span class="go">     - &#39;http&#39; スキームを操作します</span>
-<span class="go">       - &#39;https&#39; スキームを操作します</span>
-<span class="go">       * ra_svn : svn ネットワークプロトコルを使ってリポジトリにアクセスするモジュール 。</span>
-<span class="go">         - Cyrus SASL 認証を併用</span>
-<span class="go">   - &#39;svn&#39; スキームを操作します</span>
-<span class="go">   * ra_local : ローカルディスク上のリポジトリにアクセスするモジュール。</span>
-<span class="go">     - &#39;file&#39; スキームを操作します</span></code></pre></div>
+   * ra_neon : Neon を利用して WebDAV (DeltaV) プロトコルでリポジトリにアクセスするモジュール。
+     - 'http' スキームを操作します
+       - 'https' スキームを操作します
+       * ra_svn : svn ネットワークプロトコルを使ってリポジトリにアクセスするモジュール 。
+         - Cyrus SASL 認証を併用
+   - 'svn' スキームを操作します
+   * ra_local : ローカルディスク上のリポジトリにアクセスするモジュール。
+     - 'file' スキームを操作します</code>
+  </pre>
+</figure>
 
 <p>色々探して、とりあえず1.6.11-2.el6<em>1</em>4のsubversion-perlを見つけた。</p>
 
@@ -171,19 +231,27 @@
 
 <p>再チャレンジ。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> rpm -ivh subversion-perl-1.6.11-2.el6_1.4.i686.rpm
-<span class="go">警告: subversion-perl-1.6.11-2.el6_1.4.i686.rpm: ヘッダ V4 DSA/SHA1 Signature, key ID 192a7d7d: NOKEY</span>
-<span class="go">準備中...                ########################################### [100%]</span>
-<span class="go">   1:subversion-perl        ########################################### [100%]</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console"># rpm -ivh subversion-perl-1.6.11-2.el6_1.4.i686.rpm
+警告: subversion-perl-1.6.11-2.el6_1.4.i686.rpm: ヘッダ V4 DSA/SHA1 Signature, key ID 192a7d7d: NOKEY
+準備中...                ########################################### [100%]
+   1:subversion-perl        ########################################### [100%]</code>
+  </pre>
+</figure>
 
 <p>入ったー。で、依存は一個消えた。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> rpm -ivh git-svn-1.7.1-2.el6_0.1.noarch.rpm
-<span class="go">警告: git-svn-1.7.1-2.el6_0.1.noarch.rpm: ヘッダ V3 RSA/SHA256 Signature, key ID c105b9de: NOKEY</span>
-<span class="go">エラー: 依存性の欠如:</span>
-<span class="go">        perl(Term::ReadKey) は git-svn-1.7.1-2.el6_0.1.noarch に必要とされています</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console"># rpm -ivh git-svn-1.7.1-2.el6_0.1.noarch.rpm
+警告: git-svn-1.7.1-2.el6_0.1.noarch.rpm: ヘッダ V3 RSA/SHA256 Signature, key ID c105b9de: NOKEY
+エラー: 依存性の欠如:
+        perl(Term::ReadKey) は git-svn-1.7.1-2.el6_0.1.noarch に必要とされています</code>
+  </pre>
+</figure>
 
-<h3 id="perl-term-readkey">perl(Term::ReadKey)</h3>
+<h3 id="tocAnchor-1-3-2">perl(Term::ReadKey)</h3>
 
 <p>特にバージョンの指定がないんだけど、とりあえず後ろ(el6)は合わせてみた。elってRHELのELなのかな…？</p>
 
@@ -192,54 +260,78 @@
 <li><a href="http://pkgs.org/centos-6-rhel-6/centos-rhel-i386/perl-TermReadKey-2.30-13.el6.i686.rpm.html">perl-TermReadKey-2.30-13.el6.i686.rpm CentOS 6 (RHEL 6) Download</a></li>
 </ul>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">[root@tpc6102 share]# rpm -ivh perl-TermReadKey-2.30-13.el6.i686.rpm</span>
-<span class="go">警告: perl-TermReadKey-2.30-13.el6.i686.rpm: ヘッダ V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY</span>
-<span class="go">準備中...                ########################################### [100%]</span>
-<span class="go">   1:perl-TermReadKey       ########################################### [100%]</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">[root@tpc6102 share]# rpm -ivh perl-TermReadKey-2.30-13.el6.i686.rpm
+警告: perl-TermReadKey-2.30-13.el6.i686.rpm: ヘッダ V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY
+準備中...                ########################################### [100%]
+   1:perl-TermReadKey       ########################################### [100%]</code>
+  </pre>
+</figure>
 
 <p>いった！</p>
 
 <p>で、git-svnも入った！</p>
 
-<h2 id="動作確認">動作確認</h2>
+<h2 id="tocAnchor-1-6">動作確認</h2>
 
 <p>コミットしようとしたらエラーが。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git svn dcommit
-<span class="go">Committing to svn://xxxxxxx/repo/trunk ...</span>
-<span class="go">Authentication realm: &lt;svn://xxxxxxx:3690&gt; xxxxxxxx-...</span>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ git svn dcommit
+Committing to svn://xxxxxxx/repo/trunk ...
+Authentication realm: &lt;svn://xxxxxxx:3690&gt; xxxxxxxx-...
 
-<span class="go">(gnome-ssh-askpass:20438): Gtk-WARNING **: cannot open display:</span>
-<span class="go">Use of uninitialized value $password in substitution (s///) at /usr/libexec/git-core/git-svn line 3979.</span>
-<span class="go">error: git-svn died of signal 11</span></code></pre></div>
+(gnome-ssh-askpass:20438): Gtk-WARNING **: cannot open display:
+Use of uninitialized value $password in substitution (s///) at /usr/libexec/git-core/git-svn line 3979.
+error: git-svn died of signal 11</code>
+  </pre>
+</figure>
 
 <p>GUIでLinuxをインストールしている場合、 <code>gnome-ssh-askpass</code> を使ってパスワード認証をかますようにパスが通っており、今はtelnetなどでつないでいる(=認証画面出したいのに画面ない)のが問題みたい。</p>
 
 <ul>
-<li><a href="http://ultimania.org/trac/yuna/wiki/pm/DVCS#git%E3%81%A7%E8%AA%8D%E8%A8%BC%E3%82%A8%E3%83%A9%E3%83%BC">pm/DVCS - Yuna&#39;s Technical Guide</a></li>
+<li><a href="http://ultimania.org/trac/yuna/wiki/pm/DVCS#git%E3%81%A7%E8%AA%8D%E8%A8%BC%E3%82%A8%E3%83%A9%E3%83%BC">pm/DVCS - Yuna's Technical Guide</a></li>
 </ul>
 
 <p>確かにいる。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> <span class="nb">echo</span> <span class="nv">$SSH_ASKPASS</span>
-<span class="go">/usr/libexec/openssh/gnome-ssh-askpass</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ echo $SSH_ASKPASS
+/usr/libexec/openssh/gnome-ssh-askpass</code>
+  </pre>
+</figure>
 
 <p>これを空にしてやればよい。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> <span class="nb">unset </span>SSH_ASKPASS
-<span class="gp">$</span> <span class="nb">echo</span> <span class="nv">$SSH_ASKPASS</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ unset SSH_ASKPASS
+$ echo $SSH_ASKPASS</code>
+  </pre>
+</figure>
 
 <p>で、dcommit！</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git svn dcommit
-<span class="go">Committing to svn://xxxxxxxx/repo/trunk ...</span>
-<span class="go">Authentication realm: &lt;svn://xxxxxxxx:3690&gt; xxxxxxxxxxx.....</span>
-<span class="go">Password for &#39;kk_Ataka&#39;:</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ git svn dcommit
+Committing to svn://xxxxxxxx/repo/trunk ...
+Authentication realm: &lt;svn://xxxxxxxx:3690&gt; xxxxxxxxxxx.....
+Password for 'kk_Ataka':</code>
+  </pre>
+</figure>
 
 <p>パスワード認証もOK。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">M       memo/test.txt</span>
-<span class="go">略</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">M       memo/test.txt
+略</code>
+  </pre>
+</figure>
 
 <p>コミットされた！</p>
 
@@ -249,17 +341,17 @@
   <ul>
     
       <li class="prev">
-        <a href="/2012/11/12/from-hatena-to-jekyll" title="はてなダイアリーのエントリをJekyllへ移行する">
+        <a href="/2012/11/12/from-hatena-to-jekyll/" title="はてなダイアリーのエントリをJekyllへ移行する">
           はてなダイアリーのエントリをJekyllへ移行する
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2012/12/25/ruby-memo" title="メモ化を知った">
+        <a href="/2012/12/25/ruby-memo/" title="メモ化を知った">
           メモ化を知った
         </a>
       </li>
@@ -272,16 +364,16 @@
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2012/12/12/git-svn-dcommit" data-text="kk_Atakaの日記 - git-svnインストールからgit svn dcommit完了までの手順" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2012/12/12/git-svn-dcommit/" data-text="kk_Atakaの日記 - git-svnインストールからgit svn dcommit完了までの手順" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/12/12/git-svn-dcommit/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/12/12/git-svn-dcommit/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/12/12/git-svn-dcommit//">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/12/12/git-svn-dcommit//" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/12/12/git-svn-dcommit/"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/12/12/git-svn-dcommit//"
      data-hatena-bookmark-title="kk_Atakaの日記 - git-svnインストールからgit svn dcommit完了までの手順"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
@@ -294,7 +386,7 @@
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/12/12/git-svn-dcommit/"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/12/12/git-svn-dcommit//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
@@ -368,142 +460,142 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/12/12/git-svn
       <li>
         <span>2016/03/05</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Homebrew">Homebrew</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Homebrew">Homebrew</a></code> ]</span>
         
-        <a href="/2016/03/05/go-bin-install-from-homebrew">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
+        <a href="/2016/03/05/go-bin-install-from-homebrew/">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//" />
         </a>
       </li>
     
       <li>
         <span>2016/02/17</span>
         
-          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Mac">Mac</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Mac">Mac</a></code> ]</span>
         
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan">El Capitan上に古いpumaをインストールすると失敗する</a>
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">El Capitan上に古いpumaをインストールすると失敗する</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/19</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
+        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/12</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <a href="/2016/01/12/golang-nicony/">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony//" />
         </a>
       </li>
     
       <li>
         <span>2015/12/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt/">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/11/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt/">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/10/13</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt/">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/09/24</span>
         
-          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ansible">Ansible</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <a href="/2015/09/24/ansible-meetup-201509/">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//" />
         </a>
       </li>
     
       <li>
         <span>2015/08/06</span>
         
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Jekyll">Jekyll</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Liquid">Liquid</a></code> ]</span>
         
-        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <a href="/2015/08/06/jekyll-tag-sort/">Jekyllで出力するタグをソートする 解決編</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//" />
         </a>
       </li>
     
       <li>
         <span>2015/07/13</span>
         
-          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Markdown">Markdown</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+          <span>[ <code><a href="/tags/#reST">reST</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Wiki">Wiki</a></code> ]</span>
         
-        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <a href="/2015/07/13/lightweight-markup-language-history/">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//" />
         </a>
       </li>
     
@@ -517,205 +609,205 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/12/12/git-svn
     
     
       
-      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+      <li><a href="/tags/#API">API <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+      <li><a href="/tags/#Android">Android <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+      <li><a href="/tags/#Dropbox">Dropbox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>4</sub></a></li>
+      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Homebrew">Homebrew <sub>1</sub></a></li>
+      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
     
       
-      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
     
       
-      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
     
       
-      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Mac">Mac <sub>8</sub></a></li>
+      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+      <li><a href="/tags/#Python">Python <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#Ruby">Ruby <sub>72</sub></a></li>
+      <li><a href="/tags/#Ruby">Ruby <sub>72</sub></a></li>
     
       
-      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
     
       
-      <li><a href="/tags.html#Sphinx">Sphinx <sub>16</sub></a></li>
+      <li><a href="/tags/#Sphinx">Sphinx <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
     
       
-      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
     
       
-      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#イベント">イベント <sub>26</sub></a></li>
+      <li><a href="/tags/#イベント">イベント <sub>26</sub></a></li>
     
       
-      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
     
       
-      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
     
   </ul>
 

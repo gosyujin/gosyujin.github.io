@@ -3,9 +3,17 @@
   <head>
     <title>Rubyのgemバージョン管理ができるBundlerを実行できなかった - kk_Atakaの日記</title>
     <meta charset="utf-8">
+    <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
     <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/toc.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/js/jquery.tocLight.js"></script>
+    <script type="text/javascript">
+       $(function() {
+         $.toc.clickHideButton();
+       });
+    </script>
   </head>
   <body>
     <script type="text/javascript">
@@ -25,23 +33,23 @@
       <nav>
         <ul>
           <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives.html">Archive</a>
-          <li class="main-nav"><a href="/tags.html">Tag</a>
-          <li class="main-nav"><a href="/monitor.html">Monitor</a>
+          <li class="main-nav"><a href="/archives/">Archive</a>
+          <li class="main-nav"><a href="/tags/">Tag</a>
+          <li class="main-nav"><a href="/monitor/">Monitor</a>
         </ul>
       </nav>
     </div>
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2011/10/03/1317642705">Rubyのgemバージョン管理ができるBundlerを実行できなかった</a></h1>
+        <h1><a href="/2011/10/03/1317642705/">Rubyのgemバージョン管理ができるBundlerを実行できなかった</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags.html#Ruby" class="tag">Ruby</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Ruby" class="tag">Ruby</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#備忘録" class="tag">備忘録</a></code> ]</span>
+              <span>[ <code><a href="/tags/#備忘録" class="tag">備忘録</a></code> ]</span>
             
           
           
@@ -55,17 +63,17 @@
   <ul>
     
       <li class="prev">
-        <a href="/2011/09/30/1317312438" title=".msgファイルをパースして中から添付ファイルを抜き出す">
+        <a href="/2011/09/30/1317312438/" title=".msgファイルをパースして中から添付ファイルを抜き出す">
           .msgファイルをパースして中から添付ファイルを抜き出す
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2011/10/04/1317660186" title="複数のRuby環境の管理・切替ができるpikを実行できた">
+        <a href="/2011/10/04/1317660186/" title="複数のRuby環境の管理・切替ができるpikを実行できた">
           複数のRuby環境の管理・切替ができるpikを実行できた
         </a>
       </li>
@@ -74,17 +82,54 @@
 </div>
 
 
-
-
 <div class="content">
-<h1>あらすじ</h1>
-<ul><li>gemでライブラリを入れまくり、updateしまくりでバージョンの不整合が起こり復旧不可能になった</li><li>同じ過ちは繰り返したくない…ので今度はうまく管理したい</li><li>Bundlerを使えばgemのバージョン管理ができるみたい<ul><li>設定さえあればどの環境も同じにする事が出来る？</li></ul></li></ul>
+<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>Contents</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">Rubygemsインストール</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">Bundlerインストール</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">Gemfile作成</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-4">
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">gemインストール</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-5">
+              <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">プロジェクトでbundle内のgemを読み込むようにする</span></a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><h1>あらすじ</h1>
+<ul>
+  <li>gemでライブラリを入れまくり、updateしまくりでバージョンの不整合が起こり復旧不可能になった</li>
+  <li>同じ過ちは繰り返したくない…ので今度はうまく管理したい</li>
+  <li>Bundlerを使えばgemのバージョン管理ができるみたい<ul><li>設定さえあればどの環境も同じにする事が出来る？</li></ul></li>
+</ul>
 <p>Bundlerを入れてみます。</p>
 <h1>環境</h1>
-<ul><li>Windows XP</li><li>Ruby 1.8.7<ul><li>RubyのパスはC:\ruby</li></ul></li><li>必要なDLLなど<ul><li>zlib.dll</li><li>readline.dll</li><li>iconv.dll</li><li>iconv.lib</li><li>iconv_a.lib</li><li>ssleay32.dll</li><li>libeay32.dll</li></ul></li></ul>
+<ul>
+  <li>Windows XP</li>
+  <li>Ruby 1.8.7<ul><li>RubyのパスはC:\ruby</li></ul></li>
+  <li>必要なDLLなど<ul><li>zlib.dll</li><li>readline.dll</li><li>iconv.dll</li><li>iconv.lib</li><li>iconv_a.lib</li><li>ssleay32.dll</li><li>libeay32.dll</li></ul></li>
+</ul>
 <h1>手順</h1>
-<h2>Rubygemsインストール</h2>
-<ul><li><a href="http://rubyforge.org/frs/?group_id=126">RubyForge: RubyGems: Project Filelist</a>よりRubygemsをDL。バージョンは1.7.2<ul><li>gemは入っていないとするので、zipファイルからインストールする。</li></ul></li></ul>
+<h2 id="tocAnchor-1-1">Rubygemsインストール</h2>
+<ul>
+  <li><a href="http://rubyforge.org/frs/?group_id=126">RubyForge: RubyGems: Project Filelist</a>よりRubygemsをDL。バージョンは1.7.2<ul><li>gemは入っていないとするので、zipファイルからインストールする。</li></ul></li>
+</ul>
 <pre>$ ruby setup.rb
 RubyGems 1.7.2 installed
 
@@ -99,7 +144,9 @@ RubyGems 1.7.2 installed
 
 RubyGems installed the following executables:
         C:/ruby/bin/gem</pre>
-<ul><li>バージョン、環境を確認</li></ul>
+<ul>
+  <li>バージョン、環境を確認</li>
+</ul>
 <pre>$ gem -v
 1.7.2
 
@@ -124,33 +171,70 @@ RubyGems Environment:
      - :bulk_threshold =&gt; 1000
   - REMOTE SOURCES:
      - http://rubygems.org/</pre>
-<ul><li>C:\ruby\binにgemコマンドが格納される</li><li>C:\ruby\lib\ruby\site_ruby\1.8がgemのパスとなっており、rbconfigやrubygemsが作成されている<ul><li>rubyフォルダ下と%USERPROFILE%下に.gemフォルダも定義されている。各ユーザ用かな？</li></ul></li></ul>
+<ul>
+  <li>C:\ruby\binにgemコマンドが格納される</li>
+  <li>C:\ruby\lib\ruby\site_ruby\1.8がgemのパスとなっており、rbconfigやrubygemsが作成されている<ul><li>rubyフォルダ下と%USERPROFILE%下に.gemフォルダも定義されている。各ユーザ用かな？</li></ul></li>
+</ul>
 <p>※proxyエラー等が起こった場合は~/に.gemrcファイルを作成し、http-proxy: PROXY_URLと記述すればよい？</p>
-<h2>Bundlerインストール</h2>
-<ul><li>Bundlerは最新版を導入する(0.X系と1.X系で大きく変わったところがあるらしいので気をつける)</li></ul>
+<h2 id="tocAnchor-1-2">Bundlerインストール</h2>
+<ul>
+  <li>Bundlerは最新版を導入する(0.X系と1.X系で大きく変わったところがあるらしいので気をつける)</li>
+</ul>
 <pre>$ gem install bundler
 Fetching: bundler-1.0.20.gem (100%)
 Successfully installed bundler-1.0.20
 1 gem installed
 Installing ri documentation for bundler-1.0.20...
 Installing RDoc documentation for bundler-1.0.20...</pre>
-<ul><li>bundleコマンドが実行できるようになるが、今うってもエラーが出る。</li></ul>
+<ul>
+  <li>bundleコマンドが実行できるようになるが、今うってもエラーが出る。</li>
+</ul>
 <pre>$ bundle install
 Could not locate Gemfile</pre>
 <p>Gemfileを作成する必要があるようだ。</p>
-<h2>Gemfile作成</h2>
-<ul><li>書式等は <a href="http://gembundler.com/gemfile.html">Bundler: The best way to manage Ruby applications</a> 参照。</li><li>少なくとも一つはRubygemsのサーバURLを記述する必要がある</li></ul>
+<h2 id="tocAnchor-1-3">Gemfile作成</h2>
+<ul>
+  <li>書式等は <a href="http://gembundler.com/gemfile.html">Bundler: The best way to manage Ruby applications</a> 参照。</li>
+  <li>少なくとも一つはRubygemsのサーバURLを記述する必要がある</li>
+</ul>
 <pre>source :rubygems
-source &quot;http://rubygems.org&quot;</pre>
-<ul><li>次にインストールするgemとバージョンを指定する</li></ul>
+source "http://rubygems.org"</pre>
+<ul>
+  <li>次にインストールするgemとバージョンを指定する</li>
+</ul>
 <pre>gem 'rails', '2.3.5'</pre>
-<ul><li>バージョンの指定方法は以下仮でまとめ</li></ul>
-<table><tr><th>記載なし</th><td>最新版</td></tr><tr><th>&#39;1.5&#39;</th><td>1.5</td></tr><tr><th>&#39;&gt;=1.5&#39;</th><td>1.5以上の最新版？</td></tr><tr><th>&#39;~&gt;1.5&#39;</th><td>1.5以上2.0未満？</td></tr></table>
-<ul><li>プロジェクトに配備<ul><li>プロジェクトのルートフォルダにGemfileを配備(redmineで使おうと思ったらredmine/Gemfileとする)</li></ul></li></ul>
-<h2>gemインストール</h2>
-<ul><li>下記コマンドでPATHへgemがインストールされる</li></ul>
+<ul>
+  <li>バージョンの指定方法は以下仮でまとめ</li>
+</ul>
+<table>
+  <tr>
+    <th>記載なし</th>
+    <td>最新版</td>
+  </tr>
+  <tr>
+    <th>'1.5'</th>
+    <td>1.5</td>
+  </tr>
+  <tr>
+    <th>'&gt;=1.5'</th>
+    <td>1.5以上の最新版？</td>
+  </tr>
+  <tr>
+    <th>'~&gt;1.5'</th>
+    <td>1.5以上2.0未満？</td>
+  </tr>
+</table>
+<ul>
+  <li>プロジェクトに配備<ul><li>プロジェクトのルートフォルダにGemfileを配備(redmineで使おうと思ったらredmine/Gemfileとする)</li></ul></li>
+</ul>
+<h2 id="tocAnchor-1-4">gemインストール</h2>
+<ul>
+  <li>下記コマンドでPATHへgemがインストールされる</li>
+</ul>
 <pre>bundle install PATH</pre>
-<ul><li>お勧めはプロジェクトルート/vendor/bundleらしい</li></ul>
+<ul>
+  <li>お勧めはプロジェクトルート/vendor/bundleらしい</li>
+</ul>
 <pre>$ bundle install vendor/bundle
 Fetching source index for http://rubygems.org/
 Fetching source index for http://rubygems.org/
@@ -181,7 +265,9 @@ The path argument to `bundle install` is deprecated. It will be removed in versi
 　┗bundle # インストールしたgem格納フォルダ
 　　┗ruby
 　　　┗...</pre>
-<ul><li>ところで、インストール後のコメントを見るとこのbundle install PATHコマンドは1.1でなくなる予定のようで、今後はきちんと--pathオプションを指定しなければならないらしい</li></ul>
+<ul>
+  <li>ところで、インストール後のコメントを見るとこのbundle install PATHコマンドは1.1でなくなる予定のようで、今後はきちんと--pathオプションを指定しなければならないらしい</li>
+</ul>
 <pre>bundle install --path vendor/bundle
 Fetching source index for http://rubygems.org/
 Fetching source index for http://rubygems.org/
@@ -195,7 +281,9 @@ Installing activeresource (2.3.5)
 Installing rails (2.3.5)
 Using bundler (1.0.20)
 Your bundle is complete! It was installed into ./vendor/bundle</pre>
-<ul><li>また、システムに同じgemが入っていたらシステム優先とする--disable-shared-gemsオプションというものがあるようだが、最新バージョンではやらなくてよいみたい？　「--pathオプション使え」と出てる</li></ul>
+<ul>
+  <li>また、システムに同じgemが入っていたらシステム優先とする--disable-shared-gemsオプションというものがあるようだが、最新バージョンではやらなくてよいみたい？　「--pathオプション使え」と出てる</li>
+</ul>
 <pre> bundle install vendor/bundle --disable-shared-gems
 The disable-shared-gem option is no longer available.
 
@@ -204,13 +292,17 @@ or `bundle install --path path/to/gems` to install to an isolated
 location. Bundler will resolve relative paths relative to
 your `Gemfile`.</pre>
 <h1>確認(ここから先は失敗したので自分用備忘録…)</h1>
-<ul><li>gemにはbundler以外なし</li></ul>
+<ul>
+  <li>gemにはbundler以外なし</li>
+</ul>
 <pre>gem list
 
 *** LOCAL GEMS ***
 
 bundler (1.0.20)</pre>
-<ul><li>bundlerで導入したgemを確認するにはプロジェクトのルートフォルダ下で以下コマンド</li></ul>
+<ul>
+  <li>bundlerで導入したgemを確認するにはプロジェクトのルートフォルダ下で以下コマンド</li>
+</ul>
 <pre>bundle show
 Gems included by the bundle:
   * actionmailer (2.3.5)
@@ -222,10 +314,15 @@ Gems included by the bundle:
   * rack (1.0.1)
   * rails (2.3.5)
   * rake (0.9.2)</pre>
-<h2>プロジェクトでbundle内のgemを読み込むようにする</h2>
+<h2 id="tocAnchor-1-5">プロジェクトでbundle内のgemを読み込むようにする</h2>
 <p>今回はredmineを参考にしてみる</p>
-<ul><li>config/boot.rbを修正</li><li>config/preinitializer.rbを作成</li></ul>
-<ul><li>i18nが足りないと言われたのでGemfileに足し再度インストール</li></ul>
+<ul>
+  <li>config/boot.rbを修正</li>
+  <li>config/preinitializer.rbを作成</li>
+</ul>
+<ul>
+  <li>i18nが足りないと言われたのでGemfileに足し再度インストール</li>
+</ul>
 <pre>ruby script\server -e production
 Missing the i18n 0.4.2 gem. Please `gem install -v=0.4.2 i18n`</pre>
 <pre>gem 'rails', '2.3.5'
@@ -289,7 +386,7 @@ For help on options, try 'rdoc --help'
 Successfully installed rubytree-0.8.1
 1 gem installed
 Installing ri documentation for rubytree-0.8.1...
-gem.bat install coderay --version &quot;~&gt; 0.9.7&quot;
+gem.bat install coderay --version "~&gt; 0.9.7"
 Successfully installed coderay-0.9.8
 1 gem installed
 Installing ri documentation for coderay-0.9.8...
@@ -302,17 +399,17 @@ Installing RDoc documentation for coderay-0.9.8...</pre>
   <ul>
     
       <li class="prev">
-        <a href="/2011/09/30/1317312438" title=".msgファイルをパースして中から添付ファイルを抜き出す">
+        <a href="/2011/09/30/1317312438/" title=".msgファイルをパースして中から添付ファイルを抜き出す">
           .msgファイルをパースして中から添付ファイルを抜き出す
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2011/10/04/1317660186" title="複数のRuby環境の管理・切替ができるpikを実行できた">
+        <a href="/2011/10/04/1317660186/" title="複数のRuby環境の管理・切替ができるpikを実行できた">
           複数のRuby環境の管理・切替ができるpikを実行できた
         </a>
       </li>
@@ -325,16 +422,16 @@ Installing RDoc documentation for coderay-0.9.8...</pre>
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2011/10/03/1317642705" data-text="kk_Atakaの日記 - Rubyのgemバージョン管理ができるBundlerを実行できなかった" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2011/10/03/1317642705/" data-text="kk_Atakaの日記 - Rubyのgemバージョン管理ができるBundlerを実行できなかった" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/03/1317642705/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/10/03/1317642705/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/03/1317642705//">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/10/03/1317642705//" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/03/1317642705/"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/03/1317642705//"
      data-hatena-bookmark-title="kk_Atakaの日記 - Rubyのgemバージョン管理ができるBundlerを実行できなかった"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
@@ -347,7 +444,7 @@ Installing RDoc documentation for coderay-0.9.8...</pre>
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/10/03/1317642705/"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/10/03/1317642705//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
@@ -421,142 +518,142 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/10/03/1317642
       <li>
         <span>2016/03/05</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Homebrew">Homebrew</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Homebrew">Homebrew</a></code> ]</span>
         
-        <a href="/2016/03/05/go-bin-install-from-homebrew">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
+        <a href="/2016/03/05/go-bin-install-from-homebrew/">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//" />
         </a>
       </li>
     
       <li>
         <span>2016/02/17</span>
         
-          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Mac">Mac</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Mac">Mac</a></code> ]</span>
         
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan">El Capitan上に古いpumaをインストールすると失敗する</a>
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">El Capitan上に古いpumaをインストールすると失敗する</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/19</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
+        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/12</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <a href="/2016/01/12/golang-nicony/">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony//" />
         </a>
       </li>
     
       <li>
         <span>2015/12/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt/">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/11/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt/">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/10/13</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt/">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/09/24</span>
         
-          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ansible">Ansible</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <a href="/2015/09/24/ansible-meetup-201509/">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//" />
         </a>
       </li>
     
       <li>
         <span>2015/08/06</span>
         
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Jekyll">Jekyll</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Liquid">Liquid</a></code> ]</span>
         
-        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <a href="/2015/08/06/jekyll-tag-sort/">Jekyllで出力するタグをソートする 解決編</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//" />
         </a>
       </li>
     
       <li>
         <span>2015/07/13</span>
         
-          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Markdown">Markdown</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+          <span>[ <code><a href="/tags/#reST">reST</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Wiki">Wiki</a></code> ]</span>
         
-        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <a href="/2015/07/13/lightweight-markup-language-history/">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//" />
         </a>
       </li>
     
@@ -570,205 +667,205 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/10/03/1317642
     
     
       
-      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+      <li><a href="/tags/#API">API <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+      <li><a href="/tags/#Android">Android <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+      <li><a href="/tags/#Dropbox">Dropbox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>4</sub></a></li>
+      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Homebrew">Homebrew <sub>1</sub></a></li>
+      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
     
       
-      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
     
       
-      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
     
       
-      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Mac">Mac <sub>8</sub></a></li>
+      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+      <li><a href="/tags/#Python">Python <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#Ruby">Ruby <sub>72</sub></a></li>
+      <li><a href="/tags/#Ruby">Ruby <sub>72</sub></a></li>
     
       
-      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
     
       
-      <li><a href="/tags.html#Sphinx">Sphinx <sub>16</sub></a></li>
+      <li><a href="/tags/#Sphinx">Sphinx <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
     
       
-      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
     
       
-      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#イベント">イベント <sub>26</sub></a></li>
+      <li><a href="/tags/#イベント">イベント <sub>26</sub></a></li>
     
       
-      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
     
       
-      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
     
   </ul>
 

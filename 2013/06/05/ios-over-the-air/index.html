@@ -3,9 +3,17 @@
   <head>
     <title>Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある - kk_Atakaの日記</title>
     <meta charset="utf-8">
+    <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
     <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/toc.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/js/jquery.tocLight.js"></script>
+    <script type="text/javascript">
+       $(function() {
+         $.toc.clickHideButton();
+       });
+    </script>
   </head>
   <body>
     <script type="text/javascript">
@@ -25,23 +33,23 @@
       <nav>
         <ul>
           <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives.html">Archive</a>
-          <li class="main-nav"><a href="/tags.html">Tag</a>
-          <li class="main-nav"><a href="/monitor.html">Monitor</a>
+          <li class="main-nav"><a href="/archives/">Archive</a>
+          <li class="main-nav"><a href="/tags/">Tag</a>
+          <li class="main-nav"><a href="/monitor/">Monitor</a>
         </ul>
       </nav>
     </div>
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2013/06/05/ios-over-the-air">Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある</a></h1>
+        <h1><a href="/2013/06/05/ios-over-the-air/">Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags.html#iPhone" class="tag">iPhone</a></code> ]</span>
+              <span>[ <code><a href="/tags/#iPhone" class="tag">iPhone</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#iOS" class="tag">iOS</a></code> ]</span>
+              <span>[ <code><a href="/tags/#iOS" class="tag">iOS</a></code> ]</span>
             
           
           
@@ -55,17 +63,17 @@
   <ul>
     
       <li class="prev">
-        <a href="/2013/05/27/jekyll-githubpages-analytics-setting" title="Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた">
+        <a href="/2013/05/27/jekyll-githubpages-analytics-setting/" title="Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた">
           Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2013/07/18/ios-backup-restore" title="iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段">
+        <a href="/2013/07/18/ios-backup-restore/" title="iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段">
           iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段
         </a>
       </li>
@@ -74,10 +82,68 @@
 </div>
 
 
-<div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#インストール環境構築手順'>インストール環境構築手順</a></li><ul><li><a href='#参考サイト'>参考サイト</a></li><li><a href='#前提'>前提</a></li><li><a href='#前準備'>前準備</a></li><ul><li><a href='#certificatesigningrequest-certsigningrequest-準備'>CertificateSigningRequest.certSigningRequest 準備</a></li><li><a href='#destribution用certificates-作成'>Destribution用Certificates 作成</a></li><li><a href='#destribution用provisioning-profile-作成'>Destribution用Provisioning Profile 作成</a></li></ul><li><a href='#アプリ側準備'>アプリ側準備</a></li><ul><li><a href='#provisioning-profileインストール'>Provisioning Profileインストール</a></li><li><a href='#ipaファイル作成'>ipaファイル作成</a></li></ul><li><a href='#ダウンロードページ準備'>ダウンロードページ準備</a></li><li><a href='#サーバ配備'>サーバ配備</a></li><li><a href='#アクセス、インストール'>アクセス、インストール</a></li></ul><li><a href='#うまくいかない場合'>うまくいかない場合</a></li><ul><li><a href='#パターン1'>パターン1</a></li><li><a href='#パターン2'>パターン2</a></li><li><a href='#パターン3-未解決'>パターン3(未解決)</a></li></ul><li><a href='#しかも'>しかも</a></li></ul></ul><!-- end of tree list --></div></div>
-
 <div class="content">
-<h2 id="あらすじ">あらすじ</h2>
+<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>Contents</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">インストール環境構築手順</span></a>
+              <ul>
+                <li class="toc_level-2 toc_section-3">
+                  <a href="#tocAnchor-1-2-1"><span class="tocnumber">2.1</span> <span class="toctext">参考サイト</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-4">
+                  <a href="#tocAnchor-1-2-2"><span class="tocnumber">2.2</span> <span class="toctext">前提</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-5">
+                  <a href="#tocAnchor-1-2-3"><span class="tocnumber">2.3</span> <span class="toctext">前準備</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-6">
+                  <a href="#tocAnchor-1-2-4"><span class="tocnumber">2.4</span> <span class="toctext">アプリ側準備</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-7">
+                  <a href="#tocAnchor-1-2-5"><span class="tocnumber">2.5</span> <span class="toctext">ダウンロードページ準備</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-8">
+                  <a href="#tocAnchor-1-2-6"><span class="tocnumber">2.6</span> <span class="toctext">サーバ配備</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-9">
+                  <a href="#tocAnchor-1-2-7"><span class="tocnumber">2.7</span> <span class="toctext">アクセス、インストール</span></a>
+                </li>
+              </ul>
+            </li>
+            <li class="toc_level-1 toc_section-10">
+              <a href="#tocAnchor-1-10"><span class="tocnumber">3</span> <span class="toctext">うまくいかない場合</span></a>
+              <ul>
+                <li class="toc_level-2 toc_section-11">
+                  <a href="#tocAnchor-1-10-1"><span class="tocnumber">3.1</span> <span class="toctext">パターン1</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-12">
+                  <a href="#tocAnchor-1-10-2"><span class="tocnumber">3.2</span> <span class="toctext">パターン2</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-13">
+                  <a href="#tocAnchor-1-10-3"><span class="tocnumber">3.3</span> <span class="toctext">パターン3(未解決)</span></a>
+                </li>
+              </ul>
+            </li>
+            <li class="toc_level-1 toc_section-14">
+              <a href="#tocAnchor-1-14"><span class="tocnumber">4</span> <span class="toctext">しかも</span></a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><h2 id="tocAnchor-1-1">あらすじ</h2>
 
 <p>iOSアプリをサーバに置いてそこからインストールできるようにしたかった。</p>
 
@@ -86,9 +152,9 @@
 <li>と、なぜか失敗する端末もあるので、後半にその調査メモ(とりあえず、インストールはできたが、根本原因がわからん)</li>
 </ul>
 
-<h2 id="インストール環境構築手順">インストール環境構築手順</h2>
+<h2 id="tocAnchor-1-2">インストール環境構築手順</h2>
 
-<h3 id="参考サイト">参考サイト</h3>
+<h3 id="tocAnchor-1-2-1">参考サイト</h3>
 
 <ul>
 <li><a href="http://mushikago.com/i/?p=2083">iOS用アプリのAdHoc版を作る（Xcode） ｜ MUSHIKAGO APPS MEMO</a></li>
@@ -96,7 +162,7 @@
 <li><a href="http://d.hatena.ne.jp/zentoo/20121024/1351097392">iOSアプリのAd-Hoc install (Over-the-Air, HTTP経由) がなんかよくわからんけど失敗する、という時はとにかくログを見るべしという話 - 愛と勇気と缶ビール</a></li>
 </ul>
 
-<h3 id="前提">前提</h3>
+<h3 id="tocAnchor-1-2-2">前提</h3>
 
 <ul>
 <li>iOS端末実機にXcode経由でアプリがビルドができる状態になっている事</li>
@@ -107,7 +173,7 @@
 
 <p>別の作業と混同している可能性も。</p>
 
-<h3 id="前準備">前準備</h3>
+<h3 id="tocAnchor-1-2-3">前準備</h3>
 
 <h4 id="certificatesigningrequest-certsigningrequest-準備">CertificateSigningRequest.certSigningRequest 準備</h4>
 
@@ -164,7 +230,7 @@
 
 <p>ここまでで作ったファイルは、なんかうまくいかない時に使う <strong>かも</strong> 。</p>
 
-<h3 id="アプリ側準備">アプリ側準備</h3>
+<h3 id="tocAnchor-1-2-4">アプリ側準備</h3>
 
 <h4 id="provisioning-profileインストール">Provisioning Profileインストール</h4>
 
@@ -213,16 +279,20 @@
 <li><code>helloworld.ipa</code> と <code>helloworld.plist</code> が作成される</li>
 </ul>
 
-<h3 id="ダウンロードページ準備">ダウンロードページ準備</h3>
+<h3 id="tocAnchor-1-2-5">ダウンロードページ準備</h3>
 
 <p>※ 作らなくても、Safari等から決められたUrlを直叩きすればインストールできる。…が、長くて直叩きはめんどい。</p>
 
 <p>index.htmlとして、以下のようなリンクを持つページを作成する。</p>
 
-<div class="highlight"><pre><code class="language-html" data-lang="html">(略)
+<figure class="highlight">
+  <pre>
+    <code class="language-html" data-lang="html">(略)
 <span class="nt">&lt;body&gt;</span>
-<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;itms-services://?action=download-manifest&amp;url=PLIST_FULL_PATH&quot;</span><span class="nt">&gt;</span>Download !!<span class="nt">&lt;/a&gt;</span>
-<span class="nt">&lt;/body&gt;</span></code></pre></div>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"itms-services://?action=download-manifest&amp;url=PLIST_FULL_PATH"</span><span class="nt">&gt;</span>Download !!<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/body&gt;</span></code>
+  </pre>
+</figure>
 
 <ul>
 <li><code>PLIST_FULL_PATH</code> : plistファイルを配備する時のフルパスを入力する(ipaファイルと同じ所に置く)
@@ -232,7 +302,7 @@
 </ul></li>
 </ul>
 
-<h3 id="サーバ配備">サーバ配備</h3>
+<h3 id="tocAnchor-1-2-6">サーバ配備</h3>
 
 <ul>
 <li>サーバに以下のファイルを配備する。
@@ -244,41 +314,45 @@
 </ul></li>
 </ul>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> cp index.html DOCUMENT_ROOT/
-<span class="go">  $ cp helloworld.ipa DOCUMENT_ROOT/ipa/</span>
-<span class="go">  $ chmod 755 DOCUMENT_ROOT/ipa/helloworld.ipa </span>
-<span class="go">  $ cp helloworld.plist DOCUMENT_ROOT/ipa/</span>
-<span class="go">  $ chmod 755 DOCUMENT_ROOT/ipa/helloworld.plist</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">  $ cp index.html DOCUMENT_ROOT/
+  $ cp helloworld.ipa DOCUMENT_ROOT/ipa/
+  $ chmod 755 DOCUMENT_ROOT/ipa/helloworld.ipa 
+  $ cp helloworld.plist DOCUMENT_ROOT/ipa/
+  $ chmod 755 DOCUMENT_ROOT/ipa/helloworld.plist</code>
+  </pre>
+</figure>
 
 <p>ダウンロードするのでアクセス権限を変更しておく。</p>
 
-<h3 id="アクセス、インストール">アクセス、インストール</h3>
+<h3 id="tocAnchor-1-2-7">アクセス、インストール</h3>
 
 <ul>
 <li>端末から http://xx.xx.xx.xx/ へアクセスし、indexのリンクを叩く</li>
-<li><code>&quot;xx.xx.xx.xx&quot;により&quot;PROJECT&quot;がインストールされます</code> と表示されるので、インストールを選択</li>
+<li><code>"xx.xx.xx.xx"により"PROJECT"がインストールされます</code> と表示されるので、インストールを選択</li>
 <li><strong>うまくいけば</strong> インストール成功</li>
 </ul>
 
-<h2 id="うまくいかない場合">うまくいかない場合</h2>
+<h2 id="tocAnchor-1-10">うまくいかない場合</h2>
 
 <p>ここからが本題。</p>
 
 <p>大体うまくいくんだけど、一部うまく場合がある。なんでかがわからない。</p>
 
-<h3 id="パターン1">パターン1</h3>
+<h3 id="tocAnchor-1-10-1">パターン1</h3>
 
 <p><code>iOS Deployment Target</code> のバージョンより低いバージョンの端末でインストールしようとした場合、エラーダイアログとともに失敗する。</p>
 
 <p>これは凡ミスなので、TargetのiOSバージョンを下げてやればよい。</p>
 
-<h3 id="パターン2">パターン2</h3>
+<h3 id="tocAnchor-1-10-2">パターン2</h3>
 
 <p>未遭遇だが、Provisioning Profileが正常にインストールされていない場合などもこけるはず。</p>
 
 <p>設定アプリの一般からプロファイルを確認。</p>
 
-<h3 id="パターン3-未解決">パターン3(未解決)</h3>
+<h3 id="tocAnchor-1-10-3">パターン3(未解決)</h3>
 
 <p>これで困った。</p>
 
@@ -313,12 +387,16 @@
 
 <p>…で、確認してみたら以下のようなログが延々と出ていた。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;: (com.apple.ubd) Throttling respawn: Will start in 1 seconds</span>
-<span class="go">May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;: (com.apple.ubd) Throttling respawn: Will start in 1 seconds</span>
-<span class="go">May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;: (com.apple.ubd) Throttling respawn: Will start in 1 seconds</span>
-<span class="go">May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;: (com.apple.ubd) Throttling respawn: Will start in 1 seconds</span>
-<span class="go">May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;: (com.apple.ubd) Throttling respawn: Will start in 1 seconds</span>
-<span class="go">(略)</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;: (com.apple.ubd) Throttling respawn: Will start in 1 seconds
+May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;: (com.apple.ubd) Throttling respawn: Will start in 1 seconds
+May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;: (com.apple.ubd) Throttling respawn: Will start in 1 seconds
+May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;: (com.apple.ubd) Throttling respawn: Will start in 1 seconds
+May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;: (com.apple.ubd) Throttling respawn: Will start in 1 seconds
+(略)</code>
+  </pre>
+</figure>
 
 <p>うーん、なんだろうこれ。</p>
 
@@ -336,11 +414,11 @@
 <p>ubdとはなんぞや…。</p>
 
 <ul>
-<li><a href="http://www.macinside.info/process.php?name=ubd">What is &quot;ubd&quot;? — Process safety information — MacInside (Beta)</a></li>
+<li><a href="http://www.macinside.info/process.php?name=ubd">What is "ubd"? — Process safety information — MacInside (Beta)</a></li>
 </ul>
 
 <blockquote>
-<p>&quot;ubd&quot; is the Ubiquity Server Process.</p>
+<p>"ubd" is the Ubiquity Server Process.</p>
 </blockquote>
 
 <p>何者なんだ…。OSXの方でなにやらエラーログを出しまくるという現象あり。</p>
@@ -386,11 +464,15 @@ A quick search for com.apple.ubd shows it is the iCloud synchronization daemon.<
 </ul></li>
 </ul>
 
-<h2 id="しかも">しかも</h2>
+<h2 id="tocAnchor-1-14">しかも</h2>
 
 <p>正常にインストールできるようになってからも、インストール失敗した端末だけは依然として</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;: (com.apple.ubd) Throttling respawn: Will start in 1 seconds</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;: (com.apple.ubd) Throttling respawn: Will start in 1 seconds</code>
+  </pre>
+</figure>
 
 <p>ログは出続けている…。</p>
 
@@ -404,17 +486,17 @@ A quick search for com.apple.ubd shows it is the iCloud synchronization daemon.<
   <ul>
     
       <li class="prev">
-        <a href="/2013/05/27/jekyll-githubpages-analytics-setting" title="Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた">
+        <a href="/2013/05/27/jekyll-githubpages-analytics-setting/" title="Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた">
           Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2013/07/18/ios-backup-restore" title="iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段">
+        <a href="/2013/07/18/ios-backup-restore/" title="iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段">
           iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段
         </a>
       </li>
@@ -427,16 +509,16 @@ A quick search for com.apple.ubd shows it is the iCloud synchronization daemon.<
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2013/06/05/ios-over-the-air" data-text="kk_Atakaの日記 - Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2013/06/05/ios-over-the-air/" data-text="kk_Atakaの日記 - Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/06/05/ios-over-the-air/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/06/05/ios-over-the-air/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/06/05/ios-over-the-air//">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/06/05/ios-over-the-air//" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/06/05/ios-over-the-air/"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/06/05/ios-over-the-air//"
      data-hatena-bookmark-title="kk_Atakaの日記 - Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
@@ -449,7 +531,7 @@ A quick search for com.apple.ubd shows it is the iCloud synchronization daemon.<
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/06/05/ios-over-the-air/"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/06/05/ios-over-the-air//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
@@ -523,142 +605,142 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/06/05/ios-ove
       <li>
         <span>2016/03/05</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Homebrew">Homebrew</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Homebrew">Homebrew</a></code> ]</span>
         
-        <a href="/2016/03/05/go-bin-install-from-homebrew">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
+        <a href="/2016/03/05/go-bin-install-from-homebrew/">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//" />
         </a>
       </li>
     
       <li>
         <span>2016/02/17</span>
         
-          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Mac">Mac</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Mac">Mac</a></code> ]</span>
         
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan">El Capitan上に古いpumaをインストールすると失敗する</a>
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">El Capitan上に古いpumaをインストールすると失敗する</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/19</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
+        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/12</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <a href="/2016/01/12/golang-nicony/">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony//" />
         </a>
       </li>
     
       <li>
         <span>2015/12/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt/">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/11/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt/">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/10/13</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt/">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/09/24</span>
         
-          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ansible">Ansible</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <a href="/2015/09/24/ansible-meetup-201509/">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//" />
         </a>
       </li>
     
       <li>
         <span>2015/08/06</span>
         
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Jekyll">Jekyll</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Liquid">Liquid</a></code> ]</span>
         
-        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <a href="/2015/08/06/jekyll-tag-sort/">Jekyllで出力するタグをソートする 解決編</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//" />
         </a>
       </li>
     
       <li>
         <span>2015/07/13</span>
         
-          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Markdown">Markdown</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+          <span>[ <code><a href="/tags/#reST">reST</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Wiki">Wiki</a></code> ]</span>
         
-        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <a href="/2015/07/13/lightweight-markup-language-history/">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//" />
         </a>
       </li>
     
@@ -672,205 +754,205 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/06/05/ios-ove
     
     
       
-      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+      <li><a href="/tags/#API">API <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+      <li><a href="/tags/#Android">Android <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+      <li><a href="/tags/#Dropbox">Dropbox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>4</sub></a></li>
+      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Homebrew">Homebrew <sub>1</sub></a></li>
+      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
     
       
-      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
     
       
-      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
     
       
-      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Mac">Mac <sub>8</sub></a></li>
+      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+      <li><a href="/tags/#Python">Python <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#Ruby">Ruby <sub>72</sub></a></li>
+      <li><a href="/tags/#Ruby">Ruby <sub>72</sub></a></li>
     
       
-      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
     
       
-      <li><a href="/tags.html#Sphinx">Sphinx <sub>16</sub></a></li>
+      <li><a href="/tags/#Sphinx">Sphinx <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
     
       
-      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
     
       
-      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#イベント">イベント <sub>26</sub></a></li>
+      <li><a href="/tags/#イベント">イベント <sub>26</sub></a></li>
     
       
-      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
     
       
-      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
     
   </ul>
 

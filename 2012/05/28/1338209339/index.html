@@ -3,9 +3,17 @@
   <head>
     <title>Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red - kk_Atakaの日記</title>
     <meta charset="utf-8">
+    <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
     <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/toc.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/js/jquery.tocLight.js"></script>
+    <script type="text/javascript">
+       $(function() {
+         $.toc.clickHideButton();
+       });
+    </script>
   </head>
   <body>
     <script type="text/javascript">
@@ -25,27 +33,27 @@
       <nav>
         <ul>
           <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives.html">Archive</a>
-          <li class="main-nav"><a href="/tags.html">Tag</a>
-          <li class="main-nav"><a href="/monitor.html">Monitor</a>
+          <li class="main-nav"><a href="/archives/">Archive</a>
+          <li class="main-nav"><a href="/tags/">Tag</a>
+          <li class="main-nav"><a href="/monitor/">Monitor</a>
         </ul>
       </nav>
     </div>
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2012/05/28/1338209339">Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red</a></h1>
+        <h1><a href="/2012/05/28/1338209339/">Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags.html#Ruby" class="tag">Ruby</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Ruby" class="tag">Ruby</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#イベント" class="tag">イベント</a></code> ]</span>
+              <span>[ <code><a href="/tags/#イベント" class="tag">イベント</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#Jenkins" class="tag">Jenkins</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Jenkins" class="tag">Jenkins</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#Redmine" class="tag">Redmine</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Redmine" class="tag">Redmine</a></code> ]</span>
             
           
           
@@ -59,17 +67,17 @@
   <ul>
     
       <li class="prev">
-        <a href="/2012/05/21/1337605575" title="SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした">
+        <a href="/2012/05/21/1337605575/" title="SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした">
           SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2012/06/03/1338724924" title="TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました">
+        <a href="/2012/06/03/1338724924/" title="TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました">
           TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました
         </a>
       </li>
@@ -78,52 +86,189 @@
 </div>
 
 
-
-
 <div class="content">
-<h1>概要</h1>
-<ul><li><a href="http://connpass.com/event/500/">Jenkins,Redmine使いこなし勉強会 - connpass</a></li></ul>
+<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>Contents</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">Redmineにおける問題</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">プラグインの探し方・おすすめ</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">REST API</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-4">
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">プラグインを作る</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-5">
+              <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">Ruby環境</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-6">
+              <a href="#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">Redmineインストール</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-7">
+              <a href="#tocAnchor-1-7"><span class="tocnumber">7</span> <span class="toctext">Rubyデバッグ環境</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-8">
+              <a href="#tocAnchor-1-8"><span class="tocnumber">8</span> <span class="toctext">NetBeans</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-9">
+              <a href="#tocAnchor-1-9"><span class="tocnumber">9</span> <span class="toctext">一つだけシンプルなプラグインを</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-10">
+              <a href="#tocAnchor-1-10"><span class="tocnumber">10</span> <span class="toctext">Jenkinsとは</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-11">
+              <a href="#tocAnchor-1-11"><span class="tocnumber">11</span> <span class="toctext">プラグインの探し方</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-12">
+              <a href="#tocAnchor-1-12"><span class="tocnumber">12</span> <span class="toctext">プラグインの使い方</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-13">
+              <a href="#tocAnchor-1-13"><span class="tocnumber">13</span> <span class="toctext">プラグインのハック</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-14">
+              <a href="#tocAnchor-1-14"><span class="tocnumber">14</span> <span class="toctext">環境</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-15">
+              <a href="#tocAnchor-1-15"><span class="tocnumber">15</span> <span class="toctext">手順</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-16">
+              <a href="#tocAnchor-1-16"><span class="tocnumber">16</span> <span class="toctext">環境その2</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-17">
+              <a href="#tocAnchor-1-17"><span class="tocnumber">17</span> <span class="toctext">手順その2</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-18">
+              <a href="#tocAnchor-1-18"><span class="tocnumber">18</span> <span class="toctext">環境</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-19">
+              <a href="#tocAnchor-1-19"><span class="tocnumber">19</span> <span class="toctext">手順</span></a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><h1>概要</h1>
+<ul>
+  <li>
+    <a href="http://connpass.com/event/500/">Jenkins,Redmine使いこなし勉強会 - connpass</a>
+  </li>
+</ul>
 <p>前半は発表のメモ。後半は実際にプラグイン作ったりインストールしたりのメモ。</p>
 <h1>Redmineプラグイン活用入門 - @<a href="http://twitter.com/Kokawa_Takashi">Kokawa Takashi (Kokawa_Takashi)さんはTwitterを使っています</a>さん</h1>
-<p><span class="deco" style="color:#FF0000;">注意:Redmine開発環境が安定していないので、すぐ陳腐化してしまう事がある！</span></p>
-<h2>Redmineにおける問題</h2>
-<ul><li>Redmineの設定で解決</li><li>運用で解決</li><li>ツール自体を拡張して解決<ul><li>プラグインの探し方・おすすめ</li><li>REST APIを使って外部から</li><li>プラグインを作る</li></ul></li></ul>
-<h2>プラグインの探し方・おすすめ</h2>
-<ul><li><a href="http://www.r-labs.org/projects/r-labs/wiki/Redmine%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E9%9B%86">r-labs</a></li><li><a href="http://www.redmine.org/plugins">Plugins - Redmine</a></li><li>一つだけおすすめを… Wiki Extensions Plugin<ul><li>オートプレビュー</li><li>任意のページをメニューに</li><li>任意のページを埋め込み 等々…</li></ul></li><li>他のおすすめ<ul><li>CodeRevirew</li><li>Backlogs</li><li>TimeTracker</li></ul></li></ul>
-<h2>REST API</h2>
-<ul><li>自動でチケットを作ったりできる</li><li>チケット一覧を取得できたり</li><li>この一連の流れができたらJenkinsに任せる事ができる<ul><li>期日が間近のチケットのメール通知などもできる</li></ul></li></ul>
-<h2>プラグインを作る</h2>
-<ul><li>Redmine1.4 or 2.0が対象(Ruby1.9,Bundler対応している/これ以前はしていない)</li><li>プラグイン開発環境構築がつらいので</li></ul>
-<h2>Ruby環境</h2>
-<ul><li>WindowsならRubyInstaller + DevKit</li><li>MacならRVM<ul><li>自分でも少しまとめている <a href="2011-12-04-1323009249">2011-12-04-1323009249</a></li></ul></li></ul>
-<h2>Redmineインストール</h2>
-<ul><li>公式を参考に<ul><li>自分でも少しまとめている <a href="2011-05-01-1304204171">2011-05-01-1304204171</a></li><li>同じく <a href="2011-09-07-1315401886">2011-09-07-1315401886</a></li></ul></li><li>rmagickを除外する</li></ul>
+<p>
+  <span class="deco" style="color:#FF0000;">注意:Redmine開発環境が安定していないので、すぐ陳腐化してしまう事がある！</span>
+</p>
+<h2 id="tocAnchor-1-1">Redmineにおける問題</h2>
+<ul>
+  <li>Redmineの設定で解決</li>
+  <li>運用で解決</li>
+  <li>ツール自体を拡張して解決<ul><li>プラグインの探し方・おすすめ</li><li>REST APIを使って外部から</li><li>プラグインを作る</li></ul></li>
+</ul>
+<h2 id="tocAnchor-1-2">プラグインの探し方・おすすめ</h2>
+<ul>
+  <li>
+    <a href="http://www.r-labs.org/projects/r-labs/wiki/Redmine%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E9%9B%86">r-labs</a>
+  </li>
+  <li>
+    <a href="http://www.redmine.org/plugins">Plugins - Redmine</a>
+  </li>
+  <li>一つだけおすすめを… Wiki Extensions Plugin<ul><li>オートプレビュー</li><li>任意のページをメニューに</li><li>任意のページを埋め込み 等々…</li></ul></li>
+  <li>他のおすすめ<ul><li>CodeRevirew</li><li>Backlogs</li><li>TimeTracker</li></ul></li>
+</ul>
+<h2 id="tocAnchor-1-3">REST API</h2>
+<ul>
+  <li>自動でチケットを作ったりできる</li>
+  <li>チケット一覧を取得できたり</li>
+  <li>この一連の流れができたらJenkinsに任せる事ができる<ul><li>期日が間近のチケットのメール通知などもできる</li></ul></li>
+</ul>
+<h2 id="tocAnchor-1-4">プラグインを作る</h2>
+<ul>
+  <li>Redmine1.4 or 2.0が対象(Ruby1.9,Bundler対応している/これ以前はしていない)</li>
+  <li>プラグイン開発環境構築がつらいので</li>
+</ul>
+<h2 id="tocAnchor-1-5">Ruby環境</h2>
+<ul>
+  <li>WindowsならRubyInstaller + DevKit</li>
+  <li>MacならRVM<ul><li>自分でも少しまとめている <a href="http://d.hatena.ne.jp/kk_Ataka/20111204/1323009249">2011-12-04-1323009249</a></li></ul></li>
+</ul>
+<h2 id="tocAnchor-1-6">Redmineインストール</h2>
+<ul>
+  <li>公式を参考に<ul><li>自分でも少しまとめている <a href="http://d.hatena.ne.jp/kk_Ataka/20110501/1304204171">2011-05-01-1304204171</a></li><li>同じく <a href="http://d.hatena.ne.jp/kk_Ataka/20110907/1315401886">2011-09-07-1315401886</a></li></ul></li>
+  <li>rmagickを除外する</li>
+</ul>
 <pre>bundle install -without development test rmagick -path vendor/bundle</pre>
-<h2>Rubyデバッグ環境</h2>
-<ul><li>ruby-debug-ide…だがこの環境ではうまく動かなくなってしまった</li><li>ruby-debug-base19が必要らしいが、そのまま落としてきても動かない<ul><li>preオプションを入れる</li></ul></li></ul>
+<h2 id="tocAnchor-1-7">Rubyデバッグ環境</h2>
+<ul>
+  <li>ruby-debug-ide…だがこの環境ではうまく動かなくなってしまった</li>
+  <li>ruby-debug-base19が必要らしいが、そのまま落としてきても動かない<ul><li>preオプションを入れる</li></ul></li>
+</ul>
 <p>&gt;|?|</p>
 <p>gem install ruby-debug-base19 --pre</p>
 <p>gem install ruby-debug-ide --pre</p>
-<table><tr><td>&lt;</td></tr></table>
-<h2>NetBeans</h2>
-<ul><li>ただし、公式サポートは6.9.1が最終</li></ul>
-<h2>一つだけシンプルなプラグインを</h2>
-<ul><li>Redmineのメニューからヘルプを消す</li><li>スケルトンを作ってinit.rbに一文足すだけ<ul><li>最後に試してみるよ</li></ul></li></ul>
+<table>
+  <tr>
+    <td>&lt;</td>
+  </tr>
+</table>
+<h2 id="tocAnchor-1-8">NetBeans</h2>
+<ul>
+  <li>ただし、公式サポートは6.9.1が最終</li>
+</ul>
+<h2 id="tocAnchor-1-9">一つだけシンプルなプラグインを</h2>
+<ul>
+  <li>Redmineのメニューからヘルプを消す</li>
+  <li>スケルトンを作ってinit.rbに一文足すだけ<ul><li>最後に試してみるよ</li></ul></li>
+</ul>
 <h1>Jenkinsプラグイン活用入門- @<a href="http://twitter.com/cactusman">さぼてん（さぼ福）しんざき 佐藤太一  (cactusman)さんはTwitterを使っています</a>さん</h1>
-<h2>Jenkinsとは</h2>
-<ul><li>高性能Cron</li></ul>
-<h2>プラグインの探し方</h2>
-<ul><li>探す前に…</li><li>shやbatなどをうまく組み合わせられないかなどをまず考える</li><li>Jenkins自体の昨日もうまく使う</li><li>プラグイン自体は本家に登録されている</li><li>Jenkins Plugin Hub<ul><li>ソフト、ツール名などでとりあえず引っ掛けてみる</li></ul></li></ul>
-<h2>プラグインの使い方</h2>
-<ul><li>すごくメンテされているものとほったらかされているものでまちまち</li><li>コミットやDL数を見てみる</li><li>TackScanerPlugin<ul><li>キーワードを拾う(TODOなど)</li><li>最後に入れてみる</li></ul></li><li>DickUsagePlugin<ul><li>Jenkinsのディスク使用量を見る</li></ul></li><li>JobConfigHistoryPlugin<ul><li>設定ファイルのバックアップ、差分表示</li></ul></li></ul>
-<h2>プラグインのハック</h2>
-<ul><li>エクステンションポイントを継承する<ul><li>Notifierを継承すれば通知系の事ができる</li></ul></li><li>mvnにおまじないを追加する</li><li>Jenkinsの公式Pluginが参考になる</li></ul>
+<h2 id="tocAnchor-1-10">Jenkinsとは</h2>
+<ul>
+  <li>高性能Cron</li>
+</ul>
+<h2 id="tocAnchor-1-11">プラグインの探し方</h2>
+<ul>
+  <li>探す前に…</li>
+  <li>shやbatなどをうまく組み合わせられないかなどをまず考える</li>
+  <li>Jenkins自体の昨日もうまく使う</li>
+  <li>プラグイン自体は本家に登録されている</li>
+  <li>Jenkins Plugin Hub<ul><li>ソフト、ツール名などでとりあえず引っ掛けてみる</li></ul></li>
+</ul>
+<h2 id="tocAnchor-1-12">プラグインの使い方</h2>
+<ul>
+  <li>すごくメンテされているものとほったらかされているものでまちまち</li>
+  <li>コミットやDL数を見てみる</li>
+  <li>TackScanerPlugin<ul><li>キーワードを拾う(TODOなど)</li><li>最後に入れてみる</li></ul></li>
+  <li>DickUsagePlugin<ul><li>Jenkinsのディスク使用量を見る</li></ul></li>
+  <li>JobConfigHistoryPlugin<ul><li>設定ファイルのバックアップ、差分表示</li></ul></li>
+</ul>
+<h2 id="tocAnchor-1-13">プラグインのハック</h2>
+<ul>
+  <li>エクステンションポイントを継承する<ul><li>Notifierを継承すれば通知系の事ができる</li></ul></li>
+  <li>mvnにおまじないを追加する</li>
+  <li>Jenkinsの公式Pluginが参考になる</li>
+</ul>
 <h1>実際にやってみる(Redmine)</h1>
 <p>メニューの一部を消してみる。</p>
-<h2>環境</h2>
-<ul><li>Windows XP</li><li>Ruby 1.8.7</li><li>Redmine 1.0.0.stable (SQLite)</li></ul>
-<h2>手順</h2>
-<ul><li>はじめにRedmine Pluginのスケルトンを作成する。名前はdelete_menuとした</li></ul>
+<h2 id="tocAnchor-1-14">環境</h2>
+<ul>
+  <li>Windows XP</li>
+  <li>Ruby 1.8.7</li>
+  <li>Redmine 1.0.0.stable (SQLite)</li>
+</ul>
+<h2 id="tocAnchor-1-15">手順</h2>
+<ul>
+  <li>はじめにRedmine Pluginのスケルトンを作成する。名前はdelete_menuとした</li>
+</ul>
 <pre>$ cd REDMINE_ROOT
 $ ruby script\generate redmine_plugin delete_menu
 ./script/../config/../vendor/rails/railties/lib/rails/gem_dependency.rb:119:Warning: Gem::Dependency#version_requirements is deprecated and will be removed on or after August 2010.  Use #requirement
@@ -144,7 +289,9 @@ $ ruby script\generate redmine_plugin delete_menu
       create  vendor/plugins/redmine_delete_menu/lang/en.yml
       create  vendor/plugins/redmine_delete_menu/config/locales/en.yml
       create  vendor/plugins/redmine_delete_menu/test/test_helper.rb</pre>
-<ul><li>vendor/pluginにredmine_delete_menuというフォルダができている</li></ul>
+<ul>
+  <li>vendor/pluginにredmine_delete_menuというフォルダができている</li>
+</ul>
 <pre>$ ls
 ...
 redmine_delete_menu/
@@ -153,13 +300,17 @@ $ cd redmine_delete_menu
 $ ls
 README.rdoc assets/     db/         lang/       test/
 app/        config/     init.rb*    lib/</pre>
-<ul><li>init.rbに例の一文を挿入</li></ul>
+<ul>
+  <li>init.rbに例の一文を挿入</li>
+</ul>
 <pre class="ruby"> Redmine::Plugin.register :redmine_delete_menu do
    ...
    
 +  delete_menu_item :top_menu, :help
  end</pre>
-<ul><li>そして起動</li></ul>
+<ul>
+  <li>そして起動</li>
+</ul>
 <pre>$ cd REDMINE_ROOT
 $ ruby script\server -e production
 =&gt; Booting WEBrick
@@ -170,16 +321,26 @@ $ ruby script\server -e production
 [2012-05-28 19:15:50] INFO  WEBrick 1.3.1
 [2012-05-28 19:15:50] INFO  ruby 1.8.7 (2010-12-23) [i386-mswin32]
 [2012-05-28 19:15:50] INFO  WEBrick::HTTPServer#start: pid=4640 port=3000</pre>
-<ul><li><a href="http://localhost:3000">http://localhost:3000</a> にアクセスすると…おお！　消えてる！</li></ul>
-<h2>環境その2</h2>
+<ul>
+  <li><a href="http://localhost:3000">http://localhost:3000</a> にアクセスすると…おお！　消えてる！</li>
+</ul>
+<h2 id="tocAnchor-1-16">環境その2</h2>
 <p>Ruby1.9、Redmine1.4でもやってみるかー。</p>
-<ul><li>Windows XP</li><li>Ruby 1.9.3</li><li>Redmine 1.4.0.stable (SQLite)</li></ul>
-<h2>手順その2</h2>
-<ul><li>いきなりgenerateしようとしたらbundle installしろと言われた</li></ul>
+<ul>
+  <li>Windows XP</li>
+  <li>Ruby 1.9.3</li>
+  <li>Redmine 1.4.0.stable (SQLite)</li>
+</ul>
+<h2 id="tocAnchor-1-17">手順その2</h2>
+<ul>
+  <li>いきなりgenerateしようとしたらbundle installしろと言われた</li>
+</ul>
 <pre>$ ruby script\generate redmine_plugin delete_menu
 Some gems may need to be installed or updated.
 Please run `bundle install --without development test`.</pre>
-<ul><li>なのでbundle install</li></ul>
+<ul>
+  <li>なのでbundle install</li>
+</ul>
 <pre>$ bundle install --without development test --path ./vendor/bundle
 Fetching source index for http://rubygems.org/
 Installing rake (0.9.2.2)
@@ -196,7 +357,9 @@ Installing net-ldap (0.3.1)
 Installing pg (0.13.2)
 Installing rails (2.3.14)
 Installing rmagick (2.13.1) with native extensions</pre>
-<ul><li>rmagickが入らず止まりっぱなし……そういえば、rmagickは使わなければwithoutしてしまってもいいです的な事を言われていた気がするのでそれをプラス</li></ul>
+<ul>
+  <li>rmagickが入らず止まりっぱなし……そういえば、rmagickは使わなければwithoutしてしまってもいいです的な事を言われていた気がするのでそれをプラス</li>
+</ul>
 <pre>$ bundle install --without development test rmagick --path ./vendor/bundle
 Fetching source index for http://rubygems.org/
 Using rake (0.9.2.2)
@@ -217,7 +380,9 @@ Installing sqlite3 (1.3.6)
 Installing tzinfo (0.3.33)
 Using bundler (1.0.21)
 Your bundle is complete! It was installed into ./vendor/bundle</pre>
-<ul><li>再度。先ほどbundlerを使ったのでbundle exec</li></ul>
+<ul>
+  <li>再度。先ほどbundlerを使ったのでbundle exec</li>
+</ul>
 <pre>$ bundle exec ruby script\generate redmine_plugin delete_menu
 C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/activesupport-2.3.14/lib/active_support/inflector.rb:3:in `&lt;top (required)&gt;': iconv will be deprecated in the future, use String#encode instead.
 NOTE: Gem.source_index is deprecated, use Specification. It will be removed on or after 2011-11-01.
@@ -256,13 +421,17 @@ Gem::SourceIndex#each called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems
       create  vendor/plugins/redmine_delete_menu/init.rb
       create  vendor/plugins/redmine_delete_menu/config/locales/en.yml
       create  vendor/plugins/redmine_delete_menu/test/test_helper.rb</pre>
-<ul><li>deprecateがやまほど出たけど、一応スケルトンは作れたみたい。で、init.rbを編集。ここは同じ</li></ul>
+<ul>
+  <li>deprecateがやまほど出たけど、一応スケルトンは作れたみたい。で、init.rbを編集。ここは同じ</li>
+</ul>
 <pre class="ruby"> Redmine::Plugin.register :redmine_delete_menu do
    ...
    
 +  delete_menu_item :top_menu, :help
  end</pre>
-<ul><li>で、起動。ここでもbundle exec</li></ul>
+<ul>
+  <li>で、起動。ここでもbundle exec</li>
+</ul>
 <pre>$ bundle exec ruby script\server -e production
 C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/activesupport-2.3.14/lib/active_support/inflector.rb:3:in `&lt;top (required)&gt;': iconv will be deprecated in the future, use String#encode instead.
 =&gt; Booting WEBrick
@@ -277,28 +446,39 @@ Gem.source_index called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/rail
 <p>1.4台でもいけた！</p>
 <h1>実際にプラグインを入れてみる(Jenkins)</h1>
 <p>Task Scanner Pluginを入れてみよう。</p>
-<h2>環境</h2>
-<ul><li>Windows XP</li><li>Jenkins 1.450</li></ul>
-<h2>手順</h2>
-<ul><li>Jenkinsの管理 =&gt; プラグインの管理 =&gt; 利用可能タブ =&gt; Task Scanner Pluginをチェックしインストール<ul><li>Static Code Analysis Plug-insも同時にDLされるみたい</li></ul></li><li>再起動</li><li>Jenkinsプロジェクト =&gt; 設定 =&gt; ビルド後の処理 =&gt; 未解決タスクの集計<span class="footnote"><a href="#f1" title="ローカライズされてた" name="fn1">*1</a></span>にチェック<ul><li>集計対象: source/*.rst<ul><li>今回はSphinxのドキュメントソース内のTODOを拾うので</li></ul></li><li>集計対象外: source/*.py<ul><li>conf.pyなどは除外する</li></ul></li><li>タスクタグ 優先度 Normal: //TODO<ul><li>ドキュメント内の//TODOを探してもらう。優先度は適当</li></ul></li><li>高度な設定を開きデフォルトのエンコーディング: UTF-8</li></ul></li><li>保存してビルド</li><li>一度ビルドするとJenkinsプロジェクトのメニューに【未解決タスク】のリンクが表示される<ul><li>今回設定した//TODOがまとめられてる！</li><li>後、//TODO hogehogeとキーワードの後ろに何か書いておくとメッセージとしてどんなTODOなのかも表示される！</li></ul></li></ul>
-<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: ローカライズされてた</p></div>
+<h2 id="tocAnchor-1-18">環境</h2>
+<ul>
+  <li>Windows XP</li>
+  <li>Jenkins 1.450</li>
+</ul>
+<h2 id="tocAnchor-1-19">手順</h2>
+<ul>
+  <li>Jenkinsの管理 =&gt; プラグインの管理 =&gt; 利用可能タブ =&gt; Task Scanner Pluginをチェックしインストール<ul><li>Static Code Analysis Plug-insも同時にDLされるみたい</li></ul></li>
+  <li>再起動</li>
+  <li>Jenkinsプロジェクト =&gt; 設定 =&gt; ビルド後の処理 =&gt; 未解決タスクの集計<span class="footnote"><a href="#f1" title="ローカライズされてた" name="fn1" id="fn1">*1</a></span>にチェック<ul><li>集計対象: source/*.rst<ul><li>今回はSphinxのドキュメントソース内のTODOを拾うので</li></ul></li><li>集計対象外: source/*.py<ul><li>conf.pyなどは除外する</li></ul></li><li>タスクタグ 優先度 Normal: //TODO<ul><li>ドキュメント内の//TODOを探してもらう。優先度は適当</li></ul></li><li>高度な設定を開きデフォルトのエンコーディング: UTF-8</li></ul></li>
+  <li>保存してビルド</li>
+  <li>一度ビルドするとJenkinsプロジェクトのメニューに【未解決タスク】のリンクが表示される<ul><li>今回設定した//TODOがまとめられてる！</li><li>後、//TODO hogehogeとキーワードの後ろに何か書いておくとメッセージとしてどんなTODOなのかも表示される！</li></ul></li>
+</ul>
+<div class="footnote">
+  <p class="footnote"><a href="#fn1" name="f1" id="f1">*1</a>: ローカライズされてた</p>
+</div>
 </div>
 
 <div class="pagination">
   <ul>
     
       <li class="prev">
-        <a href="/2012/05/21/1337605575" title="SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした">
+        <a href="/2012/05/21/1337605575/" title="SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした">
           SlideShareのAPIを叩いてスライドをDLするRubyスクリプトをHerokuにデプロイした
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2012/06/03/1338724924" title="TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました">
+        <a href="/2012/06/03/1338724924/" title="TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました">
           TDD Boot Camp 大阪 1.0( #tddbc ) に参加しました
         </a>
       </li>
@@ -311,16 +491,16 @@ Gem.source_index called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/rail
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2012/05/28/1338209339" data-text="kk_Atakaの日記 - Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2012/05/28/1338209339/" data-text="kk_Atakaの日記 - Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/05/28/1338209339/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/05/28/1338209339/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/05/28/1338209339//">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/05/28/1338209339//" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/05/28/1338209339/"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/05/28/1338209339//"
      data-hatena-bookmark-title="kk_Atakaの日記 - Jenkins,Redmine使いこなし勉強会に参加しました と、ちょっとプラグイン作ってみた #jen_red"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
@@ -333,7 +513,7 @@ Gem.source_index called from C:/redmine-1.4.0/vendor/bundle/ruby/1.9.1/gems/rail
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/05/28/1338209339/"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/05/28/1338209339//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
@@ -407,142 +587,142 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/05/28/1338209
       <li>
         <span>2016/03/05</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Homebrew">Homebrew</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Homebrew">Homebrew</a></code> ]</span>
         
-        <a href="/2016/03/05/go-bin-install-from-homebrew">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
+        <a href="/2016/03/05/go-bin-install-from-homebrew/">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//" />
         </a>
       </li>
     
       <li>
         <span>2016/02/17</span>
         
-          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Mac">Mac</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Mac">Mac</a></code> ]</span>
         
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan">El Capitan上に古いpumaをインストールすると失敗する</a>
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">El Capitan上に古いpumaをインストールすると失敗する</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/19</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
+        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/12</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <a href="/2016/01/12/golang-nicony/">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony//" />
         </a>
       </li>
     
       <li>
         <span>2015/12/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt/">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/11/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt/">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/10/13</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt/">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/09/24</span>
         
-          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ansible">Ansible</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <a href="/2015/09/24/ansible-meetup-201509/">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//" />
         </a>
       </li>
     
       <li>
         <span>2015/08/06</span>
         
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Jekyll">Jekyll</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Liquid">Liquid</a></code> ]</span>
         
-        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <a href="/2015/08/06/jekyll-tag-sort/">Jekyllで出力するタグをソートする 解決編</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//" />
         </a>
       </li>
     
       <li>
         <span>2015/07/13</span>
         
-          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Markdown">Markdown</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+          <span>[ <code><a href="/tags/#reST">reST</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Wiki">Wiki</a></code> ]</span>
         
-        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <a href="/2015/07/13/lightweight-markup-language-history/">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//" />
         </a>
       </li>
     
@@ -556,205 +736,205 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/05/28/1338209
     
     
       
-      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+      <li><a href="/tags/#API">API <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+      <li><a href="/tags/#Android">Android <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+      <li><a href="/tags/#Dropbox">Dropbox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>4</sub></a></li>
+      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Homebrew">Homebrew <sub>1</sub></a></li>
+      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
     
       
-      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
     
       
-      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
     
       
-      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Mac">Mac <sub>8</sub></a></li>
+      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+      <li><a href="/tags/#Python">Python <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#Ruby">Ruby <sub>72</sub></a></li>
+      <li><a href="/tags/#Ruby">Ruby <sub>72</sub></a></li>
     
       
-      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
     
       
-      <li><a href="/tags.html#Sphinx">Sphinx <sub>16</sub></a></li>
+      <li><a href="/tags/#Sphinx">Sphinx <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
     
       
-      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
     
       
-      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#イベント">イベント <sub>26</sub></a></li>
+      <li><a href="/tags/#イベント">イベント <sub>26</sub></a></li>
     
       
-      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
     
       
-      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
     
   </ul>
 

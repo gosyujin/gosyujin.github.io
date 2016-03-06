@@ -3,9 +3,17 @@
   <head>
     <title>WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ - kk_Atakaの日記</title>
     <meta charset="utf-8">
+    <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
     <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/toc.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/js/jquery.tocLight.js"></script>
+    <script type="text/javascript">
+       $(function() {
+         $.toc.clickHideButton();
+       });
+    </script>
   </head>
   <body>
     <script type="text/javascript">
@@ -25,27 +33,27 @@
       <nav>
         <ul>
           <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives.html">Archive</a>
-          <li class="main-nav"><a href="/tags.html">Tag</a>
-          <li class="main-nav"><a href="/monitor.html">Monitor</a>
+          <li class="main-nav"><a href="/archives/">Archive</a>
+          <li class="main-nav"><a href="/tags/">Tag</a>
+          <li class="main-nav"><a href="/monitor/">Monitor</a>
         </ul>
       </nav>
     </div>
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2013/08/09/redmine2.3-install-and-plugin">WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ</a></h1>
+        <h1><a href="/2013/08/09/redmine2.3-install-and-plugin/">WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags.html#Ruby" class="tag">Ruby</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Ruby" class="tag">Ruby</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#Redmine" class="tag">Redmine</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Redmine" class="tag">Redmine</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#MySql" class="tag">MySql</a></code> ]</span>
+              <span>[ <code><a href="/tags/#MySql" class="tag">MySql</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#StartUp" class="tag">StartUp</a></code> ]</span>
+              <span>[ <code><a href="/tags/#StartUp" class="tag">StartUp</a></code> ]</span>
             
           
           
@@ -59,17 +67,17 @@
   <ul>
     
       <li class="prev">
-        <a href="/2013/08/07/jekyll-maintenance-1" title="Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編">
+        <a href="/2013/08/07/jekyll-maintenance-1/" title="Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編">
           Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2013/08/20/rails3-log-not-colorize" title="Rails3のログ出力にANSIカラーコードを使用しない設定">
+        <a href="/2013/08/20/rails3-log-not-colorize/" title="Rails3のログ出力にANSIカラーコードを使用しない設定">
           Rails3のログ出力にANSIカラーコードを使用しない設定
         </a>
       </li>
@@ -78,14 +86,66 @@
 </div>
 
 
-<div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#環境'>環境</a></li><li><a href='#参考サイト'>参考サイト</a></li><li><a href='#redmineインストール手順'>Redmineインストール手順</a></li><ul><li><a href='#mysql'>MySQL</a></li><li><a href='#redmine'>Redmine</a></li></ul><li><a href='#プラグイン作成の準備'>プラグイン作成の準備</a></li><ul><li><a href='#コマンド'>コマンド</a></li><li><a href='#スケルトン作成'>スケルトン作成</a></li><li><a href='#init-rb'>init.rb</a></li><li><a href='#viewのフック'>viewのフック</a></li><ul><li><a href='#フックファイル'>フックファイル</a></li><li><a href='#viewファイル'>Viewファイル</a></li></ul><li><a href='#controllerと連携'>Controllerと連携</a></li><ul><li><a href='#controller'>Controller</a></li><li><a href='#view'>View</a></li><li><a href='#route'>Route</a></li></ul></ul></ul></ul><!-- end of tree list --></div></div>
-
 <div class="content">
-<h2 id="あらすじ">あらすじ</h2>
+<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>Contents</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">環境</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">参考サイト</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-4">
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">Redmineインストール手順</span></a>
+              <ul>
+                <li class="toc_level-2 toc_section-5">
+                  <a href="#tocAnchor-1-4-1"><span class="tocnumber">4.1</span> <span class="toctext">MySQL</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-6">
+                  <a href="#tocAnchor-1-4-2"><span class="tocnumber">4.2</span> <span class="toctext">Redmine</span></a>
+                </li>
+              </ul>
+            </li>
+            <li class="toc_level-1 toc_section-7">
+              <a href="#tocAnchor-1-7"><span class="tocnumber">5</span> <span class="toctext">プラグイン作成の準備</span></a>
+              <ul>
+                <li class="toc_level-2 toc_section-8">
+                  <a href="#tocAnchor-1-7-1"><span class="tocnumber">5.1</span> <span class="toctext">コマンド</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-9">
+                  <a href="#tocAnchor-1-7-2"><span class="tocnumber">5.2</span> <span class="toctext">スケルトン作成</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-10">
+                  <a href="#tocAnchor-1-7-3"><span class="tocnumber">5.3</span> <span class="toctext">init.rb</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-11">
+                  <a href="#tocAnchor-1-7-4"><span class="tocnumber">5.4</span> <span class="toctext">viewのフック</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-12">
+                  <a href="#tocAnchor-1-7-5"><span class="tocnumber">5.5</span> <span class="toctext">Controllerと連携</span></a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><h2 id="tocAnchor-1-1">あらすじ</h2>
 
 <p>Redmine 2.0台におけるインストール方法〜起動方法とプラグインの作り方のメモ。</p>
 
-<h2 id="環境">環境</h2>
+<h2 id="tocAnchor-1-2">環境</h2>
 
 <ul>
 <li>Windows 7 32bit</li>
@@ -99,7 +159,7 @@
 <li>MySql 5.6.12.1</li>
 </ul>
 
-<h2 id="参考サイト">参考サイト</h2>
+<h2 id="tocAnchor-1-3">参考サイト</h2>
 
 <ul>
 <li><a href="http://redmine.jp/guide/RedmineInstall/">Redmineのインストール — Redmine Guide 日本語訳</a></li>
@@ -109,11 +169,11 @@
 <li><a href="http://railsdoc.com/view">ビュー(view) - Railsドキュメント</a></li>
 </ul>
 
-<h2 id="redmineインストール手順">Redmineインストール手順</h2>
+<h2 id="tocAnchor-1-4">Redmineインストール手順</h2>
 
 <p>まずは準備。</p>
 
-<h3 id="mysql">MySQL</h3>
+<h3 id="tocAnchor-1-4-1">MySQL</h3>
 
 <p>実はMySQLさわるのはじめてかもしれない。</p>
 
@@ -139,34 +199,42 @@
 <li>コンソールから <code>redmine</code> ユーザを作成し、 <strong>テーブルの権限を設定する</strong> (これをよく忘れて <code>access denied</code> になる)</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-mysql" data-lang="mysql"><span class="k">create</span> <span class="k">database</span> <span class="n">redmine</span> <span class="k">character</span> <span class="kt">set</span> <span class="n">utf8</span><span class="p">;</span>
-<span class="k">create</span> <span class="n">user</span> <span class="s1">&#39;redmine&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="n">identified</span> <span class="k">by</span> <span class="s1">&#39;my_password&#39;</span><span class="p">;</span>
-<span class="k">grant</span> <span class="k">all</span> <span class="n">privileges</span> <span class="k">on</span> <span class="n">redmine</span><span class="p">.</span><span class="o">*</span> <span class="k">to</span> <span class="s1">&#39;redmine&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-mysql" data-lang="mysql">create database redmine character set utf8;
+create user 'redmine'@'localhost' identified by 'my_password';
+grant all privileges on redmine.* to 'redmine'@'localhost';</code>
+  </pre>
+</figure>
 
 <p>で、とりあえずオッケー。</p>
 
-<h3 id="redmine">Redmine</h3>
+<h3 id="tocAnchor-1-4-2">Redmine</h3>
 
 <ul>
 <li>Redmine 2.3.1 をDLし、適当なところへ解凍。</li>
 <li><code>config/database.yml.example</code> を <code>config/database.yml</code> にリネームし、内容編集。MySQLとつなげるように</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
-  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql2</span>
-  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">redmine</span>
-  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
-  <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">redmine</span>
-  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">my_password</span>
-  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">utf8</span>
+<figure class="highlight">
+  <pre>
+    <code class="language-yaml" data-lang="yaml"><span class="s">production</span><span class="pi">:</span>
+  <span class="s">adapter</span><span class="pi">:</span> <span class="s">mysql2</span>
+  <span class="s">database</span><span class="pi">:</span> <span class="s">redmine</span>
+  <span class="s">host</span><span class="pi">:</span> <span class="s">localhost</span>
+  <span class="s">username</span><span class="pi">:</span> <span class="s">redmine</span>
+  <span class="s">password</span><span class="pi">:</span> <span class="s">my_password</span>
+  <span class="s">encoding</span><span class="pi">:</span> <span class="s">utf8</span>
 
-<span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
-  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql2</span>
-  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">redmine_development</span>
-  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
-  <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">redmine</span>
-  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">my_password</span>
-  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">utf8</span></code></pre></div>
+<span class="s">development</span><span class="pi">:</span>
+  <span class="s">adapter</span><span class="pi">:</span> <span class="s">mysql2</span>
+  <span class="s">database</span><span class="pi">:</span> <span class="s">redmine_development</span>
+  <span class="s">host</span><span class="pi">:</span> <span class="s">localhost</span>
+  <span class="s">username</span><span class="pi">:</span> <span class="s">redmine</span>
+  <span class="s">password</span><span class="pi">:</span> <span class="s">my_password</span>
+  <span class="s">encoding</span><span class="pi">:</span> <span class="s">utf8</span></code>
+  </pre>
+</figure>
 
 <p>Ruby 1.9 からMySQLにつなぐには adapter は mysql2 である必要がある模様。</p>
 
@@ -180,29 +248,33 @@
 
 <p>MySQL アダプターがなんか言ってる…my-sql-connector-c？</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">(略)</span>
-<span class="go">Installing mysql2 (0.3.11)</span>
-<span class="go">(略)</span>
-<span class="go">Using yard (0.8.6.2)</span>
-<span class="go">Your bundle is complete!</span>
-<span class="go">Gems in the group rmagick were not installed.</span>
-<span class="go">It was installed into ./vendor/bundle</span>
-<span class="go">Post-install message from mysql2:</span>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">(略)
+Installing mysql2 (0.3.11)
+(略)
+Using yard (0.8.6.2)
+Your bundle is complete!
+Gems in the group rmagick were not installed.
+It was installed into ./vendor/bundle
+Post-install message from mysql2:
 
-<span class="go">======================================================================================================</span>
+======================================================================================================
 
-<span class="go">  You&#39;ve installed the binary version of mysql2.</span>
-<span class="go">  It was built using MySQL Connector/C version 6.0.2.</span>
-<span class="go">  It&#39;s recommended to use the exact same version to avoid potential issues.</span>
+  You've installed the binary version of mysql2.
+  It was built using MySQL Connector/C version 6.0.2.
+  It's recommended to use the exact same version to avoid potential issues.
 
-<span class="go">  At the time of building this gem, the necessary DLL files where available</span>
-<span class="go">  in the following download:</span>
+  At the time of building this gem, the necessary DLL files where available
+  in the following download:
 
-<span class="go">  http://dev.mysql.com/get/Downloads/Connector-C/mysql-connector-c-noinstall-6.0.2-win32.zip/from/pick</span>
+  http://dev.mysql.com/get/Downloads/Connector-C/mysql-connector-c-noinstall-6.0.2-win32.zip/from/pick
 
-<span class="go">  And put lib\libmysql.dll file in your Ruby bin directory, for example C:\Ruby\bin</span>
+  And put lib\libmysql.dll file in your Ruby bin directory, for example C:\Ruby\bin
 
-<span class="go">======================================================================================================</span></code></pre></div>
+======================================================================================================</code>
+  </pre>
+</figure>
 
 <p>とりあえず落としてきて、 <code>lib/libmysql.dll</code> をRubyのbinディレクトリにいれた。</p>
 
@@ -212,71 +284,87 @@
 <li>デフォルトのロール、トラッカー、ステータス、ワークフロー、列挙項目のロード</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> rake generate_secret_token
-<span class="gp">$</span> <span class="nb">set </span><span class="nv">RAILS_ENV</span><span class="o">=</span>production
-<span class="gp">$</span> rake db:migrate
-<span class="go">==  Setup: migrating ==========================================================</span>
-<span class="go">-- create_table(&quot;attachments&quot;, {:force=&gt;true})</span>
-<span class="go">   -&gt; 0.1700s</span>
-<span class="go">(略)</span>
-<span class="gp">$</span> rake redmine:load_default_data
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ rake generate_secret_token
+$ set RAILS_ENV=production
+$ rake db:migrate
+==  Setup: migrating ==========================================================
+-- create_table("attachments", {:force=&gt;true})
+   -&gt; 0.1700s
+(略)
+$ rake redmine:load_default_data
 
-<span class="go">Select language: ar, az, bg, bs, ca, cs, da, de, el, en, en-GB, es, et, eu, fa, fi, fr, gl, he, hr,</span>
-<span class="go">hu, id, it, ja, ko, lt, lv, mk, mn, nl, no, pl, pt, pt-BR, ro, ru, sk, sl, sq, sr, sr-YU, sv, th, tr, uk, vi, zh, zh-TW [en] ja</span>
-<span class="go">====================================</span>
-<span class="go">Default configuration data loaded.</span></code></pre></div>
+Select language: ar, az, bg, bs, ca, cs, da, de, el, en, en-GB, es, et, eu, fa, fi, fr, gl, he, hr,
+hu, id, it, ja, ko, lt, lv, mk, mn, nl, no, pl, pt, pt-BR, ro, ru, sk, sl, sq, sr, sr-YU, sv, th, tr, uk, vi, zh, zh-TW [en] ja
+====================================
+Default configuration data loaded.</code>
+  </pre>
+</figure>
 
 <ul>
 <li>起動</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-mysql" data-lang="mysql"><span class="err">$</span> <span class="n">ruby</span> <span class="n">script</span><span class="err">\</span><span class="n">rails</span> <span class="n">server</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-mysql" data-lang="mysql">$ ruby script\rails server</code>
+  </pre>
+</figure>
 
 <p>起動したら <code>admin/admin</code> でログインして情報を見に行ってみる。</p>
 
-<div class="highlight"><pre><code class="language-mysql" data-lang="mysql"><span class="n">Environment</span><span class="p">:</span>
-  <span class="n">Redmine</span> <span class="n">version</span>                          <span class="mi">2</span><span class="p">.</span><span class="mi">3</span><span class="p">.</span><span class="mi">1</span><span class="p">.</span><span class="n">stable</span>
-  <span class="n">Ruby</span> <span class="n">version</span>                             <span class="mi">1</span><span class="p">.</span><span class="mi">9</span><span class="p">.</span><span class="mi">3</span> <span class="p">(</span><span class="n">i386</span><span class="o">-</span><span class="n">mingw32</span><span class="p">)</span>
-  <span class="n">Rails</span> <span class="n">version</span>                            <span class="mi">3</span><span class="p">.</span><span class="mi">2</span><span class="p">.</span><span class="mi">13</span>
-  <span class="n">Environment</span>                              <span class="n">production</span>
-  <span class="k">Database</span> <span class="n">adapter</span>                         <span class="n">Mysql2</span>
-<span class="n">Redmine</span> <span class="n">plugins</span><span class="p">:</span>
-  <span class="n">no</span> <span class="n">plugin</span> <span class="n">installed</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-mysql" data-lang="mysql">Environment:
+  Redmine version                          2.3.1.stable
+  Ruby version                             1.9.3 (i386-mingw32)
+  Rails version                            3.2.13
+  Environment                              production
+  Database adapter                         Mysql2
+Redmine plugins:
+  no plugin installed</code>
+  </pre>
+</figure>
 
 <p>OK。</p>
 
-<h2 id="プラグイン作成の準備">プラグイン作成の準備</h2>
+<h2 id="tocAnchor-1-7">プラグイン作成の準備</h2>
 
-<h3 id="コマンド">コマンド</h3>
+<h3 id="tocAnchor-1-7-1">コマンド</h3>
 
 <p>コマンドは <code>script/rails</code> に集約されたっぽい？</p>
 
 <p>今まで <code>script/xxx</code> とかやっていたコマンドは <code>script/rails xxx</code> になっている。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> ruby script<span class="se">\r</span>ails -h
-<span class="go">bundler is found: bundle exec ruby script\rails -h</span>
-<span class="go">Usage: rails COMMAND [ARGS]</span>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ ruby script\rails -h
+bundler is found: bundle exec ruby script\rails -h
+Usage: rails COMMAND [ARGS]
 
-<span class="go">The most common rails commands are:</span>
-<span class="go"> generate    Generate new code (short-cut alias: &quot;g&quot;)</span>
-<span class="go"> console     Start the Rails console (short-cut alias: &quot;c&quot;)</span>
-<span class="go"> server      Start the Rails server (short-cut alias: &quot;s&quot;)</span>
-<span class="go"> dbconsole   Start a console for the database specified in config/database.yml</span>
-<span class="go">             (short-cut alias: &quot;db&quot;)</span>
-<span class="go"> new         Create a new Rails application. &quot;rails new my_app&quot; creates a</span>
-<span class="go">             new application called MyApp in &quot;./my_app&quot;</span>
+The most common rails commands are:
+ generate    Generate new code (short-cut alias: "g")
+ console     Start the Rails console (short-cut alias: "c")
+ server      Start the Rails server (short-cut alias: "s")
+ dbconsole   Start a console for the database specified in config/database.yml
+             (short-cut alias: "db")
+ new         Create a new Rails application. "rails new my_app" creates a
+             new application called MyApp in "./my_app"
 
-<span class="go">In addition to those, there are:</span>
-<span class="go"> application  Generate the Rails application code</span>
-<span class="go"> destroy      Undo code generated with &quot;generate&quot; (short-cut alias: &quot;d&quot;)</span>
-<span class="go"> benchmarker  See how fast a piece of code runs</span>
-<span class="go"> profiler     Get profile information from a piece of code</span>
-<span class="go"> plugin       Install a plugin</span>
-<span class="go"> runner       Run a piece of code in the application environment (short-cut alias: &quot;r&quot;)</span>
+In addition to those, there are:
+ application  Generate the Rails application code
+ destroy      Undo code generated with "generate" (short-cut alias: "d")
+ benchmarker  See how fast a piece of code runs
+ profiler     Get profile information from a piece of code
+ plugin       Install a plugin
+ runner       Run a piece of code in the application environment (short-cut alias: "r")
 
-<span class="go">All commands can be run with -h (or --help) for more information.</span></code></pre></div>
+All commands can be run with -h (or --help) for more information.</code>
+  </pre>
+</figure>
 
-<h3 id="スケルトン作成">スケルトン作成</h3>
+<h3 id="tocAnchor-1-7-2">スケルトン作成</h3>
 
 <p><code>ruby script/rails generate redmine_plugin PLUGIN_NAME</code> で作成。</p>
 
@@ -285,42 +373,50 @@
 <li><code>plugins/</code> 下に作成される</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> ruby script<span class="se">\r</span>ails generate redmine_plugin download_issues_with_journal
-<span class="go">bundler is found: bundle exec ruby script\rails generate redmine_plugin download_issues_with_journal</span>
-<span class="go">  create  plugins/download_issues_with_journal/app</span>
-<span class="go">  create  plugins/download_issues_with_journal/app/controllers</span>
-<span class="go">  create  plugins/download_issues_with_journal/app/helpers</span>
-<span class="go">  create  plugins/download_issues_with_journal/app/models</span>
-<span class="go">  create  plugins/download_issues_with_journal/app/views</span>
-<span class="go">  create  plugins/download_issues_with_journal/db/migrate</span>
-<span class="go">  create  plugins/download_issues_with_journal/lib/tasks</span>
-<span class="go">  create  plugins/download_issues_with_journal/assets/images</span>
-<span class="go">  create  plugins/download_issues_with_journal/assets/javascripts</span>
-<span class="go">  create  plugins/download_issues_with_journal/assets/stylesheets</span>
-<span class="go">  create  plugins/download_issues_with_journal/config/locales</span>
-<span class="go">  create  plugins/download_issues_with_journal/test</span>
-<span class="go">  create  plugins/download_issues_with_journal/test/fixtures</span>
-<span class="go">  create  plugins/download_issues_with_journal/test/unit</span>
-<span class="go">  create  plugins/download_issues_with_journal/test/functional</span>
-<span class="go">  create  plugins/download_issues_with_journal/test/integration</span>
-<span class="go">  create  plugins/download_issues_with_journal/README.rdoc</span>
-<span class="go">  create  plugins/download_issues_with_journal/init.rb</span>
-<span class="go">  create  plugins/download_issues_with_journal/config/routes.rb</span>
-<span class="go">  create  plugins/download_issues_with_journal/config/locales/en.yml</span>
-<span class="go">  create  plugins/download_issues_with_journal/test/test_helper.rb</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ ruby script\rails generate redmine_plugin download_issues_with_journal
+bundler is found: bundle exec ruby script\rails generate redmine_plugin download_issues_with_journal
+  create  plugins/download_issues_with_journal/app
+  create  plugins/download_issues_with_journal/app/controllers
+  create  plugins/download_issues_with_journal/app/helpers
+  create  plugins/download_issues_with_journal/app/models
+  create  plugins/download_issues_with_journal/app/views
+  create  plugins/download_issues_with_journal/db/migrate
+  create  plugins/download_issues_with_journal/lib/tasks
+  create  plugins/download_issues_with_journal/assets/images
+  create  plugins/download_issues_with_journal/assets/javascripts
+  create  plugins/download_issues_with_journal/assets/stylesheets
+  create  plugins/download_issues_with_journal/config/locales
+  create  plugins/download_issues_with_journal/test
+  create  plugins/download_issues_with_journal/test/fixtures
+  create  plugins/download_issues_with_journal/test/unit
+  create  plugins/download_issues_with_journal/test/functional
+  create  plugins/download_issues_with_journal/test/integration
+  create  plugins/download_issues_with_journal/README.rdoc
+  create  plugins/download_issues_with_journal/init.rb
+  create  plugins/download_issues_with_journal/config/routes.rb
+  create  plugins/download_issues_with_journal/config/locales/en.yml
+  create  plugins/download_issues_with_journal/test/test_helper.rb</code>
+  </pre>
+</figure>
 
 <p><code>plugins/</code> 下にいれば、Redmine起動時にロードしてくれる。再起動して情報を見に行くと…。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">Environment:</span>
-<span class="go">  Redmine version                          2.3.1.stable</span>
-<span class="go">  Ruby version                             1.9.3 (i386-mingw32)</span>
-<span class="go">  Rails version                            3.2.13</span>
-<span class="go">  Environment                              production</span>
-<span class="go">  Database adapter                         Mysql2</span>
-<span class="go">Redmine plugins:</span>
-<span class="go">  download_issues_with_journal             0.0.1                 # =&gt; 増えてる！</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">Environment:
+  Redmine version                          2.3.1.stable
+  Ruby version                             1.9.3 (i386-mingw32)
+  Rails version                            3.2.13
+  Environment                              production
+  Database adapter                         Mysql2
+Redmine plugins:
+  download_issues_with_journal             0.0.1                 # =&gt; 増えてる！</code>
+  </pre>
+</figure>
 
-<h3 id="init-rb">init.rb</h3>
+<h3 id="tocAnchor-1-7-3">init.rb</h3>
 
 <p>書き方が、Rubyのそれとちょっと違う。Rails流？なので、はじめは慣れが必要かも。</p>
 
@@ -334,7 +430,7 @@
 
 <p>今は特にすることもないので、authorやurlを適当に編集したら次へ。</p>
 
-<h3 id="viewのフック">viewのフック</h3>
+<h3 id="tocAnchor-1-7-4">viewのフック</h3>
 
 <p>「特定の画面に何か文字とか機能を追加する」場合、viewをフックすることで実現できる。(他にも手段はあるみたいだが、とりあえず)</p>
 
@@ -344,7 +440,11 @@
 
 <p>すると、 <code>app/views/issues/index.html.erb</code> の中にこんな記述が。ページの一番下の部分にフックできそう。</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="sx">%= call_hook(:view_issues_index_bottom, { :issues =</span><span class="o">&gt;</span> <span class="vi">@issues</span><span class="p">,</span> <span class="ss">:project</span> <span class="o">=&gt;</span> <span class="vi">@project</span><span class="p">,</span> <span class="ss">:query</span> <span class="o">=&gt;</span> <span class="vi">@query</span> <span class="p">})</span> <span class="o">%&gt;</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="sx">%= call_hook(:view_issues_index_bottom, { :issues =</span><span class="o">&gt;</span> <span class="vi">@issues</span><span class="p">,</span> <span class="ss">:project</span> <span class="o">=&gt;</span> <span class="vi">@project</span><span class="p">,</span> <span class="ss">:query</span> <span class="o">=&gt;</span> <span class="vi">@query</span> <span class="p">})</span> <span class="o">%&gt;</span></code>
+  </pre>
+</figure>
 
 <p>第一引数 <code>:view_issues_index_bottom</code> はフックする時に作成するメソッド名になる、第2引数はパラメータ。これは覚えておく。</p>
 
@@ -352,18 +452,26 @@
 
 <p><code>PLUGIN/lib/PLUGIN_NAME/hooks.rb</code> を作り、以下のように記載。</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Hooks</span> <span class="o">&lt;</span> <span class="no">Redmine</span><span class="o">::</span><span class="no">Hook</span><span class="o">::</span><span class="no">ViewListener</span>
+<figure class="highlight">
+  <pre>
+    <code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Hooks</span> <span class="o">&lt;</span> <span class="no">Redmine</span><span class="o">::</span><span class="no">Hook</span><span class="o">::</span><span class="no">ViewListener</span>
   <span class="k">def</span> <span class="nf">view_issues_index_bottom</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
-    <span class="nb">puts</span> <span class="s2">&quot;view_issues_index_bottom&quot;</span>
-    <span class="k">return</span> <span class="s2">&quot;&lt;p&gt;Hello&lt;/p&gt;&quot;</span>
+    <span class="nb">puts</span> <span class="s2">"view_issues_index_bottom"</span>
+    <span class="k">return</span> <span class="s2">"&lt;p&gt;Hello&lt;/p&gt;"</span>
   <span class="k">end</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code>
+  </pre>
+</figure>
 
 <p>call<em>hookの第一引数になっていたとおり、 `view</em>issues<em>index</em>bottom` メソッドを作る。</p>
 
 <p>次に上記のフックを読み込むために <code>init.rb</code> に require を追加する。</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;download_issues_with_journal/hooks&#39;</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">'download_issues_with_journal/hooks'</span></code>
+  </pre>
+</figure>
 
 <p>これで Redmine を再起動すると、チケット一覧ページに Hello と表示されているはず。</p>
 
@@ -373,45 +481,57 @@
 
 <p>フック部分を以下のように変更。</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Hooks</span> <span class="o">&lt;</span> <span class="no">Redmine</span><span class="o">::</span><span class="no">Hook</span><span class="o">::</span><span class="no">ViewListener</span>
+<figure class="highlight">
+  <pre>
+    <code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Hooks</span> <span class="o">&lt;</span> <span class="no">Redmine</span><span class="o">::</span><span class="no">Hook</span><span class="o">::</span><span class="no">ViewListener</span>
   <span class="k">def</span> <span class="nf">view_issues_index_bottom</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
-    <span class="n">context</span><span class="o">[</span><span class="ss">:controller</span><span class="o">].</span><span class="n">send</span><span class="p">(</span><span class="ss">:render_to_string</span><span class="p">,</span> <span class="p">{</span>
-      <span class="ss">:partial</span> <span class="o">=&gt;</span> <span class="s2">&quot;hooks/download_issues_with_journal/view_issues_index_bottom&quot;</span><span class="p">,</span>
+    <span class="n">context</span><span class="p">[</span><span class="ss">:controller</span><span class="p">].</span><span class="nf">send</span><span class="p">(</span><span class="ss">:render_to_string</span><span class="p">,</span> <span class="p">{</span>
+      <span class="ss">:partial</span> <span class="o">=&gt;</span> <span class="s2">"hooks/download_issues_with_journal/view_issues_index_bottom"</span><span class="p">,</span>
       <span class="ss">:locals</span> <span class="o">=&gt;</span> <span class="n">context</span> <span class="p">})</span>
   <span class="k">end</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code>
+  </pre>
+</figure>
 
 <p><code>:partial</code> は <code>app/views/</code> 以下のパスを指定。</p>
 
 <p>上記のように指定すると <code>app/views/hooks/download_issues_with_journal/_view_issues_index_bottom.html.erb</code> (部分描画用のファイルは先頭に <code>_</code> を付けるのがルール)が呼ばれる。中身はこんな感じ。</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;contextual&quot;</span><span class="o">&gt;</span>
-  <span class="o">&lt;</span><span class="sx">%= @project %&gt;</span>
-<span class="sx">  &lt;%=</span> <span class="n">link_to</span><span class="p">(</span><span class="s2">&quot;link ror&quot;</span><span class="p">,</span> <span class="s2">&quot;http://rubyonrails.org&quot;</span><span class="p">)</span> <span class="sx">%&gt;</span>
-<span class="sx">&lt;/div&gt;</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="o">=</span><span class="s2">"contextual"</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="sx">%= @project %&gt;
+  &lt;%=</span> <span class="n">link_to</span><span class="p">(</span><span class="s2">"link ror"</span><span class="p">,</span> <span class="s2">"http://rubyonrails.org"</span><span class="p">)</span> <span class="o">%&gt;</span>
+<span class="o">&lt;</span><span class="sr">/div&gt;</span></code>
+  </pre>
+</figure>
 
 <p>チケット一覧を開いているプロジェクト名とRuby on Railsへのリンクが表示される。</p>
 
 <p>これでViewをフックしつつ、Viewの定義自体はerbファイルに追い出すことができた。</p>
 
-<h3 id="controllerと連携">Controllerと連携</h3>
+<h3 id="tocAnchor-1-7-5">Controllerと連携</h3>
 
 <p>ここまでViewをいじっていると、ファイル構造はこんな感じになった。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">download_issues_with_journal</span>
-<span class="go">├─app</span>
-<span class="go">│  └─views</span>
-<span class="go">│      └─hooks</span>
-<span class="go">│          └─download_issues_with_journal</span>
-<span class="go">│              └─_view_issues_index_bottom.html.erb (3)</span>
-<span class="go">├─assets</span>
-<span class="go">├─config</span>
-<span class="go">├─db</span>
-<span class="go">├─lib</span>
-<span class="go">│  └─download_issues_with_journal</span>
-<span class="go">│      └─hooks.rb (1)</span>
-<span class="go">├─init.rb (2)</span>
-<span class="go">└─test</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">download_issues_with_journal
+├─app
+│  └─views
+│      └─hooks
+│          └─download_issues_with_journal
+│              └─_view_issues_index_bottom.html.erb (3)
+├─assets
+├─config
+├─db
+├─lib
+│  └─download_issues_with_journal
+│      └─hooks.rb (1)
+├─init.rb (2)
+└─test</code>
+  </pre>
+</figure>
 
 <p>(1)でチケット一覧画面をフックし、(2)でそれをrequire、(3)に追加したい画面ソースを書いた。</p>
 
@@ -436,28 +556,40 @@
 <li>処理を書いていく。メソッド名が <code>:action</code> となる</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">ExportController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+<figure class="highlight">
+  <pre>
+    <code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">ExportController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
   <span class="n">unloadable</span>
 
   <span class="k">def</span> <span class="nf">export_with_journal</span>
-    <span class="nb">puts</span> <span class="s2">&quot;export_with_journal&quot;</span>
-    <span class="n">send_data</span><span class="p">(</span><span class="s2">&quot;aa&quot;</span><span class="p">,</span> <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="s2">&quot;text/csv&quot;</span><span class="p">,</span> <span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="s2">&quot;test.csv&quot;</span><span class="p">)</span>
+    <span class="nb">puts</span> <span class="s2">"export_with_journal"</span>
+    <span class="n">send_data</span><span class="p">(</span><span class="s2">"aa"</span><span class="p">,</span> <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="s2">"text/csv"</span><span class="p">,</span> <span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="s2">"test.csv"</span><span class="p">)</span>
   <span class="k">end</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code>
+  </pre>
+</figure>
 
 <h4 id="view">View</h4>
 
 <p>Controller に定義した :controller と :action 名に従って、リンク先を変更する。</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;contextual&quot;</span><span class="o">&gt;</span>
-  <span class="o">&lt;</span><span class="sx">%= link_to(&quot;dl </span><span class="si">#{</span><span class="vi">@project</span><span class="si">}</span><span class="sx"> issues&quot;, {:controller =</span><span class="o">&gt;</span> <span class="s2">&quot;export&quot;</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;export_with_journal&quot;</span><span class="p">})</span> <span class="sx">%&gt;</span>
-<span class="sx">&lt;/div&gt;</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="o">=</span><span class="s2">"contextual"</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="sx">%= link_to("dl #{@project} issues", {:controller =</span><span class="o">&gt;</span> <span class="s2">"export"</span><span class="p">,</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">"export_with_journal"</span><span class="p">})</span> <span class="o">%&gt;</span>
+<span class="o">&lt;</span><span class="sr">/div&gt;</span></code>
+  </pre>
+</figure>
 
 <h4 id="route">Route</h4>
 
 <p>Controller と View を結びつける。</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">match</span> <span class="s1">&#39;projects/export/:action&#39;</span><span class="p">,</span> <span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s1">&#39;export&#39;</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-ruby" data-lang="ruby"><span class="n">match</span> <span class="s1">'projects/export/:action'</span><span class="p">,</span> <span class="ss">:controller</span> <span class="o">=&gt;</span> <span class="s1">'export'</span></code>
+  </pre>
+</figure>
 
 <p>これで、ViewのリンクをたたくとControllerが呼ばれる。</p>
 
@@ -467,17 +599,17 @@
   <ul>
     
       <li class="prev">
-        <a href="/2013/08/07/jekyll-maintenance-1" title="Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編">
+        <a href="/2013/08/07/jekyll-maintenance-1/" title="Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編">
           Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2013/08/20/rails3-log-not-colorize" title="Rails3のログ出力にANSIカラーコードを使用しない設定">
+        <a href="/2013/08/20/rails3-log-not-colorize/" title="Rails3のログ出力にANSIカラーコードを使用しない設定">
           Rails3のログ出力にANSIカラーコードを使用しない設定
         </a>
       </li>
@@ -490,16 +622,16 @@
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2013/08/09/redmine2.3-install-and-plugin" data-text="kk_Atakaの日記 - WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2013/08/09/redmine2.3-install-and-plugin/" data-text="kk_Atakaの日記 - WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/09/redmine2.3-install-and-plugin/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/08/09/redmine2.3-install-and-plugin/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/09/redmine2.3-install-and-plugin//">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/08/09/redmine2.3-install-and-plugin//" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/09/redmine2.3-install-and-plugin/"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/09/redmine2.3-install-and-plugin//"
      data-hatena-bookmark-title="kk_Atakaの日記 - WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
@@ -512,7 +644,7 @@
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/09/redmine2.3-install-and-plugin/"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/09/redmine2.3-install-and-plugin//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
@@ -586,142 +718,142 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/09/redmine
       <li>
         <span>2016/03/05</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Homebrew">Homebrew</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Homebrew">Homebrew</a></code> ]</span>
         
-        <a href="/2016/03/05/go-bin-install-from-homebrew">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
+        <a href="/2016/03/05/go-bin-install-from-homebrew/">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//" />
         </a>
       </li>
     
       <li>
         <span>2016/02/17</span>
         
-          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Mac">Mac</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Mac">Mac</a></code> ]</span>
         
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan">El Capitan上に古いpumaをインストールすると失敗する</a>
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">El Capitan上に古いpumaをインストールすると失敗する</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/19</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
+        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/12</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <a href="/2016/01/12/golang-nicony/">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony//" />
         </a>
       </li>
     
       <li>
         <span>2015/12/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt/">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/11/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt/">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/10/13</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt/">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/09/24</span>
         
-          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ansible">Ansible</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <a href="/2015/09/24/ansible-meetup-201509/">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//" />
         </a>
       </li>
     
       <li>
         <span>2015/08/06</span>
         
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Jekyll">Jekyll</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Liquid">Liquid</a></code> ]</span>
         
-        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <a href="/2015/08/06/jekyll-tag-sort/">Jekyllで出力するタグをソートする 解決編</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//" />
         </a>
       </li>
     
       <li>
         <span>2015/07/13</span>
         
-          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Markdown">Markdown</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+          <span>[ <code><a href="/tags/#reST">reST</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Wiki">Wiki</a></code> ]</span>
         
-        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <a href="/2015/07/13/lightweight-markup-language-history/">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//" />
         </a>
       </li>
     
@@ -735,205 +867,205 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/09/redmine
     
     
       
-      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+      <li><a href="/tags/#API">API <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+      <li><a href="/tags/#Android">Android <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+      <li><a href="/tags/#Dropbox">Dropbox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>4</sub></a></li>
+      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Homebrew">Homebrew <sub>1</sub></a></li>
+      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
     
       
-      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
     
       
-      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
     
       
-      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Mac">Mac <sub>8</sub></a></li>
+      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+      <li><a href="/tags/#Python">Python <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#Ruby">Ruby <sub>72</sub></a></li>
+      <li><a href="/tags/#Ruby">Ruby <sub>72</sub></a></li>
     
       
-      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
     
       
-      <li><a href="/tags.html#Sphinx">Sphinx <sub>16</sub></a></li>
+      <li><a href="/tags/#Sphinx">Sphinx <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
     
       
-      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
     
       
-      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#イベント">イベント <sub>26</sub></a></li>
+      <li><a href="/tags/#イベント">イベント <sub>26</sub></a></li>
     
       
-      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
     
       
-      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
     
   </ul>
 

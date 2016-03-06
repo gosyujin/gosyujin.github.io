@@ -3,9 +3,17 @@
   <head>
     <title>Golangで作ったスクリプトをbrew install&brew updateできるようにする - kk_Atakaの日記</title>
     <meta charset="utf-8">
+    <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
     <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/toc.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/js/jquery.tocLight.js"></script>
+    <script type="text/javascript">
+       $(function() {
+         $.toc.clickHideButton();
+       });
+    </script>
   </head>
   <body>
     <script type="text/javascript">
@@ -25,23 +33,23 @@
       <nav>
         <ul>
           <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives.html">Archive</a>
-          <li class="main-nav"><a href="/tags.html">Tag</a>
-          <li class="main-nav"><a href="/monitor.html">Monitor</a>
+          <li class="main-nav"><a href="/archives/">Archive</a>
+          <li class="main-nav"><a href="/tags/">Tag</a>
+          <li class="main-nav"><a href="/monitor/">Monitor</a>
         </ul>
       </nav>
     </div>
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2016/03/05/go-bin-install-from-homebrew">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a></h1>
+        <h1><a href="/2016/03/05/go-bin-install-from-homebrew/">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags.html#Golang" class="tag">Golang</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Golang" class="tag">Golang</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#Homebrew" class="tag">Homebrew</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Homebrew" class="tag">Homebrew</a></code> ]</span>
             
           
           
@@ -55,13 +63,13 @@
   <ul>
     
       <li class="prev">
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan" title="El Capitan上に古いpumaをインストールすると失敗する">
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" title="El Capitan上に古いpumaをインストールすると失敗する">
           El Capitan上に古いpumaをインストールすると失敗する
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next_disabled">
@@ -72,16 +80,62 @@
 </div>
 
 
-<div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#参考'>参考</a></li><li><a href='#環境'>環境</a></li><li><a href='#要件'>要件</a></li><li><a href='#ブツ'>ブツ</a></li><li><a href='#homebrew用設定'>Homebrew用設定</a></li><ul><li><a href='#formulaの作成'>Formulaの作成</a></li></ul><li><a href='#インストールとアップデート'>インストールとアップデート</a></li><ul><li><a href='#homebrewでインストール'>Homebrewでインストール</a></li><li><a href='#homebrewでアップデート'>Homebrewでアップデート</a></li></ul></ul></ul><!-- end of tree list --></div></div>
-
 <div class="content">
-<h2 id="あらすじ">あらすじ</h2>
+<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>Contents</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">参考</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">環境</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-4">
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">要件</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-5">
+              <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">ブツ</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-6">
+              <a href="#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">Homebrew用設定</span></a>
+              <ul>
+                <li class="toc_level-2 toc_section-7">
+                  <a href="#tocAnchor-1-6-1"><span class="tocnumber">6.1</span> <span class="toctext">Formulaの作成</span></a>
+                </li>
+              </ul>
+            </li>
+            <li class="toc_level-1 toc_section-8">
+              <a href="#tocAnchor-1-8"><span class="tocnumber">7</span> <span class="toctext">インストールとアップデート</span></a>
+              <ul>
+                <li class="toc_level-2 toc_section-9">
+                  <a href="#tocAnchor-1-8-1"><span class="tocnumber">7.1</span> <span class="toctext">Homebrewでインストール</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-10">
+                  <a href="#tocAnchor-1-8-2"><span class="tocnumber">7.2</span> <span class="toctext">Homebrewでアップデート</span></a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><h2 id="tocAnchor-1-1">あらすじ</h2>
 
 <p>Golangでスクリプトを作ったので、バイナリにして<code>homebrew</code>でインストール/アップデートできるようにしてみた。</p>
 
 <p>細かく色々できるけど、とりあえず今回は最小で。</p>
 
-<h2 id="参考">参考</h2>
+<h2 id="tocAnchor-1-2">参考</h2>
 
 <ul>
 <li><a href="http://deeeet.com/writing/2014/05/20/brew-tap/">HomeBrewで自作ツールを配布する | SOTA</a></li>
@@ -94,7 +148,7 @@
 </ul></li>
 </ul>
 
-<h2 id="環境">環境</h2>
+<h2 id="tocAnchor-1-3">環境</h2>
 
 <ul>
 <li>MacOS X El Capitan 10.11.3</li>
@@ -102,14 +156,14 @@
 <li>ruby 2.1.4p265</li>
 </ul>
 
-<h2 id="要件">要件</h2>
+<h2 id="tocAnchor-1-4">要件</h2>
 
 <ul>
 <li>GitHubに上げたスクリプトを<code>brew install xxx</code>でインストールできるようにしたい</li>
 <li>でもたまには<code>go get github.com/xxx</code>でもインストールしたい</li>
 </ul>
 
-<h2 id="ブツ">ブツ</h2>
+<h2 id="tocAnchor-1-5">ブツ</h2>
 
 <p>まずはブツを作った。</p>
 
@@ -130,9 +184,9 @@
 <li>sha1のハッシュ値を取っておく</li>
 </ul>
 
-<h2 id="homebrew用設定">Homebrew用設定</h2>
+<h2 id="tocAnchor-1-6">Homebrew用設定</h2>
 
-<h3 id="formulaの作成">Formulaの作成</h3>
+<h3 id="tocAnchor-1-6-1">Formulaの作成</h3>
 
 <ul>
 <li><a href="https://github.com/gosyujin/homebrew-bulkrenamer">gosyujin/homebrew-bulkrenamer</a></li>
@@ -143,19 +197,23 @@
 <p>リポジトリの名前は<code>homebrew-APPNAME</code>とするルール。今回はbulkrenamerなので<code>homebrew-bulkrenamer</code>リポジトリを作った。</p>
 
 <p>ファイルは<code>APPNAME.rb</code>。今回は<code>bulkrenamer.rb</code></p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Bulkrenamer</span> <span class="o">&lt;</span> <span class="no">Formula</span>
-  <span class="n">desc</span> <span class="s2">&quot;BulkRenamer&quot;</span>
-  <span class="n">homepage</span> <span class="s2">&quot;https://github.com/gosyujin/bulkrenamer&quot;</span>
-  <span class="n">head</span> <span class="s2">&quot;https://github.com/gosyujin/homebrew-bulkrenamer.git&quot;</span>
-  <span class="n">version</span> <span class="s2">&quot;v0.1&quot;</span>
-  <span class="n">url</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">homepage</span><span class="si">}</span><span class="s2">/releases/download/</span><span class="si">#{</span><span class="n">version</span><span class="si">}</span><span class="s2">/bulkrenamer&quot;</span>
-  <span class="n">sha1</span> <span class="s2">&quot;5e3ac6469395aae60a00c61f45b5343207cca330&quot;</span>
+<div class="highlight">
+  <pre>
+    <code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Bulkrenamer</span> <span class="o">&lt;</span> <span class="no">Formula</span>
+  <span class="n">desc</span> <span class="s2">"BulkRenamer"</span>
+  <span class="n">homepage</span> <span class="s2">"https://github.com/gosyujin/bulkrenamer"</span>
+  <span class="n">head</span> <span class="s2">"https://github.com/gosyujin/homebrew-bulkrenamer.git"</span>
+  <span class="n">version</span> <span class="s2">"v0.1"</span>
+  <span class="n">url</span> <span class="s2">"</span><span class="si">#{</span><span class="n">homepage</span><span class="si">}</span><span class="s2">/releases/download/</span><span class="si">#{</span><span class="n">version</span><span class="si">}</span><span class="s2">/bulkrenamer"</span>
+  <span class="n">sha1</span> <span class="s2">"5e3ac6469395aae60a00c61f45b5343207cca330"</span>
 
   <span class="k">def</span> <span class="nf">install</span>
-    <span class="n">bin</span><span class="o">.</span><span class="n">install</span> <span class="no">Dir</span><span class="o">[</span><span class="s1">&#39;bulkrenamer&#39;</span><span class="o">]</span>
+    <span class="n">bin</span><span class="p">.</span><span class="nf">install</span> <span class="no">Dir</span><span class="p">[</span><span class="s1">'bulkrenamer'</span><span class="p">]</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</code></pre></div>
+</code>
+  </pre>
+</div>
 <p>sha1で比較とか他にも色々できるが、ひとまず</p>
 
 <ul>
@@ -165,30 +223,34 @@
 
 <p>だけ。</p>
 
-<h2 id="インストールとアップデート">インストールとアップデート</h2>
+<h2 id="tocAnchor-1-8">インストールとアップデート</h2>
 
-<h3 id="homebrewでインストール">Homebrewでインストール</h3>
+<h3 id="tocAnchor-1-8-1">Homebrewでインストール</h3>
 
 <p><code>tap</code>して<code>install</code>でいける！</p>
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>brew tap gosyujin/bulkrenamer
-<span class="o">==</span>&gt; Tapping gosyujin/bulkrenamer
-Cloning into <span class="s1">&#39;/usr/local/Library/Taps/gosyujin/homebrew-bulkrenamer&#39;</span>...
+<div class="highlight">
+  <pre>
+    <code class="language-sh" data-lang="sh"><span class="gp">$ </span>brew tap gosyujin/bulkrenamer
+<span class="gp">==&gt; </span>Tapping gosyujin/bulkrenamer
+Cloning into <span class="s1">'/usr/local/Library/Taps/gosyujin/homebrew-bulkrenamer'</span>...
 remote: Counting objects: 3, <span class="k">done</span>.
 remote: Compressing objects: 100% <span class="o">(</span>2/2<span class="o">)</span>, <span class="k">done</span>.
-remote: Total <span class="m">3</span> <span class="o">(</span>delta 0<span class="o">)</span>, reused <span class="m">0</span> <span class="o">(</span>delta 0<span class="o">)</span>, pack-reused 0
+remote: Total 3 <span class="o">(</span>delta 0<span class="o">)</span>, reused 0 <span class="o">(</span>delta 0<span class="o">)</span>, pack-reused 0
 Unpacking objects: 100% <span class="o">(</span>3/3<span class="o">)</span>, <span class="k">done</span>.
 Checking connectivity... <span class="k">done</span>.
-Tapped <span class="m">1</span> formula <span class="o">(</span><span class="m">25</span> files, 16.8K<span class="o">)</span>
-<span class="nv">$ </span>brew install <span class="nv">bulkrenamer</span>
-<span class="o">==</span>&gt; Installing bulkrenamer from gosyujin/bulkrenamer
-<span class="o">==</span>&gt; Downloading https://github.com/gosyujin/bulkrenamer/releases/download/v0.1/bulkrenamer
-<span class="o">==</span>&gt; Downloading from https://github-cloud.s3.amazonaws.com/releases/52855923/178f416a-dfc8-11e5-9f9c-fc48ca5e1c98?X-Amz-Algorithm<span class="o">=</span>AWS4-HMAC-SHA256<span class="p">&amp;</span>X-Amz-Credential<span class="o">=</span>AKIAISTNZFOVBIJM
+Tapped 1 formula <span class="o">(</span>25 files, 16.8K<span class="o">)</span>
+<span class="gp">$ </span>brew install bulkrenamer
+<span class="gp">==&gt; </span>Installing bulkrenamer from gosyujin/bulkrenamer
+<span class="gp">==&gt; </span>Downloading https://github.com/gosyujin/bulkrenamer/releases/download/v0.1/bulkrenamer
+<span class="gp">==&gt; </span>Downloading from https://github-cloud.s3.amazonaws.com/releases/52855923/178f416a-dfc8-11e5-9f9c-fc48ca5e1c98?X-Amz-Algorithm<span class="o">=</span>AWS4-HMAC-SHA256&amp;X-Amz-Credential<span class="o">=</span>AKIAISTNZFOVBIJM
 <span class="o">(</span>略<span class="o">)</span>
-🍺  /usr/local/Cellar/bulkrenamer/v0.1: <span class="m">2</span> files, 7M, built in <span class="m">8</span> seconds
-<span class="nv">$ </span>bulkrenamer -v
+🍺  /usr/local/Cellar/bulkrenamer/v0.1: 2 files, 7M, built <span class="k">in </span>8 seconds
+<span class="gp">$ </span>bulkrenamer -v
 BulkRenamer ver.0.1
-</code></pre></div>
-<h3 id="homebrewでアップデート">Homebrewでアップデート</h3>
+</code>
+  </pre>
+</div>
+<h3 id="tocAnchor-1-8-2">Homebrewでアップデート</h3>
 
 <p><a href="https://github.com/gosyujin/homebrew-bulkrenamer">homebrew-bulkrenamer</a>を更新して<code>brew update</code>してもらう。</p>
 
@@ -201,10 +263,14 @@ BulkRenamer ver.0.1
 
 <script src="https://gist.github.com/gosyujin/5c5ee96c7cc405405749.js"></script>
 
-<p><code>brew update</code></p>
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>brew update
+<p>
+  <code>brew update</code>
+</p>
+<div class="highlight">
+  <pre>
+    <code class="language-sh" data-lang="sh"><span class="gp">$ </span>brew update
 Updated Homebrew from 468adbc to 215cb53.
-Updated <span class="m">3</span> taps <span class="o">(</span>caskroom/cask, caskroom/versions, gosyujin/bulkrenamer<span class="o">)</span>.
+Updated 3 taps <span class="o">(</span>caskroom/cask, caskroom/versions, gosyujin/bulkrenamer<span class="o">)</span>.
  <span class="o">==</span>&gt; New Formulae
 dropbox-uploader         gnu-complexity
  <span class="o">==</span>&gt; Updated Formulae
@@ -213,36 +279,48 @@ dcd                      nss
 dmd                      planck
 gosyujin/bulkrenamer/bulkrenamer ✔               rust
 libpagemaker
-</code></pre></div>
+</code>
+  </pre>
+</div>
 <p><code>brew outdated</code>で更新があるツールの確認。</p>
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>brew outdated
+<div class="highlight">
+  <pre>
+    <code class="language-sh" data-lang="sh"><span class="gp">$ </span>brew outdated
 gosyujin/bulkrenamer/bulkrenamer <span class="o">(</span>v0.1, v0.2 &lt; v0.3<span class="o">)</span>
 go <span class="o">(</span>1.5.3 &lt; 1.6<span class="o">)</span>
 openssl <span class="o">(</span>1.0.2f &lt; 1.0.2g<span class="o">)</span>
-</code></pre></div>
-<p><code>brew upgrade</code></p>
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>brew upgrade <span class="nv">bulkrenamer</span>
-<span class="o">==</span>&gt; Upgrading <span class="m">1</span> outdated package, with result:
+</code>
+  </pre>
+</div>
+<p>
+  <code>brew upgrade</code>
+</p>
+<div class="highlight">
+  <pre>
+    <code class="language-sh" data-lang="sh"><span class="gp">$ </span>brew upgrade bulkrenamer
+<span class="gp">==&gt; </span>Upgrading 1 outdated package, with result:
 gosyujin/bulkrenamer/bulkrenamer v0.3
-<span class="o">==</span>&gt; Upgrading gosyujin/bulkrenamer/bulkrenamer
-<span class="o">==</span>&gt; Downloading https://github.com/gosyujin/bulkrenamer/releases/download/v0.3/bulkrenamer
-<span class="o">==</span>&gt; Downloading from https://github-cloud.s3.amazonaws.com/releases/52855923/c0686154-e21b-11e5-92d2-6d76b5ceb265?X-Amz-Algorithm<span class="o">=</span>AWS4-HMAC-SHA256<span class="p">&amp;</span>X-Amz-Credential<span class="o">=</span>AKIAISTNZFOVBIJM
+<span class="gp">==&gt; </span>Upgrading gosyujin/bulkrenamer/bulkrenamer
+<span class="gp">==&gt; </span>Downloading https://github.com/gosyujin/bulkrenamer/releases/download/v0.3/bulkrenamer
+<span class="gp">==&gt; </span>Downloading from https://github-cloud.s3.amazonaws.com/releases/52855923/c0686154-e21b-11e5-92d2-6d76b5ceb265?X-Amz-Algorithm<span class="o">=</span>AWS4-HMAC-SHA256&amp;X-Amz-Credential<span class="o">=</span>AKIAISTNZFOVBIJM
 <span class="o">(</span>略<span class="o">)</span>
-🍺  /usr/local/Cellar/bulkrenamer/v0.3: <span class="m">2</span> files, 7M, built in <span class="m">8</span> seconds
-</code></pre></div>
+🍺  /usr/local/Cellar/bulkrenamer/v0.3: 2 files, 7M, built <span class="k">in </span>8 seconds
+</code>
+  </pre>
+</div>
 </div>
 
 <div class="pagination">
   <ul>
     
       <li class="prev">
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan" title="El Capitan上に古いpumaをインストールすると失敗する">
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" title="El Capitan上に古いpumaをインストールすると失敗する">
           El Capitan上に古いpumaをインストールすると失敗する
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next_disabled">
@@ -257,16 +335,16 @@ gosyujin/bulkrenamer/bulkrenamer v0.3
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew" data-text="kk_Atakaの日記 - Golangで作ったスクリプトをbrew install&brew updateできるようにする" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" data-text="kk_Atakaの日記 - Golangで作ったスクリプトをbrew install&brew updateできるようにする" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//"
      data-hatena-bookmark-title="kk_Atakaの日記 - Golangで作ったスクリプトをbrew install&brew updateできるようにする"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
@@ -279,7 +357,7 @@ gosyujin/bulkrenamer/bulkrenamer v0.3
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
@@ -353,142 +431,142 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2016/03/05/go-bin-
       <li>
         <span>2016/03/05</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Homebrew">Homebrew</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Homebrew">Homebrew</a></code> ]</span>
         
-        <a href="/2016/03/05/go-bin-install-from-homebrew">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
+        <a href="/2016/03/05/go-bin-install-from-homebrew/">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//" />
         </a>
       </li>
     
       <li>
         <span>2016/02/17</span>
         
-          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Mac">Mac</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Mac">Mac</a></code> ]</span>
         
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan">El Capitan上に古いpumaをインストールすると失敗する</a>
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">El Capitan上に古いpumaをインストールすると失敗する</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/19</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
+        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/12</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <a href="/2016/01/12/golang-nicony/">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony//" />
         </a>
       </li>
     
       <li>
         <span>2015/12/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt/">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/11/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt/">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/10/13</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt/">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/09/24</span>
         
-          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ansible">Ansible</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <a href="/2015/09/24/ansible-meetup-201509/">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//" />
         </a>
       </li>
     
       <li>
         <span>2015/08/06</span>
         
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Jekyll">Jekyll</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Liquid">Liquid</a></code> ]</span>
         
-        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <a href="/2015/08/06/jekyll-tag-sort/">Jekyllで出力するタグをソートする 解決編</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//" />
         </a>
       </li>
     
       <li>
         <span>2015/07/13</span>
         
-          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Markdown">Markdown</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+          <span>[ <code><a href="/tags/#reST">reST</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Wiki">Wiki</a></code> ]</span>
         
-        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <a href="/2015/07/13/lightweight-markup-language-history/">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//" />
         </a>
       </li>
     
@@ -502,205 +580,205 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2016/03/05/go-bin-
     
     
       
-      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+      <li><a href="/tags/#API">API <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+      <li><a href="/tags/#Android">Android <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+      <li><a href="/tags/#Dropbox">Dropbox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>4</sub></a></li>
+      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Homebrew">Homebrew <sub>1</sub></a></li>
+      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
     
       
-      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
     
       
-      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
     
       
-      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Mac">Mac <sub>8</sub></a></li>
+      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+      <li><a href="/tags/#Python">Python <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#Ruby">Ruby <sub>72</sub></a></li>
+      <li><a href="/tags/#Ruby">Ruby <sub>72</sub></a></li>
     
       
-      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
     
       
-      <li><a href="/tags.html#Sphinx">Sphinx <sub>16</sub></a></li>
+      <li><a href="/tags/#Sphinx">Sphinx <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
     
       
-      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
     
       
-      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#イベント">イベント <sub>26</sub></a></li>
+      <li><a href="/tags/#イベント">イベント <sub>26</sub></a></li>
     
       
-      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
     
       
-      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
     
   </ul>
 

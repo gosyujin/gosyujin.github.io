@@ -3,9 +3,17 @@
   <head>
     <title>Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編 - kk_Atakaの日記</title>
     <meta charset="utf-8">
+    <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
     <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/toc.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/js/jquery.tocLight.js"></script>
+    <script type="text/javascript">
+       $(function() {
+         $.toc.clickHideButton();
+       });
+    </script>
   </head>
   <body>
     <script type="text/javascript">
@@ -25,25 +33,25 @@
       <nav>
         <ul>
           <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives.html">Archive</a>
-          <li class="main-nav"><a href="/tags.html">Tag</a>
-          <li class="main-nav"><a href="/monitor.html">Monitor</a>
+          <li class="main-nav"><a href="/archives/">Archive</a>
+          <li class="main-nav"><a href="/tags/">Tag</a>
+          <li class="main-nav"><a href="/monitor/">Monitor</a>
         </ul>
       </nav>
     </div>
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2013/08/07/jekyll-maintenance-1">Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編</a></h1>
+        <h1><a href="/2013/08/07/jekyll-maintenance-1/">Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags.html#Ruby" class="tag">Ruby</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Ruby" class="tag">Ruby</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#Jekyll" class="tag">Jekyll</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Jekyll" class="tag">Jekyll</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#Git" class="tag">Git</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Git" class="tag">Git</a></code> ]</span>
             
           
           
@@ -57,17 +65,17 @@
   <ul>
     
       <li class="prev">
-        <a href="/2013/08/04/android-install-intent" title="Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件">
+        <a href="/2013/08/04/android-install-intent/" title="Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件">
           Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2013/08/09/redmine2.3-install-and-plugin" title="WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ">
+        <a href="/2013/08/09/redmine2.3-install-and-plugin/" title="WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ">
           WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ
         </a>
       </li>
@@ -76,14 +84,49 @@
 </div>
 
 
-<div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#あらすじ'>あらすじ</a></li><li><a href='#環境'>環境</a></li><li><a href='#参考サイト'>参考サイト</a></li><li><a href='#やりたい事-jekyll-bootstrap-編'>やりたい事: Jekyll Bootstrap 編</a></li><ul><li><a href='#方針'>方針</a></li><li><a href='#その1-jekyll-bootstrapリポジトリから直接更新分を持ってくる-断念'>その1: Jekyll Bootstrapリポジトリから直接更新分を持ってくる(断念)</a></li><ul><li><a href='#マージする'>マージする</a></li><li><a href='#結論'>結論</a></li></ul><li><a href='#その2-jekyll-bootstrapリポジトリを一回forkしてそこから更新分を持ってくる-採用'>その2: Jekyll Bootstrapリポジトリを一回forkしてそこから更新分を持ってくる(採用)</a></li><ul><li><a href='#自分用ブランチの作成'>自分用ブランチの作成</a></li><li><a href='#合体'>合体</a></li><li><a href='#結論'>結論</a></li></ul></ul></ul></ul><!-- end of tree list --></div></div>
-
 <div class="content">
-<h2 id="あらすじ">あらすじ</h2>
+<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>Contents</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">環境</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">参考サイト</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-4">
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">やりたい事: Jekyll Bootstrap 編</span></a>
+              <ul>
+                <li class="toc_level-2 toc_section-5">
+                  <a href="#tocAnchor-1-4-1"><span class="tocnumber">4.1</span> <span class="toctext">方針</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-6">
+                  <a href="#tocAnchor-1-4-2"><span class="tocnumber">4.2</span> <span class="toctext">その1: Jekyll Bootstrapリポジトリから直接更新分を持ってくる(断念)</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-7">
+                  <a href="#tocAnchor-1-4-3"><span class="tocnumber">4.3</span> <span class="toctext">その2: Jekyll Bootstrapリポジトリを一回forkしてそこから更新分を持ってくる(採用)</span></a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><h2 id="tocAnchor-1-1">あらすじ</h2>
 
 <p>forkとか、fetchとか、本で読んでるだけじゃ実際やりたい時にどうやりゃいいかわからん…という話。</p>
 
-<hr>
+<hr />
 
 <p>Github Pagesで運用しているJekyllのバージョンアップをする時に死んだ</p>
 
@@ -100,7 +143,7 @@
 
 <p>パッパとやって手順だけメモするかーと思ったら凄まじくてこずったので、今回はBootstrapだけ。</p>
 
-<h2 id="環境">環境</h2>
+<h2 id="tocAnchor-1-2">環境</h2>
 
 <ul>
 <li>Ruby 1.9.3
@@ -130,7 +173,7 @@
 </ul></li>
 </ul>
 
-<h2 id="参考サイト">参考サイト</h2>
+<h2 id="tocAnchor-1-3">参考サイト</h2>
 
 <ul>
 <li><a href="http://git-scm.com/book/ja/Git-%E3%81%AE%E3%81%95%E3%81%BE%E3%81%96%E3%81%BE%E3%81%AA%E3%83%84%E3%83%BC%E3%83%AB-%E3%82%B5%E3%83%96%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%BC%E3%83%AB">Git - サブモジュール</a></li>
@@ -140,7 +183,7 @@
 <li><a href="http://blog.livedoor.jp/odaxsen/archives/1624005.html">オダろぐ : Git＞マージがコンフリクトしたときに，どちらかを有効にする方法</a></li>
 </ul>
 
-<h2 id="やりたい事-jekyll-bootstrap-編">やりたい事: Jekyll Bootstrap 編</h2>
+<h2 id="tocAnchor-1-4">やりたい事: Jekyll Bootstrap 編</h2>
 
 <p>テンプレートとかcssが更新されたらそれを取得して適用したい。</p>
 
@@ -148,22 +191,26 @@
 
 <p>毎回コピーするよりはなにかうまい方法を探したい。</p>
 
-<h3 id="方針">方針</h3>
+<h3 id="tocAnchor-1-4-1">方針</h3>
 
 <ul>
 <li>Jekyll Bootstrapの新しいバージョン(ブランチ/タグ)をみて新しいのが出たらマージ</li>
 </ul>
 
-<h3 id="その1-jekyll-bootstrapリポジトリから直接更新分を持ってくる-断念">その1: Jekyll Bootstrapリポジトリから直接更新分を持ってくる(断念)</h3>
+<h3 id="tocAnchor-1-4-2">その1: Jekyll Bootstrapリポジトリから直接更新分を持ってくる(断念)</h3>
 
 <p>まずは、自分のJekyllプロジェクトに、本家のJekyl Bootstrapをリモートリポジトリとして登録する。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git remote add jb http://github.com/plusjade/jekyll-bootstrap.git
-<span class="gp">$</span> git remote -v
-<span class="go">jb      http://github.com/plusjade/jekyll-bootstrap.git (fetch)</span>
-<span class="go">jb      http://github.com/plusjade/jekyll-bootstrap.git (push)</span>
-<span class="go">origin  http://github.com/gosyujin/gosyujin.github.com.git (fetch)</span>
-<span class="go">origin  http://github.com/gosyujin/gosyujin.github.com.git (push)</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ git remote add jb http://github.com/plusjade/jekyll-bootstrap.git
+$ git remote -v
+jb      http://github.com/plusjade/jekyll-bootstrap.git (fetch)
+jb      http://github.com/plusjade/jekyll-bootstrap.git (push)
+origin  http://github.com/gosyujin/gosyujin.github.com.git (fetch)
+origin  http://github.com/gosyujin/gosyujin.github.com.git (push)</code>
+  </pre>
+</figure>
 
 <h4 id="マージする">マージする</h4>
 
@@ -171,43 +218,55 @@
 
 <p>参考: ブランチなら<code>remote show</code> でも見れるんだけど、タグを見るには <code>ls-remote --tags</code> コマンドというものがあるみたい。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git ls-remote --tags jb v*
-<span class="go">20f90ffb0fa840f6aea90fc581ffd0dc84ee701f        refs/tags/v0.1.0</span>
-<span class="go">c1972379f3fa93998947f355948359c24f1307a5        refs/tags/v0.1.0^{}</span>
-<span class="go">8d498097c81e685fee3b1d1ffe61fcb66784db31        refs/tags/v0.2.0</span>
-<span class="go">4c29c7ed76a1f972b456f3cd158432caef5c0a81        refs/tags/v0.2.0^{}</span>
-<span class="go">37c14cf57ef968b8d27a54f9c3b55957bd9f7591        refs/tags/v0.2.1</span>
-<span class="go">3a2df76133171e1cd576708a60694e7d0632b671        refs/tags/v0.2.1^{}</span>
-<span class="go">f23e43f6f5cc564a3f411c503ca4eceb88b8b4c7        refs/tags/v0.2.13</span>
-<span class="go">9c0026973bf54324304ed1b917bb227603d87071        refs/tags/v0.2.13^{}</span>
-<span class="go">8fc944393399c6f64a2fa54045ce3cb7282e1970        refs/tags/v0.2.7</span>
-<span class="go">12e41751883d7336225cfd039139137bac9eca4d        refs/tags/v0.2.7^{}</span>
-<span class="go">7b27f21b7eb8f84be4decfe9085d82c6eb374e8d        refs/tags/v0.2.8</span>
-<span class="go">cefdd4e2c3ff08a1e949e035d492387b90329c88        refs/tags/v0.2.8^{}</span>
-<span class="go">653b332f47eff2f8fbe36eaca206fa0f1136d9ad        refs/tags/v0.2.9</span>
-<span class="go">162a85dfb6f2801840b00ae995adeb322487132b        refs/tags/v0.2.9^{}</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ git ls-remote --tags jb v*
+20f90ffb0fa840f6aea90fc581ffd0dc84ee701f        refs/tags/v0.1.0
+c1972379f3fa93998947f355948359c24f1307a5        refs/tags/v0.1.0^{}
+8d498097c81e685fee3b1d1ffe61fcb66784db31        refs/tags/v0.2.0
+4c29c7ed76a1f972b456f3cd158432caef5c0a81        refs/tags/v0.2.0^{}
+37c14cf57ef968b8d27a54f9c3b55957bd9f7591        refs/tags/v0.2.1
+3a2df76133171e1cd576708a60694e7d0632b671        refs/tags/v0.2.1^{}
+f23e43f6f5cc564a3f411c503ca4eceb88b8b4c7        refs/tags/v0.2.13
+9c0026973bf54324304ed1b917bb227603d87071        refs/tags/v0.2.13^{}
+8fc944393399c6f64a2fa54045ce3cb7282e1970        refs/tags/v0.2.7
+12e41751883d7336225cfd039139137bac9eca4d        refs/tags/v0.2.7^{}
+7b27f21b7eb8f84be4decfe9085d82c6eb374e8d        refs/tags/v0.2.8
+cefdd4e2c3ff08a1e949e035d492387b90329c88        refs/tags/v0.2.8^{}
+653b332f47eff2f8fbe36eaca206fa0f1136d9ad        refs/tags/v0.2.9
+162a85dfb6f2801840b00ae995adeb322487132b        refs/tags/v0.2.9^{}</code>
+  </pre>
+</figure>
 
 <p>ん？ <code>^{}</code> はなんだ…？ちょっとわからないところがあるが、いったんおいといて最新版をfetchしてmerge。(どうもtagが切られていないだけで、0.3.0が出ているよう)</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git fetch jb HEAD
-<span class="go">warning: no common commits</span>
-<span class="go">remote: Counting objects: 658, done.</span>
-<span class="go">remote: Compressing objects: 100% (350/350), done.</span>
-<span class="go">remote: Total 658 (delta 324), reused 560 (delta 272)</span>
-<span class="go">Receiving objects: 100% (658/658), 209.25 KiB, done.</span>
-<span class="go">Resolving deltas: 100% (324/324), done.</span>
-<span class="go">From http://github.com/plusjade/jekyll-bootstrap</span>
-<span class="go"> * tag               HEAD     -&gt; FETCH_HEAD</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ git fetch jb HEAD
+warning: no common commits
+remote: Counting objects: 658, done.
+remote: Compressing objects: 100% (350/350), done.
+remote: Total 658 (delta 324), reused 560 (delta 272)
+Receiving objects: 100% (658/658), 209.25 KiB, done.
+Resolving deltas: 100% (324/324), done.
+From http://github.com/plusjade/jekyll-bootstrap
+ * tag               HEAD     -&gt; FETCH_HEAD</code>
+  </pre>
+</figure>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git checkout <span class="nb">source</span> <span class="c"># 適用したいブランチに移動</span>
-<span class="gp">$</span> git merge FETCH_HEAD
-<span class="go">Auto-merging index.md</span>
-<span class="go">CONFLICT (add/add): Merge conflict in index.md</span>
-<span class="go">Auto-merging changelog.md</span>
-<span class="go">CONFLICT (add/add): Merge conflict in changelog.md</span>
-<span class="go">Auto-merging atom.xml</span>
-<span class="go">CONFLICT (add/add): Merge conflict in atom.xml</span>
-<span class="go">(略)</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ git checkout source # 適用したいブランチに移動
+$ git merge FETCH_HEAD
+Auto-merging index.md
+CONFLICT (add/add): Merge conflict in index.md
+Auto-merging changelog.md
+CONFLICT (add/add): Merge conflict in changelog.md
+Auto-merging atom.xml
+CONFLICT (add/add): Merge conflict in atom.xml
+(略)</code>
+  </pre>
+</figure>
 
 <p>いっぱいコンフリクトしたので、地道にコンフリクト解消。。。</p>
 
@@ -229,11 +288,15 @@
 
 <p>これは使えるかも?</p>
 
-<h3 id="その2-jekyll-bootstrapリポジトリを一回forkしてそこから更新分を持ってくる-採用">その2: Jekyll Bootstrapリポジトリを一回forkしてそこから更新分を持ってくる(採用)</h3>
+<h3 id="tocAnchor-1-4-3">その2: Jekyll Bootstrapリポジトリを一回forkしてそこから更新分を持ってくる(採用)</h3>
 
 <p>今度は、はじめに <strong>forkして</strong> 自分のところに持ってくる。そしてclone。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git clone http://github.com/gosyujin/jekyll-bootstrap.git <span class="c"># forkしたのでアカウントが `plusjade` から自分に変わっている</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ git clone http://github.com/gosyujin/jekyll-bootstrap.git # forkしたのでアカウントが `plusjade` から自分に変わっている</code>
+  </pre>
+</figure>
 
 <h4 id="自分用ブランチの作成">自分用ブランチの作成</h4>
 
@@ -241,47 +304,59 @@
 
 <p>独立したブランチを作るには <code>checkout --orphan</code> を使う。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git checkout --orphan oreore-jb
-<span class="go">Switched to a new branch &#39;oreore-jb&#39;</span>
-<span class="gp">$</span> git st
-<span class="gp">#</span> On branch oreore-jb
-<span class="gp">#</span>
-<span class="gp">#</span> Initial commit
-<span class="gp">#</span>
-<span class="gp">#</span> Changes to be committed:
-<span class="gp">#</span>   <span class="o">(</span>use <span class="s2">&quot;git rm --cached &lt;file&gt;...&quot;</span> to unstage<span class="o">)</span>
-<span class="gp">#</span>
-<span class="gp">#</span>       new file:   .gitignore
-<span class="gp">#</span>       new file:   404.html
-<span class="gp">#</span>       new file:   README.md
-<span class="gp">#</span>       new file:   Rakefile
-<span class="gp">#</span>       new file:   _config.yml
-<span class="go">(略)</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ git checkout --orphan oreore-jb
+Switched to a new branch 'oreore-jb'
+$ git st
+# On branch oreore-jb
+#
+# Initial commit
+#
+# Changes to be committed:
+#   (use "git rm --cached &lt;file&gt;..." to unstage)
+#
+#       new file:   .gitignore
+#       new file:   404.html
+#       new file:   README.md
+#       new file:   Rakefile
+#       new file:   _config.yml
+(略)</code>
+  </pre>
+</figure>
 
 <p>ファイルはステージングされた状態になっているのでそのままadd。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git add .
-<span class="gp">$</span> git com <span class="s2">&quot;first commit&quot;</span>
-<span class="go">[oreore-jb (root-commit) df703a3] fc</span>
-<span class="go"> 46 files changed, 2530 insertions(+)</span>
-<span class="go"> create mode 100644 .gitignore</span>
-<span class="go"> create mode 100644 404.html</span>
-<span class="go"> create mode 100644 README.md</span>
-<span class="go"> create mode 100644 Rakefile</span>
-<span class="go"> create mode 100644 _config.yml</span>
-<span class="go">(略)</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ git add .
+$ git com "first commit"
+[oreore-jb (root-commit) df703a3] fc
+ 46 files changed, 2530 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 404.html
+ create mode 100644 README.md
+ create mode 100644 Rakefile
+ create mode 100644 _config.yml
+(略)</code>
+  </pre>
+</figure>
 
 <p>これで、独立した <code>oreore-jb</code> ブランチにBootstrapの最新版が入ったことになる。</p>
 
 <p>試しにmasterブランチでいくつか適当にコミットしたあとグラフを確認してみる。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git g <span class="o">(</span>グラフ表示エイリアス<span class="o">)</span>
-<span class="go">*   bb73195 8940469 2013-08-06 kk_Ataka  (HEAD, master) test2</span>
-<span class="go">| * df703a3 fac1d1e 2013-08-06 kk_Ataka  (oreore-jb) first commit</span>
-<span class="go">*   9da0a7c fac1d1e 2013-08-06 kk_Ataka  test1j</span>
-<span class="go">*   7501cf3 4b3dcb2 2013-07-26 Jade Dominguez  (origin/master, origin/HEAD) Merge add-drafts. closes #167</span>
-<span class="go">|\</span>
-<span class="go">| * c2d70e5 4b3dcb2 2013-07-23 Jade Dominguez  add draft feature</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ git g (グラフ表示エイリアス)
+*   bb73195 8940469 2013-08-06 kk_Ataka  (HEAD, master) test2
+| * df703a3 fac1d1e 2013-08-06 kk_Ataka  (oreore-jb) first commit
+*   9da0a7c fac1d1e 2013-08-06 kk_Ataka  test1j
+*   7501cf3 4b3dcb2 2013-07-26 Jade Dominguez  (origin/master, origin/HEAD) Merge add-drafts. closes #167
+|\
+| * c2d70e5 4b3dcb2 2013-07-23 Jade Dominguez  add draft feature</code>
+  </pre>
+</figure>
 
 <p>過去を断ち切れてる。</p>
 
@@ -296,31 +371,35 @@
 
 <p>するのかな？？</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git checkout --orphan feature <span class="c"># 本家の最新版を取り入れた後…</span>
-<span class="gp">$</span> git add ./
-<span class="gp">$</span> git commit -m <span class="s2">&quot;更新取り入れ&quot;</span>  <span class="c"># この時点でブランチは大きく1. 本流, 2. oreore-jb, 3. feature の3つが存在する</span>
-<span class="gp">$</span> git checkout oreore-jb
-<span class="gp">$</span> git merge feature             <span class="c"># 変更されてるところはぶつかる</span>
-<span class="go">Auto-merging Rakefile</span>
-<span class="go">CONFLICT (add/add): Merge conflict in Rakefile</span>
-<span class="go">Automatic merge failed; fix conflicts and then commit the result.</span>
-<span class="gp">$</span> git ch --theirs Rakefile      <span class="c"># theirsのファイルかoursのファイルか(エディタ使って手でなおしてもいい)</span>
-<span class="gp">$</span> git add ./
-<span class="gp">$</span> git commit -m <span class="s2">&quot;vX.X.X&quot;</span>
-<span class="gp">$</span> git g
-<span class="go">*     221593a 028b015 2013-08-06 kk_Ataka  (HEAD, master) 本流の変更4</span>
-<span class="go">| *   940c432 a4f1743 2013-08-06 kk_Ataka  (oreore-jb) com</span>
-<span class="go">| |\</span>
-<span class="go">| | * 1938f54 a4f1743 2013-08-06 kk_Ataka  (feature) 新バージョン</span>
-<span class="go">* |   7b7427f f3131bb 2013-08-06 kk_Ataka  本流の変更3</span>
-<span class="go">* |   d109479 bd61d9c 2013-08-06 kk_Ataka  本流の変更2</span>
-<span class="go">| *   1fd0b54 9d627ae 2013-08-06 kk_Ataka  merge</span>
-<span class="go">| |\</span>
-<span class="go">| | * 626d51a 9d627ae 2013-08-06 kk_Ataka  tuizui</span>
-<span class="go">* |   6c592be 9d627ae 2013-08-06 kk_Ataka  本流の変更</span>
-<span class="go">| *   59abd4b 4b3dcb2 2013-08-06 kk_Ataka  first commit</span>
-<span class="go">*     7501cf3 4b3dcb2 2013-07-26 Jade Dominguez  (origin/master, origin/HEAD) Merge add-drafts. closes #167</span>
-<span class="gp">$</span> git push origin oreore-jb:oreore-jb</code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ git checkout --orphan feature # 本家の最新版を取り入れた後…
+$ git add ./
+$ git commit -m "更新取り入れ"  # この時点でブランチは大きく1. 本流, 2. oreore-jb, 3. feature の3つが存在する
+$ git checkout oreore-jb
+$ git merge feature             # 変更されてるところはぶつかる
+Auto-merging Rakefile
+CONFLICT (add/add): Merge conflict in Rakefile
+Automatic merge failed; fix conflicts and then commit the result.
+$ git ch --theirs Rakefile      # theirsのファイルかoursのファイルか(エディタ使って手でなおしてもいい)
+$ git add ./
+$ git commit -m "vX.X.X"
+$ git g
+*     221593a 028b015 2013-08-06 kk_Ataka  (HEAD, master) 本流の変更4
+| *   940c432 a4f1743 2013-08-06 kk_Ataka  (oreore-jb) com
+| |\
+| | * 1938f54 a4f1743 2013-08-06 kk_Ataka  (feature) 新バージョン
+* |   7b7427f f3131bb 2013-08-06 kk_Ataka  本流の変更3
+* |   d109479 bd61d9c 2013-08-06 kk_Ataka  本流の変更2
+| *   1fd0b54 9d627ae 2013-08-06 kk_Ataka  merge
+| |\
+| | * 626d51a 9d627ae 2013-08-06 kk_Ataka  tuizui
+* |   6c592be 9d627ae 2013-08-06 kk_Ataka  本流の変更
+| *   59abd4b 4b3dcb2 2013-08-06 kk_Ataka  first commit
+*     7501cf3 4b3dcb2 2013-07-26 Jade Dominguez  (origin/master, origin/HEAD) Merge add-drafts. closes #167
+$ git push origin oreore-jb:oreore-jb</code>
+  </pre>
+</figure>
 
 <p>わかりにくいけどグラフの左が本流、右が今回作ったJekyll Bootstrap自体の履歴をもたない <code>oreore-jb</code> 傍流。</p>
 
@@ -328,30 +407,34 @@
 
 <p>これを、自分のJekyllにmergeしてやる。</p>
 
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> git re add jb http://github.com/gosyujin/jekyll-bootstrap.git
-<span class="gp">$</span> git fetch jb oreore-jb
-<span class="go">remote: Counting objects: 7, done.</span>
-<span class="go">remote: Compressing objects: 100% (5/5), done.</span>
-<span class="go">remote: Total 5 (delta 3), reused 0 (delta 0)</span>
-<span class="go">Unpacking objects: 100% (5/5), done.</span>
-<span class="go">From http://github.com/gosyujin/jekyll-bootstrap.git</span>
-<span class="go"> * branch            oreore-jb  -&gt; FETCH_HEAD</span>
-<span class="gp">$</span> git merge FETCH_HEAD   <span class="c"># コンフリクトした場合は解消にいそしむ</span>
-<span class="gp">$</span> git g
-<span class="go">| *     feaea36 1675a4d 2013-08-06 kk_Ataka  (HEAD, source) Merge branch &#39;oreore-jb&#39; of ../jekyll-bootstrap into source</span>
-<span class="go">| |\</span>
-<span class="go">| | *   940c432 a4f1743 2013-08-06 kk_Ataka  com</span>
-<span class="go">| | |\</span>
-<span class="go">| | | * 1938f54 a4f1743 2013-08-06 kk_Ataka  新バージョン</span>
-<span class="go">| * |   6caafdd 7d2b1c0 2013-08-06 kk_Ataka  OK</span>
-<span class="go">| |\ \</span>
-<span class="go">| | |/</span>
-<span class="go">| | *   1fd0b54 9d627ae 2013-08-06 kk_Ataka  merge</span>
-<span class="go">| | |\</span>
-<span class="go">| | | * 626d51a 9d627ae 2013-08-06 kk_Ataka  tuizui</span>
-<span class="go">| | *   59abd4b 4b3dcb2 2013-08-06 kk_Ataka  first commit</span>
-<span class="go">* |     b3f9818 1d67408 2013-08-06 kk_Ataka  (origin/master, origin/HEAD) deploy at 2013-08-06 01:03:02 +0900</span>
-<span class="go">| *     524de33 4135ebe 2013-08-04 kk_Ataka  (origin/source) 追加 AndroidアプリのIntentタイプ</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-console" data-lang="console">$ git re add jb http://github.com/gosyujin/jekyll-bootstrap.git
+$ git fetch jb oreore-jb
+remote: Counting objects: 7, done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 5 (delta 3), reused 0 (delta 0)
+Unpacking objects: 100% (5/5), done.
+From http://github.com/gosyujin/jekyll-bootstrap.git
+ * branch            oreore-jb  -&gt; FETCH_HEAD
+$ git merge FETCH_HEAD   # コンフリクトした場合は解消にいそしむ
+$ git g
+| *     feaea36 1675a4d 2013-08-06 kk_Ataka  (HEAD, source) Merge branch 'oreore-jb' of ../jekyll-bootstrap into source
+| |\
+| | *   940c432 a4f1743 2013-08-06 kk_Ataka  com
+| | |\
+| | | * 1938f54 a4f1743 2013-08-06 kk_Ataka  新バージョン
+| * |   6caafdd 7d2b1c0 2013-08-06 kk_Ataka  OK
+| |\ \
+| | |/
+| | *   1fd0b54 9d627ae 2013-08-06 kk_Ataka  merge
+| | |\
+| | | * 626d51a 9d627ae 2013-08-06 kk_Ataka  tuizui
+| | *   59abd4b 4b3dcb2 2013-08-06 kk_Ataka  first commit
+* |     b3f9818 1d67408 2013-08-06 kk_Ataka  (origin/master, origin/HEAD) deploy at 2013-08-06 01:03:02 +0900
+| *     524de33 4135ebe 2013-08-04 kk_Ataka  (origin/source) 追加 AndroidアプリのIntentタイプ</code>
+  </pre>
+</figure>
 
 <p>グラフの左はdeploy用のブランチなのでおいといて、真ん中がソースを管理している <code>source</code> ブランチ、右が <code>oreore-jb</code> 。</p>
 
@@ -376,17 +459,17 @@
   <ul>
     
       <li class="prev">
-        <a href="/2013/08/04/android-install-intent" title="Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件">
+        <a href="/2013/08/04/android-install-intent/" title="Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件">
           Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2013/08/09/redmine2.3-install-and-plugin" title="WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ">
+        <a href="/2013/08/09/redmine2.3-install-and-plugin/" title="WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ">
           WindowsにRedmine2.3をインストールする手順と、プラグイン作成用メモ
         </a>
       </li>
@@ -399,16 +482,16 @@
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2013/08/07/jekyll-maintenance-1" data-text="kk_Atakaの日記 - Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2013/08/07/jekyll-maintenance-1/" data-text="kk_Atakaの日記 - Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/07/jekyll-maintenance-1/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/08/07/jekyll-maintenance-1/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/07/jekyll-maintenance-1//">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/08/07/jekyll-maintenance-1//" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/07/jekyll-maintenance-1/"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/07/jekyll-maintenance-1//"
      data-hatena-bookmark-title="kk_Atakaの日記 - Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
@@ -421,7 +504,7 @@
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/07/jekyll-maintenance-1/"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/07/jekyll-maintenance-1//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
@@ -495,142 +578,142 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/07/jekyll-
       <li>
         <span>2016/03/05</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Homebrew">Homebrew</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Homebrew">Homebrew</a></code> ]</span>
         
-        <a href="/2016/03/05/go-bin-install-from-homebrew">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
+        <a href="/2016/03/05/go-bin-install-from-homebrew/">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//" />
         </a>
       </li>
     
       <li>
         <span>2016/02/17</span>
         
-          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Mac">Mac</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Mac">Mac</a></code> ]</span>
         
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan">El Capitan上に古いpumaをインストールすると失敗する</a>
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">El Capitan上に古いpumaをインストールすると失敗する</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/19</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
+        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/12</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <a href="/2016/01/12/golang-nicony/">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony//" />
         </a>
       </li>
     
       <li>
         <span>2015/12/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt/">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/11/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt/">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/10/13</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt/">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/09/24</span>
         
-          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ansible">Ansible</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <a href="/2015/09/24/ansible-meetup-201509/">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//" />
         </a>
       </li>
     
       <li>
         <span>2015/08/06</span>
         
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Jekyll">Jekyll</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Liquid">Liquid</a></code> ]</span>
         
-        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <a href="/2015/08/06/jekyll-tag-sort/">Jekyllで出力するタグをソートする 解決編</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//" />
         </a>
       </li>
     
       <li>
         <span>2015/07/13</span>
         
-          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Markdown">Markdown</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+          <span>[ <code><a href="/tags/#reST">reST</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Wiki">Wiki</a></code> ]</span>
         
-        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <a href="/2015/07/13/lightweight-markup-language-history/">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//" />
         </a>
       </li>
     
@@ -644,205 +727,205 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/07/jekyll-
     
     
       
-      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+      <li><a href="/tags/#API">API <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+      <li><a href="/tags/#Android">Android <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+      <li><a href="/tags/#Dropbox">Dropbox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>4</sub></a></li>
+      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Homebrew">Homebrew <sub>1</sub></a></li>
+      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
     
       
-      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
     
       
-      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
     
       
-      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Mac">Mac <sub>8</sub></a></li>
+      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+      <li><a href="/tags/#Python">Python <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#Ruby">Ruby <sub>72</sub></a></li>
+      <li><a href="/tags/#Ruby">Ruby <sub>72</sub></a></li>
     
       
-      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
     
       
-      <li><a href="/tags.html#Sphinx">Sphinx <sub>16</sub></a></li>
+      <li><a href="/tags/#Sphinx">Sphinx <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
     
       
-      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
     
       
-      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#イベント">イベント <sub>26</sub></a></li>
+      <li><a href="/tags/#イベント">イベント <sub>26</sub></a></li>
     
       
-      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
     
       
-      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
     
   </ul>
 

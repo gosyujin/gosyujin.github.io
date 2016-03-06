@@ -3,9 +3,17 @@
   <head>
     <title>Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる… - kk_Atakaの日記</title>
     <meta charset="utf-8">
+    <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
     <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/toc.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/js/jquery.tocLight.js"></script>
+    <script type="text/javascript">
+       $(function() {
+         $.toc.clickHideButton();
+       });
+    </script>
   </head>
   <body>
     <script type="text/javascript">
@@ -25,25 +33,25 @@
       <nav>
         <ul>
           <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives.html">Archive</a>
-          <li class="main-nav"><a href="/tags.html">Tag</a>
-          <li class="main-nav"><a href="/monitor.html">Monitor</a>
+          <li class="main-nav"><a href="/archives/">Archive</a>
+          <li class="main-nav"><a href="/tags/">Tag</a>
+          <li class="main-nav"><a href="/monitor/">Monitor</a>
         </ul>
       </nav>
     </div>
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2012/09/13/1347508570">Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…</a></h1>
+        <h1><a href="/2012/09/13/1347508570/">Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags.html#Ruby" class="tag">Ruby</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Ruby" class="tag">Ruby</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#備忘録" class="tag">備忘録</a></code> ]</span>
+              <span>[ <code><a href="/tags/#備忘録" class="tag">備忘録</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#Fluentd" class="tag">Fluentd</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Fluentd" class="tag">Fluentd</a></code> ]</span>
             
           
           
@@ -57,17 +65,17 @@
   <ul>
     
       <li class="prev">
-        <a href="/2012/08/29/1346242547" title="Git add, commitをした時、中でどんな事が起こっているのか">
+        <a href="/2012/08/29/1346242547/" title="Git add, commitをした時、中でどんな事が起こっているのか">
           Git add, commitをした時、中でどんな事が起こっているのか
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2012/09/14/1347595853" title="JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備">
+        <a href="/2012/09/14/1347595853/" title="JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備">
           JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備
         </a>
       </li>
@@ -76,22 +84,57 @@
 </div>
 
 
-
-
 <div class="content">
-<h1>あらすじ</h1>
+<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>Contents</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">fluentdのプラグインロード順番</span></a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><h1>あらすじ</h1>
 <p><a href="http://d.hatena.ne.jp/kk_Ataka/20120817/1345209899">前回</a>までに簡単なプラグインを作成する事はできた。</p>
 <p>次はプラグインをGem化しようかなと思って色々いじってたら、実行時になんかうまくプラグインが読めない……。なんで？</p>
 <h1>参考サイト</h1>
-<ul><li><a href="https://github.com/fluent/fluentd">fluent/fluentd · GitHub</a></li><li><a href="http://d.hatena.ne.jp/tagomoris/20120715/1342368392">Fluentdでparser用の正規表現を書く・試す - tagomorisのメモ置き場</a></li><li><a href="http://blog.ksauzz.com/?p=37">fluent pluginの作成 » ksauzz weblog</a></li></ul>
+<ul>
+  <li>
+    <a href="https://github.com/fluent/fluentd">fluent/fluentd · GitHub</a>
+  </li>
+  <li>
+    <a href="http://d.hatena.ne.jp/tagomoris/20120715/1342368392">Fluentdでparser用の正規表現を書く・試す - tagomorisのメモ置き場</a>
+  </li>
+  <li>
+    <a href="http://blog.ksauzz.com/?p=37">fluent pluginの作成 » ksauzz weblog</a>
+  </li>
+</ul>
 <h1>今できてる事とできてない事</h1>
 <p>BundlerでFluentdをインストールし、</p>
 <pre>$ bundle exec fluentd -c /hoge/fluent.conf -p /hoge/plugin </pre>
 <p>を実行した時……</p>
-<ul><li>gem installで入れたfluentdのプラグインはちゃんとロードできる<ul><li>Gemにしちゃえばロードできる</li></ul></li><li>プラグインディレクトリ直下(-p /hoge/plugin)にササッと作ってみたプラグインもロードでき、動いた<ul><li>直下に放り込めばロードできる</li></ul></li></ul>
+<ul>
+  <li>gem installで入れたfluentdのプラグインはちゃんとロードできる<ul><li>Gemにしちゃえばロードできる</li></ul></li>
+  <li>プラグインディレクトリ直下(-p /hoge/plugin)にササッと作ってみたプラグインもロードでき、動いた<ul><li>直下に放り込めばロードできる</li></ul></li>
+</ul>
 <pre>/hoge/plugin
 └in_hoge.rb              # これはロードできる</pre>
-<ul><li><span class="deco" style="color:#FF0000;">gem未満、ササッと作った以上のプラグインがロードできない</span><ul><li>fluent-pluginっぽいディレクトリ構成にした程度のもの。まだローカルに置いてあるだけでgemには成り切れていない</li></ul></li></ul>
+<ul>
+  <li>
+    <span class="deco" style="color:#FF0000;">gem未満、ササッと作った以上のプラグインがロードできない</span>
+    <ul>
+      <li>fluent-pluginっぽいディレクトリ構成にした程度のもの。まだローカルに置いてあるだけでgemには成り切れていない</li>
+    </ul>
+  </li>
+</ul>
 <pre>/hoge/plugin
 ├in_hoge.rb              # これはロードできる
 └fluent-plugin-hogehoge
@@ -102,12 +145,25 @@
 　├fluent-plugin-hogehoge.gemspec
 　└他</pre>
 <h1>調査結果と(暫定)解決策</h1>
-<h2>fluentdのプラグインロード順番</h2>
+<h2 id="tocAnchor-1-1">fluentdのプラグインロード順番</h2>
 <p>fluentdコマンドを実行すると、 <span class="deco" style="font-weight:bold;">なんやかんやあって</span> プラグインをロードしにいく。ソースは$FLUENTD_HOME/lib/fluent/plugin.rb</p>
-<ol><li>$FLUENTD_HOME/lib/fluent/plugin/直下のrbファイルをロードする<ul><li>in_exec.rbとか</li></ul></li><li>gem_pluginをロードする<ul><li>これは今回空だった</li></ul></li><li>/etc/fluent/plugin/直下のrbファイルをロードする<ul><li>デフォルトのプラグイン置き場</li><li>デフォルトの設定は$FLUENTD_HOME/lib/fluent/env.rbに定義されている</li></ul></li><li>オプションで-p /hoge/pluginを指定していた場合、/hoge/plugin直下のrbファイルもロードする<ul><li>また、<span class="deco" style="color:#FF0000;">-pオプションは複数指定できる</span></li></ul></li><li>fluent.confに定義されている<source> type hogeが今までロードしたファイルにあるか確認。あった場合はそのままロードできる</li></ol>
-<ul><li>なかった場合はもう少し色々な場所の探索にチャレンジする<ul><li><span class="deco" style="color:#FF0000;">$LOAD_PATHと、gem installしたディレクトリ直下のどこかにlib/fluent/plugin/<type>_<name>.rb</span>が存在するか</li></ul></li></ul>
+<ol>
+  <li>$FLUENTD_HOME/lib/fluent/plugin/直下のrbファイルをロードする<ul><li>in_exec.rbとか</li></ul></li>
+  <li>gem_pluginをロードする<ul><li>これは今回空だった</li></ul></li>
+  <li>/etc/fluent/plugin/直下のrbファイルをロードする<ul><li>デフォルトのプラグイン置き場</li><li>デフォルトの設定は$FLUENTD_HOME/lib/fluent/env.rbに定義されている</li></ul></li>
+  <li>オプションで-p /hoge/pluginを指定していた場合、/hoge/plugin直下のrbファイルもロードする<ul><li>また、<span class="deco" style="color:#FF0000;">-pオプションは複数指定できる</span></li></ul></li>
+  <li>fluent.confに定義されている<source> type hogeが今までロードしたファイルにあるか確認。あった場合はそのままロードできる</source></li>
+</ol>
+<ul>
+  <li>なかった場合はもう少し色々な場所の探索にチャレンジする<ul><li><span class="deco" style="color:#FF0000;">$LOAD_PATHと、gem installしたディレクトリ直下のどこかにlib/fluent/plugin/<type>_<name>.rb</name></type></span>が存在するか</li></ul></li>
+</ul>
 <h1>解決策</h1>
-<ol><li>fluentd自体の$LOAD_PATHに追加<ul><li>本体に毎回修正かけるの？</li></ul></li><li>in_hogehoge.rbをロードしてくれる場所へコピー(デフォルトプラグイン(/etc/fluent/plugin)など)<ul><li>コピペ？</li></ul></li><li>さっさと作ってgem installできるようにもっていく<ul><li>うーん…</li></ul></li><li>オプション-pを複数指定する<ul><li>上の場合は -p /hoge/plugin -p /hoge/plugin/fluent-plugin-hogehoge/lib/fluent/plugin としてやればよい<ul><li>fluentd本体でわざわざlib/fluent/plugin下を探すようにコーディングされてるのにこんな指定の仕方するものかな？　何か違う気がする……下みたいに未完成のプラグインが増えていくとオプションガンガン長くなっていく？</li></ul></li></ul></li></ol>
+<ol>
+  <li>fluentd自体の$LOAD_PATHに追加<ul><li>本体に毎回修正かけるの？</li></ul></li>
+  <li>in_hogehoge.rbをロードしてくれる場所へコピー(デフォルトプラグイン(/etc/fluent/plugin)など)<ul><li>コピペ？</li></ul></li>
+  <li>さっさと作ってgem installできるようにもっていく<ul><li>うーん…</li></ul></li>
+  <li>オプション-pを複数指定する<ul><li>上の場合は -p /hoge/plugin -p /hoge/plugin/fluent-plugin-hogehoge/lib/fluent/plugin としてやればよい<ul><li>fluentd本体でわざわざlib/fluent/plugin下を探すようにコーディングされてるのにこんな指定の仕方するものかな？　何か違う気がする……下みたいに未完成のプラグインが増えていくとオプションガンガン長くなっていく？</li></ul></li></ul></li>
+</ol>
 <pre>/hoge/plugin
 ├in_hoge.rb
 ├fluent-plugin-hogehoge
@@ -146,8 +202,25 @@ $ bundle gem fluent-plugin-hogehoge
       create  fluent-plugin-hogehoge/lib/fluent-plugin-hogehoge/version.rb
 Initializating git repo in /略/fluent-hoge/plugin/fluent-plugin-hogehoge</pre>
 <p>なんかいろいろ出来たがちょっとルールがあるようなので整形していく。公式サイトより</p>
-<blockquote><p>Installing custom plugins</p><p>To install a plugin, put a ruby script to /etc/fluent/plugin directory.</p><p>Or you can create gem package that includes lib/fluent/plugin/<TYPE>_<NAME>.rb file.</p><p>TYPE is in for input plugins, out for output plugins and buf for buffer plugins.</p><p>It’s like lib/fluent/plugin/out_mail.rb.</p><p>The packaged gem can be distributed and installed using RubyGems.</p><p>See Searching plugins.</p><cite><a href="http://fluentd.org/doc/devel.html">http://fluentd.org/doc/devel.html</a></cite></blockquote>
-<ul><li>プラグインは/etc/fluent/pluginにインストールするといいよ<ul><li>また、-pオプションを指定すればfluent-hoge/plugin下も呼んでくれる</li></ul></li><li>Gem packageを作る場合はパッケージの下にlib/fluent/plugin/<TYPE>_<NAME>.rbって名前にしておいてね<ul><li>他の方が作ったプラグイン＠GitHubを見ていると確かにそうなっていた！</li></ul></li><li><TYPE>はinputプラグインならin、outputプラグインならoutといったように<ul><li>このルールは後ほど効いてくる</li></ul></li></ul>
+<blockquote>
+  <p>Installing custom plugins</p>
+  <p>To install a plugin, put a ruby script to /etc/fluent/plugin directory.</p>
+  <p>Or you can create gem package that includes lib/fluent/plugin/<type>_<name>.rb file.</name></type></p>
+  <p>TYPE is in for input plugins, out for output plugins and buf for buffer plugins.</p>
+  <p>It’s like lib/fluent/plugin/out_mail.rb.</p>
+  <p>The packaged gem can be distributed and installed using RubyGems.</p>
+  <p>See Searching plugins.</p>
+  <cite>
+    <a href="http://fluentd.org/doc/devel.html">http://fluentd.org/doc/devel.html</a>
+  </cite>
+</blockquote>
+<ul>
+  <li>プラグインは/etc/fluent/pluginにインストールするといいよ<ul><li>また、-pオプションを指定すればfluent-hoge/plugin下も呼んでくれる</li></ul></li>
+  <li>Gem packageを作る場合はパッケージの下にlib/fluent/plugin/<type>_<name>.rbって名前にしておいてね<ul><li>他の方が作ったプラグイン＠GitHubを見ていると確かにそうなっていた！</li></ul></name></type></li>
+  <li>
+    <type>はinputプラグインならin、outputプラグインならoutといったように<ul><li>このルールは後ほど効いてくる</li></ul></type>
+  </li>
+</ul>
 <p>ってわけでディレクトリはこんな構成に。</p>
 <pre>fluent-hoge/
 ├(略)
@@ -163,9 +236,9 @@ Initializating git repo in /略/fluent-hoge/plugin/fluent-plugin-hogehoge</pre>
 　　　└fluent/
 　　　　└plugin/
 　　　　　└in_inputs.rb</pre>
-<p>プラグインも作成。ただ{&quot;plugin&quot;=&gt;&quot;yes&quot;}を出力しまくるだけのソース。</p>
+<p>プラグインも作成。ただ{"plugin"=&gt;"yes"}を出力しまくるだけのソース。</p>
 <pre class="ruby">class FluPluGem &lt; Fluent::Input
-  Fluent::Plugin.register_input(&quot;inputs&quot;, self)
+  Fluent::Plugin.register_input("inputs", self)
   def initialize
     super
   end
@@ -175,13 +248,13 @@ Initializating git repo in /略/fluent-hoge/plugin/fluent-plugin-hogehoge</pre>
   end
 
   def start
-    puts &quot;a starts&quot;
+    puts "a starts"
     @thread = Thread.new(&amp;method(:run))
   end
 
   def run
     loop do
-      Fluent::Engine.emit(&quot;debugx.debug&quot;, Fluent::Engine.now, {&quot;plugin&quot; =&gt; &quot;yes&quot;})
+      Fluent::Engine.emit("debugx.debug", Fluent::Engine.now, {"plugin" =&gt; "yes"})
       sleep(2)
     end
   end
@@ -193,44 +266,56 @@ end</pre>
 <p>この状態で起動！</p>
 <pre>/usr/local/bin/fluentd -c /略/fluent-hoge/fluent.conf -p /略/fluent-hoge/plugin/
 2012-09-07 19:57:48 +0900: starting fluentd-0.10.25
-2012-09-07 19:57:48 +0900: reading config file path=&quot;/略/fluent-hoge/fluent.conf&quot;
-2012-09-07 19:57:48 +0900: adding source type=&quot;forward&quot;
-2012-09-07 19:57:48 +0900: adding source type=&quot;inputs&quot;
-2012-09-07 19:57:48 +0900: config error file=&quot;/略/fluent-hoge/fluent.conf&quot; error=&quot;Unknown input plugin 'inputs'. Run 'gem search -rd fluent-plugin' to find plugins&quot;
+2012-09-07 19:57:48 +0900: reading config file path="/略/fluent-hoge/fluent.conf"
+2012-09-07 19:57:48 +0900: adding source type="forward"
+2012-09-07 19:57:48 +0900: adding source type="inputs"
+2012-09-07 19:57:48 +0900: config error file="/略/fluent-hoge/fluent.conf" error="Unknown input plugin 'inputs'. Run 'gem search -rd fluent-plugin' to find plugins"
 2012-09-07 19:57:48 +0900: process finished code=256
 2012-09-07 19:57:48 +0900: process died within 1 second. exit.</pre>
 <p>失敗した…。inputsっていうプラグインなぞないって言われた。でも、プラグイン本体(in_inputs.rb)をplugin直下(ディレクトリ構成の(1)の部分)に持ってくると…</p>
 <pre>/usr/local/bin/fluentd -c /略/fluent-hoge/fluent.conf -p /略/fluent-hoge/plugin/
 2012-09-07 20:02:28 +0900: starting fluentd-0.10.25
-2012-09-07 20:02:28 +0900: reading config file path=&quot;/略/fluent-hoge/fluent.conf&quot;
-2012-09-07 20:02:28 +0900: adding source type=&quot;forward&quot;
-2012-09-07 20:02:28 +0900: adding source type=&quot;inputs&quot;
-2012-09-07 20:02:28 +0900: adding source type=&quot;thread&quot;
-2012-09-07 20:02:28 +0900: adding source type=&quot;tail&quot;
+2012-09-07 20:02:28 +0900: reading config file path="/略/fluent-hoge/fluent.conf"
+2012-09-07 20:02:28 +0900: adding source type="forward"
+2012-09-07 20:02:28 +0900: adding source type="inputs"
+2012-09-07 20:02:28 +0900: adding source type="thread"
+2012-09-07 20:02:28 +0900: adding source type="tail"
 2012-09-07 20:02:28 +0900: 'pos_file PATH' parameter is not set to a 'tail' source.
 2012-09-07 20:02:28 +0900: this parameter is highly recommended to save the position to resume tailing.
-2012-09-07 20:02:28 +0900: adding match pattern=&quot;stdd.std&quot; type=&quot;file&quot;
-2012-09-07 20:02:28 +0900: adding match pattern=&quot;devid.devid&quot; type=&quot;file&quot;
-2012-09-07 20:02:28 +0900: adding match pattern=&quot;jenkins.**&quot; type=&quot;file&quot;
-2012-09-07 20:02:28 +0900: adding match pattern=&quot;debug.**&quot; type=&quot;stdout&quot;
+2012-09-07 20:02:28 +0900: adding match pattern="stdd.std" type="file"
+2012-09-07 20:02:28 +0900: adding match pattern="devid.devid" type="file"
+2012-09-07 20:02:28 +0900: adding match pattern="jenkins.**" type="file"
+2012-09-07 20:02:28 +0900: adding match pattern="debug.**" type="stdout"
 2012-09-07 20:02:28 +0900: listening fluent socket on 0.0.0.0:24224</pre>
 <p>起動した…。</p>
-<blockquote><p>Or you can create gem package that includes lib/fluent/plugin/<TYPE>_<NAME>.rb file.</p></blockquote>
+<blockquote>
+  <p>Or you can create gem package that includes lib/fluent/plugin/<type>_<name>.rb file.</name></type></p>
+</blockquote>
 <p>この文の認識が間違ってるのかなー？</p>
 <p>よくわからないので本丸を攻めてみる。pluginの処理を記述しているのはそのものplugin.rb、また、それを呼ぼうとしているはsupervisor.rb,engine.rbあたりっぽい。</p>
-<ul><li><a href="https://github.com/fluent/fluentd/blob/master/lib/fluent/plugin.rb">fluentd/lib/fluent/plugin.rb at master · fluent/fluentd · GitHub</a></li><li><a href="https://github.com/fluent/fluentd/blob/master/lib/fluent/engine.rb">fluentd/lib/fluent/engine.rb at master · fluent/fluentd · GitHub</a></li><li><a href="https://github.com/fluent/fluentd/blob/master/lib/fluent/supervisor.rb">fluentd/lib/fluent/supervisor.rb at master · fluent/fluentd · GitHub</a></li></ul>
+<ul>
+  <li>
+    <a href="https://github.com/fluent/fluentd/blob/master/lib/fluent/plugin.rb">fluentd/lib/fluent/plugin.rb at master · fluent/fluentd · GitHub</a>
+  </li>
+  <li>
+    <a href="https://github.com/fluent/fluentd/blob/master/lib/fluent/engine.rb">fluentd/lib/fluent/engine.rb at master · fluent/fluentd · GitHub</a>
+  </li>
+  <li>
+    <a href="https://github.com/fluent/fluentd/blob/master/lib/fluent/supervisor.rb">fluentd/lib/fluent/supervisor.rb at master · fluent/fluentd · GitHub</a>
+  </li>
+</ul>
 <p>ロードしているのはplugin内だろうと思い、いろいろ出力してみる。</p>
 <pre class="ruby">  def load_plugins
-    dir = File.join(File.dirname(__FILE__), &quot;plugin&quot;)
-puts &quot;!load_plugins:#{dir}&quot;
+    dir = File.join(File.dirname(__FILE__), "plugin")
+puts "!load_plugins:#{dir}"
     load_plugin_dir(dir)
     load_gem_plugins
   end</pre>
 <pre class="ruby">  def load_plugin_dir(dir)
     dir = File.expand_path(dir)
-puts &quot;!load_plugin_dir:#{dir}&quot;
+puts "!load_plugin_dir:#{dir}"
     Dir.entries(dir).sort.each {|fname|
-puts &quot;!load_plugin_dir:#{fname}&quot;
+puts "!load_plugin_dir:#{fname}"
       if fname =~ /\.rb$/
         require File.join(dir, fname)
       end
@@ -241,33 +326,33 @@ puts &quot;!load_plugin_dir:#{fname}&quot;
   def load_gem_plugins
     return unless defined? Gem
     plugins = Gem.find_files('fluent_plugin')
-puts &quot;!load_gem_plugins:#{plugins}&quot;
+puts "!load_gem_plugins:#{plugins}"
     plugins.each {|plugin|
       begin
         load plugin
       rescue ::Exception =&gt; e
-        msg = &quot;#{plugin.inspect}: #{e.message} (#{e.class})&quot;
-        $log.warn &quot;Error loading Fluent plugin #{msg}&quot;
+        msg = "#{plugin.inspect}: #{e.message} (#{e.class})"
+        $log.warn "Error loading Fluent plugin #{msg}"
       end
     }
   end</pre>
 <pre class="ruby">  def try_load_plugin(name, type)
-puts &quot;!try_load_plugin:#{name}, #{type}&quot;
+puts "!try_load_plugin:#{name}, #{type}"
     case name
     when 'input'
-      path = &quot;fluent/plugin/in_#{type}&quot;
+      path = "fluent/plugin/in_#{type}"
     when 'output'
-      path = &quot;fluent/plugin/out_#{type}&quot;
+      path = "fluent/plugin/out_#{type}"
     when 'buffer'
-      path = &quot;fluent/plugin/buf_#{type}&quot;
+      path = "fluent/plugin/buf_#{type}"
     else
       return
     end
 
     # prefer LOAD_PATH than gems
     files = $LOAD_PATH.map {|lp|
-puts &quot;!try_load_plugin:#{lp}&quot;
-      lpath = File.join(lp, &quot;#{path}.rb&quot;)
+puts "!try_load_plugin:#{lp}"
+      lpath = File.join(lp, "#{path}.rb")
       File.exist?(lpath) ? lpath : nil
     }.compact
     unless files.empty?
@@ -286,14 +371,14 @@ puts &quot;!try_load_plugin:#{lp}&quot;
       specs = specs.sort_by {|spec| spec.version }
       if spec = specs.last
         spec.require_paths.each {|lib|
-          file = &quot;#{spec.full_gem_path}/#{lib}/#{path}&quot;
+          file = "#{spec.full_gem_path}/#{lib}/#{path}"
           require file
         }
       end</pre>
 <p>実行結果はこうなる。</p>
 <pre>$ /usr/local/bin/fluentd -c /略/fluent-hoge/fluent.conf -p /略/fluent-hoge/plugin/
 2012-09-07 19:37:32 +0900: starting fluentd-0.10.25
-2012-09-07 19:37:32 +0900: reading config file path=&quot;/略/fluent-hoge/fluent.conf&quot;</pre>
+2012-09-07 19:37:32 +0900: reading config file path="/略/fluent-hoge/fluent.conf"</pre>
 <p>→はじめはfluent本体のpluginを呼んでる。</p>
 <pre>!load_plugins:/usr/local/lib/ruby/gems/1.9.1/gems/fluentd-0.10.25/lib/fluent/plugin
 !load_plugin_dir:/usr/local/lib/ruby/gems/1.9.1/gems/fluentd-0.10.25/lib/fluent/plugin
@@ -333,15 +418,17 @@ puts &quot;!try_load_plugin:#{lp}&quot;
 !load_plugin_dir:..
 !load_plugin_dir:fluent-plugin-hogehoge
 !load_plugin_dir:simple_thread_plugin.rb</pre>
-<p><span class="deco" style="color:#FF0000;">あれ？ディレクトリの上さらっと舐めるだけ？</span></p>
+<p>
+  <span class="deco" style="color:#FF0000;">あれ？ディレクトリの上さらっと舐めるだけ？</span>
+</p>
 <p>ここからtypeがaddされている。みつかったものは特に何も表示されず次へ次へ……。</p>
-<pre>2012-09-07 20:16:24 +0900: adding source type=&quot;forward&quot;
-2012-09-07 20:16:24 +0900: adding source type=&quot;thread&quot;
-2012-09-07 20:16:24 +0900: adding source type=&quot;tail&quot;
+<pre>2012-09-07 20:16:24 +0900: adding source type="forward"
+2012-09-07 20:16:24 +0900: adding source type="thread"
+2012-09-07 20:16:24 +0900: adding source type="tail"
 2012-09-07 20:16:24 +0900: 'pos_file PATH' parameter is not set to a 'tail' source.
 2012-09-07 20:16:24 +0900: this parameter is highly recommended to save the position to resume tailing.</pre>
 <p>で、今回見つかってないtypeが出てくると、try_load_pluginが呼ばれる。</p>
-<pre>2012-09-07 20:16:24 +0900: adding source type=&quot;inputs&quot;
+<pre>2012-09-07 20:16:24 +0900: adding source type="inputs"
 !try_load_plugin:input, inputs
 !try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/http_parser.rb-0.5.3/lib
 !try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/msgpack-0.4.7/lib
@@ -360,27 +447,29 @@ puts &quot;!try_load_plugin:#{lp}&quot;
 !try_load_plugin:/usr/local/lib/ruby/1.9.1
 !try_load_plugin:/usr/local/lib/ruby/1.9.1/i686-linux
 !try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/fluentd-0.10.25/lib
-2012-09-07 20:16:24 +0900: config error file=&quot;/略/fluent-hoge/fluent.conf&quot; error=&quot;Unknown input plugin 'inputs'. Run 'gem search -rd fluent-plugin' to find plugins&quot;
+2012-09-07 20:16:24 +0900: config error file="/略/fluent-hoge/fluent.conf" error="Unknown input plugin 'inputs'. Run 'gem search -rd fluent-plugin' to find plugins"
 2012-09-07 20:16:24 +0900: process finished code=256
 2012-09-07 20:16:24 +0900: process died within 1 second. exit.</pre>
 <p>まずプラグインの種類によって読み込まれるパスとファイル名が決まるみたい。</p>
 <pre class="ruby">    case name
     when 'input'
-      path = &quot;fluent/plugin/in_#{type}&quot;
+      path = "fluent/plugin/in_#{type}"
     when 'output'
-      path = &quot;fluent/plugin/out_#{type}&quot;
+      path = "fluent/plugin/out_#{type}"
     when 'buffer'
-      path = &quot;fluent/plugin/buf_#{type}&quot;
+      path = "fluent/plugin/buf_#{type}"
     else
       return
     end</pre>
-<blockquote><p>Or you can create gem package that includes lib/fluent/plugin/<TYPE>_<NAME>.rb file.</p></blockquote>
+<blockquote>
+  <p>Or you can create gem package that includes lib/fluent/plugin/<type>_<name>.rb file.</name></type></p>
+</blockquote>
 <p>がここで効いてくるわけか。</p>
 <p>そしたら$LOAD_PATHの中にfluent/plugin/in_inputs.rbがないか探しに行ってる。そしてそこにもなかった場合、インストールしたGemの中を探す。</p>
 <pre class="ruby">    # prefer LOAD_PATH than gems
     files = $LOAD_PATH.map {|lp|
-puts &quot;!try_load_plugin:#{lp}&quot;
-      lpath = File.join(lp, &quot;#{path}.rb&quot;)
+puts "!try_load_plugin:#{lp}"
+      lpath = File.join(lp, "#{path}.rb")
       File.exist?(lpath) ? lpath : nil
     }.compact
     unless files.empty?
@@ -399,7 +488,7 @@ puts &quot;!try_load_plugin:#{lp}&quot;
       specs = specs.sort_by {|spec| spec.version }
       if spec = specs.last
         spec.require_paths.each {|lib|
-          file = &quot;#{spec.full_gem_path}/#{lib}/#{path}&quot;
+          file = "#{spec.full_gem_path}/#{lib}/#{path}"
           require file
         }
       end</pre>
@@ -411,17 +500,17 @@ puts &quot;!try_load_plugin:#{lp}&quot;
   <ul>
     
       <li class="prev">
-        <a href="/2012/08/29/1346242547" title="Git add, commitをした時、中でどんな事が起こっているのか">
+        <a href="/2012/08/29/1346242547/" title="Git add, commitをした時、中でどんな事が起こっているのか">
           Git add, commitをした時、中でどんな事が起こっているのか
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2012/09/14/1347595853" title="JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備">
+        <a href="/2012/09/14/1347595853/" title="JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備">
           JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備
         </a>
       </li>
@@ -434,16 +523,16 @@ puts &quot;!try_load_plugin:#{lp}&quot;
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2012/09/13/1347508570" data-text="kk_Atakaの日記 - Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2012/09/13/1347508570/" data-text="kk_Atakaの日記 - Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/09/13/1347508570/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/09/13/1347508570/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/09/13/1347508570//">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/09/13/1347508570//" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/09/13/1347508570/"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/09/13/1347508570//"
      data-hatena-bookmark-title="kk_Atakaの日記 - Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
@@ -456,7 +545,7 @@ puts &quot;!try_load_plugin:#{lp}&quot;
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/09/13/1347508570/"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/09/13/1347508570//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
@@ -530,142 +619,142 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/09/13/1347508
       <li>
         <span>2016/03/05</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Homebrew">Homebrew</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Homebrew">Homebrew</a></code> ]</span>
         
-        <a href="/2016/03/05/go-bin-install-from-homebrew">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
+        <a href="/2016/03/05/go-bin-install-from-homebrew/">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//" />
         </a>
       </li>
     
       <li>
         <span>2016/02/17</span>
         
-          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Mac">Mac</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Mac">Mac</a></code> ]</span>
         
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan">El Capitan上に古いpumaをインストールすると失敗する</a>
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">El Capitan上に古いpumaをインストールすると失敗する</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/19</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
+        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/12</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <a href="/2016/01/12/golang-nicony/">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony//" />
         </a>
       </li>
     
       <li>
         <span>2015/12/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt/">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/11/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt/">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/10/13</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt/">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/09/24</span>
         
-          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ansible">Ansible</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <a href="/2015/09/24/ansible-meetup-201509/">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//" />
         </a>
       </li>
     
       <li>
         <span>2015/08/06</span>
         
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Jekyll">Jekyll</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Liquid">Liquid</a></code> ]</span>
         
-        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <a href="/2015/08/06/jekyll-tag-sort/">Jekyllで出力するタグをソートする 解決編</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//" />
         </a>
       </li>
     
       <li>
         <span>2015/07/13</span>
         
-          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Markdown">Markdown</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+          <span>[ <code><a href="/tags/#reST">reST</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Wiki">Wiki</a></code> ]</span>
         
-        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <a href="/2015/07/13/lightweight-markup-language-history/">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//" />
         </a>
       </li>
     
@@ -679,205 +768,205 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/09/13/1347508
     
     
       
-      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+      <li><a href="/tags/#API">API <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+      <li><a href="/tags/#Android">Android <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+      <li><a href="/tags/#Dropbox">Dropbox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>4</sub></a></li>
+      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Homebrew">Homebrew <sub>1</sub></a></li>
+      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
     
       
-      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
     
       
-      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
     
       
-      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Mac">Mac <sub>8</sub></a></li>
+      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+      <li><a href="/tags/#Python">Python <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#Ruby">Ruby <sub>72</sub></a></li>
+      <li><a href="/tags/#Ruby">Ruby <sub>72</sub></a></li>
     
       
-      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
     
       
-      <li><a href="/tags.html#Sphinx">Sphinx <sub>16</sub></a></li>
+      <li><a href="/tags/#Sphinx">Sphinx <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
     
       
-      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
     
       
-      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#イベント">イベント <sub>26</sub></a></li>
+      <li><a href="/tags/#イベント">イベント <sub>26</sub></a></li>
     
       
-      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
     
       
-      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
     
   </ul>
 

@@ -3,9 +3,17 @@
   <head>
     <title>Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き - kk_Atakaの日記</title>
     <meta charset="utf-8">
+    <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
     <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/toc.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/js/jquery.tocLight.js"></script>
+    <script type="text/javascript">
+       $(function() {
+         $.toc.clickHideButton();
+       });
+    </script>
   </head>
   <body>
     <script type="text/javascript">
@@ -25,23 +33,23 @@
       <nav>
         <ul>
           <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives.html">Archive</a>
-          <li class="main-nav"><a href="/tags.html">Tag</a>
-          <li class="main-nav"><a href="/monitor.html">Monitor</a>
+          <li class="main-nav"><a href="/archives/">Archive</a>
+          <li class="main-nav"><a href="/tags/">Tag</a>
+          <li class="main-nav"><a href="/monitor/">Monitor</a>
         </ul>
       </nav>
     </div>
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2013/08/23/sphinx-install-python-proxy2">Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き</a></h1>
+        <h1><a href="/2013/08/23/sphinx-install-python-proxy2/">Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags.html#Python" class="tag">Python</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Python" class="tag">Python</a></code> ]</span>
             
-              <span>[ <code><a href="/tags.html#Sphinx" class="tag">Sphinx</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Sphinx" class="tag">Sphinx</a></code> ]</span>
             
           
           
@@ -55,17 +63,17 @@
   <ul>
     
       <li class="prev">
-        <a href="/2013/08/21/sphinx-install-python-proxy" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話">
+        <a href="/2013/08/21/sphinx-install-python-proxy/" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話">
           Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2013/08/26/utf8-space-c2a0" title="ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話">
+        <a href="/2013/08/26/utf8-space-c2a0/" title="ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話">
           ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話
         </a>
       </li>
@@ -74,10 +82,47 @@
 </div>
 
 
-<div class="content_tree_wrapper"><h2 class="content_tree">目次</h2><div class="content_tree_list"><ul><!-- start tree list --><li><a href='#前回までのあらすじ'>前回までのあらすじ</a></li><li><a href='#結論'>結論</a></li><ul><li><a href='#レジストリ-ie-の設定-から'>レジストリ( IE の設定)から</a></li><li><a href='#環境変数から'>環境変数から</a></li></ul><li><a href='#内部の処理'>内部の処理</a></li><ul><li><a href='#環境変数-`http_proxy`-を設定している、ieのプロキシを設定している場合'>環境変数 `HTTP_PROXY` を設定している、IEのプロキシを設定している場合</a></li><li><a href='#環境変数-`http_proxy`-を設定していない、ieのプロキシを設定している場合'>環境変数 `HTTP_PROXY` を設定していない、IEのプロキシを設定している場合</a></li></ul></ul></ul><!-- end of tree list --></div></div>
-
 <div class="content">
-<h2 id="前回までのあらすじ">前回までのあらすじ</h2>
+<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>Contents</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">前回までのあらすじ</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">結論</span></a>
+              <ul>
+                <li class="toc_level-2 toc_section-3">
+                  <a href="#tocAnchor-1-2-1"><span class="tocnumber">2.1</span> <span class="toctext">レジストリ( IE の設定)から</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-4">
+                  <a href="#tocAnchor-1-2-2"><span class="tocnumber">2.2</span> <span class="toctext">環境変数から</span></a>
+                </li>
+              </ul>
+            </li>
+            <li class="toc_level-1 toc_section-5">
+              <a href="#tocAnchor-1-5"><span class="tocnumber">3</span> <span class="toctext">内部の処理</span></a>
+              <ul>
+                <li class="toc_level-2 toc_section-6">
+                  <a href="#tocAnchor-1-5-1"><span class="tocnumber">3.1</span> <span class="toctext">環境変数 HTTP_PROXY を設定している、IEのプロキシを設定している場合</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-7">
+                  <a href="#tocAnchor-1-5-2"><span class="tocnumber">3.2</span> <span class="toctext">環境変数 HTTP_PROXY を設定していない、IEのプロキシを設定している場合</span></a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><h2 id="tocAnchor-1-1">前回までのあらすじ</h2>
 
 <ul>
 <li><a href="http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy/">Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話</a></li>
@@ -95,13 +140,13 @@
 
 <p>なんでか気になったので調べた。</p>
 
-<h2 id="結論">結論</h2>
+<h2 id="tocAnchor-1-2">結論</h2>
 
 <p>http <strong>以外</strong> の proxy 設定をしていなかったから。というマヌケなオチ。</p>
 
 <p>次から気をつけよう。</p>
 
-<h3 id="レジストリ-ie-の設定-から">レジストリ( IE の設定)から</h3>
+<h3 id="tocAnchor-1-2-1">レジストリ( IE の設定)から</h3>
 
 <p>IE の 設定では、 <code>ツール &gt; インターネットオプション &gt; 接続 &gt; LAN の設定 &gt; 詳細設定</code> の Secure にも proxy の設定が入れていた。</p>
 
@@ -109,21 +154,29 @@
 
 <p>レジストリから読み込んだ場合、 Python 実行中に取得した変数 <code>proxies</code> (使用する proxy をしまっておく変数)の値はこんな感じだった。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">[(</span><span class="s">&#39;http&#39;</span><span class="p">,</span> <span class="s">&#39;http://PROXY:PORT/&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;https&#39;</span><span class="p">,</span> <span class="s">&#39;https://PROXY:PORT/&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;ftp&#39;</span><span class="p">,</span> <span class="s">&#39;ftp://PROXY:PORT&#39;</span><span class="p">)]</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-python" data-lang="python"><span class="p">[(</span><span class="s">'http'</span><span class="p">,</span> <span class="s">'http://PROXY:PORT/'</span><span class="p">),</span> <span class="p">(</span><span class="s">'https'</span><span class="p">,</span> <span class="s">'https://PROXY:PORT/'</span><span class="p">),</span> <span class="p">(</span><span class="s">'ftp'</span><span class="p">,</span> <span class="s">'ftp://PROXY:PORT'</span><span class="p">)]</span></code>
+  </pre>
+</figure>
 
-<h3 id="環境変数から">環境変数から</h3>
+<h3 id="tocAnchor-1-2-2">環境変数から</h3>
 
 <p>一方、環境変数には <code>HTTP_PROXY</code> しか指定していなかった。 <code>proxies</code> を出力するとこう。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">[(</span><span class="s">&#39;http&#39;</span><span class="p">,</span> <span class="s">&#39;http://PROXY:PORT/&#39;</span><span class="p">)]</span></code></pre></div>
+<figure class="highlight">
+  <pre>
+    <code class="language-python" data-lang="python"><span class="p">[(</span><span class="s">'http'</span><span class="p">,</span> <span class="s">'http://PROXY:PORT/'</span><span class="p">)]</span></code>
+  </pre>
+</figure>
 
 <p>なので、環境変数に <code>HTTPS_PROXY</code> : <code>https://PROXY:PORT/</code> を追加すると無事に easy_install できた！</p>
 
-<h2 id="内部の処理">内部の処理</h2>
+<h2 id="tocAnchor-1-5">内部の処理</h2>
 
 <p>内部がどうなっているのか見てみよう。</p>
 
-<h3 id="環境変数-http_proxy-を設定している、ieのプロキシを設定している場合">環境変数 <code>HTTP_PROXY</code> を設定している、IEのプロキシを設定している場合</h3>
+<h3 id="tocAnchor-1-5-1">環境変数 <code>HTTP_PROXY</code> を設定している、IEのプロキシを設定している場合</h3>
 
 <p>この場合、環境変数 <code>HTTP_PROXY</code> が使われる。</p>
 
@@ -133,51 +186,63 @@
 <li>urllib2#ProxyHandler から urllib#getproxies を呼ぶ</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">ProxyHandler</span><span class="p">(</span><span class="n">BaseHandler</span><span class="p">):</span>
+<figure class="highlight">
+  <pre>
+    <code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">ProxyHandler</span><span class="p">(</span><span class="n">BaseHandler</span><span class="p">):</span>
     <span class="c"># Proxies must be in front</span>
     <span class="n">handler_order</span> <span class="o">=</span> <span class="mi">100</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">proxies</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">proxies</span> <span class="o">=</span> <span class="n">getproxies</span><span class="p">()</span></code></pre></div>
+            <span class="n">proxies</span> <span class="o">=</span> <span class="n">getproxies</span><span class="p">()</span></code>
+  </pre>
+</figure>
 
 <ul>
 <li>getproxies_environment を呼ぶ</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">getproxies</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot;Return a dictionary of scheme -&gt; proxy server URL mappings.</span>
+<figure class="highlight">
+  <pre>
+    <code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">getproxies</span><span class="p">():</span>
+        <span class="s">"""Return a dictionary of scheme -&gt; proxy server URL mappings.
 
-<span class="sd">        Returns settings gathered from the environment, if specified,</span>
-<span class="sd">        or the registry.</span>
+        Returns settings gathered from the environment, if specified,
+        or the registry.
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">getproxies_environment</span><span class="p">()</span> <span class="ow">or</span> <span class="n">getproxies_registry</span><span class="p">()</span></code></pre></div>
+        """</span>
+        <span class="k">return</span> <span class="n">getproxies_environment</span><span class="p">()</span> <span class="ow">or</span> <span class="n">getproxies_registry</span><span class="p">()</span></code>
+  </pre>
+</figure>
 
 <ul>
 <li>環境変数を取得して <code>xxxx_proxy</code> のものを探して返す</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">getproxies_environment</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Return a dictionary of scheme -&gt; proxy server URL mappings.</span>
+<figure class="highlight">
+  <pre>
+    <code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">getproxies_environment</span><span class="p">():</span>
+    <span class="s">"""Return a dictionary of scheme -&gt; proxy server URL mappings.
 
-<span class="sd">    Scan the environment for variables named &lt;scheme&gt;_proxy;</span>
-<span class="sd">    this seems to be the standard convention.  If you need a</span>
-<span class="sd">    different way, you can pass a proxies dictionary to the</span>
-<span class="sd">    [Fancy]URLopener constructor.</span>
+    Scan the environment for variables named &lt;scheme&gt;_proxy;
+    this seems to be the standard convention.  If you need a
+    different way, you can pass a proxies dictionary to the
+    [Fancy]URLopener constructor.
 
-<span class="sd">    &quot;&quot;&quot;</span>
+    """</span>
     <span class="n">proxies</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">and</span> <span class="n">name</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:]</span> <span class="o">==</span> <span class="s">&#39;_proxy&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">and</span> <span class="n">name</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:]</span> <span class="o">==</span> <span class="s">'_proxy'</span><span class="p">:</span>
             <span class="k">print</span> <span class="n">name</span>
             <span class="n">proxies</span><span class="p">[</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">6</span><span class="p">]]</span> <span class="o">=</span> <span class="n">value</span>
-    <span class="k">return</span> <span class="n">proxies</span></code></pre></div>
+    <span class="k">return</span> <span class="n">proxies</span></code>
+  </pre>
+</figure>
 
 <p>これで <code>HTTP_PROXY</code> が見つかって <code>proxies</code> にぶちこまれてる。</p>
 
-<h3 id="環境変数-http_proxy-を設定していない、ieのプロキシを設定している場合">環境変数 <code>HTTP_PROXY</code> を設定していない、IEのプロキシを設定している場合</h3>
+<h3 id="tocAnchor-1-5-2">環境変数 <code>HTTP_PROXY</code> を設定していない、IEのプロキシを設定している場合</h3>
 
 <p>この場合、 IE の proxy 設定をレジストリから探しに行く。</p>
 
@@ -185,28 +250,32 @@
 <li>getproxies<em>environment を呼ぶところまでは同じだが、 getproxies</em>environment から設定を見つけられないので getproxies_registry へ</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">getproxies_registry</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot;Return a dictionary of scheme -&gt; proxy server URL mappings.</span>
+<figure class="highlight">
+  <pre>
+    <code class="language-python" data-lang="python">   <span class="k">def</span> <span class="nf">getproxies_registry</span><span class="p">():</span>
+        <span class="s">"""Return a dictionary of scheme -&gt; proxy server URL mappings.
 
-<span class="sd">        Win32 uses the registry to store proxies.</span>
+        Win32 uses the registry to store proxies.
 
-<span class="sd">        &quot;&quot;&quot;</span>
+        """</span>
         <span class="n">proxies</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="kn">import</span> <span class="nn">_winreg</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">except</span> <span class="nb">ImportError</span><span class="p">:</span>
             <span class="c"># Std module, so should be around - but you never know!</span>
             <span class="k">return</span> <span class="n">proxies</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">internetSettings</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">OpenKey</span><span class="p">(</span><span class="n">_winreg</span><span class="o">.</span><span class="n">HKEY_CURRENT_USER</span><span class="p">,</span>
-                <span class="s">r&#39;Software\Microsoft\Windows\CurrentVersion\Internet Settings&#39;</span><span class="p">)</span>
+                <span class="s">r'Software</span><span class="err">\</span><span class="s">Microsoft</span><span class="err">\</span><span class="s">Windows</span><span class="err">\</span><span class="s">CurrentVersion</span><span class="err">\</span><span class="s">Internet Settings'</span><span class="p">)</span>
             <span class="n">proxyEnable</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">QueryValueEx</span><span class="p">(</span><span class="n">internetSettings</span><span class="p">,</span>
-                                               <span class="s">&#39;ProxyEnable&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                                               <span class="s">'ProxyEnable'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">proxyEnable</span><span class="p">:</span>
                 <span class="c"># Returned as Unicode but problems if not converted to ASCII</span>
                 <span class="n">proxyServer</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">_winreg</span><span class="o">.</span><span class="n">QueryValueEx</span><span class="p">(</span><span class="n">internetSettings</span><span class="p">,</span>
-                                                       <span class="s">&#39;ProxyServer&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="k">if</span> <span class="s">&#39;=&#39;</span> <span class="ow">in</span> <span class="n">proxyServer</span><span class="p">:</span></code></pre></div>
+                                                       <span class="s">'ProxyServer'</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="s">'='</span> <span class="ow">in</span> <span class="n">proxyServer</span><span class="p">:</span></code>
+  </pre>
+</figure>
 
 <p>Internet Settings に探しにいっている。</p>
 
@@ -216,17 +285,17 @@
   <ul>
     
       <li class="prev">
-        <a href="/2013/08/21/sphinx-install-python-proxy" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話">
+        <a href="/2013/08/21/sphinx-install-python-proxy/" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話">
           Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話
         </a>
       </li>
     
     <li>
-      <a href="/archives.html">Archive</a>
+      <a href="/archives/">Archive</a>
     </li>
     
       <li class="next">
-        <a href="/2013/08/26/utf8-space-c2a0" title="ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話">
+        <a href="/2013/08/26/utf8-space-c2a0/" title="ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話">
           ソースコード中に0xC2A0(UTF-8のNO-BREAK SPACE)が混ざり実行できなくて困った話
         </a>
       </li>
@@ -239,16 +308,16 @@
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2" data-text="kk_Atakaの日記 - Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2/" data-text="kk_Atakaの日記 - Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2//">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2//" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2/"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2//"
      data-hatena-bookmark-title="kk_Atakaの日記 - Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
@@ -261,7 +330,7 @@
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2/"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/23/sphinx-install-python-proxy2//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
@@ -335,142 +404,142 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/23/sphinx-
       <li>
         <span>2016/03/05</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Homebrew">Homebrew</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Homebrew">Homebrew</a></code> ]</span>
         
-        <a href="/2016/03/05/go-bin-install-from-homebrew">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
+        <a href="/2016/03/05/go-bin-install-from-homebrew/">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//" />
         </a>
       </li>
     
       <li>
         <span>2016/02/17</span>
         
-          <span>[ <code><a href="/tags.html#Ruby">Ruby</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Mac">Mac</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Mac">Mac</a></code> ]</span>
         
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan">El Capitan上に古いpumaをインストールすると失敗する</a>
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">El Capitan上に古いpumaをインストールすると失敗する</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/02/17/bundle-install-old-version-puma-for-el-capitan//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/19</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
+        <a href="/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/19/pyladiestokyo-08-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2016/01/12</span>
         
-          <span>[ <code><a href="/tags.html#Golang">Golang</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Golang">Golang</a></code> ]</span>
         
-        <a href="/2016/01/12/golang-nicony">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
+        <a href="/2016/01/12/golang-nicony/">golangでニコ動の動画をパトロールするツール「nicony」を作った</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/01/12/golang-nicony//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/01/12/golang-nicony//" />
         </a>
       </li>
     
       <li>
         <span>2015/12/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/12/01/sphinxconjp-2015-kpt">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
+        <a href="/2015/12/01/sphinxconjp-2015-kpt/">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/11/01</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/11/01/sphinx-workshop-kansai-kpt">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
+        <a href="/2015/11/01/sphinx-workshop-kansai-kpt/">Sphinxワークショップ@関西で事例紹介とハンズオンTAをしてきた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/10/13</span>
         
-          <span>[ <code><a href="/tags.html#Sphinx">Sphinx</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Python">Python</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt/">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt//" />
         </a>
       </li>
     
       <li>
         <span>2015/09/24</span>
         
-          <span>[ <code><a href="/tags.html#Ansible">Ansible</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Ansible">Ansible</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#イベント">イベント</a></code> ]</span>
+          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
         
-        <a href="/2015/09/24/ansible-meetup-201509">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
+        <a href="/2015/09/24/ansible-meetup-201509/">Ansible Meetup in Tokyo 2015.09でLTしてきました #ansiblejp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/09/24/ansible-meetup-201509//" />
         </a>
       </li>
     
       <li>
         <span>2015/08/06</span>
         
-          <span>[ <code><a href="/tags.html#Jekyll">Jekyll</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Jekyll">Jekyll</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Liquid">Liquid</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Liquid">Liquid</a></code> ]</span>
         
-        <a href="/2015/08/06/jekyll-tag-sort">Jekyllで出力するタグをソートする 解決編</a>
+        <a href="/2015/08/06/jekyll-tag-sort/">Jekyllで出力するタグをソートする 解決編</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/08/06/jekyll-tag-sort//" />
         </a>
       </li>
     
       <li>
         <span>2015/07/13</span>
         
-          <span>[ <code><a href="/tags.html#Markdown">Markdown</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Markdown">Markdown</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#reST">reST</a></code> ]</span>
+          <span>[ <code><a href="/tags/#reST">reST</a></code> ]</span>
         
-          <span>[ <code><a href="/tags.html#Wiki">Wiki</a></code> ]</span>
+          <span>[ <code><a href="/tags/#Wiki">Wiki</a></code> ]</span>
         
-        <a href="/2015/07/13/lightweight-markup-language-history">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
+        <a href="/2015/07/13/lightweight-markup-language-history/">軽量マークアップ言語の歴史をゆるく調べた #sphinxjp</a>
         <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history/" />
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/07/13/lightweight-markup-language-history//" />
         </a>
       </li>
     
@@ -484,205 +553,205 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/23/sphinx-
     
     
       
-      <li><a href="/tags.html#API">API <sub>8</sub></a></li>
+      <li><a href="/tags/#API">API <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Agile">Agile <sub>2</sub></a></li>
+      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Android">Android <sub>2</sub></a></li>
+      <li><a href="/tags/#Android">Android <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Ansible">Ansible <sub>2</sub></a></li>
+      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Application">Application <sub>1</sub></a></li>
+      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Bundle">Bundle <sub>1</sub></a></li>
+      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Chef">Chef <sub>2</sub></a></li>
+      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Dropbox">Dropbox <sub>2</sub></a></li>
+      <li><a href="/tags/#Dropbox">Dropbox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Eclipse">Eclipse <sub>1</sub></a></li>
+      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Evernote">Evernote <sub>2</sub></a></li>
+      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Firefox">Firefox <sub>2</sub></a></li>
+      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Fluentd">Fluentd <sub>3</sub></a></li>
+      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Git">Git <sub>16</sub></a></li>
+      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#GitHub">GitHub <sub>2</sub></a></li>
+      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Golang">Golang <sub>4</sub></a></li>
+      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Haml">Haml <sub>1</sub></a></li>
+      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Haskell">Haskell <sub>5</sub></a></li>
+      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Heroku">Heroku <sub>5</sub></a></li>
+      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Homebrew">Homebrew <sub>1</sub></a></li>
+      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hubot">Hubot <sub>1</sub></a></li>
+      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Hugo">Hugo <sub>1</sub></a></li>
+      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#IE">IE <sub>1</sub></a></li>
+      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Java">Java <sub>11</sub></a></li>
+      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
     
       
-      <li><a href="/tags.html#JavaScript">JavaScript <sub>1</sub></a></li>
+      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Jekyll">Jekyll <sub>20</sub></a></li>
+      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
     
       
-      <li><a href="/tags.html#Jenkins">Jenkins <sub>7</sub></a></li>
+      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
     
       
-      <li><a href="/tags.html#Liquid">Liquid <sub>3</sub></a></li>
+      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Lokka">Lokka <sub>1</sub></a></li>
+      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Mac">Mac <sub>8</sub></a></li>
+      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
     
       
-      <li><a href="/tags.html#Markdown">Markdown <sub>1</sub></a></li>
+      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#MySql">MySql <sub>1</sub></a></li>
+      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#OAuth">OAuth <sub>1</sub></a></li>
+      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Oracle">Oracle <sub>5</sub></a></li>
+      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#Python">Python <sub>5</sub></a></li>
+      <li><a href="/tags/#Python">Python <sub>5</sub></a></li>
     
       
-      <li><a href="/tags.html#RSpec">RSpec <sub>1</sub></a></li>
+      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Rails">Rails <sub>4</sub></a></li>
+      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Redmine">Redmine <sub>9</sub></a></li>
+      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#Ruby">Ruby <sub>72</sub></a></li>
+      <li><a href="/tags/#Ruby">Ruby <sub>72</sub></a></li>
     
       
-      <li><a href="/tags.html#SQL">SQL <sub>3</sub></a></li>
+      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#SQLite3">SQLite3 <sub>1</sub></a></li>
+      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Selenium">Selenium <sub>2</sub></a></li>
+      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Shell">Shell <sub>1</sub></a></li>
+      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Sinatra">Sinatra <sub>2</sub></a></li>
+      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#SlideShare">SlideShare <sub>1</sub></a></li>
+      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Solaris">Solaris <sub>12</sub></a></li>
+      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
     
       
-      <li><a href="/tags.html#Sphinx">Sphinx <sub>16</sub></a></li>
+      <li><a href="/tags/#Sphinx">Sphinx <sub>16</sub></a></li>
     
       
-      <li><a href="/tags.html#StartUp">StartUp <sub>6</sub></a></li>
+      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Subversion">Subversion <sub>9</sub></a></li>
+      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
     
       
-      <li><a href="/tags.html#TDD">TDD <sub>1</sub></a></li>
+      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Test">Test <sub>1</sub></a></li>
+      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Translate">Translate <sub>2</sub></a></li>
+      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
     
       
-      <li><a href="/tags.html#Twitter">Twitter <sub>4</sub></a></li>
+      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#Unix">Unix <sub>13</sub></a></li>
+      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
     
       
-      <li><a href="/tags.html#VB">VB <sub>1</sub></a></li>
+      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Vim">Vim <sub>3</sub></a></li>
+      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#Wicket">Wicket <sub>6</sub></a></li>
+      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
     
       
-      <li><a href="/tags.html#Wiki">Wiki <sub>1</sub></a></li>
+      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#Windows">Windows <sub>25</sub></a></li>
+      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
     
       
-      <li><a href="/tags.html#iOS">iOS <sub>3</sub></a></li>
+      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#iPhone">iPhone <sub>4</sub></a></li>
+      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#java-ja">java-ja <sub>4</sub></a></li>
+      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
     
       
-      <li><a href="/tags.html#node.js">node.js <sub>1</sub></a></li>
+      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
     
       
-      <li><a href="/tags.html#reST">reST <sub>3</sub></a></li>
+      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#さくらVPS">さくらVPS <sub>3</sub></a></li>
+      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
     
       
-      <li><a href="/tags.html#イベント">イベント <sub>26</sub></a></li>
+      <li><a href="/tags/#イベント">イベント <sub>26</sub></a></li>
     
       
-      <li><a href="/tags.html#備忘録">備忘録 <sub>76</sub></a></li>
+      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
     
       
-      <li><a href="/tags.html#日記">日記 <sub>11</sub></a></li>
+      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
     
   </ul>
 
