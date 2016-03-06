@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Monitor
+noToc: true
 ---
 
 ## Mackerel

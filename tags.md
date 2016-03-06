@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Tags
+noToc: true
 ---
 
 ## Tag cloud
@@ -9,7 +10,7 @@ title: Tags
 {% assign sorted_tags = site.tags | sort %}
 {% for tag in sorted_tags %}
   {% assign t = tag[0] %}
-  <code><a href="/tags.html#{{ t }}">{{ t }} <sub>{{ site.tags[t].size }}</sub></a></code>
+  <code><a href="/tags/#{{ t }}">{{ t }} <sub>{{ site.tags[t].size }}</sub></a></code>
 {% endfor %}
 </div>
 

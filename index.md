@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Index
+noToc: true
 ---
 
 ## kk_Atakaの日記

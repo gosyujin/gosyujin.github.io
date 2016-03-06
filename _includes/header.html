@@ -3,9 +3,17 @@
   <head>
     <title>{{ page.title }} - {{ site.title }}</title>
     <meta charset="utf-8">
+    <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
     <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/toc.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/js/jquery.tocLight.js"></script>
+    <script type="text/javascript">
+       $(function() {
+         $.toc.clickHideButton();
+       });
+    </script>
   </head>
   <body>
     {% include ga.html %}
@@ -14,9 +22,9 @@
       <nav>
         <ul>
           <li><a href="/">{{ site.title }}</a></li>
-          <li class="main-nav"><a href="/archives.html">Archive</a>
-          <li class="main-nav"><a href="/tags.html">Tag</a>
-          <li class="main-nav"><a href="/monitor.html">Monitor</a>
+          <li class="main-nav"><a href="/archives/">Archive</a>
+          <li class="main-nav"><a href="/tags/">Tag</a>
+          <li class="main-nav"><a href="/monitor/">Monitor</a>
         </ul>
       </nav>
     </div>
@@ -28,7 +36,7 @@
           {% if page.tags %}
             <span>Tags: </span>
             {% for tag in page.tags %}
-              <span>[ <code><a href="/tags.html#{{ tag }}" class="tag">{{ tag }}</a></code> ]</span>
+              <span>[ <code><a href="/tags/#{{ tag }}" class="tag">{{ tag }}</a></code> ]</span>
             {% endfor %}
           {% endif %}
           {% if page.date %}
