@@ -124,12 +124,12 @@
 <h2 id="tocAnchor-1-2">環境</h2>
 
 <ul>
-<li>CentOS 6.2</li>
-<li>Git 1.7.1
-
-<ul>
-<li>git は入っているが、git svnは実行できない</li>
-</ul></li>
+  <li>CentOS 6.2</li>
+  <li>Git 1.7.1
+    <ul>
+      <li>git は入っているが、git svnは実行できない</li>
+    </ul>
+  </li>
 </ul>
 
 <figure class="highlight">
@@ -140,8 +140,8 @@ git: 'svn' is not a git command. See 'git --help'.</code>
 </figure>
 
 <ul>
-<li>svn 1.6.11 (r934486)</li>
-<li>ネットにつながっていないぼっち環境</li>
+  <li>svn 1.6.11 (r934486)</li>
+  <li>ネットにつながっていないぼっち環境</li>
 </ul>
 
 <p>yumとかで入れられると一発っぽいんだけどなー。</p>
@@ -151,10 +151,10 @@ git: 'svn' is not a git command. See 'git --help'.</code>
 <p>まずは、git-svnのrpmをDLしてくる。</p>
 
 <ul>
-<li><a href="http://rpmfind.net/linux/rpm2html/search.php?query=git-svn">RPM resource git-svn</a></li>
+  <li><a href="http://rpmfind.net/linux/rpm2html/search.php?query=git-svn">RPM resource git-svn</a></li>
 </ul>
 
-<p>インストールしたいPCに持ってきて、rpmコマンド。 <code>perl(SVN::Core)</code> と、 <code>perl(Term:ReadKey)</code> がないと言われる。</p>
+<p>インストールしたいPCに持ってきて、rpmコマンド。 <code class="highlighter-rouge">perl(SVN::Core)</code> と、 <code class="highlighter-rouge">perl(Term:ReadKey)</code> がないと言われる。</p>
 
 <figure class="highlight">
   <pre>
@@ -168,11 +168,11 @@ git: 'svn' is not a git command. See 'git --help'.</code>
 
 <h3 id="tocAnchor-1-3-1">perl(SVN::Core)</h3>
 
-<p>SVN::Coreは <code>subversion-perl</code> というパッケージから入れられるよう。</p>
+<p>SVN::Coreは <code class="highlighter-rouge">subversion-perl</code> というパッケージから入れられるよう。</p>
 
 <ul>
-<li><a href="http://d.hatena.ne.jp/init9/20080709/1215571342">SVN::Core は subversion-perl に入っている - init9の日記</a></li>
-<li><a href="http://rpm.pbone.net/index.php3/stat/4/idpl/18080007/dir/centos_5/com/subversion-perl-1.6.11-10.el5_8.i386.rpm.html">RPM CentOS 5 subversion-perl 1.6.11 i386 rpm</a></li>
+  <li><a href="http://d.hatena.ne.jp/init9/20080709/1215571342">SVN::Core は subversion-perl に入っている - init9の日記</a></li>
+  <li><a href="http://rpm.pbone.net/index.php3/stat/4/idpl/18080007/dir/centos_5/com/subversion-perl-1.6.11-10.el5_8.i386.rpm.html">RPM CentOS 5 subversion-perl 1.6.11 i386 rpm</a></li>
 </ul>
 
 <p>subversion-perlをDLしてインストール。</p>
@@ -198,7 +198,7 @@ git: 'svn' is not a git command. See 'git --help'.</code>
   </pre>
 </figure>
 
-<p>やっぱインストール済み…1.6.11-2.el6<em>1</em>4…だと…。このrelease番号？ってsvn --versionじゃ確認できないの？</p>
+<p>やっぱインストール済み…1.6.11-2.el6_1_4…だと…。このrelease番号？ってsvn –versionじゃ確認できないの？</p>
 
 <figure class="highlight">
   <pre>
@@ -223,10 +223,10 @@ svn, バージョン 1.6.11 (r934486)
   </pre>
 </figure>
 
-<p>色々探して、とりあえず1.6.11-2.el6<em>1</em>4のsubversion-perlを見つけた。</p>
+<p>色々探して、とりあえず1.6.11-2.el6_1_4のsubversion-perlを見つけた。</p>
 
 <ul>
-<li><a href="http://rpm.pbone.net/index.php3/stat/4/idpl/16844891/dir/scientific_linux_6/com/subversion-perl-1.6.11-2.el6_1.4.i686.rpm.html">RPM Scientific Linux 6 subversion-perl 1.6.11 i686 rpm</a></li>
+  <li><a href="http://rpm.pbone.net/index.php3/stat/4/idpl/16844891/dir/scientific_linux_6/com/subversion-perl-1.6.11-2.el6_1.4.i686.rpm.html">RPM Scientific Linux 6 subversion-perl 1.6.11 i686 rpm</a></li>
 </ul>
 
 <p>再チャレンジ。</p>
@@ -256,8 +256,8 @@ svn, バージョン 1.6.11 (r934486)
 <p>特にバージョンの指定がないんだけど、とりあえず後ろ(el6)は合わせてみた。elってRHELのELなのかな…？</p>
 
 <ul>
-<li><a href="http://blogger.horisawa.info/2012/03/rpm.html">泡史朗の戯れの日々: RPMパッケージの命名規則</a></li>
-<li><a href="http://pkgs.org/centos-6-rhel-6/centos-rhel-i386/perl-TermReadKey-2.30-13.el6.i686.rpm.html">perl-TermReadKey-2.30-13.el6.i686.rpm CentOS 6 (RHEL 6) Download</a></li>
+  <li><a href="http://blogger.horisawa.info/2012/03/rpm.html">泡史朗の戯れの日々: RPMパッケージの命名規則</a></li>
+  <li><a href="http://pkgs.org/centos-6-rhel-6/centos-rhel-i386/perl-TermReadKey-2.30-13.el6.i686.rpm.html">perl-TermReadKey-2.30-13.el6.i686.rpm CentOS 6 (RHEL 6) Download</a></li>
 </ul>
 
 <figure class="highlight">
@@ -289,10 +289,10 @@ error: git-svn died of signal 11</code>
   </pre>
 </figure>
 
-<p>GUIでLinuxをインストールしている場合、 <code>gnome-ssh-askpass</code> を使ってパスワード認証をかますようにパスが通っており、今はtelnetなどでつないでいる(=認証画面出したいのに画面ない)のが問題みたい。</p>
+<p>GUIでLinuxをインストールしている場合、 <code class="highlighter-rouge">gnome-ssh-askpass</code> を使ってパスワード認証をかますようにパスが通っており、今はtelnetなどでつないでいる(=認証画面出したいのに画面ない)のが問題みたい。</p>
 
 <ul>
-<li><a href="http://ultimania.org/trac/yuna/wiki/pm/DVCS#git%E3%81%A7%E8%AA%8D%E8%A8%BC%E3%82%A8%E3%83%A9%E3%83%BC">pm/DVCS - Yuna's Technical Guide</a></li>
+  <li><a href="http://ultimania.org/trac/yuna/wiki/pm/DVCS#git%E3%81%A7%E8%AA%8D%E8%A8%BC%E3%82%A8%E3%83%A9%E3%83%BC">pm/DVCS - Yuna’s Technical Guide</a></li>
 </ul>
 
 <p>確かにいる。</p>

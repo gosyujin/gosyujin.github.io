@@ -102,7 +102,7 @@
               <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">Python インストール</span></a>
             </li>
             <li class="toc_level-1 toc_section-4">
-              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">easyinstall インストール(distributesetup.py)</span></a>
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">easy_install インストール(distribute_setup.py)</span></a>
               <ul>
                 <li class="toc_level-2 toc_section-5">
                   <a href="#tocAnchor-1-4-1"><span class="tocnumber">4.1</span> <span class="toctext">実行時に urllib2.URLError エラー</span></a>
@@ -113,7 +113,7 @@
               <a href="#tocAnchor-1-6"><span class="tocnumber">5</span> <span class="toctext">Sphinx インストール</span></a>
             </li>
             <li class="toc_level-1 toc_section-7">
-              <a href="#tocAnchor-1-7"><span class="tocnumber">6</span> <span class="toctext">おまけ easyinstall インストール(ezsetup.py)</span></a>
+              <a href="#tocAnchor-1-7"><span class="tocnumber">6</span> <span class="toctext">おまけ easy_install インストール(ez_setup.py)</span></a>
             </li>
           </ul>
         </td>
@@ -127,8 +127,8 @@
 <h2 id="tocAnchor-1-2">環境</h2>
 
 <ul>
-<li>Windows 7</li>
-<li>Python 2.7</li>
+  <li>Windows 7</li>
+  <li>Python 2.7</li>
 </ul>
 
 <h2 id="tocAnchor-1-3">Python インストール</h2>
@@ -137,33 +137,33 @@
 
 <p>Sphinx-Users.jp のインストール手順では 2.6 が使われていたので、 2.7 でも大丈夫そう。</p>
 
-<p>環境変数 <code>PATH</code> に以下のパスを追加。</p>
+<p>環境変数 <code class="highlighter-rouge">PATH</code> に以下のパスを追加。</p>
 
 <ul>
-<li><code>C:\Python27</code>
-
-<ul>
-<li>Pythonのコマンドが含まれるフォルダ</li>
-</ul></li>
-<li><code>C:\Python27\Scripts</code>
-
-<ul>
-<li>次に説明するeasy_installコマンドや、Sphinxのコマンドが格納されるフォルダ</li>
-</ul></li>
+  <li><code class="highlighter-rouge">C:\Python27</code>
+    <ul>
+      <li>Pythonのコマンドが含まれるフォルダ</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">C:\Python27\Scripts</code>
+    <ul>
+      <li>次に説明するeasy_installコマンドや、Sphinxのコマンドが格納されるフォルダ</li>
+    </ul>
+  </li>
 </ul>
 
-<h2 id="tocAnchor-1-4">easy<em>install インストール(distribute</em>setup.py)</h2>
+<h2 id="tocAnchor-1-4">easy_install インストール(distribute_setup.py)</h2>
 
 <p>Ruby でいうところの Bundler のようなもの？</p>
 
 <ul>
-<li><a href="http://www.freia.jp/taka/docs/pyhack4/setuptools/index.html">setuptools - 清水川Web</a></li>
+  <li><a href="http://www.freia.jp/taka/docs/pyhack4/setuptools/index.html">setuptools - 清水川Web</a></li>
 </ul>
 
 <p>setuptoolsの互換パッケージを導入。</p>
 
 <ul>
-<li><a href="http://python-distribute.org/">python-distribute.org</a> から <code>distribute_setup.py</code> をDLし実行。</li>
+  <li><a href="http://python-distribute.org/">python-distribute.org</a> から <code class="highlighter-rouge">distribute_setup.py</code> をDLし実行。</li>
 </ul>
 
 <figure class="highlight">
@@ -191,7 +191,7 @@ C:\Python27\Lib\site-packages\setuptools-0.6c11-py2.7.egg-info already exists</c
   </pre>
 </figure>
 
-<p>これで、 <code>PYTHON/Scripts</code> 下に <code>easy_install</code> コマンドが入る。</p>
+<p>これで、 <code class="highlighter-rouge">PYTHON/Scripts</code> 下に <code class="highlighter-rouge">easy_install</code> コマンドが入る。</p>
 
 <h3 id="tocAnchor-1-4-1">実行時に urllib2.URLError エラー</h3>
 
@@ -200,8 +200,8 @@ C:\Python27\Lib\site-packages\setuptools-0.6c11-py2.7.egg-info already exists</c
 <p>状況はこんな感じ。</p>
 
 <ul>
-<li>proxyが必要な環境</li>
-<li>環境変数 <code>HTTP_PROXY</code> は設定している</li>
+  <li>proxyが必要な環境</li>
+  <li>環境変数 <code class="highlighter-rouge">HTTP_PROXY</code> は設定している</li>
 </ul>
 
 <figure class="highlight">
@@ -243,17 +243,17 @@ urllib2.URLError: &lt;urlopen error [Errno 11004] getaddrinfo failed&gt;</code>
   </pre>
 </figure>
 
-<p>ん？Pythonは <code>HTTP_PROXY</code> じゃダメなの？</p>
+<p>ん？Pythonは <code class="highlighter-rouge">HTTP_PROXY</code> じゃダメなの？</p>
 
 <p>こんな話もあるようだが…。</p>
 
 <ul>
-<li><a href="http://d.hatena.ne.jp/orangeclover/20121020/1350689017">blockdiagシリーズのseqdiagとactdiagが、[Errno 10060]のダウンロードエラーでeasy_installのインストールに失敗する - みちしるべ</a></li>
+  <li><a href="http://d.hatena.ne.jp/orangeclover/20121020/1350689017">blockdiagシリーズのseqdiagとactdiagが、[Errno 10060]のダウンロードエラーでeasy_installのインストールに失敗する - みちしるべ</a></li>
 </ul>
 
 <p>今回は URL 直接指定でもエラーが変わらなかった。</p>
 
-<p>色々試行錯誤し、 <strong>とりあえず環境を一回きれいにしてみようと <code>HTTP_PROXY</code> もクリアした</strong> 状態でダメ元で実行してみた…らいけた…だと…。</p>
+<p>色々試行錯誤し、 <strong>とりあえず環境を一回きれいにしてみようと <code class="highlighter-rouge">HTTP_PROXY</code> もクリアした</strong> 状態でダメ元で実行してみた…らいけた…だと…。</p>
 
 <figure class="highlight">
   <pre>
@@ -276,103 +276,107 @@ C:\Python27\Lib\site-packages\setuptools-0.6c11-py2.7.egg-info already exists</c
 <p>というわけで、ちょっと urllib のドキュメントを調べる…。</p>
 
 <ul>
-<li><a href="http://docs.python.jp/2/library/urllib.html#module-urllib">20.5. urllib — URL による任意のリソースへのアクセス — Python 2.7ja1 documentation</a></li>
+  <li><a href="http://docs.python.jp/2/library/urllib.html#module-urllib">20.5. urllib — URL による任意のリソースへのアクセス — Python 2.7ja1 documentation</a></li>
 </ul>
 
 <blockquote>
-<p>Windows 環境では、プロキシを指定する環境変数が設定されていない場合、プロキシの設定値はレジストリの Internet Settings セクションから取得されます。</p>
+  <p>Windows 環境では、プロキシを指定する環境変数が設定されていない場合、プロキシの設定値はレジストリの Internet Settings セクションから取得されます。</p>
 </blockquote>
 
 <ul>
-<li><a href="http://docs.python.jp/2/library/urllib2.html#module-urllib2">20.6. urllib2 — URL を開くための拡張可能なライブラリ — Python 2.7ja1 documentation</a></li>
+  <li><a href="http://docs.python.jp/2/library/urllib2.html#module-urllib2">20.6. urllib2 — URL を開くための拡張可能なライブラリ — Python 2.7ja1 documentation</a></li>
 </ul>
 
 <blockquote>
-<p>このクラスはプロキシを通過してリクエストを送らせます。引数 proxies を与える場合、プロトコル名からプロキシの URL へ対応付ける辞書でなくてはなりません。標準では、プロキシのリストを環境変数 <protocol>_proxy から読み出します。</protocol></p>
+  <p>このクラスはプロキシを通過してリクエストを送らせます。引数 proxies を与える場合、プロトコル名からプロキシの URL へ対応付ける辞書でなくてはなりません。標準では、プロキシのリストを環境変数 <protocol>_proxy から読み出します。</protocol></p>
 
-<p>プロキシ環境変数が設定されていない場合は、 Windows 環境では、レジストリのインターネット設定セクションからプロキシ設定を手に入れ、 Mac OS X 環境では、 OS X システム設定フレームワーク (System Configuration Framework) からプロキシ情報を取得します。</p>
+  <p>プロキシ環境変数が設定されていない場合は、 Windows 環境では、レジストリのインターネット設定セクションからプロキシ設定を手に入れ、 Mac OS X 環境では、 OS X システム設定フレームワーク (System Configuration Framework) からプロキシ情報を取得します。</p>
 </blockquote>
 
 <p>なに？レジストリ見てんの？</p>
 
-<p>というわけでレジストリから <code>Internet Settings</code> を探すと、</p>
+<p>というわけでレジストリから <code class="highlighter-rouge">Internet Settings</code> を探すと、</p>
 
 <ul>
-<li>HKEY_USERS
-
-<ul>
-<li>S-1-5-21-xxxxxxxx-xxxxxxxx...</li>
-<li>Software
-
-<ul>
-<li>Microsoft</li>
-<li>Windows
-
-<ul>
-<li>CurrentVersion</li>
-<li>Internet Settings</li>
-</ul></li>
-</ul></li>
-</ul></li>
+  <li>HKEY_USERS
+    <ul>
+      <li>S-1-5-21-xxxxxxxx-xxxxxxxx…
+        <ul>
+          <li>Software
+            <ul>
+              <li>Microsoft
+                <ul>
+                  <li>Windows
+                    <ul>
+                      <li>CurrentVersion
+                        <ul>
+                          <li>Internet Settings</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
 
-<p>ここに <code>ProxyServer</code> という値があった！</p>
+<p>ここに <code class="highlighter-rouge">ProxyServer</code> という値があった！</p>
 
 <p>どうやらこれはIEのインターネットオプションから設定する値らしい。</p>
 
 <p>※ HKEY_USERSの下のS-xxx文字列</p>
 
 <blockquote>
-<p>HKEY_USERS以下には、次のようなサブキーが存在します。</p>
+  <p>HKEY_USERS以下には、次のようなサブキーが存在します。</p>
 
-<table><thead>
-<tr>
-<th>サブキー</th>
-<th>サブキーを参照するユーザー</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>.DEFAULT</td>
-<td>プロファイルがロードされていないユーザーが参照する。</td>
-</tr>
-<tr>
-<td>----------------------------------------------</td>
-<td>-----------------------------------------------------</td>
-</tr>
-<tr>
-<td>S-1-5-18</td>
-<td>SYSTEMが参照する。</td>
-</tr>
-<tr>
-<td>----------------------------------------------</td>
-<td>-----------------------------------------------------</td>
-</tr>
-<tr>
-<td>S-1-5-19</td>
-<td>LOCAL SERVICEが参照する。</td>
-</tr>
-<tr>
-<td>----------------------------------------------</td>
-<td>-----------------------------------------------------</td>
-</tr>
-<tr>
-<td>S-1-5-20</td>
-<td>NETWORK SERVICEが参照する</td>
-</tr>
-<tr>
-<td>----------------------------------------------</td>
-<td>-----------------------------------------------------</td>
-</tr>
-<tr>
-<td>S-1-5-21-XXXXXXXXXX-XXXXXXXXXX-XXXXXXXXXX-XXXX</td>
-<td>特定のユーザーが参照する。SIDの最後の4文字はRIDであり、各ユーザーはこれで識別される。 RIDを除いた残りのSIDは、コンピュータのSIDである。</td>
-</tr>
-</tbody></table>
+  <table>
+    <thead>
+      <tr>
+        <th>サブキー</th>
+        <th>サブキーを参照するユーザー</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>.DEFAULT</td>
+        <td>プロファイルがロードされていないユーザーが参照する。</td>
+      </tr>
+    </tbody>
+    <tbody>
+      <tr>
+        <td>S-1-5-18</td>
+        <td>SYSTEMが参照する。</td>
+      </tr>
+    </tbody>
+    <tbody>
+      <tr>
+        <td>S-1-5-19</td>
+        <td>LOCAL SERVICEが参照する。</td>
+      </tr>
+    </tbody>
+    <tbody>
+      <tr>
+        <td>S-1-5-20</td>
+        <td>NETWORK SERVICEが参照する</td>
+      </tr>
+    </tbody>
+    <tbody>
+      <tr>
+        <td>S-1-5-21-XXXXXXXXXX-XXXXXXXXXX-XXXXXXXXXX-XXXX</td>
+        <td>特定のユーザーが参照する。SIDの最後の4文字はRIDであり、各ユーザーはこれで識別される。 RIDを除いた残りのSIDは、コンピュータのSIDである。</td>
+      </tr>
+    </tbody>
+  </table>
 </blockquote>
 
-<p>なるほど。これを見にきたから <code>HTTP_PROXY</code> をクリアしてもOKだったわけか。</p>
+<p>なるほど。これを見にきたから <code class="highlighter-rouge">HTTP_PROXY</code> をクリアしてもOKだったわけか。</p>
 
-<p>でも、 <strong>なんで環境変数 <code>HTTP_PROXY</code> に値を入れている状態</strong> だとインストール失敗したんだろう？( 環境変数 <code>HTTP_PROXY</code> と レジストリ <code>ProxyServer</code> はまったく同じ値)</p>
+<p>でも、 <strong>なんで環境変数 <code class="highlighter-rouge">HTTP_PROXY</code> に値を入れている状態</strong> だとインストール失敗したんだろう？( 環境変数 <code class="highlighter-rouge">HTTP_PROXY</code> と レジストリ <code class="highlighter-rouge">ProxyServer</code> はまったく同じ値)</p>
 
 <p>ここから先中身を追ってみないと分からないか…。</p>
 
@@ -380,7 +384,7 @@ C:\Python27\Lib\site-packages\setuptools-0.6c11-py2.7.egg-info already exists</c
 
 <p>やっと Sphinx。</p>
 
-<p>easy<em>install で入れる。当環境では `HTTP</em>PROXY` を事前にクリアする必要があった。</p>
+<p>easy_install で入れる。当環境では <code class="highlighter-rouge">HTTP_PROXY</code> を事前にクリアする必要があった。</p>
 
 <figure class="highlight">
   <pre>
@@ -501,19 +505,19 @@ Finished processing dependencies for sphinx</code>
 
 <hr />
 
-<h2 id="tocAnchor-1-7">おまけ easy<em>install インストール(ez</em>setup.py)</h2>
+<h2 id="tocAnchor-1-7">おまけ easy_install インストール(ez_setup.py)</h2>
 
 <p>すごいはまった挙句、結局ローカルに落としてインストールした時の記録。</p>
 
-<p>多分 distrybute<em>setup.py と同様、 `HTTP</em>PROXY` をクリアすれば IE の proxy 設定を参照しにいって無事にインストールされるのではないかと思われる。</p>
+<p>多分 distrybute_setup.py と同様、 <code class="highlighter-rouge">HTTP_PROXY</code> をクリアすれば IE の proxy 設定を参照しにいって無事にインストールされるのではないかと思われる。</p>
 
 <p>しかし、こちらは現在メンテナンスされていないらしい。</p>
 
 <ul>
-<li><a href="http://sphinx-users.jp/gettingstarted/install_windows.html">Windowsへのインストール :: ドキュメンテーションツール スフィンクス Sphinx-users.jp</a></li>
+  <li><a href="http://sphinx-users.jp/gettingstarted/install_windows.html">Windowsへのインストール :: ドキュメンテーションツール スフィンクス Sphinx-users.jp</a></li>
 </ul>
 
-<p><code>ez_setup.py</code> をダウンロードし、実行すると以下のようなエラー。</p>
+<p><code class="highlighter-rouge">ez_setup.py</code> をダウンロードし、実行すると以下のようなエラー。</p>
 
 <figure class="highlight">
   <pre>
@@ -554,10 +558,10 @@ urllib2.URLError: &lt;urlopen error [Errno 11004] getaddrinfo failed&gt;</code>
 
 <p>Downloading のurlにブラウザからアクセスするとダウンロードできるので、多分proxyの設定が適切になされていない。</p>
 
-<p>「urllib2 proxy」で調べると ProxyHandler を使えばよいということ(というか、環境変数 <code>HTTP_PROXY</code> (設定済み) を呼んでくれそうな気がするんだけど)なので、 ez_setup.py の中で明示的に proxy を指定してみた。</p>
+<p>「urllib2 proxy」で調べると ProxyHandler を使えばよいということ(というか、環境変数 <code class="highlighter-rouge">HTTP_PROXY</code> (設定済み) を呼んでくれそうな気がするんだけど)なので、 ez_setup.py の中で明示的に proxy を指定してみた。</p>
 
 <ul>
-<li><a href="http://docs.python.jp/2/library/urllib2.html#urllib2.urlopen">20.6. urllib2 ? URL を開くための拡張可能なライブラリ ? Python 2.7ja1 documentation</a></li>
+  <li><a href="http://docs.python.jp/2/library/urllib2.html#urllib2.urlopen">20.6. urllib2 ? URL を開くための拡張可能なライブラリ ? Python 2.7ja1 documentation</a></li>
 </ul>
 
 <figure class="highlight">
@@ -572,34 +576,34 @@ urllib2.URLError: &lt;urlopen error [Errno 11004] getaddrinfo failed&gt;</code>
 <p>が、エラー変わらず。 proxy が原因じゃないのか。今度は Errno でググってみた。</p>
 
 <ul>
-<li><a href="http://ss9neco.blog.fc2.com/category3-1.html">ss_9's log　 Python</a></li>
+  <li><a href="http://ss9neco.blog.fc2.com/category3-1.html">ss_9’s log　 Python</a></li>
 </ul>
 
 <blockquote>
-<p>その際、proxy環境の場合は、</p>
+  <p>その際、proxy環境の場合は、</p>
 
-<blockquote>
-<p>＃ export http_proxy=http://[proxy名]:[ポート番号]</p>
-</blockquote>
+  <blockquote>
+    <p>＃ export http_proxy=http://[proxy名]:[ポート番号]</p>
+  </blockquote>
 
-<p>にてproxy環境を整えてください。</p>
+  <p>にてproxy環境を整えてください。</p>
 </blockquote>
 
 <p>お、やっぱり環境変数から呼んでくれるみたい。そして、</p>
 
 <blockquote>
-<p>また、ez_setupを取得して、以下のようなurllib2のエラーが出た時は、</p>
+  <p>また、ez_setupを取得して、以下のようなurllib2のエラーが出た時は、</p>
 
-<p>urllib2.URLError:</p>
+  <p>urllib2.URLError:</p>
 
-<p>setuptoolsをez_setupと同じディレクトリに置いてください。</p>
+  <p>setuptoolsをez_setupと同じディレクトリに置いてください。</p>
 
-<blockquote>
-<p>＃ sudo wget http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg#md5=fe1f997bc722265116870bc7919059ea</p>
+  <blockquote>
+    <p>＃ sudo wget http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg#md5=fe1f997bc722265116870bc7919059ea</p>
+  </blockquote>
 </blockquote>
-</blockquote>
 
-<p>ということなので、この setuptools <code>setuptools-0.6c11-py2.7.egg</code> をDLし再び実行すると無事にインストールできた。</p>
+<p>ということなので、この setuptools <code class="highlighter-rouge">setuptools-0.6c11-py2.7.egg</code> をDLし再び実行すると無事にインストールできた。</p>
 
 <figure class="highlight">
   <pre>
@@ -665,6 +669,7 @@ usage: easy_install-script.py [options] requirement_or_url ...
    or: easy_install-script.py --help</code>
   </pre>
 </figure>
+
 
 </div>
 

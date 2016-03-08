@@ -148,25 +148,25 @@
 <h2 id="tocAnchor-1-2">環境</h2>
 
 <ul>
-<li>Windows 7 32bit</li>
-<li>Ruby 1.9.3
-
-<ul>
-<li>Bundler 1.3.5 導入済</li>
-<li>DevKit 導入済</li>
-</ul></li>
-<li>Redmine 2.3.1</li>
-<li>MySql 5.6.12.1</li>
+  <li>Windows 7 32bit</li>
+  <li>Ruby 1.9.3
+    <ul>
+      <li>Bundler 1.3.5 導入済</li>
+      <li>DevKit 導入済</li>
+    </ul>
+  </li>
+  <li>Redmine 2.3.1</li>
+  <li>MySql 5.6.12.1</li>
 </ul>
 
 <h2 id="tocAnchor-1-3">参考サイト</h2>
 
 <ul>
-<li><a href="http://redmine.jp/guide/RedmineInstall/">Redmineのインストール — Redmine Guide 日本語訳</a></li>
-<li><a href="http://www.redmine.org/projects/redmine/wiki/Hooks#View-hooks-2">Hooks - Redmine</a></li>
-<li><a href="http://www.redmine.org/projects/redmine/wiki/Hooks_List">Hooks List - Redmine</a></li>
-<li><a href="http://www.r-labs.org/projects/r-labs/wiki/%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3_%E3%83%9B%E3%83%83%E3%82%AF">プラグイン ホック - r-labs</a></li>
-<li><a href="http://railsdoc.com/view">ビュー(view) - Railsドキュメント</a></li>
+  <li><a href="http://redmine.jp/guide/RedmineInstall/">Redmineのインストール — Redmine Guide 日本語訳</a></li>
+  <li><a href="http://www.redmine.org/projects/redmine/wiki/Hooks#View-hooks-2">Hooks - Redmine</a></li>
+  <li><a href="http://www.redmine.org/projects/redmine/wiki/Hooks_List">Hooks List - Redmine</a></li>
+  <li><a href="http://www.r-labs.org/projects/r-labs/wiki/%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3_%E3%83%9B%E3%83%83%E3%82%AF">プラグイン ホック - r-labs</a></li>
+  <li><a href="http://railsdoc.com/view">ビュー(view) - Railsドキュメント</a></li>
 </ul>
 
 <h2 id="tocAnchor-1-4">Redmineインストール手順</h2>
@@ -178,25 +178,28 @@
 <p>実はMySQLさわるのはじめてかもしれない。</p>
 
 <ul>
-<li><a href="http://dev.mysql.com/downloads/installer/">MySQL :: Download MySQL Installer</a> からインストーラをDL。Oracleのアカウントが必要</li>
-<li>基本的にPathなどの設定はそのまま。
-
-<ul>
-<li>Choosing a Setup Type: <code>Developer Default</code> を選択</li>
-<li>MySQL Server Configuration:</li>
-<li>Server Configuration Type は <code>Development Machine</code></li>
-<li>ポートは <code>3306</code></li>
-<li><code>root</code> のパスワードを入力</li>
-<li>Windows Service Details の <code>Start the MySQL Server at System Startup</code> のチェックだけ <code>KILL</code> そんなに使わないしPCがしょぼいので常時起動させておくこともない</li>
-</ul></li>
+  <li><a href="http://dev.mysql.com/downloads/installer/">MySQL :: Download MySQL Installer</a> からインストーラをDL。Oracleのアカウントが必要</li>
+  <li>基本的にPathなどの設定はそのまま。
+    <ul>
+      <li>Choosing a Setup Type: <code class="highlighter-rouge">Developer Default</code> を選択</li>
+      <li>MySQL Server Configuration:
+        <ul>
+          <li>Server Configuration Type は <code class="highlighter-rouge">Development Machine</code></li>
+          <li>ポートは <code class="highlighter-rouge">3306</code></li>
+          <li><code class="highlighter-rouge">root</code> のパスワードを入力</li>
+          <li>Windows Service Details の <code class="highlighter-rouge">Start the MySQL Server at System Startup</code> のチェックだけ <code class="highlighter-rouge">KILL</code> そんなに使わないしPCがしょぼいので常時起動させておくこともない</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
 
 <p>全部終わると MySQL Workbench が立ち上がる。</p>
 
 <ul>
-<li>Open Connection to Start Queryin に <code>Local instance MySQL56</code> を選択</li>
-<li>root のパスワードを入力し、ログインできる事を確認</li>
-<li>コンソールから <code>redmine</code> ユーザを作成し、 <strong>テーブルの権限を設定する</strong> (これをよく忘れて <code>access denied</code> になる)</li>
+  <li>Open Connection to Start Queryin に <code class="highlighter-rouge">Local instance MySQL56</code> を選択</li>
+  <li>root のパスワードを入力し、ログインできる事を確認</li>
+  <li>コンソールから <code class="highlighter-rouge">redmine</code> ユーザを作成し、 <strong>テーブルの権限を設定する</strong> (これをよく忘れて <code class="highlighter-rouge">access denied</code> になる)</li>
 </ul>
 
 <figure class="highlight">
@@ -212,8 +215,8 @@ grant all privileges on redmine.* to 'redmine'@'localhost';</code>
 <h3 id="tocAnchor-1-4-2">Redmine</h3>
 
 <ul>
-<li>Redmine 2.3.1 をDLし、適当なところへ解凍。</li>
-<li><code>config/database.yml.example</code> を <code>config/database.yml</code> にリネームし、内容編集。MySQLとつなげるように</li>
+  <li>Redmine 2.3.1 をDLし、適当なところへ解凍。</li>
+  <li><code class="highlighter-rouge">config/database.yml.example</code> を <code class="highlighter-rouge">config/database.yml</code> にリネームし、内容編集。MySQLとつなげるように</li>
 </ul>
 
 <figure class="highlight">
@@ -239,11 +242,11 @@ grant all privileges on redmine.* to 'redmine'@'localhost';</code>
 <p>Ruby 1.9 からMySQLにつなぐには adapter は mysql2 である必要がある模様。</p>
 
 <ul>
-<li>そして <code>bundle install --path vendor/bundle --without rmagick</code>
-
-<ul>
-<li>rmagickは頑張って入れてもいいけど今回はwithoutする</li>
-</ul></li>
+  <li>そして <code class="highlighter-rouge">bundle install --path vendor/bundle --without rmagick</code>
+    <ul>
+      <li>rmagickは頑張って入れてもいいけど今回はwithoutする</li>
+    </ul>
+  </li>
 </ul>
 
 <p>MySQL アダプターがなんか言ってる…my-sql-connector-c？</p>
@@ -276,12 +279,12 @@ Post-install message from mysql2:
   </pre>
 </figure>
 
-<p>とりあえず落としてきて、 <code>lib/libmysql.dll</code> をRubyのbinディレクトリにいれた。</p>
+<p>とりあえず落としてきて、 <code class="highlighter-rouge">lib/libmysql.dll</code> をRubyのbinディレクトリにいれた。</p>
 
 <ul>
-<li>セッションストア秘密鍵の作成</li>
-<li>テーブルの作成</li>
-<li>デフォルトのロール、トラッカー、ステータス、ワークフロー、列挙項目のロード</li>
+  <li>セッションストア秘密鍵の作成</li>
+  <li>テーブルの作成</li>
+  <li>デフォルトのロール、トラッカー、ステータス、ワークフロー、列挙項目のロード</li>
 </ul>
 
 <figure class="highlight">
@@ -303,7 +306,7 @@ Default configuration data loaded.</code>
 </figure>
 
 <ul>
-<li>起動</li>
+  <li>起動</li>
 </ul>
 
 <figure class="highlight">
@@ -312,7 +315,7 @@ Default configuration data loaded.</code>
   </pre>
 </figure>
 
-<p>起動したら <code>admin/admin</code> でログインして情報を見に行ってみる。</p>
+<p>起動したら <code class="highlighter-rouge">admin/admin</code> でログインして情報を見に行ってみる。</p>
 
 <figure class="highlight">
   <pre>
@@ -333,9 +336,9 @@ Redmine plugins:
 
 <h3 id="tocAnchor-1-7-1">コマンド</h3>
 
-<p>コマンドは <code>script/rails</code> に集約されたっぽい？</p>
+<p>コマンドは <code class="highlighter-rouge">script/rails</code> に集約されたっぽい？</p>
 
-<p>今まで <code>script/xxx</code> とかやっていたコマンドは <code>script/rails xxx</code> になっている。</p>
+<p>今まで <code class="highlighter-rouge">script/xxx</code> とかやっていたコマンドは <code class="highlighter-rouge">script/rails xxx</code> になっている。</p>
 
 <figure class="highlight">
   <pre>
@@ -366,11 +369,11 @@ All commands can be run with -h (or --help) for more information.</code>
 
 <h3 id="tocAnchor-1-7-2">スケルトン作成</h3>
 
-<p><code>ruby script/rails generate redmine_plugin PLUGIN_NAME</code> で作成。</p>
+<p><code class="highlighter-rouge">ruby script/rails generate redmine_plugin PLUGIN_NAME</code> で作成。</p>
 
 <ul>
-<li>プラグイン名はスネークケース</li>
-<li><code>plugins/</code> 下に作成される</li>
+  <li>プラグイン名はスネークケース</li>
+  <li><code class="highlighter-rouge">plugins/</code> 下に作成される</li>
 </ul>
 
 <figure class="highlight">
@@ -401,7 +404,7 @@ bundler is found: bundle exec ruby script\rails generate redmine_plugin download
   </pre>
 </figure>
 
-<p><code>plugins/</code> 下にいれば、Redmine起動時にロードしてくれる。再起動して情報を見に行くと…。</p>
+<p><code class="highlighter-rouge">plugins/</code> 下にいれば、Redmine起動時にロードしてくれる。再起動して情報を見に行くと…。</p>
 
 <figure class="highlight">
   <pre>
@@ -421,11 +424,11 @@ Redmine plugins:
 <p>書き方が、Rubyのそれとちょっと違う。Rails流？なので、はじめは慣れが必要かも。</p>
 
 <blockquote>
-<ul>
-<li>文字列ではなく、なるべくシンボルを使う</li>
-<li>ブロックは括弧 {} ではなく、 do, end を使う</li>
-<li>メソッドの括弧 () は省略する</li>
-</ul>
+  <ul>
+    <li>文字列ではなく、なるべくシンボルを使う</li>
+    <li>ブロックは括弧 {} ではなく、 do, end を使う</li>
+    <li>メソッドの括弧 () は省略する</li>
+  </ul>
 </blockquote>
 
 <p>今は特にすることもないので、authorやurlを適当に編集したら次へ。</p>
@@ -434,11 +437,11 @@ Redmine plugins:
 
 <p>「特定の画面に何か文字とか機能を追加する」場合、viewをフックすることで実現できる。(他にも手段はあるみたいだが、とりあえず)</p>
 
-<p>どこにフックできるかは、 <code>app/views下のerbファイル</code> を確認し、 <code>call_hook(xxx)</code> と書かれているところがそうらしい。詳しくは参考サイト参照</p>
+<p>どこにフックできるかは、 <code class="highlighter-rouge">app/views下のerbファイル</code> を確認し、 <code class="highlighter-rouge">call_hook(xxx)</code> と書かれているところがそうらしい。詳しくは参考サイト参照</p>
 
 <p>今回は、チケット一覧のページにフックしたいので、その辺を探してみる…。</p>
 
-<p>すると、 <code>app/views/issues/index.html.erb</code> の中にこんな記述が。ページの一番下の部分にフックできそう。</p>
+<p>すると、 <code class="highlighter-rouge">app/views/issues/index.html.erb</code> の中にこんな記述が。ページの一番下の部分にフックできそう。</p>
 
 <figure class="highlight">
   <pre>
@@ -446,11 +449,11 @@ Redmine plugins:
   </pre>
 </figure>
 
-<p>第一引数 <code>:view_issues_index_bottom</code> はフックする時に作成するメソッド名になる、第2引数はパラメータ。これは覚えておく。</p>
+<p>第一引数 <code class="highlighter-rouge">:view_issues_index_bottom</code> はフックする時に作成するメソッド名になる、第2引数はパラメータ。これは覚えておく。</p>
 
-<h4 id="フックファイル">フックファイル</h4>
+<h4 id="section-6">フックファイル</h4>
 
-<p><code>PLUGIN/lib/PLUGIN_NAME/hooks.rb</code> を作り、以下のように記載。</p>
+<p><code class="highlighter-rouge">PLUGIN/lib/PLUGIN_NAME/hooks.rb</code> を作り、以下のように記載。</p>
 
 <figure class="highlight">
   <pre>
@@ -463,9 +466,9 @@ Redmine plugins:
   </pre>
 </figure>
 
-<p>call<em>hookの第一引数になっていたとおり、 `view</em>issues<em>index</em>bottom` メソッドを作る。</p>
+<p>call_hookの第一引数になっていたとおり、 <code class="highlighter-rouge">view_issues_index_bottom</code> メソッドを作る。</p>
 
-<p>次に上記のフックを読み込むために <code>init.rb</code> に require を追加する。</p>
+<p>次に上記のフックを読み込むために <code class="highlighter-rouge">init.rb</code> に require を追加する。</p>
 
 <figure class="highlight">
   <pre>
@@ -475,7 +478,7 @@ Redmine plugins:
 
 <p>これで Redmine を再起動すると、チケット一覧ページに Hello と表示されているはず。</p>
 
-<h4 id="viewファイル">Viewファイル</h4>
+<h4 id="view-1">Viewファイル</h4>
 
 <p>また、View担当部分はきちんとViewにわけることもできる。</p>
 
@@ -493,9 +496,9 @@ Redmine plugins:
   </pre>
 </figure>
 
-<p><code>:partial</code> は <code>app/views/</code> 以下のパスを指定。</p>
+<p><code class="highlighter-rouge">:partial</code> は <code class="highlighter-rouge">app/views/</code> 以下のパスを指定。</p>
 
-<p>上記のように指定すると <code>app/views/hooks/download_issues_with_journal/_view_issues_index_bottom.html.erb</code> (部分描画用のファイルは先頭に <code>_</code> を付けるのがルール)が呼ばれる。中身はこんな感じ。</p>
+<p>上記のように指定すると <code class="highlighter-rouge">app/views/hooks/download_issues_with_journal/_view_issues_index_bottom.html.erb</code> (部分描画用のファイルは先頭に <code class="highlighter-rouge">_</code> を付けるのがルール)が呼ばれる。中身はこんな感じ。</p>
 
 <figure class="highlight">
   <pre>
@@ -540,20 +543,20 @@ Redmine plugins:
 <p>いじるファイルは以下。</p>
 
 <ul>
-<li>Controllerファイル(新規作成)</li>
-<li>Viewファイル(Controllerを呼ぶように編集)</li>
-<li>Routeファイル(編集)</li>
+  <li>Controllerファイル(新規作成)</li>
+  <li>Viewファイル(Controllerを呼ぶように編集)</li>
+  <li>Routeファイル(編集)</li>
 </ul>
 
-<h4 id="controller">Controller</h4>
+<h4 id="controller-1">Controller</h4>
 
-<p><code>app/controller/export_controller.rb</code> を作成。</p>
+<p><code class="highlighter-rouge">app/controller/export_controller.rb</code> を作成。</p>
 
 <ul>
-<li>export_controller なので、、 <code>export</code> がこの先 <code>:controller</code> に指定する名前になる</li>
-<li>ApplicationController クラスを継承</li>
-<li>unloadable を書かないと Development モードで動かない。今はおまじないでいい</li>
-<li>処理を書いていく。メソッド名が <code>:action</code> となる</li>
+  <li>export_controller なので、、 <code class="highlighter-rouge">export</code> がこの先 <code class="highlighter-rouge">:controller</code> に指定する名前になる</li>
+  <li>ApplicationController クラスを継承</li>
+  <li>unloadable を書かないと Development モードで動かない。今はおまじないでいい</li>
+  <li>処理を書いていく。メソッド名が <code class="highlighter-rouge">:action</code> となる</li>
 </ul>
 
 <figure class="highlight">
@@ -569,7 +572,7 @@ Redmine plugins:
   </pre>
 </figure>
 
-<h4 id="view">View</h4>
+<h4 id="view-2">View</h4>
 
 <p>Controller に定義した :controller と :action 名に従って、リンク先を変更する。</p>
 

@@ -125,18 +125,18 @@
 </div><h2 id="tocAnchor-1-1">前回までのあらすじ</h2>
 
 <ul>
-<li><a href="http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy/">Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話</a></li>
+  <li><a href="http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy/">Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話</a></li>
 </ul>
 
 <p>easy_install で見に行く proxy の順番はこんな感じだった。</p>
 
 <ol>
-<li>引数に明示的に指定した場合は引数を使う</li>
-<li>↑を満たさず、環境変数 <code>xxxx_proxy</code> が設定されている場合はそこから読み込む</li>
-<li>↑を満たさない場合、 Windows ではレジストリ( IE の proxy 設定)を見にいく</li>
+  <li>引数に明示的に指定した場合は引数を使う</li>
+  <li>↑を満たさず、環境変数 <code class="highlighter-rouge">xxxx_proxy</code> が設定されている場合はそこから読み込む</li>
+  <li>↑を満たさない場合、 Windows ではレジストリ( IE の proxy 設定)を見にいく</li>
 </ol>
 
-<p>で、なぜか環境変数 <code>HTTP_PROXY</code> を読み込んだ場合は失敗して、 <code>HTTP_PROXY</code> をクリアしてレジストリの proxy 設定を使ったら DL が成功しちゃったという話。</p>
+<p>で、なぜか環境変数 <code class="highlighter-rouge">HTTP_PROXY</code> を読み込んだ場合は失敗して、 <code class="highlighter-rouge">HTTP_PROXY</code> をクリアしてレジストリの proxy 設定を使ったら DL が成功しちゃったという話。</p>
 
 <p>なんでか気になったので調べた。</p>
 
@@ -148,11 +148,11 @@
 
 <h3 id="tocAnchor-1-2-1">レジストリ( IE の設定)から</h3>
 
-<p>IE の 設定では、 <code>ツール &gt; インターネットオプション &gt; 接続 &gt; LAN の設定 &gt; 詳細設定</code> の Secure にも proxy の設定が入れていた。</p>
+<p>IE の 設定では、 <code class="highlighter-rouge">ツール &gt; インターネットオプション &gt; 接続 &gt; LAN の設定 &gt; 詳細設定</code> の Secure にも proxy の設定が入れていた。</p>
 
-<p><code>すべてのプロトコルに同じプロキシサーバーを使用する</code> にチェックを入れていたので。</p>
+<p><code class="highlighter-rouge">すべてのプロトコルに同じプロキシサーバーを使用する</code> にチェックを入れていたので。</p>
 
-<p>レジストリから読み込んだ場合、 Python 実行中に取得した変数 <code>proxies</code> (使用する proxy をしまっておく変数)の値はこんな感じだった。</p>
+<p>レジストリから読み込んだ場合、 Python 実行中に取得した変数 <code class="highlighter-rouge">proxies</code> (使用する proxy をしまっておく変数)の値はこんな感じだった。</p>
 
 <figure class="highlight">
   <pre>
@@ -162,7 +162,7 @@
 
 <h3 id="tocAnchor-1-2-2">環境変数から</h3>
 
-<p>一方、環境変数には <code>HTTP_PROXY</code> しか指定していなかった。 <code>proxies</code> を出力するとこう。</p>
+<p>一方、環境変数には <code class="highlighter-rouge">HTTP_PROXY</code> しか指定していなかった。 <code class="highlighter-rouge">proxies</code> を出力するとこう。</p>
 
 <figure class="highlight">
   <pre>
@@ -170,20 +170,20 @@
   </pre>
 </figure>
 
-<p>なので、環境変数に <code>HTTPS_PROXY</code> : <code>https://PROXY:PORT/</code> を追加すると無事に easy_install できた！</p>
+<p>なので、環境変数に <code class="highlighter-rouge">HTTPS_PROXY</code> : <code class="highlighter-rouge">https://PROXY:PORT/</code> を追加すると無事に easy_install できた！</p>
 
 <h2 id="tocAnchor-1-5">内部の処理</h2>
 
 <p>内部がどうなっているのか見てみよう。</p>
 
-<h3 id="tocAnchor-1-5-1">環境変数 <code>HTTP_PROXY</code> を設定している、IEのプロキシを設定している場合</h3>
+<h3 id="tocAnchor-1-5-1">環境変数 <code class="highlighter-rouge">HTTP_PROXY</code> を設定している、IEのプロキシを設定している場合</h3>
 
-<p>この場合、環境変数 <code>HTTP_PROXY</code> が使われる。</p>
+<p>この場合、環境変数 <code class="highlighter-rouge">HTTP_PROXY</code> が使われる。</p>
 
-<p>また、ProxyHandler への引数 <code>proxies</code> が指定されている場合(明示的に指定している場合)、それが最優先で使われる。</p>
+<p>また、ProxyHandler への引数 <code class="highlighter-rouge">proxies</code> が指定されている場合(明示的に指定している場合)、それが最優先で使われる。</p>
 
 <ul>
-<li>urllib2#ProxyHandler から urllib#getproxies を呼ぶ</li>
+  <li>urllib2#ProxyHandler から urllib#getproxies を呼ぶ</li>
 </ul>
 
 <figure class="highlight">
@@ -199,7 +199,7 @@
 </figure>
 
 <ul>
-<li>getproxies_environment を呼ぶ</li>
+  <li>getproxies_environment を呼ぶ</li>
 </ul>
 
 <figure class="highlight">
@@ -216,7 +216,7 @@
 </figure>
 
 <ul>
-<li>環境変数を取得して <code>xxxx_proxy</code> のものを探して返す</li>
+  <li>環境変数を取得して <code class="highlighter-rouge">xxxx_proxy</code> のものを探して返す</li>
 </ul>
 
 <figure class="highlight">
@@ -240,14 +240,14 @@
   </pre>
 </figure>
 
-<p>これで <code>HTTP_PROXY</code> が見つかって <code>proxies</code> にぶちこまれてる。</p>
+<p>これで <code class="highlighter-rouge">HTTP_PROXY</code> が見つかって <code class="highlighter-rouge">proxies</code> にぶちこまれてる。</p>
 
-<h3 id="tocAnchor-1-5-2">環境変数 <code>HTTP_PROXY</code> を設定していない、IEのプロキシを設定している場合</h3>
+<h3 id="tocAnchor-1-5-2">環境変数 <code class="highlighter-rouge">HTTP_PROXY</code> を設定していない、IEのプロキシを設定している場合</h3>
 
 <p>この場合、 IE の proxy 設定をレジストリから探しに行く。</p>
 
 <ul>
-<li>getproxies<em>environment を呼ぶところまでは同じだが、 getproxies</em>environment から設定を見つけられないので getproxies_registry へ</li>
+  <li>getproxies_environment を呼ぶところまでは同じだが、 getproxies_environment から設定を見つけられないので getproxies_registry へ</li>
 </ul>
 
 <figure class="highlight">

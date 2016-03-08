@@ -118,7 +118,7 @@
 
 <h2 id="tocAnchor-1-2">解決策(暫定)</h2>
 
-<p><code>_config.yml</code>に<code>host: 0.0.0.0</code>を定義するか、起動時に<code>--host 0.0.0.0</code>オプションを指定すればいいんだけどそれがもっともよいんだろうか。</p>
+<p><code class="highlighter-rouge">_config.yml</code>に<code class="highlighter-rouge">host: 0.0.0.0</code>を定義するか、起動時に<code class="highlighter-rouge">--host 0.0.0.0</code>オプションを指定すればいいんだけどそれがもっともよいんだろうか。</p>
 
 <p>常時あげっぱなしにはしないんだけど、どうしても一瞬別のPCで起動してそこに向けて(ローカルからだったり外からだったり)アタックしたい時があるので困っていた。</p>
 
@@ -159,16 +159,16 @@ Gems included by the bundle:
   </pre>
 </figure>
 
-<p><code>bundle update</code>は成功した。2.5.3まであがった。</p>
+<p><code class="highlighter-rouge">bundle update</code>は成功した。2.5.3まであがった。</p>
 
 <h2 id="tocAnchor-1-4">困った</h2>
 
 <p>で、起動すると色々warningはあるものの一応成功はするのだが、BindAddressがいきなり変わってて外部からアクセスできなくなってた。</p>
 
-<p><code>jekyll serve</code>時の起動ログでアドレスが確認できる。</p>
+<p><code class="highlighter-rouge">jekyll serve</code>時の起動ログでアドレスが確認できる。</p>
 
 <ul>
-<li>Jekyll 2.4.0(ちょうど別環境で動くやつがあった)</li>
+  <li>Jekyll 2.4.0(ちょうど別環境で動くやつがあった)</li>
 </ul>
 
 <figure class="highlight">
@@ -178,7 +178,7 @@ Gems included by the bundle:
 </figure>
 
 <ul>
-<li>Jekyll 2.5.3</li>
+  <li>Jekyll 2.5.3</li>
 </ul>
 
 <figure class="highlight">
@@ -189,9 +189,9 @@ Gems included by the bundle:
 
 <h2 id="tocAnchor-1-5">調査</h2>
 
-<p>とりあえず<code>jekyll-x.x.x/lib/jekyll/commands/serve.rb</code>を探る。</p>
+<p>とりあえず<code class="highlighter-rouge">jekyll-x.x.x/lib/jekyll/commands/serve.rb</code>を探る。</p>
 
-<p>この辺でBindAddressにconfig['host']を入れてて、この初期(？)値が変わってる。</p>
+<p>この辺でBindAddressにconfig[‘host’]を入れてて、この初期(？)値が変わってる。</p>
 
 <figure class="highlight">
   <pre>
@@ -208,7 +208,7 @@ Gems included by the bundle:
   </pre>
 </figure>
 
-<p>configってどこで初期化されてるんだっけ〜 -&gt; <code>jekyll-x.x.x/lib/jekyll/configuration.rb</code>だった！</p>
+<p>configってどこで初期化されてるんだっけ〜 -&gt; <code class="highlighter-rouge">jekyll-x.x.x/lib/jekyll/configuration.rb</code>だった！</p>
 
 <p>blameしていつ変更が入ったのか調べてみると、2014年の11月だった。</p>
 
@@ -229,6 +229,7 @@ index 8a1d732..7f1148a 100644
        # Backwards-compatibility options</code>
   </pre>
 </figure>
+
 
 </div>
 

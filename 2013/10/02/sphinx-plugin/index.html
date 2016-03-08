@@ -129,30 +129,30 @@
 <h2 id="tocAnchor-1-2">参考サイト</h2>
 
 <ul>
-<li><a href="http://sphinx-users.jp/doc10/extensions.html">Sphinx拡張 Sphinx v1.0.6 documentation</a></li>
-<li><a href="http://docs.sphinx-users.jp/extensions.html">Sphinx拡張 Sphinx 1.2b1 documentation</a></li>
+  <li><a href="http://sphinx-users.jp/doc10/extensions.html">Sphinx拡張 Sphinx v1.0.6 documentation</a></li>
+  <li><a href="http://docs.sphinx-users.jp/extensions.html">Sphinx拡張 Sphinx 1.2b1 documentation</a></li>
 </ul>
 
 <p>打ち消し線は既に実例があったので、これを写経する方針で。</p>
 
 <ul>
-<li><a href="http://labs.timedia.co.jp/2012/04/sphinx.html">Sphinxで打ち消し線を使う - TIM Labs</a></li>
+  <li><a href="http://labs.timedia.co.jp/2012/04/sphinx.html">Sphinxで打ち消し線を使う - TIM Labs</a></li>
 </ul>
 
 <h2 id="tocAnchor-1-3">環境</h2>
 
 <ul>
-<li>Windows XP</li>
-<li>Python 2.7.3</li>
-<li>Sphinx 1.1.3</li>
+  <li>Windows XP</li>
+  <li>Python 2.7.3</li>
+  <li>Sphinx 1.1.3</li>
 </ul>
 
 <p>と、</p>
 
 <ul>
-<li>Windows 7</li>
-<li>Python 2.7.4</li>
-<li>Sphinx 1.2b.1</li>
+  <li>Windows 7</li>
+  <li>Python 2.7.4</li>
+  <li>Sphinx 1.2b.1</li>
 </ul>
 
 <h2 id="tocAnchor-1-4">Sphinxの拡張の仕方</h2>
@@ -160,16 +160,16 @@
 <p>Sphinx 1.1.3 時に調べていた感じでは、拡張には大きく3通りある模様。</p>
 
 <ul>
-<li>新出力形式対応やパース時のアクションサポート(ビルダー追加で実現)</li>
-<li>reSTのマークアップ拡張</li>
-<li>いろいろなフックポイントで諸処理を記述</li>
+  <li>新出力形式対応やパース時のアクションサポート(ビルダー追加で実現)</li>
+  <li>reSTのマークアップ拡張</li>
+  <li>いろいろなフックポイントで諸処理を記述</li>
 </ul>
 
 <p>今回はreSTのマークアップ拡張が該当するかな。</p>
 
 <p>拡張は基本的にPythonで記述する。(setup関数を呼び出す)</p>
 
-<p>作成した拡張機能は <code>conf.py</code> の中で読み込むように設定を変更する。</p>
+<p>作成した拡張機能は <code class="highlighter-rouge">conf.py</code> の中で読み込むように設定を変更する。</p>
 
 <p>以下、打ち消し線を導入しつつ何してるのか写経してみる。</p>
 
@@ -191,20 +191,20 @@
 </figure>
 
 <ul>
-<li>. <a href="http://docs.sphinx-users.jp/extensions.html#where-to-put-your-own-extensions">自分自身の拡張機能はどこに置くべき？</a> という事で、プラグインファイルを置く場所を <code>conf.py</code> の <code>sys.path</code> に追加する</li>
-<li><code>extensions</code>
-
-<ul>
-<li>使用したいSphinx拡張モジュールを格納する(配列)</li>
-<li>絶対パスで指定</li>
-</ul></li>
+  <li>. <a href="http://docs.sphinx-users.jp/extensions.html#where-to-put-your-own-extensions">自分自身の拡張機能はどこに置くべき？</a> という事で、プラグインファイルを置く場所を <code class="highlighter-rouge">conf.py</code> の <code class="highlighter-rouge">sys.path</code> に追加する</li>
+  <li><code class="highlighter-rouge">extensions</code>
+    <ul>
+      <li>使用したいSphinx拡張モジュールを格納する(配列)</li>
+      <li>絶対パスで指定</li>
+    </ul>
+  </li>
 </ul>
 
 <p>rolesは <strong>設定値</strong> 。これから作る sphinxcontrib_roles.py で定義する。</p>
 
 <h3 id="tocAnchor-1-5-2">sphinxcontrib_roles.py(新規)</h3>
 
-<p>一番はじめは <code>setup(app)</code> 関数。</p>
+<p>一番はじめは <code class="highlighter-rouge">setup(app)</code> 関数。</p>
 
 <figure class="highlight">
   <pre>
@@ -217,64 +217,64 @@
 </figure>
 
 <ul>
-<li><code>app.add_config_value(name, default, rebuild)</code>
-
-<ul>
-<li>新しい設定値 <code>"roles"</code> を追加する(名前衝突を避けるため、 <code>name</code> <strong>には拡張機能名を入れなければならない</strong> )</li>
-<li><code>default</code> はデフォルト値</li>
-<li><code>rebuild</code> はリビルドする時の設定。 <code>"html"</code> の場合は出力が <code>html</code> だった時リビルドされる。</li>
-</ul></li>
-<li><code>sphinx.connect(event, collback)</code>
-
-<ul>
-<li><code>event</code> が発行された時に呼ばれる <code>collback</code> を登録。</li>
-</ul></li>
+  <li><code class="highlighter-rouge">app.add_config_value(name, default, rebuild)</code>
+    <ul>
+      <li>新しい設定値 <code class="highlighter-rouge">"roles"</code> を追加する(名前衝突を避けるため、 <code class="highlighter-rouge">name</code> <strong>には拡張機能名を入れなければならない</strong> )</li>
+      <li><code class="highlighter-rouge">default</code> はデフォルト値</li>
+      <li><code class="highlighter-rouge">rebuild</code> はリビルドする時の設定。 <code class="highlighter-rouge">"html"</code> の場合は出力が <code class="highlighter-rouge">html</code> だった時リビルドされる。</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">sphinx.connect(event, collback)</code>
+    <ul>
+      <li><code class="highlighter-rouge">event</code> が発行された時に呼ばれる <code class="highlighter-rouge">collback</code> を登録。</li>
+    </ul>
+  </li>
 </ul>
 
 <p>eventは以下のようなものがある。</p>
 
 <table>
   <thead>
-<tr>
-<th>event</th>
-<th>説明</th>
-</tr>
-</thead>
+    <tr>
+      <th>event</th>
+      <th>説明</th>
+    </tr>
+  </thead>
   <tbody>
-<tr>
-<td>builder-inited</td>
-<td>ビルダーオブジェクト作成時に発行</td>
-</tr>
-<tr>
-<td>html-collect-pages</td>
-<td></td>
-</tr>
-<tr>
-<td>html-page-context</td>
-<td>テンプレートを使用してレンダリングを行う時に発行</td>
-</tr>
-</tbody>
+    <tr>
+      <td>builder-inited</td>
+      <td>ビルダーオブジェクト作成時に発行</td>
+    </tr>
+    <tr>
+      <td>html-collect-pages</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>html-page-context</td>
+      <td>テンプレートを使用してレンダリングを行う時に発行</td>
+    </tr>
+  </tbody>
 </table>
 
 <p>他にも…。</p>
 
 <table>
   <thead>
-<tr>
-<th>event</th>
-<th>説明</th>
-</tr>
-</thead>
+    <tr>
+      <th>event</th>
+      <th>説明</th>
+    </tr>
+  </thead>
   <tbody>
-<tr>
-<td>source-read</td>
-<td>ソースファイルが読み込まれる時に発行</td>
-</tr>
-<tr>
-<td>build-finished</td>
-<td>ビルド完了時、例外としてビルドが例外を投げた時も発行</td>
-</tr>
-</tbody>
+    <tr>
+      <td>source-read</td>
+      <td>ソースファイルが読み込まれる時に発行</td>
+    </tr>
+    <tr>
+      <td>build-finished</td>
+      <td>ビルド完了時、例外としてビルドが例外を投げた時も発行</td>
+    </tr>
+  </tbody>
 </table>
 
 <p>html-collect-pagesってなんだろう？</p>
@@ -330,7 +330,7 @@
   </pre>
 </figure>
 
-<p><code>index.rst</code> を作成。</p>
+<p><code class="highlighter-rouge">index.rst</code> を作成。</p>
 
 <figure class="highlight">
   <pre>

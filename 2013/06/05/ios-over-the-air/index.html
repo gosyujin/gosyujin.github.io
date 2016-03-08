@@ -148,8 +148,8 @@
 <p>iOSアプリをサーバに置いてそこからインストールできるようにしたかった。</p>
 
 <ul>
-<li>結果、Over-the-Airという方式でインストール環境を作り、インストールできるようなったので手順のメモ</li>
-<li>と、なぜか失敗する端末もあるので、後半にその調査メモ(とりあえず、インストールはできたが、根本原因がわからん)</li>
+  <li>結果、Over-the-Airという方式でインストール環境を作り、インストールできるようなったので手順のメモ</li>
+  <li>と、なぜか失敗する端末もあるので、後半にその調査メモ(とりあえず、インストールはできたが、根本原因がわからん)</li>
 </ul>
 
 <h2 id="tocAnchor-1-2">インストール環境構築手順</h2>
@@ -157,16 +157,16 @@
 <h3 id="tocAnchor-1-2-1">参考サイト</h3>
 
 <ul>
-<li><a href="http://mushikago.com/i/?p=2083">iOS用アプリのAdHoc版を作る（Xcode） ｜ MUSHIKAGO APPS MEMO</a></li>
-<li><a href="http://blog.livedoor.jp/arumisoft/archives/12055981.html">iPadな日記 : AdHoc配布のやり方</a></li>
-<li><a href="http://d.hatena.ne.jp/zentoo/20121024/1351097392">iOSアプリのAd-Hoc install (Over-the-Air, HTTP経由) がなんかよくわからんけど失敗する、という時はとにかくログを見るべしという話 - 愛と勇気と缶ビール</a></li>
+  <li><a href="http://mushikago.com/i/?p=2083">iOS用アプリのAdHoc版を作る（Xcode） ｜ MUSHIKAGO APPS MEMO</a></li>
+  <li><a href="http://blog.livedoor.jp/arumisoft/archives/12055981.html">iPadな日記 : AdHoc配布のやり方</a></li>
+  <li><a href="http://d.hatena.ne.jp/zentoo/20121024/1351097392">iOSアプリのAd-Hoc install (Over-the-Air, HTTP経由) がなんかよくわからんけど失敗する、という時はとにかくログを見るべしという話 - 愛と勇気と缶ビール</a></li>
 </ul>
 
 <h3 id="tocAnchor-1-2-2">前提</h3>
 
 <ul>
-<li>iOS端末実機にXcode経由でアプリがビルドができる状態になっている事</li>
-<li>Webサーバ構築済で It works!! できる事</li>
+  <li>iOS端末実機にXcode経由でアプリがビルドができる状態になっている事</li>
+  <li>Webサーバ構築済で It works!! できる事</li>
 </ul>
 
 <p>まだよくわかってないところもあるので、以下は必要ない手順、ファイルも多いかも。。。</p>
@@ -175,108 +175,111 @@
 
 <h3 id="tocAnchor-1-2-3">前準備</h3>
 
-<h4 id="certificatesigningrequest-certsigningrequest-準備">CertificateSigningRequest.certSigningRequest 準備</h4>
+<h4 id="certificatesigningrequestcertsigningrequest-">CertificateSigningRequest.certSigningRequest 準備</h4>
 
-<p>はじめに <code>CertificateSigningRequest.certSigningRequest</code> をMac上で作成する</p>
-
-<ul>
-<li><code>キーチェインアクセス</code> を起動</li>
-<li><code>キーチェインアクセス -&gt; 証明書アシスタント -&gt; 認証局に証明書を要求...</code> を選択
+<p>はじめに <code class="highlighter-rouge">CertificateSigningRequest.certSigningRequest</code> をMac上で作成する</p>
 
 <ul>
-<li>メールアドレス: メアド入力</li>
-<li>通称: (なんでもいい？)</li>
-<li>要求の処理: <code>ディスクに保存</code> にチェック、 <code>鍵ペア情報を指定</code> にチェック</li>
-</ul></li>
-<li>そのまま続ける(鍵ペア情報はデフォルトのまま)
-
-<ul>
-<li>鍵のサイズ: 2048ビット</li>
-<li>アルゴリズム: RSA</li>
-</ul></li>
-<li><code>CertificateSigningRequest.certSigningRequest</code> が作成される(次で使う)</li>
+  <li><code class="highlighter-rouge">キーチェインアクセス</code> を起動</li>
+  <li><code class="highlighter-rouge">キーチェインアクセス -&gt; 証明書アシスタント -&gt; 認証局に証明書を要求...</code> を選択
+    <ul>
+      <li>メールアドレス: メアド入力</li>
+      <li>通称: (なんでもいい？)</li>
+      <li>要求の処理: <code class="highlighter-rouge">ディスクに保存</code> にチェック、 <code class="highlighter-rouge">鍵ペア情報を指定</code> にチェック</li>
+    </ul>
+  </li>
+  <li>そのまま続ける(鍵ペア情報はデフォルトのまま)
+    <ul>
+      <li>鍵のサイズ: 2048ビット</li>
+      <li>アルゴリズム: RSA</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">CertificateSigningRequest.certSigningRequest</code> が作成される(次で使う)</li>
 </ul>
 
-<h4 id="destribution用certificates-作成">Destribution用Certificates 作成</h4>
+<h4 id="destributioncertificates-">Destribution用Certificates 作成</h4>
 
 <p>実機にインストールできるという事は、Developer用のCertificateは作成済のはず。今回はDestribution用を作る。</p>
 
 <ul>
-<li><a href="https://developer.apple.com/">Apple Developer</a> から iOS Apps へ</li>
-<li><code>Certificates -&gt; All(なんでもいい) -&gt; +アイコン</code> で新しくCertificatesを作る</li>
-<li><code>Select Type</code> : <code>App Store and Ad Hoc</code> を選択
-
-<ul>
-<li>1個作ったらそれ以上作れない？ 改めて見に行ったらdisable状態で選択できなかったので、以降は記憶で</li>
-</ul></li>
-<li><code>CertificateSigningRequest.certSigningRequest</code> を選択</li>
-<li>作成されたDistribution Certificateをダウンロードしておく: <code>ios_distribution.cer</code></li>
+  <li><a href="https://developer.apple.com/">Apple Developer</a> から iOS Apps へ</li>
+  <li><code class="highlighter-rouge">Certificates -&gt; All(なんでもいい) -&gt; +アイコン</code> で新しくCertificatesを作る</li>
+  <li><code class="highlighter-rouge">Select Type</code> : <code class="highlighter-rouge">App Store and Ad Hoc</code> を選択
+    <ul>
+      <li>1個作ったらそれ以上作れない？ 改めて見に行ったらdisable状態で選択できなかったので、以降は記憶で</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">CertificateSigningRequest.certSigningRequest</code> を選択</li>
+  <li>作成されたDistribution Certificateをダウンロードしておく: <code class="highlighter-rouge">ios_distribution.cer</code></li>
 </ul>
 
-<h4 id="destribution用provisioning-profile-作成">Destribution用Provisioning Profile 作成</h4>
+<h4 id="destributionprovisioning-profile-">Destribution用Provisioning Profile 作成</h4>
 
 <p>実機にインストールできるという事は、Developer用の以下略。</p>
 
 <ul>
-<li>引き続き <a href="https://developer.apple.com/">Apple Developer</a> の iOS Apps </li>
-<li><code>Provisioning Profiles -&gt; All(なんでもいい) -&gt; +アイコン</code> で新しくProvisioning Profileを作る</li>
-<li><code>Select Type</code> : <code>Ad Hoc</code> を選択</li>
-<li><code>Configure</code> : <code>Select App ID</code> App ID を選択するが、前提で使っている実機にインストールする時に使っているProvisioning Profileと同じ App ID を選択</li>
-<li><code>Configure</code> : <code>Select certificates</code> 上で作成した時のDestribution用のCertificateファイルがあるはずなのでそれを選ぶ</li>
-<li><code>Configure</code> : <code>Select devices</code> インストールしたいデバイスを選ぶ</li>
-<li><code>Generate</code> : Profile Nameを入力</li>
-<li>作成されたDestribution Provisioning Profile をダウンロードしておく: <code>PROJECT_NAME.mobileprovision</code></li>
+  <li>引き続き <a href="https://developer.apple.com/">Apple Developer</a> の iOS Apps</li>
+  <li><code class="highlighter-rouge">Provisioning Profiles -&gt; All(なんでもいい) -&gt; +アイコン</code> で新しくProvisioning Profileを作る</li>
+  <li><code class="highlighter-rouge">Select Type</code> : <code class="highlighter-rouge">Ad Hoc</code> を選択</li>
+  <li><code class="highlighter-rouge">Configure</code> : <code class="highlighter-rouge">Select App ID</code> App ID を選択するが、前提で使っている実機にインストールする時に使っているProvisioning Profileと同じ App ID を選択</li>
+  <li><code class="highlighter-rouge">Configure</code> : <code class="highlighter-rouge">Select certificates</code> 上で作成した時のDestribution用のCertificateファイルがあるはずなのでそれを選ぶ</li>
+  <li><code class="highlighter-rouge">Configure</code> : <code class="highlighter-rouge">Select devices</code> インストールしたいデバイスを選ぶ</li>
+  <li><code class="highlighter-rouge">Generate</code> : Profile Nameを入力</li>
+  <li>作成されたDestribution Provisioning Profile をダウンロードしておく: <code class="highlighter-rouge">PROJECT_NAME.mobileprovision</code></li>
 </ul>
 
 <p>ここまでで作ったファイルは、なんかうまくいかない時に使う <strong>かも</strong> 。</p>
 
 <h3 id="tocAnchor-1-2-4">アプリ側準備</h3>
 
-<h4 id="provisioning-profileインストール">Provisioning Profileインストール</h4>
+<h4 id="provisioning-profile">Provisioning Profileインストール</h4>
 
-<p>※ ここは、サーバに <code>PROJECT_NAME.mobileprovision</code> を配備し、サーバ経由でインストールする方法もあるっぽい。</p>
-
-<ul>
-<li>Xcodeからビルドしたいプロジェクトを起動する</li>
-<li><code>Organizer -&gt; Devices -&gt; LIBRARY -&gt; Provisioning Profiles</code> に上で作った <code>PROJECT_NAME</code> のProvisioning Profileがある事を確認する
+<p>※ ここは、サーバに <code class="highlighter-rouge">PROJECT_NAME.mobileprovision</code> を配備し、サーバ経由でインストールする方法もあるっぽい。</p>
 
 <ul>
-<li>また、status が <code>Valid profile</code> になっている事を確認する</li>
-<li>キーチェインへの登録とかがうまくいってないと、statusが 〜not found〜 みたいになる場合がある</li>
-</ul></li>
-<li>インストールしたい端末と Xcode を接続する</li>
-<li><code>Organizer -&gt; Devices -&gt; 接続した端末 -&gt; Provisioning Profiles</code> に <code>PROJECT_NAME</code> がある事を確認する
-
-<ul>
-<li>なければ、LIBRARYのProvisioning Profileからドラッグ＆ドロップしたりして持ってくる</li>
-</ul></li>
+  <li>Xcodeからビルドしたいプロジェクトを起動する</li>
+  <li><code class="highlighter-rouge">Organizer -&gt; Devices -&gt; LIBRARY -&gt; Provisioning Profiles</code> に上で作った <code class="highlighter-rouge">PROJECT_NAME</code> のProvisioning Profileがある事を確認する
+    <ul>
+      <li>また、status が <code class="highlighter-rouge">Valid profile</code> になっている事を確認する</li>
+      <li>キーチェインへの登録とかがうまくいってないと、statusが 〜not found〜 みたいになる場合がある</li>
+    </ul>
+  </li>
+  <li>インストールしたい端末と Xcode を接続する</li>
+  <li><code class="highlighter-rouge">Organizer -&gt; Devices -&gt; 接続した端末 -&gt; Provisioning Profiles</code> に <code class="highlighter-rouge">PROJECT_NAME</code> がある事を確認する
+    <ul>
+      <li>なければ、LIBRARYのProvisioning Profileからドラッグ＆ドロップしたりして持ってくる</li>
+    </ul>
+  </li>
 </ul>
 
-<h4 id="ipaファイル作成">ipaファイル作成</h4>
+<h4 id="ipa">ipaファイル作成</h4>
 
 <ul>
-<li>引き続きXcode</li>
-<li>Organizerからプロジェクトに戻りBuild Settingsへ
-
-<ul>
-<li>Code Signing Identity を <code>iPhone Distribution:</code> へ変更(必要？)</li>
-</ul></li>
-<li><code>Product -&gt; Archive</code> を選択</li>
-<li>アーカイブ化が成功したら <code>Organizer -&gt; Archives</code> 画面が起動する
-
-<ul>
-<li>作成されたアーカイブを選択し <code>Distribute...</code> 選択</li>
-<li><code>Select the method of distribution</code> : <code>Save for Enterprise or Ad-Hoc Deployment</code> 選択</li>
-<li><code>Choose an Identity to sign with</code> : https://developer.apple.com で作成した iOS Distribution が存在するはずなので、それを選択</li>
-<li><code>Save as</code> : 保存場所とファイル名を選択、 <code>Save for Enterprise Distribution</code> にチェックを入れる</li>
-<li><code>Application URL</code> : ipaファイルを配備する時のフルパスを入力する
-
-<ul>
-<li>例: IPが <code>xx.xx.xx.xx</code> であるサーバの <code>DOCUMENT_ROOT/ipa/helloworld.ipa</code> に置くとしたら <code>http://xx.xx.xx.xx/ipa/helloworld.ipa</code></li>
-<li>Title以下は適当で(アイコンの設定とかなので、とりあえずインストールしたいだけの場合はTitle以外空白でもいい)</li>
-</ul></li>
-</ul></li>
-<li><code>helloworld.ipa</code> と <code>helloworld.plist</code> が作成される</li>
+  <li>引き続きXcode</li>
+  <li>Organizerからプロジェクトに戻りBuild Settingsへ
+    <ul>
+      <li>Code Signing Identity を <code class="highlighter-rouge">iPhone Distribution:</code> へ変更(必要？)</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">Product -&gt; Archive</code> を選択</li>
+  <li>アーカイブ化が成功したら <code class="highlighter-rouge">Organizer -&gt; Archives</code> 画面が起動する
+    <ul>
+      <li>作成されたアーカイブを選択し <code class="highlighter-rouge">Distribute...</code> 選択</li>
+      <li><code class="highlighter-rouge">Select the method of distribution</code> : <code class="highlighter-rouge">Save for Enterprise or Ad-Hoc Deployment</code> 選択</li>
+      <li><code class="highlighter-rouge">Choose an Identity to sign with</code> : https://developer.apple.com で作成した iOS Distribution が存在するはずなので、それを選択</li>
+      <li><code class="highlighter-rouge">Save as</code> : 保存場所とファイル名を選択、 <code class="highlighter-rouge">Save for Enterprise Distribution</code> にチェックを入れる
+        <ul>
+          <li><code class="highlighter-rouge">Application URL</code> : ipaファイルを配備する時のフルパスを入力する
+            <ul>
+              <li>例: IPが <code class="highlighter-rouge">xx.xx.xx.xx</code> であるサーバの <code class="highlighter-rouge">DOCUMENT_ROOT/ipa/helloworld.ipa</code> に置くとしたら <code class="highlighter-rouge">http://xx.xx.xx.xx/ipa/helloworld.ipa</code></li>
+              <li>Title以下は適当で(アイコンの設定とかなので、とりあえずインストールしたいだけの場合はTitle以外空白でもいい)</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">helloworld.ipa</code> と <code class="highlighter-rouge">helloworld.plist</code> が作成される</li>
 </ul>
 
 <h3 id="tocAnchor-1-2-5">ダウンロードページ準備</h3>
@@ -295,23 +298,23 @@
 </figure>
 
 <ul>
-<li><code>PLIST_FULL_PATH</code> : plistファイルを配備する時のフルパスを入力する(ipaファイルと同じ所に置く)
-
-<ul>
-<li>例: IPが <code>xx.xx.xx.xx</code> であるサーバの <code>DOCUMENT_ROOT/ipa/helloworld.plist</code> に置くとしたら <code>http://xx.xx.xx.xx/ipa/helloworld.plist</code></li>
-</ul></li>
+  <li><code class="highlighter-rouge">PLIST_FULL_PATH</code> : plistファイルを配備する時のフルパスを入力する(ipaファイルと同じ所に置く)
+    <ul>
+      <li>例: IPが <code class="highlighter-rouge">xx.xx.xx.xx</code> であるサーバの <code class="highlighter-rouge">DOCUMENT_ROOT/ipa/helloworld.plist</code> に置くとしたら <code class="highlighter-rouge">http://xx.xx.xx.xx/ipa/helloworld.plist</code></li>
+    </ul>
+  </li>
 </ul>
 
 <h3 id="tocAnchor-1-2-6">サーバ配備</h3>
 
 <ul>
-<li>サーバに以下のファイルを配備する。
-
-<ul>
-<li><code>helloworld.ipa</code></li>
-<li><code>helloworld.plist</code></li>
-<li><code>index.html</code></li>
-</ul></li>
+  <li>サーバに以下のファイルを配備する。
+    <ul>
+      <li><code class="highlighter-rouge">helloworld.ipa</code></li>
+      <li><code class="highlighter-rouge">helloworld.plist</code></li>
+      <li><code class="highlighter-rouge">index.html</code></li>
+    </ul>
+  </li>
 </ul>
 
 <figure class="highlight">
@@ -329,9 +332,9 @@
 <h3 id="tocAnchor-1-2-7">アクセス、インストール</h3>
 
 <ul>
-<li>端末から http://xx.xx.xx.xx/ へアクセスし、indexのリンクを叩く</li>
-<li><code>"xx.xx.xx.xx"により"PROJECT"がインストールされます</code> と表示されるので、インストールを選択</li>
-<li><strong>うまくいけば</strong> インストール成功</li>
+  <li>端末から http://xx.xx.xx.xx/ へアクセスし、indexのリンクを叩く</li>
+  <li><code class="highlighter-rouge">"xx.xx.xx.xx"により"PROJECT"がインストールされます</code> と表示されるので、インストールを選択</li>
+  <li><strong>うまくいけば</strong> インストール成功</li>
 </ul>
 
 <h2 id="tocAnchor-1-10">うまくいかない場合</h2>
@@ -342,7 +345,7 @@
 
 <h3 id="tocAnchor-1-10-1">パターン1</h3>
 
-<p><code>iOS Deployment Target</code> のバージョンより低いバージョンの端末でインストールしようとした場合、エラーダイアログとともに失敗する。</p>
+<p><code class="highlighter-rouge">iOS Deployment Target</code> のバージョンより低いバージョンの端末でインストールしようとした場合、エラーダイアログとともに失敗する。</p>
 
 <p>これは凡ミスなので、TargetのiOSバージョンを下げてやればよい。</p>
 
@@ -357,30 +360,30 @@
 <p>これで困った。</p>
 
 <ul>
-<li>Safariにて、index.htmlに記載されたリンクを叩きインストール開始</li>
-<li>端末の画面がSafariからホーム画面に遷移</li>
-<li>アイコンが現れ、 <strong>待機中...</strong> と表示される</li>
-<li>そこで止まる！
-
-<ul>
-<li>エラーなし、警告なしでずっと待機中のまま</li>
-</ul></li>
+  <li>Safariにて、index.htmlに記載されたリンクを叩きインストール開始</li>
+  <li>端末の画面がSafariからホーム画面に遷移</li>
+  <li>アイコンが現れ、 <strong>待機中…</strong> と表示される</li>
+  <li>そこで止まる！
+    <ul>
+      <li>エラーなし、警告なしでずっと待機中のまま</li>
+    </ul>
+  </li>
 </ul>
 
 <p>iOSのバージョンとかにもよるのかと思ったが、違うっぽい。インストールできてる端末もあるし、Provisioning Profileも入ってるから端末の問題と思われる。</p>
 
 <ul>
-<li>iOS 5.0.1: インストール成功した</li>
-<li>iOS 5.1.1: インストール成功した</li>
-<li>iOS 6.0.1: <strong>このエラーでインストールできなかった</strong></li>
-<li>↑とは別のiOS 6.0.1: <strong>インストール成功した</strong></li>
+  <li>iOS 5.0.1: インストール成功した</li>
+  <li>iOS 5.1.1: インストール成功した</li>
+  <li>iOS 6.0.1: <strong>このエラーでインストールできなかった</strong></li>
+  <li>↑とは別のiOS 6.0.1: <strong>インストール成功した</strong></li>
 </ul>
 
 <p>内部のログとか見れないかと調べていると、2通りの方法で調べられた。</p>
 
 <ol>
-<li>Xcodeの <code>Organizer -&gt; 端末 -&gt; Console</code></li>
-<li>Appleから <code>iPhone 構成ユーティリティ</code> アプリをダウンロード</li>
+  <li>Xcodeの <code class="highlighter-rouge">Organizer -&gt; 端末 -&gt; Console</code></li>
+  <li>Appleから <code class="highlighter-rouge">iPhone 構成ユーティリティ</code> アプリをダウンロード</li>
 </ol>
 
 <p>どっちも端末とMacを接続すれば使える。</p>
@@ -405,8 +408,8 @@ May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;
 <p>launchdはプロセスの起動を制御するデーモンプロセス。</p>
 
 <ul>
-<li><a href="http://yawarakakajiya.blogspot.jp/2011/01/ios-launchd.html">柔らか鍛冶屋: iOS: launchd</a></li>
-<li><a href="http://www.itmedia.co.jp/enterprise/articles/0704/26/news009_2.html">Undocumented Mac OS X：第1回　initを置き換えるlaunchd【前編】 (2/3) - ITmedia エンタープライズ</a></li>
+  <li><a href="http://yawarakakajiya.blogspot.jp/2011/01/ios-launchd.html">柔らか鍛冶屋: iOS: launchd</a></li>
+  <li><a href="http://www.itmedia.co.jp/enterprise/articles/0704/26/news009_2.html">Undocumented Mac OS X：第1回　initを置き換えるlaunchd【前編】 (2/3) - ITmedia エンタープライズ</a></li>
 </ul>
 
 <p>こやつがubdを1秒毎に呼ぼうとしてる？</p>
@@ -414,18 +417,18 @@ May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;
 <p>ubdとはなんぞや…。</p>
 
 <ul>
-<li><a href="http://www.macinside.info/process.php?name=ubd">What is "ubd"? — Process safety information — MacInside (Beta)</a></li>
+  <li><a href="http://www.macinside.info/process.php?name=ubd">What is “ubd”? — Process safety information — MacInside (Beta)</a></li>
 </ul>
 
 <blockquote>
-<p>"ubd" is the Ubiquity Server Process.</p>
+  <p>“ubd” is the Ubiquity Server Process.</p>
 </blockquote>
 
 <p>何者なんだ…。OSXの方でなにやらエラーログを出しまくるという現象あり。</p>
 
 <ul>
-<li><a href="https://discussionsjapan.apple.com/thread/10106396?start=15&amp;tstart=0">Ubiquityの大量エラーログ: Apple サポートコミュニティ</a></li>
-<li><a href="https://discussionsjapan.apple.com/message/100633645#100633645">Mobile Documentsフォルダが勝手に書き換えられる: Apple サポートコミュニティ</a></li>
+  <li><a href="https://discussionsjapan.apple.com/thread/10106396?start=15&amp;tstart=0">Ubiquityの大量エラーログ: Apple サポートコミュニティ</a></li>
+  <li><a href="https://discussionsjapan.apple.com/message/100633645#100633645">Mobile Documentsフォルダが勝手に書き換えられる: Apple サポートコミュニティ</a></li>
 </ul>
 
 <p>iCloud関係なの？確かにログインはした事あるけど、今はログアウト済なんだよなあ。</p>
@@ -433,7 +436,7 @@ May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;
 <p>また、iPhone5のバッテリー持ちが4よりもひどいという所ではまったく同じログを吐いている人も。</p>
 
 <ul>
-<li><a href="https://discussions.apple.com/message/20379541#20379541">iPhone 5 battery life is way worse than...: Apple Support Communities</a></li>
+  <li><a href="https://discussions.apple.com/message/20379541#20379541">iPhone 5 battery life is way worse than…: Apple Support Communities</a></li>
 </ul>
 
 <p>ただし、決定打ではない…。</p>
@@ -441,27 +444,27 @@ May xx xx:xx:xx iOS端末名 com.apple.launchd[1] (com.apple.ubd) &lt;Notice&gt;
 <p>困り果てているところへこんな情報。(OSXっぽいけど)</p>
 
 <ul>
-<li><a href="http://www.insanelymac.com/forum/topic/281143-comappleubd-problem/">com.apple.ubd problem - OSx86 10.8 (Mountain Lion) - InsanelyMac Forum</a></li>
+  <li><a href="http://www.insanelymac.com/forum/topic/281143-comappleubd-problem/">com.apple.ubd problem - OSx86 10.8 (Mountain Lion) - InsanelyMac Forum</a></li>
 </ul>
 
 <blockquote>
-<p>This message would repeat in the logs every 10 seconds. 
+  <p>This message would repeat in the logs every 10 seconds. 
 And would continue to repeat even after the offending application had been force quit. 
 A quick search for com.apple.ubd shows it is the iCloud synchronization daemon.</p>
 </blockquote>
 
 <ul>
-<li>アプリケーションをあらかたkillしてみる？
-
-<ul>
-<li>念のため端末自体も再起動してみる</li>
-<li>再起動後、ダメ元でもう一度インストールしてみる
-
-<ul>
-<li>インストールされた</li>
-<li><strong>なんで！？</strong></li>
-</ul></li>
-</ul></li>
+  <li>アプリケーションをあらかたkillしてみる？
+    <ul>
+      <li>念のため端末自体も再起動してみる</li>
+      <li>再起動後、ダメ元でもう一度インストールしてみる
+        <ul>
+          <li>インストールされた</li>
+          <li><strong>なんで！？</strong></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="tocAnchor-1-14">しかも</h2>
@@ -478,7 +481,7 @@ A quick search for com.apple.ubd shows it is the iCloud synchronization daemon.<
 
 <p>インストールできない問題と、このエラーメッセージは関係ないの！？</p>
 
-<p>数ある内の一台だけ…なぜ。 </p>
+<p>数ある内の一台だけ…なぜ。</p>
 
 </div>
 

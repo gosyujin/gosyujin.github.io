@@ -133,19 +133,19 @@
 </div><h2 id="tocAnchor-1-1">あらすじ</h2>
 
 <ol>
-<li>Jekyll に一点気になるところがあったのでなおしかたを調べた</li>
-<li>せっかくなのでプルリクエストしてみたい！</li>
-<li>…が、知らないこと多すぎて頓挫</li>
-<li>とりあえず、今わかったところまでまとめた ← 今ここ</li>
+  <li>Jekyll に一点気になるところがあったのでなおしかたを調べた</li>
+  <li>せっかくなのでプルリクエストしてみたい！</li>
+  <li>…が、知らないこと多すぎて頓挫</li>
+  <li>とりあえず、今わかったところまでまとめた ← 今ここ</li>
 </ol>
 
 <h2 id="tocAnchor-1-2">なおした内容</h2>
 
-<p>Jekyll でかき集められた <code>tags</code> (タグのリスト) がバラバラのため、 tags.html ページから探すのがつらいのでソートをしたい。</p>
+<p>Jekyll でかき集められた <code class="highlighter-rouge">tags</code> (タグのリスト) がバラバラのため、 tags.html ページから探すのがつらいのでソートをしたい。</p>
 
 <h3 id="tocAnchor-1-2-1">修正内容</h3>
 
-<p>Jekyll のソースを追っていった結果、 <code>jekyll/lib/jekyll/site.rb</code> 内の一行をいじるだけでいけた。</p>
+<p>Jekyll のソースを追っていった結果、 <code class="highlighter-rouge">jekyll/lib/jekyll/site.rb</code> 内の一行をいじるだけでいけた。</p>
 
 <figure class="highlight">
   <pre>
@@ -176,111 +176,117 @@
 <h3 id="tocAnchor-1-5-1">既に実装済みじゃないか調査</h3>
 
 <ul>
-<li>とりあえず、既存機能(設定ファイルの操作など)では、タグのソートはできない…はず。やり方があったら教えて下さい</li>
-<li>一応、 「 Liquid の領域」で頑張ればできる <strong>かも</strong> という情報は見つけた</li>
-<li>しかし、そもそもこの「タグをソートする」という機能が、どの領域で受け持つのが妥当なのかわからない( Liquid？ Jekyll？)
-
-<ul>
-<li>ソースを読んでいった結果、「タグの value (記事自体)のソート」を Jekyll でやっていたので、 key もここでやればいいんじゃね？と思った</li>
-</ul></li>
+  <li>とりあえず、既存機能(設定ファイルの操作など)では、タグのソートはできない…はず。やり方があったら教えて下さい</li>
+  <li>一応、 「 Liquid の領域」で頑張ればできる <strong>かも</strong> という情報は見つけた</li>
+  <li>しかし、そもそもこの「タグをソートする」という機能が、どの領域で受け持つのが妥当なのかわからない( Liquid？ Jekyll？)
+    <ul>
+      <li>ソースを読んでいった結果、「タグの value (記事自体)のソート」を Jekyll でやっていたので、 key もここでやればいいんじゃね？と思った</li>
+    </ul>
+  </li>
 </ul>
 
 <h3 id="tocAnchor-1-5-2">既にプロジェクトへ要望としてあがっていないか調査</h3>
 
 <ul>
-<li><a href="https://github.com/mojombo/jekyll">mojombo/jekyll ・ GitHub</a></li>
+  <li><a href="https://github.com/mojombo/jekyll">mojombo/jekyll ・ GitHub</a></li>
 </ul>
 
 <p>まずは、本家の Issues と Pull Requests を見てすでにあがってないか確認してみる。</p>
 
-<p><code>sort</code> とか <code>tag</code> とかで検索してみたが、特に類似しているチケットはない様子。(Issue 内検索とか、 プルリク内検索ってどうやるんだろう？)</p>
+<p><code class="highlighter-rouge">sort</code> とか <code class="highlighter-rouge">tag</code> とかで検索してみたが、特に類似しているチケットはない様子。(Issue 内検索とか、 プルリク内検索ってどうやるんだろう？)</p>
 
 <h3 id="tocAnchor-1-5-3">じゃあプルリクエストを送る</h3>
 
-<h4 id="一連の流れ">一連の流れ</h4>
+<h4 id="section-8">一連の流れ</h4>
 
 <p>ここの進め方はプロジェクトによりけりだと思う。郷に入っては郷に従えで、 Jekyll では以下のページの手順に沿う。</p>
 
 <ul>
-<li><a href="http://jekyllrb.com/docs/contributing/">Contributing</a></li>
+  <li><a href="http://jekyllrb.com/docs/contributing/">Contributing</a></li>
 </ul>
 
 <blockquote>
-<ul>
-<li>Fork the project.</li>
-<li>Clone down your fork:</li>
-</ul>
+  <ul>
+    <li>Fork the project.</li>
+    <li>Clone down your fork:</li>
+  </ul>
 
-<blockquote>
-<div class="highlight"><pre><code class="language-" data-lang=""> git clone git://github.com/&lt;username&gt;/jekyll.git
-</code></pre></div></blockquote>
+  <blockquote>
+    <div class="highlighter-rouge"><pre class="highlight"><code> git clone git://github.com/&lt;username&gt;/jekyll.git
+</code></pre>
+    </div>
+  </blockquote>
 
-<ul>
-<li>Create a topic branch to contain your change:</li>
-</ul>
+  <ul>
+    <li>Create a topic branch to contain your change:</li>
+  </ul>
 
-<blockquote>
-<div class="highlight"><pre><code class="language-" data-lang=""> git checkout -b my_awesome_feature
-</code></pre></div></blockquote>
+  <blockquote>
+    <div class="highlighter-rouge"><pre class="highlight"><code> git checkout -b my_awesome_feature
+</code></pre>
+    </div>
+  </blockquote>
 
-<ul>
-<li><code>Hack away, add tests.</code> Not necessarily in that order.</li>
-<li><code>Make sure everything still passes by running rake.</code></li>
-<li>If necessary, <code>rebase your commits into logical chunks, without errors.</code></li>
-<li>Push the branch up:</li>
-</ul>
+  <ul>
+    <li><code class="highlighter-rouge">Hack away, add tests.</code> Not necessarily in that order.</li>
+    <li><code class="highlighter-rouge">Make sure everything still passes by running rake.</code></li>
+    <li>If necessary, <code class="highlighter-rouge">rebase your commits into logical chunks, without errors.</code></li>
+    <li>Push the branch up:</li>
+  </ul>
 
-<blockquote>
-<div class="highlight"><pre><code class="language-" data-lang=""> git push origin my_awesome_feature
-</code></pre></div></blockquote>
+  <blockquote>
+    <div class="highlighter-rouge"><pre class="highlight"><code> git push origin my_awesome_feature
+</code></pre>
+    </div>
+  </blockquote>
 
-<ul>
-<li>Create a pull request against mojombo/jekyll and describe what your change does and the why you think it should be merged.</li>
-</ul>
+  <ul>
+    <li>Create a pull request against mojombo/jekyll and describe what your change does and the why you think it should be merged.</li>
+  </ul>
 </blockquote>
 
 <p>順を追って見てみる。</p>
 
-<h4 id="最初の作業-fork-とか">最初の作業 fork とか</h4>
+<h4 id="fork-">最初の作業 fork とか</h4>
 
 <blockquote>
-<ul>
-<li>Fork the project.</li>
-<li>Clone down your fork:</li>
-<li>Create a topic branch to contain your change:</li>
-</ul>
+  <ul>
+    <li>Fork the project.</li>
+    <li>Clone down your fork:</li>
+    <li>Create a topic branch to contain your change:</li>
+  </ul>
 </blockquote>
 
 <p>本家を fork して、ローカルに clone して、修正用のブランチを作る。</p>
 
 <p>この辺はなんとなくわかる。</p>
 
-<h4 id="テストを作る">テストを作る</h4>
+<h4 id="section-9">テストを作る</h4>
 
 <blockquote>
-<ul>
-<li><code>Hack away, add tests.</code> Not necessarily in that order.</li>
-</ul>
+  <ul>
+    <li><code class="highlighter-rouge">Hack away, add tests.</code> Not necessarily in that order.</li>
+  </ul>
 </blockquote>
 
 <p>修正して <strong>テストを追加</strong> する。</p>
 
-<p><code>!! Contributions will not be accepted without tests</code> と言われているのでテストがないと門前払いっぽい。</p>
+<p><code class="highlighter-rouge">!! Contributions will not be accepted without tests</code> と言われているのでテストがないと門前払いっぽい。</p>
 
 <p>ただ、テストって言われてもどう作ればいいのか…？</p>
 
 <p><a href="http://jekyllrb.com/docs/contributing/">Contributing</a> に立ち戻ってみると、修正内容の種類によってどうすればよいか書かれていた。</p>
 
 <ol>
-<li>小さい修正か、既にある機能のパッチの場合</li>
-<li>新しい機能の場合</li>
-<li>ドキュメンテーションの場合</li>
+  <li>小さい修正か、既にある機能のパッチの場合</li>
+  <li>新しい機能の場合</li>
+  <li>ドキュメンテーションの場合</li>
 </ol>
 
 <p>今回は一つ目だな。</p>
 
 <blockquote>
-<p>If you’re creating a small fix or patch to an existing feature, just a simple test will do. Please stay in the confines of the current test suite and use Shoulda and RR.</p>
+  <p>If you’re creating a small fix or patch to an existing feature, just a simple test will do. Please stay in the confines of the current test suite and use Shoulda and RR.</p>
 </blockquote>
 
 <p>Shoulda と RR を使ってテストを書けばいいの…？</p>
@@ -289,12 +295,12 @@
 
 <p>これに関しては一旦置いといて、続き。</p>
 
-<h4 id="jekyll-を壊してない事を確認したらプルリク">Jekyll を壊してない事を確認したらプルリク</h4>
+<h4 id="jekyll-">Jekyll を壊してない事を確認したらプルリク</h4>
 
 <blockquote>
-<ul>
-<li><code>Make sure everything still passes by running rake.</code></li>
-</ul>
+  <ul>
+    <li><code class="highlighter-rouge">Make sure everything still passes by running rake.</code></li>
+  </ul>
 </blockquote>
 
 <p>rake を通せと。</p>
@@ -304,28 +310,28 @@
 <p>これを壊すなということか。</p>
 
 <blockquote>
-<ul>
-<li>If necessary, <code>rebase your commits into logical chunks, without errors.</code></li>
-</ul>
+  <ul>
+    <li>If necessary, <code class="highlighter-rouge">rebase your commits into logical chunks, without errors.</code></li>
+  </ul>
 </blockquote>
 
 <p>エラーが出ないようにコミットを意味のあるかたまりに rebase せよ。</p>
 
 <blockquote>
-<ul>
-<li>Push the branch up:</li>
-</ul>
+  <ul>
+    <li>Push the branch up:</li>
+  </ul>
 </blockquote>
 
 <p>ブランチをプッシュせよ。</p>
 
 <blockquote>
-<ul>
-<li>Create a pull request against mojombo/jekyll and describe what your change does and the why you think it should be merged.</li>
-</ul>
+  <ul>
+    <li>Create a pull request against mojombo/jekyll and describe what your change does and the why you think it should be merged.</li>
+  </ul>
 </blockquote>
 
-<p>最後に <code>mojombo/jekyll</code> にプルリクしてね。なぜ Jekyll は you の修正をマージすべきなのかを記載してね。</p>
+<p>最後に <code class="highlighter-rouge">mojombo/jekyll</code> にプルリクしてね。なぜ Jekyll は you の修正をマージすべきなのかを記載してね。</p>
 
 <p>…結構果てしないな。</p>
 
@@ -336,11 +342,15 @@
 <p>調べてみよう……。</p>
 
 <ul>
-<li><p><a href="http://casperfabricius.com/site/2009/07/25/test-driven-rails-development-with-rspec-rr-shoulda-factory-girl-and-stubble/">Test-driven Rails development with RSpec, RR, Shoulda, Factory Girl and Stubble｜casperfabricius.com</a></p></li>
-<li><p><a href="https://github.com/thoughtbot/shoulda/tree/master">thoughtbot/shoulda ・ GitHub</a></p></li>
-<li><p><a href="http://d.hatena.ne.jp/irohiroki/20071024/shoulda">RSpecよりShoulda、fixturesよりヘルパーとMocha - Unexplored Rails</a></p></li>
-<li><p><a href="https://github.com/rr/rr">rr/rr ・ GitHub</a></p></li>
-<li><p><a href="http://eitoball.blogspot.jp/2010/03/rr-readmerdoc-01010.html">eitoballの練習帳: rr README.rdoc（バージョン 0.10.10）私訳</a></p></li>
+  <li>
+    <p><a href="http://casperfabricius.com/site/2009/07/25/test-driven-rails-development-with-rspec-rr-shoulda-factory-girl-and-stubble/">Test-driven Rails development with RSpec, RR, Shoulda, Factory Girl and Stubble｜casperfabricius.com</a></p>
+  </li>
+  <li><a href="https://github.com/thoughtbot/shoulda/tree/master">thoughtbot/shoulda ・ GitHub</a></li>
+  <li>
+    <p><a href="http://d.hatena.ne.jp/irohiroki/20071024/shoulda">RSpecよりShoulda、fixturesよりヘルパーとMocha - Unexplored Rails</a></p>
+  </li>
+  <li><a href="https://github.com/rr/rr">rr/rr ・ GitHub</a></li>
+  <li><a href="http://eitoball.blogspot.jp/2010/03/rr-readmerdoc-01010.html">eitoballの練習帳: rr README.rdoc（バージョン 0.10.10）私訳</a></li>
 </ul>
 
 </div>

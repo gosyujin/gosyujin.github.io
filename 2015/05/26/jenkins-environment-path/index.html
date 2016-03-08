@@ -119,23 +119,23 @@
 
 <p>結構昔にWindows 7上において、以下の2通りのSeleniumスクリプト実行結果が違ってすごく困っていた。</p>
 
-<p>前提条件としては、Seleniumスクリプトは同じ。実行コマンドも <code>bundle exec ruby hoge.rb</code> で同じ。違うのは実行の仕方だけ。</p>
+<p>前提条件としては、Seleniumスクリプトは同じ。実行コマンドも <code class="highlighter-rouge">bundle exec ruby hoge.rb</code> で同じ。違うのは実行の仕方だけ。</p>
 
 <ol>
-<li>コマンドプロンプトで実行
-
-<ul>
-<li>Seleniumスクリプト</li>
-<li>コマンドプロンプトからコマンド実行</li>
-<li>正常終了</li>
-</ul></li>
-<li>Jenkinsで実行
-
-<ul>
-<li>Seleniumスクリプト(「Windowsバッチコマンドの実行」でジョブに登録)</li>
-<li>リモートビルドから実行</li>
-<li>＼エラー／</li>
-</ul></li>
+  <li>コマンドプロンプトで実行
+    <ul>
+      <li>Seleniumスクリプト</li>
+      <li>コマンドプロンプトからコマンド実行</li>
+      <li>正常終了</li>
+    </ul>
+  </li>
+  <li>Jenkinsで実行
+    <ul>
+      <li>Seleniumスクリプト(「Windowsバッチコマンドの実行」でジョブに登録)</li>
+      <li>リモートビルドから実行</li>
+      <li>＼エラー／</li>
+    </ul>
+  </li>
 </ol>
 
 <p>原因の切り分け方とかもわからなかったのでかなり苦戦…。</p>
@@ -143,15 +143,15 @@
 <h2 id="tocAnchor-1-2">環境</h2>
 
 <ul>
-<li>Windows 7</li>
-<li>Jenkins 1.581</li>
-<li>Ruby 1.9.3
-
-<ul>
-<li>bundler (1.3.5)</li>
-<li>pit (0.0.7)</li>
-<li>selenium-webdriver (2.43.0)</li>
-</ul></li>
+  <li>Windows 7</li>
+  <li>Jenkins 1.581</li>
+  <li>Ruby 1.9.3
+    <ul>
+      <li>bundler (1.3.5)</li>
+      <li>pit (0.0.7)</li>
+      <li>selenium-webdriver (2.43.0)</li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="tocAnchor-1-3">結論</h2>
@@ -161,18 +161,18 @@
 <p>具体的に何が起こっていたかというと…。</p>
 
 <ul>
-<li>Seleniumスクリプトの中で <code>pit</code> (https://github.com/cho45/pit) というアカウントのID、パスワードを外出しできるGemを使用していた
-
-<ul>
-<li>pitの挙動は、 <code>~/.pit</code> 直下にあるyamlファイルを探して、IDとパスワードを取得するというもの</li>
-</ul></li>
+  <li>Seleniumスクリプトの中で <code class="highlighter-rouge">pit</code> (https://github.com/cho45/pit) というアカウントのID、パスワードを外出しできるGemを使用していた
+    <ul>
+      <li>pitの挙動は、 <code class="highlighter-rouge">~/.pit</code> 直下にあるyamlファイルを探して、IDとパスワードを取得するというもの</li>
+    </ul>
+  </li>
 </ul>
 
 <h3 id="tocAnchor-1-3-1">コマンドプロンプトで実行したとき</h3>
 
 <ol>
-<li>実行ユーザは「今Windowsにログオンしている自分」</li>
-<li>pitは <code>~/.pit</code> = <code>C:\Users\USER\.pit</code> を見に行っていた</li>
+  <li>実行ユーザは「今Windowsにログオンしている自分」</li>
+  <li>pitは <code class="highlighter-rouge">~/.pit</code> = <code class="highlighter-rouge">C:\Users\USER\.pit</code> を見に行っていた</li>
 </ol>
 
 <p>ホームディレクトリにはアカウント定義しているyamlがあるので正常に動作。まあこれはそうだよね。問題は次。</p>
@@ -180,31 +180,31 @@
 <h3 id="tocAnchor-1-3-2">Jenkinsで実行したとき</h3>
 
 <ol>
-<li>実行ユーザは「Jenkins自体？」(コンソール出力を見るとリモートホスト127.0.0.1が実行となってる)</li>
-<li>pitは <code>~/.pit</code> = <code>C:\windows\system32\config\systemprofile\.pit</code> を見に行っていた</li>
+  <li>実行ユーザは「Jenkins自体？」(コンソール出力を見るとリモートホスト127.0.0.1が実行となってる)</li>
+  <li>pitは <code class="highlighter-rouge">~/.pit</code> = <code class="highlighter-rouge">C:\windows\system32\config\systemprofile\.pit</code> を見に行っていた</li>
 </ol>
 
 <p>system32…？こんなパスにアカウント定義しているyamlはないので当然失敗する。</p>
 
-<p>Jenkinsの管理 -&gt; システム情報 からシステムプロパティを見ると <code>user.home</code> が <code>C:\Windows\System32\config\systemprofile</code> と定義されていた</p>
+<p>Jenkinsの管理 -&gt; システム情報 からシステムプロパティを見ると <code class="highlighter-rouge">user.home</code> が <code class="highlighter-rouge">C:\Windows\System32\config\systemprofile</code> と定義されていた</p>
 
 <ul>
-<li>Seleniumスクリプト実行前にこんな環境変数セットして無理矢理解決した</li>
+  <li>Seleniumスクリプト実行前にこんな環境変数セットして無理矢理解決した</li>
 </ul>
 
 <p>
-  <code>set USERPROFILE=C:\Users\USER</code>
+  <code class="highlighter-rouge">set USERPROFILE=C:\Users\USER</code>
 </p>
 
 <ul>
-<li>普段目立たなかったライブラリの環境変数が変わっていることに気づかなかった</li>
-<li>あと、そこに気づけるようになっていなかったので、原因突き詰めるのにも手間取った</li>
+  <li>普段目立たなかったライブラリの環境変数が変わっていることに気づかなかった</li>
+  <li>あと、そこに気づけるようになっていなかったので、原因突き詰めるのにも手間取った</li>
 </ul>
 
 <h2 id="tocAnchor-1-6">原因にたどり着くまで</h2>
 
 <ul>
-<li>Jenkinsで実行するとこんなエラーがでた。なんかframeがないと。</li>
+  <li>Jenkinsで実行するとこんなエラーがでた。なんかframeがないと。</li>
 </ul>
 
 <figure class="highlight">
@@ -214,14 +214,14 @@
 </figure>
 
 <ul>
-<li>でも、このエラーだけじゃ全然よくわからん…しかし、どうやって原因を切り分ければよいのかもわからんかった。
-
-<ul>
-<li>とりあえずputsを入れまくってみた</li>
-<li>@yando さんの助言によりこけてそうなところでスクリーンショットを取るようにしてみた</li>
-</ul></li>
-<li>putsとスクショの結果を眺めると、ログインフォームにID、パスワードが入ってないようだ</li>
-<li>pitがうまく動いてないとわかった</li>
+  <li>でも、このエラーだけじゃ全然よくわからん…しかし、どうやって原因を切り分ければよいのかもわからんかった。
+    <ul>
+      <li>とりあえずputsを入れまくってみた</li>
+      <li>@yando さんの助言によりこけてそうなところでスクリーンショットを取るようにしてみた</li>
+    </ul>
+  </li>
+  <li>putsとスクショの結果を眺めると、ログインフォームにID、パスワードが入ってないようだ</li>
+  <li>pitがうまく動いてないとわかった</li>
 </ul>
 
 <p>という感じ。</p>
@@ -229,8 +229,8 @@
 <p>いろんなテクニックを駆使して、どこでコケてるかわかりやすくしなければならないのか。</p>
 
 <ul>
-<li><a href="http://qiita.com/oh_rusty_nail/items/b8ba525d31ea7c522856">全国のSeleniumer必読</a></li>
-<li><a href="http://qiita.com/oh_rusty_nail/items/d2284efc7fd2dd7c3206">Selenium+JenkinsのCIをできるだけコケなくするコツ</a></li>
+  <li><a href="http://qiita.com/oh_rusty_nail/items/b8ba525d31ea7c522856">全国のSeleniumer必読</a></li>
+  <li><a href="http://qiita.com/oh_rusty_nail/items/d2284efc7fd2dd7c3206">Selenium+JenkinsのCIをできるだけコケなくするコツ</a></li>
 </ul>
 
 </div>

@@ -112,10 +112,10 @@
 <p>Jekyll ではてなダイアリーのような脚注をつけられるプラグインを作った。</p>
 
 <ul>
-<li><a href="https://github.com/gosyujin/gosyujin.github.com/blob/1cac1dbbb34f271ce54ce3a85c69261af3336aec/_plugins/gosyujin.github.com/reference.rb">gosyujin.github.com/_plugins/gosyujin.github.com/reference.rb</a></li>
+  <li><a href="https://github.com/gosyujin/gosyujin.github.com/blob/1cac1dbbb34f271ce54ce3a85c69261af3336aec/_plugins/gosyujin.github.com/reference.rb">gosyujin.github.com/_plugins/gosyujin.github.com/reference.rb</a></li>
 </ul>
 
-<p>文中に登場した <code>ref</code> タグの引数を集めて <code>ref_anchor</code> タグが打たれた箇所にリスト出力する、というもの。</p>
+<p>文中に登場した <code class="highlighter-rouge">ref</code> タグの引数を集めて <code class="highlighter-rouge">ref_anchor</code> タグが打たれた箇所にリスト出力する、というもの。</p>
 
 <p>こう書くと、</p>
 
@@ -149,21 +149,21 @@
 
 <h2 id="tocAnchor-1-2">できる</h2>
 
-<p><em>同じ .md ファイル内に</em> <code>ref</code> タグと <code>ref_anchor</code> タグを書くと問題なくいける。</p>
+<p><em>同じ .md ファイル内に</em> <code class="highlighter-rouge">ref</code> タグと <code class="highlighter-rouge">ref_anchor</code> タグを書くと問題なくいける。</p>
 
 <p>上記あらすじの例がそう。</p>
 
 <h2 id="tocAnchor-1-3">できない</h2>
 
-<p><code>ref</code> タグは .md ファイル内に。 <code>ref_anchor</code> タグは「記事の一番最後に一つあればいい」ということでテーマ内に書いて集約したい。</p>
+<p><code class="highlighter-rouge">ref</code> タグは .md ファイル内に。 <code class="highlighter-rouge">ref_anchor</code> タグは「記事の一番最後に一つあればいい」ということでテーマ内に書いて集約したい。</p>
 
 <p>と思って、 <em>テーマ( _includes/themes/twitter/post.html )</em> に書いてみたが、これだと脚注が拾えなかった…。</p>
 
 <ul>
-<li><a href="https://github.com/gosyujin/gosyujin.github.com/blob/cbfe075f348e20d17850074af4/_includes/themes/twitter/post.html">_includes/themes/twitter/post.html</a></li>
+  <li><a href="https://github.com/gosyujin/gosyujin.github.com/blob/cbfe075f348e20d17850074af4/_includes/themes/twitter/post.html">_includes/themes/twitter/post.html</a></li>
 </ul>
 
-<p>デバッグしてみると、どうもレンダリングの順番で、 <code>_includes/themes/twitter/post.html(ref_anchor) -&gt; _posts/xxx.md(ref)</code> になっているから拾えないっぽい？</p>
+<p>デバッグしてみると、どうもレンダリングの順番で、 <code class="highlighter-rouge">_includes/themes/twitter/post.html(ref_anchor) -&gt; _posts/xxx.md(ref)</code> になっているから拾えないっぽい？</p>
 
 <h2 id="tocAnchor-1-4">対応</h2>
 

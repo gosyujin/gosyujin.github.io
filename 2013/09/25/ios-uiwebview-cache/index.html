@@ -146,53 +146,52 @@
 <h2 id="tocAnchor-1-2">環境</h2>
 
 <ul>
-<li>サーバ
-
-<ul>
-<li>apache バージョン失念</li>
-</ul></li>
-<li>クライアント
-
-<ul>
-<li>iOS 6.0 と 5.1 の UIWebView と Safari</li>
-</ul></li>
+  <li>サーバ
+    <ul>
+      <li>apache バージョン失念</li>
+    </ul>
+  </li>
+  <li>クライアント
+    <ul>
+      <li>iOS 6.0 と 5.1 の UIWebView と Safari</li>
+    </ul>
+  </li>
 </ul>
 
 <h3 id="tocAnchor-1-2-1">サーバの内容</h3>
 
-<p>変更したファイル <code>index.html</code></p>
-<div class="highlight">
-  <pre>
-    <code class="language-" data-lang="">- &lt;p&gt;Hell World&lt;/p&gt;
+<p>変更したファイル <code class="highlighter-rouge">index.html</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>- &lt;p&gt;Hell World&lt;/p&gt;
 + &lt;p&gt;Hello World&lt;/p&gt;
-</code>
-  </pre>
+</code></pre>
 </div>
+
 <p>とりあえず更新がわかるようにテキトウな文言で。</p>
 
 <h3 id="tocAnchor-1-2-2">上記 index.html にアクセスした結果</h3>
 
 <ul>
-<li>iPhone Safari
-
-<ul>
-<li>更新された</li>
-</ul></li>
-<li>iPhone 独自アプリ内の UIWebView
-
-<ul>
-<li><strong>更新されない場合があった</strong></li>
-</ul></li>
-<li>上記とは別の iPhone Safari
-
-<ul>
-<li>更新された</li>
-</ul></li>
-<li>おまけ: PCからアクセスした場合(IEだったかな)
-
-<ul>
-<li>更新された</li>
-</ul></li>
+  <li>iPhone Safari
+    <ul>
+      <li>更新された</li>
+    </ul>
+  </li>
+  <li>iPhone 独自アプリ内の UIWebView
+    <ul>
+      <li><strong>更新されない場合があった</strong></li>
+    </ul>
+  </li>
+  <li>上記とは別の iPhone Safari
+    <ul>
+      <li>更新された</li>
+    </ul>
+  </li>
+  <li>おまけ: PCからアクセスした場合(IEだったかな)
+    <ul>
+      <li>更新された</li>
+    </ul>
+  </li>
 </ul>
 
 <p>試行回数が不十分なため完全ではなさそうだが、とりあえず UIWebView でのアクセス時は更新されたりされなかったり。(アプリのタスクを切ったり、電源ON/OFFしたりも試した)</p>
@@ -205,16 +204,16 @@
 
 <h3 id="tocAnchor-1-5-1">キャッシュポリシーの変更</h3>
 
-<h4 id="使用前">使用前</h4>
+<h4 id="section-5">使用前</h4>
 
 <blockquote>
-<p>NSURLRequest *request = [NSURLRequest requestWithURL:url];</p>
+  <p>NSURLRequest *request = [NSURLRequest requestWithURL:url];</p>
 </blockquote>
 
-<h4 id="使用後">使用後</h4>
+<h4 id="section-6">使用後</h4>
 
 <blockquote>
-<p>NSURLRequest *request = [NSURLRequest requestWithURL:url
+  <p>NSURLRequest *request = [NSURLRequest requestWithURL:url
   cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
   timeoutInterval:60.0];</p>
 </blockquote>
@@ -222,26 +221,26 @@
 <p>キャッシュポリシーは以下のものがある。</p>
 
 <ul>
-<li>NSURLRequestUseProtocolCachePolicy</li>
-<li>NSURLRequestReloadIgnoringLocalCacheData
-
-<ul>
-<li>(NSURLRequestReloadIgnoringCacheData が置き換わったもの)</li>
-</ul></li>
-<li>NSURLRequestReloadIgnoringLocalAndRemoteCacheData</li>
-<li>NSURLRequestReloadRevalidatingCacheData</li>
-<li>NSURLRequestReturnCacheDataElseLoad</li>
-<li>NSURLRequestReturnCacheDataDontLoad</li>
+  <li>NSURLRequestUseProtocolCachePolicy</li>
+  <li>NSURLRequestReloadIgnoringLocalCacheData
+    <ul>
+      <li>(NSURLRequestReloadIgnoringCacheData が置き換わったもの)</li>
+    </ul>
+  </li>
+  <li>NSURLRequestReloadIgnoringLocalAndRemoteCacheData</li>
+  <li>NSURLRequestReloadRevalidatingCacheData</li>
+  <li>NSURLRequestReturnCacheDataElseLoad</li>
+  <li>NSURLRequestReturnCacheDataDontLoad</li>
 </ul>
 
 <p>名前が長い…。</p>
 
-<p>キャッシュを無視するには <code>NSURLRequestReloadIgnoringLocalCacheData</code> を使えばよい。</p>
+<p>キャッシュを無視するには <code class="highlighter-rouge">NSURLRequestReloadIgnoringLocalCacheData</code> を使えばよい。</p>
 
 <h3 id="tocAnchor-1-5-2">キャッシュ容量を 0 に</h3>
 
 <ul>
-<li><a href="http://www.yoheim.net/blog.php?q=20120912">[XCODE] UIWebViewでHTML,CSS,JSなどをキャッシュさせない方法 - YoheiM .NET</a></li>
+  <li><a href="http://www.yoheim.net/blog.php?q=20120912">[XCODE] UIWebViewでHTML,CSS,JSなどをキャッシュさせない方法 - YoheiM .NET</a></li>
 </ul>
 
 <figure class="highlight">
@@ -253,8 +252,8 @@
 <h3 id="tocAnchor-1-5-3">キャッシュ全消し</h3>
 
 <ul>
-<li><a href="http://sarudeki.jp/fernweh/uiwebview/">知ってると楽になるUIWebView関連6つのTips｜学習A4デスノート @ Cocos2d-x とかの勉強メモ</a></li>
-<li><a href="http://qiita.com/uro_uro_/items/d4e5fb66f2039090000f">Objective-C - UIWebViewを使うときに気をつけていること - Qiita [キータ]</a></li>
+  <li><a href="http://sarudeki.jp/fernweh/uiwebview/">知ってると楽になるUIWebView関連6つのTips｜学習A4デスノート @ Cocos2d-x とかの勉強メモ</a></li>
+  <li><a href="http://qiita.com/uro_uro_/items/d4e5fb66f2039090000f">Objective-C - UIWebViewを使うときに気をつけていること - Qiita [キータ]</a></li>
 </ul>
 
 <figure class="highlight">
@@ -268,13 +267,13 @@
 <h3 id="tocAnchor-1-5-4">ネットワーク情報を監視できるライブラリ</h3>
 
 <ul>
-<li><a href="http://cocoadays.blogspot.jp/2011/05/ios_25.html">Cocoaの日々: [iOS] ネットワーク接続状況取得ライブラリを公開</a></li>
-<li><a href="https://github.com/dev5tec/FBNetworkReachability">dev5tec/FBNetworkReachability · GitHub</a></li>
+  <li><a href="http://cocoadays.blogspot.jp/2011/05/ios_25.html">Cocoaの日々: [iOS] ネットワーク接続状況取得ライブラリを公開</a></li>
+  <li><a href="https://github.com/dev5tec/FBNetworkReachability">dev5tec/FBNetworkReachability · GitHub</a></li>
 </ul>
 
 <h2 id="tocAnchor-1-10">結果</h2>
 
-<p>今回は強引に <code>UIWebView#shouldStartLoadWithRequest:navigationType:</code> で毎回キャッシュを削除するようにした。</p>
+<p>今回は強引に <code class="highlighter-rouge">UIWebView#shouldStartLoadWithRequest:navigationType:</code> で毎回キャッシュを削除するようにした。</p>
 
 <figure class="highlight">
   <pre>
@@ -303,8 +302,8 @@
 <h2 id="tocAnchor-1-11">TODO</h2>
 
 <ul>
-<li>アタリはつけられたので、この辺のドキュメントを調べてみる</li>
-<li>iOS 7 ではどうなっているのか</li>
+  <li>アタリはつけられたので、この辺のドキュメントを調べてみる</li>
+  <li>iOS 7 ではどうなっているのか</li>
 </ul>
 
 <h2 id="tocAnchor-1-12">おまけ: ホームで終了した場合にアプリを終わらせる</h2>
@@ -313,9 +312,9 @@
 
 <p>という事で、ホームで終了した場合、再起動時は問答無用ではじめからとするようにもした。</p>
 
-<p><code>PROJECT_NAME-Info.plist</code> というファイルの中に <code>Application does not run in background</code> (アプリケーションをバックグラウンドで走らせない) という項目があるのでこれを <code>YES</code> に。</p>
+<p><code class="highlighter-rouge">PROJECT_NAME-Info.plist</code> というファイルの中に <code class="highlighter-rouge">Application does not run in background</code> (アプリケーションをバックグラウンドで走らせない) という項目があるのでこれを <code class="highlighter-rouge">YES</code> に。</p>
 
-<p>ソースで見ると <code>UIApplicationExitsOnSuspend</code> が変わっていた。</p>
+<p>ソースで見ると <code class="highlighter-rouge">UIApplicationExitsOnSuspend</code> が変わっていた。</p>
 
 <figure class="highlight">
   <pre>
@@ -324,6 +323,7 @@
 +       <span class="nt">&lt;true/&gt;</span></code>
   </pre>
 </figure>
+
 
 </div>
 

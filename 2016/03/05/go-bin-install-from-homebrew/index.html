@@ -131,36 +131,45 @@
   </table>
 </div><h2 id="tocAnchor-1-1">あらすじ</h2>
 
-<p>Golangでスクリプトを作ったので、バイナリにして<code>homebrew</code>でインストール/アップデートできるようにしてみた。</p>
+<p>Golangでスクリプトを作ったので、バイナリにして<code class="highlighter-rouge">homebrew</code>でインストール/アップデートできるようにしてみた。</p>
 
 <p>細かく色々できるけど、とりあえず今回は最小で。</p>
 
 <h2 id="tocAnchor-1-2">参考</h2>
 
 <ul>
-<li><a href="http://deeeet.com/writing/2014/05/20/brew-tap/">HomeBrewで自作ツールを配布する | SOTA</a></li>
-<li><a href="http://blog.monochromegane.com/blog/2014/05/19/homebrew-formula-for-golang/">Go言語でつくったツールをHomebrewで配布する · THINKING MEGANE</a></li>
-<li>Mackerel
-
-<ul>
-<li><a href="https://github.com/mackerelio/homebrew-mackerel-agent">mackerelio/homebrew-mackerel-agent</a></li>
-<li><a href="https://github.com/mackerelio/mackerel-agent">mackerelio/mackerel-agent</a></li>
-</ul></li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>[HomeBrewで自作ツールを配布する</td>
+          <td>SOTA](http://deeeet.com/writing/2014/05/20/brew-tap/)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li><a href="http://blog.monochromegane.com/blog/2014/05/19/homebrew-formula-for-golang/">Go言語でつくったツールをHomebrewで配布する · THINKING MEGANE</a></li>
+  <li>Mackerel
+    <ul>
+      <li><a href="https://github.com/mackerelio/homebrew-mackerel-agent">mackerelio/homebrew-mackerel-agent</a></li>
+      <li><a href="https://github.com/mackerelio/mackerel-agent">mackerelio/mackerel-agent</a></li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="tocAnchor-1-3">環境</h2>
 
 <ul>
-<li>MacOS X El Capitan 10.11.3</li>
-<li>go version go1.5.3 darwin/amd64</li>
-<li>ruby 2.1.4p265</li>
+  <li>MacOS X El Capitan 10.11.3</li>
+  <li>go version go1.5.3 darwin/amd64</li>
+  <li>ruby 2.1.4p265</li>
 </ul>
 
 <h2 id="tocAnchor-1-4">要件</h2>
 
 <ul>
-<li>GitHubに上げたスクリプトを<code>brew install xxx</code>でインストールできるようにしたい</li>
-<li>でもたまには<code>go get github.com/xxx</code>でもインストールしたい</li>
+  <li>GitHubに上げたスクリプトを<code class="highlighter-rouge">brew install xxx</code>でインストールできるようにしたい</li>
+  <li>でもたまには<code class="highlighter-rouge">go get github.com/xxx</code>でもインストールしたい</li>
 </ul>
 
 <h2 id="tocAnchor-1-5">ブツ</h2>
@@ -168,20 +177,20 @@
 <p>まずはブツを作った。</p>
 
 <ul>
-<li><a href="https://github.com/gosyujin/bulkrenamer">gosyujin/bulkrenamer</a></li>
+  <li><a href="https://github.com/gosyujin/bulkrenamer">gosyujin/bulkrenamer</a></li>
 </ul>
 
 <p>引数にディレクトリ与えたら、最下層のファイルを直前のディレクトリ名にリネームするっ的なスクリプト。こちらは特に意識する必要はない。</p>
 
-<p>なんとなく動くようになったら、<code>go build</code>して作ったファイルを<a href="https://github.com/gosyujin/bulkrenamer/releases">GitHubのReleases</a>から<code>v0.1</code>として追加した。(割愛/今回は配布先のPCにgoコマンドがない前提なので、実行ファイルをそのまま配る)</p>
+<p>なんとなく動くようになったら、<code class="highlighter-rouge">go build</code>して作ったファイルを<a href="https://github.com/gosyujin/bulkrenamer/releases">GitHubのReleases</a>から<code class="highlighter-rouge">v0.1</code>として追加した。(割愛/今回は配布先のPCにgoコマンドがない前提なので、実行ファイルをそのまま配る)</p>
 
 <ul>
-<li>実行ファイルのUrlを覚えておく
-
-<ul>
-<li><code>https://github.com/gosyujin/bulkrenamer/releases/download/v0.1/bulkrenamer</code></li>
-</ul></li>
-<li>sha1のハッシュ値を取っておく</li>
+  <li>実行ファイルのUrlを覚えておく
+    <ul>
+      <li><code class="highlighter-rouge">https://github.com/gosyujin/bulkrenamer/releases/download/v0.1/bulkrenamer</code></li>
+    </ul>
+  </li>
+  <li>sha1のハッシュ値を取っておく</li>
 </ul>
 
 <h2 id="tocAnchor-1-6">Homebrew用設定</h2>
@@ -189,17 +198,16 @@
 <h3 id="tocAnchor-1-6-1">Formulaの作成</h3>
 
 <ul>
-<li><a href="https://github.com/gosyujin/homebrew-bulkrenamer">gosyujin/homebrew-bulkrenamer</a></li>
+  <li><a href="https://github.com/gosyujin/homebrew-bulkrenamer">gosyujin/homebrew-bulkrenamer</a></li>
 </ul>
 
-<p><code>brew create</code>で作れるみたいだけど、とりあえず手打ち。</p>
+<p><code class="highlighter-rouge">brew create</code>で作れるみたいだけど、とりあえず手打ち。</p>
 
-<p>リポジトリの名前は<code>homebrew-APPNAME</code>とするルール。今回はbulkrenamerなので<code>homebrew-bulkrenamer</code>リポジトリを作った。</p>
+<p>リポジトリの名前は<code class="highlighter-rouge">homebrew-APPNAME</code>とするルール。今回はbulkrenamerなので<code class="highlighter-rouge">homebrew-bulkrenamer</code>リポジトリを作った。</p>
 
-<p>ファイルは<code>APPNAME.rb</code>。今回は<code>bulkrenamer.rb</code></p>
-<div class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Bulkrenamer</span> <span class="o">&lt;</span> <span class="no">Formula</span>
+<p>ファイルは<code class="highlighter-rouge">APPNAME.rb</code>。今回は<code class="highlighter-rouge">bulkrenamer.rb</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Bulkrenamer</span> <span class="o">&lt;</span> <span class="no">Formula</span>
   <span class="n">desc</span> <span class="s2">"BulkRenamer"</span>
   <span class="n">homepage</span> <span class="s2">"https://github.com/gosyujin/bulkrenamer"</span>
   <span class="n">head</span> <span class="s2">"https://github.com/gosyujin/homebrew-bulkrenamer.git"</span>
@@ -211,14 +219,14 @@
     <span class="n">bin</span><span class="p">.</span><span class="nf">install</span> <span class="no">Dir</span><span class="p">[</span><span class="s1">'bulkrenamer'</span><span class="p">]</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</code>
-  </pre>
+</code></pre>
 </div>
+
 <p>sha1で比較とか他にも色々できるが、ひとまず</p>
 
 <ul>
-<li><code>url</code>はツールの場所</li>
-<li><code>version</code>はFormulaのバージョン。バージョンアップ時に使う</li>
+  <li><code class="highlighter-rouge">url</code>はツールの場所</li>
+  <li><code class="highlighter-rouge">version</code>はFormulaのバージョン。バージョンアップ時に使う</li>
 </ul>
 
 <p>だけ。</p>
@@ -227,10 +235,9 @@
 
 <h3 id="tocAnchor-1-8-1">Homebrewでインストール</h3>
 
-<p><code>tap</code>して<code>install</code>でいける！</p>
-<div class="highlight">
-  <pre>
-    <code class="language-sh" data-lang="sh"><span class="gp">$ </span>brew tap gosyujin/bulkrenamer
+<p><code class="highlighter-rouge">tap</code>して<code class="highlighter-rouge">install</code>でいける！</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew tap gosyujin/bulkrenamer
 <span class="gp">==&gt; </span>Tapping gosyujin/bulkrenamer
 Cloning into <span class="s1">'/usr/local/Library/Taps/gosyujin/homebrew-bulkrenamer'</span>...
 remote: Counting objects: 3, <span class="k">done</span>.
@@ -247,28 +254,27 @@ Tapped 1 formula <span class="o">(</span>25 files, 16.8K<span class="o">)</span>
 🍺  /usr/local/Cellar/bulkrenamer/v0.1: 2 files, 7M, built <span class="k">in </span>8 seconds
 <span class="gp">$ </span>bulkrenamer -v
 BulkRenamer ver.0.1
-</code>
-  </pre>
+</code></pre>
 </div>
+
 <h3 id="tocAnchor-1-8-2">Homebrewでアップデート</h3>
 
-<p><a href="https://github.com/gosyujin/homebrew-bulkrenamer">homebrew-bulkrenamer</a>を更新して<code>brew update</code>してもらう。</p>
+<p><a href="https://github.com/gosyujin/homebrew-bulkrenamer">homebrew-bulkrenamer</a>を更新して<code class="highlighter-rouge">brew update</code>してもらう。</p>
 
 <p>今回は配布ファイル変えずにバージョンだけ上げてみた。</p>
 
 <ul>
-<li>v0.2になっているのは一回試した後だから</li>
-<li>本来の流れ的にはブツ(bulkrenamer)を更新してreleasesに新しいバージョンを登録後、この操作を行う</li>
+  <li>v0.2になっているのは一回試した後だから</li>
+  <li>本来の流れ的にはブツ(bulkrenamer)を更新してreleasesに新しいバージョンを登録後、この操作を行う</li>
 </ul>
 
 <script src="https://gist.github.com/gosyujin/5c5ee96c7cc405405749.js"></script>
 
 <p>
-  <code>brew update</code>
+  <code class="highlighter-rouge">brew update</code>
 </p>
-<div class="highlight">
-  <pre>
-    <code class="language-sh" data-lang="sh"><span class="gp">$ </span>brew update
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew update
 Updated Homebrew from 468adbc to 215cb53.
 Updated 3 taps <span class="o">(</span>caskroom/cask, caskroom/versions, gosyujin/bulkrenamer<span class="o">)</span>.
  <span class="o">==</span>&gt; New Formulae
@@ -279,25 +285,23 @@ dcd                      nss
 dmd                      planck
 gosyujin/bulkrenamer/bulkrenamer ✔               rust
 libpagemaker
-</code>
-  </pre>
+</code></pre>
 </div>
-<p><code>brew outdated</code>で更新があるツールの確認。</p>
-<div class="highlight">
-  <pre>
-    <code class="language-sh" data-lang="sh"><span class="gp">$ </span>brew outdated
+
+<p><code class="highlighter-rouge">brew outdated</code>で更新があるツールの確認。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew outdated
 gosyujin/bulkrenamer/bulkrenamer <span class="o">(</span>v0.1, v0.2 &lt; v0.3<span class="o">)</span>
 go <span class="o">(</span>1.5.3 &lt; 1.6<span class="o">)</span>
 openssl <span class="o">(</span>1.0.2f &lt; 1.0.2g<span class="o">)</span>
-</code>
-  </pre>
+</code></pre>
 </div>
+
 <p>
-  <code>brew upgrade</code>
+  <code class="highlighter-rouge">brew upgrade</code>
 </p>
-<div class="highlight">
-  <pre>
-    <code class="language-sh" data-lang="sh"><span class="gp">$ </span>brew upgrade bulkrenamer
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew upgrade bulkrenamer
 <span class="gp">==&gt; </span>Upgrading 1 outdated package, with result:
 gosyujin/bulkrenamer/bulkrenamer v0.3
 <span class="gp">==&gt; </span>Upgrading gosyujin/bulkrenamer/bulkrenamer
@@ -305,9 +309,9 @@ gosyujin/bulkrenamer/bulkrenamer v0.3
 <span class="gp">==&gt; </span>Downloading from https://github-cloud.s3.amazonaws.com/releases/52855923/c0686154-e21b-11e5-92d2-6d76b5ceb265?X-Amz-Algorithm<span class="o">=</span>AWS4-HMAC-SHA256&amp;X-Amz-Credential<span class="o">=</span>AKIAISTNZFOVBIJM
 <span class="o">(</span>略<span class="o">)</span>
 🍺  /usr/local/Cellar/bulkrenamer/v0.3: 2 files, 7M, built <span class="k">in </span>8 seconds
-</code>
-  </pre>
+</code></pre>
 </div>
+
 </div>
 
 <div class="pagination">

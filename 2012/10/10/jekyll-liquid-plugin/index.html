@@ -126,30 +126,33 @@
 <h2 id="tocAnchor-1-2">参考サイト</h2>
 
 <ul>
-<li><a href="http://d.hatena.ne.jp/yuum3/20120711/1341998687">最近作った Jekyll (Liquid) のプラグイン - @yuumi3のお仕事日記</a></li>
+  <li><a href="http://d.hatena.ne.jp/yuum3/20120711/1341998687">最近作った Jekyll (Liquid) のプラグイン - @yuumi3のお仕事日記</a></li>
 </ul>
 
 <h2 id="tocAnchor-1-3">ソース</h2>
 
 <ul>
-<li><a href="https://github.com/gosyujin/gosyujin.github.com/blob/source/_plugins/tree_list.rb">gosyujin.github.com/<em>plugins/tree</em>list.rb at master · gosyujin/gosyujin.github.com · GitHub</a></li>
+  <li><a href="https://github.com/gosyujin/gosyujin.github.com/blob/source/_plugins/tree_list.rb">gosyujin.github.com/_plugins/tree_list.rb at master · gosyujin/gosyujin.github.com · GitHub</a></li>
 </ul>
 
 <h3 id="tocAnchor-1-3-1">まだできてない事</h3>
 
 <ul>
-<li>記事中に <code>h1 (#)</code> タグがあるとうまく生成されない
-
-<ul>
-<li>記事タイトルが <code>h1 (#)</code> なので、 <code>h2 (##)</code> 以下の見出しを集めてくるようにしている</li>
-</ul></li>
-<li>目次から記事へのリンク
-
-<ul>
-<li>Markdownでは <code>## &lt;a name="section"&gt; hoge</code> と記載すればnameを振ってくれるようだけど、めんどいので自動で振ってほしい</li>
-<li><strong>むしろ今はaタグを入れているとレイアウトが崩れる</strong></li>
-<li>…あれ？　別の環境でやったら <code>h</code>タグに <code>section</code> , <code>section-1</code> , <code>section-2</code> ... って連番が振られてる！？　なんで！</li>
-</ul></li>
+  <li>記事中に <code class="highlighter-rouge">h1 (#)</code> タグがあるとうまく生成されない
+    <ul>
+      <li>記事タイトルが <code class="highlighter-rouge">h1 (#)</code> なので、 <code class="highlighter-rouge">h2 (##)</code> 以下の見出しを集めてくるようにしている</li>
+    </ul>
+  </li>
+  <li>目次から記事へのリンク
+    <ul>
+      <li>Markdownでは <code class="highlighter-rouge">## &lt;a name="section"&gt; hoge</code> と記載すればnameを振ってくれるようだけど、めんどいので自動で振ってほしい</li>
+      <li><strong>むしろ今はaタグを入れているとレイアウトが崩れる</strong>
+        <ul>
+          <li>…あれ？　別の環境でやったら <code class="highlighter-rouge">h</code>タグに <code class="highlighter-rouge">section</code> , <code class="highlighter-rouge">section-1</code> , <code class="highlighter-rouge">section-2</code> … って連番が振られてる！？　なんで！</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="tocAnchor-1-5">作り方</h2>
@@ -173,20 +176,20 @@
   </pre>
 </figure>
 
-<p>これでMarkdown中に <code>{% sample hogehoge fuga  %}</code> と書くと、initializeメソッドの <code>tag_name</code> にsample、 <code>xxx</code> にhogehoge fuga、 <code>tokens</code> に本文が渡される。</p>
+<p>これでMarkdown中に <code class="highlighter-rouge"><span class="p">{</span><span class="err">%</span><span class="w"> </span><span class="err">sample</span><span class="w"> </span><span class="err">hogehoge</span><span class="w"> </span><span class="err">fuga</span><span class="w">  </span><span class="err">%</span><span class="p">}</span></code> と書くと、initializeメソッドの <code class="highlighter-rouge">tag_name</code> にsample、 <code class="highlighter-rouge">xxx</code> にhogehoge fuga、 <code class="highlighter-rouge">tokens</code> に本文が渡される。</p>
 
 <p>という事でタグにつけた引数や本文を使う場合はinitializeで確保しとく。</p>
 
 <p>renderメソッドでreturnした文字列がそのままページに出力される。</p>
 
-<p>※ 新しくタグを作ったときは、Jekyllを再起動しないと <code>Unknown tag</code> が出続ける。</p>
+<p>※ 新しくタグを作ったときは、Jekyllを再起動しないと <code class="highlighter-rouge">Unknown tag</code> が出続ける。</p>
 
 <h2 id="tocAnchor-1-6">例</h2>
 
 <ul>
-<li>己のJekyll下の <code>_plugins</code> に <code>tree_list.rb</code> を突っ込む</li>
-<li>html(postするMarkdownファイルでもいいし、テンプレートのhtmlでもいい)のどこかに <code>{% tree  %}</code> を埋め込む</li>
-<li><code>$ jekyll --server</code> 実行後localhost:4000にアクセス</li>
+  <li>己のJekyll下の <code class="highlighter-rouge">_plugins</code> に <code class="highlighter-rouge">tree_list.rb</code> を突っ込む</li>
+  <li>html(postするMarkdownファイルでもいいし、テンプレートのhtmlでもいい)のどこかに <code class="highlighter-rouge"><span class="p">{</span><span class="err">%</span><span class="w"> </span><span class="err">tree</span><span class="w">  </span><span class="err">%</span><span class="p">}</span></code> を埋め込む</li>
+  <li><code class="highlighter-rouge">$ jekyll --server</code> 実行後localhost:4000にアクセス</li>
 </ul>
 
 <p>これで文中の見出しが目次としてかき集められる。ただし、GitHub Pagesを使っている場合はソースをそのままpushするだけではダメで、対策が必要っぽい。</p>

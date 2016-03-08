@@ -108,43 +108,46 @@
 <p>1年半前の記事<a href="http://gosyujin.github.io/2014/01/28/pull-request-to-jekyll/#%E3%81%AA%E3%81%8A%E3%81%97%E3%81%9F%E5%86%85%E5%AE%B9">Jekyllプロジェクトへpull requestを行う手順(したとは言っていない) - kk_Atakaの日記</a>でこんな事をやりたがってた。</p>
 
 <blockquote>
-<p>Jekyll でかき集められた tags (タグのリスト) がバラバラのため、 tags.html ページから探すのがつらいのでソートをしたい。</p>
+  <p>Jekyll でかき集められた tags (タグのリスト) がバラバラのため、 tags.html ページから探すのがつらいのでソートをしたい。</p>
 </blockquote>
 
 <p>で、こうした。</p>
 
 <blockquote>
-<p>Jekyll のソースを追っていった結果、 jekyll/lib/jekyll/site.rb 内の一行をいじるだけでいけた。</p>
+  <p>Jekyll のソースを追っていった結果、 jekyll/lib/jekyll/site.rb 内の一行をいじるだけでいけた。</p>
 </blockquote>
 
 <p>その後、悩んだりもした。</p>
 
 <blockquote>
-<ul>
-<li><p>一応、 「 Liquid の領域」で頑張ればできる かも という情報は見つけた</p></li>
-<li><p>しかし、そもそもこの「タグをソートする」という機能が、どの領域で受け持つのが妥当なのかわからない( Liquid？ Jekyll？)</p>
+  <ul>
+    <li>
+      <p>一応、 「 Liquid の領域」で頑張ればできる かも という情報は見つけた</p>
+    </li>
+    <li>
+      <p>しかし、そもそもこの「タグをソートする」という機能が、どの領域で受け持つのが妥当なのかわからない( Liquid？ Jekyll？)</p>
 
-<ul>
-<li>ソースを読んでいった結果、「タグの value (記事自体)のソート」を Jekyll でやっていたので、 key もここでやればいいんじゃね？と思った</li>
-</ul></li>
-</ul>
+      <ul>
+        <li>ソースを読んでいった結果、「タグの value (記事自体)のソート」を Jekyll でやっていたので、 key もここでやればいいんじゃね？と思った</li>
+      </ul>
+    </li>
+  </ul>
 </blockquote>
 
 <h2 id="tocAnchor-1-2">解法</h2>
 
 <p>Liquidでもできました。</p>
-<div class="highlight">
-  <pre>
-    <code class="language-html" data-lang="html">
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
 {% assign sorted_tags = site.tags | sort %}
 {% for tag in sorted_tags %}
   {% assign t = tag[0] %}
   <span class="nt">&lt;code&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/tags.html#{{ t }}"</span><span class="nt">&gt;</span>{{ t }} <span class="nt">&lt;sub&gt;</span>{{ site.tags[t].size }}<span class="nt">&lt;/sub&gt;&lt;/a&gt;&lt;/code&gt;</span>
 {% endfor %}
 
-</code>
-  </pre>
+</code></pre>
 </div>
+
 <p>一年半越しに解決。</p>
 
 </div>

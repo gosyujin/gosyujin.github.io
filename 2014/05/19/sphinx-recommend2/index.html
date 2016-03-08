@@ -137,7 +137,7 @@
 </div><h2 id="tocAnchor-1-1">前回のあらすじ</h2>
 
 <ul>
-<li><a href="http://gosyujin.github.io/2013/10/25/sphinx-recommend/">「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた - kk_Atakaの日記</a></li>
+  <li><a href="http://gosyujin.github.io/2013/10/25/sphinx-recommend/">「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた - kk_Atakaの日記</a></li>
 </ul>
 
 <p>かなり期間があいてしまったが、次に考えるは、実際にどうやって「導入」して「運用」するか。</p>
@@ -153,7 +153,7 @@
 <h3 id="tocAnchor-1-2-1">第1段階: 対開発工程の課題</h3>
 
 <ul>
-<li>プロジェクトに対しての導入・運用方法</li>
+  <li>プロジェクトに対しての導入・運用方法</li>
 </ul>
 
 <p>どうやって運用していくか。</p>
@@ -163,8 +163,8 @@
 <h3 id="tocAnchor-1-2-2">第2段階: 対納品工程の課題</h3>
 
 <ul>
-<li>納品形式</li>
-<li>納品後修正が発生した場合どうするか</li>
+  <li>納品形式</li>
+  <li>納品後修正が発生した場合どうするか</li>
 </ul>
 
 <p>顧客(※)に対してどうやって納品するか、またそれをなおすのは誰？</p>
@@ -180,46 +180,55 @@
 <p>以下、架空の登場人物とする。</p>
 
 <ul>
-<li><code>リーダー</code> : Sphinx を導入したい側
-
-<ul>
-<li>Sphinx 導入に燃えている人</li>
-</ul></li>
-<li><code>メンバー</code> : 導入した Sphinx を使う側
-
-<ul>
-<li>Sphinx および reST は知らない</li>
-</ul></li>
+  <li><code class="highlighter-rouge">リーダー</code> : Sphinx を導入したい側
+    <ul>
+      <li>Sphinx 導入に燃えている人</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">メンバー</code> : 導入した Sphinx を使う側
+    <ul>
+      <li>Sphinx および reST は知らない</li>
+    </ul>
+  </li>
 </ul>
 
 <h3 id="tocAnchor-1-5-2">プロジェクト内での運用方法</h3>
 
 <ul>
-<li>reST は覚えてもらう
-
-<ul>
-<li>マスト。これがないと書けないから</li>
-<li>一応「 reST 記法書き方」的なページは <code>リーダー</code> が事前に作って教えてあげることが前提</li>
-<li>実はマストではなかった</li>
-<li>Markdownとかがよければ、 Pandoc を経由して Markdown -&gt; reST -&gt; OUTPUT というのもありかも</li>
-<li><a href="http://librabuch.jp/2013/12/sphinx_documentation_advent_calendar_2013/">ドキュメンテーションツール「Sphinx」をチーム運用するまでの道のり - Librabuch</a></li>
-</ul></li>
-<li>とりあえず <code>メンバー</code> にはドキュメント作成に注力してもらい、ファイル生成などは <code>リーダー</code> が整備する</li>
-<li>運用はできるだけ git push または svn commit してもらうだけにしたい
-
-<ul>
-<li>ただし、いきなりファイルを push してもらうのはちょっと嫌で、 Sintax error くらいは <code>メンバー</code> のローカルでも確認してもらいたいんだけど</li>
-<li>そうすると Python インストール必須だよなぁ…</li>
-<li>ローカルで reST プレビューとかできるのかなぁ…</li>
-<li>GitHub とか使えばプレビューできるんだけど…</li>
-<li>バージョン管理ツールの使い方は割愛</li>
-<li>アウトライン(雛形？ / タイトルとか目次とか)はあらかじめ定めておき、空ファイル(ひな形)は <code>リーダー</code> が事前に用意しておく</li>
-</ul></li>
-<li>コミット後は、コミットをフックして make (Jenkins などで)して Apache の下とかに展開する
-
-<ul>
-<li>http://xx.xx.xx.xx/hoge にアクセスしたらすぐ最新版が見られるようにする</li>
-</ul></li>
+  <li>reST は覚えてもらう
+    <ul>
+      <li>マスト。これがないと書けないから
+        <ul>
+          <li>一応「 reST 記法書き方」的なページは <code class="highlighter-rouge">リーダー</code> が事前に作って教えてあげることが前提</li>
+        </ul>
+      </li>
+      <li>実はマストではなかった
+        <ul>
+          <li>Markdownとかがよければ、 Pandoc を経由して Markdown -&gt; reST -&gt; OUTPUT というのもありかも</li>
+          <li><a href="http://librabuch.jp/2013/12/sphinx_documentation_advent_calendar_2013/">ドキュメンテーションツール「Sphinx」をチーム運用するまでの道のり - Librabuch</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>とりあえず <code class="highlighter-rouge">メンバー</code> にはドキュメント作成に注力してもらい、ファイル生成などは <code class="highlighter-rouge">リーダー</code> が整備する</li>
+  <li>運用はできるだけ git push または svn commit してもらうだけにしたい
+    <ul>
+      <li>ただし、いきなりファイルを push してもらうのはちょっと嫌で、 Sintax error くらいは <code class="highlighter-rouge">メンバー</code> のローカルでも確認してもらいたいんだけど
+        <ul>
+          <li>そうすると Python インストール必須だよなぁ…</li>
+          <li>ローカルで reST プレビューとかできるのかなぁ…</li>
+          <li>GitHub とか使えばプレビューできるんだけど…</li>
+        </ul>
+      </li>
+      <li>バージョン管理ツールの使い方は割愛</li>
+      <li>アウトライン(雛形？ / タイトルとか目次とか)はあらかじめ定めておき、空ファイル(ひな形)は <code class="highlighter-rouge">リーダー</code> が事前に用意しておく</li>
+    </ul>
+  </li>
+  <li>コミット後は、コミットをフックして make (Jenkins などで)して Apache の下とかに展開する
+    <ul>
+      <li>http://xx.xx.xx.xx/hoge にアクセスしたらすぐ最新版が見られるようにする</li>
+    </ul>
+  </li>
 </ul>
 
 <p>その他にも、そのプロジェクトの風土にあわせたカスタマイズが必要かもしれない。</p>
@@ -231,17 +240,17 @@
 <h3 id="tocAnchor-1-8-1">登場人物</h3>
 
 <ul>
-<li><code>プロジェクト</code> : Sphinx でドキュメントを作成した側
-
-<ul>
-<li>上記開発工程の <code>リーダー</code> と <code>メンバー</code> の集合体</li>
-</ul></li>
-<li><code>顧客</code> : Sphinx で作成したドキュメントを納品される側
-
-<ul>
-<li>社内の人かもしれないし、社外の人かもしれない</li>
-<li>慣例から、成果物は Office で納品されることが多い</li>
-</ul></li>
+  <li><code class="highlighter-rouge">プロジェクト</code> : Sphinx でドキュメントを作成した側
+    <ul>
+      <li>上記開発工程の <code class="highlighter-rouge">リーダー</code> と <code class="highlighter-rouge">メンバー</code> の集合体</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">顧客</code> : Sphinx で作成したドキュメントを納品される側
+    <ul>
+      <li>社内の人かもしれないし、社外の人かもしれない</li>
+      <li>慣例から、成果物は Office で納品されることが多い</li>
+    </ul>
+  </li>
 </ul>
 
 <h3 id="tocAnchor-1-8-2">納品形式</h3>
@@ -251,19 +260,19 @@
 <p>とりあえず 2 つ考えられる。</p>
 
 <ol>
-<li>reST ファイル、 reST からアウトプットしたファイル、説明書(Sphinx インストール、ビルド手順など)の 3 点セット
-
-<ul>
-<li>対象フォーマットで納品したけど、 reST からどうとでもできるよ形式</li>
-</ul></li>
-<li>reST からアウトプットしたファイルのみ
-
-<ul>
-<li>html , pdf などのみ</li>
-</ul></li>
+  <li>reST ファイル、 reST からアウトプットしたファイル、説明書(Sphinx インストール、ビルド手順など)の 3 点セット
+    <ul>
+      <li>対象フォーマットで納品したけど、 reST からどうとでもできるよ形式</li>
+    </ul>
+  </li>
+  <li>reST からアウトプットしたファイルのみ
+    <ul>
+      <li>html , pdf などのみ</li>
+    </ul>
+  </li>
 </ol>
 
-<p>前者は <code>顧客</code> への負担が高すぎ。</p>
+<p>前者は <code class="highlighter-rouge">顧客</code> への負担が高すぎ。</p>
 
 <p>かといって後者だと納品後問題が発生した場合どうすればいいのか…。(後述)</p>
 
@@ -276,17 +285,17 @@
 <p>これも 2 つ考えられる。</p>
 
 <ol>
-<li>保守などで <code>プロジェクト</code> が適宜修正する事ができる取り決めの場合
-
-<ul>
-<li>この場合は、 Sphinx の環境を使ってなおせばよい</li>
-</ul></li>
-<li><code>顧客</code> が巻き取り、その後ガンガン機能追加・修正していく場合
-
-<ul>
-<li>reST を修正してもらう？</li>
-<li>アウトプットファイル(htmlとか) を直接修正してもらう？</li>
-</ul></li>
+  <li>保守などで <code class="highlighter-rouge">プロジェクト</code> が適宜修正する事ができる取り決めの場合
+    <ul>
+      <li>この場合は、 Sphinx の環境を使ってなおせばよい</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">顧客</code> が巻き取り、その後ガンガン機能追加・修正していく場合
+    <ul>
+      <li>reST を修正してもらう？</li>
+      <li>アウトプットファイル(htmlとか) を直接修正してもらう？</li>
+    </ul>
+  </li>
 </ol>
 
 <p>前者は特に問題ない。困るのは後者。</p>
@@ -298,14 +307,14 @@
 <p>ということで、今考えているのが</p>
 
 <ul>
-<li>開発時は reST で作成、レビューも reST からの OUTPUT で行う</li>
-<li>最終納品のときに reST を Office 形式に変換して納品する
-
-<ul>
-<li>ただしこの変換、逆はできないのでいったっきり</li>
-</ul></li>
-<li><code>顧客</code> には Office でなおしてもらう</li>
-<li>改修のお鉢が <code>プロジェクト</code> に回ってきた場合は (-人-)</li>
+  <li>開発時は reST で作成、レビューも reST からの OUTPUT で行う</li>
+  <li>最終納品のときに reST を Office 形式に変換して納品する
+    <ul>
+      <li>ただしこの変換、逆はできないのでいったっきり</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">顧客</code> には Office でなおしてもらう</li>
+  <li>改修のお鉢が <code class="highlighter-rouge">プロジェクト</code> に回ってきた場合は (-人-)</li>
 </ul>
 
 </div>

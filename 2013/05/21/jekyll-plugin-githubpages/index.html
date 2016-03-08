@@ -130,14 +130,14 @@
 <p>Jekyll＠GitHub Pagesの場合、Liquidで(自分で)作ったプラグインは使えないという事が判明した。(ローカルで起動した場合/safeモードじゃない場合は関係ない)</p>
 
 <ul>
-<li><a href="http://webtech-walker.com/archive/2012/09/fired-myblog.html">俺の最強ブログシステムも火を噴いてたぜ - Webtech Walker</a></li>
+  <li><a href="http://webtech-walker.com/archive/2012/09/fired-myblog.html">俺の最強ブログシステムも火を噴いてたぜ - Webtech Walker</a></li>
 </ul>
 
 <p>これを回避するには</p>
 
 <ul>
-<li>GitHub Pages をやめる(レンタルサーバを借りてデプロイ)</li>
-<li>GitHub Pages に <strong>静的ファイル</strong> としてhtml自体をデプロイ</li>
+  <li>GitHub Pages をやめる(レンタルサーバを借りてデプロイ)</li>
+  <li>GitHub Pages に <strong>静的ファイル</strong> としてhtml自体をデプロイ</li>
 </ul>
 
 <p>する方法がありそう。今回はGitHub Pagesを使い続けたいので後者で頑張ってみる。</p>
@@ -145,31 +145,33 @@
 <h2 id="tocAnchor-1-2">参考サイト</h2>
 
 <ul>
-<li><a href="https://help.github.com/categories/20/articles">github:help</a></li>
+  <li><a href="https://help.github.com/categories/20/articles">github:help</a></li>
 </ul>
 
 <h2 id="tocAnchor-1-3">そもそもGitHub Pagesとはなんぞや</h2>
 
 <blockquote>
-<h3 id="user-amp-organization-pages">User &amp; Organization Pages</h3>
+  <h3 id="user--organization-pages">User &amp; Organization Pages</h3>
 
-<p>User &amp; Organization Pages はPagesファイル専用のスペシャルリポジトリとして生きている。このリポジトリはaccount nameを使用する。例えば、defunkt/defunkt.github.com</p>
+  <p>User &amp; Organization Pages はPagesファイル専用のスペシャルリポジトリとして生きている。このリポジトリはaccount nameを使用する。例えば、defunkt/defunkt.github.com</p>
 
-<ul>
-<li>このリポジトリは <code>username/username.github.com</code> というnaming schemeを使わなければならない</li>
-<li><p><code>master</code> ブランチからのコンテンツはビルドとパブリッシュに使用される</p></li>
-<li><p>...</p></li>
-</ul>
+  <ul>
+    <li>このリポジトリは <code class="highlighter-rouge">username/username.github.com</code> というnaming schemeを使わなければならない</li>
+    <li>
+      <p><code class="highlighter-rouge">master</code> ブランチからのコンテンツはビルドとパブリッシュに使用される</p>
+    </li>
+    <li>…</li>
+  </ul>
 
-<h3 id="project-pages">Project Pages</h3>
+  <h3 id="project-pages">Project Pages</h3>
 
-<p>Project Pages は同じリポジトリからプロジェクトとして維持される。これらのページはUser PageとOrg Pagesほとんど正確に同じである。いくつかのわずかな違いはある。</p>
+  <p>Project Pages は同じリポジトリからプロジェクトとして維持される。これらのページはUser PageとOrg Pagesほとんど正確に同じである。いくつかのわずかな違いはある。</p>
 
-<ul>
-<li><code>gh-pages</code> ブランチはビルドとパブリッシュに使用される</li>
-<li>カスタムドメインを使っていないなら、Project PagesはUser Pageのサブパスの下で使われる。 <code>username.github.com/projectname</code></li>
-<li>...</li>
-</ul>
+  <ul>
+    <li><code class="highlighter-rouge">gh-pages</code> ブランチはビルドとパブリッシュに使用される</li>
+    <li>カスタムドメインを使っていないなら、Project PagesはUser Pageのサブパスの下で使われる。 <code class="highlighter-rouge">username.github.com/projectname</code></li>
+    <li>…</li>
+  </ul>
 </blockquote>
 
 <h3 id="tocAnchor-1-3-1">ということは</h3>
@@ -177,20 +179,20 @@
 <p>まず、GitHub Pagesは2種類ある。</p>
 
 <ol>
-<li><strong>ユーザ、組織用</strong> のページ
-
-<ul>
-<li>己のページ</li>
-<li><code>USERNAME.github.com</code> という特別なリポジトリを作れば <code>http://USERNAME.github.com</code> でアクセスできる</li>
-<li>ビルドには <code>master</code> ブランチが使用される</li>
-</ul></li>
-<li><strong>プロジェクト</strong> のページ
-
-<ul>
-<li>各プロジェクト用のページ</li>
-<li>GitHubに <code>PROJECT</code> というプロジェクトがあれば <code>http://USERNAME.github.com/PROJECT</code> でアクセスできる</li>
-<li>ビルドには <strong><code>gh-pages</code></strong> ブランチが使用される</li>
-</ul></li>
+  <li><strong>ユーザ、組織用</strong> のページ
+    <ul>
+      <li>己のページ</li>
+      <li><code class="highlighter-rouge">USERNAME.github.com</code> という特別なリポジトリを作れば <code class="highlighter-rouge">http://USERNAME.github.com</code> でアクセスできる</li>
+      <li>ビルドには <code class="highlighter-rouge">master</code> ブランチが使用される</li>
+    </ul>
+  </li>
+  <li><strong>プロジェクト</strong> のページ
+    <ul>
+      <li>各プロジェクト用のページ</li>
+      <li>GitHubに <code class="highlighter-rouge">PROJECT</code> というプロジェクトがあれば <code class="highlighter-rouge">http://USERNAME.github.com/PROJECT</code> でアクセスできる</li>
+      <li>ビルドには <strong><code class="highlighter-rouge">gh-pages</code></strong> ブランチが使用される</li>
+    </ul>
+  </li>
 </ol>
 
 <p>という事でよろしい？</p>
@@ -202,23 +204,23 @@
 <p>=&gt; <a href="http://aligach.net/diary/20120716.html">あーありがち - github pagesとjekyllを今さら練習 , 夏だ</a> によると、</p>
 
 <blockquote>
-<ol>
-<li>github.com/wtnabe/wtnabe.github.com 内に /ical2gcal/index.html を作成
-
-<ul>
-<li>作った /ical2gcal/index.html が wtnabe.github.com/ical2gcal/ に表示される</li>
-</ul></li>
-<li>github.com/wtnabe/ical2gcal に gh-pages branch を作る
-
-<ul>
-<li>作った gh-pages が wtnabe.github.com/ical2gcal/ に表示される</li>
-</ul></li>
-<li>github.com/wtnabe/wtnabe.github.com/ical2gcal/index.html を編集
-
-<ul>
-<li>今編集したファイルが表示される。つまり 1 に戻る。</li>
-</ul></li>
-</ol>
+  <ol>
+    <li>github.com/wtnabe/wtnabe.github.com 内に /ical2gcal/index.html を作成
+      <ul>
+        <li>作った /ical2gcal/index.html が wtnabe.github.com/ical2gcal/ に表示される</li>
+      </ul>
+    </li>
+    <li>github.com/wtnabe/ical2gcal に gh-pages branch を作る
+      <ul>
+        <li>作った gh-pages が wtnabe.github.com/ical2gcal/ に表示される</li>
+      </ul>
+    </li>
+    <li>github.com/wtnabe/wtnabe.github.com/ical2gcal/index.html を編集
+      <ul>
+        <li>今編集したファイルが表示される。つまり 1 に戻る。</li>
+      </ul>
+    </li>
+  </ol>
 </blockquote>
 
 <p>ちょっと気をつけないといけない。</p>
@@ -227,7 +229,7 @@
 
 <p>プロジェクト用のGitHub Pagesの場合。</p>
 
-<p>既に <code>master</code> が少し育っているとして <code>gh-pages</code> ブランチを作成してみる。とりあえず、GitHubから以下のようなコマンド例が提示される。</p>
+<p>既に <code class="highlighter-rouge">master</code> が少し育っているとして <code class="highlighter-rouge">gh-pages</code> ブランチを作成してみる。とりあえず、GitHubから以下のようなコマンド例が提示される。</p>
 
 <figure class="highlight">
   <pre>
@@ -242,7 +244,7 @@ $ git push origin gh-pages</code>
   </pre>
 </figure>
 
-<p>何をやっているのかというと… <code>master</code> ブランチ(というか、ソースとかがある本流のブランチ？)と <strong>独立した空っぽのブランチ</strong> を作り、そこにindex.htmlをpushしている。</p>
+<p>何をやっているのかというと… <code class="highlighter-rouge">master</code> ブランチ(というか、ソースとかがある本流のブランチ？)と <strong>独立した空っぽのブランチ</strong> を作り、そこにindex.htmlをpushしている。</p>
 
 <h3 id="tocAnchor-1-6-1">コマンド、オプションのメモ</h3>
 
@@ -253,7 +255,7 @@ $ git symbolic-ref HEAD refs/heads/gh-pages</code>
   </pre>
 </figure>
 
-<p><code>HEAD(.git/HEAD)ファイル</code> には最終コミットの参照が入っている。例えば…</p>
+<p><code class="highlighter-rouge">HEAD(.git/HEAD)ファイル</code> には最終コミットの参照が入っている。例えば…</p>
 
 <figure class="highlight">
   <pre>
@@ -262,7 +264,7 @@ ref: refs/heads/master</code>
   </pre>
 </figure>
 
-<p>こんなん。で、checkoutとかすると変わる。このHEADファイルを変更するためのコマンドが <code>symbolic-ref</code> 。</p>
+<p>こんなん。で、checkoutとかすると変わる。このHEADファイルを変更するためのコマンドが <code class="highlighter-rouge">symbolic-ref</code> 。</p>
 
 <p>移動した後は、Gitで管理していたファイルはインデックスに移っている。</p>
 
@@ -273,9 +275,9 @@ $ git clean -fdx</code>
   </pre>
 </figure>
 
-<p>ので、まず <code>index</code> ファイルを削除してインデックスにあったファイルを追跡対象から除外。</p>
+<p>ので、まず <code class="highlighter-rouge">index</code> ファイルを削除してインデックスにあったファイルを追跡対象から除外。</p>
 
-<p>そして <code>clean</code> コマンドで追跡対象外のファイルを掃除。 <code>-f</code> 実行(このオプションを指定しないと実行されない)、 <code>-d</code> ディレクトリも含める。 <code>-x</code> 無視ファイルも削除</p>
+<p>そして <code class="highlighter-rouge">clean</code> コマンドで追跡対象外のファイルを掃除。 <code class="highlighter-rouge">-f</code> 実行(このオプションを指定しないと実行されない)、 <code class="highlighter-rouge">-d</code> ディレクトリも含める。 <code class="highlighter-rouge">-x</code> 無視ファイルも削除</p>
 
 <figure class="highlight">
   <pre>
@@ -286,9 +288,9 @@ $ git push origin gh-pages</code>
   </pre>
 </figure>
 
-<p>奇麗さっぱりしたらindex.htmlを作ってFirst commit...。</p>
+<p>奇麗さっぱりしたらindex.htmlを作ってFirst commit…。</p>
 
-<p>これで <code>master</code> ブランチ(ソース)とは完全に独立した <code>gh-pages</code> ブランチが作成できた。</p>
+<p>これで <code class="highlighter-rouge">master</code> ブランチ(ソース)とは完全に独立した <code class="highlighter-rouge">gh-pages</code> ブランチが作成できた。</p>
 
 <h2 id="tocAnchor-1-8">JekylプラグインをGitHub Pagesで使えるようにするには</h2>
 
@@ -297,39 +299,39 @@ $ git push origin gh-pages</code>
 <p>今までの情報からわかった事は以下。</p>
 
 <ul>
-<li>自分が使っているのは <strong>ユーザ用のGitHub Pages</strong>
-
-<ul>
-<li>つまり、 <strong><code>master</code></strong> ブランチのファイルがビルドされる</li>
-</ul></li>
-<li>今の <code>master</code> ブランチにはJekyll用のソースがある
-
-<ul>
-<li>ページのテンプレートやMarkdownで書かれたエントリなど</li>
-</ul></li>
+  <li>自分が使っているのは <strong>ユーザ用のGitHub Pages</strong>
+    <ul>
+      <li>つまり、 <strong><code class="highlighter-rouge">master</code></strong> ブランチのファイルがビルドされる</li>
+    </ul>
+  </li>
+  <li>今の <code class="highlighter-rouge">master</code> ブランチにはJekyll用のソースがある
+    <ul>
+      <li>ページのテンプレートやMarkdownで書かれたエントリなど</li>
+    </ul>
+  </li>
 </ul>
 
 <p>この状況を以下のように変更する。</p>
 
 <ul>
-<li><code>source</code> ブランチ: 現在の <code>master</code> ブランチのソースをそのまま持ってくる
-
-<ul>
-<li>エントリなどはこちらで書いていく事になる</li>
-</ul></li>
-<li><code>master</code> ブランチ: 一旦からっぽにして、 <code>source</code> ブランチのソースから生成した <strong>静的ファイル</strong> を持ってきてプッシュする
-
-<ul>
-<li>ローカルで一旦生成しちゃった後でGitHub Pagesにpushしているから、プラグインが動かないという問題も起こらない</li>
-</ul></li>
+  <li><code class="highlighter-rouge">source</code> ブランチ: 現在の <code class="highlighter-rouge">master</code> ブランチのソースをそのまま持ってくる
+    <ul>
+      <li>エントリなどはこちらで書いていく事になる</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">master</code> ブランチ: 一旦からっぽにして、 <code class="highlighter-rouge">source</code> ブランチのソースから生成した <strong>静的ファイル</strong> を持ってきてプッシュする
+    <ul>
+      <li>ローカルで一旦生成しちゃった後でGitHub Pagesにpushしているから、プラグインが動かないという問題も起こらない</li>
+    </ul>
+  </li>
 </ul>
 
 <p>そうすると</p>
 
 <ul>
-<li><code>source</code> ブランチでファイルを生成する(_site/直下)</li>
-<li>これを <code>master</code> にコピーする</li>
-<li>push</li>
+  <li><code class="highlighter-rouge">source</code> ブランチでファイルを生成する(_site/直下)</li>
+  <li>これを <code class="highlighter-rouge">master</code> にコピーする</li>
+  <li>push</li>
 </ul>
 
 <p>を毎回やらなければならない…それはめんどくさい！</p>
@@ -337,11 +339,11 @@ $ git push origin gh-pages</code>
 <p>これはrakeでやればいいかな。</p>
 
 <ul>
-<li>Rakefile にdeployコマンドとして上記の動作を実行してくれる処理を記載する
-
-<ul>
-<li><a href="https://github.com/gosyujin/gosyujin.github.com/commit/2943985064ced913767157eb0fdae431b68ac491">deploy タスクを追加 2943985 gosyujin/gosyujin.github.com GitHub</a></li>
-</ul></li>
+  <li>Rakefile にdeployコマンドとして上記の動作を実行してくれる処理を記載する
+    <ul>
+      <li><a href="https://github.com/gosyujin/gosyujin.github.com/commit/2943985064ced913767157eb0fdae431b68ac491">deploy タスクを追加 2943985 gosyujin/gosyujin.github.com GitHub</a></li>
+    </ul>
+  </li>
 </ul>
 
 <p>こんな感じ。</p>

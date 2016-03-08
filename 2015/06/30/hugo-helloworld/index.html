@@ -110,21 +110,16 @@
                 <li class="toc_level-2 toc_section-6">
                   <a href="#tocAnchor-1-3-3"><span class="tocnumber">3.3</span> <span class="toctext">Content作成</span></a>
                 </li>
-              </ul>
-            </li>
-            <li class="toc_level-1 toc_section-7">
-              <a href="#tocAnchor-1-7"><span class="tocnumber">4</span> <span class="toctext">ビルド</span></a>
-              <ul>
+                <li class="toc_level-2 toc_section-7">
+                  <a href="#tocAnchor-1-3-4"><span class="tocnumber">3.4</span> <span class="toctext">jekyll build した場合</span></a>
+                </li>
                 <li class="toc_level-2 toc_section-8">
-                  <a href="#tocAnchor-1-7-1"><span class="tocnumber">4.1</span> <span class="toctext">jekyll build した場合</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-9">
-                  <a href="#tocAnchor-1-7-2"><span class="tocnumber">4.2</span> <span class="toctext">hugoした場合</span></a>
+                  <a href="#tocAnchor-1-3-5"><span class="tocnumber">3.5</span> <span class="toctext">hugoした場合</span></a>
                 </li>
               </ul>
             </li>
-            <li class="toc_level-1 toc_section-10">
-              <a href="#tocAnchor-1-10"><span class="tocnumber">5</span> <span class="toctext">まだよくわかってない</span></a>
+            <li class="toc_level-1 toc_section-9">
+              <a href="#tocAnchor-1-9"><span class="tocnumber">4</span> <span class="toctext">まだよくわかってない</span></a>
             </li>
           </ul>
         </td>
@@ -138,25 +133,25 @@
 <p>要望とか環境とか。</p>
 
 <ul>
-<li>PCの外には出さない
-
-<ul>
-<li>ローカルで作成して、出力して、ローカルで見る</li>
-</ul></li>
-<li>プレーンテキストでバージョン管理したい</li>
-<li>タグとかカテゴリである程度ジャンル分けしたい</li>
-<li>(できれば)Windowsでも(苦労せず)動かしたい</li>
+  <li>PCの外には出さない
+    <ul>
+      <li>ローカルで作成して、出力して、ローカルで見る</li>
+    </ul>
+  </li>
+  <li>プレーンテキストでバージョン管理したい</li>
+  <li>タグとかカテゴリである程度ジャンル分けしたい</li>
+  <li>(できれば)Windowsでも(苦労せず)動かしたい</li>
 </ul>
 
 <p>こんなことができそうな静的サイトジェネレータを探してみる…。</p>
 
 <ul>
-<li>Jekyll</li>
-<li>Middleman</li>
-<li>Pelican</li>
-<li>Sphinx</li>
-<li>Hugo</li>
-<li>あとはJavascript系からいくつか…</li>
+  <li>Jekyll</li>
+  <li>Middleman</li>
+  <li>Pelican</li>
+  <li>Sphinx</li>
+  <li>Hugo</li>
+  <li>あとはJavascript系からいくつか…</li>
 </ul>
 
 <h2 id="tocAnchor-1-2">結果、Hugoにした</h2>
@@ -164,10 +159,10 @@
 <p>公式に書かれていることを信じて。</p>
 
 <ul>
-<li>Make the Web Fun Again</li>
-<li>Run Anywhere</li>
-<li>Fast &amp; Powerful</li>
-<li>Flexible</li>
+  <li>Make the Web Fun Again</li>
+  <li>Run Anywhere</li>
+  <li>Fast &amp; Powerful</li>
+  <li>Flexible</li>
 </ul>
 
 <p>Windowsでも結構使うので、個人的にはRun Anywhareがいいかなと思った。</p>
@@ -182,25 +177,22 @@
 
 <h3 id="tocAnchor-1-3-1">Hugoインストール</h3>
 
-<p>割愛。バイナリファイルもあるので、それを持ってきてパス通す。<code>hugo</code>コマンドが実行できればOK。</p>
-<div class="highlight">
-  <pre>
-    <code class="language-" data-lang="">&gt;hugo version
+<p>割愛。バイナリファイルもあるので、それを持ってきてパス通す。<code class="highlighter-rouge">hugo</code>コマンドが実行できればOK。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&gt;hugo version
 Hugo Static Site Generator v0.13 BuildDate: 2015-05-12T10:43:12+09:00
-</code>
-  </pre>
+</code></pre>
 </div>
+
 <h3 id="tocAnchor-1-3-2">サイト新規作成</h3>
-<div class="highlight">
-  <pre>
-    <code class="language-html" data-lang="html">&gt;hugo new site mysite
-</code>
-  </pre>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&gt;hugo new site mysite
+</code></pre>
 </div>
+
 <p>こんな感じの階層でファイルができる。</p>
-<div class="highlight">
-  <pre>
-    <code class="language-html" data-lang="html">C:.
+
+<div class="highlighter-rouge"><pre class="highlight"><code>C:.
 │  config.toml
 │
 ├─archetypes
@@ -208,33 +200,30 @@ Hugo Static Site Generator v0.13 BuildDate: 2015-05-12T10:43:12+09:00
 ├─data
 ├─layouts
 └─static
-</code>
-  </pre>
+</code></pre>
 </div>
+
 <p>これがデフォルトの構造っぽい。</p>
 
 <p>tomlファイルは初見だ。yamlのような感じか。</p>
 
 <h3 id="tocAnchor-1-3-3">Content作成</h3>
 
-<p><code>content</code>ディレクトリはいわゆる記事の置き場かな。<code>hugo new</code>で<code>content</code>の下にファイルが生成される。</p>
-<div class="highlight">
-  <pre>
-    <code class="language-html" data-lang="html">&gt;hugo new about.md
+<p><code class="highlighter-rouge">content</code>ディレクトリはいわゆる記事の置き場かな。<code class="highlighter-rouge">hugo new</code>で<code class="highlighter-rouge">content</code>の下にファイルが生成される。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&gt;hugo new about.md
 content\about.md created
-</code>
-  </pre>
+</code></pre>
 </div>
-<h2 id="tocAnchor-1-7">ビルド</h2>
+<p>## ビルド</p>
 
 <p>ちょうどよいので、速度をはかるため今までのブログ記事を(最低限Hugoが変換できる程度になおして)ビルドをしてみた。</p>
 
 <p>元の記事はJekyllで管理されている。</p>
 
 <p>Migrate方法はまだ全部見ていないが公式にもある。<a href="http://gohugo.io/tutorials/migrate-from-jekyll/">Migrate to Hugo from Jekyll</a></p>
-<div class="highlight">
-  <pre>
-    <code class="language-html" data-lang="html">ファイルサイズ - ファイル名
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ファイルサイズ - ファイル名
 2635 - 2012-10-10-jekyll-liquid-plugin.md
 4898 - 2012-10-01-bundle-exec-bat.mdｄ
 6387 - 2012-09-21-jekyll-pygments.md
@@ -297,141 +286,139 @@ content\about.md created
 3545 - 2015-03-14-jekyll-changed-bindaddress.md
 4185 - 2015-04-30-golang-helloworld.md
 4110 - 2015-05-26-jenkins-environment-path.md
-</code>
-  </pre>
+</code></pre>
 </div>
-<h3 id="tocAnchor-1-7-1">jekyll build した場合</h3>
-<div class="highlight">
-  <pre>
-    <code class="language-html" data-lang="html">$ time jekyll build
-</code>
-  </pre>
+
+<h3 id="tocAnchor-1-3-4">jekyll build した場合</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ time jekyll build
+</code></pre>
 </div>
+
 <p>体感で8秒くらいかかってる。</p>
 
 <table>
   <thead>
-<tr>
-<th>real</th>
-<th>user</th>
-<th>sys</th>
-</tr>
-</thead>
+    <tr>
+      <th>real</th>
+      <th>user</th>
+      <th>sys</th>
+    </tr>
+  </thead>
   <tbody>
-<tr>
-<td>0m7.955s</td>
-<td>0m7.341s</td>
-<td>0m0.527s</td>
-</tr>
-<tr>
-<td>0m7.856s</td>
-<td>0m7.409s</td>
-<td>0m0.447s</td>
-</tr>
-<tr>
-<td>0m7.818s</td>
-<td>0m7.297s</td>
-<td>0m0.529s</td>
-</tr>
-<tr>
-<td>0m7.901s</td>
-<td>0m7.402s</td>
-<td>0m0.466s</td>
-</tr>
-<tr>
-<td>0m7.594s</td>
-<td>0m7.167s</td>
-<td>0m0.440s</td>
-</tr>
-</tbody>
+    <tr>
+      <td>0m7.955s</td>
+      <td>0m7.341s</td>
+      <td>0m0.527s</td>
+    </tr>
+    <tr>
+      <td>0m7.856s</td>
+      <td>0m7.409s</td>
+      <td>0m0.447s</td>
+    </tr>
+    <tr>
+      <td>0m7.818s</td>
+      <td>0m7.297s</td>
+      <td>0m0.529s</td>
+    </tr>
+    <tr>
+      <td>0m7.901s</td>
+      <td>0m7.402s</td>
+      <td>0m0.466s</td>
+    </tr>
+    <tr>
+      <td>0m7.594s</td>
+      <td>0m7.167s</td>
+      <td>0m0.440s</td>
+    </tr>
+  </tbody>
 </table>
 
-<h3 id="tocAnchor-1-7-2">hugoした場合</h3>
+<h3 id="tocAnchor-1-3-5">hugoした場合</h3>
 
 <p>テーマは適当。</p>
-<div class="highlight">
-  <pre>
-    <code class="language-html" data-lang="html">$ hugo --theme=xxx
-</code>
-  </pre>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ hugo --theme=xxx
+</code></pre>
 </div>
+
 <p>体感0.55秒。むっちゃはやい。</p>
 
 <table>
   <thead>
-<tr>
-<th>real</th>
-<th>user</th>
-<th>sys</th>
-</tr>
-</thead>
+    <tr>
+      <th>real</th>
+      <th>user</th>
+      <th>sys</th>
+    </tr>
+  </thead>
   <tbody>
-<tr>
-<td>0m0.553s</td>
-<td>0m0.912s</td>
-<td>0m0.092s</td>
-</tr>
-<tr>
-<td>0m0.613s</td>
-<td>0m0.995s</td>
-<td>0m0.111s</td>
-</tr>
-<tr>
-<td>0m0.605s</td>
-<td>0m0.985s</td>
-<td>0m0.105s</td>
-</tr>
-<tr>
-<td>0m0.518s</td>
-<td>0m0.825s</td>
-<td>0m0.091s</td>
-</tr>
-<tr>
-<td>0m0.559s</td>
-<td>0m0.887s</td>
-<td>0m0.096s</td>
-</tr>
-</tbody>
+    <tr>
+      <td>0m0.553s</td>
+      <td>0m0.912s</td>
+      <td>0m0.092s</td>
+    </tr>
+    <tr>
+      <td>0m0.613s</td>
+      <td>0m0.995s</td>
+      <td>0m0.111s</td>
+    </tr>
+    <tr>
+      <td>0m0.605s</td>
+      <td>0m0.985s</td>
+      <td>0m0.105s</td>
+    </tr>
+    <tr>
+      <td>0m0.518s</td>
+      <td>0m0.825s</td>
+      <td>0m0.091s</td>
+    </tr>
+    <tr>
+      <td>0m0.559s</td>
+      <td>0m0.887s</td>
+      <td>0m0.096s</td>
+    </tr>
+  </tbody>
 </table>
 
 <p>このビルドスピードはかなり快適で、GitHub Pages自体Hugoに切り替えようと思ってしまうほどだった。</p>
 
-<h2 id="tocAnchor-1-10">まだよくわかってない</h2>
+<h2 id="tocAnchor-1-9">まだよくわかってない</h2>
 
 <p>hugoのデフォルトコマンドの操作がちょっと気になるので、色々いじりたい。</p>
 
 <p>が、どうするのが一番ベストなのかまだよくわかってない。例えば…、</p>
 
 <ol>
-<li><code>hugo new about</code>で<code>about.md</code>ファイルを作ってほしい
-
-<ul>
-<li>拡張子指定するのめんどくさい</li>
-</ul></li>
-<li>もっというと、2015/06/20に上記コマンドを実行したら<code>2015-06-20-about.md</code>ファイルを作ってほしい
-
-<ul>
-<li>過去の資産との整合性をとりたい(ファイル命名規則)</li>
-</ul></li>
-<li><code>about</code>部分をtitleじゃなくslugに指定したい
-
-<ul>
-<li>タイトルは最終的に変えるから<code>""</code>とかでいい</li>
-<li>過去の資産との整合性をとりたい(パーマリンクに使用)</li>
-</ul></li>
-<li><code>archetypes/default.md</code>の使って新しいファイルを生成しているみたいなんだけど、勝手にFrontMatterをソートしたりするのやめてほしい
-
-<ul>
-<li>過去の資産との整合性をとりたい</li>
-</ul></li>
+  <li><code class="highlighter-rouge">hugo new about</code>で<code class="highlighter-rouge">about.md</code>ファイルを作ってほしい
+    <ul>
+      <li>拡張子指定するのめんどくさい</li>
+    </ul>
+  </li>
+  <li>もっというと、2015/06/20に上記コマンドを実行したら<code class="highlighter-rouge">2015-06-20-about.md</code>ファイルを作ってほしい
+    <ul>
+      <li>過去の資産との整合性をとりたい(ファイル命名規則)</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">about</code>部分をtitleじゃなくslugに指定したい
+    <ul>
+      <li>タイトルは最終的に変えるから<code class="highlighter-rouge">""</code>とかでいい</li>
+      <li>過去の資産との整合性をとりたい(パーマリンクに使用)</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">archetypes/default.md</code>の使って新しいファイルを生成しているみたいなんだけど、勝手にFrontMatterをソートしたりするのやめてほしい
+    <ul>
+      <li>過去の資産との整合性をとりたい</li>
+    </ul>
+  </li>
 </ol>
 
 <p>こういうことをしたいのだけど、どうするのが一番いいんだろう。(ドキュメントを全部読みきれていないので、もしかしたらコマンドのオプションとかconfig定義で解決できるものもあるかも)</p>
 
 <ul>
-<li>hugoソースに直接手を入れて実現すべき？</li>
-<li>hugoコマンドのラッパーコマンドを作るべき？(goで)</li>
-<li>hugoコマンドのラッパーコマンドを作るべき？(シェルスクリプトなどで)</li>
+  <li>hugoソースに直接手を入れて実現すべき？</li>
+  <li>hugoコマンドのラッパーコマンドを作るべき？(goで)</li>
+  <li>hugoコマンドのラッパーコマンドを作るべき？(シェルスクリプトなどで)</li>
 </ul>
 
 <p>いまはシェルスクリプトでやってる…。</p>

@@ -131,7 +131,7 @@
 <h2 id="tocAnchor-1-2">参考</h2>
 
 <ul>
-<li>すごいHaskellたのしく学ぼう</li>
+  <li>すごいHaskellたのしく学ぼう</li>
 </ul>
 
 <h2 id="tocAnchor-1-3">5章 高階関数</h2>
@@ -139,21 +139,21 @@
 <h3 id="tocAnchor-1-3-1">カリー化</h3>
 
 <ul>
-<li>Haskellでは <strong>すべての関数が引数を一つだけとる</strong> 事になっている。
-
-<ul>
-<li>……んでも今まで普通に二つとか引数とってなかったっけ？ <code>max</code> とか</li>
-</ul></li>
+  <li>Haskellでは <strong>すべての関数が引数を一つだけとる</strong> 事になっている。
+    <ul>
+      <li>……んでも今まで普通に二つとか引数とってなかったっけ？ <code class="highlighter-rouge">max</code> とか</li>
+    </ul>
+  </li>
 </ul>
 
-<h4 id="max関数">max関数</h4>
+<h4 id="max">max関数</h4>
 
-<p>本書より、 <code>max 4 5</code> の場合……。</p>
+<p>本書より、 <code class="highlighter-rouge">max 4 5</code> の場合……。</p>
 
 <ul>
-<li>はじめに <code>max 4</code> が適用される</li>
-<li><code>max 4</code> の返り値は <code>5 に適用するための別の関数</code></li>
-<li><code>別の関数 5</code> が適用され、最終的な値が返る</li>
+  <li>はじめに <code class="highlighter-rouge">max 4</code> が適用される</li>
+  <li><code class="highlighter-rouge">max 4</code> の返り値は <code class="highlighter-rouge">5 に適用するための別の関数</code></li>
+  <li><code class="highlighter-rouge">別の関数 5</code> が適用され、最終的な値が返る</li>
 </ul>
 
 <p>ふーむ……？</p>
@@ -167,24 +167,23 @@
   </pre>
 </figure>
 
-<p>こう書く事もできる。 <code>a型の値を引数にとり、a型の値を返す</code></p>
+<p>こう書く事もできる。 <code class="highlighter-rouge">a型の値を引数にとり、a型の値を返す</code></p>
 
 <figure class="highlight">
   <pre>
     <code class="language-haskell" data-lang="haskell"><span class="n">max</span> <span class="o">::</span> <span class="kt">Ord</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="p">(</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="p">)</span></code>
   </pre>
 </figure>
- 
 
-<p>関数を本来より少ない引数で呼び出すことを <code>部分適用する</code> という。 <code>部分適用</code> すると、関数をその場で作りだし、それを他の関数に渡せる。</p>
+<p>関数を本来より少ない引数で呼び出すことを <code class="highlighter-rouge">部分適用する</code> という。 <code class="highlighter-rouge">部分適用</code> すると、関数をその場で作りだし、それを他の関数に渡せる。</p>
 
 <p>それを踏まえて、max関数。</p>
 
 <ul>
-<li>はじめに <code>max 4</code> が適用される (一つ目のa)</li>
-<li><code>max 4</code> の返り値は <strong>引数を一つとって関数を返す関数</strong> となる
-( ( a -&gt; a ) の部分)</li>
-<li><strong>引数を一つとって関数を返す関数</strong> に5が適用され、最終的な値が返る ( かっこの中の a -&gt; a )</li>
+  <li>はじめに <code class="highlighter-rouge">max 4</code> が適用される (一つ目のa)</li>
+  <li><code class="highlighter-rouge">max 4</code> の返り値は <strong>引数を一つとって関数を返す関数</strong> となる
+ ( ( a -&gt; a ) の部分)</li>
+  <li><strong>引数を一つとって関数を返す関数</strong> に5が適用され、最終的な値が返る ( かっこの中の a -&gt; a )</li>
 </ul>
 
 <p>これらから、部分適用できる、というのは何となくだけどわかった。これはかけるのだ。</p>
@@ -198,7 +197,6 @@
 <span class="mi">5</span></code>
   </pre>
 </figure>
- 
 
 <p>これがわからない。</p>
 
@@ -211,11 +209,10 @@
 <span class="mi">5</span></code>
   </pre>
 </figure>
- 
 
 <p>やっていることは上と等価なはずなんだけど、関数定義の部分に変数xがいない。</p>
 
-<p>max 4 の返り値が <strong>引数を一つとって関数を返す関数</strong> であるから、max'' も引数を一つとれるということ？</p>
+<p>max 4 の返り値が <strong>引数を一つとって関数を返す関数</strong> であるから、max’’ も引数を一つとれるということ？</p>
 
 <h3 id="tocAnchor-1-3-2">セクション</h3>
 
@@ -247,7 +244,7 @@
   </pre>
 </figure>
 
-<p>ただし、引き算を使うときだけ注意しなければならない。 <code>(-4)</code> は <code>マイナス4</code> として扱われる。(引きたい時は <code>subtract</code> 関数を使う)</p>
+<p>ただし、引き算を使うときだけ注意しなければならない。 <code class="highlighter-rouge">(-4)</code> は <code class="highlighter-rouge">マイナス4</code> として扱われる。(引きたい時は <code class="highlighter-rouge">subtract</code> 関数を使う)</p>
 
 <h3 id="tocAnchor-1-3-3">関数を表示する</h3>
 
@@ -275,7 +272,7 @@
 </figure>
 
 <p>
-  <code>f (f x) -&gt; f (tail [1,2,3,4]) -&gt; f ([2,3,4]) -&gt; tail [2,3,4] -&gt; [3,4]</code>
+  <code class="highlighter-rouge">f (f x) -&gt; f (tail [1,2,3,4]) -&gt; f ([2,3,4]) -&gt; tail [2,3,4] -&gt; [3,4]</code>
 </p>
 
 <p>ってことかな。</p>
@@ -293,7 +290,7 @@
 <p>こういうのに対しては部分適用が使われている。</p>
 
 <p>
-  <code>f (f x) -&gt; f ((++ "Hoge") "A" -&gt; f ("AHoge") -&gt; (++ "Hoge") "AHoge" -&gt; "AHogeHoge"</code>
+  <code class="highlighter-rouge">f (f x) -&gt; f ((++ "Hoge") "A" -&gt; f ("AHoge") -&gt; (++ "Hoge") "AHoge" -&gt; "AHogeHoge"</code>
 </p>
 
 <p>こういうことか！順番あってる？</p>
@@ -343,7 +340,7 @@
 <p>んー何となく書けたんだけど、解説がわからないぞ……。(解説ではxとyが逆になってる)</p>
 
 <blockquote>
-<p>この新しいバージョンのflip' では、関数がカリー化されていることをうまく使っています。flip' f を引数y とx なしで呼び出したら、2 つの引数を取る、引数の入れ替わったf が返るでしょう。</p>
+  <p>この新しいバージョンのflip’ では、関数がカリー化されていることをうまく使っています。flip’ f を引数y とx なしで呼び出したら、2 つの引数を取る、引数の入れ替わったf が返るでしょう。</p>
 </blockquote>
 
 <p>そうなの？</p>
@@ -367,14 +364,14 @@
 </figure>
 
 <ul>
-<li>最初の引数(f)は <code>引数を二つ(t1, t2)をとり、関数(t)を返す関数</code> <code>(div) y x</code></li>
-<li>最初の引数(f)に次の引数(x / t2)を適用すると <code>最初の引数(f)に引数t2を適用した関数を返す関数</code> を返す <code>(div) y 0</code></li>
-<li><code>最初の引数(f)に引数t2を適用した関数を返す関数</code> に次の次の引数(y /t1)を適用すると <code>結果をshowする関数？</code> を返す？ <code>(div) 2 0</code> = 0</li>
+  <li>最初の引数(f)は <code class="highlighter-rouge">引数を二つ(t1, t2)をとり、関数(t)を返す関数</code> <code class="highlighter-rouge">(div) y x</code></li>
+  <li>最初の引数(f)に次の引数(x / t2)を適用すると <code class="highlighter-rouge">最初の引数(f)に引数t2を適用した関数を返す関数</code> を返す <code class="highlighter-rouge">(div) y 0</code></li>
+  <li><code class="highlighter-rouge">最初の引数(f)に引数t2を適用した関数を返す関数</code> に次の次の引数(y /t1)を適用すると <code class="highlighter-rouge">結果をshowする関数？</code> を返す？ <code class="highlighter-rouge">(div) 2 0</code> = 0</li>
 </ul>
 
 <p>……？</p>
 
-<p>あれ？違うっぽいな……。 </p>
+<p>あれ？違うっぽいな……。</p>
 
 <p>
   <strong>続く！</strong>

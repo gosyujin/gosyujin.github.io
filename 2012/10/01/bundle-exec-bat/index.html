@@ -129,20 +129,20 @@
 
 <p>Bundler、非常によいツールなんだけど、bundle exec がめんどい。</p>
 
-<p>ググってみたところ <code>gemset</code> を使う方法 <a href="http://blog.s21g.com/articles/1930">rvmのgemsetを使ってbundlerと賢く付き合う方法 - Hello, world! - s21g</a> と、 <code>bundler-exec.sh</code> というツールを使う <a href="http://d.hatena.ne.jp/willnet/20110612/1307849053">bundle exec を省略する - おもしろWEBサービス開発日記</a> 方法があるみたい。</p>
+<p>ググってみたところ <code class="highlighter-rouge">gemset</code> を使う方法 <a href="http://blog.s21g.com/articles/1930">rvmのgemsetを使ってbundlerと賢く付き合う方法 - Hello, world! - s21g</a> と、 <code class="highlighter-rouge">bundler-exec.sh</code> というツールを使う <a href="http://d.hatena.ne.jp/willnet/20110612/1307849053">bundle exec を省略する - おもしろWEBサービス開発日記</a> 方法があるみたい。</p>
 
 <p>Windowsでこれを実現したいんだけど、gemsetはちょっと大げさな気がするので、bundler-exec.shを参考にバッチファイルを作成できないかな。</p>
 
 <h2 id="tocAnchor-1-2">参考サイト</h2>
 
 <ul>
-<li><a href="http://www.adminweb.jp/command/command/index2.html">コマンドのエイリアス設定(DOSKEY)</a></li>
-<li><a href="http://www.atmarkit.co.jp/fwin2k/win2ktips/319which/which.html">whichコマンドを作る </a></li>
-<li><a href="http://ykr414.com/dos/dos05.html#07">コマンドプロンプトを使ってみよう！　－バッチファイル－</a></li>
-<li><a href="http://www.atmarkit.co.jp/fwin2k/operation/command008/command02.html">Windows 2000 コマンドライン徹底活用</a></li>
-<li><a href="http://otnx.jp/CMD/%A5%B3%A5%DE%A5%F3%A5%C9%CA%CC/for/">コマンド別/for</a></li>
-<li><a href="http://pgkiss.web.fc2.com/windows/batch-file.html">UNIXライクなパス操作をwindowsのcmd.exeのバッチファイルのみで実現</a></li>
-<li><a href="http://d.hatena.ne.jp/superstring04/20080301/1204373672">Windowsのコマンドプロンプトは変態（一部）</a></li>
+  <li><a href="http://www.adminweb.jp/command/command/index2.html">コマンドのエイリアス設定(DOSKEY)</a></li>
+  <li><a href="http://www.atmarkit.co.jp/fwin2k/win2ktips/319which/which.html">whichコマンドを作る </a></li>
+  <li><a href="http://ykr414.com/dos/dos05.html#07">コマンドプロンプトを使ってみよう！　－バッチファイル－</a></li>
+  <li><a href="http://www.atmarkit.co.jp/fwin2k/operation/command008/command02.html">Windows 2000 コマンドライン徹底活用</a></li>
+  <li><a href="http://otnx.jp/CMD/%A5%B3%A5%DE%A5%F3%A5%C9%CA%CC/for/">コマンド別/for</a></li>
+  <li><a href="http://pgkiss.web.fc2.com/windows/batch-file.html">UNIXライクなパス操作をwindowsのcmd.exeのバッチファイルのみで実現</a></li>
+  <li><a href="http://d.hatena.ne.jp/superstring04/20080301/1204373672">Windowsのコマンドプロンプトは変態（一部）</a></li>
 </ul>
 
 <h2 id="tocAnchor-1-3">調査</h2>
@@ -150,11 +150,11 @@
 <p>ソースを読む限り、やっている処理は</p>
 
 <ol>
-<li><code>ruby</code> とか<code>rspec</code> とかbundle exec hogehogeしたいコマンドにaliasをはる(rubyならbundler-exec.sh rubyとなるように)</li>
-<li><code>bundle</code> コマンドが使えるのか探してみる。使えない場合はそのままコマンドを実行する</li>
-<li> <code>bundle</code> が使える場合、今いるパスに <code>Gemfile</code> ファイルがあるのか調べる。ない場合は一つ階層を上がってまた <code>Gemfile</code> があるか探す</li>
-<li>上記をを繰り返す。 <code>Gemfile</code> がない場合はそのままコマンドを実行する</li>
-<li><code>Gemfile</code> があった場合、 <code>bundle exec</code> を付加してコマンドを実行する</li>
+  <li><code class="highlighter-rouge">ruby</code> とか<code class="highlighter-rouge"> rspec</code> とかbundle exec hogehogeしたいコマンドにaliasをはる(rubyならbundler-exec.sh rubyとなるように)</li>
+  <li><code class="highlighter-rouge">bundle</code> コマンドが使えるのか探してみる。使えない場合はそのままコマンドを実行する</li>
+  <li><code class="highlighter-rouge">bundle</code> が使える場合、今いるパスに <code class="highlighter-rouge">Gemfile</code> ファイルがあるのか調べる。ない場合は一つ階層を上がってまた <code class="highlighter-rouge">Gemfile</code> があるか探す</li>
+  <li>上記をを繰り返す。 <code class="highlighter-rouge">Gemfile</code> がない場合はそのままコマンドを実行する</li>
+  <li><code class="highlighter-rouge">Gemfile</code> があった場合、 <code class="highlighter-rouge">bundle exec</code> を付加してコマンドを実行する</li>
 </ol>
 
 <p>という感じになっている。</p>
@@ -174,38 +174,36 @@
 <p>コマンドプロンプトの場合にはaliasがないようなので、マクロ定義ファイルを作成し、それを起動時に読むようにバッチファイルを作る。または起動オプションを変更する必要があるらしい。(レジストリに登録などでもいい)</p>
 
 <p>定義ファイルは以下のように記述する。とりあえずruby, rspec, herokuを使えるように。必要なコマンドは適宜このファイルに追加する事になる。</p>
-<div class="highlight">
-  <pre>
-    <code class="language-" data-lang="">heroku=bundler-exec heroku $*
+
+<div class="highlighter-rouge"><pre class="highlight"><code>heroku=bundler-exec heroku $*
 rspec=bundler-exec rspec $*
 ruby=bundler-exec ruby $*
-</code>
-  </pre>
+</code></pre>
 </div>
+
 <p>定義ファイルを読み込む場合は</p>
 
 <p>
-  <code>&gt; doskey /macrofile=MACRO_FILE</code>
+  <code class="highlighter-rouge">&gt; doskey /macrofile=MACRO_FILE</code>
 </p>
 
 <p>alias(マクロ)を確認するには</p>
 
 <p>
-  <code>&gt; doskey /macros</code>
+  <code class="highlighter-rouge">&gt; doskey /macros</code>
 </p>
 
 <h3 id="tocAnchor-1-5-2">それ以降</h3>
 
-<p>それ以降の処理は <code>bundler-exec.bat</code> に記述している。</p>
+<p>それ以降の処理は <code class="highlighter-rouge">bundler-exec.bat</code> に記述している。</p>
 
 <p>バッチファイルをがっつり書く機会もあまりなかったので、結構試行錯誤。(pwdをWindowsで実現させるには？　コマンドの実行結果を変数に格納するには？　while文ないの？　等々)</p>
 
 <p>とりあえず、動く版を作る事ができた。一応、Documents and Settings下でも実行できたのでパスにスペースが入っていても大丈夫そう。</p>
 
 <p>これをパスが通っているところに放り込み、下記のようなfizzbuzzディレクトリで実行してみる。</p>
-<div class="highlight">
-  <pre>
-    <code class="language-" data-lang="">C:\fizzbuzz
+
+<div class="highlighter-rouge"><pre class="highlight"><code>C:\fizzbuzz
   ┣.bundle
   ┣Gemfile
   ┣Gemfile.lock
@@ -217,9 +215,9 @@ ruby=bundler-exec ruby $*
       ┗ruby
        ┗1.9.1
          ┗…
-</code>
-  </pre>
+</code></pre>
 </div>
+
 <p>まずは普通に。</p>
 
 <figure class="highlight">
@@ -241,7 +239,7 @@ Buzz</code>
   </pre>
 </figure>
 
-<p>Gemfileを消して <code>Ruby</code> コマンド実行。</p>
+<p>Gemfileを消して <code class="highlighter-rouge">Ruby</code> コマンド実行。</p>
 
 <figure class="highlight">
   <pre>
@@ -253,12 +251,12 @@ FizzBuzz</code>
   </pre>
 </figure>
 
-<p>ちゃんと <code>bundle exec</code> なしで実行できた！</p>
+<p>ちゃんと <code class="highlighter-rouge">bundle exec</code> なしで実行できた！</p>
 
 <h2 id="tocAnchor-1-8">残件</h2>
 
 <ul>
-<li>なんか重い</li>
+  <li>なんか重い</li>
 </ul>
 
 <p>結構力技でやってるから…？　またはテストしてるPCがヘボいから？</p>

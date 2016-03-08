@@ -132,7 +132,7 @@
 
 <h2 id="tocAnchor-1-2">はてなのエントリ取得</h2>
 
-<p>何はなくともエントリをエクスポートしてこない事には始まらない。管理画面から <code>データ管理 =&gt; インポート/エクスポート =&gt; はてなの日記データ形式</code> をDL。</p>
+<p>何はなくともエントリをエクスポートしてこない事には始まらない。管理画面から <code class="highlighter-rouge">データ管理 =&gt; インポート/エクスポート =&gt; はてなの日記データ形式</code> をDL。</p>
 
 <h2 id="tocAnchor-1-3">はてな =&gt; Jekyll</h2>
 
@@ -141,8 +141,8 @@
 <p>はてなのエントリをJekyllで見るためには、恐らく2通りの方法がある。</p>
 
 <ol>
-<li>はてなエントリをMarkdown記法に変換して、Jekyllに突っ込む</li>
-<li>はてなエントリから記事を作れるようにJekyllにパーサを突っ込む</li>
+  <li>はてなエントリをMarkdown記法に変換して、Jekyllに突っ込む</li>
+  <li>はてなエントリから記事を作れるようにJekyllにパーサを突っ込む</li>
 </ol>
 
 <p>さて…。</p>
@@ -181,9 +181,9 @@ gem 'rdiscount'</code>
   </pre>
 </figure>
 
-<p>これで <code>bundle exec jekyll --server</code> で行けるかと思ったけど、なんか色々ないって言われる。</p>
+<p>これで <code class="highlighter-rouge">bundle exec jekyll --server</code> で行けるかと思ったけど、なんか色々ないって言われる。</p>
 
-<p>どうやらまだgemが最新版になっていないらしい(gemからJekyllを持ってくると、多分 JEKYLL<em>HOME/lib/jekyll/tags/post</em>url.rbがないとか言われる)ので、GitHubから最新版を持ってくる。</p>
+<p>どうやらまだgemが最新版になっていないらしい(gemからJekyllを持ってくると、多分 JEKYLL_HOME/lib/jekyll/tags/post_url.rbがないとか言われる)ので、GitHubから最新版を持ってくる。</p>
 
 <figure class="highlight">
   <pre>
@@ -201,7 +201,7 @@ $ git clone git://github.com/hotchpotch/hparser.git # 4fbeefc8becc45ed18bf374bec
 <p>それでは、いよいよはてなのエントリ.xmlをhogehoge.htn * n個 のファイルにコンバートする。以下の作業は全て上記のてっく煮さんのブログをcloneした中を間借りして行なっている。己のリポジトリで行なってもできる。</p>
 
 <ul>
-<li>Gemfileに <code>nokogiri</code> を追加する</li>
+  <li>Gemfileに <code class="highlighter-rouge">nokogiri</code> を追加する</li>
 </ul>
 
 <figure class="highlight">
@@ -213,14 +213,14 @@ gem 'nokogiri'  # コンバート用</code>
 </figure>
 
 <ul>
-<li><code>_scripts/</code> 直下に <code>_posts</code> と <code>_caches</code> ディレクトリを作る</li>
-<li><code>bundle exec ruby convert_hatena_to_jekyll_posts.rb HATENA_ID はてなのエントリ.xml</code> を実行！</li>
-<li>……が、途中で止まる。どうやらUrl先のtitleを探しに行くとき、対象が404だった場合例外を吐くらしい</li>
+  <li><code class="highlighter-rouge">_scripts/</code> 直下に <code class="highlighter-rouge">_posts</code> と <code class="highlighter-rouge">_caches</code> ディレクトリを作る</li>
+  <li><code class="highlighter-rouge">bundle exec ruby convert_hatena_to_jekyll_posts.rb HATENA_ID はてなのエントリ.xml</code> を実行！</li>
+  <li>……が、途中で止まる。どうやらUrl先のtitleを探しに行くとき、対象が404だった場合例外を吐くらしい</li>
 </ul>
 
 <blockquote>
-<p>対象のコンテンツが 404 になっている場合には例外が出てスクリプトが停止します。
-その場合は <em>caches/url</em>title.json に手動でエントリを追加する、元のエントリを
+  <p>対象のコンテンツが 404 になっている場合には例外が出てスクリプトが停止します。
+その場合は _caches/url_title.json に手動でエントリを追加する、元のエントリを
 修正する、などして回避してください。</p>
 </blockquote>
 
@@ -263,22 +263,21 @@ gem 'nokogiri'  # コンバート用</code>
 
 <p>これで、やりたいことができた……。</p>
 
-<p>が、yamlの扱い方がよくわからん。hogehoge.htnファイルのtagsとして <code>tags: [aaa, bbb, ccc]</code> って出力したかったんだけど、配列の記述のまま <code>"[aaa, bbb, ccc]"</code> to_yamlすると hogehoge.htn内で <code>! ' [aaa, bbb, ccc] '</code> こう出力されてしまったので力技でうまくいくように。</p>
+<p>が、yamlの扱い方がよくわからん。hogehoge.htnファイルのtagsとして <code class="highlighter-rouge">tags: [aaa, bbb, ccc]</code> って出力したかったんだけど、配列の記述のまま <code class="highlighter-rouge">"[aaa, bbb, ccc]"</code> to_yamlすると hogehoge.htn内で <code class="highlighter-rouge">! ' [aaa, bbb, ccc] '</code> こう出力されてしまったので力技でうまくいくように。</p>
 
 <p>まあ一回しか変換しないしいっか……。</p>
 
-<p>これではてなダイアリーの全ての記事がhogehoge.htnとして <code>_posts</code> ディレクトリに生成された。</p>
+<p>これではてなダイアリーの全ての記事がhogehoge.htnとして <code class="highlighter-rouge">_posts</code> ディレクトリに生成された。</p>
 
-<p>あとはこれを己のJekyllの <code>_posts</code> に放り込み、コンバートは完了。</p>
+<p>あとはこれを己のJekyllの <code class="highlighter-rouge">_posts</code> に放り込み、コンバートは完了。</p>
 
 <h2 id="tocAnchor-1-8">起動/変換</h2>
 
 <p>最後にJekyllでhogehoge.htnファイルを静的ファイルに変換する。てっく煮さんのpluginがいくつかないと正常に変換されず、途中で止まるかも。</p>
 
-<p>(要確認)とりあえず <code>_plugins</code> 下にこんだけあれば動いた。ここははてなダイアリーで使っている記法による？amazonを使ってなければamazon.rbはいらないかもしれない。</p>
-<div class="highlight">
-  <pre>
-    <code class="language-" data-lang="">converters
+<p>(要確認)とりあえず <code class="highlighter-rouge">_plugins</code> 下にこんだけあれば動いた。ここははてなダイアリーで使っている記法による？amazonを使ってなければamazon.rbはいらないかもしれない。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>converters
 ┣ hatena.rb
 ┣ ext
 ┃┗ post_to_liquid_raw.rb
@@ -292,24 +291,24 @@ gem 'nokogiri'  # コンバート用</code>
   ┣ tweet.rb
   ┣ twitter.rb
   ┗ youtube.rb
-</code>
-  </pre>
+</code></pre>
 </div>
-<p>プロジェクトのGemfileでは <code>Jekyll</code> と <code>hparser</code> をGutHubから最新のものを持ってくればそれで良いかな。(そのうちgemでも取れるようになると思うが)あと <code>albino</code> じゃなくて <code>pygments.rb</code> を使うようにする。</p>
+
+<p>プロジェクトのGemfileでは <code class="highlighter-rouge">Jekyll</code> と <code class="highlighter-rouge">hparser</code> をGutHubから最新のものを持ってくればそれで良いかな。(そのうちgemでも取れるようになると思うが)あと <code class="highlighter-rouge">albino</code> じゃなくて <code class="highlighter-rouge">pygments.rb</code> を使うようにする。</p>
 
 <h2 id="tocAnchor-1-9">自分用TODO</h2>
 
 <ul>
-<li>おかしい
-
-<ul>
-<li>2009-10-19-1255949562.htn</li>
-<li>2011-05-01-1304204171.htn</li>
-<li>2011-10-08-1318068887.htn</li>
-<li>2011-11-27-1322329546.htn</li>
-<li>2011-11-28-1322482230.htn</li>
-<li>2011-12-16-1324086694.htn</li>
-</ul></li>
+  <li>おかしい
+    <ul>
+      <li>2009-10-19-1255949562.htn</li>
+      <li>2011-05-01-1304204171.htn</li>
+      <li>2011-10-08-1318068887.htn</li>
+      <li>2011-11-27-1322329546.htn</li>
+      <li>2011-11-28-1322482230.htn</li>
+      <li>2011-12-16-1324086694.htn</li>
+    </ul>
+  </li>
 </ul>
 
 </div>
