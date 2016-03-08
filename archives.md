@@ -6,10 +6,10 @@ noToc: true
 
 {% assign lists = site.posts %}
 
-## Calendar
-
-{% include calendar.html %}
-
 ## Entries
 
 {% include list.html %}
+
+## Calendar
+
+{% include calendar.html %}
