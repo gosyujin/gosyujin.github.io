@@ -14,7 +14,7 @@ Golangでスクリプトを作ったので、バイナリにして`homebrew`で�
 
 ## 参考
 
-- [HomeBrewで自作ツールを配布する | SOTA](http://deeeet.com/writing/2014/05/20/brew-tap/)
+- [HomeBrewで自作ツールを配布する ｜ SOTA](http://deeeet.com/writing/2014/05/20/brew-tap/)
 - [Go言語でつくったツールをHomebrewで配布する · THINKING MEGANE](http://blog.monochromegane.com/blog/2014/05/19/homebrew-formula-for-golang/)
 - Mackerel
     - [mackerelio/homebrew-mackerel-agent](https://github.com/mackerelio/homebrew-mackerel-agent)
