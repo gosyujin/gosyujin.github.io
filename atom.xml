@@ -4,13 +4,83 @@
  <title>kk_Atakaの日記</title>
  <link href="http://gosyujin.github.io/atom.xml" rel="self"/>
  <link href="http://gosyujin.github.io"/>
- <updated>2016-03-09T14:23:59+00:00</updated>
+ <updated>2016-04-30T14:33:43+00:00</updated>
  <id>http://gosyujin.github.io</id>
  <author>
    <name>kk_Ataka</name>
    <email>kk_ataka@ring.skr.jp</email>
  </author>
 
+ 
+ <entry>
+   <title>AndroidのAccountManagerをとりあえず動かすところまで</title>
+   <link href="http://gosyujin.github.io/2016/04/30/android-minimum-account-manager/"/>
+   <updated>2016-04-30T00:00:00+00:00</updated>
+   <id>http://gosyujin.github.io/2016/04/30/android-minimum-account-manager</id>
+   <content type="html">&lt;h2 id=&quot;section&quot;&gt;あらすじ&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Androidでアカウントに関連する情報をアプリ内に持ちたくない
+    &lt;ul&gt;
+      &lt;li&gt;Android側でAccountManagerという仕組みを用意してくれている&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;しかし、説明を読んでもイマイチピンとこなかった&lt;/li&gt;
+  &lt;li&gt;実際に動きを確認できるところまでサンプル作ってみた&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Android Security 安全なアプリケーションを作成するために 11.2章&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://gunosy.github.io/2014/05/30/android-accounts.html&quot;&gt;Android におけるアカウント管理 – Gunosy Tech Blog&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://qiita.com/nein37/items/25ba6e5176118fae5f13&quot;&gt;AccountManagerを利用する - Qiita&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://qiita.com/nein37/items/9aef7e4e06e71990c6e1&quot;&gt;AccountManagerでアカウントを管理する - Qiita&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;accountmanager&quot;&gt;AccountManagerの概念&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://cloud.githubusercontent.com/assets/588166/14935816/34843e48-0f1a-11e6-9446-d2e7a9ce8f62.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;AndroidSecurity安全なアプリケーションを作成するために P267より抜粋&lt;/p&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;環境&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Android Studio 1.5.1&lt;/li&gt;
+  &lt;li&gt;Minimum SDK API 19: Android 4.4(KitKat)&lt;/li&gt;
+  &lt;li&gt;Emulator Nexus 5 API 19 Android 4.4.4, API 19&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;動くもの&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;こんな感じで動く
+    &lt;ul&gt;
+      &lt;li&gt;ソース: &lt;a href=&quot;https://github.com/gosyujin/MinimumAccountManagerSample&quot;&gt;MinimumAccountManagerSample&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/gosyujin/MinimumAccountManagerSample/master/demo.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-4&quot;&gt;ハマり&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;AccountManager&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;Authenticator&lt;/code&gt; ともにサンプル通り作ってみようと思ったらエラーの切り分けができなかった&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Android的に×なのか&lt;/li&gt;
+  &lt;li&gt;AccountManager的に×なのか&lt;/li&gt;
+  &lt;li&gt;使おうとしたGoogle APIのお作法的に×なのか(多分これが一番有力)
+    &lt;ul&gt;
+      &lt;li&gt;Android Security(2012/2/21 第二版)のサンプルが古めのGoogle APIを使っていたため、これを最新に置き換えて〜という作業も発生していた&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;空の &lt;code class=&quot;highlighter-rouge&quot;&gt;Authenticator&lt;/code&gt; を作って、とりあえず登録できる口だけ用意する事で一気通貫通す事ができた！&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Golangで作ったスクリプトをbrew install&brew updateできるようにする</title>
