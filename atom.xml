@@ -4,13 +4,93 @@
  <title>kk_Atakaの日記</title>
  <link href="http://gosyujin.github.io/atom.xml" rel="self"/>
  <link href="http://gosyujin.github.io"/>
- <updated>2016-04-30T14:33:43+00:00</updated>
+ <updated>2016-05-29T05:25:53+00:00</updated>
  <id>http://gosyujin.github.io</id>
  <author>
    <name>kk_Ataka</name>
    <email>kk_ataka@ring.skr.jp</email>
  </author>
 
+ 
+ <entry>
+   <title>Android Apply Proguard</title>
+   <link href="http://gosyujin.github.io/2016/05/29/android-apply-proguard/"/>
+   <updated>2016-05-29T00:00:00+00:00</updated>
+   <id>http://gosyujin.github.io/2016/05/29/android-apply-proguard</id>
+   <content type="html">&lt;h2 id=&quot;section&quot;&gt;あらすじ&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Androidアプリの難読化作業を最後にまとめて実施しようとしたら思いがけずハマった&lt;/li&gt;
+  &lt;li&gt;しかし「こうすれば全部OK」という定石はなく、ライブラリの情報を読み、実際にアプリを実行していくしか方法がなさそう？&lt;/li&gt;
+  &lt;li&gt;ベストプラクティスなどあれば教えて下さい…&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://qiita.com/tsuyosh/items/9dd3c6b9dc11b5f640be&quot;&gt;ProGuard設定まとめ - Qiita&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://qiita.com/teracy/items/f42448a186ee2319a3c1#rxjava&quot;&gt;Proguardメモ - Qiita&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://qiita.com/niusounds/items/d58a0c1e99c9db0260f8&quot;&gt;ProGuardのメモ - Qiita&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/35009832/androidstudio-disable-expected-resource-of-type-string&quot;&gt;android - AndroidStudio disable “Expected resource of type string” - Stack Overflow&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;手順&lt;/h2&gt;
+
+&lt;p&gt;最後に一気にやろうとすると、とにかくまずビルドが通らない。&lt;/p&gt;
+
+&lt;p&gt;まっさらなプロジェクトを用意して一つずつライブラリを入れてくのが良さそう。&lt;/p&gt;
+
+&lt;h3 id=&quot;build-successful&quot;&gt;BUILD SUCCESSFULになるまで&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;まっさらなプロジェクト(以下、確認用プロジェクト)を作る
+    &lt;ul&gt;
+      &lt;li&gt;その状態でProGuardを適用するように設定変更する&lt;/li&gt;
+      &lt;li&gt;リリースビルド( &lt;code class=&quot;highlighter-rouge&quot;&gt;gradlew assembleRelease&lt;/code&gt; など)が成功する事を確認する&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;本プロジェクトで使用しているライブラリ( &lt;code class=&quot;highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt; に定義されているものなど)を確認用プロジェクトに追加していく
+    &lt;ul&gt;
+      &lt;li&gt;一つ追加してはビルドが失敗しない事を確認する&lt;/li&gt;
+      &lt;li&gt;失敗した場合はエラーメッセージを確認する&lt;/li&gt;
+      &lt;li&gt;恐らく追加したライブラリに関連するエラーが出ているはずなので、該当ライブラリREADME/GitHub IssueにProGuardに関する記載があるか確認する&lt;/li&gt;
+      &lt;li&gt;記載があった場合、ProGuard設定を追加し再度ビルドする&lt;/li&gt;
+      &lt;li&gt;…以上の手順を全ライブラリに対して行う&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;並行して、ビルド成功した場合は本プロジェクトにProGuard設定を転記していっても良いかも&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;build-successful-1&quot;&gt;BUILD SUCCESSFULになったあと&lt;/h3&gt;
+
+&lt;p&gt;難読化の影響で &lt;strong&gt;処理呼び出し時にコケる&lt;/strong&gt; 、というパターンもある。これは実際にapkを叩いてみるまでわからない模様。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;PCとAndroid端末をUSBで接続する&lt;/li&gt;
+  &lt;li&gt;リリース用apkをインストールする( &lt;code class=&quot;highlighter-rouge&quot;&gt;adb install&lt;/code&gt; など)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;adb logcat&lt;/code&gt; でログを確認できるようにしておく&lt;/li&gt;
+  &lt;li&gt;実機でコケる操作を行う&lt;/li&gt;
+  &lt;li&gt;logcatからエラーを確認する
+    &lt;ul&gt;
+      &lt;li&gt;コケているライブラリのREADME/GitHub IssueにProGuardに関する記載があるか確認する&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;…という感じの繰り返しで確認していく。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;ライブラリ追加時&lt;/h3&gt;
+
+&lt;p&gt;ライブラリを新たに追加する場合は毎回&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;BUILD FAILEDにならない事を確認する&lt;/li&gt;
+  &lt;li&gt;実機確認で追加ライブラリを使用している処理を実行する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;しかない？&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>AndroidのAccountManagerをとりあえず動かすところまで</title>
@@ -156,7 +236,7 @@
 
 &lt;p&gt;ファイルは&lt;code class=&quot;highlighter-rouge&quot;&gt;APPNAME.rb&lt;/code&gt;。今回は&lt;code class=&quot;highlighter-rouge&quot;&gt;bulkrenamer.rb&lt;/code&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Bulkrenamer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Formula&lt;/span&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Bulkrenamer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Formula&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;desc&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;BulkRenamer&quot;&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;homepage&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;https://github.com/gosyujin/bulkrenamer&quot;&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;head&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;https://github.com/gosyujin/homebrew-bulkrenamer.git&quot;&lt;/span&gt;
@@ -186,7 +266,7 @@
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;tap&lt;/code&gt;して&lt;code class=&quot;highlighter-rouge&quot;&gt;install&lt;/code&gt;でいける！&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;brew tap gosyujin/bulkrenamer
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;brew tap gosyujin/bulkrenamer
 &lt;span class=&quot;gp&quot;&gt;==&amp;gt; &lt;/span&gt;Tapping gosyujin/bulkrenamer
 Cloning into &lt;span class=&quot;s1&quot;&gt;&#39;/usr/local/Library/Taps/gosyujin/homebrew-bulkrenamer&#39;&lt;/span&gt;...
 remote: Counting objects: 3, &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;.
@@ -221,7 +301,7 @@ BulkRenamer ver.0.1
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;brew update&lt;/code&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;brew update
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;brew update
 Updated Homebrew from 468adbc to 215cb53.
 Updated 3 taps &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;caskroom/cask, caskroom/versions, gosyujin/bulkrenamer&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;.
  &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&amp;gt; New Formulae
@@ -237,7 +317,7 @@ libpagemaker
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;brew outdated&lt;/code&gt;で更新があるツールの確認。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;brew outdated
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;brew outdated
 gosyujin/bulkrenamer/bulkrenamer &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;v0.1, v0.2 &amp;lt; v0.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 go &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.5.3 &amp;lt; 1.6&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 openssl &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.0.2f &amp;lt; 1.0.2g&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
@@ -246,7 +326,7 @@ openssl &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.0.2f &amp;lt; 1.0.2g&lt;
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;brew upgrade&lt;/code&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;brew upgrade bulkrenamer
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;brew upgrade bulkrenamer
 &lt;span class=&quot;gp&quot;&gt;==&amp;gt; &lt;/span&gt;Upgrading 1 outdated package, with result:
 gosyujin/bulkrenamer/bulkrenamer v0.3
 &lt;span class=&quot;gp&quot;&gt;==&amp;gt; &lt;/span&gt;Upgrading gosyujin/bulkrenamer/bulkrenamer
@@ -283,11 +363,11 @@ gosyujin/bulkrenamer/bulkrenamer v0.3
 
 &lt;p&gt;EL Capitanに古い &lt;code class=&quot;highlighter-rouge&quot;&gt;2.14&lt;/code&gt; より低い &lt;code class=&quot;highlighter-rouge&quot;&gt;puma&lt;/code&gt; を入れるには &lt;code class=&quot;highlighter-rouge&quot;&gt;--with-opt-dir&lt;/code&gt; でopensslのパスを指定する必要がある。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;bundle config build.puma --with-opt-dir&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/usr/local/opt/openssl
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;bundle config build.puma --with-opt-dir&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/usr/local/opt/openssl
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;cat ~/.bundle/config
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;cat ~/.bundle/config
 ---
 BUNDLE_BUILD__PUMA: &lt;span class=&quot;s2&quot;&gt;&quot;--with-opt-dir=/usr/local/opt/openssl&quot;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -295,7 +375,7 @@ BUNDLE_BUILD__PUMA: &lt;span class=&quot;s2&quot;&gt;&quot;--with-opt-dir=/usr/l
 
 &lt;p&gt;指定しないとエラー。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
 
     /Users/ataka/.rbenv/versions/2.1.4/bin/ruby extconf.rb
 checking &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;BIO_read&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; -lcrypto... yes
@@ -935,7 +1015,7 @@ WARNING: &#39;default&#39; html theme has been renamed to &#39;classic&#39;. Ple
 
 &lt;p&gt;Liquidでもできました。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
 {% assign sorted_tags = site.tags | sort %}
 {% for tag in sorted_tags %}
   {% assign t = tag[0] %}
@@ -1375,7 +1455,7 @@ WARNING: &#39;default&#39; html theme has been renamed to &#39;classic&#39;. Ple
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Zope 1.9 alpha 1
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Zope 1.9 alpha 1
 
       This was the inital Zope test release.StructuredText.py
 &lt;/code&gt;&lt;/pre&gt;
@@ -1446,7 +1526,7 @@ WARNING: &#39;default&#39; html theme has been renamed to &#39;classic&#39;. Ple
 
 &lt;p&gt;以下はreST 0.4のChangelog。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Release 0.4 (2002-04-18)
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Release 0.4 (2002-04-18)
 ========================
 
 This is the final release of reStructuredText as an independent
@@ -1938,13 +2018,13 @@ Hugo Static Site Generator v0.13 BuildDate: 2015-05-12T10:43:12+09:00
 
 &lt;h3 id=&quot;section-2&quot;&gt;サイト新規作成&lt;/h3&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;hugo new site mysite
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;hugo new site mysite
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 &lt;p&gt;こんな感じの階層でファイルができる。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;C:.
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;C:.
 │  config.toml
 │
 ├─archetypes
@@ -1963,7 +2043,7 @@ Hugo Static Site Generator v0.13 BuildDate: 2015-05-12T10:43:12+09:00
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;content&lt;/code&gt;ディレクトリはいわゆる記事の置き場かな。&lt;code class=&quot;highlighter-rouge&quot;&gt;hugo new&lt;/code&gt;で&lt;code class=&quot;highlighter-rouge&quot;&gt;content&lt;/code&gt;の下にファイルが生成される。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;hugo new about.md
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;hugo new about.md
 content\about.md created
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
@@ -1975,7 +2055,7 @@ content\about.md created
 
 &lt;p&gt;Migrate方法はまだ全部見ていないが公式にもある。&lt;a href=&quot;http://gohugo.io/tutorials/migrate-from-jekyll/&quot;&gt;Migrate to Hugo from Jekyll&lt;/a&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ファイルサイズ - ファイル名
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ファイルサイズ - ファイル名
 2635 - 2012-10-10-jekyll-liquid-plugin.md
 4898 - 2012-10-01-bundle-exec-bat.mdｄ
 6387 - 2012-09-21-jekyll-pygments.md
@@ -2043,7 +2123,7 @@ content\about.md created
 
 &lt;h3 id=&quot;jekyll-build-&quot;&gt;jekyll build した場合&lt;/h3&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ time jekyll build
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ time jekyll build
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
@@ -2090,7 +2170,7 @@ content\about.md created
 
 &lt;p&gt;テーマは適当。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ hugo --theme=xxx
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ hugo --theme=xxx
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
