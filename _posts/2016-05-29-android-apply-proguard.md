@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "ProGuardでAndroidアプリを難読化していく手順(暫定)"
+title: "ProGuardでAndroidアプリを難読化していく手順(良い方法があったら知りたい)"
 description: ""
 category: 
 tags: [Android]
