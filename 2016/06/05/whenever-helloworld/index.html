@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <title>複数のRuby環境の管理・切替ができるpikを実行できた - kk_Atakaの日記</title>
+    <title>Rubyで自然言語っぽくcrontab管理できるwheneverを使う - kk_Atakaの日記</title>
     <meta charset="utf-8">
     <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
@@ -42,18 +42,16 @@
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2011/10/04/1317660186/">複数のRuby環境の管理・切替ができるpikを実行できた</a></h1>
+        <h1><a href="/2016/06/05/whenever-helloworld/">Rubyで自然言語っぽくcrontab管理できるwheneverを使う</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
               <span>[ <code><a href="/tags/#Ruby" class="tag">Ruby</a></code> ]</span>
             
-              <span>[ <code><a href="/tags/#備忘録" class="tag">備忘録</a></code> ]</span>
-            
           
           
-            <span>Published: 2011/10/04</span>
+            <span>Published: 2016/06/05</span>
           
         </div>
 
@@ -63,8 +61,8 @@
   <ul>
     
       <li class="prev">
-        <a href="/2011/10/03/1317642705/" title="Rubyのgemバージョン管理ができるBundlerを実行できなかった">
-          Rubyのgemバージョン管理ができるBundlerを実行できなかった
+        <a href="/2016/05/29/android-apply-proguard/" title="ProGuardでAndroidアプリを難読化していく手順(良い方法があったら知りたい)">
+          ProGuardでAndroidアプリを難読化していく手順(良い方法があったら知りたい)
         </a>
       </li>
     
@@ -72,10 +70,8 @@
       <a href="/archives/">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2011/10/08/1318068887/" title="さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする">
-          さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
@@ -93,213 +89,158 @@
           </div>
           <ul>
             <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">20111124追記</span></a>
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">参考</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">環境</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-4">
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">手順</span></a>
+              <ul>
+                <li class="toc_level-2 toc_section-5">
+                  <a href="#tocAnchor-1-4-1"><span class="tocnumber">4.1</span> <span class="toctext">crontab更新と削除</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-6">
+                  <a href="#tocAnchor-1-4-2"><span class="tocnumber">4.2</span> <span class="toctext">スケジュール確認</span></a>
+                </li>
+              </ul>
             </li>
           </ul>
         </td>
       </tr>
     </tbody>
   </table>
-</div><h1>あらすじ</h1>
+</div><h2 id="tocAnchor-1-1">あらすじ</h2>
+
 <ul>
-  <li><a href="http://d.hatena.ne.jp/kk_Ataka/20111003/1317642705">2011-10-03-1317642705</a>にてBundlerでのgem管理に失敗した</li>
-  <li>別の方法はないかと調べているとRubyをバージョンごとに管理できるrvmとpikを見つけた<ul><li>とりあえず別出ししておいて安定させたい環境と色々試行錯誤したい環境に分けられる？</li></ul></li>
-  <li>Windows環境なのでpikを使ってみようとインストールしてみた</li>
+  <li>cronタスクを書きたいけど、そのままctontabを書きかえたりするのはめんどいし怖い( <code class="highlighter-rouge">crontab -r</code> とか)</li>
+  <li>Rubyでcrontab管理をできるライブラリwheneverを使う</li>
 </ul>
-<h1>インストール手順(gem)</h1>
-<p>※gemでは実際にRubyをinstallする段階の所で失敗したので、実際は次のmsiを使ってインストールした。</p>
-<ul>
-  <li>gemでOK</li>
-</ul>
-<pre>gem install pik</pre>
-<ul>
-  <li>pikをインストールするにはpik_installコマンドを実行する必要があるが、フォルダを作成し、PATHに追加してから実行してくれと言われる</li>
-</ul>
-<pre>$ pik_install
-Usage:  pik_install path\to\install
 
-You should install to a directory that is in your system path,
-or add the directory to your system path.  Do not install to
-your ruby's bin directory because pik will remove it from the
-path when switching versions.
-
-Example:
-
-  C:\&gt;path
-
-  PATH=C:\tools;C:\ruby\Ruby-186-p383\bin;C:\WINDOWS\system32;...
-
-  C:\&gt;pik_install C:\tools</pre>
-<ul>
-  <li>C:\pikフォルダ作成しPATHに追加し再度</li>
-</ul>
-<pre>$ pik_install C:\pik
-Thank you for using pik.
-
-mkdir -p C:\pik
-mkdir -p %userprofile%/.pik
-Installing to C:\pik
-
-cp C:/ruby/lib/ruby/gems/1.8/gems/pik-0.2.8/tools/pik_runner.exe C:\pik
-cp C:/ruby/lib/ruby/gems/1.8/gems/pik-0.2.8/tools/pik.bat C:\pik
-cp C:/ruby/lib/ruby/gems/1.8/gems/pik-0.2.8/tools/pik.ps1 C:\pik
-
-creating %USERPROFILE%/.pik/.pikrc
-
-pik is installed
-
-The directory you installed to is not in the sytem path.
-C:\pik
-
-You will need to add it.
-
-
-if you want to use pik with git bash, add the following line to your ~/.bashrc:
-
-  [[ -s $USERPROFILE/.pik/.pikrc ]] &amp;&amp; source $USERPROFILE/.pik/.pikr</pre>
-<ul>
-  <li>ホームとC直下にファイルが作成された</li>
-</ul>
-<h1>インストール手順(msi)</h1>
-<p>※gemから入れるとRubyをinstallする段階でエラーが表示された。</p>
-<pre>$ pik install ruby -v 1.9.2-P136
-pik 0.2.8
-
-There was an error.
- Error: private method `gsub' called for nil:NilClass
-
-  in: pik/commands/install_command.rb:24:in `execute'
-  in: pik_runner:33</pre>
-<ul>
-  <li>他のバージョンでもだめだった。ぐぬぬ。調べてみるとgemからではなくmsiからインストールした方がよいとの事なので一回gem uninstallしてmsiからインストールする事に。。。</li>
-</ul>
-<blockquote>
-  <p>    * <a href="https://github.com/vertiginous/pik/downloads">Downloads · vertiginous/pik · GitHub</a></p>
-  <p>から .msi をダウンロードして実行してください。今回は pik 2.8.0 を使いました。</p>
-  <cite>
-    <a href="http://d.hatena.ne.jp/miau/20110106/1294325095">http://d.hatena.ne.jp/miau/20110106/1294325095</a>
-  </cite>
-</blockquote>
-<ul>
-  <li>msiからインストールする場合Rubyが空っぽの場合からでもいけるようなので既存のRubyを削除。。</li>
-  <li>そしてmsi実行</li>
-</ul>
-<p>pikコマンドを打つ際にRubyが一つも入っていないとエラーになるため、%USERPROFILE%\.pik\config.ymlにダミーのバージョンを記載する必要がある。</p>
-<pre>--- 
-"000: ruby 0.0.0 (dummy ruby for pik)": 
-  :path: !ruby/object:Pathname 
-    path: C:/pik/dummy
---- {}</pre>
-<p>で、使用法へ。</p>
-<h1>使用法</h1>
-<ul>
-  <li>現在インストールされているRuby表示</li>
-</ul>
-<pre>$ pik list
- * 187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]</pre>
-<ul>
-  <li>インストール可能なRuby一覧表示。Ruby1.8から1.9からJRubyまで</li>
-</ul>
-<pre>$ pik list -r
----
-DevKit:
-  3.4.5r3: http://rubyforge.org/frs/download.php/66888/devkit-3.4.5r3-20091110.7z
-IronRuby:
-  0.3.0: http://rubyforge.org/frs/download.php/53552/ironruby-0.3.0.zip
-  0.5.0: http://rubyforge.org/frs/download.php/57126/ironruby-0.5.0.zip
-  0.6.0: http://rubyforge.org/frs/download.php/59717/ironruby-0.6.0.zip
-  0.9.0: http://rubyforge.org/frs/download.php/61382/ironruby-0.9.0.zip
-  0.9.1: http://rubyforge.org/frs/download.php/64504/ironruby-0.9.1.zip
-  0.9.2: http://rubyforge.org/frs/download.php/66606/ironruby-0.9.2.zip
-  "1.0": http://rubyforge.org/frs/download.php/70179/ironruby-1.0.zip
-  1.0-rc1: http://rubyforge.org/frs/download.php/67955/ironruby-1.0-rc1.zip
-  1.0-rc2: http://rubyforge.org/frs/download.php/69180/ironruby-1.0-rc2.zip
-  1.0.0rc: http://rubyforge.org/frs/download.php/69853/ironruby-1.0.0rc.zip
-  1.0rc3: http://rubyforge.org/frs/download.php/69665/ironruby-1.0rc3.zip
-  1.0v4: http://rubyforge.org/frs/download.php/70181/ironruby-1.0v4.zip
-JRuby:
-  1.5.6: http://jruby.org.s3.amazonaws.com/downloads/1.5.6/jruby-bin-1.5.6.zip
-  1.6.4: http://jruby.org.s3.amazonaws.com/downloads/1.6.4/jruby-bin-1.6.4.zip
-Ruby:
-  1.8.7-p302: http://rubyforge.org/frs/download.php/72087/ruby-1.8.7-p302-i386-mingw32.7z
-  1.8.7-p330: http://rubyforge.org/frs/download.php/73720/ruby-1.8.7-p330-i386-mingw32.7z
-  1.8.7-p334: http://rubyforge.org/frs/download.php/74296/ruby-1.8.7-p334-i386-mingw32.7z
-  1.8.7-p352: http://rubyforge.org/frs/download.php/75108/ruby-1.8.7-p352-i386-mingw32.7z
-  1.9.1-p429: http://rubyforge.org/frs/download.php/71496/ruby-1.9.1-p429-i386-mingw32.7z
-  1.9.1-p430: http://rubyforge.org/frs/download.php/72076/ruby-1.9.1-p430-i386-mingw32.7z
-  1.9.2-p0: http://rubyforge.org/frs/download.php/72160/ruby-1.9.2-p0-i386-mingw32.7z
-  1.9.2-p136: http://rubyforge.org/frs/download.php/73723/ruby-1.9.2-p136-i386-mingw32.7z
-  1.9.2-p180: http://rubyforge.org/frs/download.php/74299/ruby-1.9.2-p180-i386-mingw32.7z
-  1.9.2-p290: http://rubyforge.org/frs/download.php/75128/ruby-1.9.2-p290-i386-mingw32.7z
-  1.9.2-rc1: http://rubyforge.org/frs/download.php/71498/ruby-1.9.2-rc1-i386-mingw32.7z
-  1.9.2dev-preview3-1: http://rubyforge.org/frs/download.php/71175/ruby-1.9.2dev-preview3-i386-mingw32-1.7z</pre>
-<ul>
-  <li>pikフォルダへRubyインストール</li>
-</ul>
-<pre>$ pik install ruby -v 1.9.2-p0
-pik 0.2.8
-** Downloading:  http://rubyforge.org/frs/download.php/72160/ruby-1.9.2-p0-i386-mingw32.7z
-   to:  %userprofile%\.pik\downloads\ruby-1.9.2-p0-i386-mingw32.7z
-
-ruby-1.9.2-p0-i386-mingw32.7z: 100% |oooooooooo|   5.7MB/  5.7MB Time: 00:00:20
-
-You need the 7zip utility to extract this file.
-Would you like me to download it? (yes/no)  |yes|
-y [ENTER]
-7za465.zip: 100% |ooooooooooooooooooooooooooooo| 352.5KB/352.5KB Time: 00:00:00
-
-** Extracting:  %USERPROFILE%\.pik\downloads\ruby-1.9.2-p0-i386-mingw32.7z
-   to:  %USERPROFILE%\.pik\rubies\Ruby-192-p0
-done
-
-** Adding:  192: ruby 1.9.2p0 (2010-08-18) [i386-mingw32]
- Located at:  %USERPROFILE%\.pik\rubies\Ruby-192-p0\bin</pre>
-<p>お、行けた。<span class="footnote"><a href="#f1" title="config.ymlを開きっぱにしている場合、Permission deniedがでる" name="fn1" id="fn1">*1</a></span></p>
-<ul>
-  <li>再度確認。1.9が入ってる。</li>
-</ul>
-<pre> $ pik list
- * 187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]
-   192: ruby 1.9.2p0 (2010-08-18) [i386-mingw32]</pre>
 <p>
-  <del datetime="2011-11-24T21:41:19+09:00">最後にswitch or sw or use コマンドを使用する事でrubyのバージョンを切り替えられる……はずだったのだが、どうにも試した環境だと変わらなかった。何故変わらんのだー。ので、今回の導入は見送りして少し調べないといかん。</del>
+  <a href="https://github.com/javan/whenever">javan/whenever: Cron jobs in Ruby</a>
 </p>
-<h2 id="tocAnchor-1-1">
-  <span class="deco" style="color:#FF0000;">20111124追記</span>
-</h2>
-<p>……と、切り替わらなかったのが前回までの話。原因は主に二つあり、なぜ切り替わらなかったのかわかるためにはpikの動きを追う必要があった。</p>
-<ol>
-  <li>環境変数がおかしかった</li>
-  <li>コマンドプロンプトではなくnyaosを使っていた</li>
-</ol>
-<p>この記事では1を解決させる。nyaosは <a href="http://d.hatena.ne.jp/kk_Ataka/20111124/1322138944">2011-11-24-1322138944</a> で。</p>
+
+<blockquote>
+  <p>Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs.</p>
+</blockquote>
+
+<h2 id="tocAnchor-1-2">参考</h2>
+
 <ul>
-  <li>
-    <a href="http://d.hatena.ne.jp/miyamuko/20100905/nyaos_with_pik">nyaos で pik を使う設定と pik の動作原理 - *Trace Output*</a>
+  <li><a href="http://morizyun.github.io/blog/whenever-gem-rails-ruby-capistrano/">Wheneverは導入が超簡単なcrontab管理ライブラリGemです！[Rails4.2 x Ruby2.3] - 酒と泪とRubyとRailsと</a></li>
+  <li><a href="http://qiita.com/yumiyon/items/388fbb84450f49a6ab0d">Railsで定期的にバッチ回す「Whenever」 - Qiita</a></li>
+</ul>
+
+<h2 id="tocAnchor-1-3">環境</h2>
+
+<ul>
+  <li>Ruby 2.3.0</li>
+  <li>Rails 4.1.6</li>
+</ul>
+
+<h2 id="tocAnchor-1-4">手順</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">Gemfile</code> に以下を追記し、 <code class="highlighter-rouge">bundle install</code></li>
+</ul>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="n">gem</span> <span class="s1">'whenever'</span><span class="p">,</span> <span class="ss">require: </span><span class="kp">false</span>
+</code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">bundle exec wheneverrize .</code> でスケジュール記述するファイルを作成する</li>
+</ul>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>bundle <span class="nb">exec </span>wheneverize .
+<span class="o">[</span>add] writing <span class="sb">`</span>./config/schedule.rb<span class="s1">'
+[done] wheneverized!
+</span></code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">config/schedule.rb</code> の記述はこんな感じで記述できる
+    <ul>
+      <li><code class="highlighter-rouge">every n hour</code> など自然言語っぽく書けてわかりやすい</li>
+    </ul>
   </li>
 </ul>
-<p>2-1. pik_runner.exe の処理を読むと最後に切り替えたRubyのパスを環境変数に追加するために%USERPROFILE%\.pik\pik.batを実行していると書いている。</p>
-<ul>
-  <li>ただし、このpik.batはインストールしてpik listとかって実行する時のpik.batとは違う<ul><li>そのpikはC:\pikとかに入っているはず</li></ul></li>
-</ul>
-<p>知らなかった……こんなbatファイルが生成されているとは。このSET PATHを見ると……ギャーーー！！　なんかpath変数の頭の方に%PATH%が入っていて、pikで追加したRuby(%USERPROFILE%\.pik\rubies\Ruby-192-p0\binなど)より既存Ruby(C:\ruby\binなど)のパスが前におるじゃないかぁぁぁ！　というわけで、path変数から%PATH%を取り除いたのが一つ。これでコマンドプロンプトからは動いた！</p>
-<h1>その他</h1>
-<p>今回は使わなかったコマンドたち</p>
-<p>既に入っているRubyをpikへ追加するaddと削除するuninstall</p>
-<pre>$ pik add Rubyのパス(ruby.exeのある場所)
-$ pik uninstall ruby -v 187</pre>
-<p>※コマンドはバージョンによって若干記述が違う様子。特にsw or switch or useあたり？</p>
-<div class="footnote">
-  <p class="footnote"><a href="#fn1" name="f1" id="f1">*1</a>: config.ymlを開きっぱにしている場合、Permission deniedがでる</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="c1"># ログ出力先</span>
+<span class="n">set</span> <span class="ss">:output</span><span class="p">,</span> <span class="s2">"log/cron.log"</span>
+<span class="c1"># productionの場合はproductionに</span>
+<span class="n">set</span> <span class="ss">:environment</span><span class="p">,</span> <span class="s2">"development"</span>
+
+<span class="c1"># 3時間毎、他にも色々書き方ある(公式のREADME参照)</span>
+<span class="n">every</span> <span class="mi">3</span><span class="p">.</span><span class="nf">hours</span> <span class="k">do</span>
+  <span class="c1"># Rails内のメソッド実行するときはrunner</span>
+  <span class="n">runner</span> <span class="s2">"MyModel.some_process"</span>
+  <span class="c1"># rakeタスクの場合はrake</span>
+  <span class="n">rake</span> <span class="s2">"my:rake:task"</span>
+  <span class="c1"># コマンド自体も記述できる</span>
+  <span class="n">command</span> <span class="s2">"/usr/bin/my_great_command"</span>
+<span class="k">end</span>
+
+<span class="c1"># いわゆるcronの書式でも書ける</span>
+<span class="n">every</span> <span class="s1">'0 0 27-31 * *'</span> <span class="k">do</span>
+  <span class="n">command</span> <span class="s2">"echo 'hello'"</span>
+<span class="k">end</span>
+</code></pre>
 </div>
+
+<h3 id="tocAnchor-1-4-1">crontab更新と削除</h3>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>bundle <span class="nb">exec </span>whenever --clear-crontab
+<span class="o">[</span>write] crontab file 
+</code></pre>
+</div>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>bundle <span class="nb">exec </span>whenever --update-crontab
+<span class="o">[</span>write] crontab file updated
+</code></pre>
+</div>
+
+<h3 id="tocAnchor-1-4-2">スケジュール確認</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">bundle exec whenever</code> で確認</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ bundle exec whenever
+* * * * * /bin/bash -l -c 'cd /Users/kk_Ataka/github/sample_whenever 実行するタスク'
+
+## [message] Above is your schedule file converted to cron syntax; your crontab file was not updated.
+## [message] Run `whenever --help' for more options.
+</code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">crontab -l</code> でも反映されている事確認できる</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># Begin Whenever generated tasks for: /Users/kk_Ataka/github/sample_whenever/config/schedule.rb
+0 * * * * config/schedule.rbに定義したcron
+
+# End Whenever generated tasks for: /Users/kk_Ataka/github/sample_whenever/config/schedule.rb
+</code></pre>
+</div>
+
+<ul>
+  <li>同じサーバー内の複数のプロジェクトで <code class="highlighter-rouge">whenever --update-crontab</code> , <code class="highlighter-rouge">whenever --clear-crontab</code> を実行しても、そのプロジェクトに紐づくcronのみ削除されるので安心</li>
+</ul>
+
 </div>
 
 <div class="pagination">
   <ul>
     
       <li class="prev">
-        <a href="/2011/10/03/1317642705/" title="Rubyのgemバージョン管理ができるBundlerを実行できなかった">
-          Rubyのgemバージョン管理ができるBundlerを実行できなかった
+        <a href="/2016/05/29/android-apply-proguard/" title="ProGuardでAndroidアプリを難読化していく手順(良い方法があったら知りたい)">
+          ProGuardでAndroidアプリを難読化していく手順(良い方法があったら知りたい)
         </a>
       </li>
     
@@ -307,10 +248,8 @@ $ pik uninstall ruby -v 187</pre>
       <a href="/archives/">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2011/10/08/1318068887/" title="さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする">
-          さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
@@ -321,17 +260,17 @@ $ pik uninstall ruby -v 187</pre>
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2011/10/04/1317660186/" data-text="kk_Atakaの日記 - 複数のRuby環境の管理・切替ができるpikを実行できた" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2016/06/05/whenever-helloworld/" data-text="kk_Atakaの日記 - Rubyで自然言語っぽくcrontab管理できるwheneverを使う" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/04/1317660186/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/10/04/1317660186/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/06/05/whenever-helloworld/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/06/05/whenever-helloworld/" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/04/1317660186/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - 複数のRuby環境の管理・切替ができるpikを実行できた"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/06/05/whenever-helloworld/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Rubyで自然言語っぽくcrontab管理できるwheneverを使う"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
 	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
@@ -343,7 +282,7 @@ $ pik uninstall ruby -v 187</pre>
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/10/04/1317660186//"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2016/06/05/whenever-helloworld//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>

@@ -4,13 +4,138 @@
  <title>kk_Atakaの日記</title>
  <link href="http://gosyujin.github.io/atom.xml" rel="self"/>
  <link href="http://gosyujin.github.io"/>
- <updated>2016-05-29T05:39:24+00:00</updated>
+ <updated>2016-06-05T04:38:51+00:00</updated>
  <id>http://gosyujin.github.io</id>
  <author>
    <name>kk_Ataka</name>
    <email>kk_ataka@ring.skr.jp</email>
  </author>
 
+ 
+ <entry>
+   <title>Rubyで自然言語っぽくcrontab管理できるwheneverを使う</title>
+   <link href="http://gosyujin.github.io/2016/06/05/whenever-helloworld/"/>
+   <updated>2016-06-05T00:00:00+00:00</updated>
+   <id>http://gosyujin.github.io/2016/06/05/whenever-helloworld</id>
+   <content type="html">&lt;h2 id=&quot;section&quot;&gt;あらすじ&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;cronタスクを書きたいけど、そのままctontabを書きかえたりするのはめんどいし怖い( &lt;code class=&quot;highlighter-rouge&quot;&gt;crontab -r&lt;/code&gt; とか)&lt;/li&gt;
+  &lt;li&gt;Rubyでcrontab管理をできるライブラリwheneverを使う&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/javan/whenever&quot;&gt;javan/whenever: Cron jobs in Ruby&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://morizyun.github.io/blog/whenever-gem-rails-ruby-capistrano/&quot;&gt;Wheneverは導入が超簡単なcrontab管理ライブラリGemです！[Rails4.2 x Ruby2.3] - 酒と泪とRubyとRailsと&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://qiita.com/yumiyon/items/388fbb84450f49a6ab0d&quot;&gt;Railsで定期的にバッチ回す「Whenever」 - Qiita&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;環境&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Ruby 2.3.0&lt;/li&gt;
+  &lt;li&gt;Rails 4.1.6&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;手順&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt; に以下を追記し、 &lt;code class=&quot;highlighter-rouge&quot;&gt;bundle install&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;whenever&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;require: &lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;bundle exec wheneverrize .&lt;/code&gt; でスケジュール記述するファイルを作成する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;wheneverize .
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;add] writing &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;./config/schedule.rb&lt;span class=&quot;s1&quot;&gt;&#39;
+[done] wheneverized!
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;config/schedule.rb&lt;/code&gt; の記述はこんな感じで記述できる
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;every n hour&lt;/code&gt; など自然言語っぽく書けてわかりやすい&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# ログ出力先&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;log/cron.log&quot;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# productionの場合はproductionに&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:environment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;development&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# 3時間毎、他にも色々書き方ある(公式のREADME参照)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;every&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;hours&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# Rails内のメソッド実行するときはrunner&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;runner&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;MyModel.some_process&quot;&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# rakeタスクの場合はrake&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;rake&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;my:rake:task&quot;&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# コマンド自体も記述できる&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;command&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/usr/bin/my_great_command&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# いわゆるcronの書式でも書ける&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;every&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;0 0 27-31 * *&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;command&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;echo &#39;hello&#39;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;crontab&quot;&gt;crontab更新と削除&lt;/h3&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;whenever --clear-crontab
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;write] crontab file 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;whenever --update-crontab
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;write] crontab file updated
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;スケジュール確認&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;bundle exec whenever&lt;/code&gt; で確認&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ bundle exec whenever
+* * * * * /bin/bash -l -c &#39;cd /Users/kk_Ataka/github/sample_whenever 実行するタスク&#39;
+
+## [message] Above is your schedule file converted to cron syntax; your crontab file was not updated.
+## [message] Run `whenever --help&#39; for more options.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;crontab -l&lt;/code&gt; でも反映されている事確認できる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Begin Whenever generated tasks for: /Users/kk_Ataka/github/sample_whenever/config/schedule.rb
+0 * * * * config/schedule.rbに定義したcron
+
+# End Whenever generated tasks for: /Users/kk_Ataka/github/sample_whenever/config/schedule.rb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;同じサーバー内の複数のプロジェクトで &lt;code class=&quot;highlighter-rouge&quot;&gt;whenever --update-crontab&lt;/code&gt; , &lt;code class=&quot;highlighter-rouge&quot;&gt;whenever --clear-crontab&lt;/code&gt; を実行しても、そのプロジェクトに紐づくcronのみ削除されるので安心&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+ </entry>
  
  <entry>
    <title>ProGuardでAndroidアプリを難読化していく手順(良い方法があったら知りたい)</title>
