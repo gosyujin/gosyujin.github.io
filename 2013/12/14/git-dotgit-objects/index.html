@@ -205,7 +205,7 @@
 <figure class="highlight">
   <pre>
     <code class="language-console" data-lang="console">  SHA1 557db03de997c86a4a028e1ebd3a1ceb225be238
-  ファイル .git/objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238</code>
+<span class="err">  ファイル .git/objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238</span></code>
   </pre>
 </figure>
 
@@ -247,13 +247,13 @@
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git cat-file -p 047f8f6f81e483c5c3004cd80d5ecb81a7f64090
-tree c3b5990fc81599cd04934d349b2c08a952f16c18               # コミットした時のファイル一覧
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 047f8f6f81e483c5c3004cd80d5ecb81a7f64090
+</span>tree c3b5990fc81599cd04934d349b2c08a952f16c18               # コミットした時のファイル一覧
 parent c11123084bd99af451ddf8eaad378b9a0a5ae695             # 1つ前の commit オブジェクト
 author kk_Ataka &lt;kk_ataka@example.com&gt; 1385538273 +0000     # 作成した人
 committer kk_Ataka &lt;kk_ataka@example.com&gt; 1385538273 +0000  # コミットした人
 
-add test.txt                                                # コミットログ</code>
+<span class="err">add test.txt                                                # コミットログ</span></code>
   </pre>
 </figure>
 
@@ -271,9 +271,9 @@ add test.txt                                                # コミットログ
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git cat-file -p c3b5990fc81599cd04934d349b2c08a952f16c18
-100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
-040000 tree 85a2934a71f7385034f934f9ccc8c746b73d4f44    testdir</code>
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p c3b5990fc81599cd04934d349b2c08a952f16c18
+</span>100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
+<span class="err">040000 tree 85a2934a71f7385034f934f9ccc8c746b73d4f44    testdir</span></code>
   </pre>
 </figure>
 
@@ -300,8 +300,15 @@ add test.txt                                                # コミットログ
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ mkdir git_test
-$ cd git_test/</code>
+    <code class="language-console" data-lang="console">
+      <span class="w">$ </span>
+      <span class="nc">mkdir</span>
+      <span class="kv"> git_test
+</span>
+      <span class="w">$ </span>
+      <span class="nc">cd</span>
+      <span class="kv"> git_test/</span>
+    </code>
   </pre>
 </figure>
 
@@ -309,13 +316,13 @@ $ cd git_test/</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git init
-Initialized empty Git repository in /home/vagrant/git_test/.git/
-$ ls -la
-total 12
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> init
+</span>Initialized empty Git repository in /home/vagrant/git_test/.git/
+<span class="w">$ </span><span class="nc">ls</span><span class="kv"> -la
+</span>total 12
 drwxrwxr-x 3 vagrant vagrant 4096 Nov 26 03:08 .
 drwx------ 4 vagrant vagrant 4096 Nov 26 03:08 ..
-drwxrwxr-x 7 vagrant vagrant 4096 Nov 26 03:08 .git</code>
+<span class="err">drwxrwxr-x 7 vagrant vagrant 4096 Nov 26 03:08 .git</span></code>
   </pre>
 </figure>
 
@@ -323,9 +330,9 @@ drwxrwxr-x 7 vagrant vagrant 4096 Nov 26 03:08 .git</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ cd .git
-$ ls -la
-total 40
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">cd</span><span class="kv"> .git
+</span><span class="w">$ </span><span class="nc">ls</span><span class="kv"> -la
+</span>total 40
 drwxrwxr-x 7 vagrant vagrant 4096 Nov 26 03:08 .
 drwxrwxr-x 3 vagrant vagrant 4096 Nov 26 03:08 ..
 drwxrwxr-x 2 vagrant vagrant 4096 Nov 26 03:08 branches
@@ -335,7 +342,7 @@ drwxrwxr-x 2 vagrant vagrant 4096 Nov 26 03:08 branches
 drwxrwxr-x 2 vagrant vagrant 4096 Nov 26 03:08 hooks
 drwxrwxr-x 2 vagrant vagrant 4096 Nov 26 03:08 info
 drwxrwxr-x 4 vagrant vagrant 4096 Nov 26 03:08 objects
-drwxrwxr-x 4 vagrant vagrant 4096 Nov 26 03:08 refs</code>
+<span class="err">drwxrwxr-x 4 vagrant vagrant 4096 Nov 26 03:08 refs</span></code>
   </pre>
 </figure>
 
@@ -392,10 +399,10 @@ drwxrwxr-x 4 vagrant vagrant 4096 Nov 26 03:08 refs</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git init
-Initialized empty Git repository in /home/vagrant/git_test/.git/.git/
-$ git add branches/ config description HEAD hooks/ info/ objects/ refs/
-$ git commit -m "fitst commit"</code>
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> init
+</span>Initialized empty Git repository in /home/vagrant/git_test/.git/.git/
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> add branches/ config description HEAD hooks/ info/ objects/ refs/
+</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "fitst commit"</span></code>
   </pre>
 </figure>
 
@@ -403,9 +410,17 @@ $ git commit -m "fitst commit"</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git status
-# On branch master
-nothing to commit (working directory clean)</code>
+    <code class="language-console" data-lang="console">
+      <span class="w">$ </span>
+      <span class="nc">git</span>
+      <span class="kv"> status
+</span>
+      <span class="ni"># </span>
+      <span class="nc">On</span>
+      <span class="kv"> branch master
+</span>
+      <span class="err">nothing to commit (working directory clean)</span>
+    </code>
   </pre>
 </figure>
 
@@ -419,9 +434,17 @@ nothing to commit (working directory clean)</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ echo "Hello World" &gt;&gt; README
-$ cat README
-Hello World</code>
+    <code class="language-console" data-lang="console">
+      <span class="w">$ </span>
+      <span class="nc">echo</span>
+      <span class="kv"> "Hello World" &gt;&gt; README
+</span>
+      <span class="w">$ </span>
+      <span class="nc">cat</span>
+      <span class="kv"> README
+</span>
+      <span class="err">Hello World</span>
+    </code>
   </pre>
 </figure>
 
@@ -429,10 +452,21 @@ Hello World</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ cd .git
-$ git status
-# On branch master
-nothing to commit (working directory clean)</code>
+    <code class="language-console" data-lang="console">
+      <span class="w">$ </span>
+      <span class="nc">cd</span>
+      <span class="kv"> .git
+</span>
+      <span class="w">$ </span>
+      <span class="nc">git</span>
+      <span class="kv"> status
+</span>
+      <span class="ni"># </span>
+      <span class="nc">On</span>
+      <span class="kv"> branch master
+</span>
+      <span class="err">nothing to commit (working directory clean)</span>
+    </code>
   </pre>
 </figure>
 
@@ -440,17 +474,17 @@ nothing to commit (working directory clean)</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git add README
-$ git status
-# On branch master
-#
-# Initial commit
-#
-# Changes to be committed:
-#   (use "git rm --cached &lt;file&gt;..." to unstage)
-#
-#       new file:   README
-#</code>
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> add README
+</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> status
+</span><span class="ni"># </span><span class="nc">On</span><span class="kv"> branch master
+</span>#
+<span class="ni"># </span><span class="nc">Initial</span><span class="kv"> commit
+</span>#
+<span class="ni"># </span><span class="nc">Changes</span><span class="kv"> to be committed:
+</span><span class="ni"># </span><span class="kv">  (use "git rm --cached &lt;file&gt;..." to unstage)
+</span>#
+<span class="ni"># </span><span class="kv">      new file:   README
+</span><span class="err">#</span></code>
   </pre>
 </figure>
 
@@ -458,14 +492,14 @@ $ git status
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ cd .git
-$ git status
-# On branch master
-# Untracked files:
-#   (use "git add &lt;file&gt;..." to include in what will be committed)
-#
-#       index
-#       objects/</code>
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">cd</span><span class="kv"> .git
+</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> status
+</span><span class="ni"># </span><span class="nc">On</span><span class="kv"> branch master
+</span><span class="ni"># </span><span class="nc">Untracked</span><span class="kv"> files:
+</span><span class="ni"># </span><span class="kv">  (use "git add &lt;file&gt;..." to include in what will be committed)
+</span>#
+<span class="ni"># </span><span class="kv">      index
+</span><span class="ni"># </span><span class="kv">      objects/</span></code>
   </pre>
 </figure>
 
@@ -473,8 +507,13 @@ $ git status
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ find ./objects/ -type f
-./objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238</code>
+    <code class="language-console" data-lang="console">
+      <span class="w">$ </span>
+      <span class="nc">find</span>
+      <span class="kv"> ./objects/ -type f
+</span>
+      <span class="err">./objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238</span>
+    </code>
   </pre>
 </figure>
 
@@ -489,12 +528,12 @@ $ git status
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git cat-file -t 557db03de997c86a4a028e1ebd3a1ceb225be238
-blob # type
-$ git cat-file -s 557db03de997c86a4a028e1ebd3a1ceb225be238
-12 # size
-$ git cat-file -p 557db03de997c86a4a028e1ebd3a1ceb225be238
-Hello World # 中身</code>
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 557db03de997c86a4a028e1ebd3a1ceb225be238
+</span>blob # type
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -s 557db03de997c86a4a028e1ebd3a1ceb225be238
+</span>12 # size
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 557db03de997c86a4a028e1ebd3a1ceb225be238
+</span><span class="err">Hello World # 中身</span></code>
   </pre>
 </figure>
 
@@ -502,10 +541,11 @@ Hello World # 中身</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ cd .git/objects/55
-$ ls
-7db03de997c86a4a028e1ebd3a1ceb225be238
-$ irb</code>
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">cd</span><span class="kv"> .git/objects/55
+</span><span class="w">$ </span><span class="nc">ls
+</span><span class="kv">
+</span>7db03de997c86a4a028e1ebd3a1ceb225be238
+<span class="w">$ </span><span class="nc">irb</span></code>
   </pre>
 </figure>
 
@@ -540,10 +580,10 @@ $ irb</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git commit -m "README first commit"
-[master (root-commit) c111230] README first commit
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "README first commit"
+</span>[master (root-commit) c111230] README first commit
  1 files changed, 1 insertions(+), 0 deletions(-)
- create mode 100644 README</code>
+<span class="err"> create mode 100644 README</span></code>
   </pre>
 </figure>
 
@@ -551,11 +591,11 @@ $ irb</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ cd .git/
-$ find ./objects/ -type f
-./objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">cd</span><span class="kv"> .git/
+</span><span class="w">$ </span><span class="nc">find</span><span class="kv"> ./objects/ -type f
+</span>./objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238
 ./objects/67/dc4302383b2715f4e0b8c41840eb05b1873697
-./objects/c1/1123084bd99af451ddf8eaad378b9a0a5ae695</code>
+<span class="err">./objects/c1/1123084bd99af451ddf8eaad378b9a0a5ae695</span></code>
   </pre>
 </figure>
 
@@ -565,16 +605,16 @@ $ find ./objects/ -type f
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git cat-file -t c11123084bd99af451ddf8eaad378b9a0a5ae695
-commit
-$ git cat-file -s c11123084bd99af451ddf8eaad378b9a0a5ae695
-182
-$ git cat-file -p c11123084bd99af451ddf8eaad378b9a0a5ae695
-tree 67dc4302383b2715f4e0b8c41840eb05b1873697
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t c11123084bd99af451ddf8eaad378b9a0a5ae695
+</span>commit
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -s c11123084bd99af451ddf8eaad378b9a0a5ae695
+</span>182
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p c11123084bd99af451ddf8eaad378b9a0a5ae695
+</span>tree 67dc4302383b2715f4e0b8c41840eb05b1873697
 author kk_Ataka &lt;kk_ataka@example.com&gt; 1385505619 +0000
 committer kk_Ataka &lt;kk_ataka@example.com&gt; 1385505619 +0000
 
-README first commit</code>
+<span class="err">README first commit</span></code>
   </pre>
 </figure>
 
@@ -588,12 +628,12 @@ README first commit</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git cat-file -t 67dc4302383b2715f4e0b8c41840eb05b1873697
-tree
-$ git cat-file -s 67dc4302383b2715f4e0b8c41840eb05b1873697
-34
-$ git cat-file -p 67dc4302383b2715f4e0b8c41840eb05b1873697
-100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README</code>
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 67dc4302383b2715f4e0b8c41840eb05b1873697
+</span>tree
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -s 67dc4302383b2715f4e0b8c41840eb05b1873697
+</span>34
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 67dc4302383b2715f4e0b8c41840eb05b1873697
+</span><span class="err">100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README</span></code>
   </pre>
 </figure>
 
@@ -617,13 +657,13 @@ $ git cat-file -p 67dc4302383b2715f4e0b8c41840eb05b1873697
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ mkdir testdir
-$ echo "test file" &gt;&gt; testdir/test.txt
-$ git add testdir/test.txt
-$ git commit -m "add test.txt"
-[master 047f8f6] add test.txt
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">mkdir</span><span class="kv"> testdir
+</span><span class="w">$ </span><span class="nc">echo</span><span class="kv"> "test file" &gt;&gt; testdir/test.txt
+</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> add testdir/test.txt
+</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "add test.txt"
+</span>[master 047f8f6] add test.txt
  1 files changed, 1 insertions(+), 0 deletions(-)
- create mode 100644 testdir/test.txt</code>
+<span class="err"> create mode 100644 testdir/test.txt</span></code>
   </pre>
 </figure>
 
@@ -631,14 +671,14 @@ $ git commit -m "add test.txt"
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ find .git/objects/ -type f
-.git/objects/04/7f8f6f81e483c5c3004cd80d5ecb81a7f64090
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">find</span><span class="kv"> .git/objects/ -type f
+</span>.git/objects/04/7f8f6f81e483c5c3004cd80d5ecb81a7f64090
 .git/objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238
 .git/objects/c3/b5990fc81599cd04934d349b2c08a952f16c18
 .git/objects/67/dc4302383b2715f4e0b8c41840eb05b1873697
 .git/objects/85/a2934a71f7385034f934f9ccc8c746b73d4f44
 .git/objects/c1/1123084bd99af451ddf8eaad378b9a0a5ae695
-.git/objects/16/b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe</code>
+<span class="err">.git/objects/16/b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe</span></code>
   </pre>
 </figure>
 
@@ -648,15 +688,15 @@ $ git commit -m "add test.txt"
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git cat-file -t 047f8f6f81e483c5c3004cd80d5ecb81a7f64090
-commit
-$ git cat-file -p 047f8f6f81e483c5c3004cd80d5ecb81a7f64090
-tree c3b5990fc81599cd04934d349b2c08a952f16c18
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 047f8f6f81e483c5c3004cd80d5ecb81a7f64090
+</span>commit
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 047f8f6f81e483c5c3004cd80d5ecb81a7f64090
+</span>tree c3b5990fc81599cd04934d349b2c08a952f16c18
 parent c11123084bd99af451ddf8eaad378b9a0a5ae695
 author kk_Ataka &lt;kk_ataka@example.com&gt; 1385508273 +0000
 committer kk_Ataka &lt;kk_ataka@example.com&gt; 1385508273 +0000
 
-add test.txt</code>
+<span class="err">add test.txt</span></code>
   </pre>
 </figure>
 
@@ -664,15 +704,15 @@ add test.txt</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git cat-file -t c3b5990fc81599cd04934d349b2c08a952f16c18
-tree
-$ git cat-file -p c3b5990fc81599cd04934d349b2c08a952f16c18
-100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t c3b5990fc81599cd04934d349b2c08a952f16c18
+</span>tree
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p c3b5990fc81599cd04934d349b2c08a952f16c18
+</span>100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
 040000 tree 85a2934a71f7385034f934f9ccc8c746b73d4f44    testdir
-$ git cat-file -t 85a2934a71f7385034f934f9ccc8c746b73d4f44
-tree
-$ git cat-file -p 85a2934a71f7385034f934f9ccc8c746b73d4f44
-100644 blob 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe    test.txt</code>
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 85a2934a71f7385034f934f9ccc8c746b73d4f44
+</span>tree
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 85a2934a71f7385034f934f9ccc8c746b73d4f44
+</span><span class="err">100644 blob 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe    test.txt</span></code>
   </pre>
 </figure>
 
@@ -680,10 +720,10 @@ $ git cat-file -p 85a2934a71f7385034f934f9ccc8c746b73d4f44
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git cat-file -t 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe
-blob
-$ git cat-file -p 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe
-test file</code>
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe
+</span>blob
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe
+</span><span class="err">test file</span></code>
   </pre>
 </figure>
 
@@ -697,13 +737,13 @@ test file</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git checkout -b test
-Switched to a new branch 'test'
-$ echo "test branch" &gt;&gt; README
-$ git add README
-$ git commit -m "test branch"
-[test 38c9e30] test branch
- 1 files changed, 1 insertions(+), 0 deletions(-)</code>
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> checkout -b test
+</span>Switched to a new branch 'test'
+<span class="w">$ </span><span class="nc">echo</span><span class="kv"> "test branch" &gt;&gt; README
+</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> add README
+</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "test branch"
+</span>[test 38c9e30] test branch
+<span class="err"> 1 files changed, 1 insertions(+), 0 deletions(-)</span></code>
   </pre>
 </figure>
 
@@ -711,11 +751,11 @@ $ git commit -m "test branch"
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git g
-* 38c9e30 f60ab37 2013-11-28 kk_Ataka  (HEAD, test) test branch
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> g
+</span>* 38c9e30 f60ab37 2013-11-28 kk_Ataka  (HEAD, test) test branch
 * c2333bd 1a53959 2013-11-28 kk_Ataka  (master) master branch
 * 047f8f6 c3b5990 2013-11-27 kk_Ataka  add test.txt
-* c111230 67dc430 2013-11-27 kk_Ataka  README first commit</code>
+<span class="err">* c111230 67dc430 2013-11-27 kk_Ataka  README first commit</span></code>
   </pre>
 </figure>
 
@@ -723,12 +763,12 @@ $ git commit -m "test branch"
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git checkout master
-Switched to branch 'master'
-$ git merge --no-ff test
-Merge made by recursive.
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> checkout master
+</span>Switched to branch 'master'
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> merge --no-ff test
+</span>Merge made by recursive.
  README |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)</code>
+<span class="err"> 1 files changed, 1 insertions(+), 0 deletions(-)</span></code>
   </pre>
 </figure>
 
@@ -736,14 +776,14 @@ Merge made by recursive.
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git g
-*   b870b73 f60ab37 2013-11-28 kk_Ataka  (HEAD, master) Merge branch 'test'
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> g
+</span>*   b870b73 f60ab37 2013-11-28 kk_Ataka  (HEAD, master) Merge branch 'test'
 |\
 | * 38c9e30 f60ab37 2013-11-28 kk_Ataka  (test) test branch
 |/
 * c2333bd 1a53959 2013-11-28 kk_Ataka  master branch
 * 047f8f6 c3b5990 2013-11-27 kk_Ataka  add test.txt
-* c111230 67dc430 2013-11-27 kk_Ataka  README first commit</code>
+<span class="err">* c111230 67dc430 2013-11-27 kk_Ataka  README first commit</span></code>
   </pre>
 </figure>
 
@@ -751,8 +791,13 @@ Merge made by recursive.
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git rev-parse HEAD
-b870b7313d2fcfda308204b12d5534c5ccac95cb</code>
+    <code class="language-console" data-lang="console">
+      <span class="w">$ </span>
+      <span class="nc">git</span>
+      <span class="kv"> rev-parse HEAD
+</span>
+      <span class="err">b870b7313d2fcfda308204b12d5534c5ccac95cb</span>
+    </code>
   </pre>
 </figure>
 
@@ -760,14 +805,14 @@ b870b7313d2fcfda308204b12d5534c5ccac95cb</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git cat-file -p b870b7313d2fcfda30
-tree f60ab375c7a4408527f814167a0dc9285f1cbcca
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p b870b7313d2fcfda30
+</span>tree f60ab375c7a4408527f814167a0dc9285f1cbcca
 parent c2333bd833a82784ca06a960890a739d43f32c5e
 parent 38c9e304d897e71c479bf78fe4def6bcb3ad1b72
 author kk_Ataka &lt;kk_ataka@example.com&gt; 1385633710 +0000
 committer kk_Ataka &lt;kk_ataka@example.com&gt; 1385633710 +0000
 
-Merge branch 'test'</code>
+<span class="err">Merge branch 'test'</span></code>
   </pre>
 </figure>
 
@@ -781,10 +826,21 @@ Merge branch 'test'</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ echo "hello" &gt;&gt; hello.txt
-$ git add hello.txt
-$ find .git/objects/ -type f
-.git/objects/ce/013625030ba8dba906f756967f9e9ca394464a</code>
+    <code class="language-console" data-lang="console">
+      <span class="w">$ </span>
+      <span class="nc">echo</span>
+      <span class="kv"> "hello" &gt;&gt; hello.txt
+</span>
+      <span class="w">$ </span>
+      <span class="nc">git</span>
+      <span class="kv"> add hello.txt
+</span>
+      <span class="w">$ </span>
+      <span class="nc">find</span>
+      <span class="kv"> .git/objects/ -type f
+</span>
+      <span class="err">.git/objects/ce/013625030ba8dba906f756967f9e9ca394464a</span>
+    </code>
   </pre>
 </figure>
 
@@ -792,15 +848,15 @@ $ find .git/objects/ -type f
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git commit -m "first commit"
-(略)
-$ find .git/objects/ -type f
-.git/objects/aa/a96ced2d9a1c8e72c56b253a0e2fe78393feb7    # tree
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "first commit"
+</span>(略)
+<span class="w">$ </span><span class="nc">find</span><span class="kv"> .git/objects/ -type f
+</span>.git/objects/aa/a96ced2d9a1c8e72c56b253a0e2fe78393feb7    # tree
 .git/objects/30/5fd379be250870d1e55584241637dacb44ec82    # commit
 .git/objects/ce/013625030ba8dba906f756967f9e9ca394464a    # blob  hello.txt
-$ git status
-# On branch master
-nothing to commit (working directory clean)</code>
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> status
+</span><span class="ni"># </span><span class="nc">On</span><span class="kv"> branch master
+</span><span class="err">nothing to commit (working directory clean)</span></code>
   </pre>
 </figure>
 
@@ -810,19 +866,19 @@ nothing to commit (working directory clean)</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git rm hello.txt
-rm 'hello.txt'
-$ git status
-# On branch master
-# Changes to be committed:
-#   (use "git reset HEAD &lt;file&gt;..." to unstage)
-#
-#       deleted:    hello.txt
-#
-$ find .git/objects/ -type f
-.git/objects/aa/a96ced2d9a1c8e72c56b253a0e2fe78393feb7
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> rm hello.txt
+</span>rm 'hello.txt'
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> status
+</span><span class="ni"># </span><span class="nc">On</span><span class="kv"> branch master
+</span><span class="ni"># </span><span class="nc">Changes</span><span class="kv"> to be committed:
+</span><span class="ni"># </span><span class="kv">  (use "git reset HEAD &lt;file&gt;..." to unstage)
+</span>#
+<span class="ni"># </span><span class="kv">      deleted:    hello.txt
+</span>#
+<span class="w">$ </span><span class="nc">find</span><span class="kv"> .git/objects/ -type f
+</span>.git/objects/aa/a96ced2d9a1c8e72c56b253a0e2fe78393feb7
 .git/objects/30/5fd379be250870d1e55584241637dacb44ec82
-.git/objects/ce/013625030ba8dba906f756967f9e9ca394464a</code>
+<span class="err">.git/objects/ce/013625030ba8dba906f756967f9e9ca394464a</span></code>
   </pre>
 </figure>
 
@@ -832,14 +888,14 @@ $ find .git/objects/ -type f
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git commit -m "delete hello.txt"
-(略)
-$ find .git/objects/ -type f
-.git/objects/aa/a96ced2d9a1c8e72c56b253a0e2fe78393feb7    # tree
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "delete hello.txt"
+</span>(略)
+<span class="w">$ </span><span class="nc">find</span><span class="kv"> .git/objects/ -type f
+</span>.git/objects/aa/a96ced2d9a1c8e72c56b253a0e2fe78393feb7    # tree
 .git/objects/30/5fd379be250870d1e55584241637dacb44ec82    # commit
 .git/objects/4b/825dc642cb6eb9a060e54bf8d69288fbee4904
 .git/objects/ce/013625030ba8dba906f756967f9e9ca394464a    # blob  hello.txt
-.git/objects/72/e0a285935e33b62877ecb809fd4b6fac6d416d</code>
+<span class="err">.git/objects/72/e0a285935e33b62877ecb809fd4b6fac6d416d</span></code>
   </pre>
 </figure>
 
@@ -847,24 +903,24 @@ $ find .git/objects/ -type f
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git cat-file -t 72e0
-commit
-$ git cat-file -p 72e0
-tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 72e0
+</span>commit
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 72e0
+</span>tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904
 parent 305fd379be250870d1e55584241637dacb44ec82
 author kk_Ataka &lt;kk_ataka@example.com&gt; 1386303674 +0000
 committer kk_Ataka &lt;kk_ataka@example.com&gt; 1386303674 +0000
 
-delete hello.txt</code>
+<span class="err">delete hello.txt</span></code>
   </pre>
 </figure>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git cat-file -t 4b82
-tree
-$ git cat-file -p 4b82
-$</code>
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 4b82
+</span>tree
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 4b82
+</span><span class="err">$</span></code>
   </pre>
 </figure>
 
@@ -902,17 +958,17 @@ $</code>
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git cat-file -p HEAD # HEAD = commit オブジェクト
-tree c3b5990fc81599cd04934d349b2c08a952f16c18
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p HEAD # HEAD = commit オブジェクト
+</span>tree c3b5990fc81599cd04934d349b2c08a952f16c18
 parent c11123084bd99af451ddf8eaad378b9a0a5ae695
 author kk_Ataka &lt;kk_ataka@example.com&gt; 1385508273 +0000
 committer kk_Ataka &lt;kk_ataka@example.com&gt; 1385508273 +0000
 
 add test.txt
 
-$ git cat-file -p c3b5990 # tree オブジェクト
-100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
-040000 tree 85a2934a71f7385034f934f9ccc8c746b73d4f44    testdir</code>
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p c3b5990 # tree オブジェクト
+</span>100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
+<span class="err">040000 tree 85a2934a71f7385034f934f9ccc8c746b73d4f44    testdir</span></code>
   </pre>
 </figure>
 
@@ -920,8 +976,13 @@ $ git cat-file -p c3b5990 # tree オブジェクト
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git hash-object README # blob オブジェクト
-557db03de997c86a4a028e1ebd3a1ceb225be238</code>
+    <code class="language-console" data-lang="console">
+      <span class="w">$ </span>
+      <span class="nc">git</span>
+      <span class="kv"> hash-object README # blob オブジェクト
+</span>
+      <span class="err">557db03de997c86a4a028e1ebd3a1ceb225be238</span>
+    </code>
   </pre>
 </figure>
 
@@ -929,8 +990,13 @@ $ git cat-file -p c3b5990 # tree オブジェクト
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git rev-parse HEAD
-047f8f6f81e483c5c3004cd80d5ecb81a7f64090</code>
+    <code class="language-console" data-lang="console">
+      <span class="w">$ </span>
+      <span class="nc">git</span>
+      <span class="kv"> rev-parse HEAD
+</span>
+      <span class="err">047f8f6f81e483c5c3004cd80d5ecb81a7f64090</span>
+    </code>
   </pre>
 </figure>
 
@@ -938,11 +1004,11 @@ $ git cat-file -p c3b5990 # tree オブジェクト
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git ls-tree HEAD
-100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> ls-tree HEAD
+</span>100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
 040000 tree 85a2934a71f7385034f934f9ccc8c746b73d4f44    testdir
-$ git ls-tree 85a293
-100644 blob 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe    test.txt</code>
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> ls-tree 85a293
+</span><span class="err">100644 blob 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe    test.txt</span></code>
   </pre>
 </figure>
 
@@ -950,10 +1016,10 @@ $ git ls-tree 85a293
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git ls-files --stage
-100644 d7f3c505ac2e28aaac5fa9210adb1115b8c57d72 0       README
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> ls-files --stage
+</span>100644 d7f3c505ac2e28aaac5fa9210adb1115b8c57d72 0       README
 100644 9daeafb9864cf43055ae93beb0afd6c7d144bfa4 0       new.txt
-100644 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe 0       testdir/test.txt</code>
+<span class="err">100644 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe 0       testdir/test.txt</span></code>
   </pre>
 </figure>
 
@@ -961,18 +1027,18 @@ $ git ls-tree 85a293
 
 <figure class="highlight">
   <pre>
-    <code class="language-console" data-lang="console">$ git show d7f3c505ac2e28a
-Hello World
+    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> show d7f3c505ac2e28a
+</span>Hello World
 master branch
 test branch
 
-$ git show HEAD
-commit b870b7313d2fcfda308204b12d5534c5ccac95cb
+<span class="w">$ </span><span class="nc">git</span><span class="kv"> show HEAD
+</span>commit b870b7313d2fcfda308204b12d5534c5ccac95cb
 Merge: c2333bd 38c9e30
 Author: kk_Ataka &lt;kk_ataka@example.com&gt;
 Date:   Thu Nov 28 20:15:10 2013 +0000
 
-    Merge branch 'test'</code>
+<span class="err">    Merge branch 'test'</span></code>
   </pre>
 </figure>
 
@@ -1100,6 +1166,18 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/12/14/git-dot
   
     
       <li>
+        <span>2016/07/30</span>
+        
+          <span>[ <code><a href="/tags/#Scala">Scala</a></code> ]</span>
+        
+        <a href="/2016/07/30/gatling-helloworld/">Gatlingを使用してみた</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/07/30/gatling-helloworld/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/07/30/gatling-helloworld/" />
+        </a>
+      </li>
+    
+      <li>
         <span>2016/06/05</span>
         
           <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
@@ -1214,22 +1292,6 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/12/14/git-dot
         <!-- Hatena Bookmark Users -->
         <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/">
           <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/11/01/sphinx-workshop-kansai-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2015/10/13</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2015/10/13/pyconjp-sphinx-handson-kpt/">PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/10/13/pyconjp-sphinx-handson-kpt/" />
         </a>
       </li>
     
@@ -1361,6 +1423,9 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/12/14/git-dot
     
       
       <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
+    
+      
+      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
     
       
       <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>

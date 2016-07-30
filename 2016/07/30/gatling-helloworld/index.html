@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <title>Windowsのローカル環境にWordPressをインストールした - kk_Atakaの日記</title>
+    <title>Gatlingを使用してみた - kk_Atakaの日記</title>
     <meta charset="utf-8">
     <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
@@ -42,18 +42,16 @@
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2011/10/11/1318334855/">Windowsのローカル環境にWordPressをインストールした</a></h1>
+        <h1><a href="/2016/07/30/gatling-helloworld/">Gatlingを使用してみた</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags/#Windows" class="tag">Windows</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#備忘録" class="tag">備忘録</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Scala" class="tag">Scala</a></code> ]</span>
             
           
           
-            <span>Published: 2011/10/11</span>
+            <span>Published: 2016/07/30</span>
           
         </div>
 
@@ -63,8 +61,8 @@
   <ul>
     
       <li class="prev">
-        <a href="/2011/10/08/1318068887/" title="さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする">
-          さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする
+        <a href="/2016/06/05/whenever-helloworld/" title="Rubyで自然言語っぽくcrontab管理できるwheneverを使う">
+          Rubyで自然言語っぽくcrontab管理できるwheneverを使う
         </a>
       </li>
     
@@ -72,10 +70,8 @@
       <a href="/archives/">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2011/11/16/1321447232/" title="Excel2007のF1キーを無効化する">
-          Excel2007のF1キーを無効化する
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
@@ -93,222 +89,164 @@
           </div>
           <ul>
             <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">インストール、設定</span></a>
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
             </li>
             <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">Windowsサービス登録</span></a>
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">Gatlingとは</span></a>
             </li>
             <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">Windowsサービス起動</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-4">
-              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">ユーザ作成</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-5">
-              <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">インストール</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-6">
-              <a href="#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">インストール</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-7">
-              <a href="#tocAnchor-1-7"><span class="tocnumber">7</span> <span class="toctext">参考サイト</span></a>
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">実際に使う</span></a>
             </li>
           </ul>
         </td>
       </tr>
     </tbody>
   </table>
-</div><h1>あらすじ</h1>
-<ul>
-  <li>Wordpress上ではてな記法を使うことができるというプラグイン <a href="http://rewish.org/wp/hatena_notation_plugin">WordPressにはてな記法を導入するプラグインを作った - Rewish</a> を見つけて使ってみたい！　と思ったのでWordpress備忘録も兼ねてインストール</li>
-</ul>
-<h1>参考サイト</h1>
-<ul>
-  <li>WordPress<ul><li><a href="http://ja.wordpress.org/">WordPress | 日本語</a></li><li><a href="http://ja.wordpress.org/install/">WordPress | 日本語 » インストール</a></li><li><a href="http://www.webcreatorbox.com/tech/wordpress-install-local/">Wordpressをローカルにインストールする | Webクリエイターボックス</a></li></ul></li>
-  <li>MySQL<ul><li><a href="http://y-kit.jp/saba/xp/mysqlinst.htm">MySQLデータベースサーバーのインストール Windows篇</a></li><li><a href="http://www.mysql.com/downloads/installer/">MySQL ::  Download MySQL Installer</a></li></ul></li>
-</ul>
-<h1>推奨環境</h1>
-<ul>
-  <li>WordPress 3.2 の場合<ul><li>PHP 5.2.4 以上</li><li>MySQL 5.0 以上</li></ul></li>
-</ul>
-<h1>実行環境</h1>
-<ul>
-  <li>Windows XP</li>
-  <li>WordPress 3.2</li>
-  <li>Apache 2.2.1</li>
-  <li>PHP 5.3.8</li>
-  <li>MySQL 5.5.15</li>
-</ul>
-<h1>MySQL</h1>
-<h2 id="tocAnchor-1-1">インストール、設定</h2>
-<ul>
-  <li><a href="http://www.mysql.com/downloads/installer/">MySQL ::  Download MySQL Installer</a>よりMySQLをDL。登録がめんどかったら<a href="http://download.softagency.net/mysql/Downloads/MySQL-5.5/">Index of /mysql/Downloads/MySQL-5.5</a>この辺から</li>
-  <li>msi実行。基本的に次へ次へ</li>
-  <li>C:\windows直下にmy.iniファイルを作成以下のように記述<ul><li>basedirはMySQLのルート(msiでデフォルトインストールするとC:/Program Files/MySQL/MySQL Server 5.5に入る)</li><li>datadirはその中のdataフォルダ</li></ul></li>
-</ul>
-<pre class="python">[mysqld]
-basedir="C:/Program Files/MySQL/MySQL Server 5.5"
-datadir="C:/Program Files/MySQL/MySQL Server 5.5/data"
-default-character-set=cp932
+</div><h2 id="tocAnchor-1-1">あらすじ</h2>
 
-[mysql]
-default-character-set=cp932</pre>
-<h2 id="tocAnchor-1-2">Windowsサービス登録</h2>
-<pre class="python">$ cd "c:/Program Files/MySQL/MySQL Server 5.5/bin/"
-$ mysqld --install
-Service successfully installed.</pre>
-<h2 id="tocAnchor-1-3">Windowsサービス起動</h2>
-<pre class="python">$ net start mysql
-MySQL サービスを開始します....
-MySQL サービスを開始できませんでした。
+<p>サーバーにリクエストをいっぱい投げて負荷をかけたい。(いわゆる弾投げ)</p>
 
-システム エラーが発生しました。
+<ul>
+  <li>WEB+DB-PRESS-Vol.83 Javaの鉱脈 Gatlingによる多彩で柔軟な負荷テスト</li>
+  <li><a href="http://qiita.com/nii_yan/items/d7d0ea949abeab13aea7">便利すぎる負荷試験テストツールGatlingの使い方~自力ソース編~ - Qiita</a></li>
+  <li><a href="http://shanon-tech.blogspot.jp/2015/10/scala-gatling.html">Scala 初心者が Gatling をぶっ放して負荷テストをやってみました - SHANON　Engineer’s　Blog</a></li>
+</ul>
 
-システム エラー 1067 が発生しました。
+<h2 id="tocAnchor-1-2">Gatlingとは</h2>
 
-プロセスを途中で強制終了しました。</pre>
 <ul>
-  <li>エラーが起きた。1067でググってみると設定ファイルがうまく読み込めていないよう</li>
-  <li>さらにdatadir下にある.errファイルを見るとこんなエラーが。default-character-setミスってるっぽい？</li>
+  <li>負荷テストツール</li>
+  <li>2011年頃から作成</li>
+  <li>Scalaで実装されている</li>
+  <li><strong>Scalaでテストケースを書く</strong></li>
+  <li>ライバルはJMeter</li>
 </ul>
-<pre class="python">111004 17:18:24 [ERROR] c:\Program Files\MySQL\MySQL Server 5.5\bin\mysqld.exe: unknown variable 'default-character-set=cp932'</pre>
-<ul>
-  <li>default-character-setが使えるのははMySQL5.0までで5.5以降はcharacter-set-serverとなるらしい</li>
-  <li>ただし、[mysql]はdefault-character-setらしい…？</li>
-  <li>my.ini書き換え</li>
-</ul>
-<pre class="python">[mysqld]
-basedir="C:/Program Files/MySQL/MySQL Server 5.5"
-datadir="C:/Program Files/MySQL/MySQL Server 5.5/data"
-# default-character-set=cp932
-character-set-server=cp932
 
-[mysql]
-default-character-set=cp932
-# character-set-server=cp932</pre>
-<ul>
-  <li>一旦サービス削除</li>
-</ul>
-<pre class="python">$ mysqld --remove
-Service successfully removed.</pre>
-<ul>
-  <li>設定ファイルを指定しつつサービス登録</li>
-</ul>
-<pre class="python">$ mysqld --install
-Service successfully installed.</pre>
-<ul>
-  <li>再度起動</li>
-</ul>
-<pre class="python">$ net start mysql
-MySQL サービスを開始します..
-MySQL サービスは正常に開始されました</pre>
-<p>よし。</p>
-<h2 id="tocAnchor-1-4">ユーザ作成</h2>
-<ul>
-  <li>はじめにrootユーザのパスワードを設定する</li>
-</ul>
-<pre class="python">$ mysqladmin.exe -u root password root</pre>
-<ul>
-  <li>接続</li>
-</ul>
-<pre class="python">$ mysql -u root -p
-Enter password: **** # パスワード求められる</pre>
-<ul>
-  <li>Wordpress用のDBを作成</li>
-</ul>
-<pre class="python">mysql&gt; create database wordpress
-    -&gt; ;
-Query OK, 1 row affected (0.05 sec)</pre>
-<ul>
-  <li>とりあえず終了</li>
-</ul>
-<pre class="python">mysql&gt; quit
-Bye</pre>
-<h1>PHP</h1>
-<h2 id="tocAnchor-1-5">インストール</h2>
-<ul>
-  <li><a href="http://windows.php.net/download/">PHP For Windows: Binaries and sources Releases</a> からWindows用のPHPをDL<ul><li>Non Thread safe版にはApacheと連携するためのライブラリ等が入っていないのでThread safe版のInstallerを</li></ul></li>
-  <li>次へ次へ<ul><li>インストール先はC:\Program Files\PHP\にした</li></ul></li>
-  <li>Web Server Setup は Apache 2.2.x Moduleを選択</li>
-  <li>Apache Configuration Directory は次に入れるApacheのパスを記述(どこまで？Apacheルート？　bin？)</li>
-</ul>
-<h1>Apache</h1>
-<h2 id="tocAnchor-1-6">インストール</h2>
-<ul>
-  <li><a href="http://httpd.apache.org/download.cgi#apache22">Download - The Apache HTTP Server Project</a> からDL</li>
-</ul>
-<h1>ApacheとPHPとWordpressの連携</h1>
-<ul>
-  <li>APACHE2.2\conf\httpd.confファイルを編集<ul><li>LoadModuleの近くに追加</li></ul></li>
-</ul>
-<pre class="python">PHPIniDir "C:\Program Files\PHP\" # PHPがインストールされているフォルダ
-LoadModule php5_module "C:/Program Files/PHP/php5apache2_2.dll"</pre>
-<ul>
-  <ul>
-    <li>DocumentRootをWordpressのルートに変更</li>
-  </ul>
-</ul>
-<pre class="python">DocumentRoot "C:\Program Files\wordpress" # Wordpressを解凍したフォルダ
+<h2 id="tocAnchor-1-3">実際に使う</h2>
 
-&lt;Directory "C:\Program Files\wordpress"&gt; # 同じく</pre>
 <ul>
-  <ul>
-    <li>index.phpをウェルカムファイルに追加</li>
-  </ul>
+  <li><a href="http://gatling.io/#/resources/download">Gatling Project, Stress Tool</a></li>
 </ul>
-<pre>    DirectoryIndex index.html, index.php # index.php追加。htmlより左に持って行くと最優先でindex.phpが表示</pre>
-<ul>
-  <ul>
-    <li>AddTypeなどを追加</li>
-  </ul>
-</ul>
-<pre>     AddHandler cgi-script .cgi
 
-     AddType application/x-httpd-php .php
-     PHPIniDir "C:/Program Files/PHP"</pre>
-<ul>
-  <li>Apache再起動後、localhost:80へアクセスすると(エラーが出るが)PHPが実行されているはず</li>
-</ul>
-<h1>WordPress</h1>
-<ul>
-  <li><a href="http://ja.wordpress.org/">WordPress | 日本語</a> からWordPressをDLし解凍</li>
-  <li>wp-config-sample.phpをコピーしwp-config.phpを作成し、以下の設定を変更</li>
-</ul>
-<pre class="python">// ** MySQL 設定 - こちらの情報はホスティング先から入手してください。 ** //
-/** WordPress のためのデータベース名 */
-define('DB_NAME', 'database_name_here'); # 上で作成したwordpressに
+<p>からダウンロードできる。今回はzipでDLした。</p>
 
-/** MySQL データベースのユーザー名 */
-define('DB_USER', 'username_here'); # ユーザ(今回はrootで)
+<ul>
+  <li>DLしたzipファイルを解凍、ディレクトリに移動し、適当なテストケースを作成する</li>
+</ul>
 
-/** MySQL データベースのパスワード */
-define('DB_PASSWORD', 'password_here'); # パスワード</pre>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nb">cd </span>gatling-charts-highcharts-bundle-2.2.1
+vi user-files/simulations/computerdatabase/advanced/Sample.scala
+</code></pre>
+</div>
+
 <ul>
-  <li>localhost:80/wp-admin/install.phpへアクセスし、「ようこそ」画面が出てきたら正常動作している</li>
-  <li>サイトのタイトル、ユーザ名、パスワードを入力し「Wordpressをインストール」ボタン押下</li>
-  <li>localhost:80にアクセスし、Hello World!が表示されていれば完了！</li>
+  <li>テストコードはサンプルを見ながら…scalaやったことないからちょっと難しい</li>
 </ul>
-<h1>wordpress-hatena</h1>
-<h2 id="tocAnchor-1-7">参考サイト</h2>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">io.gatling.core.Predef._</span>
+<span class="k">import</span> <span class="nn">io.gatling.http.Predef._</span>
+<span class="k">import</span> <span class="nn">scala.concurrent.duration._</span>
+<span class="k">class</span> <span class="nc">Sample</span> <span class="k">extends</span> <span class="nc">Simulation</span> <span class="o">{</span>
+  <span class="c1">// プロトコルの定義
+</span>  <span class="k">val</span> <span class="n">httpConf</span> <span class="k">=</span> <span class="n">http</span>
+    <span class="o">.</span><span class="n">baseURL</span><span class="o">(</span><span class="s">"http://localhost:8080"</span><span class="o">)</span>
+  <span class="c1">// シナリオの定義
+</span>  <span class="k">val</span> <span class="n">scn</span> <span class="k">=</span> <span class="n">scenario</span><span class="o">(</span><span class="s">"Sample"</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">exec</span><span class="o">(</span><span class="n">http</span><span class="o">(</span><span class="s">"sample_request"</span><span class="o">)</span>
+      <span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="s">"/"</span><span class="o">))</span>
+    <span class="o">.</span><span class="n">pause</span><span class="o">(</span><span class="mi">100</span> <span class="n">milliseconds</span><span class="o">)</span>
+  <span class="c1">// シナリオの構成
+</span>  <span class="n">setUp</span><span class="o">(</span><span class="n">scn</span><span class="o">.</span><span class="n">inject</span><span class="o">(</span><span class="n">rampUsers</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span> <span class="n">over</span><span class="o">(</span><span class="mi">5</span> <span class="n">seconds</span><span class="o">))</span> <span class="o">.</span><span class="n">protocols</span><span class="o">(</span><span class="n">httpConf</span><span class="o">))</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
 <ul>
-  <li>
-    <a href="http://rewish.org/wp/hatena_notation_plugin">WordPressにはてな記法を導入するプラグインを作った - Rewish</a>
-  </li>
+  <li><code class="highlighter-rouge">bin/gatling.sh</code> でテスト実行。他にもいくつかサンプルテストケースが列挙されるので、今回は自分で作った <code class="highlighter-rouge">Sample</code> <code class="highlighter-rouge">[0]</code> を選択</li>
 </ul>
-<h1>手順</h1>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sh bin/gatling.sh 
+GATLING_HOME is set to /Users/kk_Ataka/Downloads/gatling-charts-highcharts-bundle-2.2.1
+Choose a simulation number:
+     [0] Sample
+     (略)
+0
+Select simulation id (default is 'sample'). Accepted characters are a-z, A-Z, 0-9, - and _
+
+Select run description (optional)
+
+Simulation Sample started...
+
+================================================================================
+2016-07-30 14:05:54                                           5s elapsed
+---- Sample --------------------------------------------------------------------
+[###########################################################--------       ] 80%
+          waiting: 1      / active: 1      / done:8     
+---- Requests ------------------------------------------------------------------
+&gt; Global                                                   (OK=9      KO=0     )
+&gt; sample_request                                           (OK=9      KO=0     )
+================================================================================
+
+
+================================================================================
+2016-07-30 14:05:55                                           5s elapsed
+---- Sample --------------------------------------------------------------------
+[##########################################################################]100%
+          waiting: 0      / active: 0      / done:10    
+---- Requests ------------------------------------------------------------------
+&gt; Global                                                   (OK=10     KO=0     )
+&gt; sample_request                                           (OK=10     KO=0     )
+================================================================================
+
+Simulation Sample completed in 4 seconds
+Parsing log file(s)...
+Parsing log file(s) done
+Generating reports...
+
+================================================================================
+---- Global Information --------------------------------------------------------
+&gt; request count                                         10 (OK=10     KO=0     )
+&gt; min response time                                      5 (OK=5      KO=-     )
+&gt; max response time                                     23 (OK=23     KO=-     )
+&gt; mean response time                                    13 (OK=13     KO=-     )
+&gt; std deviation                                          5 (OK=5      KO=-     )
+&gt; response time 50th percentile                         14 (OK=14     KO=-     )
+&gt; response time 75th percentile                         15 (OK=15     KO=-     )
+&gt; response time 95th percentile                         20 (OK=20     KO=-     )
+&gt; response time 99th percentile                         22 (OK=22     KO=-     )
+&gt; mean requests/sec                                      2 (OK=2      KO=-     )
+---- Response Time Distribution ------------------------------------------------
+&gt; t &lt; 800 ms                                            10 (100%)
+&gt; 800 ms &lt; t &lt; 1200 ms                                   0 (  0%)
+&gt; t &gt; 1200 ms                                            0 (  0%)
+&gt; failed                                                 0 (  0%)
+================================================================================
+
+Reports generated in 0s.
+Please open the following file: /Users/kk_Ataka/Downloads/gatling-charts-highcharts-bundle-2.2.1/results/sample-xxxxxxxxxxx/index.html
+</code></pre>
+</div>
+
 <ul>
-  <li><a href="http://downloads.wordpress.org/plugin/wp-hatena-notation.zip">WPHatenaNotation</a> をDL</li>
-  <li>Wordpressにログイン</li>
-  <li>プラグイン -&gt; 新規追加 -&gt; アップロード -&gt; zipを参照しいますぐインストール -&gt; プラグインを有効化</li>
+  <li>実行が終わったら <code class="highlighter-rouge">result</code> 下にレポートが出力されている</li>
 </ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>open results/sample-xxxxxxxxxxx/index.html
+</code></pre>
+</div>
+
+<p>リクエスト間隔や数を変更するなら「シナリオの構成」部分に手を加えたら良い。</p>
+
+<p>というような感じで、今回は単純なリクエストを送信するだけに使ったが、もっと凝った事ができるので、詳細はWEB+DB-PRESS-Vol.83を読む。</p>
+
 </div>
 
 <div class="pagination">
   <ul>
     
       <li class="prev">
-        <a href="/2011/10/08/1318068887/" title="さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする">
-          さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする
+        <a href="/2016/06/05/whenever-helloworld/" title="Rubyで自然言語っぽくcrontab管理できるwheneverを使う">
+          Rubyで自然言語っぽくcrontab管理できるwheneverを使う
         </a>
       </li>
     
@@ -316,10 +254,8 @@ define('DB_PASSWORD', 'password_here'); # パスワード</pre>
       <a href="/archives/">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2011/11/16/1321447232/" title="Excel2007のF1キーを無効化する">
-          Excel2007のF1キーを無効化する
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
@@ -330,17 +266,17 @@ define('DB_PASSWORD', 'password_here'); # パスワード</pre>
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2011/10/11/1318334855/" data-text="kk_Atakaの日記 - Windowsのローカル環境にWordPressをインストールした" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2016/07/30/gatling-helloworld/" data-text="kk_Atakaの日記 - Gatlingを使用してみた" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/11/1318334855/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/10/11/1318334855/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/07/30/gatling-helloworld/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/07/30/gatling-helloworld/" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/10/11/1318334855/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - Windowsのローカル環境にWordPressをインストールした"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/07/30/gatling-helloworld/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Gatlingを使用してみた"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
 	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
@@ -352,7 +288,7 @@ define('DB_PASSWORD', 'password_here'); # パスワード</pre>
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/10/11/1318334855//"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2016/07/30/gatling-helloworld//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
