@@ -4,13 +4,106 @@
  <title>kk_Atakaの日記</title>
  <link href="http://gosyujin.github.io/atom.xml" rel="self"/>
  <link href="http://gosyujin.github.io"/>
- <updated>2016-07-30T07:59:55+00:00</updated>
+ <updated>2016-09-01T01:54:11+00:00</updated>
  <id>http://gosyujin.github.io</id>
  <author>
    <name>kk_Ataka</name>
    <email>kk_ataka@ring.skr.jp</email>
  </author>
 
+ 
+ <entry>
+   <title>Rubyの変数DATABASE_URLでハマった話</title>
+   <link href="http://gosyujin.github.io/2016/08/31/ruby-database-url/"/>
+   <updated>2016-08-31T00:00:00+00:00</updated>
+   <id>http://gosyujin.github.io/2016/08/31/ruby-database-url</id>
+   <content type="html">&lt;h2 id=&quot;section&quot;&gt;あらすじ&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;一台のサーバーに複数のRailsアプリケーションがある&lt;/li&gt;
+  &lt;li&gt;新しく一つRailsアプリケーションを作成した&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;config/database.yml&lt;/code&gt; を見るとこんなコメントアウトがあった&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# On Heroku and other platform providers, you may have a full connection URL&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# available as an environment variable. For example:&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#   DATABASE_URL=&quot;mysql2://myuser:mypass@localhost/somedatabase&quot;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# You can use this database configuration with:&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#   production:&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#     url: &amp;lt;%= ENV[&#39;DATABASE_URL&#39;] %&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;こんな変数があるのね。 &lt;code class=&quot;highlighter-rouge&quot;&gt;database.yml&lt;/code&gt; で使ってみた&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s&quot;&gt;production&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;lt;%= ENV[&#39;DATABASE_URL&#39;] %&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;変数を &lt;code class=&quot;highlighter-rouge&quot;&gt;.bash_profile&lt;/code&gt; あたりに定義&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DATABASE_URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;mysql2://myuser:mypass@localhost/somedatabase&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;結果、同じサーバーに存在している全部のRailsアプリケーションが上記の接続先を見に行った！&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;原因&lt;/h2&gt;
+
+&lt;p&gt;コメントでも &lt;code class=&quot;highlighter-rouge&quot;&gt;DATABASE_URL&lt;/code&gt; を使用してね、とあるが、環境変数に &lt;code class=&quot;highlighter-rouge&quot;&gt;ENV[&#39;DATABASE_URL&#39;]&lt;/code&gt; が存在すると &lt;code class=&quot;highlighter-rouge&quot;&gt;active_record/connection_handling.rb&lt;/code&gt; で &lt;code class=&quot;highlighter-rouge&quot;&gt;DATABASE_URL&lt;/code&gt; がマージされてしまう模様。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://railsguides.jp/configuring.html#%E3%83%87%E3%83%BC%E3%82%BF%E3%83%99%E3%83%BC%E3%82%B9%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B&quot;&gt;Rails アプリケーションを設定する Rails ガイド #データベースを設定する&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;以下、引用。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;config/database.ymlファイルと環境変数ENV[‘DATABASE_URL’]が両方存在する場合、両者の設定はマージして使用されます。以下のいくつかの例を参照して理解を深めてください。&lt;/p&gt;
+
+  &lt;p&gt;提供された接続情報が重複している場合、環境変数が優先されます。&lt;/p&gt;
+
+  &lt;p&gt;提供された複数の情報が重複しておらず、競合している場合も、常に環境変数の接続設定が優先されます。&lt;/p&gt;
+
+  &lt;p&gt;poolはENV[‘DATABASE_URL’]で提供される情報に含まれていないので、マージされています。adapterは重複しているので、ENV[‘DATABASE_URL’]の接続情報が優先されています。&lt;/p&gt;
+
+  &lt;p&gt;ENV[‘DATABASE_URL’]の情報よりもdatabase.ymlの情報を優先する唯一の方法は、database.ymlで”url”サブキーを使用して明示的にURL接続を指定することです。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;マージしているのは、このあたりかな。 &lt;code class=&quot;highlighter-rouge&quot;&gt;./vendor/bundle/ruby/2.1.0/gems/activerecord-4.1.15/lib/active_record/connection_handling.rb&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-rb highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;mi&quot;&gt;66&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;# Returns fully resolved connection hashes.&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;67&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;# Merges connection information from `ENV[&#39;DATABASE_URL&#39;]` if available.&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;68&lt;/span&gt;       &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;resolve&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;69&lt;/span&gt;         &lt;span class=&quot;no&quot;&gt;ConnectionAdapters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ConnectionSpecification&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Resolver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;resolve_all&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;70&lt;/span&gt;       &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;71&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;72&lt;/span&gt;       &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;73&lt;/span&gt;         &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;config&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;74&lt;/span&gt;           &lt;span class=&quot;vi&quot;&gt;@raw_config&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;dup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;tap&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cfg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;75&lt;/span&gt;             &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;DATABASE_URL&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;76&lt;/span&gt;               &lt;span class=&quot;n&quot;&gt;cfg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;77&lt;/span&gt;               &lt;span class=&quot;n&quot;&gt;cfg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;url&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;78&lt;/span&gt;             &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;79&lt;/span&gt;           &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;80&lt;/span&gt;         &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;まあ影響範囲を考えて使いましょうという話。&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Gatlingを使用してみた</title>
@@ -2316,7 +2409,7 @@ Hugo Static Site Generator v0.13 BuildDate: 2015-05-12T10:43:12+09:00
 content\about.md created
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;## ビルド&lt;/p&gt;
+&lt;h2 id=&quot;section-3&quot;&gt;ビルド&lt;/h2&gt;
 
 &lt;p&gt;ちょうどよいので、速度をはかるため今までのブログ記事を(最低限Hugoが変換できる程度になおして)ビルドをしてみた。&lt;/p&gt;
 
@@ -2484,7 +2577,7 @@ content\about.md created
 
 &lt;p&gt;このビルドスピードはかなり快適で、GitHub Pages自体Hugoに切り替えようと思ってしまうほどだった。&lt;/p&gt;
 
-&lt;h2 id=&quot;section-3&quot;&gt;まだよくわかってない&lt;/h2&gt;
+&lt;h2 id=&quot;section-4&quot;&gt;まだよくわかってない&lt;/h2&gt;
 
 &lt;p&gt;hugoのデフォルトコマンドの操作がちょっと気になるので、色々いじりたい。&lt;/p&gt;
 
