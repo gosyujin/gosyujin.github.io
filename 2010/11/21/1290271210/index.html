@@ -99,7 +99,7 @@
 <ul><li>ページ下部の新しいアプリケーションを追加 を選択</li></ul>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20101120230314"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101120/20101120230314.png"></a></p>
 <p>後で編集もできるのでとりあえず入力しておく。下記の2項目はとりあえず</p>
-<ul><ul><li>アプリケーションの種類: クライアントアプリケーション</li><li>標準のアクセスタイプ: Read &amp; Write</li></ul></ul>
+<ol><ul><li>アプリケーションの種類: クライアントアプリケーション</li><li>標準のアクセスタイプ: Read &amp; Write</li></ul></ol>
 <p>にしておく。</p>
 <ul><li>登録したら、consumer_keyとconsumer_secretをもらえるので控えておく</li></ul>
 <p><a href="http://f.hatena.ne.jp/kk_Ataka/20101120232314"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101120/20101120232314.png"></a></p>
@@ -109,9 +109,9 @@
 <table><tr><th>oauth_consumer_key</th><td>Twitterからもらったconsumer_key</td></tr><tr><th>oauth_nonce</th><td>一意な値(にする必要があるが、とりあえず適当でもよいみたい)</td></tr><tr><th>oauth_signature</th><td>認証するための暗号</td></tr><tr><th>oauth_signature_method</th><td>認証方式(色々あるようだが、Twitterでは&quot;HMAC-SHA1&quot;固定)</td></tr><tr><th>oauth_timestamp</th><td>今のタイムスタンプ(ミリ秒)</td></tr><tr><th>oauth_version</th><td>バージョン(必須ではないが、付ける場合は&quot;1.0&quot;)</td></tr></table>
 <p>consumer_key, nonce, signature_method, timestamp, versionの生成は難しくないのですが、問題はsignature。signature生成は大きく3つの流れを踏む事になります。</p>
 <ul><li>認証用の値を生成する(以下の3つの値を&amp;で連結する←この&amp;は<span style="font-weight:bold;">エスケープしない</span>)</li></ul>
-<ul><ol><li>http_methodの種類(&quot;GET&quot;か&quot;POST&quot;。今回は&quot;GET&quot;)</li><li>&quot;<a href="http://twitter.com/oauth/request_token">http://twitter.com/oauth/request_token</a>&quot;をエスケープしたもの</li><li>上記のパラメータから<span style="font-weight:bold;">oauth_signatureを抜かしたパラメータ</span>を<span style="font-weight:bold;">アルファベット順</span>に並べて<span style="font-weight:bold;">xxx=yyy&amp;vvv=zzz……</span>の形で連結した値を<span style="font-weight:bold;">エスケープしたもの</span></li></ol></ul>
+<ol><ol><li>http_methodの種類(&quot;GET&quot;か&quot;POST&quot;。今回は&quot;GET&quot;)</li><li>&quot;<a href="http://twitter.com/oauth/request_token">http://twitter.com/oauth/request_token</a>&quot;をエスケープしたもの</li><li>上記のパラメータから<span style="font-weight:bold;">oauth_signatureを抜かしたパラメータ</span>を<span style="font-weight:bold;">アルファベット順</span>に並べて<span style="font-weight:bold;">xxx=yyy&amp;vvv=zzz……</span>の形で連結した値を<span style="font-weight:bold;">エスケープしたもの</span></li></ol></ol>
 <ul><li>署名キーを生成する</li></ul>
-<ul><ol><li>リクエストトークンを発行してもらうときは<span style="font-weight:bold;">&quot;consumer_secret&amp;&quot;</span>(consumer_secretのおしりに&amp;を連結する)</li></ol></ul>
+<ol><ol><li>リクエストトークンを発行してもらうときは<span style="font-weight:bold;">&quot;consumer_secret&amp;&quot;</span>(consumer_secretのおしりに&amp;を連結する)</li></ol></ol>
 <ul><li>キーを元に値をHMAC-SHA1方式で暗号化した値をbase64形式でエンコードする</li></ul>
 <p>……認証に失敗したとき、どこのステップで間違ってるのかわからなかったので非常に苦労しました。幸いsignatureを生成してくれるページ <a href="http://cgi.geocities.jp/ydevnet/techblog/sample/signature.html">OAuth Signature生成サンプル</a> があるので、ここで作成した値と同じ状況を作って比較しました。</p>
 <table><tr><th>OAuth type</th><td>2-legged OAuth</td></tr><tr><th>URL</th><td><a href="http://twitter.com/oauth/request_token">http://twitter.com/oauth/request_token</a></td></tr><tr><th>parameters</th><td>なし</td></tr><tr><th>consumer key</th><td>Twitterからもらったconsumer_key</td></tr><tr><th>consumer secret</th><td>Twitterからもらったconsumer_secret</td></tr><tr><th>version</th><td>1.0</td></tr><tr><th>timestamp</th><td>nowを押して発行されたtimestampをソースに逆移植する</td></tr><tr><th>nonce</th><td>randomを押して発行されたnonceをソースに逆移植する</td></tr><tr><th>signature method</th><td>HMAC-SHA1固定</td></tr></table>
@@ -325,6 +325,18 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2010/11/21/1290271
   
     
       <li>
+        <span>2016/09/30</span>
+        
+          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
+        
+        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        <!-- Hatena Bookmark Users -->
+        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
+          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
+        </a>
+      </li>
+    
+      <li>
         <span>2016/08/31</span>
         
           <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
@@ -438,20 +450,6 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2010/11/21/1290271
         </a>
       </li>
     
-      <li>
-        <span>2015/12/01</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2015/12/01/sphinxconjp-2015-kpt/">SphinxCon JP 2015 で雑用してきた #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2015/12/01/sphinxconjp-2015-kpt/" />
-        </a>
-      </li>
-    
   
 </ul>
 
@@ -468,7 +466,7 @@ var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2010/11/21/1290271
       <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
     
       
-      <li><a href="/tags/#Android">Android <sub>4</sub></a></li>
+      <li><a href="/tags/#Android">Android <sub>5</sub></a></li>
     
       
       <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
