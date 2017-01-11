@@ -12,7 +12,7 @@ tags: [Sphinx, Python, イベント]
 
 ので振り返りメモ。
 
-- [プレゼンテーション：Sphinxハンズオン | PyCon JP 2015 in TOKYO](https://pycon.jp/2015/ja/schedule/presentation/74/)
+- [プレゼンテーション：Sphinxハンズオン ｜ PyCon JP 2015 in TOKYO](https://pycon.jp/2015/ja/schedule/presentation/74/)
     - 講師: 清水川さん
     - TA: 渋川さん、自分
 
