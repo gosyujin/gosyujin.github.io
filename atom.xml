@@ -4,13 +4,130 @@
  <title>kk_Atakaの日記</title>
  <link href="http://gosyujin.github.io/atom.xml" rel="self"/>
  <link href="http://gosyujin.github.io"/>
- <updated>2017-01-11T08:55:11+00:00</updated>
+ <updated>2017-03-04T12:29:11+00:00</updated>
  <id>http://gosyujin.github.io</id>
  <author>
    <name>kk_Ataka</name>
    <email>kk_ataka@ring.skr.jp</email>
  </author>
 
+ 
+ <entry>
+   <title>GradleのresValueで値をリソースに設定する</title>
+   <link href="http://gosyujin.github.io/2017/02/28/gradle_res_value/"/>
+   <updated>2017-02-28T00:00:00+00:00</updated>
+   <id>http://gosyujin.github.io/2017/02/28/gradle_res_value</id>
+   <content type="html">&lt;h2 id=&quot;あらすじ&quot;&gt;あらすじ&lt;/h2&gt;
+
+&lt;p&gt;FacebookのAPIを使うために &lt;code class=&quot;highlighter-rouge&quot;&gt;facebookAppId&lt;/code&gt; を取得したが、このAPI Keyを設定ファイル( &lt;code class=&quot;highlighter-rouge&quot;&gt;AndroidManifest.xml&lt;/code&gt; )外に追い出すのに苦労した。&lt;/p&gt;
+
+&lt;p&gt;Gradle力が低いので、もっと良いやり方があるかもしれない。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developers.facebook.com/docs/android/getting-started&quot;&gt;スタートガイド - Android SDK&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;1.strings.xmlファイルを開きます。パスの例:/app/src/main/res/values/strings.xml。
+2.新しい文字列を、facebook_app_idの名前とFacebookアプリIDとともに追加します。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;やりたいこと&quot;&gt;やりたいこと&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;facebookAppId&lt;/code&gt; を &lt;code class=&quot;highlighter-rouge&quot;&gt;gradle.properties&lt;/code&gt; に定義したい&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;AndroidManifest.xml&lt;/code&gt; に &lt;code class=&quot;highlighter-rouge&quot;&gt;gradle.properties&lt;/code&gt; から参照した文字列を埋め込みたい&lt;/li&gt;
+  &lt;li&gt;ただし、プロパティに定義したKeyは数値のみ(文字数値入り混じったKeyなら問題ない)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;manifestplaceholdersに登録して参照うまくいかなかった&quot;&gt;manifestPlaceholdersに登録して参照(うまくいかなかった)&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;gradle.properties&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;キーを書いた&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;facebookAppId=123456711111111
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;productFlavors&lt;/code&gt; に &lt;code class=&quot;highlighter-rouge&quot;&gt;getProperty(&quot;facebookAppId&quot;)&lt;/code&gt; と記載し、 &lt;code class=&quot;highlighter-rouge&quot;&gt;gradle.properties&lt;/code&gt; から値を呼び出した&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    productFlavors {
+        develop {
+            manifestPlaceholders = [
+                                    facebook_app_id: getProperty(&quot;facebookAppId&quot;)]
+            略
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;AndroidManifest.xml&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;        &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta-data&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;android:name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.facebook.sdk.ApplicationId&quot;&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;android:value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${facebook_app_id}&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;これ、確かに参照はできるんだけどFacebookSDKの中でKeyが数値とみなされて &lt;code class=&quot;highlighter-rouge&quot;&gt;applicationId cannot be null&lt;/code&gt; となってしまった。&lt;/p&gt;
+
+&lt;p&gt;そして、 &lt;code class=&quot;highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt; の中で何とか文字列に変換して渡そうとしてもうまくいかなかった…。&lt;/p&gt;
+
+&lt;h2 id=&quot;resvalueに登録して参照うまくいった&quot;&gt;resValueに登録して参照(うまくいった)&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/16156856/android-facebook-applicationid-cannot-be-null&quot;&gt;Android facebook applicationId cannot be null - Stack Overflow&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;同じような事をした人がおり、その回答は &lt;code class=&quot;highlighter-rouge&quot;&gt;resValue&lt;/code&gt; でリソースとして登録すればいけるというものだったので試したところうまくいった。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;gradle.properties&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;変更なし&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;参照のしかたを &lt;code class=&quot;highlighter-rouge&quot;&gt;resValue&lt;/code&gt; に変更した&lt;/li&gt;
+      &lt;li&gt;これで &lt;code class=&quot;highlighter-rouge&quot;&gt;@string/〜&lt;/code&gt; の形式でアクセスできるようになり、そして文字列としてFacebookSDKに渡されるようなので、無事にKeyが通った&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    productFlavors {
+        develop {
+            resValue(&quot;string&quot;, &quot;facebook_app_id&quot;, getProperty(&quot;facebookAppId&quot;))
+            略
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;AndroidManifest.xml&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;        &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta-data&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;android:name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.facebook.sdk.ApplicationId&quot;&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;android:value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;@string/facebook_app_id&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</content>
+ </entry>
  
  <entry>
    <title>localhost:xxxxにはてブしてるコメントを収集してみた</title>

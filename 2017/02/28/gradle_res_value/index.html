@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <title>Subversionのauto-props設定ではまった - kk_Atakaの日記</title>
+    <title>GradleのresValueで値をリソースに設定する - kk_Atakaの日記</title>
     <meta charset="utf-8">
     <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
@@ -42,18 +42,18 @@
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2011/08/14/1313326346/">Subversionのauto-props設定ではまった</a></h1>
+        <h1><a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags/#Subversion" class="tag">Subversion</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Android" class="tag">Android</a></code> ]</span>
             
-              <span>[ <code><a href="/tags/#備忘録" class="tag">備忘録</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Gradle" class="tag">Gradle</a></code> ]</span>
             
           
           
-            <span>Published: 2011/08/14</span>
+            <span>Published: 2017/02/28</span>
           
         </div>
 
@@ -63,8 +63,8 @@
   <ul>
     
       <li class="prev">
-        <a href="/2011/08/01/1312213654/" title="BPStudy#47に参加しました">
-          BPStudy#47に参加しました
+        <a href="/2017/01/11/localhost-hateb/" title="localhost:xxxxにはてブしてるコメントを収集してみた">
+          localhost:xxxxにはてブしてるコメントを収集してみた
         </a>
       </li>
     
@@ -72,10 +72,8 @@
       <a href="/archives/">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2011/08/23/1314103220/" title="MicrosoftOutlookで消せなくなったフォルダをwin32ole経由でRubyから消してみる">
-          MicrosoftOutlookで消せなくなったフォルダをwin32ole経由でRubyから消してみる
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
@@ -83,25 +81,150 @@
 
 
 <div class="content">
-<p>SubversionでExcelファイルをコミットしようとするとエラーが発生。</p>
-<pre>ファイル 'C:\～～～\なんとか管理表.xls' の MIMEタイプ属性はバイナリです</pre>
-<p>んーなんでだっけー？.xlsファイルのmime-typeを指定してないからかなー？ という事でconfigファイルにmime-type指定。<a href="http://trac.symfony-project.org/wiki/SymfonyRepositoryTips">SymfonyRepositoryTips - symfony - Trac</a> ここを参考に。</p>
-<pre> *.xls = svn:mime-type=application/vnd.ms-excel</pre>
-<p>しかしエラーは変わらず。なんでだー。というか今までは別にmime-type指定しなくてもいけてた気がするのに…と、ここまでやってconfigをよく見ると</p>
-<pre> *.xls = svn:mime-type=application/vnd.ms-excel
- * = svn:eol-style=native</pre>
-<p>こうなってた。全部のファイルにeol-style=nativeしている！！<span class="footnote"><a href="#f1" title="自分でやったんだけど" name="fn1">*1</a></span>　とあるファイル種別<span class="deco" style="font-weight:bold;">以外</span>、みたいな指定はできない？　っぽいので、横着せずに一拡張子毎に設定を書いてうまく行きました。 </p>
-<pre> *.xls = svn:mime-type=application/vnd.ms-excel
- *.sh = svn:eol-style=native</pre>
-<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 自分でやったんだけど</p></div>
+<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>Contents</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">やりたいこと</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">manifestPlaceholdersに登録して参照(うまくいかなかった)</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-4">
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">resValueに登録して参照(うまくいった)</span></a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><h2 id="tocAnchor-1-1">あらすじ</h2>
+
+<p>FacebookのAPIを使うために <code class="highlighter-rouge">facebookAppId</code> を取得したが、このAPI Keyを設定ファイル( <code class="highlighter-rouge">AndroidManifest.xml</code> )外に追い出すのに苦労した。</p>
+
+<p>Gradle力が低いので、もっと良いやり方があるかもしれない。</p>
+
+<ul>
+  <li><a href="https://developers.facebook.com/docs/android/getting-started">スタートガイド - Android SDK</a></li>
+</ul>
+
+<blockquote>
+  <p>1.strings.xmlファイルを開きます。パスの例:/app/src/main/res/values/strings.xml。
+2.新しい文字列を、facebook_app_idの名前とFacebookアプリIDとともに追加します。</p>
+</blockquote>
+
+<h2 id="tocAnchor-1-2">やりたいこと</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">facebookAppId</code> を <code class="highlighter-rouge">gradle.properties</code> に定義したい</li>
+  <li><code class="highlighter-rouge">AndroidManifest.xml</code> に <code class="highlighter-rouge">gradle.properties</code> から参照した文字列を埋め込みたい</li>
+  <li>ただし、プロパティに定義したKeyは数値のみ(文字数値入り混じったKeyなら問題ない)</li>
+</ul>
+
+<h2 id="tocAnchor-1-3">manifestPlaceholdersに登録して参照(うまくいかなかった)</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">gradle.properties</code>
+    <ul>
+      <li>キーを書いた</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>facebookAppId=123456711111111
+</code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">build.gradle</code>
+    <ul>
+      <li><code class="highlighter-rouge">productFlavors</code> に <code class="highlighter-rouge">getProperty("facebookAppId")</code> と記載し、 <code class="highlighter-rouge">gradle.properties</code> から値を呼び出した</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    productFlavors {
+        develop {
+            manifestPlaceholders = [
+                                    facebook_app_id: getProperty("facebookAppId")]
+            略
+        }
+    }
+</code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">AndroidManifest.xml</code></li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code>        <span class="nt">&lt;meta-data</span>
+            <span class="na">android:name=</span><span class="s">"com.facebook.sdk.ApplicationId"</span>
+            <span class="na">android:value=</span><span class="s">"${facebook_app_id}"</span> <span class="nt">/&gt;</span>
+</code></pre>
+</div>
+
+<p>これ、確かに参照はできるんだけどFacebookSDKの中でKeyが数値とみなされて <code class="highlighter-rouge">applicationId cannot be null</code> となってしまった。</p>
+
+<p>そして、 <code class="highlighter-rouge">build.gradle</code> の中で何とか文字列に変換して渡そうとしてもうまくいかなかった…。</p>
+
+<h2 id="tocAnchor-1-4">resValueに登録して参照(うまくいった)</h2>
+
+<ul>
+  <li><a href="http://stackoverflow.com/questions/16156856/android-facebook-applicationid-cannot-be-null">Android facebook applicationId cannot be null - Stack Overflow</a></li>
+</ul>
+
+<p>同じような事をした人がおり、その回答は <code class="highlighter-rouge">resValue</code> でリソースとして登録すればいけるというものだったので試したところうまくいった。</p>
+
+<ul>
+  <li><code class="highlighter-rouge">gradle.properties</code>
+    <ul>
+      <li>変更なし</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">build.gradle</code>
+    <ul>
+      <li>参照のしかたを <code class="highlighter-rouge">resValue</code> に変更した</li>
+      <li>これで <code class="highlighter-rouge">@string/〜</code> の形式でアクセスできるようになり、そして文字列としてFacebookSDKに渡されるようなので、無事にKeyが通った</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    productFlavors {
+        develop {
+            resValue("string", "facebook_app_id", getProperty("facebookAppId"))
+            略
+        }
+    }
+</code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">AndroidManifest.xml</code></li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code>        <span class="nt">&lt;meta-data</span>
+            <span class="na">android:name=</span><span class="s">"com.facebook.sdk.ApplicationId"</span>
+            <span class="na">android:value=</span><span class="s">"@string/facebook_app_id"</span> <span class="nt">/&gt;</span>
+</code></pre>
+</div>
+
 </div>
 
 <div class="pagination">
   <ul>
     
       <li class="prev">
-        <a href="/2011/08/01/1312213654/" title="BPStudy#47に参加しました">
-          BPStudy#47に参加しました
+        <a href="/2017/01/11/localhost-hateb/" title="localhost:xxxxにはてブしてるコメントを収集してみた">
+          localhost:xxxxにはてブしてるコメントを収集してみた
         </a>
       </li>
     
@@ -109,10 +232,8 @@
       <a href="/archives/">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2011/08/23/1314103220/" title="MicrosoftOutlookで消せなくなったフォルダをwin32ole経由でRubyから消してみる">
-          MicrosoftOutlookで消せなくなったフォルダをwin32ole経由でRubyから消してみる
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
@@ -123,17 +244,17 @@
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2011/08/14/1313326346/" data-text="kk_Atakaの日記 - Subversionのauto-props設定ではまった" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2017/02/28/gradle_res_value/" data-text="kk_Atakaの日記 - GradleのresValueで値をリソースに設定する" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/08/14/1313326346/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/08/14/1313326346/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/08/14/1313326346/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - Subversionのauto-props設定ではまった"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - GradleのresValueで値をリソースに設定する"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
 	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
@@ -145,7 +266,7 @@
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/08/14/1313326346//"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2017/02/28/gradle_res_value//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
