@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <title>GitHub PagesでJekyllプラグインを使えるようにするには… - kk_Atakaの日記</title>
+    <title>Dropboxをコマンドラインで使用する方法 - kk_Atakaの日記</title>
     <meta charset="utf-8">
     <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
@@ -42,18 +42,16 @@
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2013/05/21/jekyll-plugin-githubpages/">GitHub PagesでJekyllプラグインを使えるようにするには…</a></h1>
+        <h1><a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags/#Jekyll" class="tag">Jekyll</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#Git" class="tag">Git</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Dropbox" class="tag">Dropbox</a></code> ]</span>
             
           
           
-            <span>Published: 2013/05/21</span>
+            <span>Published: 2017/04/30</span>
           
         </div>
 
@@ -63,8 +61,8 @@
   <ul>
     
       <li class="prev">
-        <a href="/2013/04/27/bpstudy68/" title="BPStudy#68に参加しました #bpstudy">
-          BPStudy#68に参加しました #bpstudy
+        <a href="/2017/03/30/rbenv-update/" title="rbenvを最新にして新しいバージョンのRubyをインストールできるようにする">
+          rbenvを最新にして新しいバージョンのRubyをインストールできるようにする
         </a>
       </li>
     
@@ -72,10 +70,8 @@
       <a href="/archives/">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2013/05/23/jekyll-liquid-plugin2/" title="記事の目次を出力するJekyllプラグインの改良">
-          記事の目次を出力するJekyllプラグインの改良
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
@@ -99,26 +95,7 @@
               <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">参考サイト</span></a>
             </li>
             <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">そもそもGitHub Pagesとはなんぞや</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-4">
-                  <a href="#tocAnchor-1-3-1"><span class="tocnumber">3.1</span> <span class="toctext">ということは</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-5">
-                  <a href="#tocAnchor-1-3-2"><span class="tocnumber">3.2</span> <span class="toctext">かぶった場合どうなる？</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="toc_level-1 toc_section-6">
-              <a href="#tocAnchor-1-6"><span class="tocnumber">4</span> <span class="toctext">GitHub Pagesの作り方</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-7">
-                  <a href="#tocAnchor-1-6-1"><span class="tocnumber">4.1</span> <span class="toctext">コマンド、オプションのメモ</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="toc_level-1 toc_section-8">
-              <a href="#tocAnchor-1-8"><span class="tocnumber">5</span> <span class="toctext">JekylプラグインをGitHub Pagesで使えるようにするには</span></a>
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">手順</span></a>
             </li>
           </ul>
         </td>
@@ -127,309 +104,81 @@
   </table>
 </div><h2 id="tocAnchor-1-1">あらすじ</h2>
 
-<p>Jekyll＠GitHub Pagesの場合、Liquidで(自分で)作ったプラグインは使えないという事が判明した。(ローカルで起動した場合/safeモードじゃない場合は関係ない)</p>
-
 <ul>
-  <li><a href="http://webtech-walker.com/archive/2012/09/fired-myblog.html">俺の最強ブログシステムも火を噴いてたぜ - Webtech Walker</a></li>
+  <li>LinuxサーバーでもDropboxを起動させたい</li>
 </ul>
-
-<p>これを回避するには</p>
-
-<ul>
-  <li>GitHub Pages をやめる(レンタルサーバを借りてデプロイ)</li>
-  <li>GitHub Pages に <strong>静的ファイル</strong> としてhtml自体をデプロイ</li>
-</ul>
-
-<p>する方法がありそう。今回はGitHub Pagesを使い続けたいので後者で頑張ってみる。</p>
 
 <h2 id="tocAnchor-1-2">参考サイト</h2>
 
 <ul>
-  <li><a href="https://help.github.com/categories/20/articles">github:help</a></li>
+  <li><a href="https://www.dropbox.com/install-linux">インストール - Dropbox</a>
+    <ul>
+      <li>Ubuntu(.deb), Fedora(.rpm), Debian(.deb)パッケージが提供されている。ソースからコンパイルもできる</li>
+    </ul>
+  </li>
+  <li><a href="http://www.maruko2.com/mw/Dropbox%E3%82%92Linux%E3%81%A7%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95">DropboxをLinuxで利用する方法 - maruko2 Note.</a></li>
+  <li><a href="http://qiita.com/yudoufu/items/163f9c9b6b9fa2f4bf9e">Dropbox を Linuxサーバでも使うときにやるべき設定 - Qiita</a></li>
+  <li><a href="http://www.dropboxwiki.com/tips-and-tricks/using-the-official-dropbox-command-line-interface-cli">Using the Official Dropbox Command Line Interface (CLI) - The Unofficial Dropbox Wiki</a></li>
 </ul>
 
-<h2 id="tocAnchor-1-3">そもそもGitHub Pagesとはなんぞや</h2>
-
-<blockquote>
-  <h3 id="user--organization-pages">User &amp; Organization Pages</h3>
-
-  <p>User &amp; Organization Pages はPagesファイル専用のスペシャルリポジトリとして生きている。このリポジトリはaccount nameを使用する。例えば、defunkt/defunkt.github.com</p>
-
-  <ul>
-    <li>このリポジトリは <code class="highlighter-rouge">username/username.github.com</code> というnaming schemeを使わなければならない</li>
-    <li>
-      <p><code class="highlighter-rouge">master</code> ブランチからのコンテンツはビルドとパブリッシュに使用される</p>
-    </li>
-    <li>…</li>
-  </ul>
-
-  <h3 id="project-pages">Project Pages</h3>
-
-  <p>Project Pages は同じリポジトリからプロジェクトとして維持される。これらのページはUser PageとOrg Pagesほとんど正確に同じである。いくつかのわずかな違いはある。</p>
-
-  <ul>
-    <li><code class="highlighter-rouge">gh-pages</code> ブランチはビルドとパブリッシュに使用される</li>
-    <li>カスタムドメインを使っていないなら、Project PagesはUser Pageのサブパスの下で使われる。 <code class="highlighter-rouge">username.github.com/projectname</code></li>
-    <li>…</li>
-  </ul>
-</blockquote>
-
-<h3 id="tocAnchor-1-3-1">ということは</h3>
-
-<p>まず、GitHub Pagesは2種類ある。</p>
-
-<ol>
-  <li><strong>ユーザ、組織用</strong> のページ
-    <ul>
-      <li>己のページ</li>
-      <li><code class="highlighter-rouge">USERNAME.github.com</code> という特別なリポジトリを作れば <code class="highlighter-rouge">http://USERNAME.github.com</code> でアクセスできる</li>
-      <li>ビルドには <code class="highlighter-rouge">master</code> ブランチが使用される</li>
-    </ul>
-  </li>
-  <li><strong>プロジェクト</strong> のページ
-    <ul>
-      <li>各プロジェクト用のページ</li>
-      <li>GitHubに <code class="highlighter-rouge">PROJECT</code> というプロジェクトがあれば <code class="highlighter-rouge">http://USERNAME.github.com/PROJECT</code> でアクセスできる</li>
-      <li>ビルドには <strong><code class="highlighter-rouge">gh-pages</code></strong> ブランチが使用される</li>
-    </ul>
-  </li>
-</ol>
-
-<p>という事でよろしい？</p>
-
-<h3 id="tocAnchor-1-3-2">かぶった場合どうなる？</h3>
-
-<p>ところで、こうなるとユーザのGitHub Pagesにプロジェクト名と同じ階層でファイルを作ったらどっちが呼ばれるの？</p>
-
-<p>=&gt; <a href="http://aligach.net/diary/20120716.html">あーありがち - github pagesとjekyllを今さら練習 , 夏だ</a> によると、</p>
-
-<blockquote>
-  <ol>
-    <li>github.com/wtnabe/wtnabe.github.com 内に /ical2gcal/index.html を作成
-      <ul>
-        <li>作った /ical2gcal/index.html が wtnabe.github.com/ical2gcal/ に表示される</li>
-      </ul>
-    </li>
-    <li>github.com/wtnabe/ical2gcal に gh-pages branch を作る
-      <ul>
-        <li>作った gh-pages が wtnabe.github.com/ical2gcal/ に表示される</li>
-      </ul>
-    </li>
-    <li>github.com/wtnabe/wtnabe.github.com/ical2gcal/index.html を編集
-      <ul>
-        <li>今編集したファイルが表示される。つまり 1 に戻る。</li>
-      </ul>
-    </li>
-  </ol>
-</blockquote>
-
-<p>ちょっと気をつけないといけない。</p>
-
-<h2 id="tocAnchor-1-6">GitHub Pagesの作り方</h2>
-
-<p>プロジェクト用のGitHub Pagesの場合。</p>
-
-<p>既に <code class="highlighter-rouge">master</code> が少し育っているとして <code class="highlighter-rouge">gh-pages</code> ブランチを作成してみる。とりあえず、GitHubから以下のようなコマンド例が提示される。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">cd</span>
-      <span class="kv"> /path/to/repo-name
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> symbolic-ref HEAD refs/heads/gh-pages
-</span>
-      <span class="w">$ </span>
-      <span class="nc">rm</span>
-      <span class="kv"> .git/index
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> clean -fdx
-</span>
-      <span class="w">$ </span>
-      <span class="nc">echo</span>
-      <span class="kv"> "My GitHub Page" &gt; index.html
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> add .
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> commit -a -m "First pages commit"
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> push origin gh-pages</span>
-    </code>
-  </pre>
-</figure>
-
-<p>何をやっているのかというと… <code class="highlighter-rouge">master</code> ブランチ(というか、ソースとかがある本流のブランチ？)と <strong>独立した空っぽのブランチ</strong> を作り、そこにindex.htmlをpushしている。</p>
-
-<h3 id="tocAnchor-1-6-1">コマンド、オプションのメモ</h3>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">cd</span>
-      <span class="kv"> /path/to/repo-name
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> symbolic-ref HEAD refs/heads/gh-pages</span>
-    </code>
-  </pre>
-</figure>
-
-<p><code class="highlighter-rouge">HEAD(.git/HEAD)ファイル</code> には最終コミットの参照が入っている。例えば…</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">cat</span>
-      <span class="kv"> .git/HEAD
-</span>
-      <span class="err">ref: refs/heads/master</span>
-    </code>
-  </pre>
-</figure>
-
-<p>こんなん。で、checkoutとかすると変わる。このHEADファイルを変更するためのコマンドが <code class="highlighter-rouge">symbolic-ref</code> 。</p>
-
-<p>移動した後は、Gitで管理していたファイルはインデックスに移っている。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">rm</span>
-      <span class="kv"> .git/index
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> clean -fdx</span>
-    </code>
-  </pre>
-</figure>
-
-<p>ので、まず <code class="highlighter-rouge">index</code> ファイルを削除してインデックスにあったファイルを追跡対象から除外。</p>
-
-<p>そして <code class="highlighter-rouge">clean</code> コマンドで追跡対象外のファイルを掃除。 <code class="highlighter-rouge">-f</code> 実行(このオプションを指定しないと実行されない)、 <code class="highlighter-rouge">-d</code> ディレクトリも含める。 <code class="highlighter-rouge">-x</code> 無視ファイルも削除</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">echo</span>
-      <span class="kv"> "My GitHub Page" &gt; index.html
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> add .
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> commit -a -m "First pages commit"
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> push origin gh-pages</span>
-    </code>
-  </pre>
-</figure>
-
-<p>奇麗さっぱりしたらindex.htmlを作ってFirst commit…。</p>
-
-<p>これで <code class="highlighter-rouge">master</code> ブランチ(ソース)とは完全に独立した <code class="highlighter-rouge">gh-pages</code> ブランチが作成できた。</p>
-
-<h2 id="tocAnchor-1-8">JekylプラグインをGitHub Pagesで使えるようにするには</h2>
-
-<p>さてようやく本題。</p>
-
-<p>今までの情報からわかった事は以下。</p>
+<h2 id="tocAnchor-1-3">手順</h2>
 
 <ul>
-  <li>自分が使っているのは <strong>ユーザ用のGitHub Pages</strong>
-    <ul>
-      <li>つまり、 <strong><code class="highlighter-rouge">master</code></strong> ブランチのファイルがビルドされる</li>
-    </ul>
-  </li>
-  <li>今の <code class="highlighter-rouge">master</code> ブランチにはJekyll用のソースがある
-    <ul>
-      <li>ページのテンプレートやMarkdownで書かれたエントリなど</li>
-    </ul>
-  </li>
+  <li><a href="https://www.dropbox.com/ja/install?os=linux">インストール - Dropbox</a> の <code class="highlighter-rouge">コマンド ラインを使った Dropbox のヘッドレス インストール</code> に沿ってDropboxデーモンをインストールする</li>
 </ul>
 
-<p>この状況を以下のように変更する。</p>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>wget -O – <span class="s2">"https://www.dropbox.com/download?plat=lnx.x86_64"</span> | tar zxf -
+</code></pre>
+</div>
 
 <ul>
-  <li><code class="highlighter-rouge">source</code> ブランチ: 現在の <code class="highlighter-rouge">master</code> ブランチのソースをそのまま持ってくる
-    <ul>
-      <li>エントリなどはこちらで書いていく事になる</li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">master</code> ブランチ: 一旦からっぽにして、 <code class="highlighter-rouge">source</code> ブランチのソースから生成した <strong>静的ファイル</strong> を持ってきてプッシュする
-    <ul>
-      <li>ローカルで一旦生成しちゃった後でGitHub Pagesにpushしているから、プラグインが動かないという問題も起こらない</li>
-    </ul>
-  </li>
+  <li><code class="highlighter-rouge">.dropbox-dist</code> というディレクトリができるので、その中の <code class="highlighter-rouge">dropboxd</code> を実行後、アカウントと紐付ける</li>
 </ul>
 
-<p>そうすると</p>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>~/.dropbox-dist/dropboxd
+このコンピュータは Dropbox アカウントにリンクされていません...
+このデバイスをリンクするには、https://www.dropbox.com/cli_link_nonce?nonce<span class="o">=</span>HOGE にアクセスしてください。
+このコンピュータは Dropbox アカウントにリンクされていません...
+このデバイスをリンクするには、https://www.dropbox.com/cli_link_nonce?nonce<span class="o">=</span>HOGE にアクセスしてください。
+
+<span class="o">(</span>以降Dropboxでログインするまでループ<span class="o">)</span>
+
+このデバイスをリンクするには、https://www.dropbox.com/cli_link_nonce?nonce<span class="o">=</span>HOGE にアクセスしてください。
+このコンピュータは Dropbox にリンクされました。ようこそ、xxx さん。
+
+強制終了
+</code></pre>
+</div>
 
 <ul>
-  <li><code class="highlighter-rouge">source</code> ブランチでファイルを生成する(_site/直下)</li>
-  <li>これを <code class="highlighter-rouge">master</code> にコピーする</li>
-  <li>push</li>
+  <li><code class="highlighter-rouge">dropbox.py</code> をDLする</li>
 </ul>
 
-<p>を毎回やらなければならない…それはめんどくさい！</p>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>wget -O dropbox.py https://www.dropbox.com/download?dl<span class="o">=</span>packages/dropbox.py
+</code></pre>
+</div>
 
-<p>これはrakeでやればいいかな。</p>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>python dropbox.py 
+Dropbox <span class="nb">command</span>-line interface
 
-<ul>
-  <li>Rakefile にdeployコマンドとして上記の動作を実行してくれる処理を記載する
-    <ul>
-      <li><a href="https://github.com/gosyujin/gosyujin.github.com/commit/2943985064ced913767157eb0fdae431b68ac491">deploy タスクを追加 2943985 gosyujin/gosyujin.github.com GitHub</a></li>
-    </ul>
-  </li>
-</ul>
+commands:
 
-<p>こんな感じ。</p>
+Note: use dropbox <span class="nb">help</span> &lt;<span class="nb">command</span>&gt; to view usage <span class="k">for </span>a specific command.
 
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="c1"># Usage: rake deploy</span>
-<span class="n">desc</span> <span class="s2">"Begin a push static file to GitHub"</span>
-<span class="n">task</span> <span class="ss">:deploy</span> <span class="k">do</span>
-  <span class="nb">puts</span> <span class="s2">"! Copy static file from _site to _deploy"</span>
-  <span class="n">sh</span> <span class="s2">"cp -r _site/* _deploy/"</span>
-  <span class="nb">puts</span> <span class="s2">"! Change directory _deplay"</span>
-  <span class="n">cd</span> <span class="s2">"_deploy"</span> <span class="k">do</span>
-    <span class="nb">puts</span> <span class="s2">"! Push to master branch of GitHub"</span>
-    <span class="n">sh</span> <span class="s2">"git add *"</span>
-    <span class="n">message</span> <span class="o">=</span> <span class="s2">"deploy at </span><span class="si">#{</span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="si">}</span><span class="s2">"</span>
-    <span class="k">begin</span>
-      <span class="n">sh</span> <span class="s2">"git commit -m </span><span class="se">\"</span><span class="si">#{</span><span class="n">message</span><span class="si">}</span><span class="se">\"</span><span class="s2">"</span>
-      <span class="n">sh</span> <span class="s2">"git push origin master:master"</span>
-    <span class="k">rescue</span> <span class="no">Exception</span> <span class="o">=&gt;</span> <span class="n">e</span>
-      <span class="nb">puts</span> <span class="s2">"! Error - git command abort"</span>
-      <span class="nb">exit</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
+ status       get current status of the dropboxd
+ throttle     <span class="nb">set </span>bandwidth limits <span class="k">for </span>Dropbox
+ <span class="nb">help         </span>provide <span class="nb">help
+ </span>puburl       get public url of a file <span class="k">in </span>your dropbox<span class="s1">'s publ automatically start dropbox at login
+ exclude      ignores/excludes a directory from syncing
+ lansync      enables or disables LAN sync
+ sharelink    get a shared link for a file in your dropbox
+ proxy        set proxy settings for Dropbox
+</span></code></pre>
+</div>
 
-<p>とやれば、手間はそれほど変わらずにGitHub PagesでJekyllプラグインが使えるか。</p>
+<p>色々いじる前に最低限、lansync(Lan同期)の設定だけは確認しておく。</p>
+
+<p>初期設定のままだと同一Lan内にUDPパケットを投げまくるので、VPSなどで <code class="highlighter-rouge">lansync y</code> (デフォルトがy)のままだと他の人に迷惑ががが。</p>
 
 </div>
 
@@ -437,8 +186,8 @@
   <ul>
     
       <li class="prev">
-        <a href="/2013/04/27/bpstudy68/" title="BPStudy#68に参加しました #bpstudy">
-          BPStudy#68に参加しました #bpstudy
+        <a href="/2017/03/30/rbenv-update/" title="rbenvを最新にして新しいバージョンのRubyをインストールできるようにする">
+          rbenvを最新にして新しいバージョンのRubyをインストールできるようにする
         </a>
       </li>
     
@@ -446,10 +195,8 @@
       <a href="/archives/">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2013/05/23/jekyll-liquid-plugin2/" title="記事の目次を出力するJekyllプラグインの改良">
-          記事の目次を出力するJekyllプラグインの改良
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
@@ -460,17 +207,17 @@
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2013/05/21/jekyll-plugin-githubpages/" data-text="kk_Atakaの日記 - GitHub PagesでJekyllプラグインを使えるようにするには…" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2017/04/30/dropbox-cli/" data-text="kk_Atakaの日記 - Dropboxをコマンドラインで使用する方法" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/05/21/jekyll-plugin-githubpages/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/05/21/jekyll-plugin-githubpages/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/05/21/jekyll-plugin-githubpages/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - GitHub PagesでJekyllプラグインを使えるようにするには…"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Dropboxをコマンドラインで使用する方法"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
 	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
@@ -482,7 +229,7 @@
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/05/21/jekyll-plugin-githubpages//"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2017/04/30/dropbox-cli//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
