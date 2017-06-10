@@ -22,16 +22,14 @@
       {% assign month = post.date | date: "%m" %}
 
       {% if is_year_first or show_year != year %}
-        {% if is_year_first %}
+        {% unless is_month_first %}
           </li>
-        {% endif %}
+        {% endunless %}
 
         {% assign is_year_first = false %}
         {% assign show_year = year %}
 
-        <li>
-        {{ year }}
-        |
+	<li> {{ year }} |
 
       {% endif %}
 
@@ -40,11 +38,11 @@
         {% assign is_month_first = false %}
         {% assign show_month = month %}
 
-        {{ month }}
-        |
+        {{ month }} |
 
       {% endif %}
   {% endfor %}
+  </li>
 
 </ul>
 </div>
