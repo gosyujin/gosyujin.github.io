@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <title>java-ja忘年会に参加しました2010 - kk_Atakaの日記</title>
+    <title>Android StudioでAndroid Lint - kk_Atakaの日記</title>
     <meta charset="utf-8">
     <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
@@ -42,18 +42,16 @@
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2010/12/11/1292077752/">java-ja忘年会に参加しました2010</a></h1>
+        <h1><a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags/#java-ja" class="tag">java-ja</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#イベント" class="tag">イベント</a></code> ]</span>
+              <span>[ <code><a href="/tags/#Android" class="tag">Android</a></code> ]</span>
             
           
           
-            <span>Published: 2010/12/11</span>
+            <span>Published: 2017/05/31</span>
           
         </div>
 
@@ -63,8 +61,8 @@
   <ul>
     
       <li class="prev">
-        <a href="/2010/12/07/1291733295/" title="RubyでTwitterのタイムラインを取得してみる">
-          RubyでTwitterのタイムラインを取得してみる
+        <a href="/2017/04/30/dropbox-cli/" title="Dropboxをコマンドラインで使用する方法">
+          Dropboxをコマンドラインで使用する方法
         </a>
       </li>
     
@@ -72,10 +70,8 @@
       <a href="/archives/">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2010/12/21/1292940870/" title="pixiv Tech Meetingに行ってきました">
-          pixiv Tech Meetingに行ってきました
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
@@ -83,24 +79,87 @@
 
 
 <div class="content">
-<h1>今年は渋谷。</h1>
-<p>定時までに終わるかなーと思っていたミーティングがまさかの2時間オーバー。そして人身事故によるりんかい線のダイヤ乱れ。北海道に着いたのは20:45くらいでした……。Tweetviteでは出席になっていたのに、会費は集計して足りなかったらでいいよ！　と言ってくれた名幹事やましろさん++　いつも取りまとめありがとうございます。</p>
-<h1>二次会は部隊編成</h1>
-<p>そして場所を変えて二次会。ハンター組とハンターじゃない組に別れて二次会が開催されました。僕はハンターじゃない組。二次会では主に食べてました。　＠<a href="http://twitter.com/Ewigkeit">Ewigkeit</a>さんにいっぱいサービスしてもらった＞＜</p>
-<p>飯以外では、＠Ewigkeitさん、@<a href="http://twitter.com/leather_sole">leather_sole</a>さん、@<a href="http://twitter.com/kamekoopa">kamekoopa</a>さんとPHPの話、タバコの話<span class="footnote"><a href="#f1" title="途中でタバコの試供品を配るお姉ちゃんがきてたからだと思う……。" name="fn1">*1</a></span>、staticおじさんや相互フォロー推進委員会suspendされた話で盛り上がりました。社内でstaticおじさんとか相互フォロー推進委員会なんて単語出した事ないなー<span class="footnote"><a href="#f2" title="おれは会社でなんの話をしているんだろう？" name="fn2">*2</a></span>とか思いつつ……やっぱjava-jaいいわー。</p>
-<p>イベントに出ると、会った人の顔とTwitter idとTwitterアイコンを一致させるのが難しいですよねーという話も。「あれ？　この人会ったことある……idなんだっけ？」「idはタイムラインで見たことあるなぁ……」等々……。難しいですよね……。</p>
-<h1>終わりに</h1>
-<p>何とか滑り込みで2年連続2回目の出場をキメる事ができました…。来年も参加するぞ！　いや、その前に時間通りにイベントに参加できるようにだな…。</p>
-<p>一次会幹事の@<a href="http://twitter.com/yamashiro">yamashiro</a>さん、ハンターじゃない方の二次会を取りまとめてくださった@<a href="http://twitter.com/meso">meso</a>さん、java-jaの皆様お疲れさまでした！</p>
-<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 途中でタバコの試供品を配るお姉ちゃんがきてたからだと思う……。</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: おれは会社でなんの話をしているんだろう？</p></div>
+<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>Contents</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">参考</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">Android Lintって</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-4">
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">使用例</span></a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><h2 id="tocAnchor-1-1">あらすじ</h2>
+
+<p>Android Lintを使ってみる。</p>
+
+<h2 id="tocAnchor-1-2">参考</h2>
+
+<ul>
+  <li><a href="http://tools.android.com/tips/lint">Android Lint - Android Studio Project Site</a></li>
+  <li><a href="http://tools.android.com/tips/lint-checks">Android Lint Checks - Android Studio Project Site</a></li>
+  <li><a href="http://dev.classmethod.jp/smartphone/android-tips-11-lint-r17/">Android Tips #11 ADT revision 17のLintの機能追加について ｜ Developers.IO</a></li>
+</ul>
+
+<h2 id="tocAnchor-1-3">Android Lintって</h2>
+
+<ul>
+  <li>ADT 16から導入されたツール</li>
+  <li>ソースに潜在するバグをチェックしてくれる
+    <ul>
+      <li>Missing translations (and unused translations)</li>
+      <li>Layout performance problems (all the issues the old layoutopt tool used to find, and more)</li>
+      <li>Unused resources</li>
+      <li>Inconsistent array sizes (when arrays are defined in multiple configurations)</li>
+      <li>Accessibility and internationalization problems (hardcoded strings, missing contentDescription, etc)</li>
+      <li>Icon problems (like missing densities, duplicate icons, wrong sizes, etc)</li>
+      <li>Usability problems (like not specifying an input type on a text field)</li>
+      <li>Manifest errors</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="tocAnchor-1-4">使用例</h2>
+
+<p>コマンドラインから使う事ができる。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ /Users/USER/Library/Android/sdk/tools/lint --version
+lint: version 24.4.1
+</code></pre>
+</div>
+
+<p>Android Studioから使いたい。</p>
+
+<p><code class="highlighter-rouge">Analyze</code> -&gt; <code class="highlighter-rouge">Inspect Code</code> で実行できる。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Running Android Lint...
+</code></pre>
+</div>
+
 </div>
 
 <div class="pagination">
   <ul>
     
       <li class="prev">
-        <a href="/2010/12/07/1291733295/" title="RubyでTwitterのタイムラインを取得してみる">
-          RubyでTwitterのタイムラインを取得してみる
+        <a href="/2017/04/30/dropbox-cli/" title="Dropboxをコマンドラインで使用する方法">
+          Dropboxをコマンドラインで使用する方法
         </a>
       </li>
     
@@ -108,10 +167,8 @@
       <a href="/archives/">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2010/12/21/1292940870/" title="pixiv Tech Meetingに行ってきました">
-          pixiv Tech Meetingに行ってきました
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
@@ -122,17 +179,17 @@
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2010/12/11/1292077752/" data-text="kk_Atakaの日記 - java-ja忘年会に参加しました2010" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2017/05/31/android-lint/" data-text="kk_Atakaの日記 - Android StudioでAndroid Lint" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2010/12/11/1292077752/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2010/12/11/1292077752/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2010/12/11/1292077752/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - java-ja忘年会に参加しました2010"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - Android StudioでAndroid Lint"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
 	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
@@ -144,7 +201,7 @@
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2010/12/11/1292077752//"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2017/05/31/android-lint//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
