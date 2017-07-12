@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <title>Excel2007のF1キーを無効化する - kk_Atakaの日記</title>
+    <title>ニコレポの仕様が変わったので一覧情報の取得方法を調査した - kk_Atakaの日記</title>
     <meta charset="utf-8">
     <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/css/github-markdown.css">
@@ -42,18 +42,16 @@
 
     <div id="container">
       <article class="markdown-body">
-        <h1><a href="/2011/11/16/1321447232/">Excel2007のF1キーを無効化する</a></h1>
+        <h1><a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a></h1>
         <div class="published">
           
             <span>Tags: </span>
             
-              <span>[ <code><a href="/tags/#Windows" class="tag">Windows</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#備忘録" class="tag">備忘録</a></code> ]</span>
+              <span>[ <code><a href="/tags/#調査ログ" class="tag">調査ログ</a></code> ]</span>
             
           
           
-            <span>Published: 2011/11/16</span>
+            <span>Published: 2017/06/30</span>
           
         </div>
 
@@ -63,8 +61,8 @@
   <ul>
     
       <li class="prev">
-        <a href="/2011/10/11/1318334855/" title="Windowsのローカル環境にWordPressをインストールした">
-          Windowsのローカル環境にWordPressをインストールした
+        <a href="/2017/05/31/android-lint/" title="Android StudioでAndroid Lint">
+          Android StudioでAndroid Lint
         </a>
       </li>
     
@@ -72,10 +70,8 @@
       <a href="/archives/">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2011/11/17/1321537502/" title="Word2007でCtrl+hjklで移動できるようにする">
-          Word2007でCtrl+hjklで移動できるようにする
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
@@ -83,41 +79,110 @@
 
 
 <div class="content">
-<h1>あらすじ</h1>
-<p>ExcelのF1キーを殺したい…。Wordとかは百歩譲っていいとして、ExcelにはF2キーにセル編集が割当たっているので、それを使うときに暴発してしまうため。</p>
-<h1>案</h1>
-<ul><li>F1キーそのものを引っこ抜く</li><li>何かしらの方法で無効化する</li></ul>
-<p>ググってみると、F1キーをぶちぬくという方法も割とメジャーらしいのですが、いずれ返却しなければいけないPCのため物理的な方法は却下。なので無効化する方向でいきます。レジストリをいじってなんとかする。Accessの履歴といい、なんでMicrosoft製品は何かしようとしたらレジストリいじらないといけないんだ…。</p>
-<h1>手順</h1>
-<p>Windowsキー+r -&gt; regedit でレジストリエディタ起動、まずは下記パスを掘っていく。</p>
-<pre>HKEY_CURRENT_USER
-┗Software
-　┗Policies
-　　┗Microsoft
-　　　┗Office</pre>
-<p>Officeフォルダ直下になにかしら数字フォルダがあるかもしれないが、これはOfficeのバージョン。</p>
-<ul><li>12.0 = Office2007</li></ul>
-<p>という事らしい。今回は2007なので12.0を掘る。ここから下の階層はなければ作成する。(作成したい階層で右クリック -&gt; 新規 -&gt; キー)</p>
-<pre>HKEY_CURRENT_USER
-┗Software
-　┗Policies
-　　┗Microsoft
-　　　┗Office
-　　　　┗12.0
-　　　　　┗Excel
-　　　　　　┗DisabledShortcutKeysCheckBoxes</pre>
-<p>DisabledShortcutKeysCheckBoxesを作り、DisabledShortcutKeysCheckBoxesで右クリック -&gt; 新規 -&gt; 文字列値を選択しF1Key(わかればなんでもよい)と入力。作成したF1Keyをダブルクリックし</p>
-<pre>112,0</pre>
-<p>と入力しOK押下。</p>
-<p>Excelを再起動するとF1キーを押しても何も起こらなくなった！！　よし！</p>
+<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>Contents</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">調査ログ</span></a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><h2 id="tocAnchor-1-1">あらすじ</h2>
+
+<p>ニコレポの情報を <code class="highlighter-rouge">http://www.nicovideo.jp/my/top/all?innerPage=1&amp;mode=next_page</code> から取得していたが、仕様変更によりこのパラメータが無効？になっていた。</p>
+
+<p>ので、またニコレポを取得できるように色々調査。</p>
+
+<h2 id="tocAnchor-1-2">調査ログ</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">http://www.nicovideo.jp/my/top/all</code> をGoogle Chromeのデベロッパーツールを開いた状態でアクセスしてみる</li>
+  <li><code class="highlighter-rouge">nicorepo.js</code> 内でfetch <code class="highlighter-rouge">http://www.nicovideo.jp/api/nicorepo/timeline/my/all?client_app=pc_myrepo&amp;_=1234567890123</code> している？
+    <ul>
+      <li>上記に直接アクセスしてみる</li>
+      <li>パラメータは固定？( <code class="highlighter-rouge">_</code> はユーザー毎に固定？)</li>
+    </ul>
+  </li>
+  <li>以下のようなレスポンスが返ってくる</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"maxId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1499861535479-b3ec9..."</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"minId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1499754804677-da9ff..."</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"impressionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"c218734f-bff7-497f-b41c-48071c013111"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"clientAppGroup"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nicorepo"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"_limit"</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1499861535479-b3ec9..."</span><span class="p">,</span><span class="w">
+      </span><span class="err">(略)</span><span class="w">
+      </span><span class="nt">"video"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"so31557548"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PUBLIC"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"thumbnailUrl"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"normal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://tn-skr1.smilevideo.jp/smile?i=31557548"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"洲崎西 第211回放送（2017.07.11）"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"videoWatchPageId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1499858531"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="err">(略)</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1499754804677-da9ff..."</span><span class="p">,</span><span class="w">
+      </span><span class="err">(略)</span><span class="w">
+    </span><span class="err">}</span><span class="p">,</span><span class="w">
+   </span><span class="p">],</span><span class="w">
+  </span><span class="nt">"errors"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ok"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">data.video</code> が動画情報っぽい</li>
+  <li>取得件数は <code class="highlighter-rouge">_limit</code> で変えられるような気がする
+    <ul>
+      <li>が、色々パラメータを付加してみたが25から変わらなかったので別の方法を考える</li>
+    </ul>
+  </li>
+  <li>ニコレポページの「さらに読み込む」を選択してみる
+    <ul>
+      <li>新たに <code class="highlighter-rouge">http://www.nicovideo.jp/api/nicorepo/timeline/my/all?cursor=1499754804677-da9ff...&amp;client_app=pc_myrepo&amp;_=1234567890123</code> からニコレポの続きを取得された</li>
+      <li><code class="highlighter-rouge">cursor</code> の <code class="highlighter-rouge">1499754804677-da9ff...</code> は最初に取得したニコレポ一覧の最後尾の動画の <code class="highlighter-rouge">data.id</code> と一致した</li>
+      <li>そして、最後尾の動画の <code class="highlighter-rouge">data.id</code> は <code class="highlighter-rouge">meta.minid</code> と一致した</li>
+    </ul>
+  </li>
+  <li>以下を繰り返せばニコレポを取得できた
+    <ul>
+      <li><code class="highlighter-rouge">http://www.nicovideo.jp/api/nicorepo/timeline/my/all?client_app=pc_myrepo&amp;_=1234567890123</code> を取得</li>
+      <li>上記の <code class="highlighter-rouge">meta.minid</code> を <code class="highlighter-rouge">cursor</code> パラメータとして付加する</li>
+    </ul>
+  </li>
+</ul>
+
 </div>
 
 <div class="pagination">
   <ul>
     
       <li class="prev">
-        <a href="/2011/10/11/1318334855/" title="Windowsのローカル環境にWordPressをインストールした">
-          Windowsのローカル環境にWordPressをインストールした
+        <a href="/2017/05/31/android-lint/" title="Android StudioでAndroid Lint">
+          Android StudioでAndroid Lint
         </a>
       </li>
     
@@ -125,10 +190,8 @@
       <a href="/archives/">Archive</a>
     </li>
     
-      <li class="next">
-        <a href="/2011/11/17/1321537502/" title="Word2007でCtrl+hjklで移動できるようにする">
-          Word2007でCtrl+hjklで移動できるようにする
-        </a>
+      <li class="next_disabled">
+        <a>最新</a>
       </li>
     
   </ul>
@@ -139,17 +202,17 @@
     <br>
   <!-- Tweet Button -->
   <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2011/11/16/1321447232/" data-text="kk_Atakaの日記 - Excel2007のF1キーを無効化する" data-related="kk_Ataka"
+     data-url="http://gosyujin.github.io/2017/06/30/nicorepo/" data-text="kk_Atakaの日記 - ニコレポの仕様が変わったので一覧情報の取得方法を調査した" data-related="kk_Ataka"
      data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
   <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/11/16/1321447232/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/11/16/1321447232/" />
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
+    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
     </a>
   <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/11/16/1321447232/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - Excel2007のF1キーを無効化する"
+  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/"
+     data-hatena-bookmark-title="kk_Atakaの日記 - ニコレポの仕様が変わったので一覧情報の取得方法を調査した"
      data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
     <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
 	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
@@ -161,7 +224,7 @@
 var hatena_bookmark_anywhere_limit = 999; // 表示する件数
 // var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
 // var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/11/16/1321447232//"; // 表示するURL 未指定の場合、現在のページ
+var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2017/06/30/nicorepo//"; // 表示するURL 未指定の場合、現在のページ
 /*]]>*/</script>
   <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
   <div id="hatena_bookmark_anywhere"></div>
