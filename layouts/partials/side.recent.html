@@ -1,0 +1,17 @@
+{{ $num_recent_posts := default 10 .Site.Params.sidebar.num_recent_posts }}
+{{ $posts := first $num_recent_posts (where .Site.Pages "Section" "in" .Site.Params.mainSections) }}
+
+{{ if gt (len $posts) 0 }}
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="{{ .Site.BaseURL }}"><h3>Recent Entry</h3></a>
+    <ul>
+      {{ range $posts }}
+        <li>
+          <span>{{ .Date.Format "06/1/2" }} </span>
+          <!-- {{ partial "taxonomy.html" . }} -->
+          <a class="mb-2" href="{{ .URL }}">{{ .Title }}</a>
+        </li>
+      {{ end }}
+    </ul>
+  </div>
+{{ end }}

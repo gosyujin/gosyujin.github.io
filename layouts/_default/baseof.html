@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {{ if not .Site.BuildDrafts }}
+      {{ template "_internal/google_analytics_async.html" . }}
+    {{ end }}
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      {{ block "title" . }}
+        {{ .Site.Title }}
+      {{ end }}
+    </title>
+
+    {{ with .Keywords }}
+      <meta content="{{ delimit . `, ` }}" name="keywords">
+    {{ end }}
+
+    {{ if .Description }}
+      <meta name="description" property="og:description" content="{{ .Description }}|{{ .Site.Params.Description }}">
+    {{ else if .IsPage }}
+      <meta name="description" property="og:description" content="{{ .Summary | plainify }}|{{ .Site.Params.Description }}">
+    {{ else }}
+      <meta name="description" property="og:description" content="{{ .Site.Params.Description }}">
+    {{ end }}
+
+    <meta name="apple-mobile-web-app-title" content="{{ .Site.Title }}">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        {{ partial "header.html" . }}
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        {{ block "main" . }}
+        {{ end }}
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          {{ block "fixside" . }}{{ end }}
+        </div>
+        <aside class="pr-3">
+          {{ block "flowside" . }}{{ end }}
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        {{ partial "footer.html" . }}
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+    <!-- MathJax -->
+    <!-- <script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });</script> -->
+  </body>
+</html>

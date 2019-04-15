@@ -1,0 +1,32 @@
+<nav class="paginate-container">
+  <div class="pagination">
+      {{ if .PrevInSection }}
+        <a href="{{ .PrevInSection.Permalink }}" class="pagination_overflow previous_page">
+          Prev: 
+          {{ .PrevInSection.Date.Format "06/1/2" }}
+          {{ .PrevInSection.Title | truncate 30 }}
+        </a>
+      {{ else }}
+        <span class="pagination_overflow previous_page disabled">
+          Prev: -
+        </span>
+      {{ end }}
+
+      <span class="pagination_center disabled">
+        {{ .Date.Format "06/1/2" }}
+        {{ .Title | truncate 5 }}
+      </span>
+
+      {{ if .NextInSection }}
+        <a href="{{ .NextInSection.Permalink }}" class="pagination_overflow next_page">
+          Next: 
+          {{ .NextInSection.Date.Format "06/1/2" }}
+          {{ .NextInSection.Title | truncate 30 }}
+        </a>
+      {{ else }}
+        <span class="pagination_overflow next_page disabled">
+          Next: -
+        </span>
+      {{ end }}
+  </div>
+</nav>

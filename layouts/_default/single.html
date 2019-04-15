@@ -1,0 +1,43 @@
+{{ define "title" }}
+  {{ .Title }} &ndash; {{ .Site.Title }}
+{{ end }}
+
+{{ define "fixside" }}
+  {{ partial "fixside.html" . }}
+{{ end }}
+
+{{ define "flowside" }}
+  {{ partial "flowside.html" . }}
+{{ end }}
+
+{{ define "main" }}
+
+  {{ partial "relatedsection.html" . }}
+
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">{{ .Title }}</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        {{ if .Draft }}
+          DRAFT!! 
+        {{ end }}
+        Tags: {{ partial "taxonomy.html" . }} 
+        Published: <span>{{ .Date.Format "2006/01/02" }}</span>
+      </div>
+    </div>
+  </div>
+
+  {{ partial "toc.html" . }}
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      {{ .Content }}
+    </section>
+  </article>
+
+  {{ partial "relatedsection.html" . }}
+
+{{ end }}
+ 

@@ -1,0 +1,24 @@
+{{ define "title" }}
+  {{ .Title }} &ndash; {{ .Site.Title }}
+{{ end }}
+
+{{ define "fixside" }}
+  {{ partial "fixside.html" . }}
+{{ end }}
+
+{{ define "flowside" }}
+  {{ partial "flowside.html" . }}
+{{ end }}
+
+{{ define "main" }}
+  <div>
+    <h1>{{ .Title }}</h1>
+    {{ range .Pages }}
+      <h2>
+        <a href="{{ .URL }}" class="link-gray-dark">{{ .Title }}</a>
+        <span class="text-right Counter Counter--gray">{{ len .Pages }}</span>
+      </h2>
+      {{ partial "contentlist.html" . }}
+    {{ end }}
+  </div>
+{{ end }}
