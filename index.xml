@@ -12,6 +12,19 @@
     
     
     <item>
+      <title>SQL Serverでの照合順序の確認方法</title>
+      <link>/2019/04/15/sqlserver-collation-name/</link>
+      <pubDate>Mon, 15 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/04/15/sqlserver-collation-name/</guid>
+      <description>あらすじ SQLServerでは文字コード、照合順序は特に指定がなければ「規定値」が設定されるらしい。
+ サロゲートペア文字とDB設計を考える | デーコムラボ SQL ServerにUnicodeの文字列を格納する方法 - 大人になったら肺呼吸 SQLServerへのデータ格納時の文字コード（コードページ）について - 大人になったら肺呼吸 SQL Server で照合順序 Japanese_CI_AS どこ消えた？あった。 | 技術的な何か。 SQL Serverにおける日本語文字列の取り扱いで躓いた話 - ShouN-7&amp;rsquo;s tech blog  とりわけAzure環境下で英語→日本語切り替えとかすると躓く模様。
+でも、そもそも規定値ってどこで確認するのという話。
+環境  SQL Server 14.0.1000.169  まとめ  特に指定なしでDB/テーブルを作成する場合は規定値の照合順序(Collation)を使う 照合順序を変更しても、既に作成済のユーザーデータベースのテーブルの照合順序は変わらない  システムテーブル内は変わる ユーザーテーブルはALTER DATABASEで別途変更する必要がある  確認はINFORMATION_SCHEMA.COLUMNSビューで行う  手順A(SQL Serverのシステム情報スキーマビューから確認する) INFORMATION_SCHEMA.COLUMNSビューに欲しい情報全部あった。
+SELECT TABLE_CATALOG , TABLE_SCHEMA , TABLE_NAME , COLUMN_NAME , DATA_TYPE , CHARACTER_MAXIMUM_LENGTH , CHARACTER_OCTET_LENGTH , CHARACTER_SET_NAME , COLLATION_NAME FROM INFORMATION_SCHEMA.COLUMNS;    TABLE_CATALOG TABLE_SCHEMA TABLE_NAME COLUMN_NAME DATA_TYPE CHARACTER_MAXIMUM_LENGTH CHARACTER_OCTET_LENGTH CHARACTER_SET_NAME COLLATION_NAME     SAMPLE_INSTANCE SAMPLE_SCHEMA SAMPLE_TABLE ID varchar 3 3 cp932 Japanese_CI_AS   SAMPLE_INSTANCE SAMPLE_SCHEMA SAMPLE_TABLE NAME nvarchar 10 20 UNICODE Japanese_CI_AS   SAMPLE_INSTANCE SAMPLE_SCHEMA SAMPLE_TABLE ADDRESS nvarchar 25 50 UNICODE Japanese_CI_AS   SAMPLE_INSTANCE SAMPLE_SCHEMA SAMPLE_TABLE UPDATE_DATE date        手順B(頑張る場合) とあるユーザーテーブルのカラムの照合順序を調べる いきなりカラム(sys.</description>
+    </item>
+    
+    <item>
       <title>ニコレポの仕様が変わったので一覧情報の取得方法を調査した</title>
       <link>/2017/06/30/nicorepo/</link>
       <pubDate>Fri, 30 Jun 2017 00:00:00 +0000</pubDate>
