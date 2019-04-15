@@ -12,12 +12,15 @@
 
 {{ define "main" }}
 
+{{ if eq .Params.layout "post" }}
   {{ partial "relatedsection.html" . }}
+{{ end }}
 
   <div class="Subhead">
     <div class="Subhead-heading">
       <div class="h2 mt-3 mb-1">{{ .Title }}</div>
     </div>
+{{ if eq .Params.layout "post" }}
     <div class="Subhead-description">
       <div class="float-md-right">
         {{ if .Draft }}
@@ -27,9 +30,12 @@
         Published: <span>{{ .Date.Format "2006/01/02" }}</span>
       </div>
     </div>
+{{ end }}
   </div>
 
+{{ if eq .Params.layout "post" }}
   {{ partial "toc.html" . }}
+{{ end }}
 
   <article>
    <section class="pb-6 mb-3 border-bottom">
@@ -37,7 +43,9 @@
     </section>
   </article>
 
+{{ if eq .Params.layout "post" }}
   {{ partial "relatedsection.html" . }}
+{{ end }}
 
 {{ end }}
  
