@@ -1,146 +1,247 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>Redmineのプラグイン作成のための備忘録と、時々SQLite3 - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Redmineのプラグイン作成のための備忘録と、時々SQLite3 &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Ruby][Redmine][SQLite3][Windows][備忘録]Redmineのプラグイン作成のための備忘録と、時々SQLite3 あらすじ 今あると幸せになれるもの
+チケットのCSVエクスポート機能。ただし、履歴つきで。これがあるといわゆるバグとかPJ課題の管理がRedmineで一元化できExcelの呪縛から解き放てられる……
+既に履歴つきCSVエクスポートプラグインは存在しているようです。http://d.hatena.ne.jp/suer/20101003/1286120294:title　ただ、履歴の出方が1履歴毎に列を更新なんですよね。。
+No, ... ,履歴 1, ... ,#1の履歴,#2の履歴,#3の履歴 2, ... ,#1の履歴,#2の履歴 今自分が抱えている縛り的にはこう出てほしい。
+No, ... ,履歴 1, ... ,&amp;#34;#1の履歴 #2の履歴, #3の履歴&amp;#34; 2, ... ,&amp;#34;#1の履歴, #2の履歴&amp;#34; 吐き出したときにチケット1つの履歴を1セルの中に収めたい。CSVに改行はどうなんだとか1セルに改行しまくるのはどうなんだとか色々ありますがそこは縛りなので。。。
+だもんで、これを機会にRedmineのプラグインはどう作るのかを調べてみました。
+参考サイト  http://www.r-labs.org/projects/r-labs/wiki/%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E9%96%8B%E7%99%BA%E3%82%AC%E3%82%A4%E3%83%89:title http://gihyo.jp/dev/serial/01/ruby/0038:title  環境  WindowsXP Redmine 1.0.0[1]  Ruby 1.8.7 Rails 2.3.5 Rack 1.0.1  SQLite3 バージョン失念  プラグインのスケルトン作成 まずはプラグインのスケルトンというものを作成する。テンプレートみたいなもの？　以下のコマンドで自動生成してくれます。[2]
+&amp;gt;ruby script\generate redmine_plugin extendCsv するといきなりエラー。
+!!! The bundled mysql.rb driver has been removed from Rails 2.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2011/09/07/1315401886/">Redmineのプラグイン作成のための備忘録と、時々SQLite3</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Ruby" class="tag">Ruby</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#Redmine" class="tag">Redmine</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#SQLite3" class="tag">SQLite3</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#Windows" class="tag">Windows</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#備忘録" class="tag">備忘録</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2011/09/07</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2011/09/04/1315146050/" title="vmstatとかiostatとかsarとかswapコマンドのメモ">
-          vmstatとかiostatとかsarとかswapコマンドのメモ
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2011/09/04/1315146050/" class="pagination_overflow previous_page">
+          Prev: 
+          11/9/4
+          vmstatとかiostatとかsarとかswapコマンドの …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2011/09/12/1315826713/" title="Solarisのパッケージを作ってみる">
+      
+
+      <span class="pagination_center disabled">
+        11/9/7
+        Redmi …
+      </span>
+
+      
+        <a href="/2011/09/12/1315826713/" class="pagination_overflow next_page">
+          Next: 
+          11/9/12
           Solarisのパッケージを作ってみる
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<h1>あらすじ</h1>
-<dl><dt>今あると幸せになれるもの</dt><dd>チケットのCSVエクスポート機能。ただし、履歴つきで。これがあるといわゆるバグとかPJ課題の管理がRedmineで一元化できExcelの呪縛から解き放てられる……</dd></dl>
-<p>既に履歴つきCSVエクスポートプラグインは存在しているようです。<a href="http://d.hatena.ne.jp/suer/20101003/1286120294">履歴付チケット一覧出力プラグインを書いてみた - すえひろがりっっっっ!</a>　ただ、履歴の出方が1履歴毎に列を更新なんですよね。。</p>
-<pre>No, ... ,履歴
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">Redmineのプラグイン作成のための備忘録と、時々SQLite3</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
+
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
+    </a>
+  
+    <a href='/tags/redmine' class="muted-link">
+      [ <span class="Label Label--gray">Redmine</span> ]
+    </a>
+  
+    <a href='/tags/sqlite3' class="muted-link">
+      [ <span class="Label Label--gray">SQLite3</span> ]
+    </a>
+  
+    <a href='/tags/windows' class="muted-link">
+      [ <span class="Label Label--gray">Windows</span> ]
+    </a>
+  
+    <a href='/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2011/09/07</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ruby-redmine-sqlite3-windows-備忘録-redmineのプラグイン作成のための備忘録と-時々sqlite3">[Ruby][Redmine][SQLite3][Windows][備忘録]Redmineのプラグイン作成のための備忘録と、時々SQLite3</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#プラグインのスケルトン作成">プラグインのスケルトン作成</a></li>
+<li><a href="#init-rbの作成">init.rbの作成</a></li>
+<li><a href="#補足-sqlite3あれこれ">補足:SQLite3あれこれ</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="ruby-redmine-sqlite3-windows-備忘録-redmineのプラグイン作成のための備忘録と-時々sqlite3">[Ruby][Redmine][SQLite3][Windows][備忘録]Redmineのプラグイン作成のための備忘録と、時々SQLite3</h2>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>今あると幸せになれるもの<br />
+チケットのCSVエクスポート機能。ただし、履歴つきで。これがあるといわゆるバグとかPJ課題の管理がRedmineで一元化できExcelの呪縛から解き放てられる……</p>
+
+<p>既に履歴つきCSVエクスポートプラグインは存在しているようです。<a href="http://d.hatena.ne.jp/suer/20101003/1286120294:title">http://d.hatena.ne.jp/suer/20101003/1286120294:title</a>　ただ、履歴の出方が1履歴毎に列を更新なんですよね。。</p>
+<div class="highlight"><pre class="chroma">No, ... ,履歴
 1, ... ,#1の履歴,#2の履歴,#3の履歴
-2, ... ,#1の履歴,#2の履歴</pre>
+2, ... ,#1の履歴,#2の履歴</pre></div>
 <p>今自分が抱えている縛り的にはこう出てほしい。</p>
-<pre>No, ... ,履歴
-1, ... ,&quot;#1の履歴
+<div class="highlight"><pre class="chroma">No, ... ,履歴
+1, ... ,&#34;#1の履歴
 #2の履歴,
-#3の履歴&quot;
-2, ... ,&quot;#1の履歴,
-#2の履歴&quot;</pre>
+#3の履歴&#34;
+2, ... ,&#34;#1の履歴,
+#2の履歴&#34;</pre></div>
 <p>吐き出したときにチケット1つの履歴を1セルの中に収めたい。CSVに改行はどうなんだとか1セルに改行しまくるのはどうなんだとか色々ありますがそこは縛りなので。。。</p>
+
 <p>だもんで、これを機会にRedmineのプラグインはどう作るのかを調べてみました。</p>
-<h1>参考サイト</h1>
-<ul><li><a href="http://www.r-labs.org/projects/r-labs/wiki/%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E9%96%8B%E7%99%BA%E3%82%AC%E3%82%A4%E3%83%89">r-labs</a></li><li><a href="http://gihyo.jp/dev/serial/01/ruby/0038">Ruby Freaks Lounge：第38回　Redmineプラグイン開発（3）｜gihyo.jp … 技術評論社</a></li></ul>
-<h1>環境</h1>
-<ul><li>WindowsXP</li><li>Redmine 1.0.0<span class="footnote"><a href="#f1" title="[http://redmine.jp/guide/RedmineInstall/:title=Redmineのインストール | Redmine.JP]　に準拠。" name="fn1">*1</a></span><ul><li>Ruby 1.8.7</li><li>Rails 2.3.5</li><li>Rack 1.0.1</li></ul></li><li>SQLite3 バージョン失念</li></ul>
-<h1>プラグインのスケルトン作成</h1>
-<p>まずはプラグインのスケルトンというものを作成する。テンプレートみたいなもの？　以下のコマンドで自動生成してくれます。<span class="footnote"><a href="#f2" title="途中でコマンドプロンプトからConsole2というフリーソフトに切り替えたのでパスの区切りが\だったり/だったりしてます。" name="fn2">*2</a></span></p>
-<pre>&gt;ruby script\generate redmine_plugin extendCsv</pre>
+
+<h2 id="参考サイト">参考サイト</h2>
+
+<ul>
+<li><a href="http://www.r-labs.org/projects/r-labs/wiki/%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E9%96%8B%E7%99%BA%E3%82%AC%E3%82%A4%E3%83%89:title">http://www.r-labs.org/projects/r-labs/wiki/%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E9%96%8B%E7%99%BA%E3%82%AC%E3%82%A4%E3%83%89:title</a></li>
+<li><a href="http://gihyo.jp/dev/serial/01/ruby/0038:title">http://gihyo.jp/dev/serial/01/ruby/0038:title</a></li>
+</ul>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>WindowsXP</li>
+<li>Redmine 1.0.0[1]
+
+<ul>
+<li>Ruby 1.8.7</li>
+<li>Rails 2.3.5</li>
+<li>Rack 1.0.1</li>
+</ul></li>
+<li>SQLite3 バージョン失念</li>
+</ul>
+
+<h2 id="プラグインのスケルトン作成">プラグインのスケルトン作成</h2>
+
+<p>まずはプラグインのスケルトンというものを作成する。テンプレートみたいなもの？　以下のコマンドで自動生成してくれます。[2]</p>
+<div class="highlight"><pre class="chroma">&gt;ruby script\generate redmine_plugin extendCsv</pre></div>
 <p>するといきなりエラー。</p>
-<pre>!!! The bundled mysql.rb driver has been removed from Rails 2.2. Please install
-the mysql gem and try again: gem install mysql.</pre>
+<div class="highlight"><pre class="chroma">!!! The bundled mysql.rb driver has been removed from Rails 2.2. Please install
+the mysql gem and try again: gem install mysql.</pre></div>
 <p>さらに、</p>
-<pre>LIBMYSQL.dll が見つからなかったため、このアプリケーションを開始できませんでした。…</pre>
+<div class="highlight"><pre class="chroma">LIBMYSQL.dll が見つからなかったため、このアプリケーションを開始できませんでした。…</pre></div>
 <p>libmysqlが必要らしい。なんでmysqlなんだろう？　SQLite3使うようにしてなかったっけ？</p>
+
 <p>(略)</p>
+
 <p>あーわかった。config/database.ymlがこうなっていた。</p>
-<pre>production:
+<div class="highlight"><pre class="chroma">production:
   adapter: sqlite3
   database: db/redmine
- 
+
 development:
   adapter: mysql
   database: redmine_development
   host: localhost
   username: root
   password:
-  encoding: utf8</pre>
+  encoding: utf8</pre></div>
 <p>productionは変えていたけどdevelopmentはデフォルト=MySQLのままだった。開発時はdevelopmentモードを使うようになっているからmysql探し出したのか。変えてみた。</p>
-<pre>production:
+<div class="highlight"><pre class="chroma">production:
   adapter: sqlite3
   database: db/redmine
- 
+
 development:
   adapter: sqlite3
-  database: db/redminedev</pre>
+  database: db/redminedev</pre></div>
 <p>再度。</p>
-<pre>&gt;ruby script\generate redmine_plugin extendCsv</pre>
-<pre>C:\redmine-1.0.0&gt;ruby script\generate redmine_plugin extendCsv
+<div class="highlight"><pre class="chroma">&gt;ruby script\generate redmine_plugin extendCsv
+
+C:\redmine-1.0.0&gt;ruby script\generate redmine_plugin extendCsv
       create  vendor/plugins/redmine_extend_csv/app/controllers
       create  vendor/plugins/redmine_extend_csv/app/helpers
       create  vendor/plugins/redmine_extend_csv/app/models
@@ -157,36 +258,55 @@ development:
       create  vendor/plugins/redmine_extend_csv/init.rb
       create  vendor/plugins/redmine_extend_csv/lang/en.yml
       create  vendor/plugins/redmine_extend_csv/config/locales/en.yml
-      create  vendor/plugins/redmine_extend_csv/test/test_helper.rb</pre>
+      create  vendor/plugins/redmine_extend_csv/test/test_helper.rb</pre></div>
 <p>vendor/plugins下にスケルトンができた。この「vendor/plugins/今回作成したディレクトリ」というのがプラグインのルートになるようです。</p>
-<pre>C:\redmine-1.0.0\vendor\plugins&gt;dir
+<div class="highlight"><pre class="chroma">C:\redmine-1.0.0\vendor\plugins&gt;dir
 
 2011/09/06  09:24    &lt;DIR&gt;          .
 2011/09/06  09:24    &lt;DIR&gt;          ..
 略
 2011/09/06  09:24    &lt;DIR&gt;          redmine_extend_csv
-略</pre>
+略</pre></div>
 <p>プラス、自動で頭に「redmine」付加+スネークケースにリネームしてくれている。これが規約か…？　とりあえずフォルダ構成等は置いておいて、次の章へ。</p>
-<h1>init.rbの作成</h1>
+
+<h2 id="init-rbの作成">init.rbの作成</h2>
+
 <p>プラグイン名、作者名などを記述できるが今は特になにも設定せず。後でプラグインを表示さす時に戻って来ます。</p>
+
 <p>ここで一回起動してみる。</p>
-<pre>&gt;ruby script\server</pre>
+<div class="highlight"><pre class="chroma">&gt;ruby script\server</pre></div>
 <p>オプションに-e productionをつけないとdevelopmentモードで起動する。その前に、DBの初期化をしていない場合は初期化を……。(RAILS_ENV=productionを除外)</p>
-<pre>&gt;rake db:migrate
-&gt;rake redmine:load_default_data</pre>
+<div class="highlight"><pre class="chroma">&gt;rake db:migrate
+&gt;rake redmine:load_default_data</pre></div>
 <p>そしてRedmine起動 -&gt; 管理 -&gt; プラグインを見に行くと…あった！(写真なし)</p>
-<h1>補足:SQLite3あれこれ</h1>
+
+<h2 id="補足-sqlite3あれこれ">補足:SQLite3あれこれ</h2>
+
 <p>ちょっとSQLite3も使ってみる。コンソールから見ることもないだろうとexeはDLしていなかったので今回初。</p>
-<ul><li>まずexe版SQLite3をDL</li><li>実行</li></ul>
-<pre># Redmineのconfig/database.ymlで定義し作成したDBへ接続
+
+<ul>
+<li>まずexe版SQLite3をDL</li>
+<li>実行</li>
+</ul>
+
+<!-- -->
+<div class="highlight"><pre class="chroma"># Redmineのconfig/database.ymlで定義し作成したDBへ接続
 &gt;sqlite3.exe REDMINE_DB_FILE
 SQLite version 3.7.7.1 2011-06-28 17:39:05
-Enter &quot;.help&quot; for instructions
-Enter SQL statements terminated with a &quot;;&quot;</pre>
+Enter &#34;.help&#34; for instructions
+Enter SQL statements terminated with a &#34;;&#34;</pre></div>
 <p>今回はとりあえず下記の2つのコマンドを覚えて帰る。</p>
-<table><tr><th>.table</th><td>テーブル一覧を取得する</td></tr><tr><th>pragma_table_info(TABLE)</th><td>テーブルのカラム情報を取得する</td></tr></table>
-<ul><li>.table</li></ul>
-<pre>sqlite&gt; .table
+
+<p>|*.table|テーブル一覧を取得する|</p>
+
+<p>|*pragma_table_info(TABLE)|テーブルのカラム情報を取得する|</p>
+
+<ul>
+<li>.table</li>
+</ul>
+
+<!-- -->
+<div class="highlight"><pre class="chroma">sqlite&gt; .table
 attachments                          news
 auth_sources                         open_id_authentication_associations
 boards                               open_id_authentication_nonces
@@ -209,13 +329,17 @@ issues                               wiki_contents
 journal_details                      wiki_pages
 journals                             wiki_redirects
 member_roles                         wikis
-members                              workflows</pre>
-<ul><li>pragma_table_info(TABLE)</li></ul>
-<pre>sqlite&gt; pragma table_info(issues);
+members                              workflows</pre></div>
+<ul>
+<li>pragma_table_info(TABLE)</li>
+</ul>
+
+<!-- -->
+<div class="highlight"><pre class="chroma">sqlite&gt; pragma table_info(issues);
 0|id|INTEGER|1||1
 1|tracker_id|integer|1|0|0
 2|project_id|integer|1|0|0
-3|subject|varchar(255)|1|''|0
+3|subject|varchar(255)|1|&#39;&#39;|0
 4|description|text|0||0
 5|due_date|date|0||0
 6|category_id|integer|0||0
@@ -233,13 +357,13 @@ members                              workflows</pre>
 18|parent_id|integer|0|NULL|0
 19|root_id|integer|0|NULL|0
 20|lft|integer|0|NULL|0
-21|rgt|integer|0|NULL|0</pre>
-<p>今回欲しいテーブルはissues, journals, journal_detailsの3つでOKのはずなので<span class="footnote"><a href="#f3" title="チケットの履歴がjournalテーブルで管理されているのを探すのに手間取ったんだけど、どう探すのがクールなんだろう。チケット画面遷移したときのログで探して辿り着いたんだけど。" name="fn3">*3</a></span>これをちょっとメモしておく。</p>
-<pre>sqlite&gt; pragma table_info(issues);
+21|rgt|integer|0|NULL|0</pre></div>
+<p>今回欲しいテーブルはissues, journals, journal_detailsの3つでOKのはずなので[3]これをちょっとメモしておく。</p>
+<div class="highlight"><pre class="chroma">sqlite&gt; pragma table_info(issues);
  0|id              |INTEGER     |1|    |1
  1|tracker_id      |integer     |1|0   |0
  2|project_id      |integer     |1|0   |0
- 3|subject         |varchar(255)|1|''  |0
+ 3|subject         |varchar(255)|1|&#39;&#39;  |0
  4|description     |text        |0|    |0
  5|due_date        |date        |0|    |0
  6|category_id     |integer     |0|    |0
@@ -262,7 +386,7 @@ members                              workflows</pre>
 sqlite&gt; pragma table_info(journals);
  0|id              |INTEGER     |1|    |1
  1|journalized_id  |integer     |1|0   |0
- 2|journalized_type|varchar(30) |1|''  |0
+ 2|journalized_type|varchar(30) |1|&#39;&#39;  |0
  3|user_id         |integer     |1|0   |0
  4|notes           |text        |0|    |0
  5|created_on      |datetime    |1|    |0
@@ -270,495 +394,689 @@ sqlite&gt; pragma table_info(journals);
 sqlite&gt; pragma table_info(journal_details);
  0|id              |INTEGER     |1|    |1
  1|journal_id      |integer     |1|0   |0
- 2|property        |varchar(30) |1|''  |0
- 3|prop_key        |varchar(30) |1|''  |0
+ 2|property        |varchar(30) |1|&#39;&#39;  |0
+ 3|prop_key        |varchar(30) |1|&#39;&#39;  |0
  4|old_value       |varchar(255)|0|    |0
- 5|value           |varchar(255)|0|    |0</pre>
-<p>これで準備とデータを見ることはできるようになった！　次からは実際にプラグインの中身に入っていく！ </p>
-<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: [http://redmine.jp/guide/RedmineInstall/:title=Redmineのインストール | Redmine.JP]　に準拠。</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: 途中でコマンドプロンプトからConsole2というフリーソフトに切り替えたのでパスの区切りが\だったり/だったりしてます。</p><p class="footnote"><a href="#fn3" name="f3">*3</a>: チケットの履歴がjournalテーブルで管理されているのを探すのに手間取ったんだけど、どう探すのがクールなんだろう。チケット画面遷移したときのログで探して辿り着いたんだけど。</p></div>
-</div>
+ 5|value           |varchar(255)|0|    |0</pre></div>
+<p>これで準備とデータを見ることはできるようになった！　次からは実際にプラグインの中身に入っていく！</p>
 
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2011/09/04/1315146050/" title="vmstatとかiostatとかsarとかswapコマンドのメモ">
-          vmstatとかiostatとかsarとかswapコマンドのメモ
+<p>[1] [<a href="http://redmine.jp/guide/RedmineInstall/:title]　に準拠。">http://redmine.jp/guide/RedmineInstall/:title]　に準拠。</a></p>
+
+<p>[2] 途中でコマンドプロンプトからConsole2というフリーソフトに切り替えたのでパスの区切りが\だったり/だったりしてます。</p>
+
+<p>[3] チケットの履歴がjournalテーブルで管理されているのを探すのに手間取ったんだけど、どう探すのがクールなんだろう。チケット画面遷移したときのログで探して辿り着いたんだけど。</p>
+
+    </section>
+  </article>
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2011/09/04/1315146050/" class="pagination_overflow previous_page">
+          Prev: 
+          11/9/4
+          vmstatとかiostatとかsarとかswapコマンドの …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2011/09/12/1315826713/" title="Solarisのパッケージを作ってみる">
+      
+
+      <span class="pagination_center disabled">
+        11/9/7
+        Redmi …
+      </span>
+
+      
+        <a href="/2011/09/12/1315826713/" class="pagination_overflow next_page">
+          Next: 
+          11/9/12
           Solarisのパッケージを作ってみる
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2011/09/07/1315401886/" data-text="kk_Atakaの日記 - Redmineのプラグイン作成のための備忘録と、時々SQLite3" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/09/07/1315401886/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/09/07/1315401886/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/09/07/1315401886/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - Redmineのプラグイン作成のための備忘録と、時々SQLite3"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+      </div>
 
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/09/07/1315401886//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-  <h2>Recent Entries</h2>
 
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#ruby-redmine-sqlite3-windows-備忘録-redmineのプラグイン作成のための備忘録と-時々sqlite3">[Ruby][Redmine][SQLite3][Windows][備忘録]Redmineのプラグイン作成のための備忘録と、時々SQLite3</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#プラグインのスケルトン作成">プラグインのスケルトン作成</a></li>
+<li><a href="#init-rbの作成">init.rbの作成</a></li>
+<li><a href="#補足-sqlite3あれこれ">補足:SQLite3あれこれ</a></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

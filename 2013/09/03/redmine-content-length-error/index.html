@@ -1,154 +1,177 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>Ruby1.9.3のWebrickで出るCould not determine content-length...エラーを消す方法(2.0.0では解決済) - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Ruby1.9.3のWebrickで出るCould not determine content-length...エラーを消す方法(2.0.0では解決済) &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ Redmineを起動している時に以下のようなログが大量に吐かれコンソールが埋め尽くされて困った。
+[yyyy-mm-dd ...] WARN Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true 環境  Ruby 1.9.3 Redmine 2.3.1  Rails 3.2.13 WEBrick 1.3.1   参考サイト  Railsのログから&amp;rdquo;Could not determine content-length &amp;hellip;&amp;ldquo;とかでてるのを消す - Qiita [キータ] Webrickが出す大量のログを抑止するには？ - QA@IT Ruby - Railsサーバーの WARN Could not determine content-length… のログを表示しないようにする - Qiita [キータ] rails 3.1.1.rc1 emits warning for each assets when using ruby-1.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2013/09/03/redmine-content-length-error/">Ruby1.9.3のWebrickで出るCould not determine content-length...エラーを消す方法(2.0.0では解決済)</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Ruby" class="tag">Ruby</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#Rails" class="tag">Rails</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2013/09/03</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2013/08/28/android-test-tools/" title="Androidの自動テストツール、今(2013年)から使うなら何がよいのか">
-          Androidの自動テストツール、今(2013年)から使うなら何がよいのか
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/08/28/android-test-tools/" class="pagination_overflow previous_page">
+          Prev: 
+          13/8/28
+          Androidの自動テストツール、今(2013年)から使うな …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/09/05/svn-proxy-error-by-git-svn/" title="Subversionのproxy設定でいつもハマるやつ">
+      
+
+      <span class="pagination_center disabled">
+        13/9/3
+        Ruby1 …
+      </span>
+
+      
+        <a href="/2013/09/05/svn-proxy-error-by-git-svn/" class="pagination_overflow next_page">
+          Next: 
+          13/9/5
           Subversionのproxy設定でいつもハマるやつ
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">環境</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">参考サイト</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-4">
-              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">解決方法</span></a>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h2 id="tocAnchor-1-1">あらすじ</h2>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">Ruby1.9.3のWebrickで出るCould not determine content-length...エラーを消す方法(2.0.0では解決済)</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
+
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
+    </a>
+  
+    <a href='/tags/rails' class="muted-link">
+      [ <span class="Label Label--gray">Rails</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2013/09/03</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#解決方法">解決方法</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="あらすじ">あらすじ</h2>
 
 <p>Redmineを起動している時に以下のようなログが大量に吐かれコンソールが埋め尽くされて困った。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="err">[yyyy-mm-dd ...] WARN Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true</span>
-    </code>
-  </pre>
-</figure>
-
-<h2 id="tocAnchor-1-2">環境</h2>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">[yyyy-mm-dd ...] WARN Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true</code></pre></div>
+<h2 id="環境">環境</h2>
 
 <ul>
-  <li>Ruby 1.9.3</li>
-  <li>Redmine 2.3.1
-    <ul>
-      <li>Rails 3.2.13</li>
-      <li>WEBrick 1.3.1</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="tocAnchor-1-3">参考サイト</h2>
+<li>Ruby 1.9.3</li>
+<li>Redmine 2.3.1
 
 <ul>
-  <li><a href="http://qiita.com/y_uuki/items/0f8c093bd25eac3119a0">Railsのログから”Could not determine content-length …“とかでてるのを消す - Qiita [キータ]</a></li>
-  <li><a href="http://qa.atmarkit.co.jp/q/63">Webrickが出す大量のログを抑止するには？ - QA@IT</a></li>
-  <li><a href="http://qiita.com/ysk_1031/items/e57852a07dc4ddef8dbe">Ruby - Railsサーバーの WARN Could not determine content-length… のログを表示しないようにする - Qiita [キータ]</a></li>
-  <li><a href="https://github.com/rails/rails/issues/3164">rails 3.1.1.rc1 emits warning for each assets when using ruby-1.9.3-rc1 · Issue #3164 · rails/rails · GitHub</a></li>
-  <li><a href="https://bugs.ruby-lang.org/issues/5737">Bug #5737: WEBrick doesn’t support keep alive connections for 204 and 304 responses - ruby-trunk - Ruby Issue Tracking System</a></li>
+<li>Rails 3.2.13</li>
+<li>WEBrick 1.3.1</li>
+</ul></li>
 </ul>
 
-<h2 id="tocAnchor-1-4">解決方法</h2>
+<h2 id="参考サイト">参考サイト</h2>
+
+<ul>
+<li><a href="http://qiita.com/y_uuki/items/0f8c093bd25eac3119a0">Railsのログから&rdquo;Could not determine content-length &hellip;&ldquo;とかでてるのを消す - Qiita [キータ]</a></li>
+<li><a href="http://qa.atmarkit.co.jp/q/63">Webrickが出す大量のログを抑止するには？ - QA@IT</a></li>
+<li><a href="http://qiita.com/ysk_1031/items/e57852a07dc4ddef8dbe">Ruby - Railsサーバーの WARN Could not determine content-length… のログを表示しないようにする - Qiita [キータ]</a></li>
+<li><a href="https://github.com/rails/rails/issues/3164">rails 3.1.1.rc1 emits warning for each assets when using ruby-1.9.3-rc1 · Issue #3164 · rails/rails · GitHub</a></li>
+<li><a href="https://bugs.ruby-lang.org/issues/5737">Bug #5737: WEBrick doesn&rsquo;t support keep alive connections for 204 and 304 responses - ruby-trunk - Ruby Issue Tracking System</a></li>
+</ul>
+
+<h2 id="解決方法">解決方法</h2>
 
 <p>以下のパッチをあてる or 該当ファイルを変更する。</p>
 
 <ul>
-  <li><a href="https://bugs.ruby-lang.org/attachments/2300/204_304_keep_alive.patch">204-304-keep-alive.patch - ruby-trunk - Ruby Issue Tracking System</a></li>
+<li><a href="https://bugs.ruby-lang.org/attachments/2300/204_304_keep_alive.patch">204-304-keep-alive.patch - ruby-trunk - Ruby Issue Tracking System</a></li>
 </ul>
 
 <p>このパッチは取り込まれていて、最新版だとなおってるのかな？</p>
@@ -156,522 +179,701 @@
 <p>→ <strong>2.0.0 ではなおってた！</strong></p>
 
 <ul>
-  <li><a href="https://github.com/ruby/ruby/blob/ruby_2_0_0/lib/webrick/httpresponse.rb">ruby/lib/webrick/httpresponse.rb at ruby-2-0-0 · ruby/ruby · GitHub</a></li>
+<li><a href="https://github.com/ruby/ruby/blob/ruby_2_0_0/lib/webrick/httpresponse.rb">ruby/lib/webrick/httpresponse.rb at ruby-2-0-0 · ruby/ruby · GitHub</a></li>
 </ul>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby">      <span class="c1"># Keep-Alive connection.</span>
-      <span class="k">if</span> <span class="vi">@header</span><span class="p">[</span><span class="s1">'connection'</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"close"</span>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">      <span class="c1"># Keep-Alive connection.</span>
+      <span class="k">if</span> <span class="vi">@header</span><span class="o">[</span><span class="s1">&#39;connection&#39;</span><span class="o">]</span> <span class="o">==</span> <span class="s2">&#34;close&#34;</span>
         <span class="vi">@keep_alive</span> <span class="o">=</span> <span class="kp">false</span>
       <span class="k">elsif</span> <span class="n">keep_alive?</span>
-        <span class="k">if</span> <span class="n">chunked?</span> <span class="o">||</span> <span class="vi">@header</span><span class="p">[</span><span class="s1">'content-length'</span><span class="p">]</span> <span class="o">||</span> <span class="vi">@status</span> <span class="o">==</span> <span class="mi">304</span> <span class="o">||</span> <span class="vi">@status</span> <span class="o">==</span> <span class="mi">204</span> <span class="o">||</span> <span class="no">HTTPStatus</span><span class="p">.</span><span class="nf">info?</span><span class="p">(</span><span class="vi">@status</span><span class="p">)</span>
-          <span class="vi">@header</span><span class="p">[</span><span class="s1">'connection'</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Keep-Alive"</span>
-        <span class="k">else</span></code>
-  </pre>
-</figure>
-
+        <span class="k">if</span> <span class="n">chunked?</span> <span class="o">||</span> <span class="vi">@header</span><span class="o">[</span><span class="s1">&#39;content-length&#39;</span><span class="o">]</span> <span class="o">||</span> <span class="vi">@status</span> <span class="o">==</span> <span class="mi">304</span> <span class="o">||</span> <span class="vi">@status</span> <span class="o">==</span> <span class="mi">204</span> <span class="o">||</span> <span class="no">HTTPStatus</span><span class="o">.</span><span class="n">info?</span><span class="p">(</span><span class="vi">@status</span><span class="p">)</span>
+          <span class="vi">@header</span><span class="o">[</span><span class="s1">&#39;connection&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&#34;Keep-Alive&#34;</span>
+        <span class="k">else</span></code></pre></div>
 <p>ちなみに、 <a href="https://github.com/rails/rails/issues/3164">Railsのissue</a> を見ると、みんな発生してた様子。</p>
 
 <p>RFCにはこう書いてある模様。</p>
 
 <ul>
-  <li><a href="https://bugs.ruby-lang.org/issues/5737">Bug #5737: WEBrick doesn’t support keep alive connections for 204 and 304 responses - ruby-trunk - Ruby Issue Tracking System</a></li>
+<li><a href="https://bugs.ruby-lang.org/issues/5737">Bug #5737: WEBrick doesn&rsquo;t support keep alive connections for 204 and 304 responses - ruby-trunk - Ruby Issue Tracking System</a></li>
 </ul>
 
 <blockquote>
-  <p>So if you want to do keep-alive, even if you add a content length, you will always get a warning. RFC2616 Section 4.4 says:</p>
+<p>So if you want to do keep-alive, even if you add a content length, you will always get a warning. RFC2616 Section 4.4 says:</p>
 
-  <blockquote>
-    <p>1.Any response message which “MUST NOT” include a message-body (such as the 1xx, 204, and 304 responses and any response to a HEAD request) is always terminated by the first empty line after the header fields, regardless of the entity-header fields present in the message</p>
-  </blockquote>
-
-  <p>I think this means that clients will know the length of the body, and clients can support keep-alive connections with no content-length for these types of responses.</p>
+<blockquote>
+<p>1.Any response message which &ldquo;MUST NOT&rdquo; include a message-body (such as the 1xx, 204, and 304 responses and any response to a HEAD request) is always terminated by the first empty line after the header fields, regardless of the entity-header fields present in the message</p>
 </blockquote>
 
-</div>
+<p>I think this means that clients will know the length of the body, and clients can support keep-alive connections with no content-length for these types of responses.</p>
+</blockquote>
 
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2013/08/28/android-test-tools/" title="Androidの自動テストツール、今(2013年)から使うなら何がよいのか">
-          Androidの自動テストツール、今(2013年)から使うなら何がよいのか
+    </section>
+  </article>
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/08/28/android-test-tools/" class="pagination_overflow previous_page">
+          Prev: 
+          13/8/28
+          Androidの自動テストツール、今(2013年)から使うな …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/09/05/svn-proxy-error-by-git-svn/" title="Subversionのproxy設定でいつもハマるやつ">
+      
+
+      <span class="pagination_center disabled">
+        13/9/3
+        Ruby1 …
+      </span>
+
+      
+        <a href="/2013/09/05/svn-proxy-error-by-git-svn/" class="pagination_overflow next_page">
+          Next: 
+          13/9/5
           Subversionのproxy設定でいつもハマるやつ
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2013/09/03/redmine-content-length-error/" data-text="kk_Atakaの日記 - Ruby1.9.3のWebrickで出るCould not determine content-length...エラーを消す方法(2.0.0では解決済)" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/09/03/redmine-content-length-error/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/09/03/redmine-content-length-error/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/09/03/redmine-content-length-error/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - Ruby1.9.3のWebrickで出るCould not determine content-length...エラーを消す方法(2.0.0では解決済)"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+      </div>
 
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/09/03/redmine-content-length-error//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-  <h2>Recent Entries</h2>
 
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#解決方法">解決方法</a></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

@@ -1,168 +1,184 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title> 入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+   入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ Chefを触ってみたいと思いつつ、取っ掛かりを作るにはかなり用語が多いなーとウダウダしていたら、3/11にこんな本が出版されており。
+ Amazon.co.jp： 入門Chef Solo - Infrastructure as Code eBook: 伊藤直也: Kindleストア  早速購入。
+本書のはじめにはこんな事が書かれていました。
+ 公式ドキュメントがあまりにしっかり書かれすぎていることもあって「はじめの一歩」としてどの辺りを知ればいいのか、つまり「普通に使う分にはこの程度知っていればOK」というのがどの辺りなのかを掴むのが難しい…というのが筆者の個人的な印象です。
+ はじめの一歩をどうしようか迷ってる場合オススメと……。
+ではHello Worldしてみよう。
+環境(Windows編)  Windows XP Ruby 1.9.3 Rubygems 1.8.24  手順 Chef インストール ネットワークに繋がっていないぼっち環境のため、vendor/cacheディレクトリに必要なGemをありったけ放り込んでbundle install。
+$ bundle install --local --path vendor/bundle Installing erubis (2.7.0) Installing highline (1.6.16) Installing json (1.7.7) Installing mixlib-log (1.4.1) Installing mixlib-authentication (1.3.0) Installing mixlib-cli (1.3.0) Installing mixlib-config (1.1.2) Installing win32-api (1.4.8) Installing windows-api (0.4.2) Installing windows-pr (1.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2013/04/01/chef-helloworld/"> 入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Ruby" class="tag">Ruby</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#StartUp" class="tag">StartUp</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#Chef" class="tag">Chef</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2013/04/01</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2013/03/18/selenium-firefox-loaderror/" title="Selenium WebDriverでFirefoxがロードできなくなった">
-          Selenium WebDriverでFirefoxがロードできなくなった
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/03/18/selenium-firefox-loaderror/" class="pagination_overflow previous_page">
+          Prev: 
+          13/3/18
+          Selenium WebDriverでFirefoxがロード …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/04/11/jekyll-0120/" title="Jekyllのバージョンを 0.12.0 にあげた">
+      
+
+      <span class="pagination_center disabled">
+        13/4/1
+         入 …
+      </span>
+
+      
+        <a href="/2013/04/11/jekyll-0120/" class="pagination_overflow next_page">
+          Next: 
+          13/4/11
           Jekyllのバージョンを 0.12.0 にあげた
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">環境(Windows編)</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">手順</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-4">
-                  <a href="#tocAnchor-1-3-1"><span class="tocnumber">3.1</span> <span class="toctext">Chef インストール</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-5">
-                  <a href="#tocAnchor-1-3-2"><span class="tocnumber">3.2</span> <span class="toctext">構成 レポジトリ、クックブック、レシピ</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-6">
-                  <a href="#tocAnchor-1-3-3"><span class="tocnumber">3.3</span> <span class="toctext">その他設定色々、動かすためにもう少し</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-7">
-                  <a href="#tocAnchor-1-3-4"><span class="tocnumber">3.4</span> <span class="toctext">実行</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="toc_level-1 toc_section-8">
-              <a href="#tocAnchor-1-8"><span class="tocnumber">4</span> <span class="toctext">本当に何かインストールしてみる</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-9">
-              <a href="#tocAnchor-1-9"><span class="tocnumber">5</span> <span class="toctext">環境(Linux編)</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-10">
-              <a href="#tocAnchor-1-10"><span class="tocnumber">6</span> <span class="toctext">インストールテスト(zsh)</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-11">
-              <a href="#tocAnchor-1-11"><span class="tocnumber">7</span> <span class="toctext">インストールテスト(nginx)</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-12">
-                  <a href="#tocAnchor-1-11-1"><span class="tocnumber">7.1</span> <span class="toctext">service</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-13">
-                  <a href="#tocAnchor-1-11-2"><span class="tocnumber">7.2</span> <span class="toctext">template</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-14">
-                  <a href="#tocAnchor-1-11-3"><span class="tocnumber">7.3</span> <span class="toctext">cookbook file</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-15">
-                  <a href="#tocAnchor-1-11-4"><span class="tocnumber">7.4</span> <span class="toctext">directory</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-16">
-                  <a href="#tocAnchor-1-11-5"><span class="tocnumber">7.5</span> <span class="toctext">user</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-17">
-                  <a href="#tocAnchor-1-11-6"><span class="tocnumber">7.6</span> <span class="toctext">group</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-18">
-                  <a href="#tocAnchor-1-11-7"><span class="tocnumber">7.7</span> <span class="toctext">bash</span></a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h2 id="tocAnchor-1-1">あらすじ</h2>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1"> 入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
+
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
+    </a>
+  
+    <a href='/tags/startup' class="muted-link">
+      [ <span class="Label Label--gray">StartUp</span> ]
+    </a>
+  
+    <a href='/tags/chef' class="muted-link">
+      [ <span class="Label Label--gray">Chef</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2013/04/01</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境-windows編">環境(Windows編)</a></li>
+<li><a href="#手順">手順</a>
+<ul>
+<li><a href="#chef-インストール">Chef インストール</a></li>
+<li><a href="#構成-レポジトリ-クックブック-レシピ">構成 レポジトリ、クックブック、レシピ</a>
+<ul>
+<li><a href="#レポジトリ作成-コピー">レポジトリ作成(コピー)</a></li>
+<li><a href="#クックブック作成">クックブック作成</a></li>
+<li><a href="#レシピ編集">レシピ編集</a></li>
+</ul></li>
+<li><a href="#その他設定色々-動かすためにもう少し">その他設定色々、動かすためにもう少し</a></li>
+<li><a href="#実行">実行</a></li>
+</ul></li>
+<li><a href="#本当に何かインストールしてみる">本当に何かインストールしてみる</a></li>
+<li><a href="#環境-linux編">環境(Linux編)</a></li>
+<li><a href="#インストールテスト-zsh">インストールテスト(zsh)</a></li>
+<li><a href="#インストールテスト-nginx">インストールテスト(nginx)</a>
+<ul>
+<li><a href="#service">service</a></li>
+<li><a href="#template">template</a></li>
+<li><a href="#cookbook-file">cookbook file</a></li>
+<li><a href="#directory">directory</a></li>
+<li><a href="#user">user</a></li>
+<li><a href="#group">group</a></li>
+<li><a href="#bash">bash</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="あらすじ">あらすじ</h2>
 
 <p>Chefを触ってみたいと思いつつ、取っ掛かりを作るにはかなり用語が多いなーとウダウダしていたら、3/11にこんな本が出版されており。</p>
 
 <ul>
-  <li><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B00BSPH158/everlasting-22/ref=nosim/">Amazon.co.jp： 入門Chef Solo - Infrastructure as Code eBook: 伊藤直也: Kindleストア</a></li>
+<li><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B00BSPH158/everlasting-22/ref=nosim/">Amazon.co.jp： 入門Chef Solo - Infrastructure as Code eBook: 伊藤直也: Kindleストア</a></li>
 </ul>
 
 <p>早速購入。</p>
@@ -170,31 +186,28 @@
 <p>本書のはじめにはこんな事が書かれていました。</p>
 
 <blockquote>
-  <p>公式ドキュメントがあまりにしっかり書かれすぎていることもあって「はじめの一歩」としてどの辺りを知ればいいのか、つまり「普通に使う分にはこの程度知っていればOK」というのがどの辺りなのかを掴むのが難しい…というのが筆者の個人的な印象です。</p>
+<p>公式ドキュメントがあまりにしっかり書かれすぎていることもあって「はじめの一歩」としてどの辺りを知ればいいのか、つまり「普通に使う分にはこの程度知っていればOK」というのがどの辺りなのかを掴むのが難しい…というのが筆者の個人的な印象です。</p>
 </blockquote>
 
 <p>はじめの一歩をどうしようか迷ってる場合オススメと……。</p>
 
 <p>ではHello Worldしてみよう。</p>
 
-<h2 id="tocAnchor-1-2">環境(Windows編)</h2>
+<h2 id="環境-windows編">環境(Windows編)</h2>
 
 <ul>
-  <li>Windows XP</li>
-  <li>Ruby 1.9.3</li>
-  <li>Rubygems 1.8.24</li>
+<li>Windows XP</li>
+<li>Ruby 1.9.3</li>
+<li>Rubygems 1.8.24</li>
 </ul>
 
-<h2 id="tocAnchor-1-3">手順</h2>
+<h2 id="手順">手順</h2>
 
-<h3 id="tocAnchor-1-3-1">Chef インストール</h3>
+<h3 id="chef-インストール">Chef インストール</h3>
 
 <p>ネットワークに繋がっていないぼっち環境のため、vendor/cacheディレクトリに必要なGemをありったけ放り込んでbundle install。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">bundle</span><span class="kv"> install --local --path vendor/bundle
-</span>Installing erubis (2.7.0)
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ bundle install --local --path vendor/bundle
+Installing erubis (2.7.0)
 Installing highline (1.6.16)
 Installing json (1.7.7)
 Installing mixlib-log (1.4.1)
@@ -216,59 +229,43 @@ Installing ohai (6.16.0)
 Installing mime-types (1.21)
 Installing rest-client (1.6.7)
 Installing chef (11.4.0)
-<span class="err">Using bundler (1.3.1)</span></code>
-  </pre>
-</figure>
+Using bundler (1.3.1)</code></pre></div>
+<h3 id="構成-レポジトリ-クックブック-レシピ">構成 レポジトリ、クックブック、レシピ</h3>
 
-<h3 id="tocAnchor-1-3-2">構成 レポジトリ、クックブック、レシピ</h3>
-
-<p>Chefには <code class="highlighter-rouge">レポジトリ</code> , <code class="highlighter-rouge">クックブック</code> , <code class="highlighter-rouge">レシピ</code> という概念がある。</p>
+<p>Chefには <code>レポジトリ</code> , <code>クックブック</code> , <code>レシピ</code> という概念がある。</p>
 
 <ul>
-  <li>レシピ: コード化された手順書</li>
-  <li>クックブック: 特定レシピのデータをまとめる</li>
-  <li>レポジトリ: クックブックを含めた全体</li>
+<li>レシピ: コード化された手順書</li>
+<li>クックブック: 特定レシピのデータをまとめる</li>
+<li>レポジトリ: クックブックを含めた全体</li>
 </ul>
 
-<h4 id="レポジトリ作成コピー">レポジトリ作成(コピー)</h4>
+<h4 id="レポジトリ作成-コピー">レポジトリ作成(コピー)</h4>
 
 <p>まずは、レポジトリのサンプルをGitHubから取得。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> clone http://github.com/opscode/chef-repo.git</span>
-    </code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git clone http://github.com/opscode/chef-repo.git</code></pre></div>
 <p>中身はこんな感じ。それぞれの役目はまだわからない。</p>
 
 <ul>
-  <li>LICENSE</li>
-  <li>README.md</li>
-  <li>Rakefile</li>
-  <li>certificates/</li>
-  <li>chefignore</li>
-  <li>config/</li>
-  <li>cookbooks/</li>
-  <li>data_bags/</li>
-  <li>environments/</li>
-  <li>roles/</li>
+<li>LICENSE</li>
+<li>README.md</li>
+<li>Rakefile</li>
+<li>certificates/</li>
+<li>chefignore</li>
+<li>config/</li>
+<li>cookbooks/</li>
+<li>data_bags/</li>
+<li>environments/</li>
+<li>roles/</li>
 </ul>
 
 <h4 id="クックブック作成">クックブック作成</h4>
 
-<p>クックブックを作るためにはツール <code class="highlighter-rouge">knife</code> を使う。</p>
+<p>クックブックを作るためにはツール <code>knife</code> を使う。</p>
 
-<p><code class="highlighter-rouge">knife</code> の初期設定。 <code class="highlighter-rouge">knife</code> はChefをインストールすれば使えるようになっている。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">bundle</span><span class="kv"> exec knife -h
-</span>Usage: knife sub-command (options)
+<p><code>knife</code> の初期設定。 <code>knife</code> はChefをインストールすれば使えるようになっている。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ bundle exec knife -h
+Usage: knife sub-command (options)
     -s, --server-url URL             Chef Server URL
     -k, --key KEY                    API Client Key
         --[no-]color                 Use colored output, defaults to enabled
@@ -283,18 +280,12 @@ Installing chef (11.4.0)
     -V, --verbose                    More verbose output. Use twice for max verbosity
     -v, --version                    Show chef version
     -y, --yes                        Say yes to all prompts for confirmation
-<span class="err">    -h, --help                       Show this message</span></code>
-  </pre>
-</figure>
-
-<p>設定ファイルなど作成するために <code class="highlighter-rouge">knife configure</code> を実行。</p>
+    -h, --help                       Show this message</code></pre></div>
+<p>設定ファイルなど作成するために <code>knife configure</code> を実行。</p>
 
 <p>色々聞かれるが、今はそのままでいい。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">bundle</span><span class="kv"> exec knife configure
-</span>WARNING: No knife configuration file found
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ bundle exec knife configure
+WARNING: No knife configuration file found
 Where should I put the config file? [C:/Documents and Settings/USER/.chef/knife.rb]
 Please enter the chef server URL: [http://localhost:4000]
 Please enter an existing username or clientname for the API: [USER] kk_Ataka
@@ -314,573 +305,349 @@ You must place your validation key in:
 Before generating instance data with Knife!
 
 *****
-<span class="err">Configuration file written to C:/Documents and Settings/USER/.chef/knife.rb</span></code>
-  </pre>
-</figure>
-
+Configuration file written to C:/Documents and Settings/USER/.chef/knife.rb</code></pre></div>
 <p>初期設定が終わったので、さっき落としたレポジトリの中でクックブックを作る。</p>
 
-<p>
-  <code class="highlighter-rouge">knife cookbook create COOKBOOK_NAME -o COOKBOOK_DIR</code>
-</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">bundle</span><span class="kv"> exec knife cookbook create hello -o cookbooks
-</span>** Creating cookbook hello
+<p><code>knife cookbook create COOKBOOK_NAME -o COOKBOOK_DIR</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ bundle exec knife cookbook create hello -o cookbooks
+** Creating cookbook hello
 ** Creating README for cookbook: hello
 ** Creating CHANGELOG for cookbook: hello
-<span class="err">** Creating metadata for cookbook: hello</span></code>
-  </pre>
-</figure>
-
-<p>これで <code class="highlighter-rouge">chef-repo/cookbooks/hello</code> の中に以下のようなファイル。</p>
+** Creating metadata for cookbook: hello</code></pre></div>
+<p>これで <code>chef-repo/cookbooks/hello</code> の中に以下のようなファイル。</p>
 
 <ul>
-  <li>CHANGELOG.md</li>
-  <li>README.md</li>
-  <li>attributes/</li>
-  <li>definitions/</li>
-  <li>files/</li>
-  <li>libraries/</li>
-  <li>metadata.rb*</li>
-  <li>providers/</li>
-  <li>recipes/</li>
-  <li>resources/</li>
-  <li>templates/</li>
+<li>CHANGELOG.md</li>
+<li>README.md</li>
+<li>attributes/</li>
+<li>definitions/</li>
+<li>files/</li>
+<li>libraries/</li>
+<li>metadata.rb*</li>
+<li>providers/</li>
+<li>recipes/</li>
+<li>resources/</li>
+<li>templates/</li>
 </ul>
 
-<p><code class="highlighter-rouge">knife</code> コマンドも、生成されたファイルもまだ全然わからないけど、</p>
+<p><code>knife</code> コマンドも、生成されたファイルもまだ全然わからないけど、</p>
 
 <ol>
-  <li>レポジトリを作成</li>
-  <li>クックブックを作成</li>
+<li>レポジトリを作成</li>
+<li>クックブックを作成</li>
 </ol>
 
 <p>まではできたので、次はいよいよレシピを作成。</p>
 
 <h4 id="レシピ編集">レシピ編集</h4>
 
-<p>すでにひな形はできている。(コメントだけだけど) <code class="highlighter-rouge">chef-repo/cookbooks/hello/recipes/default.rb</code></p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="c1">#</span>
+<p>すでにひな形はできている。(コメントだけだけど) <code>chef-repo/cookbooks/hello/recipes/default.rb</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="c1">#</span>
 <span class="c1"># Cookbook Name:: hello</span>
 <span class="c1"># Recipe:: default</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright 2013, YOUR_COMPANY_NAME</span>
 <span class="c1">#</span>
 <span class="c1"># All rights reserved - Do Not Redistribute</span>
-<span class="c1">#</span></code>
-  </pre>
-</figure>
-
+<span class="c1">#</span></code></pre></div>
 <p>上記ファイルに追記。</p>
 
 <p>はじめはlogでHello Worldを吐くだけのレシピを作成。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">log</span> <span class="s2">&#34;Hello World!&#34;</span></code></pre></div>
+<h3 id="その他設定色々-動かすためにもう少し">その他設定色々、動かすためにもう少し</h3>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">log</span> <span class="s2">"Hello World!"</span></code>
-  </pre>
-</figure>
-
-<h3 id="tocAnchor-1-3-3">その他設定色々、動かすためにもう少し</h3>
-
-<p>レポジトリの直下 <code class="highlighter-rouge">chef-repo/</code> に どのレシピを実行するか指定するjsonファイルを作る。名前は <code class="highlighter-rouge">localhost.json</code> とした。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-json" data-lang="json">
-      <span class="err">//</span>
-      <span class="w"> </span>
-      <span class="err">localhost.json</span>
-      <span class="w">
-</span>
-      <span class="p">{</span>
-      <span class="w">
-  </span>
-      <span class="nt">"run_list"</span>
-      <span class="w"> </span>
-      <span class="p">:</span>
-      <span class="w"> </span>
-      <span class="p">[</span>
-      <span class="w"> </span>
-      <span class="s2">"recipe[hello]"</span>
-      <span class="w"> </span>
-      <span class="p">]</span>
-      <span class="w">
-</span>
-      <span class="p">}</span>
-    </code>
-  </pre>
-</figure>
-
-<p>同じくレポジトリの直下に、テンポラリディレクトリの設定などを記述する <code class="highlighter-rouge">solo.rb</code> を作る。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="c1"># solo.rb</span>
-<span class="n">file_cache_path</span> <span class="s2">"C:/chef/tmp/chef-solo"</span>
-<span class="n">cookbook_path</span> <span class="p">[</span><span class="s2">"C:/chef/chef-repo/cookbooks"</span><span class="p">]</span></code>
-  </pre>
-</figure>
-
-<h3 id="tocAnchor-1-3-4">実行</h3>
+<p>レポジトリの直下 <code>chef-repo/</code> に どのレシピを実行するか指定するjsonファイルを作る。名前は <code>localhost.json</code> とした。</p>
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="err">//</span> <span class="err">localhost.json</span>
+<span class="p">{</span>
+  <span class="nt">&#34;run_list&#34;</span> <span class="p">:</span> <span class="p">[</span> <span class="s2">&#34;recipe[hello]&#34;</span> <span class="p">]</span>
+<span class="p">}</span></code></pre></div>
+<p>同じくレポジトリの直下に、テンポラリディレクトリの設定などを記述する <code>solo.rb</code> を作る。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="c1"># solo.rb</span>
+<span class="n">file_cache_path</span> <span class="s2">&#34;C:/chef/tmp/chef-solo&#34;</span>
+<span class="n">cookbook_path</span> <span class="o">[</span><span class="s2">&#34;C:/chef/chef-repo/cookbooks&#34;</span><span class="o">]</span></code></pre></div>
+<h3 id="実行">実行</h3>
 
 <p>…すると、Gemsが結構足りないのか、Load Errorが多発。</p>
 
 <p>ffi がないって言われたり、ruby-wmiがないって言われたり、win32/serviceがないって言われたり…。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">bundle</span><span class="kv"> exec chef-solo -c solo.rb -j ./localhost.json
-</span>C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require':
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ bundle exec chef-solo -c solo.rb -j ./localhost.json
+C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require&#39;:
 cannot load such file -- win32/service (LoadError)
-        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require'
-        from C:/chef/vendor/bundle/ruby/1.9.1/gems/chef-11.4.0/lib/chef/provider/service/windows.rb:24:in `&lt;top (required)&gt;'
-        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require'
-        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require'
-        from C:/chef/vendor/bundle/ruby/1.9.1/gems/chef-11.4.0/lib/chef/providers.rb:77:in `&lt;top (required)&gt;'
-        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require'
-        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require'
+        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from C:/chef/vendor/bundle/ruby/1.9.1/gems/chef-11.4.0/lib/chef/provider/service/windows.rb:24:in `&lt;top (required)&gt;&#39;
+        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from C:/chef/vendor/bundle/ruby/1.9.1/gems/chef-11.4.0/lib/chef/providers.rb:77:in `&lt;top (required)&gt;&#39;
+        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
         from C:/chef/vendor/bundle/ruby/1.9.1/gems/chef-11.4.0/lib/chef.rb:25:in
-`&lt;top (required)&gt;'
-        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require'
-        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require'
-        from C:/chef/vendor/bundle/ruby/1.9.1/gems/chef-11.4.0/lib/chef/application/solo.rb:19:in `&lt;top (required)&gt;'
-        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require'
-        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require'
-        from C:/chef/vendor/bundle/ruby/1.9.1/gems/chef-11.4.0/bin/chef-solo:23:in `&lt;top (required)&gt;'
-        from C:/chef/vendor/bundle/ruby/1.9.1/bin/chef-solo:23:in `load'
-<span class="err">        from C:/chef/vendor/bundle/ruby/1.9.1/bin/chef-solo:23:in `&lt;main&gt;'</span></code>
-  </pre>
-</figure>
-
+`&lt;top (required)&gt;&#39;
+        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from C:/chef/vendor/bundle/ruby/1.9.1/gems/chef-11.4.0/lib/chef/application/solo.rb:19:in `&lt;top (required)&gt;&#39;
+        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from C:/rubies/Ruby-193-p0/lib/ruby/site_ruby/1.9.1/rubygems/core_ext/kernel_require.rb:45:in `require&#39;
+        from C:/chef/vendor/bundle/ruby/1.9.1/gems/chef-11.4.0/bin/chef-solo:23:in `&lt;top (required)&gt;&#39;
+        from C:/chef/vendor/bundle/ruby/1.9.1/bin/chef-solo:23:in `load&#39;
+        from C:/chef/vendor/bundle/ruby/1.9.1/bin/chef-solo:23:in `&lt;main&gt;&#39;</code></pre></div>
 <p>色々調べてみる……。</p>
 
 <ul>
-  <li><a href="http://stackoverflow.com/questions/12868121/cannot-load-such-file-ruby-wmi-loaderror-cannot-load-such-file-win32-s">windows - cannot load such file – ruby-wmi (LoadError) &amp; cannot load such file – win32/service (LoadError) - Stack Overflow</a></li>
-  <li><a href="http://wiki.opscode.com/display/chef/Common+Errors#CommonErrors-Nosuchfiletoloadrubywmi">Common Errors - Chef - Opscode Open Source Wiki</a></li>
+<li><a href="http://stackoverflow.com/questions/12868121/cannot-load-such-file-ruby-wmi-loaderror-cannot-load-such-file-win32-s">windows - cannot load such file &ndash; ruby-wmi (LoadError) &amp; cannot load such file &ndash; win32/service (LoadError) - Stack Overflow</a></li>
+<li><a href="http://wiki.opscode.com/display/chef/Common+Errors#CommonErrors-Nosuchfiletoloadrubywmi">Common Errors - Chef - Opscode Open Source Wiki</a></li>
 </ul>
 
 <p>最終的にGemfileはこうなった。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">source</span> <span class="ss">:rubygems</span>
+<span class="n">source</span> <span class="s2">&#34;http://rubygems.org&#34;</span>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">source</span> <span class="ss">:rubygems</span>
-<span class="n">source</span> <span class="s2">"http://rubygems.org"</span>
+<span class="n">gem</span> <span class="s2">&#34;chef&#34;</span>
+<span class="n">gem</span> <span class="s1">&#39;ffi&#39;</span>
 
-<span class="n">gem</span> <span class="s2">"chef"</span>
-<span class="n">gem</span> <span class="s1">'ffi'</span>
-
-<span class="n">gem</span> <span class="s2">"win32-service"</span>
-<span class="n">gem</span> <span class="s2">"ruby-wmi"</span>
-<span class="n">gem</span> <span class="s2">"windows-api"</span>
-<span class="n">gem</span> <span class="s2">"windows-pr"</span>
-<span class="n">gem</span> <span class="s2">"rdp-ruby-wmi"</span></code>
-  </pre>
-</figure>
-
+<span class="n">gem</span> <span class="s2">&#34;win32-service&#34;</span>
+<span class="n">gem</span> <span class="s2">&#34;ruby-wmi&#34;</span>
+<span class="n">gem</span> <span class="s2">&#34;windows-api&#34;</span>
+<span class="n">gem</span> <span class="s2">&#34;windows-pr&#34;</span>
+<span class="n">gem</span> <span class="s2">&#34;rdp-ruby-wmi&#34;</span></code></pre></div>
 <p>満を辞して！</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">bundle</span><span class="kv"> exec chef-solo -c solo.rb -j ./localhost.json
-</span>Starting Chef Client, version 11.4.0
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ bundle exec chef-solo -c solo.rb -j ./localhost.json
+Starting Chef Client, version 11.4.0
 [2013-03-22T17:32:30+09:00] WARN: unable to detect ip6address
 Compiling Cookbooks...
 Converging 1 resources
 Recipe: hello::default
   * log[Hello World] action write
 
-<span class="err">Chef Client finished, 1 resources updated</span></code>
-  </pre>
-</figure>
-
-<h2 id="tocAnchor-1-8">本当に何かインストールしてみる</h2>
+Chef Client finished, 1 resources updated</code></pre></div>
+<h2 id="本当に何かインストールしてみる">本当に何かインストールしてみる</h2>
 
 <p>ここからは、本当に何かをインストールしてみる。</p>
 
 <p>……と同時に、サーバいじるんだからWindowsじゃなくていいよねということで構成変更。</p>
 
-<h2 id="tocAnchor-1-9">環境(Linux編)</h2>
+<h2 id="環境-linux編">環境(Linux編)</h2>
 
 <ul>
-  <li>Red Hat Linux 5.4</li>
-  <li>Ruby 1.9.3</li>
-  <li>Rubygems 1.8.23</li>
+<li>Red Hat Linux 5.4</li>
+<li>Ruby 1.9.3</li>
+<li>Rubygems 1.8.23</li>
 </ul>
 
-<h2 id="tocAnchor-1-10">インストールテスト(zsh)</h2>
+<h2 id="インストールテスト-zsh">インストールテスト(zsh)</h2>
 
 <p>zshをchefでインストールしてみる。</p>
 
 <p>ただし、外部に接続できないサーバなので、</p>
 
 <ol>
-  <li>zshのrpmをダウンロードして</li>
-  <li>サーバに転送</li>
-  <li>chefでは(サーバ内の)ローカルにあるrpmを指定しインストール</li>
+<li>zshのrpmをダウンロードして</li>
+<li>サーバに転送</li>
+<li>chefでは(サーバ内の)ローカルにあるrpmを指定しインストール</li>
 </ol>
 
 <p>できるように準備。</p>
 
-<p><code class="highlighter-rouge">chef-solo/cookbooks/hello/recipes/default.rb</code> にzshを追加。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">package</span> <span class="s2">"zsh"</span> <span class="k">do</span>
+<p><code>chef-solo/cookbooks/hello/recipes/default.rb</code> にzshを追加。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">package</span> <span class="s2">&#34;zsh&#34;</span> <span class="k">do</span>
   <span class="n">action</span>   <span class="ss">:install</span>
-  <span class="n">source</span>   <span class="s2">"/home/kk_Ataka/zsh-3.0.5-6.i386.rpm"</span>
+  <span class="n">source</span>   <span class="s2">&#34;/home/kk_Ataka/zsh-3.0.5-6.i386.rpm&#34;</span>
   <span class="n">provider</span> <span class="no">Chef</span><span class="o">::</span><span class="no">Provider</span><span class="o">::</span><span class="no">Package</span><span class="o">::</span><span class="no">Rpm</span>
 <span class="k">end</span>
-<span class="n">log</span> <span class="s2">"Hello World"</span></code>
-  </pre>
-</figure>
-
-<p>通常は、 <code class="highlighter-rouge">action :install</code> だけで、chef側がrpmをよろしくやってくれるみたいだけど、今回はローカルのrpmを使うので、 <code class="highlighter-rouge">source</code> を指定してやる。</p>
+<span class="n">log</span> <span class="s2">&#34;Hello World&#34;</span></code></pre></div>
+<p>通常は、 <code>action :install</code> だけで、chef側がrpmをよろしくやってくれるみたいだけど、今回はローカルのrpmを使うので、 <code>source</code> を指定してやる。</p>
 
 <p>そして実行…あれ…なんかエラー出る。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">bundle</span><span class="kv"> exec chef-solo -c solo.rb -j localhost.json
-</span>The source :rubygems is deprecated because HTTP requests are insecure.
-Please change your source to 'https://rubygems.org' if possible, or 'http://rubygems.org' if not.
-Starting Chef Client, version 11.4.0
-Compiling Cookbooks...
-Converging 2 resources
-Recipe: hello::default
-  * package[zsh] action install
-================================================================================
-Error executing action `install` on resource 'package[zsh]'
-================================================================================
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"><span class="err">$</span> <span class="nx">bundle</span> <span class="nx">exec</span> <span class="nx">chef</span><span class="o">-</span><span class="nx">solo</span> <span class="o">-</span><span class="nx">c</span> <span class="nx">solo</span><span class="p">.</span><span class="nx">rb</span> <span class="o">-</span><span class="nx">j</span> <span class="nx">localhost</span><span class="p">.</span><span class="nx">json</span>
+<span class="nx">The</span> <span class="nx">source</span> <span class="p">:</span><span class="nx">rubygems</span> <span class="nx">is</span> <span class="nx">deprecated</span> <span class="nx">because</span> <span class="nx">HTTP</span> <span class="nx">requests</span> <span class="nx">are</span> <span class="nx">insecure</span><span class="p">.</span>
+<span class="nx">Please</span> <span class="nx">change</span> <span class="nx">your</span> <span class="nx">source</span> <span class="nx">to</span> <span class="err">&#39;</span><span class="nx">https</span><span class="p">:</span><span class="c1">//rubygems.org&#39; if possible, or &#39;http://rubygems.org&#39; if not.
+</span><span class="c1"></span><span class="nx">Starting</span> <span class="nx">Chef</span> <span class="nx">Client</span><span class="p">,</span> <span class="nx">version</span> <span class="mf">11.4.0</span>
+<span class="nx">Compiling</span> <span class="nx">Cookbooks</span><span class="o">...</span>
+<span class="nx">Converging</span> <span class="mi">2</span> <span class="nx">resources</span>
+<span class="nx">Recipe</span><span class="p">:</span> <span class="nx">hello</span><span class="p">::</span><span class="k">default</span>
+  <span class="o">*</span> <span class="kn">package</span><span class="p">[</span><span class="nx">zsh</span><span class="p">]</span> <span class="nx">action</span> <span class="nx">install</span>
+<span class="o">================================================================================</span>
+<span class="nx">Error</span> <span class="nx">executing</span> <span class="nx">action</span> <span class="s">`install`</span> <span class="nx">on</span> <span class="nx">resource</span> <span class="err">&#39;</span><span class="kn">package</span><span class="p">[</span><span class="nx">zsh</span><span class="p">]</span><span class="err">&#39;</span>
+<span class="o">================================================================================</span>
 
 
-Chef::Exceptions::Exec
-----------------------
-rpm  -U /home/kk_Ataka/zsh-3.0.5-6.i386.rpm returned 1, expected 0
+<span class="nx">Chef</span><span class="p">::</span><span class="nx">Exceptions</span><span class="p">::</span><span class="nx">Exec</span>
+<span class="o">----------------------</span>
+<span class="nx">rpm</span>  <span class="o">-</span><span class="nx">U</span> <span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">kk_Ataka</span><span class="o">/</span><span class="nx">zsh</span><span class="o">-</span><span class="mf">3.0.5</span><span class="o">-</span><span class="m">6.i</span><span class="mf">386.</span><span class="nx">rpm</span> <span class="nx">returned</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">expected</span> <span class="mi">0</span>
 
 
-Resource Declaration:
----------------------
-<span class="ni"># </span><span class="nc">In</span><span class="kv"> /home/kk_Ataka/chef/chef-repo/cookbooks/hello/recipes/default.rb
-</span>
-  9: package "zsh" do
- 10:   action   :install
- 11:   source   "/home/kk_Ataka/zsh-3.0.5-6.i386.rpm"
- 12:   provider Chef::Provider::Package::Rpm
- 13: end
- 14: log "Hello World"
+<span class="nx">Resource</span> <span class="nx">Declaration</span><span class="p">:</span>
+<span class="o">---------------------</span>
+<span class="err">#</span> <span class="nx">In</span> <span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">kk_Ataka</span><span class="o">/</span><span class="nx">chef</span><span class="o">/</span><span class="nx">chef</span><span class="o">-</span><span class="nx">repo</span><span class="o">/</span><span class="nx">cookbooks</span><span class="o">/</span><span class="nx">hello</span><span class="o">/</span><span class="nx">recipes</span><span class="o">/</span><span class="k">default</span><span class="p">.</span><span class="nx">rb</span>
+
+  <span class="mi">9</span><span class="p">:</span> <span class="kn">package</span> <span class="s">&#34;zsh&#34;</span> <span class="nx">do</span>
+ <span class="mi">10</span><span class="p">:</span>   <span class="nx">action</span>   <span class="p">:</span><span class="nx">install</span>
+ <span class="mi">11</span><span class="p">:</span>   <span class="nx">source</span>   <span class="s">&#34;/home/kk_Ataka/zsh-3.0.5-6.i386.rpm&#34;</span>
+ <span class="mi">12</span><span class="p">:</span>   <span class="nx">provider</span> <span class="nx">Chef</span><span class="p">::</span><span class="nx">Provider</span><span class="p">::</span><span class="nx">Package</span><span class="p">::</span><span class="nx">Rpm</span>
+ <span class="mi">13</span><span class="p">:</span> <span class="nx">end</span>
+ <span class="mi">14</span><span class="p">:</span> <span class="nx">log</span> <span class="s">&#34;Hello World&#34;</span>
 
 
 
-Compiled Resource:
-------------------
-<span class="ni"># </span><span class="nc">Declared</span><span class="kv"> in /home/kk_Ataka/chef/chef-repo/cookbooks/hello/recipes/default.rb:9:in `from_file'
-</span>
-package("zsh") do
-  provider Chef::Provider::Package::Rpm
-  action [:install]
-  retries 0
-  retry_delay 2
-  package_name "zsh"
-  source "/home/kk_Ataka/zsh-3.0.5-6.i386.rpm"
-  version "3.0.5-6"
-  cookbook_name :hello
-  recipe_name "default"
-end
+<span class="nx">Compiled</span> <span class="nx">Resource</span><span class="p">:</span>
+<span class="o">------------------</span>
+<span class="err">#</span> <span class="nx">Declared</span> <span class="nx">in</span> <span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">kk_Ataka</span><span class="o">/</span><span class="nx">chef</span><span class="o">/</span><span class="nx">chef</span><span class="o">-</span><span class="nx">repo</span><span class="o">/</span><span class="nx">cookbooks</span><span class="o">/</span><span class="nx">hello</span><span class="o">/</span><span class="nx">recipes</span><span class="o">/</span><span class="k">default</span><span class="p">.</span><span class="nx">rb</span><span class="p">:</span><span class="mi">9</span><span class="p">:</span><span class="nx">in</span> <span class="err">`</span><span class="nx">from_file</span><span class="err">&#39;</span>
+
+<span class="kn">package</span><span class="p">(</span><span class="s">&#34;zsh&#34;</span><span class="p">)</span> <span class="nx">do</span>
+  <span class="nx">provider</span> <span class="nx">Chef</span><span class="p">::</span><span class="nx">Provider</span><span class="p">::</span><span class="nx">Package</span><span class="p">::</span><span class="nx">Rpm</span>
+  <span class="nx">action</span> <span class="p">[:</span><span class="nx">install</span><span class="p">]</span>
+  <span class="nx">retries</span> <span class="mi">0</span>
+  <span class="nx">retry_delay</span> <span class="mi">2</span>
+  <span class="nx">package_name</span> <span class="s">&#34;zsh&#34;</span>
+  <span class="nx">source</span> <span class="s">&#34;/home/kk_Ataka/zsh-3.0.5-6.i386.rpm&#34;</span>
+  <span class="nx">version</span> <span class="s">&#34;3.0.5-6&#34;</span>
+  <span class="nx">cookbook_name</span> <span class="p">:</span><span class="nx">hello</span>
+  <span class="nx">recipe_name</span> <span class="s">&#34;default&#34;</span>
+<span class="nx">end</span>
 
 
 
-[2013-03-25T19:00:12+09:00] ERROR: Running exception handlers
-[2013-03-25T19:00:12+09:00] ERROR: Exception handlers complete
-Chef Client failed. 0 resources updated
-[2013-03-25T19:00:12+09:00] FATAL: Stacktrace dumped to /home/kk_Ataka/chef/chef-repo/tmp/chef-solo/chef-stacktrace.out
-<span class="err">[2013-03-25T19:00:12+09:00] FATAL: Chef::Exceptions::Exec: package[zsh] (hello::default line 9) had an error: Chef::Exceptions::Exec: rpm  -U /home/kk_Ataka/zsh-3.0.5-6.i386.rpm returned 1, expected 0</span></code>
-  </pre>
-</figure>
-
+<span class="p">[</span><span class="mi">2013</span><span class="o">-</span><span class="mo">03</span><span class="o">-</span><span class="mi">25</span><span class="nx">T19</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">12</span><span class="o">+</span><span class="mi">09</span><span class="p">:</span><span class="mo">00</span><span class="p">]</span> <span class="nx">ERROR</span><span class="p">:</span> <span class="nx">Running</span> <span class="nx">exception</span> <span class="nx">handlers</span>
+<span class="p">[</span><span class="mi">2013</span><span class="o">-</span><span class="mo">03</span><span class="o">-</span><span class="mi">25</span><span class="nx">T19</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">12</span><span class="o">+</span><span class="mi">09</span><span class="p">:</span><span class="mo">00</span><span class="p">]</span> <span class="nx">ERROR</span><span class="p">:</span> <span class="nx">Exception</span> <span class="nx">handlers</span> <span class="nx">complete</span>
+<span class="nx">Chef</span> <span class="nx">Client</span> <span class="nx">failed</span><span class="p">.</span> <span class="mi">0</span> <span class="nx">resources</span> <span class="nx">updated</span>
+<span class="p">[</span><span class="mi">2013</span><span class="o">-</span><span class="mo">03</span><span class="o">-</span><span class="mi">25</span><span class="nx">T19</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">12</span><span class="o">+</span><span class="mi">09</span><span class="p">:</span><span class="mo">00</span><span class="p">]</span> <span class="nx">FATAL</span><span class="p">:</span> <span class="nx">Stacktrace</span> <span class="nx">dumped</span> <span class="nx">to</span> <span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">kk_Ataka</span><span class="o">/</span><span class="nx">chef</span><span class="o">/</span><span class="nx">chef</span><span class="o">-</span><span class="nx">repo</span><span class="o">/</span><span class="nx">tmp</span><span class="o">/</span><span class="nx">chef</span><span class="o">-</span><span class="nx">solo</span><span class="o">/</span><span class="nx">chef</span><span class="o">-</span><span class="nx">stacktrace</span><span class="p">.</span><span class="nx">out</span>
+<span class="p">[</span><span class="mi">2013</span><span class="o">-</span><span class="mo">03</span><span class="o">-</span><span class="mi">25</span><span class="nx">T19</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">12</span><span class="o">+</span><span class="mi">09</span><span class="p">:</span><span class="mo">00</span><span class="p">]</span> <span class="nx">FATAL</span><span class="p">:</span> <span class="nx">Chef</span><span class="p">::</span><span class="nx">Exceptions</span><span class="p">::</span><span class="nx">Exec</span><span class="p">:</span> <span class="kn">package</span><span class="p">[</span><span class="nx">zsh</span><span class="p">]</span> <span class="p">(</span><span class="nx">hello</span><span class="p">::</span><span class="k">default</span> <span class="nx">line</span> <span class="mi">9</span><span class="p">)</span> <span class="nx">had</span> <span class="nx">an</span> <span class="kt">error</span><span class="p">:</span> <span class="nx">Chef</span><span class="p">::</span><span class="nx">Exceptions</span><span class="p">::</span><span class="nx">Exec</span><span class="p">:</span> <span class="nx">rpm</span>  <span class="o">-</span><span class="nx">U</span> <span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">kk_Ataka</span><span class="o">/</span><span class="nx">zsh</span><span class="o">-</span><span class="mf">3.0.5</span><span class="o">-</span><span class="m">6.i</span><span class="mf">386.</span><span class="nx">rpm</span> <span class="nx">returned</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">expected</span> <span class="mi">0</span></code></pre></div>
 <p>なんでだろ。あ、 <strong>一般ユーザだから</strong> か、そういえば？</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">rpm</span>
-      <span class="kv">  -U /home/kk_Ataka/zsh-3.0.5-6.i386.rpm
-</span>
-      <span class="err">エラー: can't create transaction lock on /var/lib/rpm/__db.000</span>
-    </code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ rpm  -U /home/kk_Ataka/zsh-3.0.5-6.i386.rpm
+エラー: can&#39;t create transaction lock on /var/lib/rpm/__db.000</code></pre></div>
 <p>やはり。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"><span class="err">$</span> <span class="nx">su</span>
+<span class="err">#</span> <span class="nx">bundle</span> <span class="nx">exec</span> <span class="nx">chef</span><span class="o">-</span><span class="nx">solo</span> <span class="o">-</span><span class="nx">c</span> <span class="nx">solo</span><span class="p">.</span><span class="nx">rb</span> <span class="o">-</span><span class="nx">j</span> <span class="nx">localhost</span><span class="p">.</span><span class="nx">json</span>
+<span class="nx">Starting</span> <span class="nx">Chef</span> <span class="nx">Client</span><span class="p">,</span> <span class="nx">version</span> <span class="mf">11.4.0</span>
+<span class="nx">Compiling</span> <span class="nx">Cookbooks</span><span class="o">...</span>
+<span class="nx">Converging</span> <span class="mi">2</span> <span class="nx">resources</span>
+<span class="nx">Recipe</span><span class="p">:</span> <span class="nx">hello</span><span class="p">::</span><span class="k">default</span>
+  <span class="o">*</span> <span class="kn">package</span><span class="p">[</span><span class="nx">zsh</span><span class="p">]</span> <span class="nx">action</span> <span class="nx">install</span>
+      <span class="o">-</span> <span class="nx">install</span> <span class="nx">version</span> <span class="mf">3.0.5</span><span class="o">-</span><span class="mi">6</span> <span class="nx">of</span> <span class="kn">package</span> <span class="nx">zsh</span>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">su</span><span class="kv">
-</span><span class="ni"># </span><span class="nc">bundle</span><span class="kv"> exec chef-solo -c solo.rb -j localhost.json
-</span>Starting Chef Client, version 11.4.0
-Compiling Cookbooks...
-Converging 2 resources
-Recipe: hello::default
-  * package[zsh] action install
-      - install version 3.0.5-6 of package zsh
+        <span class="o">*</span> <span class="nx">log</span><span class="p">[</span><span class="nx">Hello</span> <span class="nx">World</span><span class="p">]</span> <span class="nx">action</span> <span class="nx">write</span>
 
-        * log[Hello World] action write
-
-<span class="err">    Chef Client finished, 2 resources updated</span></code>
-  </pre>
-</figure>
-
+    <span class="nx">Chef</span> <span class="nx">Client</span> <span class="nx">finished</span><span class="p">,</span> <span class="mi">2</span> <span class="nx">resources</span> <span class="nx">updated</span></code></pre></div>
 <p>いったー。</p>
 
-<h2 id="tocAnchor-1-11">インストールテスト(nginx)</h2>
+<h2 id="インストールテスト-nginx">インストールテスト(nginx)</h2>
 
 <p>次にnginxを入れてみる。</p>
 
 <p>レシピはインストールするパッケージ毎に分けた方がいいみたいなんだけど、今回は仮なので同じレシピに詰め込んでいく。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">package</span> <span class="s2">"nginx"</span> <span class="k">do</span>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">package</span> <span class="s2">&#34;nginx&#34;</span> <span class="k">do</span>
   <span class="n">action</span>   <span class="ss">:install</span>
-  <span class="n">source</span>   <span class="s2">"/var/package/nginx-1.2.7-1.el5.ngx.i386.rpm"</span>
+  <span class="n">source</span>   <span class="s2">&#34;/var/package/nginx-1.2.7-1.el5.ngx.i386.rpm&#34;</span>
   <span class="n">provider</span> <span class="no">Chef</span><span class="o">::</span><span class="no">Provider</span><span class="o">::</span><span class="no">Package</span><span class="o">::</span><span class="no">Rpm</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
+<span class="k">end</span></code></pre></div>
 <p>chef実行！</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">[2013-03-28T19:20:48+09:00] ERROR: Running exception handlers
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">[2013-03-28T19:20:48+09:00] ERROR: Running exception handlers
 [2013-03-28T19:20:48+09:00] ERROR: Exception handlers complete
 Chef Client failed. 0 resources updated
 [2013-03-28T15:20:48+09:00] FATAL: Stacktrace dumped to /home/kk_Ataka/chef/chef-repo/tmp/chef-solo/chef-stacktrace.out
-<span class="err">[2013-03-28T19:20:48+09:00] FATAL: Chef::Exceptions::Exec: package[nginx] (hello::default line 18) had an error: Chef::Exceptions::Exec: rpm  -U /var/package/nginx-1.2.7-1.el5.ngx.i386.rpm returned 1, expected 0</span></code>
-  </pre>
-</figure>
-
+[2013-03-28T19:20:48+09:00] FATAL: Chef::Exceptions::Exec: package[nginx] (hello::default line 18) had an error: Chef::Exceptions::Exec: rpm  -U /var/package/nginx-1.2.7-1.el5.ngx.i386.rpm returned 1, expected 0</code></pre></div>
 <p>だめ？何だこのエラー…直接rpmできるか確認してみるか。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">rpm -ivh /var/package/nginx-1.2.7-1.el5.ngx.i386.rpm
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">rpm -ivh /var/package/nginx-1.2.7-1.el5.ngx.i386.rpm
 警告: /var/package/nginx-1.2.7-1.el5.ngx.i386.rpm: ヘッダ V3 RSA/SHA1 signature: NOKEY, key ID 7bd9bf62
 エラー: 依存性の欠如:
-<span class="err">        libpcre.so.0 は nginx-1.2.7-1.el5.ngx.i386 に必要とされています</span></code>
-  </pre>
-</figure>
-
+        libpcre.so.0 は nginx-1.2.7-1.el5.ngx.i386 に必要とされています</code></pre></div>
 <p>あ、ライブラリが足りないのか。PCREをDLしてインストールする必要があるのね</p>
 
 <p>まずはnginxとその依存ファイルをインストールするように書いてみた。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">package</span> <span class="s2">"pcre"</span> <span class="k">do</span>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">package</span> <span class="s2">&#34;pcre&#34;</span> <span class="k">do</span>
   <span class="n">action</span>   <span class="ss">:install</span>
-  <span class="n">source</span>   <span class="s2">"/var/package/pcre-6.6-6.el5_6.1.i386.rpm"</span>
+  <span class="n">source</span>   <span class="s2">&#34;/var/package/pcre-6.6-6.el5_6.1.i386.rpm&#34;</span>
   <span class="n">provider</span> <span class="no">Chef</span><span class="o">::</span><span class="no">Provider</span><span class="o">::</span><span class="no">Package</span><span class="o">::</span><span class="no">Rpm</span>
 <span class="k">end</span>
 
-<span class="n">package</span> <span class="s2">"pcre-devel"</span> <span class="k">do</span>
+<span class="n">package</span> <span class="s2">&#34;pcre-devel&#34;</span> <span class="k">do</span>
   <span class="n">action</span>   <span class="ss">:install</span>
-  <span class="n">source</span>   <span class="s2">"/var/package/pcre-devel-6.6-6.el5_6.1.i386.rpm"</span>
+  <span class="n">source</span>   <span class="s2">&#34;/var/package/pcre-devel-6.6-6.el5_6.1.i386.rpm&#34;</span>
   <span class="n">provider</span> <span class="no">Chef</span><span class="o">::</span><span class="no">Provider</span><span class="o">::</span><span class="no">Package</span><span class="o">::</span><span class="no">Rpm</span>
 <span class="k">end</span>
 
-<span class="n">package</span> <span class="s2">"nginx"</span> <span class="k">do</span>
+<span class="n">package</span> <span class="s2">&#34;nginx&#34;</span> <span class="k">do</span>
   <span class="n">action</span>   <span class="ss">:install</span>
-  <span class="n">source</span>   <span class="s2">"/var/package/nginx-1.2.7-1.el5.ngx.i386.rpm"</span>
+  <span class="n">source</span>   <span class="s2">&#34;/var/package/nginx-1.2.7-1.el5.ngx.i386.rpm&#34;</span>
   <span class="n">provider</span> <span class="no">Chef</span><span class="o">::</span><span class="no">Provider</span><span class="o">::</span><span class="no">Package</span><span class="o">::</span><span class="no">Rpm</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
+<span class="k">end</span></code></pre></div>
 <p>で、インストール。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"><span class="err">#</span> <span class="nx">bundle</span> <span class="nx">exec</span> <span class="nx">chef</span><span class="o">-</span><span class="nx">solo</span> <span class="o">-</span><span class="nx">c</span> <span class="nx">solo</span><span class="p">.</span><span class="nx">rb</span> <span class="o">-</span><span class="nx">j</span> <span class="nx">localhost</span><span class="p">.</span><span class="nx">json</span>
+<span class="nx">Starting</span> <span class="nx">Chef</span> <span class="nx">Client</span><span class="p">,</span> <span class="nx">version</span> <span class="mf">11.4.0</span>
+<span class="nx">Compiling</span> <span class="nx">Cookbooks</span><span class="o">...</span>
+<span class="nx">Converging</span> <span class="mi">4</span> <span class="nx">resources</span>
+<span class="nx">Recipe</span><span class="p">:</span> <span class="nx">hello</span><span class="p">::</span><span class="k">default</span>
+  <span class="o">*</span> <span class="kn">package</span><span class="p">[</span><span class="nx">zsh</span><span class="p">]</span> <span class="nx">action</span> <span class="nx">install</span>
+    <span class="o">-</span> <span class="nx">install</span> <span class="nx">version</span> <span class="mf">3.0.5</span><span class="o">-</span><span class="mi">6</span> <span class="nx">of</span> <span class="kn">package</span> <span class="nx">zsh</span>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="ni"># </span><span class="nc">bundle</span><span class="kv"> exec chef-solo -c solo.rb -j localhost.json
-</span>Starting Chef Client, version 11.4.0
-Compiling Cookbooks...
-Converging 4 resources
-Recipe: hello::default
-  * package[zsh] action install
-    - install version 3.0.5-6 of package zsh
+  <span class="o">*</span> <span class="kn">package</span><span class="p">[</span><span class="nx">pcre</span><span class="p">]</span> <span class="nx">action</span> <span class="nx">install</span> 
+    <span class="o">-</span> <span class="nx">install</span> <span class="nx">version</span> <span class="mf">6.6</span><span class="o">-</span><span class="mf">6.</span><span class="nx">el5_6</span><span class="mf">.1</span> <span class="nx">of</span> <span class="kn">package</span> <span class="nx">pcre</span>
 
-  * package[pcre] action install 
-    - install version 6.6-6.el5_6.1 of package pcre
+  <span class="o">*</span> <span class="kn">package</span><span class="p">[</span><span class="nx">pcre</span><span class="o">-</span><span class="nx">devel</span><span class="p">]</span> <span class="nx">action</span> <span class="nx">install</span>
+    <span class="o">-</span> <span class="nx">install</span> <span class="nx">version</span> <span class="mf">6.6</span><span class="o">-</span><span class="mf">6.</span><span class="nx">el5_6</span><span class="mf">.1</span> <span class="nx">of</span> <span class="kn">package</span> <span class="nx">pcre</span><span class="o">-</span><span class="nx">devel</span>
 
-  * package[pcre-devel] action install
-    - install version 6.6-6.el5_6.1 of package pcre-devel
-
-  * package[nginx] action install
-<span class="err">    - install version 1.2.7-1.el5.ngx of package nginx</span></code>
-  </pre>
-</figure>
-
+  <span class="o">*</span> <span class="kn">package</span><span class="p">[</span><span class="nx">nginx</span><span class="p">]</span> <span class="nx">action</span> <span class="nx">install</span>
+    <span class="o">-</span> <span class="nx">install</span> <span class="nx">version</span> <span class="mf">1.2.7</span><span class="o">-</span><span class="mf">1.</span><span class="nx">el5</span><span class="p">.</span><span class="nx">ngx</span> <span class="nx">of</span> <span class="kn">package</span> <span class="nx">nginx</span></code></pre></div>
 <p>はいった！んでnginxがあるかどうか確認…。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="ni"># </span>
-      <span class="nc">nginx</span>
-      <span class="kv"> -v
-</span>
-      <span class="err">nginx version: nginx/1.2.7</span>
-    </code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># nginx -v
+nginx version: nginx/1.2.7</code></pre></div>
 <p>ある！じゃあ起動。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="ni"># </span>
-      <span class="nc">/etc/init.d/nginx</span>
-      <span class="kv"> start
-</span>
-      <span class="err">nginx を起動中:                                            [  OK  ]</span>
-    </code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># /etc/init.d/nginx start
+nginx を起動中:                                            [  OK  ]</code></pre></div>
 <p>きたーーー！</p>
 
-<h3 id="tocAnchor-1-11-1">service</h3>
+<h3 id="service">service</h3>
 
-<p>今までレシピには <code class="highlighter-rouge">package</code> と <code class="highlighter-rouge">log</code> しか使っていなかった。</p>
+<p>今までレシピには <code>package</code> と <code>log</code> しか使っていなかった。</p>
 
-<p>次に、 <code class="highlighter-rouge">service</code> の定義方法を確認。</p>
+<p>次に、 <code>service</code> の定義方法を確認。</p>
 
 <p>serviceを定義する事でサービス周りの操作をできる。</p>
 
 <p>例えば、サービス自動起動の設定はなんにもしないとこうなってる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="ni"># </span>
-      <span class="nc">chkconfig</span>
-      <span class="kv"> --list | grep nginx
-</span>
-      <span class="err">nginx           0:off   1:off   2:on    3:on    4:on    5:on    6:off</span>
-    </code>
-  </pre>
-</figure>
-
-<p>レシピのservice &gt; <code class="highlighter-rouge">action</code> を <code class="highlighter-rouge">:disable</code> にして再インストールすると。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">service</span> <span class="s2">"nginx"</span> <span class="k">do</span>
-  <span class="n">action</span>   <span class="p">[</span> <span class="ss">:disable</span> <span class="p">]</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">  * package[nginx] action install (up to date)
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># chkconfig --list | grep nginx
+nginx           0:off   1:off   2:on    3:on    4:on    5:on    6:off</code></pre></div>
+<p>レシピのservice &gt; <code>action</code> を <code>:disable</code> にして再インストールすると。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">service</span> <span class="s2">&#34;nginx&#34;</span> <span class="k">do</span>
+  <span class="n">action</span>   <span class="o">[</span> <span class="ss">:disable</span> <span class="o">]</span>
+<span class="k">end</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">  * package[nginx] action install (up to date)
   * service[nginx] action disable
-<span class="err">    - disable service service[nginx]</span></code>
-  </pre>
-</figure>
-
-<p>サービスが無効になる。逆に <code class="highlighter-rouge">:enable</code>にしてみる。プラス、 <code class="highlighter-rouge">start</code> もつけてみる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">service</span> <span class="s2">"nginx"</span> <span class="k">do</span>
-  <span class="n">action</span>   <span class="p">[</span> <span class="ss">:enable</span><span class="p">,</span> <span class="ss">:start</span> <span class="p">]</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="ni"># </span>
-      <span class="nc">chkconfig</span>
-      <span class="kv"> --list | grep nginx
-</span>
-      <span class="err">nginx           0:off   1:off   2:off   3:off   4:off   5:off   6:off</span>
-    </code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">  * package[nginx] action install (up to date)
+    - disable service service[nginx]</code></pre></div>
+<p>サービスが無効になる。逆に <code>:enable</code>にしてみる。プラス、 <code>start</code> もつけてみる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">service</span> <span class="s2">&#34;nginx&#34;</span> <span class="k">do</span>
+  <span class="n">action</span>   <span class="o">[</span> <span class="ss">:enable</span><span class="p">,</span> <span class="ss">:start</span> <span class="o">]</span>
+<span class="k">end</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># chkconfig --list | grep nginx
+nginx           0:off   1:off   2:off   3:off   4:off   5:off   6:off</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">  * package[nginx] action install (up to date)
   * service[nginx] action enable
     - enable service service[nginx]
 
   * service[nginx] action start
-<span class="err">    - start service service[nginx]</span></code>
-  </pre>
-</figure>
-
+    - start service service[nginx]</code></pre></div>
 <p>起動時にサービスが上がるようになり、chefコマンド実行後にnginxが起動状態となっている。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="ni"># </span><span class="nc">chkconfig</span><span class="kv"> --list | grep nginx
-</span>nginx           0:off   1:off   2:on    3:on    4:on    5:on    6:off
-<span class="ni"># </span><span class="nc">/etc/init.d/nginx</span><span class="kv"> status
-</span><span class="err">nginx (pid  20026) を実行中...</span></code>
-  </pre>
-</figure>
-
-<p>次に <code class="highlighter-rouge">supports</code> 。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">service</span> <span class="s2">"nginx"</span> <span class="k">do</span>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># chkconfig --list | grep nginx
+nginx           0:off   1:off   2:on    3:on    4:on    5:on    6:off
+# /etc/init.d/nginx status
+nginx (pid  20026) を実行中...</code></pre></div>
+<p>次に <code>supports</code> 。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">service</span> <span class="s2">&#34;nginx&#34;</span> <span class="k">do</span>
   <span class="n">supports</span> <span class="ss">:status</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">:restart</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">:reload</span> <span class="o">=&gt;</span> <span class="kp">true</span>
-  <span class="n">action</span>   <span class="p">[</span> <span class="ss">:enable</span><span class="p">,</span> <span class="ss">:start</span> <span class="p">]</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
+  <span class="n">action</span>   <span class="o">[</span> <span class="ss">:enable</span><span class="p">,</span> <span class="ss">:start</span> <span class="o">]</span>
+<span class="k">end</span></code></pre></div>
 <p>これは、「他のリソースに、このサービスが使えるオプションを教える」ためのもの…らしい。</p>
 
 <p>なくても動くが、指定しておくと吉という事。まだシチュエーションがよくわかっていない。</p>
 
-<h3 id="tocAnchor-1-11-2">template</h3>
+<h3 id="template">template</h3>
 
 <p>設定ファイルを配備する。</p>
 
-<p>例えば、 <code class="highlighter-rouge">/etc/nginx/nginx.conf</code> はそのまま入れるとこうなっている。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="ni"># </span>
-      <span class="nc">ls</span>
-      <span class="kv"> -l /etc/nginx/nginx.conf
-</span>
-      <span class="err">-rw-r--r-- 1 root root 643  2月 12 22:57 /etc/nginx/nginx.conf</span>
-    </code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-nginx" data-lang="nginx"><span class="c1"># cat /etc/nginx/nginx.conf
-</span><span class="k">user</span>  <span class="s">nginx</span><span class="p">;</span>
+<p>例えば、 <code>/etc/nginx/nginx.conf</code> はそのまま入れるとこうなっている。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># ls -l /etc/nginx/nginx.conf
+-rw-r--r-- 1 root root 643  2月 12 22:57 /etc/nginx/nginx.conf</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="c1"># cat /etc/nginx/nginx.conf
+</span><span class="c1"></span><span class="k">user</span>  <span class="s">nginx</span><span class="p">;</span>
 <span class="k">worker_processes</span>  <span class="mi">1</span><span class="p">;</span>
 
-<span class="k">error_log</span>  <span class="n">/var/log/nginx/error.log</span> <span class="s">warn</span><span class="p">;</span>
-<span class="k">pid</span>        <span class="n">/var/run/nginx.pid</span><span class="p">;</span>
+<span class="k">error_log</span>  <span class="s">/var/log/nginx/error.log</span> <span class="s">warn</span><span class="p">;</span>
+<span class="k">pid</span>        <span class="s">/var/run/nginx.pid</span><span class="p">;</span>
 
 
 <span class="k">events</span> <span class="p">{</span>
@@ -889,135 +656,79 @@ Recipe: hello::default
 
 
 <span class="k">http</span> <span class="p">{</span>
-    <span class="kn">include</span>       <span class="n">/etc/nginx/mime.types</span><span class="p">;</span>
-    <span class="kn">default_type</span>  <span class="nc">application/octet-stream</span><span class="p">;</span>
+    <span class="kn">include</span>       <span class="s">/etc/nginx/mime.types</span><span class="p">;</span>
+    <span class="kn">default_type</span>  <span class="s">application/octet-stream</span><span class="p">;</span>
 
-    <span class="kn">log_format</span>  <span class="s">main</span>  <span class="s">'</span><span class="nv">$remote_addr</span> <span class="s">-</span> <span class="nv">$remote_user</span> <span class="s">[</span><span class="nv">$time_local</span><span class="s">]</span> <span class="s">"</span><span class="nv">$request</span><span class="s">"</span> <span class="s">'</span>
-                      <span class="s">'</span><span class="nv">$status</span> <span class="nv">$body_bytes_sent</span> <span class="s">"</span><span class="nv">$http_referer</span><span class="s">"</span> <span class="s">'</span>
-                      <span class="s">'"</span><span class="nv">$http_user_agent</span><span class="s">"</span> <span class="s">"</span><span class="nv">$http_x_forwarded_for</span><span class="s">"'</span><span class="p">;</span>
+    <span class="kn">log_format</span>  <span class="s">main</span>  <span class="s">&#39;</span><span class="nv">$remote_addr</span> <span class="s">-</span> <span class="nv">$remote_user</span> <span class="s">[</span><span class="nv">$time_local]</span> <span class="s">&#34;</span><span class="nv">$request&#34;</span> <span class="s">&#39;</span>
+                      <span class="s">&#39;</span><span class="nv">$status</span> <span class="nv">$body_bytes_sent</span> <span class="s">&#34;</span><span class="nv">$http_referer&#34;</span> <span class="s">&#39;</span>
+                      <span class="s">&#39;&#34;</span><span class="nv">$http_user_agent&#34;</span> <span class="s">&#34;</span><span class="nv">$http_x_forwarded_for&#34;&#39;</span><span class="p">;</span>
 
-    <span class="kn">access_log</span>  <span class="n">/var/log/nginx/access.log</span>  <span class="s">main</span><span class="p">;</span>
+    <span class="kn">access_log</span>  <span class="s">/var/log/nginx/access.log</span>  <span class="s">main</span><span class="p">;</span>
 
     <span class="kn">sendfile</span>        <span class="no">on</span><span class="p">;</span>
     <span class="c1">#tcp_nopush     on;
-</span>
+</span><span class="c1"></span>
     <span class="kn">keepalive_timeout</span>  <span class="mi">65</span><span class="p">;</span>
 
     <span class="c1">#gzip  on;
-</span>
-    <span class="kn">include</span> <span class="n">/etc/nginx/conf.d/*.conf</span><span class="p">;</span>
-<span class="p">}</span></code>
-  </pre>
-</figure>
-
+</span><span class="c1"></span>
+    <span class="kn">include</span> <span class="s">/etc/nginx/conf.d/*.conf</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
 <p>これをパーミッションから内容から色々操作したい。</p>
 
-<p>そんな時にレシピ <code class="highlighter-rouge">template</code> を追記。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">template</span> <span class="s2">"nginx.conf"</span> <span class="k">do</span>
-  <span class="n">path</span>     <span class="s2">"/etc/nginx/nginx.conf"</span>
-  <span class="n">source</span>   <span class="s2">"nginx.conf.erb"</span>
-  <span class="n">owner</span>    <span class="s2">"root"</span>
-  <span class="n">group</span>    <span class="s2">"root"</span>
+<p>そんな時にレシピ <code>template</code> を追記。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">template</span> <span class="s2">&#34;nginx.conf&#34;</span> <span class="k">do</span>
+  <span class="n">path</span>     <span class="s2">&#34;/etc/nginx/nginx.conf&#34;</span>
+  <span class="n">source</span>   <span class="s2">&#34;nginx.conf.erb&#34;</span>
+  <span class="n">owner</span>    <span class="s2">&#34;root&#34;</span>
+  <span class="n">group</span>    <span class="s2">&#34;root&#34;</span>
   <span class="n">mode</span>     <span class="mo">0644</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
+<span class="k">end</span></code></pre></div>
+<p><code>source</code> が今回使うテンプレートとなる。ファイル名しか書いていないが、クックブック内の <code>templates/default/</code> 下が読まれる様子。</p>
 
-<p><code class="highlighter-rouge">source</code> が今回使うテンプレートとなる。ファイル名しか書いていないが、クックブック内の <code class="highlighter-rouge">templates/default/</code> 下が読まれる様子。</p>
+<p>また、 <code>source</code> を書かないと、Chefが <code>nginx.conf.erb</code> を探しに行くみたい。この時の前半部 <code>nginx.conf</code> は template の nginx.conf から来ているんだろうか。</p>
 
-<p>また、 <code class="highlighter-rouge">source</code> を書かないと、Chefが <code class="highlighter-rouge">nginx.conf.erb</code> を探しに行くみたい。この時の前半部 <code class="highlighter-rouge">nginx.conf</code> は template の nginx.conf から来ているんだろうか。</p>
-
-<p>で、 <code class="highlighter-rouge">templates/default/nginx.conf.erb</code> を作成する。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-nginx" data-lang="nginx"><span class="k">user</span>            <span class="s">nginx</span><span class="p">;</span>
+<p>で、 <code>templates/default/nginx.conf.erb</code> を作成する。</p>
+<div class="highlight"><pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="k">user</span>            <span class="s">nginx</span><span class="p">;</span>
 <span class="k">worker_processes</span> <span class="mi">1</span><span class="p">;</span>
-<span class="k">error_log</span>       <span class="n">/var/log/nginx/error.log</span><span class="p">;</span>
-<span class="k">pid</span>             <span class="n">/var/run/nginx.pid</span><span class="p">;</span>
+<span class="k">error_log</span>       <span class="s">/var/log/nginx/error.log</span><span class="p">;</span>
+<span class="k">pid</span>             <span class="s">/var/run/nginx.pid</span><span class="p">;</span>
 
 <span class="k">events</span> <span class="p">{</span>
   <span class="kn">worker_connections</span> <span class="mi">1024</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="k">http</span> <span class="p">{</span>
-  <span class="kn">include</span>       <span class="n">/etc/nginx/mime.types</span><span class="p">;</span>
-  <span class="kn">default_type</span>  <span class="nc">application/octet-stream</span><span class="p">;</span>
+  <span class="kn">include</span>       <span class="s">/etc/nginx/mime.types</span><span class="p">;</span>
+  <span class="kn">default_type</span>  <span class="s">application/octet-stream</span><span class="p">;</span>
   <span class="kn">server</span> <span class="p">{</span>
-    <span class="kn">listen</span>      <span class="s">&lt;%=</span> <span class="s">node['nginx']['port']</span> <span class="s">%&gt;</span><span class="p">;</span>
+    <span class="kn">listen</span>      <span class="s">&lt;%=</span> <span class="s">node[&#39;nginx&#39;][&#39;port&#39;]</span> <span class="s">%&gt;</span><span class="p">;</span>
     <span class="kn">server_name</span> <span class="s">localhost</span><span class="p">;</span>
-    <span class="kn">location</span> <span class="n">/</span>  <span class="p">{</span>
-      <span class="kn">root</span>  <span class="n">/usr/share/nginx/html</span><span class="p">;</span>
+    <span class="kn">location</span> <span class="s">/</span>  <span class="p">{</span>
+      <span class="kn">root</span>  <span class="s">/usr/share/nginx/html</span><span class="p">;</span>
       <span class="kn">index</span> <span class="s">index.htm</span><span class="p">;</span>
     <span class="p">}</span>
   <span class="p">}</span>
-<span class="p">}</span></code>
-  </pre>
-</figure>
-
+<span class="p">}</span></code></pre></div>
 <p>基本的には、思うままに設定ファイルを作成するだけ。</p>
 
-<p>ただし、一点特徴として、設定ファイルの中に <code class="highlighter-rouge">Attribute</code> が使える。変数を埋め込んで展開できる。</p>
+<p>ただし、一点特徴として、設定ファイルの中に <code>Attribute</code> が使える。変数を埋め込んで展開できる。</p>
 
-<p>上記のファイルでは <code class="highlighter-rouge">listen</code> の値を <code class="highlighter-rouge">&lt;%= node['nginx']['port'] %&gt;</code> としてある。</p>
+<p>上記のファイルでは <code>listen</code> の値を <code>&lt;%= node['nginx']['port'] %&gt;</code> としてある。</p>
 
 <p>これはどこに定義しているかというと……。</p>
 
-<p>レポジトリ直下に作っていた <code class="highlighter-rouge">localhost.json</code> に定義している。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-json" data-lang="json">
-      <span class="err">//</span>
-      <span class="w"> </span>
-      <span class="err">localhost.json</span>
-      <span class="w">
-</span>
-      <span class="p">{</span>
-      <span class="w">
-  </span>
-      <span class="nt">"nginx"</span>
-      <span class="w">    </span>
-      <span class="p">:</span>
-      <span class="w"> </span>
-      <span class="p">{</span>
-      <span class="w"> </span>
-      <span class="nt">"port"</span>
-      <span class="w"> </span>
-      <span class="p">:</span>
-      <span class="w"> </span>
-      <span class="mi">8090</span>
-      <span class="w"> </span>
-      <span class="p">},</span>
-      <span class="w">
-  </span>
-      <span class="nt">"run_list"</span>
-      <span class="w"> </span>
-      <span class="p">:</span>
-      <span class="w"> </span>
-      <span class="p">[</span>
-      <span class="w"> </span>
-      <span class="s2">"recipe[hello]"</span>
-      <span class="w"> </span>
-      <span class="p">]</span>
-      <span class="w">
-</span>
-      <span class="p">}</span>
-    </code>
-  </pre>
-</figure>
-
+<p>レポジトリ直下に作っていた <code>localhost.json</code> に定義している。</p>
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="err">//</span> <span class="err">localhost.json</span>
+<span class="p">{</span>
+  <span class="nt">&#34;nginx&#34;</span>    <span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;port&#34;</span> <span class="p">:</span> <span class="mi">8090</span> <span class="p">},</span>
+  <span class="nt">&#34;run_list&#34;</span> <span class="p">:</span> <span class="p">[</span> <span class="s2">&#34;recipe[hello]&#34;</span> <span class="p">]</span>
+<span class="p">}</span></code></pre></div>
 <p>これが使われる。</p>
 
 <p>んで、templateを使ってchef実行！</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="ni"># </span><span class="nc">bundle</span><span class="kv"> exec chef-solo -c solo.rb -j localhost.json
-</span>Starting Chef Client, version 11.4.0
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># bundle exec chef-solo -c solo.rb -j localhost.json
+Starting Chef Client, version 11.4.0
 Compiling Cookbooks...
 Converging 6 resources
 Recipe: hello::default
@@ -1054,9 +765,9 @@ Recipe: hello::default
         -    include       /etc/nginx/mime.types;
         -    default_type  application/octet-stream;
         -
-        -    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-        -                      '$status $body_bytes_sent "$http_referer" '
-        -                      '"$http_user_agent" "$http_x_forwarded_for"';
+        -    log_format  main  &#39;$remote_addr - $remote_user [$time_local] &#34;$request&#34; &#39;
+        -                      &#39;$status $body_bytes_sent &#34;$http_referer&#34; &#39;
+        -                      &#39;&#34;$http_user_agent&#34; &#34;$http_x_forwarded_for&#34;&#39;;
         -
         -    access_log  /var/log/nginx/access.log  main;
         -
@@ -1078,92 +789,50 @@ Recipe: hello::default
         +      index index.htm;
         +    }
         +  }
-<span class="err">         }</span></code>
-  </pre>
-</figure>
-
+         }</code></pre></div>
 <p>お、置き換わったっぽい。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="ni"># </span>
-      <span class="nc">ls</span>
-      <span class="kv"> -l /etc/nginx/nginx.conf
-</span>
-      <span class="err">-rw-r--r-- 1 root root 392  3月 29 19:05 /etc/nginx/nginx.conf</span>
-    </code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># ls -l /etc/nginx/nginx.conf
+-rw-r--r-- 1 root root 392  3月 29 19:05 /etc/nginx/nginx.conf</code></pre></div>
 <p>644のroot:rootになってる。</p>
 
 <p>中身は……。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-nginx" data-lang="nginx"><span class="k">user</span>            <span class="s">nginx</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-nginx" data-lang="nginx"><span class="k">user</span>            <span class="s">nginx</span><span class="p">;</span>
 <span class="k">worker_processes</span> <span class="mi">1</span><span class="p">;</span>
-<span class="k">error_log</span>       <span class="n">/var/log/nginx/error.log</span><span class="p">;</span>
-<span class="k">pid</span>             <span class="n">/var/run/nginx.pid</span><span class="p">;</span>
+<span class="k">error_log</span>       <span class="s">/var/log/nginx/error.log</span><span class="p">;</span>
+<span class="k">pid</span>             <span class="s">/var/run/nginx.pid</span><span class="p">;</span>
 
 <span class="k">events</span> <span class="p">{</span>
   <span class="kn">worker_connections</span> <span class="mi">1024</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="k">http</span> <span class="p">{</span>
-  <span class="kn">include</span>      <span class="n">/etc/nginx/mime.types</span><span class="p">;</span>
-  <span class="kn">default_type</span> <span class="nc">application/octet-stream</span><span class="p">;</span>
+  <span class="kn">include</span>      <span class="s">/etc/nginx/mime.types</span><span class="p">;</span>
+  <span class="kn">default_type</span> <span class="s">application/octet-stream</span><span class="p">;</span>
   <span class="kn">server</span> <span class="p">{</span>
     <span class="kn">listen</span>      <span class="mi">8090</span><span class="p">;</span>
     <span class="kn">server_name</span> <span class="s">localhost</span><span class="p">;</span>
-    <span class="kn">location</span> <span class="n">/</span> <span class="p">{</span>
-      <span class="kn">root</span>  <span class="n">/usr/share/nginx/html</span><span class="p">;</span>
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+      <span class="kn">root</span>  <span class="s">/usr/share/nginx/html</span><span class="p">;</span>
       <span class="kn">index</span> <span class="s">index.htm</span><span class="p">;</span>
     <span class="p">}</span>
   <span class="p">}</span>
-<span class="p">}</span></code>
-  </pre>
-</figure>
-
+<span class="p">}</span></code></pre></div>
 <p>置き変わってる。listen ポートも8090になってる。</p>
 
-<p><code class="highlighter-rouge">notifies</code> の話はまた今度。</p>
+<p><code>notifies</code> の話はまた今度。</p>
 
-<h3 id="tocAnchor-1-11-3">cookbook file</h3>
+<h3 id="cookbook-file">cookbook file</h3>
 
 <p>クックブック内のファイルをサーバの特定の場所に配備。</p>
 
-<p>まず、クックブックの <code class="highlighter-rouge">files/default</code> ディレクトリにファイルを作る。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="ni"># </span>
-      <span class="nc">touch</span>
-      <span class="kv"> cookbooks/hello/files/default/README
-</span>
-      <span class="ni"># </span>
-      <span class="nc">echo</span>
-      <span class="kv"> "this is readme file" &gt;&gt; cookbooks/hello/files/default/README</span>
-    </code>
-  </pre>
-</figure>
-
-<p>これをレシピに <code class="highlighter-rouge">cookbook_file</code> として記載。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">cookbook_file</span> <span class="s2">"/tmp/README"</span> <span class="k">do</span>
+<p>まず、クックブックの <code>files/default</code> ディレクトリにファイルを作る。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># touch cookbooks/hello/files/default/README
+# echo &#34;this is readme file&#34; &gt;&gt; cookbooks/hello/files/default/README</code></pre></div>
+<p>これをレシピに <code>cookbook_file</code> として記載。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">cookbook_file</span> <span class="s2">&#34;/tmp/README&#34;</span> <span class="k">do</span>
   <span class="n">mode</span> <span class="mo">00444</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="ni"># </span><span class="nc">bundle</span><span class="kv"> exec chef-solo -c solo.rb -j localhost.json
-</span>(略)
+<span class="k">end</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># bundle exec chef-solo -c solo.rb -j localhost.json
+(略)
   * template[nginx.conf] action create (up to date)
   * cookbook_file[/tmp/README] action create
     - create a new cookbook_file /tmp/README
@@ -1172,67 +841,32 @@ Recipe: hello::default
         @@ -0,0 +1 @@
         +this is readme file
 
-<span class="err">Chef Client finished, 1 resources updated</span></code>
-  </pre>
-</figure>
-
+Chef Client finished, 1 resources updated</code></pre></div>
 <p>できてるかな？</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="ni"># </span><span class="nc">ls</span><span class="kv"> -l /tmp/README
-</span>-r--r--r-- 1 root root 20  3月 29 23:41 /tmp/README
-<span class="ni"># </span><span class="nc">cat</span><span class="kv"> /tmp/README
-</span><span class="err">this is readme file</span></code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># ls -l /tmp/README
+-r--r--r-- 1 root root 20  3月 29 23:41 /tmp/README
+# cat /tmp/README
+this is readme file</code></pre></div>
 <p>おーできてる。</p>
 
-<p>他にも <code class="highlighter-rouge">source</code> , <code class="highlighter-rouge">owner</code> , <code class="highlighter-rouge">group</code> , <code class="highlighter-rouge">path</code> , <code class="highlighter-rouge">checksum</code> などを指定できる。</p>
+<p>他にも <code>source</code> , <code>owner</code> , <code>group</code> , <code>path</code> , <code>checksum</code> などを指定できる。</p>
 
-<p>checksumは <code class="highlighter-rouge">SHA-256</code> が使われる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="ni"># </span>
-      <span class="nc">sha256sum</span>
-      <span class="kv"> cookbooks/hello/files/default/README
-</span>
-      <span class="err">ee55fd3276ac9361a6e632e100dba72bfa34c06f8feb2c3f8d8ae95f06941bf0  cookbooks/hello/files/default/README</span>
-    </code>
-  </pre>
-</figure>
-
+<p>checksumは <code>SHA-256</code> が使われる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># sha256sum cookbooks/hello/files/default/README
+ee55fd3276ac9361a6e632e100dba72bfa34c06f8feb2c3f8d8ae95f06941bf0  cookbooks/hello/files/default/README</code></pre></div>
 <p>ほい。これをレシピに指定。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">cookbook_file</span> <span class="s2">"/tmp/README"</span> <span class="k">do</span>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">cookbook_file</span> <span class="s2">&#34;/tmp/README&#34;</span> <span class="k">do</span>
   <span class="n">mode</span> <span class="mo">00444</span>
-  <span class="n">checksum</span> <span class="s2">"ee55fd3276ac9361a6e632e100dba72bfa34c06f8feb2c3f8d8ae95f06941bf0"</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
+  <span class="n">checksum</span> <span class="s2">&#34;ee55fd3276ac9361a6e632e100dba72bfa34c06f8feb2c3f8d8ae95f06941bf0&#34;</span>
+<span class="k">end</span></code></pre></div>
 <p>問題がなければ、何事もなく。checksumを誤ると……。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">cookbook_file</span> <span class="s2">"/tmp/README"</span> <span class="k">do</span>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">cookbook_file</span> <span class="s2">&#34;/tmp/README&#34;</span> <span class="k">do</span>
   <span class="n">mode</span> <span class="mo">00444</span>
-  <span class="n">checksum</span> <span class="s2">"hoge"</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
+  <span class="n">checksum</span> <span class="s2">&#34;hoge&#34;</span>
+<span class="k">end</span></code></pre></div>
 <p>エラーとなる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="ni"># </span><span class="nc">bundle</span><span class="kv"> exec chef-solo -c solo.rb -j localhost.json
-</span>Starting Chef Client, version 11.4.0
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># bundle exec chef-solo -c solo.rb -j localhost.json
+Starting Chef Client, version 11.4.0
 Compiling Cookbooks...
 
 ================================================================================
@@ -1242,27 +876,27 @@ Recipe Compile Error in /home/kk_Ataka/chef/chef-repo/cookbooks/hello/recipes/de
 
 Chef::Exceptions::ValidationFailed
 ----------------------------------
-Option checksum's value hoge does not match regular expression /^[a-zA-Z0-9]{64}$/
+Option checksum&#39;s value hoge does not match regular expression /^[a-zA-Z0-9]{64}$/
 
 
 Cookbook Trace:
 ---------------
-  /home/kk_Ataka/chef/chef-repo/cookbooks/hello/recipes/default.rb:49:in `block in from_file'
-  /home/kk_Ataka/chef/chef-repo/cookbooks/hello/recipes/default.rb:47:in `from_file'
+  /home/kk_Ataka/chef/chef-repo/cookbooks/hello/recipes/default.rb:49:in `block in from_file&#39;
+  /home/kk_Ataka/chef/chef-repo/cookbooks/hello/recipes/default.rb:47:in `from_file&#39;
 
 
 Relevant File Content:
 ----------------------
 /home/kk_Ataka/chef/chef-repo/cookbooks/hello/recipes/default.rb:
 
- 42:    group    "root"
+ 42:    group    &#34;root&#34;
  43:    mode     0644
- 44:  #  notifies :reload, 'service[nginx]'
+ 44:  #  notifies :reload, &#39;service[nginx]&#39;
  45:  end
  46:
- 47:  cookbook_file "/tmp/README" do
+ 47:  cookbook_file &#34;/tmp/README&#34; do
  48:    mode 00444
- 49&gt;&gt;   checksum "hoge"
+ 49&gt;&gt;   checksum &#34;hoge&#34;
  50:  end
  51:
 
@@ -1271,107 +905,60 @@ Relevant File Content:
 [2013-03-29T23:53:54+09:00] ERROR: Exception handlers complete
 Chef Client failed. 0 resources updated
 [2013-03-29T23:53:54+09:00] FATAL: Stacktrace dumped to /home/kk_Ataka/chef/chef-repo/tmp/chef-solo/chef-stacktrace.out
-<span class="err">[2013-03-29T23:53:54+09:00] FATAL: Chef::Exceptions::ValidationFailed: Option checksum's value hoge does not match regular expression /^[a-zA-Z0-9]{64}$/</span></code>
-  </pre>
-</figure>
-
-<h3 id="tocAnchor-1-11-4">directory</h3>
+[2013-03-29T23:53:54+09:00] FATAL: Chef::Exceptions::ValidationFailed: Option checksum&#39;s value hoge does not match regular expression /^[a-zA-Z0-9]{64}$/</code></pre></div>
+<h3 id="directory">directory</h3>
 
 <p>そのもの、ディレクトリを作る または 削除する。レシピはこう。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">directory</span> <span class="s2">"/tmp/mydirectory"</span> <span class="k">do</span>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">directory</span> <span class="s2">&#34;/tmp/mydirectory&#34;</span> <span class="k">do</span>
   <span class="n">mode</span> <span class="mo">00755</span>
-  <span class="n">owner</span> <span class="s2">"kk_Ataka"</span>
+  <span class="n">owner</span> <span class="s2">&#34;kk_Ataka&#34;</span>
   <span class="n">action</span> <span class="ss">:create</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
-<p><code class="highlighter-rouge">action</code> に作るか消すかを設定、 <code class="highlighter-rouge">:create</code> か <code class="highlighter-rouge">:delete</code> を指定。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="ni"># </span><span class="nc">bundle</span><span class="kv"> exec chef-solo -c solo.rb -j localhost.json
-</span>(略)
+<span class="k">end</span></code></pre></div>
+<p><code>action</code> に作るか消すかを設定、 <code>:create</code> か <code>:delete</code> を指定。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># bundle exec chef-solo -c solo.rb -j localhost.json
+(略)
   * directory[/tmp/mydirectory] action create
     - create new directory /tmp/mydirectory
-    - change mode from '' to '0755'
-<span class="err">    - change owner from '' to 'kk_Ataka'</span></code>
-  </pre>
-</figure>
-
+    - change mode from &#39;&#39; to &#39;0755&#39;
+    - change owner from &#39;&#39; to &#39;kk_Ataka&#39;</code></pre></div>
 <p>できた。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="ni"># </span>
-      <span class="nc">ls</span>
-      <span class="kv"> -l /tmp/
-</span>
-      <span class="err">drwxr-xr-x  2 kk_Ataka root 4096  3月 29 23:03 mydirectory</span>
-    </code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"># ls -l /tmp/
+drwxr-xr-x  2 kk_Ataka root 4096  3月 29 23:03 mydirectory</code></pre></div>
 <p>ところで、レシピを記述する順番とかは意識する必要があるんだろうか。</p>
 
 <ul>
-  <li>README を <code class="highlighter-rouge">/tmp/mydirectory</code> に置きたい</li>
-  <li><code class="highlighter-rouge">/tmp/mydirectory</code> はレシピで作る(今はない)</li>
+<li>README を <code>/tmp/mydirectory</code> に置きたい</li>
+<li><code>/tmp/mydirectory</code> はレシピで作る(今はない)</li>
 </ul>
 
 <p>後でディレクトリを作る。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">cookbook_file</span> <span class="s2">"/tmp/mydirectory/README"</span> <span class="k">do</span>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">cookbook_file</span> <span class="s2">&#34;/tmp/mydirectory/README&#34;</span> <span class="k">do</span>
   <span class="n">mode</span> <span class="mo">00444</span>
-  <span class="n">checksum</span> <span class="s2">"ee55fd3276ac9361a6e632e100dba72bfa34c06f8feb2c3f8d8ae95f06941bf0"</span>
+  <span class="n">checksum</span> <span class="s2">&#34;ee55fd3276ac9361a6e632e100dba72bfa34c06f8feb2c3f8d8ae95f06941bf0&#34;</span>
 <span class="k">end</span>
-<span class="n">directory</span> <span class="s2">"/tmp/mydirectory"</span> <span class="k">do</span>
+<span class="n">directory</span> <span class="s2">&#34;/tmp/mydirectory&#34;</span> <span class="k">do</span>
   <span class="n">mode</span> <span class="mo">00755</span>
   <span class="n">action</span> <span class="ss">:create</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
+<span class="k">end</span></code></pre></div>
 <p>結果、ダメ。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">[2013-03-29T23:11:39+09:00] ERROR: Running exception handlers
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">[2013-03-29T23:11:39+09:00] ERROR: Running exception handlers
 [2013-03-29T23:11:39+09:00] ERROR: Exception handlers complete
 Chef Client failed. 0 resources updated
 [2013-03-29T23:11:39+09:00] FATAL: Stacktrace dumped to /home/kk_Ataka/chef/chef-repo/tmp/chef-solo/chef-stacktrace.out
-<span class="err">[2013-03-29T23:11:39+09:00] FATAL: Chef::Exceptions::EnclosingDirectoryDoesNotExist: cookbook_file[/tmp/mydirectory/README] (hello::default line 47) had an error: Chef::Exceptions::EnclosingDirectoryDoesNotExist: Parent directory /tmp/mydirectory does not exist.</span></code>
-  </pre>
-</figure>
-
+[2013-03-29T23:11:39+09:00] FATAL: Chef::Exceptions::EnclosingDirectoryDoesNotExist: cookbook_file[/tmp/mydirectory/README] (hello::default line 47) had an error: Chef::Exceptions::EnclosingDirectoryDoesNotExist: Parent directory /tmp/mydirectory does not exist.</code></pre></div>
 <p>先にディレクトリを作る。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">directory</span> <span class="s2">"/tmp/mydirectory"</span> <span class="k">do</span>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">directory</span> <span class="s2">&#34;/tmp/mydirectory&#34;</span> <span class="k">do</span>
   <span class="n">mode</span> <span class="mo">00755</span>
   <span class="n">action</span> <span class="ss">:create</span>
 <span class="k">end</span>
-<span class="n">cookbook_file</span> <span class="s2">"/tmp/mydirectory/README"</span> <span class="k">do</span>
+<span class="n">cookbook_file</span> <span class="s2">&#34;/tmp/mydirectory/README&#34;</span> <span class="k">do</span>
   <span class="n">mode</span> <span class="mo">00444</span>
-  <span class="n">checksum</span> <span class="s2">"ee55fd3276ac9361a6e632e100dba72bfa34c06f8feb2c3f8d8ae95f06941bf0"</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
+  <span class="n">checksum</span> <span class="s2">&#34;ee55fd3276ac9361a6e632e100dba72bfa34c06f8feb2c3f8d8ae95f06941bf0&#34;</span>
+<span class="k">end</span></code></pre></div>
 <p>結果、いけた。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">  * directory[/tmp/mydirectory] action create
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">  * directory[/tmp/mydirectory] action create
     - create new directory /tmp/mydirectory
-    - change mode from '' to '0755'
+    - change mode from &#39;&#39; to &#39;0755&#39;
 
   * cookbook_file[/tmp/mydirectory/README] action create
     - create a new cookbook_file /tmp/mydirectory/README
@@ -1381,633 +968,782 @@ Chef Client failed. 0 resources updated
         +this is readme file
 
 Chef Client finished, 2 resources updated
-<span class="ni"># </span><span class="nc">ls</span><span class="kv"> -l /tmp/
-</span>合計 8
+# ls -l /tmp/
+合計 8
 drwxr-xr-x  2 root root 4096  3月 29 23:13 mydirectory
-<span class="ni"># </span><span class="nc">ls</span><span class="kv"> -l /tmp/mydirectory/
-</span>合計 4
+# ls -l /tmp/mydirectory/
+合計 4
 -r--r--r-- 1 root root 20  3月 29 23:13 README
 
-<span class="ni"># </span><span class="nc">cat</span><span class="kv"> /tmp/mydirectory/README
-</span><span class="err">this is readme file</span></code>
-  </pre>
-</figure>
-
+# cat /tmp/mydirectory/README
+this is readme file</code></pre></div>
 <ul>
-  <li>存在しないディレクトリを作ったりという事は、Chefではよろしくやってくれない</li>
-  <li>必要なディレクトリなどは先に作っておく必要がある</li>
+<li>存在しないディレクトリを作ったりという事は、Chefではよろしくやってくれない</li>
+<li>必要なディレクトリなどは先に作っておく必要がある</li>
 </ul>
 
 <p>ということかな。</p>
 
-<h3 id="tocAnchor-1-11-5">user</h3>
+<h3 id="user">user</h3>
 
-<p>ユーザ作成。 <code class="highlighter-rouge">action</code> は <code class="highlighter-rouge">:create</code> の場合省略していいみたい。削除する場合は <code class="highlighter-rouge">:remove</code> 修正もできるが一旦置いておく。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">user</span> <span class="s2">"ataka_man"</span> <span class="k">do</span>
+<p>ユーザ作成。 <code>action</code> は <code>:create</code> の場合省略していいみたい。削除する場合は <code>:remove</code> 修正もできるが一旦置いておく。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">user</span> <span class="s2">&#34;ataka_man&#34;</span> <span class="k">do</span>
   <span class="n">action</span>   <span class="ss">:create</span>
-  <span class="n">comment</span>  <span class="s2">"from_chef"</span>
-  <span class="n">home</span>     <span class="s2">"/home/ataka_man"</span>
-  <span class="n">shell</span>    <span class="s2">"/bin/bash"</span>
+  <span class="n">comment</span>  <span class="s2">&#34;from_chef&#34;</span>
+  <span class="n">home</span>     <span class="s2">&#34;/home/ataka_man&#34;</span>
+  <span class="n">shell</span>    <span class="s2">&#34;/bin/bash&#34;</span>
   <span class="n">password</span> <span class="kp">nil</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">  * user[ataka_man] action create
-<span class="err">    - create user user[ataka_man]</span></code>
-  </pre>
-</figure>
-
-<h3 id="tocAnchor-1-11-6">group</h3>
+<span class="k">end</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">  * user[ataka_man] action create
+    - create user user[ataka_man]</code></pre></div>
+<h3 id="group">group</h3>
 
 <p>グループもユーザ同様作成できる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">group</span> <span class="s2">"xenoblade"</span> <span class="k">do</span>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">group</span> <span class="s2">&#34;xenoblade&#34;</span> <span class="k">do</span>
   <span class="n">action</span>  <span class="ss">:create</span>
   <span class="n">gid</span>     <span class="mi">999</span>
-  <span class="n">members</span> <span class="p">[</span><span class="s2">"ataka_man"</span><span class="p">]</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">  * group[xenoblade] action create
-<span class="err">    - create group[xenoblade]</span></code>
-  </pre>
-</figure>
-
-<h3 id="tocAnchor-1-11-7">bash</h3>
+  <span class="n">members</span> <span class="o">[</span><span class="s2">&#34;ataka_man&#34;</span><span class="o">]</span>
+<span class="k">end</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">  * group[xenoblade] action create
+    - create group[xenoblade]</code></pre></div>
+<h3 id="bash">bash</h3>
 
 <p>bashを使う事も出来る。が、「あるべき状態」に持っていくのがたいへんなので、ご利用は計画的に。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">bash</span> <span class="s2">&#34;make_echofile_in homedir&#34;</span> <span class="k">do</span>
+  <span class="n">user</span> <span class="s2">&#34;kk_Ataka&#34;</span>
+  <span class="n">group</span> <span class="s2">&#34;kk_Ataka&#34;</span>
+  <span class="n">cwd</span> <span class="s2">&#34;/&#34;</span>
+  <span class="n">environment</span> <span class="s2">&#34;HOGE_PATH&#34;</span> <span class="o">=&gt;</span> <span class="s2">&#34;/home/kk_Ataka/&#34;</span>
+  <span class="n">code</span> <span class="s">&lt;&lt;-EOC
+</span><span class="s"></span>    <span class="n">cd</span> <span class="vg">$HOGE_PATH</span>
+    <span class="n">touch</span> <span class="n">hello</span>
+    <span class="n">chmod</span> <span class="mi">777</span> <span class="n">hello</span>
+    <span class="n">echo</span> <span class="s2">&#34;#!/bin/bash&#34;</span> <span class="o">&gt;&gt;</span> <span class="n">hello</span>
+    <span class="n">echo</span> <span class="s2">&#34;echo hello&#34;</span>  <span class="o">&gt;&gt;</span> <span class="n">hello</span>
+  <span class="no">EOC</span>
+  <span class="n">creates</span> <span class="s2">&#34;/home/kk_Ataka/hello&#34;</span>
+<span class="k">end</span></code></pre></div>
+<p><code>cwd</code> はカレントワーキングディレクトリ、 <code>environment</code> は環境変数を指定できる。</p>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">bash</span> <span class="s2">"make_echofile_in homedir"</span> <span class="k">do</span>
-  <span class="n">user</span> <span class="s2">"kk_Ataka"</span>
-  <span class="n">group</span> <span class="s2">"kk_Ataka"</span>
-  <span class="n">cwd</span> <span class="s2">"/"</span>
-  <span class="n">environment</span> <span class="s2">"HOGE_PATH"</span> <span class="o">=&gt;</span> <span class="s2">"/home/kk_Ataka/"</span>
-  <span class="n">code</span> <span class="o">&lt;&lt;-</span><span class="no">EOC</span><span class="sh">
-    cd $HOGE_PATH
-    touch hello
-    chmod 777 hello
-    echo "#!/bin/bash" &gt;&gt; hello
-    echo "echo hello"  &gt;&gt; hello
-</span><span class="no">  EOC</span>
-  <span class="n">creates</span> <span class="s2">"/home/kk_Ataka/hello"</span>
-<span class="k">end</span></code>
-  </pre>
-</figure>
-
-<p><code class="highlighter-rouge">cwd</code> はカレントワーキングディレクトリ、 <code class="highlighter-rouge">environment</code> は環境変数を指定できる。</p>
-
-<p><code class="highlighter-rouge">code</code> に実行したいコマンドを記述。</p>
+<p><code>code</code> に実行したいコマンドを記述。</p>
 
 <p>ここでは、</p>
 
 <ol>
-  <li><code class="highlighter-rouge">environment</code> に記載したパスに移動</li>
-  <li>hello ファイルを作成</li>
-  <li>実行権限変更</li>
-  <li>echo文追加</li>
+<li><code>environment</code> に記載したパスに移動</li>
+<li>hello ファイルを作成</li>
+<li>実行権限変更</li>
+<li>echo文追加</li>
 </ol>
 
 <p>している。</p>
 
-<p>最後の <code class="highlighter-rouge">creates</code> は <strong>creates に定義したコマンドがある(実行できる)場合は、このリソースを実行しない</strong> という判断のために使用される。</p>
+<p>最後の <code>creates</code> は <strong>creates に定義したコマンドがある(実行できる)場合は、このリソースを実行しない</strong> という判断のために使用される。</p>
 
 <p>上記のレシピを実行すると、初回は</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">  * bash[make_echofile_in homedir] action run
-<span class="err">    - execute "bash"  "/tmp/chef-script20130329-11001-k8nowp"</span></code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">  * bash[make_echofile_in homedir] action run
+    - execute &#34;bash&#34;  &#34;/tmp/chef-script20130329-11001-k8nowp&#34;</code></pre></div>
 <p>実行されるが、2回目以降は</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="err">  * bash[make_echofile_in homedir] action run</span>
-    </code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">  * bash[make_echofile_in homedir] action run</code></pre></div>
 <p>こうなる。2回目以降は /home/kk_Ataka/hello が実行できるから、リソースを実行しない事になっている。</p>
 
-<p>しかし、 <code class="highlighter-rouge">creates</code> をコメントアウトすると</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">  * bash[make_echofile_in homedir] action run
-<span class="err">    - execute "bash"  "/tmp/chef-script20130329-11473-1bf7sg9"</span></code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">  * bash[make_echofile_in homedir] action run
-<span class="err">    - execute "bash"  "/tmp/chef-script20130329-xxxxx-xxxxxxx"</span></code>
-  </pre>
-</figure>
-
+<p>しかし、 <code>creates</code> をコメントアウトすると</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">  * bash[make_echofile_in homedir] action run
+    - execute &#34;bash&#34;  &#34;/tmp/chef-script20130329-11473-1bf7sg9&#34;</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">  * bash[make_echofile_in homedir] action run
+    - execute &#34;bash&#34;  &#34;/tmp/chef-script20130329-xxxxx-xxxxxxx&#34;</code></pre></div>
 <p>何度もexecuteされる。helloファイルも作成され続ける。</p>
 
 <p>ここまでで、本書の2, 3, 9-13, 15辺りをひと通り触った事になる。</p>
 
-</div>
+    </section>
+  </article>
 
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2013/03/18/selenium-firefox-loaderror/" title="Selenium WebDriverでFirefoxがロードできなくなった">
-          Selenium WebDriverでFirefoxがロードできなくなった
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/03/18/selenium-firefox-loaderror/" class="pagination_overflow previous_page">
+          Prev: 
+          13/3/18
+          Selenium WebDriverでFirefoxがロード …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/04/11/jekyll-0120/" title="Jekyllのバージョンを 0.12.0 にあげた">
+      
+
+      <span class="pagination_center disabled">
+        13/4/1
+         入 …
+      </span>
+
+      
+        <a href="/2013/04/11/jekyll-0120/" class="pagination_overflow next_page">
+          Next: 
+          13/4/11
           Jekyllのバージョンを 0.12.0 にあげた
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2013/04/01/chef-helloworld/" data-text="kk_Atakaの日記 -  入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/04/01/chef-helloworld/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/04/01/chef-helloworld/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/04/01/chef-helloworld/"
-     data-hatena-bookmark-title="kk_Atakaの日記 -  入門Chef Solo - Infrastructure as Code を読みながらChef Soloで遊べるようになるまで"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+      </div>
 
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/04/01/chef-helloworld//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-  <h2>Recent Entries</h2>
 
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境-windows編">環境(Windows編)</a></li>
+<li><a href="#手順">手順</a>
+<ul>
+<li><a href="#chef-インストール">Chef インストール</a></li>
+<li><a href="#構成-レポジトリ-クックブック-レシピ">構成 レポジトリ、クックブック、レシピ</a>
+<ul>
+<li><a href="#レポジトリ作成-コピー">レポジトリ作成(コピー)</a></li>
+<li><a href="#クックブック作成">クックブック作成</a></li>
+<li><a href="#レシピ編集">レシピ編集</a></li>
+</ul></li>
+<li><a href="#その他設定色々-動かすためにもう少し">その他設定色々、動かすためにもう少し</a></li>
+<li><a href="#実行">実行</a></li>
+</ul></li>
+<li><a href="#本当に何かインストールしてみる">本当に何かインストールしてみる</a></li>
+<li><a href="#環境-linux編">環境(Linux編)</a></li>
+<li><a href="#インストールテスト-zsh">インストールテスト(zsh)</a></li>
+<li><a href="#インストールテスト-nginx">インストールテスト(nginx)</a>
+<ul>
+<li><a href="#service">service</a></li>
+<li><a href="#template">template</a></li>
+<li><a href="#cookbook-file">cookbook file</a></li>
+<li><a href="#directory">directory</a></li>
+<li><a href="#user">user</a></li>
+<li><a href="#group">group</a></li>
+<li><a href="#bash">bash</a></li>
+</ul></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

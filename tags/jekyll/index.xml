@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jekyll on kk_Atakaの日記</title>
+    <link>/tags/jekyll/</link>
+    <description>Recent content in Jekyll on kk_Atakaの日記</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>jp</language>
+    <lastBuildDate>Fri, 14 Sep 2012 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/jekyll/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Jekyllで出力するタグをソートする 解決編</title>
+      <link>/2015/08/06/jekyll-tag-sort/</link>
+      <pubDate>Thu, 06 Aug 2015 00:00:00 +0000</pubDate>
+      
+      <guid>/2015/08/06/jekyll-tag-sort/</guid>
+      <description>あらすじ 1年半前の記事Jekyllプロジェクトへpull requestを行う手順(したとは言っていない) - kk_Atakaの日記でこんな事をやりたがってた。
+ Jekyll でかき集められた tags (タグのリスト) がバラバラのため、 tags.html ページから探すのがつらいのでソートをしたい。
+ で、こうした。
+ Jekyll のソースを追っていった結果、 jekyll/lib/jekyll/site.rb 内の一行をいじるだけでいけた。
+ その後、悩んだりもした。
+  一応、 「 Liquid の領域」で頑張ればできる かも という情報は見つけた
+ しかし、そもそもこの「タグをソートする」という機能が、どの領域で受け持つのが妥当なのかわからない( Liquid？ Jekyll？)
+ ソースを読んでいった結果、「タグの value (記事自体)のソート」を Jekyll でやっていたので、 key もここでやればいいんじゃね？と思った    解法 Liquidでもできました。
+{% raw %} {% assign sorted_tags = site.tags | sort %} {% for tag in sorted_tags %} {% assign t = tag[0] %} &amp;lt;code&amp;gt;&amp;lt;a href=&amp;#34;/tags.</description>
+    </item>
+    
+    <item>
+      <title>Jekyllがデフォルトでは外部から繋がらなくなってたよ</title>
+      <link>/2015/03/14/jekyll-changed-bindaddress/</link>
+      <pubDate>Sat, 14 Mar 2015 00:00:00 +0000</pubDate>
+      
+      <guid>/2015/03/14/jekyll-changed-bindaddress/</guid>
+      <description>あらすじ しばらく触っていなかったJekyllをアップデートしたときに他のPCからアクセスできなくてちょっとハマった。
+Ruby - Sinatraがデフォルトでは外部から繋がらなくなってたよ - Qiita (タイトルはリスペクト)
+解決策(暫定) _config.ymlにhost: 0.0.0.0を定義するか、起動時に--host 0.0.0.0オプションを指定すればいいんだけどそれがもっともよいんだろうか。
+常時あげっぱなしにはしないんだけど、どうしても一瞬別のPCで起動してそこに向けて(ローカルからだったり外からだったり)アタックしたい時があるので困っていた。
+環境 $ bundle show Gems included by the bundle: * RedCloth (4.2.9) * blankslate (2.1.2.4) * bundler (1.6.1) * celluloid (0.15.2) * classifier (1.3.4) * coffee-script (2.3.0) * coffee-script-source (1.7.1) * colorator (0.1) * execjs (2.2.1) * fast-stemmer (1.0.2) * ffi (1.9.3) * hparser (0.4.0 dc35f05) * jekyll (2.1.1) * jekyll-coffeescript (1.0.0) * jekyll-gist (1.1.0) * jekyll-paginate (1.</description>
+    </item>
+    
+    <item>
+      <title>kawasaki.rb #018 でJekyllドキュメント翻訳のLTをしてきた</title>
+      <link>/2014/11/30/kawsakirb-018/</link>
+      <pubDate>Sun, 30 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/2014/11/30/kawsakirb-018/</guid>
+      <description>あらすじ kawasaki.rb #018 でTokyuRuby会議08のLTの素振りをしたんだけど、都合によりTokyu本番で発表できなかったため、素振りが最終形になってしまった。
+発表内容   Jekyllドキュメント翻訳活動振り返り  from kk_Ataka 
+本家の更新についていくのがめんどくさいよねという事で、そこをどうするかについてまとめました。
+が、5分におさめるのは難しい…。</description>
+    </item>
+    
+    <item>
+      <title>jekyllrb-ja キックオフを実施しました</title>
+      <link>/2014/07/26/jekyllrb-ja-meetupmd/</link>
+      <pubDate>Sat, 26 Jul 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/2014/07/26/jekyllrb-ja-meetupmd/</guid>
+      <description>あらすじ Jekyllドキュメントの初版翻訳が終わりまして。
+初版はえいや！でやれば進むもので、大変なのはそれを継続させていく事。
+今後の進め方とかどこかで一回詰めたいな〜と思っていたら@yandodさんに集まる場所を提供していただきました！(がJekyllなのだ)
+Engine Yardさんありがとうございます！
+詳細は以下。
+日時  7/18 19:30-21:00  場所  株式会社 Engine Yard  参加者(名前順)  @chezou @gosyujin @harupong @melborne @tmkoikee @yandod  自己紹介をしたら業務でJekyllを使いこんでいる人、ガチで翻訳している人などなど経歴がハンパなかった…。
+やったこと  v2.0の進め方  ブランチ戦略 本家への追従の仕方 翻訳ワークフロー   v2.0の進め方 ブランチ戦略  ドキュメントなので特に分ける必要はないのではないか  progitでもテストがこけなければメンテナが即マージ、表示崩れなどを発見したら適宜直す方針  とりあえずmasterブランチ一本で masterブランチに対してhttps://teatro.io/ 使ってみよう  masterで適用してみてダメそうだったらdevelopブランチきってみよう  writerの権限わける プルリクをマージする基準を決めたい  LGTMされてx時間たって何もなかったらマージするなど このあたりの操作は最終的にはbot(hubot)に任せたい   本家への追従の仕方  Engine Yardではオリジナルをpullしてきてmergeしている @melborne さんのgh-diffのデモが大好評  差分からIssueをたてる機能もあり、cron等で定期的に実行すれば「Issue=翻訳残」とわかりやすい  rakeタスク化して誰でも実行できるようにしたい   gh-diffを使用した運用フロー案  Contributerの誰かがdiffをとって .</description>
+    </item>
+    
+    <item>
+      <title>Jekyllドキュメントを翻訳してなんとなくわかってきたもの</title>
+      <link>/2014/06/22/translated-jekyllrb/</link>
+      <pubDate>Sun, 22 Jun 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/2014/06/22/translated-jekyllrb/</guid>
+      <description>あらすじ Jekyllドキュメントの翻訳リポジトリを作成して約3ヶ月くらいたちまして。
+ Jekyllドキュメントの日本語翻訳リポジトリ「jekyllrb.com.jp」を作成しました - kk_Atakaの日記 kawasaki.rb #010 で発表してきました #kwskrb - kk_Atakaの日記  現状報告と、今までの知見のまとめを。
+とりあえず自分の中でたまっているものを整理したいのでとりとめもなく書き出していくメソッド。
+現状 Jekyll &amp;bull; シンプルで、ブログのような、静的サイト
+ 翻訳当時のリビジョンの Documentation 全翻訳が完了しました！(historyなど一部を除く)  翻訳期間中、本家の更新に追従できていないのでこれから猛追モードに入ります  プロジェクトを Organization に昇格させました  jekyllrb-ja/jekyllrb-ja.github.io もともとは.br版の翻訳をしている人のリポジトリをお手本にしていたので個人リポジトリで細々とやっていた が、協力していただける方が増えたのもあり Org 化   知見とか 翻訳開始時に悩んでいた事は以下の3点。
+それに対しての答えは、現時点で少しずつ見えてきた気がする。
+少なくとも、今の自分の中で納得できる答えは見つけられた。
+意訳 or 直訳？  色々な人の意見をもとに「日本人が読みやすいように意訳していく」のが良いではという結論に至った 結局のところ翻訳した文書は誰が読むかを考えると、自分(日本人)だろう、という話が一番腑に落ちたので…以下、感銘を受けた記事など  Python界隈の翻訳プロジェクト エンジニアは翻訳をやるとお得 - 渋日記@shibu.jp 翻訳のススメ - Elliptium ドキュメントの翻訳にSphinxを使う (i18n非利用) - Sphinx-Users.jp  なんという Python 率。「ドキュメント 翻訳 なんとか」でググると Python 界隈の方の活動がすごい引っかかるのはそれだけ盛んであるということなんだろうか(Ruby 方面へのアンテナの感度が低いだけとも思う) 直訳でもフツーに間違うから固い文より、読みやすい文の方がよいのではないか(誤訳しない努力はする)  原文はどうしよう？  これについては「更新の追従」で書く Jekyllrb-jaでは「原文(英語)はコメントアウトで残す」方式を採用した  誰が、どこで、どう管理するか？  これに関しては、結局プロジェクトによりけりとしかいえないかな プロジェクトの舵を取る人が「入れよう！」といったら入れればいいし、「分けよう！」といったら分ければよいと思う  「分けよう！」はこのプロジェクト(jekyll)だし、「入れよう！」は progit とか sinatra かな   こんな感じなことが多いのかな〜。まあ、こんな綺麗に二分割はできないけどだいたいの方向性として。</description>
+    </item>
+    
+    <item>
+      <title>kawasaki.rb #010 で発表してきました #kwskrb</title>
+      <link>/2014/04/01/kawasakirb-010/</link>
+      <pubDate>Tue, 01 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/2014/04/01/kawasakirb-010/</guid>
+      <description>あらすじ 詳細は主催者の @chezou さんのまとめから。
+ Kawasaki.rb #010 - Kawasaki.rb ｜ Doorkeeper kawawaki.rb #010 を開催しました #kwskrb ｜ once upon a time,  kawasaka.rb というコミュニティを知り、参加。
+はじめて LT した！
+流れ  今回予定されていた LT の 1 本が @chezou さんの「はじめて翻訳記事を書いたら300ブクマ超えた話」  ブログ記事とソフトウェアのドキュメントの違いこそあれ、方向は大分近いかも  流れで 次枠の LT に入れてもらった  スライドなど用意していなかったため、 自分のエントリ をもとにやったことと、困っていることを発表した   初めての LT だったので緊張したが、得るものがたくさんあった。
+以下あまりまとまってない内容 当該記事の中で、自分が困っていると思った項目のうち、「原文はどうしよう？」というところに焦点を当てた。
+困っている項目はこんな感じ。
+ 意訳 or 直訳？ 原文はどうしよう？ 誰が、どこで、どう管理するか？  ※ 「誰が、どこで、どう管理するか？」に関しては、プロジェクトの方針を決める人たちが「こうしたい」と決めたら、それを尊重するのが一番よいかと。 Jekyll ( jekyllrb.com )の場合は「 本家では他言語のドキュメントは管理したくない 」という方針のため、日本語用リポジトリ jekyllrb.</description>
+    </item>
+    
+    <item>
+      <title>Jekyllドキュメントの日本語翻訳リポジトリ「jekyllrb.com.jp」を作成しました</title>
+      <link>/2014/03/13/jekyll-make-jekyllrb-com-jp/</link>
+      <pubDate>Thu, 13 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/2014/03/13/jekyll-make-jekyllrb-com-jp/</guid>
+      <description>あらすじ Jekyll プロジェクトに対していろいろやった。
+ Jekyll プロジェクトのリポジトリルートにある README.markdown と CONTRIBUTING.markdown を日本語訳してプルリクした！ 人生初のプルリクエストをささげ、マージしてもらえた。やった！ いきなりカットインしてきた PR に対してすごく親身に対応してもらえた あわせて Jekyllドキュメントの日本語翻訳リポジトリ を作成した！ 手伝ってくれる人募集中です！お願いします！ 推敲、翻訳してくれる人の募集(切実) · Issue #14 · gosyujin/jekyllrb.com.jp  所感 今回のやり取りを通じて、ドキュメントに対して以下のような観点で考える力が足りないと感じた。
+まだ明確な答えは出ていないので、これからドキュメントを育てつつ答えを探していきたい。
+ 意訳 or 直訳？ 若干意味が通らない文章になってもいいから、出てくる単語を全て愚直に訳す？ 経験(実際にライブラリを使うと、「このコマンドはこう動くから、この文章ではこう言いたいのだろう」的なニュアンスはわかったりする)をもとに意訳する？  前者だと文章がごちゃっとなりそうで、後者だと大事な表現を落としてしまう事が多そう 他プロジェクトなどで翻訳された文章を読んでいると、前者が多いような気がする… もちろんおそろしくカッコよくて読みやすい文章に訳せるならば、それに越したことはない  原文はどうしよう？ 原文(英語)の扱い  残す？残さない？また、残す場合はコメントアウト？ 文章を比較する場合や本家の更新に追従する場合、原文がないとわけわからなくならない？ diff とかとるのに  本家への追従の仕方  本家のドキュメントにどうやってついていく？  誰が、どこで、どう管理するか？ Author と Committer が読めない(管理できない)ブツはどのように管理すべきなのか  本家のリポジトリに jp とか en みたいにディレクトリ切ってそこで管理していく 翻訳したドキュメントは、その言語を取り扱える別の人が所有し、本家はそこをフォークしておく   この辺、他のプロジェクトではどうやっているんだろう。
+プルリクに至るまでの思考と行動の流れ 以下、おまけ。
+いかにして Jekyll にプルリクするに至ったかの経緯。</description>
+    </item>
+    
+    <item>
+      <title>Jekyllプロジェクトへpull requestを行う手順(したとは言っていない)</title>
+      <link>/2014/01/28/pull-request-to-jekyll/</link>
+      <pubDate>Tue, 28 Jan 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/2014/01/28/pull-request-to-jekyll/</guid>
+      <description>あらすじ  Jekyll に一点気になるところがあったのでなおしかたを調べた せっかくなのでプルリクエストしてみたい！ …が、知らないこと多すぎて頓挫 とりあえず、今わかったところまでまとめた ← 今ここ  なおした内容 Jekyll でかき集められた tags (タグのリスト) がバラバラのため、 tags.html ページから探すのがつらいのでソートをしたい。
+修正内容 Jekyll のソースを追っていった結果、 jekyll/lib/jekyll/site.rb 内の一行をいじるだけでいけた。
+def post_attr_hash(post_attr) # Build a hash map based on the specified post attribute ( post attr =&amp;gt; # array of posts ) then sort each array in reverse order. hash = Hash.new { |hsh, key| hsh[key] = Array.new } self.posts.each { |p| p.send(post_attr.to_sym).each { |t| hash[t] &amp;lt;&amp;lt; p } } hash.</description>
+    </item>
+    
+    <item>
+      <title>Jekyllのプラグイン作成で複数ファイルにまたがったタグをどう扱えばいいのかわからない話</title>
+      <link>/2013/11/25/jekyll-plugin-reference/</link>
+      <pubDate>Mon, 25 Nov 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/2013/11/25/jekyll-plugin-reference/</guid>
+      <description>あらすじ Jekyll ではてなダイアリーのような脚注をつけられるプラグインを作った。
+ gosyujin.github.com/_plugins/gosyujin.github.com/reference.rb  文中に登場した ref タグの引数を集めて ref_anchor タグが打たれた箇所にリスト出力する、というもの。
+こう書くと、
+- 超スタンダード {{ &amp;#34; {% ref といわれている &amp;#34; }} %} - 誰の PC にも入っている {{ &amp;#34; {% ref といわれている &amp;#34; }} %} - 誰でも簡単に使える {{ &amp;#34; {% ref といわれている &amp;#34; }} %} - きめ細かいデザインが可能 - 画像やフローの挿入も簡単 (略) {{ &amp;#34; {% ref_anchor &amp;#34; }} %} こうなる。
+(略)
+一応、やりたいことはできたんだけど、以下のようなことができなくて力技でなんとかした。
+できる 同じ .md ファイル内に ref タグと ref_anchor タグを書くと問題なくいける。
+上記あらすじの例がそう。
+できない ref タグは .</description>
+    </item>
+    
+    <item>
+      <title>Jekyllバージョンアップの際に思いのほか手こずった話 てっく煮さん製プラグインの更新に追従したい編</title>
+      <link>/2013/09/07/jekyll-maintenance-2/</link>
+      <pubDate>Sat, 07 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/2013/09/07/jekyll-maintenance-2/</guid>
+      <description>前回までのあらすじ  Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編  結論 fork していれば、だいたいなんとかなる。
+環境  Ruby 1.9.3  RedCloth (4.2.9) bundler (1.3.5) classifier (1.3.3) colorator (0.1) commander (4.1.4) directory_watcher (1.4.1) fast-stemmer (1.0.2) highline (1.6.19) hparser (0.4.0 dc35f05) jekyll (1.0.0 9f94eaf) kramdown (0.14.2) liquid (2.5.1) maruku (0.6.1) posix-spawn (0.3.6) pygments.rb (0.4.2) rake (10.1.0) rdiscount (2.1.6) redcarpet (2.2.2) safe_yaml (0.7.1) syntax (1.0.0) yajl-ruby (1.1.0)   参考サイト  Git で複数のリポジトリをまとめたり、逆に切り出したりする - Qiita [キータ]  やりたい事: てっく煮プラグイン編 @nitoyon さんが公開しているリポジトリ( https://github.</description>
+    </item>
+    
+    <item>
+      <title>Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編</title>
+      <link>/2013/08/07/jekyll-maintenance-1/</link>
+      <pubDate>Wed, 07 Aug 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/2013/08/07/jekyll-maintenance-1/</guid>
+      <description>あらすじ forkとか、fetchとか、本で読んでるだけじゃ実際やりたい時にどうやりゃいいかわからん…という話。
+Github Pagesで運用しているJekyllのバージョンアップをする時に死んだ
+ 原因は、他の人が公開しているプラグインやcssをほいほい コピペ していたため  公開先ではもちろんJekyllの更新に追従しており、更新を怠った己が自爆しているだけ)  なんとか自分のリポジトリでも追従したい。でもコピペはやだ  追従したいのは、主に Jekyll Bootstrap ファイル全般と @nitoyon さんのてっく煮ブログで使われているプラグイン。(特にはてな系)
+パッパとやって手順だけメモするかーと思ったら凄まじくてこずったので、今回はBootstrapだけ。
+環境  Ruby 1.9.3  RedCloth (4.2.9) bundler (1.3.5) classifier (1.3.3) colorator (0.1) commander (4.1.4) directory_watcher (1.4.1) fast-stemmer (1.0.2) highline (1.6.19) hparser (0.4.0 dc35f05) jekyll (1.0.0 9f94eaf) kramdown (0.14.2) liquid (2.5.1) maruku (0.6.1) posix-spawn (0.3.6) pygments.rb (0.4.2) rake (10.1.0) rdiscount (2.1.6) redcarpet (2.2.2) safe_yaml (0.7.1) syntax (1.0.0) yajl-ruby (1.1.0)   参考サイト  Git - サブモジュール Git で複数のリポジトリをまとめたり、逆に切り出したりする - Qiita [キータ] gitでforkしたrepoにoriginalのrepoをmergeする手順 - memo.</description>
+    </item>
+    
+    <item>
+      <title>Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた</title>
+      <link>/2013/05/27/jekyll-githubpages-analytics-setting/</link>
+      <pubDate>Mon, 27 May 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/2013/05/27/jekyll-githubpages-analytics-setting/</guid>
+      <description>あらすじ Jekyllで指定していたGoogle Analyticsの設定が効かなくなっていた。
+他のGitHub Pages@Jekyllでは正しくGoogle Analyticsが動いているのに…。
+結論  前回 GitHub Pages の運用形態を変えていた &amp;hellip; GitHub PagesでJekyllプラグインを使えるようにするには…  変更前: master ブランチにコンテンツを配備し、GitHubにデプロイしてもらう 変更後: source ブランチを作成しコンテンツを移動。ローカルでビルドした静的ファイルを master ブランチにpush  それによる オプション指定の凡ミス  おぉ…。
+参考サイト  WordPressよりjekyllで本格的ブログを作りたくなる、かもしれないまとめ ｜ ゆっくりと… 30分のチュートリアルでJekyllを理解する Jekyll ｜ CSS Radar ｜ Little Books For Front End Developers Liquid for Designers · Shopify/liquid Wiki · GitHub plusjade/jekyll-bootstrap · GitHub  ハマり 前提: GitHub Pagesの運用形態 指定のブランチに以下のようなファイル群を置いておく事で、GitHub Pagesができる。
+ Jekyllのコンテンツ  Jekyllに必要なファイルをpushしておけば、GitHubがよろしくデプロイしておいてくれる  静的ファイル  そのまま表示される   Jekyllのコンテンツをpushして、後はおまかせするだけの運用は便利だけど、 自作プラグインが動かない という問題がある。</description>
+    </item>
+    
+    <item>
+      <title>記事の目次を出力するJekyllプラグインの改良</title>
+      <link>/2013/05/23/jekyll-liquid-plugin2/</link>
+      <pubDate>Thu, 23 May 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/2013/05/23/jekyll-liquid-plugin2/</guid>
+      <description>前回までのあらすじ Jekyll(Liquid)で記事の目次を出力するプラグインを作ってみた
+これの続き。昔の話すぎて、忘れないようにメモ。
+前回の疑問  …あれ？　別の環境でやったら hタグに section , section-1 , section-2 … って連番が振られてる！？　なんで！
+ これは原因がわかった。 使っているMarkdownパーサが違うだけだった。
+ rdiscount … idなし kramdown … idにsection-xが振られる  今回やったこと  kramdownで動くようにkramdownいじったりtree_list.rbいじったり プラスバグ修正   目次から記事へのリンク
+(略) めんどいので自動で振ってほしい
+ kramdownのidの振り方 kramdownがhタグにidを振っている方法を調べてみると、
+ 半角文字はそれが そのままid になる スペースは ハイフン になる 全角文字は なくなる 全部全角文字だった場合 section と振られる 2度目以降のsectionは順に section-x と振られる  こんな感じになっているっぽい。以下は一例。
+   見出しの内容 hタグのid     ほげいち &amp;lt;h2 id=&amp;ldquo;section&amp;rdquo;&amp;gt;ほげ   ほげに &amp;lt;h2 id=&amp;ldquo;section-2&amp;rdquo;&amp;gt;ほげに   ほげさん &amp;lt;h2 id=&amp;ldquo;section-3&amp;rdquo;&amp;gt;ほげさん   hoge &amp;lt;h2 id=&amp;ldquo;hoge&amp;rdquo;&amp;gt;hoge   piyoとは &amp;lt;h2 id=&amp;ldquo;piyo&amp;rdquo;&amp;gt;piyoとは   ほげよん &amp;lt;h2 id=&amp;ldquo;section-4&amp;rdquo;&amp;gt;ほげよん    ソース 実際にソースを見てみよう。 kramdown-0.</description>
+    </item>
+    
+    <item>
+      <title>GitHub PagesでJekyllプラグインを使えるようにするには…</title>
+      <link>/2013/05/21/jekyll-plugin-githubpages/</link>
+      <pubDate>Tue, 21 May 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/2013/05/21/jekyll-plugin-githubpages/</guid>
+      <description>あらすじ Jekyll＠GitHub Pagesの場合、Liquidで(自分で)作ったプラグインは使えないという事が判明した。(ローカルで起動した場合/safeモードじゃない場合は関係ない)
+ 俺の最強ブログシステムも火を噴いてたぜ - Webtech Walker  これを回避するには
+ GitHub Pages をやめる(レンタルサーバを借りてデプロイ) GitHub Pages に 静的ファイル としてhtml自体をデプロイ  する方法がありそう。今回はGitHub Pagesを使い続けたいので後者で頑張ってみる。
+参考サイト  github:help  そもそもGitHub Pagesとはなんぞや  User &amp;amp; Organization Pages User &amp;amp; Organization Pages はPagesファイル専用のスペシャルリポジトリとして生きている。このリポジトリはaccount nameを使用する。例えば、defunkt/defunkt.github.com
+ このリポジトリは username/username.github.com というnaming schemeを使わなければならない master ブランチからのコンテンツはビルドとパブリッシュに使用される
+ &amp;hellip;
+  Project Pages Project Pages は同じリポジトリからプロジェクトとして維持される。これらのページはUser PageとOrg Pagesほとんど正確に同じである。いくつかのわずかな違いはある。
+ gh-pages ブランチはビルドとパブリッシュに使用される カスタムドメインを使っていないなら、Project PagesはUser Pageのサブパスの下で使われる。 username.github.com/projectname &amp;hellip;   ということは まず、GitHub Pagesは2種類ある。</description>
+    </item>
+    
+    <item>
+      <title>Jekyllのバージョンを 0.12.0 にあげた</title>
+      <link>/2013/04/11/jekyll-0120/</link>
+      <pubDate>Thu, 11 Apr 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/2013/04/11/jekyll-0120/</guid>
+      <description>あらすじ ぼちぼちJekyllのバージョンを上げてみる。
+参考サイト  Jekyll の 0.12.0 でシンタックス ハイライトが便利になった - てっく煮ブログ  手順 Gemfile をちょっと修正。redcarpetを追加する、のとpygmentsのバージョンをアップ。
+gem &amp;#39;rake&amp;#39; gem &amp;#39;jekyll&amp;#39;, :git =&amp;gt; &amp;#39;git://github.com/mojombo/jekyll.git&amp;#39; gem &amp;#39;RedCloth&amp;#39; -gem &amp;#39;rdiscount&amp;#39; +gem &amp;#39;redcarpet&amp;#39; +#gem &amp;#39;rdiscount&amp;#39; gem &amp;#39;hparser&amp;#39;, :git =&amp;gt; &amp;#39;git://github.com/hotchpotch/hparser.git&amp;#39; -gem &amp;#39;pygments.rb&amp;#39;, &amp;#39;=0.2.12&amp;#39; +gem &amp;#39;pygments.rb&amp;#39;, &amp;#39;=0.3.2&amp;#39; そして bundle install 。
+オプションもだいぶ変わってるみたい。
+昔。
+$ jekyll --help bundle exec jekyll --help Jekyll is a blog-aware, static site generator. Basic Command Line Usage: jekyll # . -&amp;gt; .</description>
+    </item>
+    
+    <item>
+      <title>はてなダイアリーのエントリをJekyllへ移行する</title>
+      <link>/2012/11/12/from-hatena-to-jekyll/</link>
+      <pubDate>Mon, 12 Nov 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/11/12/from-hatena-to-jekyll/</guid>
+      <description>あらすじ はてなダイアリーからJekylに移行したいんだけど、完全に移行し切るには過去の遺産(はてなダイアリーのエントリ)も移したいよ。
+はてなのエントリ取得 何はなくともエントリをエクスポートしてこない事には始まらない。管理画面から データ管理 =&amp;gt; インポート/エクスポート =&amp;gt; はてなの日記データ形式 をDL。
+はてな =&amp;gt; Jekyll どうやるか はてなのエントリをJekyllで見るためには、恐らく2通りの方法がある。
+ はてなエントリをMarkdown記法に変換して、Jekyllに突っ込む はてなエントリから記事を作れるようにJekyllにパーサを突っ込む  さて…。
+てっく煮ブログさんのJekyll 俺の最強ブログ システムが火を噴くぜ - てっく煮ブログ
+自分がどうすればいいのかなーと悩んでいる時、ものすごくタイムリーに移行なされており(タイムリーでした)、かつ自分のやりたい事(はてなエントリの移行など)を全てプラグインなどで実現されていたためすぐにGitHubを見に行きました。
+nitoyon/tech.nitoyon.com ・ GitHub
+$ git clone https://github.com/nitoyon/tech.nitoyon.com.git ぐ…中身は結構複雑。
+ソースを見る前にローカルで動くか見せてもらおうっと。
+$ vi Gemfile gem &amp;#39;jekyll&amp;#39; gem &amp;#39;hparser&amp;#39; gem &amp;#39;sass&amp;#39; gem &amp;#39;RedCloth&amp;#39; gem &amp;#39;rdiscount&amp;#39; これで bundle exec jekyll --server で行けるかと思ったけど、なんか色々ないって言われる。
+どうやらまだgemが最新版になっていないらしい(gemからJekyllを持ってくると、多分 JEKYLL_HOME/lib/jekyll/tags/post_url.rbがないとか言われる)ので、GitHubから最新版を持ってくる。
+$ git clone git://github.com/mojombo/jekyll.git # fa8400ab61cb8df176f9fb2ec52d85f93c7418a7より新しければ大丈夫そう $ git clone git://github.com/hotchpotch/hparser.git # 4fbeefc8becc45ed18bf374bec9a2d862db473d5より以下同文 Jekyllとhparserはこれに置き換え。これで実行すると…おお、自分のローカルでてっく煮ブログが…！</description>
+    </item>
+    
+    <item>
+      <title>Jekyll(Liquid)で記事の目次を出力するプラグインを作ってみた</title>
+      <link>/2012/10/10/jekyll-liquid-plugin/</link>
+      <pubDate>Wed, 10 Oct 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/10/10/jekyll-liquid-plugin/</guid>
+      <description>あらすじ Jekyllのプラグイン作成の練習。エントリから見出しを抽出して目次を出力してみたい。
+参考サイト  最近作った Jekyll (Liquid) のプラグイン - @yuumi3のお仕事日記  ソース  gosyujin.github.com/_plugins/tree_list.rb at master · gosyujin/gosyujin.github.com · GitHub  まだできてない事  記事中に h1 (#) タグがあるとうまく生成されない  記事タイトルが h1 (#) なので、 h2 (##) 以下の見出しを集めてくるようにしている  目次から記事へのリンク  Markdownでは ## &amp;lt;a name=&amp;quot;section&amp;quot;&amp;gt; hoge と記載すればnameを振ってくれるようだけど、めんどいので自動で振ってほしい むしろ今はaタグを入れているとレイアウトが崩れる …あれ？　別の環境でやったら hタグに section , section-1 , section-2 &amp;hellip; って連番が振られてる！？　なんで！   作り方 最小単位はこうなるみたい。(何もしないプラグイン)
+module Jekyll class SampleTag &amp;lt; Liquid::Tag def initialize(tag_name, xxx, tokens) super end def render(context) end end end Liquid::Template.</description>
+    </item>
+    
+    <item>
+      <title>Pygmentsを使ってJekyll内記事のコードハイライトを実現する</title>
+      <link>/2012/09/21/jekyll-pygments/</link>
+      <pubDate>Fri, 21 Sep 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/09/21/jekyll-pygments/</guid>
+      <description>あらすじ Jekyllではデフォルトでコードにハイライトをつける事はできないようなので、Pygmentsという拡張を入れる。
+環境  Python 2.7.3 (2.6以上が必要)  easy_install   easy_installはhttp://peak.telecommunity.com/dist/ez_setup.pyからDLし $ (sudo) python ez_setup.py でインストールする。
+※ 後に以下のようなエラーが出るかもしれない。
+ Liquid error: undefined method &amp;lsquo;Py_IsInitialized&amp;rsquo; for RubyPython::Python:Module
+ これはRubyからPythonを呼びに行くRubypythonというライブラリの中で、libpython2.7.soというファイルを探しに行くが、見つからないとすぐあきらめるようなので？　--enable-shared オプションつけてのインストールが吉。
+また、以下の様なエラーが出た場合、libpython2.7.so.1.0が見つからなくてpythonコマンドが実行できなくなった。
+$ python &amp;gt; python: error while loading shared libraries: libpython2.7.so.1.0: cannot open shared object file: No such file or directory $ ldd python linux-vdso.so.1 =&amp;gt; (0x00007fff9cf94000) libpython2.7.so.1.0 =&amp;gt; not found libpthread.so.0 =&amp;gt; /lib64/libpthread.so.0 (0x000000343d600000) libdl.so.2 =&amp;gt; /lib64/libdl.so.2 (0x000000343ce00000) libutil.</description>
+    </item>
+    
+    <item>
+      <title>JekyllをGitHub Pagesに上げるための準備</title>
+      <link>/2012/09/20/jekyll/</link>
+      <pubDate>Thu, 20 Sep 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/09/20/jekyll/</guid>
+      <description>GitHub Pagesに登録 GitHubより New Repository を選択。
+Repository Name を GitHubのID.github.com と入力しリポジトリ作成。
+前回の記事で作成していたJekyll Bootstrapのプッシュ先を追加し、プッシュ。
+$ git remote add origin git@github.com:gosyujin/gosyujin.github.com.git $ git push -u origin master http://gosyujin.github.com にアクセスしても多分404なので。気長に待つ。
+その間にSite Urlに上のUrlでも入れとく。
+そんなこんなでサイトが表示されるようになっているはず。(メールが来たら？)
+色々な設定 まずは _config.yml 。
+デフォルトのmarkdownパーサの maruku は日本語をうまくパースしてくれないみたいなので(日本語でリスト表記ができなかった)、 kramdown に変更する。以下の記述を追加。
+markdown:kramdown 他、タイトルや名前、TwitterIDなどを編集。
+title:kk_Atakaの日記tagline:author:name:kk_Atakaemail:kk_ataka@ring.skr.jpgithub:gosyujintwitter:kk_Atakafeedburner:feedname production_urlをGitHub Pagesに。
+production_url:http://gosyujin.github.com ここから先はJekyll Bootstrapでインストールした時に入ったコメント機能とかアクセス解析の設定。
+コメント機能 デフォルトでは DISQUS というツールを使用している。まずDISQUS - Elevating the discussionでユーザ登録をする必要がある。(TwitterID等でも可能)
+アカウントを作ったら自分のサイトを登録。
+ここで入力する shortname を控えておく。
+_config.yml にさっきの shortname を記述する。 provider もDISQUSになっている事を確認する。
+comments:provider:disqusdisqus:short_name:kkataka(略) これでいけるはず。(だめならUniversalコードを _includes/JB/comments-providers/disqus に貼り付けてみる？) 自分のサイトにコメントが書き込まれると、こんな感じでDISQUSに表示される。</description>
+    </item>
+    
+    <item>
+      <title>JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備</title>
+      <link>/2012/09/14/1347595853/</link>
+      <pubDate>Fri, 14 Sep 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/09/14/1347595853/</guid>
+      <description>[Ruby][StartUp][Jekyll]JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備 あらすじ  はてな記法、綺麗に出力できて今までお気に入りだったんだけど、欠点として、はてなでしか使わないという問題が 他にも文章書く時にreSTとかMarkdownを使うと捗るが、結局アウトプットするのは個人でははてなが多い……[1] そもそもはてな記法は基本はてなじゃなきゃ見れない なら最初から…？  うーん。他の記法使う時がきたのか。
+Jekyllとは  Jekyll is a simple, blog aware, static site generator.
+https://github.com/mojombo/jekyll/wiki
+ 静的サイトのジェネレーターなのね。 HTML, Markdown, textile なんでもござれ。
+参考サイト  [https://github.com/mojombo/jekyll:title] http://mattn.kaoriya.net/software/lang/ruby/20090409185248.htm:title http://melborne.github.com/2012/05/13/first-step-of-jekyll/:title http://tokkonopapa.github.com/blog/2011/12/28/easy-usage-of-jekyll-on-github/:title http://d.hatena.ne.jp/yuum3/20120620/1340180894:title http://d.hatena.ne.jp/takuti/20110724/1311464070:title http://dsuket.hatenablog.com/entry/2012/03/06/191459:title http://d.hatena.ne.jp/seinzumtode/20120426/1335402322:title  環境  CentOS 6.2 と、WindowsXP Ruby 1.9.2  Bundler 1.1.4  Git 1.7.9.6 Jekyll 0.11.2 RedCloth 4.2.9  いきなり動かす 本来は決まったディレクトリを作ったり、コンフィグファイルを作ったり、レイアウトファイルを作ったりしていく……のだけど、Jekyll Bootstrapを使えばいきなりフルセットで動かす事ができる。
+取得はGitで。
+$ git clone http://github.com/plusjade/jekyll-bootstrap.git JEKYLL_HOME JekyllはBundlerでインストールするので移動してGemfileを作成。そしてjekyllコマンドで実行！
+$ cd JEKYLL_HOME $ vi Gemfile $ cat Gemfile source :rubygems source &amp;#34;http://rubygems.</description>
+    </item>
+    
+  </channel>
+</rss>

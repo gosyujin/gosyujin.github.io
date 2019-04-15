@@ -1,741 +1,985 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>SolarisにSubversionをインストールするときのメモ - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  SolarisにSubversionをインストールするときのメモ &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Solaris][備忘録][Subversion]SolarisにSubversionをインストールするときのメモ インストール  http://www.sunfreeware.com/ ftp://ftp.ne.jp/Sun/sunfreeware/  から必要なライブラリをダウンロード。
+ - neon 0.29.5[1]  swig 1.3.40[2] expat 2.0.1[3] libxml2 2.7.8[4] db 4.2.52 REV=1.0.12[5] openssl 1.0.0d[6] libiconv 1.13.1[7] libintl 3.4.0[8] sasl 2.1.21[9] gcc(libgcc 3.4.6((The GNU C compiler and related programs - installs in /usr/local. This package includes the GNU C, C&#43;&#43;, and f77 suites and support files. These gcc packages require the installation of libiconv. It was compiled to use the SUN assembler and loader usually in /usr/ccs/bin if the SUNW developer packages are installed.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2011/12/22/1324573161/">SolarisにSubversionをインストールするときのメモ</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Solaris" class="tag">Solaris</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#備忘録" class="tag">備忘録</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#Subversion" class="tag">Subversion</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2011/12/22</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2011/12/21/1324477125/" title="Ruby実行時のオプションをよろしく解析してくれるoptparseを使ってみる">
-          Ruby実行時のオプションをよろしく解析してくれるoptparseを使ってみる
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2011/12/21/1324477125/" class="pagination_overflow previous_page">
+          Prev: 
+          11/12/21
+          Ruby実行時のオプションをよろしく解析してくれ …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2011/12/23/1324651460/" title="Vimコマンドよく使うものと覚えたいコマンドまとめ">
+      
+
+      <span class="pagination_center disabled">
+        11/12/22
+        Solar …
+      </span>
+
+      
+        <a href="/2011/12/23/1324651460/" class="pagination_overflow next_page">
+          Next: 
+          11/12/23
           Vimコマンドよく使うものと覚えたいコマンドまとめ
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">svnserve</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">管理DBに登録</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">起動・停止</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-4">
-              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">参考サイト</span></a>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h1>インストール</h1>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">SolarisにSubversionをインストールするときのメモ</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
+
+  
+    <a href='/tags/solaris' class="muted-link">
+      [ <span class="Label Label--gray">Solaris</span> ]
+    </a>
+  
+    <a href='/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+    <a href='/tags/subversion' class="muted-link">
+      [ <span class="Label Label--gray">Subversion</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2011/12/22</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  <li>
-    <a href="http://www.sunfreeware.com/">http://www.sunfreeware.com/</a>
-  </li>
-  <li>ftp://ftp.ne.jp/Sun/sunfreeware/</li>
+<li>
+<ul>
+<li><a href="#solaris-備忘録-subversion-solarisにsubversionをインストールするときのメモ">[Solaris][備忘録][Subversion]SolarisにSubversionをインストールするときのメモ</a></li>
+<li><a href="#インストール">インストール</a></li>
+<li><a href="#確認">確認</a></li>
+<li><a href="#インストール-1">インストール</a></li>
+<li><a href="#設定">設定</a>
+<ul>
+<li><a href="#svnserve">svnserve</a></li>
+<li><a href="#管理dbに登録">管理DBに登録</a></li>
+<li><a href="#起動-停止">起動・停止</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+</ul></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="solaris-備忘録-subversion-solarisにsubversionをインストールするときのメモ">[Solaris][備忘録][Subversion]SolarisにSubversionをインストールするときのメモ</h2>
+
+<h2 id="インストール">インストール</h2>
+
+<ul>
+<li><a href="http://www.sunfreeware.com/">http://www.sunfreeware.com/</a></li>
+<li><a href="ftp://ftp.ne.jp/Sun/sunfreeware/">ftp://ftp.ne.jp/Sun/sunfreeware/</a></li>
+</ul>
+
 <p>から必要なライブラリをダウンロード。</p>
-<ol></ol><ul>
-  <li>neon 0.29.5<span class="footnote"><a href="#f1" title="Neon is an HTTP and WebDAV client library - installs in /usr/local. Neon is used by subversion. There are slightly newer versions of neon, but this one seems to work best with subversion. Dependencies: openssl-1.0.0d, expat-2.0.1, zlib-1.2.5, and you will need /usr/local/lib/libgcc_s.so.1 either from the libgcc-3.4.6 or gcc-3.4.6 packages." name="fn1" id="fn1">*1</a></span></li>
-  <li>swig 1.3.40<span class="footnote"><a href="#f2" title="SWIG is a software development tool that connects programs written in C and C++ with a variety of high-level programming languages. SWIG is used with different types of languages including common scripting languages such as Perl, PHP, Python, Tcl, Ruby and PHP - installs in /usr/local. Dependencies: zlib and having libgcc_s.so.1 and libstdc++.so.6 in /usr/local/lib is required. This can be done by installing libgcc-3.4.6 or gcc-3.4.6." name="fn2" id="fn2">*2</a></span></li>
-  <li>expat 2.0.1<span class="footnote"><a href="#f3" title="Expat is a fast, non-validating, stream-oriented XML parsing library - installs in /usr/local. Dependency: to have /usr/local/lib/libgcc_s.so.1 install either the libgcc-3.4.6 or gcc-3.4.6 or later." name="fn3" id="fn3">*3</a></span></li>
-  <li>libxml2 2.7.8<span class="footnote"><a href="#f4" title="Libxml2 is the XML C library developed for the Gnome project - installs in /usr/local. libxml2 requires that the zlib, libiconv, and either libgcc-3.4.6 or gcc-3.4.6 packages be installed." name="fn4" id="fn4">*4</a></span></li>
-  <li>db 4.2.52 REV=1.0.12<span class="footnote"><a href="#f5" title="db is the Berkeley open source embedded database system - installs in /usr/local/BerkeleyDB.4.2. This packages also requires that you have install either libgcc or gcc." name="fn5" id="fn5">*5</a></span></li>
-  <li>openssl 1.0.0d<span class="footnote"><a href="#f6" title="Openssl is an open source toolkit implementing the Secure Sockets Layer (SSL v2/v3) and Transport Layer Security (TLS v1) protocols as well as a full-strength general purpose cryptography library - installs in /usr/local/ssl. Note to users with sun4m machines. The openssl package here was built on a sun4u system and will not work on your machines. The one built for Solaris 2.5 was built on a sun4m machine and has been tested and does work. If you do uname -a and you get sun4m in the result, install the Solaris 2.5 openssl package instead. The configure option used for making openssl was solaris-sparcv9-gcc shared. You may also need to install either gcc-3.4.6 or libgcc-3.4.6 to obtain the libgcc_s.so.1 library. The libraries for openssl-0.9.8r are also included in this package to maintain compatibility for those packages still using them. If you cannot or do not want to update to the 1.0.x level, the 0.9.8p package below can be used. Openssl is often used to make machines more secure. Make sure you know what you are doing. Any security problems are your responsiblitiy. See our Disclaimer." name="fn6" id="fn6">*6</a></span></li>
-  <li>libiconv 1.13.1<span class="footnote"><a href="#f7" title="GNU libiconv provides an iconv() implementation for use on systems which do not have one - installs in /usr/local. Dependencies: libgcc_s.so.1 from libgcc-3.4.6 or gcc-3.4.6 or higher. " name="fn7" id="fn7">*7</a></span></li>
-  <li>libintl 3.4.0<span class="footnote"><a href="#f8" title="Libintl is used with gettext and is needed by a few programs when libintl in not in /usr/lib - installs in /usr/local/lib. Dependencies: libiconv and to have /usr/local/lib/libgcc_s.so.1 and /usr/local/lib/libstdc++.so.6, either the libgcc-3.4.6 or gcc-3.4.6 packages." name="fn8" id="fn8">*8</a></span></li>
-  <li>sasl 2.1.21<span class="footnote"><a href="#f9" title="This is the Cyrus SASL (Simple Authentication and Security Layer) API implementation. It can be used on the client or server side to provide authentication and authorization services - installs in /usr/local. Dependencies: db-4.2.52.NC and having libgcc_s.so.1 in /usr/local/lib is required. This can be done by installing libgcc-3.3 or gcc-3.3.2 or higher. The installation of the sasl software indicates:" name="fn9" id="fn9">*9</a></span></li>
-  <li>gcc(libgcc 3.4.6)<span class="footnote"><a href="#f10" title="The GNU C compiler and related programs - installs in /usr/local. This package includes the GNU C, C++, and f77 suites and support files. These gcc packages require the installation of libiconv. It was compiled to use the SUN assembler and loader usually in /usr/ccs/bin if the SUNW developer packages are installed. When needed and the source code supports it, this C compiler can create 64-bit executables via the -m64 flag as well as the usual 32-bit ones. Please read the details on how this package was created which can be found at Comments on gcc 3.4.6 . The Details link below contains information on what is new in 3.4.6. Documentation is in /usr/local/doc/gcc, /usr/local/man, and /usr/local/info. The gcc package is quite large. Some users may have trouble downloading very large files via a browser. These users should try using command line anonymous ftp or perhaps the Sun Download Manager." name="fn10" id="fn10">*10</a></span></li>
-  <li>zlib<span class="footnote"><a href="#f11" title="zlib compression libraries - installs in /usr/local. This package has both libz.a and libz.so libraries. The package requires that libgcc_s.so.1 be in /usr/local/lib. This can be done by installing libgcc-3.3 or gcc or higher." name="fn11" id="fn11">*11</a></span></li>
-  <li>apache2 2.2.19</li>
-  <li>openldap 2.4.24</li>
-  <li>subversion 1.6.12</li>
-</ul>
-<p>上記のsparc-local.gzファイルをDLする。</p>
-<h1>確認</h1>
-<ul>
-  <li>ldd svnで何が足りないかわかる</li>
-  <li>全部入れてもエラーが出た<ul><li>どうもsasl-2.1.21-sol10-sparc-local.gzが足りなかった模様(上記反映済み)</li></ul></li>
-</ul>
-<h1>インストール</h1>
-<pre># pkgadd -d パッケージ</pre>
-<p>依存関係などはない？</p>
-<h1>設定</h1>
-<h2 id="tocAnchor-1-1">svnserve</h2>
-<blockquote>
-  <p>Subversion には、Svnserve (通常の TCP/IP 接続上でカスタムプロトコルを使用する軽量スタンドアロンサーバ) があります。小規模構成にしたい場合や、本格的な Apache サーバを使用できない場合には申し分ありませんし、</p>
-  <p>ほとんどの場合、svnserve は Apache ベースサーバよりセットアップが簡単で、早く実行できますが、高度な機能のいくつかはありません。また今では、さらに安全にしやすくする SASL サポートも含まれています。</p>
-  <cite>
-    <a href="http://tortoisesvn.net/docs/nightly/TortoiseSVN_ja/tsvn-serversetup-svnserve.html">http://tortoisesvn.net/docs/nightly/TortoiseSVN_ja/tsvn-serversetup-svnserve.html</a>
-  </cite>
-</blockquote>
-<blockquote>
-  <p>inetd登場以前は、1台のサーバで複数のサービス(FTPサーバ、TELNETサーバ等)を稼働させておくには、それぞれのサービスのデーモン (ftpd、tftpd等)を起動しておき、それぞれのデーモンが、それぞれの待ち受けポートを監視する - というスタイルだった。しかし、この方法では、監視するポートの数だけデーモンが起動していることとなるため、実際にそのサービスが利用されていない時には、実質、メモリの無駄遣いということとなる。そこで、待ち受けポートを監視する専用の中継デーモンを用意し、待ち受けポートに要求がきた時には、あらかじめ決められたデーモン(ftpd、tftpd等)を起動させるという動作が用意されるようになった。</p>
-  <cite>
-    <a href="http://ja.wikipedia.org/wiki/Inetd">http://ja.wikipedia.org/wiki/Inetd</a>
-  </cite>
-</blockquote>
-<p>Subversion用の簡易サーバをクライアントから要求が来た時だけ起動するようにしたい。(ただしちょっと遅い)ってことかな。</p>
-<dl>
-  <dt>ポート - サービス の設定</dt>
-  <dd>/etc/services</dd>
-  <dt>サービス - サーバ の設定</dt>
-  <dd>/etc/inetd.conf</dd>
-</dl>
-<p>Subversionでは3690ポートに要求がくるため/etc/servicesには以下のように追記する。</p>
-<pre># サービス名 ポート
-svn      3690/tcp
-svn      3690/udp</pre>
-<p>svnというサービスを3690ポートで受ける。</p>
-<h2 id="tocAnchor-1-2">管理DBに登録</h2>
-<p>次にinetd.confファイルを追記する。</p>
-<pre>svn stream tcp nowait svn /(SVNインストールされたディレクトリ)/svnserve svnserve -i -r SVNROOT</pre>
-<table>
-  <tr>
-    <th>サービス名</th>
-    <td>svn</td>
-  </tr>
-  <tr>
-    <th>ソケットタイプ</th>
-    <td>stream</td>
-  </tr>
-  <tr>
-    <th>プロトコル</th>
-    <td>tcp</td>
-  </tr>
-  <tr>
-    <th>wait or nowait</th>
-    <td>nowait</td>
-  </tr>
-  <tr>
-    <th><del datetime="2012-01-15T20:04:06+09:00">プログラム名</del>ユーザ名</th>
-    <td>svn</td>
-  </tr>
-  <tr>
-    <th>コマンドと引数</th>
-    <td>/(SVNインストールされたディレクトリ)/svnserve svnserve -i -r SVNROOT</td>
-  </tr>
-</table>
-<p>svnというサービスをsvnserve -i -r SVNROOTというコマンドで動かす。-iは--inetdオプションと同じでsvnserveが標準出力、標準入力のファイル拡張子を利用するように指定する。-r SVNROOTはリポジトリのルートを設定する。UrlはこのSVNROOTからのパスとみなされる。- オプション一覧。 <a href="http://www.thekyo.jp/manual/subversion/svn.ref.svnserve.html">http://www.thekyo.jp/manual/subversion/svn.ref.svnserve.html</a></p>
-<p>※ユーザ名を存在しないユーザにしてinetconvすると下記のようなエラーになる。</p>
-<pre>inetconv: エラー ./inetd.conf、n行目。不明なユーザ: xxx</pre>
-<p>設定ファイルを作成したが、Solaris10ではinetd.conf自体は使われない。inetconvコマンドを使い管理DB？　に登録を行う。</p>
-<pre># inetconv -i ./inetd.conf
-svn -&gt; /var/svc/manifest/network/svn-tcp.xml
-Importing svn-tcp.xml ...Done</pre>
-<p>設定変更した時は-fオプションをつける。</p>
-<pre>inetconv -f -I ./inetd.conf？</pre>
-<p>起動しているかの確認はinetadmコマンドで行う。</p>
-<pre># inetadm | grep svn
-enabled online svc:/network/svn/tcp:default</pre>
-<p>このsvc:/network/svn/tcp:defaultをFMRIという。</p>
-<h2 id="tocAnchor-1-3">起動・停止</h2>
-<p>起動・停止もinetadmコマンドを使う。起動は-eオプション+FMRI。(enable？)</p>
-<pre>inetadm -e svc:/network/svn/tcp:default  </pre>
-<p>停止は-dオプション+FMRI。(disable？)</p>
-<pre>inetadm -d svc:/network/svn/tcp:default</pre>
-<h2 id="tocAnchor-1-4">参考サイト</h2>
-<p>このあたりはまだよく仕組みがわかってない。</p>
-<ul>
-  <li>
-    <a href="http://sy2920.s151.xrea.com/solaris/smf.html">Solaris 10 のサービス管理方法</a>
-  </li>
-  <li>
-    <a href="http://sy2920.s151.xrea.com/solaris/smf-inetd.html">SMFによるinetd管理方法</a>
-  </li>
-  <li>
-    <a href="http://www.rinneza.com/junya/tech/solaris10_x86/os/etc_setting_02.html">Solaris10 OSCXg[®¹ãÌeíÝè2 (inetadm svcadm)</a>
-  </li>
-  <li>
-    <a href="http://www.oratorio-tangram.com/Solaris/SMF.html">SMF でサービスのメンテナンス</a>
-  </li>
-  <li>
-    <a href="http://tortoisesvn.net/docs/nightly/TortoiseSVN_ja/tsvn-serversetup-svnserve.html">svnserve ベースのサーバ</a>
-  </li>
-  <li>
-    <a href="http://www.sunsept.com/svnbook_ja_html/ch09s04.html">svnserve</a>
-  </li>
-</ul>
-<div class="footnote">
-  <p class="footnote"><a href="#fn1" name="f1" id="f1">*1</a>: Neon is an HTTP and WebDAV client library - installs in /usr/local. Neon is used by subversion. There are slightly newer versions of neon, but this one seems to work best with subversion. Dependencies: openssl-1.0.0d, expat-2.0.1, zlib-1.2.5, and you will need /usr/local/lib/libgcc_s.so.1 either from the libgcc-3.4.6 or gcc-3.4.6 packages.</p>
-  <p class="footnote"><a href="#fn2" name="f2" id="f2">*2</a>: SWIG is a software development tool that connects programs written in C and C++ with a variety of high-level programming languages. SWIG is used with different types of languages including common scripting languages such as Perl, PHP, Python, Tcl, Ruby and PHP - installs in /usr/local. Dependencies: zlib and having libgcc_s.so.1 and libstdc++.so.6 in /usr/local/lib is required. This can be done by installing libgcc-3.4.6 or gcc-3.4.6.</p>
-  <p class="footnote"><a href="#fn3" name="f3" id="f3">*3</a>: Expat is a fast, non-validating, stream-oriented XML parsing library - installs in /usr/local. Dependency: to have /usr/local/lib/libgcc_s.so.1 install either the libgcc-3.4.6 or gcc-3.4.6 or later.</p>
-  <p class="footnote"><a href="#fn4" name="f4" id="f4">*4</a>: Libxml2 is the XML C library developed for the Gnome project - installs in /usr/local. libxml2 requires that the zlib, libiconv, and either libgcc-3.4.6 or gcc-3.4.6 packages be installed.</p>
-  <p class="footnote"><a href="#fn5" name="f5" id="f5">*5</a>: db is the Berkeley open source embedded database system - installs in /usr/local/BerkeleyDB.4.2. This packages also requires that you have install either libgcc or gcc.</p>
-  <p class="footnote"><a href="#fn6" name="f6" id="f6">*6</a>: Openssl is an open source toolkit implementing the Secure Sockets Layer (SSL v2/v3) and Transport Layer Security (TLS v1) protocols as well as a full-strength general purpose cryptography library - installs in /usr/local/ssl. Note to users with sun4m machines. The openssl package here was built on a sun4u system and will not work on your machines. The one built for Solaris 2.5 was built on a sun4m machine and has been tested and does work. If you do uname -a and you get sun4m in the result, install the Solaris 2.5 openssl package instead. The configure option used for making openssl was solaris-sparcv9-gcc shared. You may also need to install either gcc-3.4.6 or libgcc-3.4.6 to obtain the libgcc_s.so.1 library. The libraries for openssl-0.9.8r are also included in this package to maintain compatibility for those packages still using them. If you cannot or do not want to update to the 1.0.x level, the 0.9.8p package below can be used. Openssl is often used to make machines more secure. Make sure you know what you are doing. Any security problems are your responsiblitiy. See our Disclaimer.</p>
-  <p class="footnote"><a href="#fn7" name="f7" id="f7">*7</a>: GNU libiconv provides an iconv() implementation for use on systems which do not have one - installs in /usr/local. Dependencies: libgcc_s.so.1 from libgcc-3.4.6 or gcc-3.4.6 or higher. </p>
-  <p class="footnote"><a href="#fn8" name="f8" id="f8">*8</a>: Libintl is used with gettext and is needed by a few programs when libintl in not in /usr/lib - installs in /usr/local/lib. Dependencies: libiconv and to have /usr/local/lib/libgcc_s.so.1 and /usr/local/lib/libstdc++.so.6, either the libgcc-3.4.6 or gcc-3.4.6 packages.</p>
-  <p class="footnote"><a href="#fn9" name="f9" id="f9">*9</a>: This is the Cyrus SASL (Simple Authentication and Security Layer) API implementation. It can be used on the client or server side to provide authentication and authorization services - installs in /usr/local. Dependencies: db-4.2.52.NC and having libgcc_s.so.1 in /usr/local/lib is required. This can be done by installing libgcc-3.3 or gcc-3.3.2 or higher. The installation of the sasl software indicates:</p>
-  <p class="footnote"><a href="#fn10" name="f10" id="f10">*10</a>: The GNU C compiler and related programs - installs in /usr/local. This package includes the GNU C, C++, and f77 suites and support files. These gcc packages require the installation of libiconv. It was compiled to use the SUN assembler and loader usually in /usr/ccs/bin if the SUNW developer packages are installed. When needed and the source code supports it, this C compiler can create 64-bit executables via the -m64 flag as well as the usual 32-bit ones. Please read the details on how this package was created which can be found at Comments on gcc 3.4.6 . The Details link below contains information on what is new in 3.4.6. Documentation is in /usr/local/doc/gcc, /usr/local/man, and /usr/local/info. The gcc package is quite large. Some users may have trouble downloading very large files via a browser. These users should try using command line anonymous ftp or perhaps the Sun Download Manager.</p>
-  <p class="footnote"><a href="#fn11" name="f11" id="f11">*11</a>: zlib compression libraries - installs in /usr/local. This package has both libz.a and libz.so libraries. The package requires that libgcc_s.so.1 be in /usr/local/lib. This can be done by installing libgcc-3.3 or gcc or higher.</p>
-</div>
-</div>
 
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2011/12/21/1324477125/" title="Ruby実行時のオプションをよろしく解析してくれるoptparseを使ってみる">
-          Ruby実行時のオプションをよろしく解析してくれるoptparseを使ってみる
+<ul>
+<li>-   neon 0.29.5[1]
+
+<ul>
+<li>swig 1.3.40[2]</li>
+<li>expat 2.0.1[3]</li>
+<li>libxml2 2.7.8[4]</li>
+<li>db 4.2.52 REV=1.0.12[5]</li>
+<li>openssl 1.0.0d[6]</li>
+<li>libiconv 1.13.1[7]</li>
+<li>libintl 3.4.0[8]</li>
+<li>sasl 2.1.21[9]</li>
+<li>gcc(libgcc 3.4.6((The GNU C compiler and related programs - installs in /usr/local. This package includes the GNU C, C++, and f77 suites and support files. These gcc packages require the installation of libiconv. It was compiled to use the SUN assembler and loader usually in /usr/ccs/bin if the SUNW developer packages are installed. When needed and the source code supports it, this C compiler can create 64-bit executables via the -m64 flag as well as the usual 32-bit ones. Please read the details on how this package was created which can be found at Comments on gcc 3.4.6 . The Details link below contains information on what is new in 3.4.6. Documentation is in /usr/local/doc/gcc, /usr/local/man, and /usr/local/info. The gcc package is quite large. Some users may have trouble downloading very large files via a browser. These users should try using command line anonymous ftp or perhaps the Sun Download Manager.))</li>
+<li>zlib[10]</li>
+<li>apache2 2.2.19</li>
+<li>openldap 2.4.24</li>
+<li>subversion 1.6.12</li>
+</ul></li>
+</ul>
+
+<p>上記のsparc-local.gzファイルをDLする。</p>
+
+<h2 id="確認">確認</h2>
+
+<ul>
+<li>ldd svnで何が足りないかわかる</li>
+<li>全部入れてもエラーが出た
+
+<ul>
+<li>どうもsasl-2.1.21-sol10-sparc-local.gzが足りなかった模様(上記反映済み)</li>
+</ul></li>
+</ul>
+
+<h2 id="インストール-1">インストール</h2>
+<div class="highlight"><pre class="chroma"># pkgadd -d パッケージ</pre></div>
+<p>依存関係などはない？</p>
+
+<h2 id="設定">設定</h2>
+
+<h3 id="svnserve">svnserve</h3>
+
+<blockquote>
+<p>Subversion には、Svnserve (通常の TCP/IP 接続上でカスタムプロトコルを使用する軽量スタンドアロンサーバ) があります。小規模構成にしたい場合や、本格的な Apache サーバを使用できない場合には申し分ありませんし、</p>
+
+<p>ほとんどの場合、svnserve は Apache ベースサーバよりセットアップが簡単で、早く実行できますが、高度な機能のいくつかはありません。また今では、さらに安全にしやすくする SASL サポートも含まれています。</p>
+
+<p><cite><a href="http://tortoisesvn.net/docs/nightly/TortoiseSVN_ja/tsvn-serversetup-svnserve.html">http://tortoisesvn.net/docs/nightly/TortoiseSVN_ja/tsvn-serversetup-svnserve.html</a></cite></p>
+
+<p>inetd登場以前は、1台のサーバで複数のサービス(FTPサーバ、TELNETサーバ等)を稼働させておくには、それぞれのサービスのデーモン (ftpd、tftpd等)を起動しておき、それぞれのデーモンが、それぞれの待ち受けポートを監視する - というスタイルだった。しかし、この方法では、監視するポートの数だけデーモンが起動していることとなるため、実際にそのサービスが利用されていない時には、実質、メモリの無駄遣いということとなる。そこで、待ち受けポートを監視する専用の中継デーモンを用意し、待ち受けポートに要求がきた時には、あらかじめ決められたデーモン(ftpd、tftpd等)を起動させるという動作が用意されるようになった。</p>
+
+<p><cite><a href="http://ja.wikipedia.org/wiki/Inetd">http://ja.wikipedia.org/wiki/Inetd</a></cite></p>
+</blockquote>
+
+<p>Subversion用の簡易サーバをクライアントから要求が来た時だけ起動するようにしたい。(ただしちょっと遅い)ってことかな。</p>
+
+<p>ポート - サービス の設定<br />
+/etc/services</p>
+
+<p>サービス - サーバ の設定<br />
+/etc/inetd.conf</p>
+
+<p>Subversionでは3690ポートに要求がくるため/etc/servicesには以下のように追記する。</p>
+<div class="highlight"><pre class="chroma"># サービス名 ポート
+svn      3690/tcp
+svn      3690/udp</pre></div>
+<p>svnというサービスを3690ポートで受ける。</p>
+
+<h3 id="管理dbに登録">管理DBに登録</h3>
+
+<p>次にinetd.confファイルを追記する。</p>
+<div class="highlight"><pre class="chroma">svn stream tcp nowait svn /(SVNインストールされたディレクトリ)/svnserve svnserve -i -r SVNROOT</pre></div>
+<p>|*サービス名|svn|</p>
+
+<p>|*ソケットタイプ|stream|</p>
+
+<p>|*プロトコル|tcp|</p>
+
+<p>|*wait or nowait|nowait|</p>
+
+<p>|*<del datetime="2012-01-15T20:04:06+09:00">プログラム名</del>ユーザ名|svn|</p>
+
+<p>|*コマンドと引数|/(SVNインストールされたディレクトリ)/svnserve svnserve -i -r SVNROOT|</p>
+
+<p>svnというサービスをsvnserve -i -r SVNROOTというコマンドで動かす。-iは&ndash;inetdオプションと同じでsvnserveが標準出力、標準入力のファイル拡張子を利用するように指定する。-r SVNROOTはリポジトリのルートを設定する。UrlはこのSVNROOTからのパスとみなされる。- オプション一覧。 <a href="http://www.thekyo.jp/manual/subversion/svn.ref.svnserve.html">http://www.thekyo.jp/manual/subversion/svn.ref.svnserve.html</a></p>
+
+<p>※ユーザ名を存在しないユーザにしてinetconvすると下記のようなエラーになる。</p>
+<div class="highlight"><pre class="chroma">inetconv: エラー ./inetd.conf、n行目。不明なユーザ: xxx</pre></div>
+<p>設定ファイルを作成したが、Solaris10ではinetd.conf自体は使われない。inetconvコマンドを使い管理DB？　に登録を行う。</p>
+<div class="highlight"><pre class="chroma"># inetconv -i ./inetd.conf
+svn -&gt; /var/svc/manifest/network/svn-tcp.xml
+Importing svn-tcp.xml ...Done</pre></div>
+<p>設定変更した時は-fオプションをつける。</p>
+<div class="highlight"><pre class="chroma">inetconv -f -I ./inetd.conf？</pre></div>
+<p>起動しているかの確認はinetadmコマンドで行う。</p>
+<div class="highlight"><pre class="chroma"># inetadm | grep svn
+enabled online svc:/network/svn/tcp:default</pre></div>
+<p>このsvc:/network/svn/tcp:defaultをFMRIという。</p>
+
+<h3 id="起動-停止">起動・停止</h3>
+
+<p>起動・停止もinetadmコマンドを使う。起動は-eオプション+FMRI。(enable？)</p>
+<div class="highlight"><pre class="chroma">inetadm -e svc:/network/svn/tcp:default  </pre></div>
+<p>停止は-dオプション+FMRI。(disable？)</p>
+<div class="highlight"><pre class="chroma">inetadm -d svc:/network/svn/tcp:default</pre></div>
+<h3 id="参考サイト">参考サイト</h3>
+
+<p>このあたりはまだよく仕組みがわかってない。</p>
+
+<ul>
+<li><a href="http://sy2920.s151.xrea.com/solaris/smf.html:title">http://sy2920.s151.xrea.com/solaris/smf.html:title</a></li>
+<li><a href="http://sy2920.s151.xrea.com/solaris/smf-inetd.html:title">http://sy2920.s151.xrea.com/solaris/smf-inetd.html:title</a></li>
+<li><a href="http://www.rinneza.com/junya/tech/solaris10_x86/os/etc_setting_02.html:title">http://www.rinneza.com/junya/tech/solaris10_x86/os/etc_setting_02.html:title</a></li>
+<li><a href="http://www.oratorio-tangram.com/Solaris/SMF.html:title">http://www.oratorio-tangram.com/Solaris/SMF.html:title</a></li>
+<li><a href="http://tortoisesvn.net/docs/nightly/TortoiseSVN_ja/tsvn-serversetup-svnserve.html:title">http://tortoisesvn.net/docs/nightly/TortoiseSVN_ja/tsvn-serversetup-svnserve.html:title</a></li>
+<li><a href="http://www.sunsept.com/svnbook_ja_html/ch09s04.html:title">http://www.sunsept.com/svnbook_ja_html/ch09s04.html:title</a></li>
+</ul>
+
+<p>kk_Ataka</p>
+
+<p>inetd.confのプログラム名、これユーザ名の間違い<br>存在しないユーザ入力してinetconvすると<br><br>inetconv: エラー ./inetd.conf、n行目。不明なユーザ: xxx</p>
+
+<p>1326450707</p>
+
+<p>[1] Neon is an HTTP and WebDAV client library - installs in /usr/local. Neon is used by subversion. There are slightly newer versions of neon, but this one seems to work best with subversion. Dependencies: openssl-1.0.0d, expat-2.0.1, zlib-1.2.5, and you will need /usr/local/lib/libgcc_s.so.1 either from the libgcc-3.4.6 or gcc-3.4.6 packages.</p>
+
+<p>[2] SWIG is a software development tool that connects programs written in C and C++ with a variety of high-level programming languages. SWIG is used with different types of languages including common scripting languages such as Perl, PHP, Python, Tcl, Ruby and PHP - installs in /usr/local. Dependencies: zlib and having libgcc_s.so.1 and libstdc++.so.6 in /usr/local/lib is required. This can be done by installing libgcc-3.4.6 or gcc-3.4.6.</p>
+
+<p>[3] Expat is a fast, non-validating, stream-oriented XML parsing library - installs in /usr/local. Dependency: to have /usr/local/lib/libgcc_s.so.1 install either the libgcc-3.4.6 or gcc-3.4.6 or later.</p>
+
+<p>[4] Libxml2 is the XML C library developed for the Gnome project - installs in /usr/local. libxml2 requires that the zlib, libiconv, and either libgcc-3.4.6 or gcc-3.4.6 packages be installed.</p>
+
+<p>[5] db is the Berkeley open source embedded database system - installs in /usr/local/BerkeleyDB.4.2. This packages also requires that you have install either libgcc or gcc.</p>
+
+<p>[6] Openssl is an open source toolkit implementing the Secure Sockets Layer (SSL v2/v3) and Transport Layer Security (TLS v1) protocols as well as a full-strength general purpose cryptography library - installs in /usr/local/ssl. Note to users with sun4m machines. The openssl package here was built on a sun4u system and will not work on your machines. The one built for Solaris 2.5 was built on a sun4m machine and has been tested and does work. If you do uname -a and you get sun4m in the result, install the Solaris 2.5 openssl package instead. The configure option used for making openssl was solaris-sparcv9-gcc shared. You may also need to install either gcc-3.4.6 or libgcc-3.4.6 to obtain the libgcc_s.so.1 library. The libraries for openssl-0.9.8r are also included in this package to maintain compatibility for those packages still using them. If you cannot or do not want to update to the 1.0.x level, the 0.9.8p package below can be used. Openssl is often used to make machines more secure. Make sure you know what you are doing. Any security problems are your responsiblitiy. See our Disclaimer.</p>
+
+<p>[7] GNU libiconv provides an iconv() implementation for use on systems which do not have one - installs in /usr/local. Dependencies: libgcc_s.so.1 from libgcc-3.4.6 or gcc-3.4.6 or higher.</p>
+
+<p>[8] Libintl is used with gettext and is needed by a few programs when libintl in not in /usr/lib - installs in /usr/local/lib. Dependencies: libiconv and to have /usr/local/lib/libgcc_s.so.1 and /usr/local/lib/libstdc++.so.6, either the libgcc-3.4.6 or gcc-3.4.6 packages.</p>
+
+<p>[9] This is the Cyrus SASL (Simple Authentication and Security Layer) API implementation. It can be used on the client or server side to provide authentication and authorization services - installs in /usr/local. Dependencies: db-4.2.52.NC and having libgcc_s.so.1 in /usr/local/lib is required. This can be done by installing libgcc-3.3 or gcc-3.3.2 or higher. The installation of the sasl software indicates:</p>
+
+<p>[10] zlib compression libraries - installs in /usr/local. This package has both libz.a and libz.so libraries. The package requires that libgcc_s.so.1 be in /usr/local/lib. This can be done by installing libgcc-3.3 or gcc or higher.</p>
+
+    </section>
+  </article>
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2011/12/21/1324477125/" class="pagination_overflow previous_page">
+          Prev: 
+          11/12/21
+          Ruby実行時のオプションをよろしく解析してくれ …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2011/12/23/1324651460/" title="Vimコマンドよく使うものと覚えたいコマンドまとめ">
+      
+
+      <span class="pagination_center disabled">
+        11/12/22
+        Solar …
+      </span>
+
+      
+        <a href="/2011/12/23/1324651460/" class="pagination_overflow next_page">
+          Next: 
+          11/12/23
           Vimコマンドよく使うものと覚えたいコマンドまとめ
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2011/12/22/1324573161/" data-text="kk_Atakaの日記 - SolarisにSubversionをインストールするときのメモ" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/22/1324573161/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/22/1324573161/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/22/1324573161/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - SolarisにSubversionをインストールするときのメモ"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+      </div>
 
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/12/22/1324573161//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-  <h2>Recent Entries</h2>
 
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#solaris-備忘録-subversion-solarisにsubversionをインストールするときのメモ">[Solaris][備忘録][Subversion]SolarisにSubversionをインストールするときのメモ</a></li>
+<li><a href="#インストール">インストール</a></li>
+<li><a href="#確認">確認</a></li>
+<li><a href="#インストール-1">インストール</a></li>
+<li><a href="#設定">設定</a>
+<ul>
+<li><a href="#svnserve">svnserve</a></li>
+<li><a href="#管理dbに登録">管理DBに登録</a></li>
+<li><a href="#起動-停止">起動・停止</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+</ul></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

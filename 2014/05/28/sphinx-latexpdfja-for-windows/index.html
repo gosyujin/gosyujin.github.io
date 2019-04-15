@@ -1,161 +1,183 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話 - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話 &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ Windows に Sphinx から pdf を出力する環境を作成したが、 make latexpdfja コマンドを打つと途中で失敗する。
+ for f in *.pdf *.png *.gif *.jpg *.jpeg; do extractbb $f; done
+f の使い方が誤っています。
+make: *** [all-pdf-ja] Error 255
+ 環境  Windows 7 Python 2.7.6 Sphinx 1.2.2 e-pTeX 3.1415926-p3.4-110825-2.6 (sjis) (TeX Live 2013/W32TeX)  kpathsea version 6.1.1 ptexenc version 1.3.1   結論  PYTHON_HOME\Lib\site-packages\SPHINX_HOME\sphinx\texinputs の下に make.bat がなく、 Makefile しかない場合エラーが出るかもしれない [Sphinx-Users 276] Re: LaTeX経由でのPDF作成手順をアップデートしました にある make.bat をコピーする 上記の texinputs 下に配置して再度 make latexpdfja を実行する  これでうまくいくかもしれない。|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2014/05/28/sphinx-latexpdfja-for-windows/">WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Sphinx" class="tag">Sphinx</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2014/05/28</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2014/05/19/sphinx-recommend2/" title="「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた2">
-          「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた2
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2014/05/19/sphinx-recommend2/" class="pagination_overflow previous_page">
+          Prev: 
+          14/5/19
+          「Sphinxをはじめよう」を読んで導入したいと思ったので色 …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2014/06/22/translated-jekyllrb/" title="Jekyllドキュメントを翻訳してなんとなくわかってきたもの">
+      
+
+      <span class="pagination_center disabled">
+        14/5/28
+        Windo …
+      </span>
+
+      
+        <a href="/2014/06/22/translated-jekyllrb/" class="pagination_overflow next_page">
+          Next: 
+          14/6/22
           Jekyllドキュメントを翻訳してなんとなくわかってきたもの
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">環境</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">結論</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-4">
-              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">事前準備</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-5">
-              <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">調査</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-6">
-                  <a href="#tocAnchor-1-5-1"><span class="tocnumber">5.1</span> <span class="toctext">エラー内容</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-7">
-                  <a href="#tocAnchor-1-5-2"><span class="tocnumber">5.2</span> <span class="toctext">エラーメッセージ調査</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-8">
-                  <a href="#tocAnchor-1-5-3"><span class="tocnumber">5.3</span> <span class="toctext">パッチあて</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="toc_level-1 toc_section-9">
-              <a href="#tocAnchor-1-9"><span class="tocnumber">6</span> <span class="toctext">解決策</span></a>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h2 id="tocAnchor-1-1">あらすじ</h2>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
 
-<p>Windows に Sphinx から pdf を出力する環境を作成したが、 <code class="highlighter-rouge">make latexpdfja</code> コマンドを打つと途中で失敗する。</p>
+  
+    <a href='/tags/sphinx' class="muted-link">
+      [ <span class="Label Label--gray">Sphinx</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2014/05/28</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#結論">結論</a></li>
+<li><a href="#事前準備">事前準備</a></li>
+<li><a href="#調査">調査</a>
+<ul>
+<li><a href="#エラー内容">エラー内容</a></li>
+<li><a href="#エラーメッセージ調査">エラーメッセージ調査</a></li>
+<li><a href="#パッチあて">パッチあて</a></li>
+</ul></li>
+<li><a href="#解決策">解決策</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>Windows に Sphinx から pdf を出力する環境を作成したが、 <code>make latexpdfja</code> コマンドを打つと途中で失敗する。</p>
 
 <blockquote>
-  <p>for f in *.pdf *.png *.gif *.jpg *.jpeg; do extractbb $f; done</p>
+<p>for f in *.pdf *.png *.gif *.jpg *.jpeg; do extractbb $f; done</p>
 
-  <p>f の使い方が誤っています。</p>
+<p>f の使い方が誤っています。</p>
 
-  <p>make: *** [all-pdf-ja] Error 255</p>
+<p>make: *** [all-pdf-ja] Error 255</p>
 </blockquote>
 
-<h2 id="tocAnchor-1-2">環境</h2>
+<h2 id="環境">環境</h2>
 
 <ul>
-  <li>Windows 7</li>
-  <li>Python 2.7.6</li>
-  <li>Sphinx 1.2.2</li>
-  <li>e-pTeX 3.1415926-p3.4-110825-2.6 (sjis) (TeX Live 2013/W32TeX)
-    <ul>
-      <li>kpathsea version 6.1.1</li>
-      <li>ptexenc version 1.3.1</li>
-    </ul>
-  </li>
+<li>Windows 7</li>
+<li>Python 2.7.6</li>
+<li>Sphinx 1.2.2</li>
+<li>e-pTeX 3.1415926-p3.4-110825-2.6 (sjis) (TeX Live 2013/W32TeX)
+
+<ul>
+<li>kpathsea version 6.1.1</li>
+<li>ptexenc version 1.3.1</li>
+</ul></li>
 </ul>
 
-<h2 id="tocAnchor-1-3">結論</h2>
+<h2 id="結論">結論</h2>
 
 <ul>
-  <li><code class="highlighter-rouge">PYTHON_HOME\Lib\site-packages\SPHINX_HOME\sphinx\texinputs</code> の下に make.bat がなく、 Makefile しかない場合エラーが出るかもしれない</li>
-  <li><a href="http://www.python.jp/pipermail/sphinx-users/2012-April/000593.html">[Sphinx-Users 276] Re: LaTeX経由でのPDF作成手順をアップデートしました</a> にある make.bat をコピーする</li>
-  <li>上記の <code class="highlighter-rouge">texinputs</code> 下に配置して再度 <code class="highlighter-rouge">make latexpdfja</code> を実行する</li>
+<li><code>PYTHON_HOME\Lib\site-packages\SPHINX_HOME\sphinx\texinputs</code> の下に make.bat がなく、 Makefile しかない場合エラーが出るかもしれない</li>
+<li><a href="http://www.python.jp/pipermail/sphinx-users/2012-April/000593.html">[Sphinx-Users 276] Re: LaTeX経由でのPDF作成手順をアップデートしました</a> にある make.bat をコピーする</li>
+<li>上記の <code>texinputs</code> 下に配置して再度 <code>make latexpdfja</code> を実行する</li>
 </ul>
 
 <p>これでうまくいくかもしれない。</p>
@@ -164,25 +186,22 @@
 
 <p>これがわからない。</p>
 
-<h2 id="tocAnchor-1-4">事前準備</h2>
+<h2 id="事前準備">事前準備</h2>
 
 <ul>
-  <li>Sphinx は上記のバージョンをインストール済み</li>
-  <li><a href="http://sphinx-users.jp/cookbook/pdf/latex.html">LaTeX経由でのPDF作成 &gt; Python製ドキュメンテーションビルダー、Sphinxの日本ユーザ会</a> を参考に TeXLive をインストール
-    <ul>
-      <li>同ページの「Sphinxへのパッチ適用」は Sphinx 1.2.2 だったのでスルー</li>
-      <li>同ページの「Sphinxプロジェクトの設定変更」に従って <code class="highlighter-rouge">conf.py</code> の設定を追加</li>
-    </ul>
-  </li>
+<li>Sphinx は上記のバージョンをインストール済み</li>
+<li><a href="http://sphinx-users.jp/cookbook/pdf/latex.html">LaTeX経由でのPDF作成 &gt; Python製ドキュメンテーションビルダー、Sphinxの日本ユーザ会</a> を参考に TeXLive をインストール
+
+<ul>
+<li>同ページの「Sphinxへのパッチ適用」は Sphinx 1.2.2 だったのでスルー</li>
+<li>同ページの「Sphinxプロジェクトの設定変更」に従って <code>conf.py</code> の設定を追加</li>
+</ul></li>
 </ul>
 
-<h2 id="tocAnchor-1-5">調査</h2>
+<h2 id="調査">調査</h2>
 
-<h3 id="tocAnchor-1-5-1">エラー内容</h3>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">C:\sphinx\project&gt;make latexpdfja
+<h3 id="エラー内容">エラー内容</h3>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">C:\sphinx\project&gt;make latexpdfja
 (略)
 processing project.tex... index local/project/project_plan ...
 resolving references...
@@ -194,33 +213,21 @@ for f in *.pdf *.png *.gif *.jpg *.jpeg; do extractbb $f; done
 f の使い方が誤っています。
 make: *** [all-pdf-ja] Error 255
 
-<span class="err">Build finished; the PDF files are in build/latex.</span></code>
-  </pre>
-</figure>
-
-<p>うーん？ <code class="highlighter-rouge">make.bat</code> の latexpdfja 部分を見てみるか。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-bat" data-lang="bat">(略)
-if "%1" == "latexpdfja" (
-  %SPHINXBUILD% -b latex %ALLSPHINXOPTS% %BUILDDIR%/latex
-  cd %BUILDDIR%/latex
+Build finished; the PDF files are in build/latex.</code></pre></div>
+<p>うーん？ <code>make.bat</code> の latexpdfja 部分を見てみるか。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bat" data-lang="bat"><span class="p">(</span>略<span class="p">)</span>
+<span class="k">if</span> <span class="s2">&#34;</span><span class="nv">%1</span><span class="s2">&#34;</span> <span class="o">==</span> <span class="s2">&#34;latexpdfja&#34;</span> <span class="p">(</span>
+  <span class="nv">%SPHINXBUILD%</span> -b latex <span class="nv">%ALLSPHINXOPTS%</span> <span class="nv">%BUILDDIR%</span>/latex
+  <span class="k">cd</span> <span class="nv">%BUILDDIR%</span>/latex
   make all-pdf-ja
-  cd %BUILDDIR%/..
-  echo.
-  echo.Build finished; the PDF files are in %BUILDDIR%/latex.
-  goto end
-)
-(略)</code>
-  </pre>
-</figure>
-
-<p><code class="highlighter-rouge">BUILDDIR/latex</code> の中でさらに make してるな。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">C:\sphinx\project&gt;cd build\latex
+  <span class="k">cd</span> <span class="nv">%BUILDDIR%</span>/..
+  <span class="k">echo</span>.
+  <span class="k">echo</span>.Build finished; the PDF files are in <span class="nv">%BUILDDIR%</span>/latex.
+  <span class="k">goto</span> <span class="nl">end</span>
+<span class="p">)</span>
+<span class="p">(</span>略<span class="p">)</span></code></pre></div>
+<p><code>BUILDDIR/latex</code> の中でさらに make してるな。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">C:\sphinx\project&gt;cd build\latex
 C:\sphinx\project\build\latex&gt;dir
 (略)
 2014/05/27  11:14            39,126 project.tex
@@ -229,49 +236,38 @@ C:\sphinx\project\build\latex&gt;dir
 2014/05/15  19:17            15,816 sphinx.sty
 2014/05/15  19:17             2,699 sphinxhowto.cls
 2014/05/15  19:17             4,101 sphinxmanual.cls
-<span class="err">(略)</span></code>
-  </pre>
-</figure>
-
+(略)</code></pre></div>
 <p>Makefileある。中身は…。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">all-pdf-ja:
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">all-pdf-ja:
   for f in *.pdf *.png *.gif *.jpg *.jpeg; do extractbb $$f; done
   for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
   for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
   for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
-  -for f in *.idx; do mendex -U -f -d "`basename $$f .idx`.dic" -s python.ist $$f; done
+  -for f in *.idx; do mendex -U -f -d &#34;`basename $$f .idx`.dic&#34; -s python.ist $$f; done
   for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
   for f in *.tex; do platex -kanji=utf8 $(LATEXOPTS) $$f; done
-<span class="err">  for f in *.dvi; do dvipdfmx $$f; done</span></code>
-  </pre>
-</figure>
-
+  for f in *.dvi; do dvipdfmx $$f; done</code></pre></div>
 <p>エラーの行あるな。ここでこけてるのか。</p>
 
-<h3 id="tocAnchor-1-5-2">エラーメッセージ調査</h3>
+<h3 id="エラーメッセージ調査">エラーメッセージ調査</h3>
 
 <p>とりあえず、エラーメッセージでググると Sphinx Users のメーリングリストがひっかかった。</p>
 
 <p>2012 年の記事で、いろいろバージョンはちょい古め。</p>
 
 <ul>
-  <li><a href="http://www.python.jp/pipermail/sphinx-users/2012-April/000582.html">[Sphinx-Users 265] Re: LaTeX経由でのPDF作成手順をアップデートしました</a></li>
+<li><a href="http://www.python.jp/pipermail/sphinx-users/2012-April/000582.html">[Sphinx-Users 265] Re: LaTeX経由でのPDF作成手順をアップデートしました</a></li>
 </ul>
 
 <p>で、この記事を追っていくと最終的には「打田さんのパッチを当てたら動いた(？)」という事らしい。</p>
 
-<h3 id="tocAnchor-1-5-3">パッチあて</h3>
+<h3 id="パッチあて">パッチあて</h3>
 
 <p>ただ、今回インストールしている Sphinx 1.2.2 のソースと目 grep するとどうもこのパッチの修正が当たってたり当たってなかったり(？)するのが気になる。(基本的には取り込まれてるみたいなんだけど)</p>
 
-<p>例えば、 <code class="highlighter-rouge">sphinx/writers/latex.py</code> のパッチのところ。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">diff --git a/sphinx/writers/latex.py b/sphinx/writers/latex.py
+<p>例えば、 <code>sphinx/writers/latex.py</code> のパッチのところ。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">{% raw %}
+diff --git a/sphinx/writers/latex.py b/sphinx/writers/latex.py
 --- a/sphinx/writers/latex.py
 +++ b/sphinx/writers/latex.py
 @@ -47,6 +47,10 @@
@@ -288,44 +284,40 @@ C:\sphinx\project\build\latex&gt;dir
 @@ -204,13 +208,10 @@
  
              # pTeX (Japanese TeX) for support
-             if builder.config.language == 'ja':
--                self.elements['classoptions'] = ',dvipdfm'
+             if builder.config.language == &#39;ja&#39;:
+-                self.elements[&#39;classoptions&#39;] = &#39;,dvipdfm&#39;
 -                # found elements of babel, but this should be above sphinx.sty.
 -                # because pTeX (Japanese TeX) cannot handle this count.
--                self.elements['babel'] = r'\newcount\pdfoutput\pdfoutput=0'
+-                self.elements[&#39;babel&#39;] = r&#39;\newcount\pdfoutput\pdfoutput=0&#39;
 -                # to make the pdf with correct encoded hyperref bookmarks
--                self.elements['preamble'] += \
--                    r'\AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}'
+-                self.elements[&#39;preamble&#39;] += \
+-                    r&#39;\AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}&#39;
 +                # use dvipdfmx as default class option in Japanese
-+                self.elements['classoptions'] = ',dvipdfmx'
++                self.elements[&#39;classoptions&#39;] = &#39;,dvipdfmx&#39;
 +                # disable babel which has not publishing quality in Japanese
-+                self.elements['babel'] = ''
++                self.elements[&#39;babel&#39;] = &#39;&#39;
          else:
-             self.elements['classoptions'] += ',english'
-<span class="err">         # allow the user to override them all</span></code>
-  </pre>
-</figure>
-
+             self.elements[&#39;classoptions&#39;] += &#39;,english&#39;
+         # allow the user to override them all
+{% endraw %}</code></pre></div>
 <p>そして、 1.1.2 から 1.2.2 の diff 。</p>
 
-<p>パッチ以外の修正もいっぱいあるのは当然として <code class="highlighter-rouge">hypersetup</code> の周りは取り込まれていなかったり。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">C:\work&gt;hg clone https://bitbucket.org/birkenfeld/sphinx
+<p>パッチ以外の修正もいっぱいあるのは当然として <code>hypersetup</code> の周りは取り込まれていなかったり。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">{% raw %}
+C:\work&gt;hg clone https://bitbucket.org/birkenfeld/sphinx
 C:\work&gt;cd sphinx
 C:\work\sphinx&gt;hg diff -r 1.2.2 -r 1.1.2 sphinx\writers\latex.py
 diff -r 7d389fe78ee9 -r 14b315a7d010 sphinx/writers/latex.py
 --- a/sphinx/writers/latex.py	     Tue Nov 01 21:40:52 2011 +0100
 +++ b/sphinx/writers/latex.py	     Sun Mar 02 08:41:38 2014 +0100
 @@ -8,7 +8,7 @@
-     Much of this code is adapted from Dave Kuhlman's "docpy" writer from his
+     Much of this code is adapted from Dave Kuhlman&#39;s &#34;docpy&#34; writer from his
      docutils sandbox.
  
 -    :copyright: Copyright 2007-2011 by the Sphinx team, see AUTHORS.
 +    :copyright: Copyright 2007-2014 by the Sphinx team, see AUTHORS.
      :license: BSD, see LICENSE for details.
- """
+ &#34;&#34;&#34;
  
 @@ -22,7 +22,7 @@
  from sphinx import addnodes
@@ -347,43 +339,43 @@ diff -r 7d389fe78ee9 -r 14b315a7d010 sphinx/writers/latex.py
 @@ -100,10 +101,18 @@
  class ExtBabel(Babel):
      def get_shorthandoff(self):
-         shortlang = self.language.split('_')[0]
--        if shortlang in ('de', 'sl', 'pt', 'es', 'nl', 'pl', 'it'):
-+        if shortlang in ('de', 'ngerman', 'sl', 'slovene', 'pt', 'portuges',
-+                         'es', 'spanish', 'nl', 'dutch', 'pl', 'polish', 'it',
-+                         'italian'):
-             return '\\shorthandoff{"}'
-         return ''
+         shortlang = self.language.split(&#39;_&#39;)[0]
+-        if shortlang in (&#39;de&#39;, &#39;sl&#39;, &#39;pt&#39;, &#39;es&#39;, &#39;nl&#39;, &#39;pl&#39;, &#39;it&#39;):
++        if shortlang in (&#39;de&#39;, &#39;ngerman&#39;, &#39;sl&#39;, &#39;slovene&#39;, &#39;pt&#39;, &#39;portuges&#39;,
++                         &#39;es&#39;, &#39;spanish&#39;, &#39;nl&#39;, &#39;dutch&#39;, &#39;pl&#39;, &#39;polish&#39;, &#39;it&#39;,
++                         &#39;italian&#39;):
+             return &#39;\\shorthandoff{&#34;}&#39;
+         return &#39;&#39;
  
 +    def uses_cyrillic(self):
-+        shortlang = self.language.split('_')[0]
-+        return shortlang in ('bg','bulgarian', 'kk','kazakh',
-+                             'mn','mongolian', 'ru','russian',
-+                             'uk','ukrainian')
++        shortlang = self.language.split(&#39;_&#39;)[0]
++        return shortlang in (&#39;bg&#39;,&#39;bulgarian&#39;, &#39;kk&#39;,&#39;kazakh&#39;,
++                             &#39;mn&#39;,&#39;mongolian&#39;, &#39;ru&#39;,&#39;russian&#39;,
++                             &#39;uk&#39;,&#39;ukrainian&#39;)
 +
  # in latest trunk, the attribute is called Babel.language_codes and already
  # includes Slovene
- if hasattr(Babel, '_ISO639_TO_BABEL'):
+ if hasattr(Babel, &#39;_ISO639_TO_BABEL&#39;):
 @@ -133,8 +142,10 @@
-         'papersize':       'letterpaper',
-         'pointsize':       '10pt',
-         'classoptions':    '',
-+        'extraclassoptions': '',
-         'inputenc':        '\\usepackage[utf8]{inputenc}',
-         'utf8extra':       '\\DeclareUnicodeCharacter{00A0}{\\nobreakspace}',
-+        'cmappkg':         '\\usepackage{cmap}',
-         'fontenc':         '\\usepackage[T1]{fontenc}',
-         'babel':           '\\usepackage{babel}',
-         'fontpkg':         '\\usepackage{times}',
+         &#39;papersize&#39;:       &#39;letterpaper&#39;,
+         &#39;pointsize&#39;:       &#39;10pt&#39;,
+         &#39;classoptions&#39;:    &#39;&#39;,
++        &#39;extraclassoptions&#39;: &#39;&#39;,
+         &#39;inputenc&#39;:        &#39;\\usepackage[utf8]{inputenc}&#39;,
+         &#39;utf8extra&#39;:       &#39;\\DeclareUnicodeCharacter{00A0}{\\nobreakspace}&#39;,
++        &#39;cmappkg&#39;:         &#39;\\usepackage{cmap}&#39;,
+         &#39;fontenc&#39;:         &#39;\\usepackage[T1]{fontenc}&#39;,
+         &#39;babel&#39;:           &#39;\\usepackage{babel}&#39;,
+         &#39;fontpkg&#39;:         &#39;\\usepackage{times}&#39;,
 @@ -153,8 +164,12 @@
-         'tableofcontents': '\\tableofcontents',
-         'footer':          '',
-         'printindex':      '\\printindex',
-+        'transition':      '\n\n\\bigskip\\hrule{}\\bigskip\n\n',
+         &#39;tableofcontents&#39;: &#39;\\tableofcontents&#39;,
+         &#39;footer&#39;:          &#39;&#39;,
+         &#39;printindex&#39;:      &#39;\\printindex&#39;,
++        &#39;transition&#39;:      &#39;\n\n\\bigskip\\hrule{}\\bigskip\n\n&#39;,
      }
  
 +    # sphinx specific document classes
-+    docclasses = ('howto', 'manual')
++    docclasses = (&#39;howto&#39;, &#39;manual&#39;)
 +
      def __init__(self, document, builder):
          nodes.NodeVisitor.__init__(self, document)
@@ -392,43 +384,43 @@ diff -r 7d389fe78ee9 -r 14b315a7d010 sphinx/writers/latex.py
  
          self.elements = self.default_elements.copy()
          self.elements.update({
--            'wrapperclass': 'sphinx' + document.settings.docclass,
-+            'wrapperclass': self.format_docclass(document.settings.docclass),
-             'papersize':    papersize,
-             'pointsize':    builder.config.latex_font_size,
+-            &#39;wrapperclass&#39;: &#39;sphinx&#39; + document.settings.docclass,
++            &#39;wrapperclass&#39;: self.format_docclass(document.settings.docclass),
+             &#39;papersize&#39;:    papersize,
+             &#39;pointsize&#39;:    builder.config.latex_font_size,
              # if empty, the title is set to the first section title
 @@ -202,19 +217,25 @@
-             self.elements['shorthandoff'] = babel.get_shorthandoff()
-             self.elements['fncychap'] = '\\usepackage[Sonny]{fncychap}'
+             self.elements[&#39;shorthandoff&#39;] = babel.get_shorthandoff()
+             self.elements[&#39;fncychap&#39;] = &#39;\\usepackage[Sonny]{fncychap}&#39;
  
-+            # Times fonts don't work with Cyrillic languages
++            # Times fonts don&#39;t work with Cyrillic languages
 +            if babel.uses_cyrillic():
-+                self.elements['fontpkg'] = ''
++                self.elements[&#39;fontpkg&#39;] = &#39;&#39;
 +
              # pTeX (Japanese TeX) for support
-             if builder.config.language == 'ja':
--                self.elements['classoptions'] = ',dvipdfm'
+             if builder.config.language == &#39;ja&#39;:
+-                self.elements[&#39;classoptions&#39;] = &#39;,dvipdfm&#39;
 -                # found elements of babel, but this should be above sphinx.sty.
 -                # because pTeX (Japanese TeX) cannot handle this count.
--                self.elements['babel'] = r'\newcount\pdfoutput\pdfoutput=0'
+-                self.elements[&#39;babel&#39;] = r&#39;\newcount\pdfoutput\pdfoutput=0&#39;
 -                # to make the pdf with correct encoded hyperref bookmarks
--                self.elements['preamble'] += \
--                    r'\AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}'
+-                self.elements[&#39;preamble&#39;] += \
+-                    r&#39;\AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}&#39;
 +                # use dvipdfmx as default class option in Japanese
-+                self.elements['classoptions'] = ',dvipdfmx'
++                self.elements[&#39;classoptions&#39;] = &#39;,dvipdfmx&#39;
 +                # disable babel which has not publishing quality in Japanese
-+                self.elements['babel'] = ''
++                self.elements[&#39;babel&#39;] = &#39;&#39;
 +                # disable fncychap in Japanese documents
-+                self.elements['fncychap'] = ''
++                self.elements[&#39;fncychap&#39;] = &#39;&#39;
          else:
-             self.elements['classoptions'] += ',english'
+             self.elements[&#39;classoptions&#39;] += &#39;,english&#39;
          # allow the user to override them all
          self.elements.update(builder.config.latex_elements)
-+        if self.elements['extraclassoptions']:
-+            self.elements['classoptions'] += ',' + \
-+                                             self.elements['extraclassoptions']
++        if self.elements[&#39;extraclassoptions&#39;]:
++            self.elements[&#39;classoptions&#39;] += &#39;,&#39; + \
++                                             self.elements[&#39;extraclassoptions&#39;]
  
-         self.highlighter = highlighting.PygmentsBridge('latex',
+         self.highlighter = highlighting.PygmentsBridge(&#39;latex&#39;,
              builder.config.pygments_style, builder.config.trim_doctest_flags)
 @@ -243,7 +264,6 @@
          self.next_figure_ids = set()
@@ -443,10 +435,10 @@ diff -r 7d389fe78ee9 -r 14b315a7d010 sphinx/writers/latex.py
          self.remember_multirow = {}
  
 +    def format_docclass(self, docclass):
-+        """ prepends prefix to sphinx document classes
-+        """
++        &#34;&#34;&#34; prepends prefix to sphinx document classes
++        &#34;&#34;&#34;
 +        if docclass in self.docclasses:
-+            docclass = 'sphinx' + docclass
++            docclass = &#39;sphinx&#39; + docclass
 +        return docclass
 +
      def astext(self):
@@ -454,8 +446,8 @@ diff -r 7d389fe78ee9 -r 14b315a7d010 sphinx/writers/latex.py
                  self.highlighter.get_stylesheet() +
 @@ -292,7 +319,7 @@
                  if i &gt; 0:
-                     ret.append('\\indexspace\n')
-                 ret.append('\\bigletter{%s}\n' %
+                     ret.append(&#39;\\indexspace\n&#39;)
+                 ret.append(&#39;\\bigletter{%s}\n&#39; %
 -                           letter.translate(tex_escape_map))
 +                           unicode(letter).translate(tex_escape_map))
                  for entry in entries:
@@ -463,30 +455,30 @@ diff -r 7d389fe78ee9 -r 14b315a7d010 sphinx/writers/latex.py
                          continue
 @@ -351,7 +378,7 @@
                      widest_label = bi[0]
-             self.body.append(u'\n\\begin{thebibliography}{%s}\n' % widest_label)
+             self.body.append(u&#39;\n\\begin{thebibliography}{%s}\n&#39; % widest_label)
              for bi in self.bibitems:
--                target = self.hypertarget(bi[2] + ':' + bi[0].lower(),
-+                target = self.hypertarget(bi[2] + ':' + bi[3],
+-                target = self.hypertarget(bi[2] + &#39;:&#39; + bi[0].lower(),
++                target = self.hypertarget(bi[2] + &#39;:&#39; + bi[3],
                                            withdoc=False)
-                 self.body.append(u'\\bibitem[%s]{%s}{%s %s}\n' %
+                 self.body.append(u&#39;\\bibitem[%s]{%s}{%s %s}\n&#39; %
                      (bi[0], self.idescape(bi[0]), target, bi[1]))
 @@ -440,7 +467,7 @@
-         self.body.append('}\n')
+         self.body.append(&#39;}\n&#39;)
  
      def visit_transition(self, node):
--        self.body.append('\n\n\\bigskip\\hrule{}\\bigskip\n\n')
-+        self.body.append(self.elements['transition'])
+-        self.body.append(&#39;\n\n\\bigskip\\hrule{}\\bigskip\n\n&#39;)
++        self.body.append(self.elements[&#39;transition&#39;])
      def depart_transition(self, node):
          pass
  
 @@ -544,10 +571,12 @@
  
      def visit_desc_name(self, node):
-         self.body.append(r'\bfcode{')
+         self.body.append(r&#39;\bfcode{&#39;)
 +        self.no_contractions += 1
          self.literal_whitespace += 1
      def depart_desc_name(self, node):
-         self.body.append('}')
+         self.body.append(&#39;}&#39;)
          self.literal_whitespace -= 1
 +        self.no_contractions -= 1
  
@@ -497,46 +489,46 @@ diff -r 7d389fe78ee9 -r 14b315a7d010 sphinx/writers/latex.py
          pass
  
 -    def visit_refcount(self, node):
--        self.body.append("\\emph{")
+-        self.body.append(&#34;\\emph{&#34;)
 -    def depart_refcount(self, node):
--        self.body.append("}\\\\")
+-        self.body.append(&#34;}\\\\&#34;)
 -
      def visit_seealso(self, node):
-         self.body.append(u'\n\n\\strong{%s:}\n\n' % admonitionlabels['seealso'])
+         self.body.append(u&#39;\n\n\\strong{%s:}\n\n&#39; % admonitionlabels[&#39;seealso&#39;])
      def depart_seealso(self, node):
 @@ -618,6 +642,7 @@
          if isinstance(node.parent, nodes.citation):
              self.bibitems[-1][0] = node.astext()
              self.bibitems[-1][2] = self.curfilestack[-1]
-+            self.bibitems[-1][3] = node.parent['ids'][0]
++            self.bibitems[-1][3] = node.parent[&#39;ids&#39;][0]
          raise nodes.SkipNode
  
      def visit_tabular_col_spec(self, node):
 @@ -680,16 +705,15 @@
              self.body.extend(self.tableheaders)
-             self.body.append('\\endfirsthead\n\n')
-             self.body.append('\\multicolumn{%s}{c}%%\n' % self.table.colcount)
--            self.body.append(r'{{\bfseries \tablename\ \thetable{} -- %s}} \\'
-+            self.body.append(r'{{\textsf{\tablename\ \thetable{} -- %s}}} \\'
-                              % _('continued from previous page'))
-             self.body.append('\n\\hline\n')
+             self.body.append(&#39;\\endfirsthead\n\n&#39;)
+             self.body.append(&#39;\\multicolumn{%s}{c}%%\n&#39; % self.table.colcount)
+-            self.body.append(r&#39;\{\{\bfseries \tablename\ \thetable{} -- %s\}\} \\&#39;
++            self.body.append(r&#39;\{\{\textsf{\tablename\ \thetable{} -- %s\}}\} \\&#39;
+                              % _(&#39;continued from previous page&#39;))
+             self.body.append(&#39;\n\\hline\n&#39;)
              self.body.extend(self.tableheaders)
-             self.body.append('\\endhead\n\n')
--            self.body.append(ur'\hline \multicolumn{%s}{|r|}{{%s}} \\ \hline'
-+            self.body.append(ur'\hline \multicolumn{%s}{|r|}{{\textsf{%s}}} \\ \hline'
+             self.body.append(&#39;\\endhead\n\n&#39;)
+-            self.body.append(ur&#39;\hline \multicolumn{%s}{|r|}\{\{%s\}\} \\ \hline&#39;
++            self.body.append(ur&#39;\hline \multicolumn{%s}{|r|}\{\{\textsf{%s\}\}} \\ \hline&#39;
                               % (self.table.colcount,
-                                 _('Continued on next page')))
-             self.body.append('\n\\endfoot\n\n')
--            self.body.append('\\hline\n')
-             self.body.append('\\endlastfoot\n\n')
+                                 _(&#39;Continued on next page&#39;)))
+             self.body.append(&#39;\n\\endfoot\n\n&#39;)
+-            self.body.append(&#39;\\hline\n&#39;)
+             self.body.append(&#39;\\endlastfoot\n\n&#39;)
          else:
-             self.body.append('\\hline\n')
+             self.body.append(&#39;\\hline\n&#39;)
 @@ -719,29 +743,28 @@
          # Redirect head output until header is finished. see visit_tbody.
          self.body = self.tableheaders
      def depart_thead(self, node):
 -        pass
-+        self.body.append('\\hline')
++        self.body.append(&#39;\\hline&#39;)
  
      def visit_tbody(self, node):
          if not self.table.had_head:
@@ -544,68 +536,68 @@ diff -r 7d389fe78ee9 -r 14b315a7d010 sphinx/writers/latex.py
          self.body = self.tablebody
      def depart_tbody(self, node):
 -        pass
-+        self.body.append('\\hline')
++        self.body.append(&#39;\\hline&#39;)
  
      def visit_row(self, node):
          self.table.col = 0
      def depart_row(self, node):
          if self.previous_spanning_row == 1:
              self.previous_spanning_row = 0
--            self.body.append('\\\\\n')
+-            self.body.append(&#39;\\\\\n&#39;)
 -        else:
--            self.body.append('\\\\\\hline\n')
-+        self.body.append('\\\\\n')
+-            self.body.append(&#39;\\\\\\hline\n&#39;)
++        self.body.append(&#39;\\\\\n&#39;)
          self.table.rowcount += 1
  
      def visit_entry(self, node):
 -        if self.remember_multirow.get(0, 0) &gt; 1:
 +        if self.table.col &gt; 0:
-             self.body.append(' &amp; ')
+             self.body.append(&#39; &amp; &#39;)
 -        if self.table.col &gt; 0:
 +        elif self.remember_multirow.get(1, 0) &gt; 1:
 +            self.remember_multirow[1] -= 1
-             self.body.append(' &amp; ')
+             self.body.append(&#39; &amp; &#39;)
          self.table.col += 1
-         context = ''
+         context = &#39;&#39;
 @@ -761,7 +784,7 @@
-                 self.body.append('}{l|}{')
-             context += '}'
+                 self.body.append(&#39;}{l|}{&#39;)
+             context += &#39;}&#39;
          if isinstance(node.parent.parent, nodes.thead):
--            self.body.append('\\textbf{')
-+            self.body.append('\\textsf{\\relax ')
-             context += '}'
+-            self.body.append(&#39;\\textbf{&#39;)
++            self.body.append(&#39;\\textsf{\\relax &#39;)
+             context += &#39;}&#39;
          if self.remember_multirow.get(self.table.col + 1, 0) &gt; 1:
              self.remember_multirow[self.table.col + 1] -= 1
 @@ -1035,12 +1058,7 @@
      depart_warning = _depart_named_admonition
  
      def visit_versionmodified(self, node):
--        intro = versionlabels[node['type']] % node['version']
+-        intro = versionlabels[node[&#39;type&#39;]] % node[&#39;version&#39;]
 -        if node.children:
--            intro += ': '
+-            intro += &#39;: &#39;
 -        else:
--            intro += '.'
+-            intro += &#39;.&#39;
 -        self.body.append(intro)
 +        pass
      def depart_versionmodified(self, node):
          pass
  
 @@ -1172,7 +1190,7 @@
-             id = self.curfilestack[-1] + ':' + uri[1:]
+             id = self.curfilestack[-1] + &#39;:&#39; + uri[1:]
              self.body.append(self.hyperlink(id))
              if self.builder.config.latex_show_pagerefs and not \
 -                    self.in_productionlist:
 +                    self.in_production_list:
-                 self.context.append('}} (%s)' % self.hyperpageref(id))
+                 self.context.append(&#39;}} (%s)&#39; % self.hyperpageref(id))
              else:
-                 self.context.append('}}')
+                 self.context.append(&#39;}}&#39;)
 @@ -1248,7 +1266,8 @@
  
      def visit_citation(self, node):
          # TODO maybe use cite bibitems
--        self.bibitems.append(['', '', ''])  # [citeid, citetext, docname]
+-        self.bibitems.append([&#39;&#39;, &#39;&#39;, &#39;&#39;])  # [citeid, citetext, docname]
 +        # bibitem: [citelabel, citetext, docname, citeid]
-+        self.bibitems.append(['', '', '', ''])
++        self.bibitems.append([&#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;])
          self.context.append(len(self.body))
      def depart_citation(self, node):
          size = self.context.pop()
@@ -613,85 +605,85 @@ diff -r 7d389fe78ee9 -r 14b315a7d010 sphinx/writers/latex.py
          pass
  
      def visit_literal_block(self, node):
--        self.verbatim = ''
+-        self.verbatim = &#39;&#39;
 +        if self.in_footnote:
-+            raise UnsupportedError('%s:%s: literal blocks in footnotes are '
-+                                   'not supported by LaTeX' %
++            raise UnsupportedError(&#39;%s:%s: literal blocks in footnotes are &#39;
++                                   &#39;not supported by LaTeX&#39; %
 +                                   (self.curfilestack[-1], node.line))
 +        if node.rawsource != node.astext():
-+            # most probably a parsed-literal block -- don't highlight
-+            self.body.append('\\begin{alltt}\n')
++            # most probably a parsed-literal block -- don&#39;t highlight
++            self.body.append(&#39;\\begin{alltt}\n&#39;)
 +        else:
-+            code = node.astext().rstrip('\n')
++            code = node.astext().rstrip(&#39;\n&#39;)
 +            lang = self.hlsettingstack[-1][0]
-+            linenos = code.count('\n') &gt;= self.hlsettingstack[-1][1] - 1
-+            highlight_args = node.get('highlight_args', {})
-+            if 'language' in node:
++            linenos = code.count(&#39;\n&#39;) &gt;= self.hlsettingstack[-1][1] - 1
++            highlight_args = node.get(&#39;highlight_args&#39;, {})
++            if &#39;language&#39; in node:
 +                # code-block directives
-+                lang = node['language']
-+                highlight_args['force'] = True
-+            if 'linenos' in node:
-+                linenos = node['linenos']
++                lang = node[&#39;language&#39;]
++                highlight_args[&#39;force&#39;] = True
++            if &#39;linenos&#39; in node:
++                linenos = node[&#39;linenos&#39;]
 +            def warner(msg):
 +                self.builder.warn(msg, (self.curfilestack[-1], node.line))
 +            hlcode = self.highlighter.highlight_block(code, lang, warn=warner,
 +                    linenos=linenos, **highlight_args)
 +            # workaround for Unicode issue
-+            hlcode = hlcode.replace(u'€', u'@texteuro[]')
-+            # must use original Verbatim environment and "tabular" environment
++            hlcode = hlcode.replace(u&#39;€&#39;, u&#39;@texteuro[]&#39;)
++            # must use original Verbatim environment and &#34;tabular&#34; environment
 +            if self.table:
-+                hlcode = hlcode.replace('\\begin{Verbatim}',
-+                                        '\\begin{OriginalVerbatim}')
++                hlcode = hlcode.replace(&#39;\\begin{Verbatim}&#39;,
++                                        &#39;\\begin{OriginalVerbatim}&#39;)
 +                self.table.has_problematic = True
 +                self.table.has_verbatim = True
 +            # get consistent trailer
 +            hlcode = hlcode.rstrip()[:-14] # strip \end{Verbatim}
-+            hlcode = hlcode.rstrip() + '\n'
-+            self.body.append('\n' + hlcode + '\\end{%sVerbatim}\n' %
-+                             (self.table and 'Original' or ''))
++            hlcode = hlcode.rstrip() + &#39;\n&#39;
++            self.body.append(&#39;\n&#39; + hlcode + &#39;\\end{%sVerbatim}\n&#39; %
++                             (self.table and &#39;Original&#39; or &#39;&#39;))
 +            raise nodes.SkipNode
      def depart_literal_block(self, node):
--        code = self.verbatim.rstrip('\n')
+-        code = self.verbatim.rstrip(&#39;\n&#39;)
 -        lang = self.hlsettingstack[-1][0]
--        linenos = code.count('\n') &gt;= self.hlsettingstack[-1][1] - 1
--        if 'language' in node:
+-        linenos = code.count(&#39;\n&#39;) &gt;= self.hlsettingstack[-1][1] - 1
+-        if &#39;language&#39; in node:
 -            # code-block directives
--            lang = node['language']
--        if 'linenos' in node:
--            linenos = node['linenos']
--        highlight_args = node.get('highlight_args', {})
+-            lang = node[&#39;language&#39;]
+-        if &#39;linenos&#39; in node:
+-            linenos = node[&#39;linenos&#39;]
+-        highlight_args = node.get(&#39;highlight_args&#39;, {})
 -        def warner(msg):
 -            self.builder.warn(msg, (self.curfilestack[-1], node.line))
 -        hlcode = self.highlighter.highlight_block(code, lang, warn=warner,
 -                linenos=linenos, **highlight_args)
 -        # workaround for Unicode issue
--        hlcode = hlcode.replace(u'€', u'@texteuro[]')
--        # must use original Verbatim environment and "tabular" environment
+-        hlcode = hlcode.replace(u&#39;€&#39;, u&#39;@texteuro[]&#39;)
+-        # must use original Verbatim environment and &#34;tabular&#34; environment
 -        if self.table:
--            hlcode = hlcode.replace('\\begin{Verbatim}',
--                                    '\\begin{OriginalVerbatim}')
+-            hlcode = hlcode.replace(&#39;\\begin{Verbatim}&#39;,
+-                                    &#39;\\begin{OriginalVerbatim}&#39;)
 -            self.table.has_problematic = True
 -            self.table.has_verbatim = True
 -        # get consistent trailer
 -        hlcode = hlcode.rstrip()[:-14] # strip \end{Verbatim}
--        hlcode = hlcode.rstrip() + '\n'
--        self.body.append('\n' + hlcode + '\\end{%sVerbatim}\n' %
--                         (self.table and 'Original' or ''))
+-        hlcode = hlcode.rstrip() + &#39;\n&#39;
+-        self.body.append(&#39;\n&#39; + hlcode + &#39;\\end{%sVerbatim}\n&#39; %
+-                         (self.table and &#39;Original&#39; or &#39;&#39;))
 -        self.verbatim = None
-+        self.body.append('\n\\end{alltt}\n')
++        self.body.append(&#39;\n\\end{alltt}\n&#39;)
      visit_doctest_block = visit_literal_block
      depart_doctest_block = depart_literal_block
  
 @@ -1477,6 +1505,7 @@
-             text = text.replace(u'\n', u'~\\\\\n').replace(u' ', u'~')
+             text = text.replace(u&#39;\n&#39;, u&#39;~\\\\\n&#39;).replace(u&#39; &#39;, u&#39;~&#39;)
          if self.no_contractions:
-             text = text.replace('--', u'-{-}')
-+            text = text.replace("''", u"'{'}")
+             text = text.replace(&#39;--&#39;, u&#39;-{-}&#39;)
++            text = text.replace(&#34;&#39;&#39;&#34;, u&#34;&#39;{&#39;}&#34;)
          return text
  
      def encode_uri(self, text):
 @@ -1484,13 +1513,10 @@
-         return self.encode(text).replace('\\textasciitilde{}', '~')
+         return self.encode(text).replace(&#39;\\textasciitilde{}&#39;, &#39;~&#39;)
  
      def visit_Text(self, node):
 -        if self.verbatim is not None:
@@ -710,26 +702,24 @@ diff -r 7d389fe78ee9 -r 14b315a7d010 sphinx/writers/latex.py
  
 @@ -1506,5 +1532,14 @@
      def depart_system_message(self, node):
-         self.body.append('\n')
+         self.body.append(&#39;\n&#39;)
  
 +    def visit_math(self, node):
-+        self.builder.warn('using "math" markup without a Sphinx math extension '
-+                          'active, please use one of the math extensions '
-+                          'described at http://sphinx-doc.org/ext/math.html',
++        self.builder.warn(&#39;using &#34;math&#34; markup without a Sphinx math extension &#39;
++                          &#39;active, please use one of the math extensions &#39;
++                          &#39;described at http://sphinx-doc.org/ext/math.html&#39;,
 +                          (self.curfilestack[-1], node.line))
 +        raise nodes.SkipNode
 +
 +    visit_math_block = visit_math
 +
      def unknown_visit(self, node):
-<span class="err">         raise NotImplementedError('Unknown node: ' + node.__class__.__name__)</span></code>
-  </pre>
-</figure>
-
+         raise NotImplementedError(&#39;Unknown node: &#39; + node.__class__.__name__)
+{% endraw %}</code></pre></div>
 <p><a href="http://sphinx-users.jp/cookbook/pdf/latex.html">LaTeX経由でのPDF作成 &gt; Python製ドキュメンテーションビルダー、Sphinxの日本ユーザ会</a> にも</p>
 
 <blockquote>
-  <p>Sphinx-1.2 (2013/12/10リリース)に打田さんのパッチが取り込まれています。</p>
+<p>Sphinx-1.2 (2013/12/10リリース)に打田さんのパッチが取り込まれています。</p>
 </blockquote>
 
 <p>と書かれているので、やっぱり 1.2.2 を正として、このバージョンでは動くものと考えて良いんだろう…。</p>
@@ -740,563 +730,749 @@ diff -r 7d389fe78ee9 -r 14b315a7d010 sphinx/writers/latex.py
 
 <p>抜けてるとしたら、 Sphinx インストール周りなんだけど。</p>
 
-<h2 id="tocAnchor-1-9">解決策</h2>
+<h2 id="解決策">解決策</h2>
 
 <ul>
-  <li><a href="http://www.python.jp/pipermail/sphinx-users/2012-April/000593.html">[Sphinx-Users 276] Re: LaTeX経由でのPDF作成手順をアップデートしました</a></li>
+<li><a href="http://www.python.jp/pipermail/sphinx-users/2012-April/000593.html">[Sphinx-Users 276] Re: LaTeX経由でのPDF作成手順をアップデートしました</a></li>
 </ul>
 
 <p>このトピックの最後で打田さんが make.bat を作ったといっている。</p>
 
-<p>このファイルを作って <code class="highlighter-rouge">PYTHON_HOME\Lib\site-packages\SPHINX_HOME\sphinx\texinputs</code> の下にコピーした。(パスは環境によって変わるかも)</p>
+<p>このファイルを作って <code>PYTHON_HOME\Lib\site-packages\SPHINX_HOME\sphinx\texinputs</code> の下にコピーした。(パスは環境によって変わるかも)</p>
+<div class="highlight"><pre class="chroma"><code class="language-bat" data-lang="bat"><span class="p">@@</span><span class="k">echo</span> off
+<span class="k">setlocal</span>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-bat" data-lang="bat">@@echo off
-setlocal
+<span class="p">:</span><span class="c1">:set %LATEXOPTS%=</span>
 
-::set %LATEXOPTS%=
+<span class="k">if</span> <span class="s2">&#34;</span><span class="nv">%1</span><span class="s2">&#34;</span> <span class="ow">EQU</span> <span class="s2">&#34;all-pdf&#34;</span> <span class="k">goto</span> <span class="nl">all-pdf</span>
+<span class="k">if</span> <span class="s2">&#34;</span><span class="nv">%1</span><span class="s2">&#34;</span> <span class="ow">EQU</span> <span class="s2">&#34;all-dvi&#34;</span> <span class="k">goto</span> <span class="nl">all-dvi</span>
+<span class="k">if</span> <span class="s2">&#34;</span><span class="nv">%1</span><span class="s2">&#34;</span> <span class="ow">EQU</span> <span class="s2">&#34;all-ps&#34;</span> <span class="k">goto</span> <span class="nl">all-ps</span>
+<span class="k">if</span> <span class="s2">&#34;</span><span class="nv">%1</span><span class="s2">&#34;</span> <span class="ow">EQU</span> <span class="s2">&#34;all-pdf-ja&#34;</span> <span class="k">goto</span> <span class="nl">all-pdf-ja</span>
+<span class="k">if</span> <span class="s2">&#34;</span><span class="nv">%1</span><span class="s2">&#34;</span> <span class="ow">EQU</span> <span class="s2">&#34;clean&#34;</span> <span class="k">goto</span> <span class="nl">clean</span>
 
-if "%1" EQU "all-pdf" goto all-pdf
-if "%1" EQU "all-dvi" goto all-dvi
-if "%1" EQU "all-ps" goto all-ps
-if "%1" EQU "all-pdf-ja" goto all-pdf-ja
-if "%1" EQU "clean" goto clean
+<span class="p">:</span><span class="nl">all-pdf</span>
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> pdflatex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> pdflatex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> pdflatex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.idx<span class="p">)</span> <span class="k">do</span> <span class="k">if</span> <span class="k">exist</span> <span class="se">%%</span>f <span class="p">(</span>makeindex -s python.ist <span class="se">%%</span>f<span class="p">)</span>
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> pdflatex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> pdflatex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">goto</span> <span class="nl">end</span>
 
-:all-pdf
-for %%f in (*.tex) do pdflatex %LATEXOPTS% %%f
-for %%f in (*.tex) do pdflatex %LATEXOPTS% %%f
-for %%f in (*.tex) do pdflatex %LATEXOPTS% %%f
-for %%f in (*.idx) do if exist %%f (makeindex -s python.ist %%f)
-for %%f in (*.tex) do pdflatex %LATEXOPTS% %%f
-for %%f in (*.tex) do pdflatex %LATEXOPTS% %%f
-goto end
+<span class="p">:</span><span class="nl">all-dvi</span>
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> latex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> latex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> latex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.idx<span class="p">)</span> <span class="k">do</span> <span class="k">if</span> <span class="k">exist</span> <span class="se">%%</span>f <span class="p">(</span>makeindex -s python.ist <span class="se">%%</span>f<span class="p">)</span>
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> latex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> latex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">goto</span> <span class="nl">end</span>
 
-:all-dvi
-for %%f in (*.tex) do latex %LATEXOPTS% %%f
-for %%f in (*.tex) do latex %LATEXOPTS% %%f
-for %%f in (*.tex) do latex %LATEXOPTS% %%f
-for %%f in (*.idx) do if exist %%f (makeindex -s python.ist %%f)
-for %%f in (*.tex) do latex %LATEXOPTS% %%f
-for %%f in (*.tex) do latex %LATEXOPTS% %%f
-goto end
+<span class="p">:</span><span class="nl">all-ps</span>
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> latex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> latex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> latex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.idx<span class="p">)</span> <span class="k">do</span> <span class="k">if</span> <span class="k">exist</span> <span class="se">%%</span>f <span class="p">(</span>makeindex -s python.ist <span class="se">%%</span>f<span class="p">)</span>
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> latex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> latex <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.dvi<span class="p">)</span> <span class="k">do</span> dvips <span class="se">%%</span>f
+<span class="k">goto</span> <span class="nl">end</span>
 
-:all-ps
-for %%f in (*.tex) do latex %LATEXOPTS% %%f
-for %%f in (*.tex) do latex %LATEXOPTS% %%f
-for %%f in (*.tex) do latex %LATEXOPTS% %%f
-for %%f in (*.idx) do if exist %%f (makeindex -s python.ist %%f)
-for %%f in (*.tex) do latex %LATEXOPTS% %%f
-for %%f in (*.tex) do latex %LATEXOPTS% %%f
-for %%f in (*.dvi) do dvips %%f
-goto end
+<span class="p">:</span><span class="nl">all-pdf-ja</span>
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.pdf *.png *.gif *.jpg *.jpeg<span class="p">)</span> <span class="k">do</span> extractbb <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> platex -kanji=utf8 <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> platex -kanji=utf8 <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> platex -kanji=utf8 <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.idx<span class="p">)</span> <span class="k">do</span> <span class="k">if</span> <span class="k">exist</span> <span class="se">%%</span>f <span class="p">(</span>mendex -U -f -d <span class="s2">&#34;`basename </span><span class="se">%%</span><span class="s2">f .idx`.dic&#34;</span> -s python.ist <span class="se">%%</span>f<span class="p">)</span>
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> platex -kanji=utf8 <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.tex<span class="p">)</span> <span class="k">do</span> platex -kanji=utf8 <span class="nv">%LATEXOPTS%</span> <span class="se">%%</span>f
+<span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span>*.dvi<span class="p">)</span> <span class="k">do</span> dvipdfmx <span class="se">%%</span>f
+<span class="k">goto</span> <span class="nl">end</span>
 
-:all-pdf-ja
-for %%f in (*.pdf *.png *.gif *.jpg *.jpeg) do extractbb %%f
-for %%f in (*.tex) do platex -kanji=utf8 %LATEXOPTS% %%f
-for %%f in (*.tex) do platex -kanji=utf8 %LATEXOPTS% %%f
-for %%f in (*.tex) do platex -kanji=utf8 %LATEXOPTS% %%f
-for %%f in (*.idx) do if exist %%f (mendex -U -f -d "`basename %%f .idx`.dic" -s python.ist %%f)
-for %%f in (*.tex) do platex -kanji=utf8 %LATEXOPTS% %%f
-for %%f in (*.tex) do platex -kanji=utf8 %LATEXOPTS% %%f
-for %%f in (*.dvi) do dvipdfmx %%f
-goto end
+<span class="p">:</span><span class="nl">clean</span>
+<span class="k">del</span> *.dvi *.log *.ind *.aux *.toc *.syn *.idx *.out *.ilg *.pla
+<span class="k">goto</span> <span class="nl">end</span>
 
-:clean
-del *.dvi *.log *.ind *.aux *.toc *.syn *.idx *.out *.ilg *.pla
-goto end
-
-:end</code>
-  </pre>
-</figure>
-
-<p>そして <code class="highlighter-rouge">make latexpdfja</code> を再チャレンジしたら動いた！</p>
+<span class="p">:</span><span class="nl">end</span></code></pre></div>
+<p>そして <code>make latexpdfja</code> を再チャレンジしたら動いた！</p>
 
 <p>…とここまで書いて一つ思いついたけど、もしかして make の種類関係あるか…？</p>
 
-</div>
+    </section>
+  </article>
 
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2014/05/19/sphinx-recommend2/" title="「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた2">
-          「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた2
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2014/05/19/sphinx-recommend2/" class="pagination_overflow previous_page">
+          Prev: 
+          14/5/19
+          「Sphinxをはじめよう」を読んで導入したいと思ったので色 …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2014/06/22/translated-jekyllrb/" title="Jekyllドキュメントを翻訳してなんとなくわかってきたもの">
+      
+
+      <span class="pagination_center disabled">
+        14/5/28
+        Windo …
+      </span>
+
+      
+        <a href="/2014/06/22/translated-jekyllrb/" class="pagination_overflow next_page">
+          Next: 
+          14/6/22
           Jekyllドキュメントを翻訳してなんとなくわかってきたもの
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2014/05/28/sphinx-latexpdfja-for-windows/" data-text="kk_Atakaの日記 - WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2014/05/28/sphinx-latexpdfja-for-windows/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2014/05/28/sphinx-latexpdfja-for-windows/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2014/05/28/sphinx-latexpdfja-for-windows/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦した話"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+      </div>
 
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2014/05/28/sphinx-latexpdfja-for-windows//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-  <h2>Recent Entries</h2>
 
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#結論">結論</a></li>
+<li><a href="#事前準備">事前準備</a></li>
+<li><a href="#調査">調査</a>
+<ul>
+<li><a href="#エラー内容">エラー内容</a></li>
+<li><a href="#エラーメッセージ調査">エラーメッセージ調査</a></li>
+<li><a href="#パッチあて">パッチあて</a></li>
+</ul></li>
+<li><a href="#解決策">解決策</a></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

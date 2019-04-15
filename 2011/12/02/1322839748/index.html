@@ -1,743 +1,1142 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>Sphinxでドキュメントを書くためreST記法に入門した - kk_Atakaの日記</title>
-    <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
-  </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
-
-
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
-    </div>
-
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2011/12/02/1322839748/">Sphinxでドキュメントを書くためreST記法に入門した</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Sphinx" class="tag">Sphinx</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#reST" class="tag">reST</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#備忘録" class="tag">備忘録</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2011/12/02</span>
-          
-        </div>
-
-
-
-<div class="pagination">
-  <ul>
     
-      <li class="prev">
-        <a href="/2011/12/01/1322746718/" title="DAT装置の使い方 超簡易版(Solaris)">
+      
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Sphinxでドキュメントを書くためreST記法に入門した &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Sphinx][reST][備忘録]Sphinxでドキュメントを書くためreST記法に入門した あらすじ Sphinxを導入した時にまとめたreST(reStructuredText)記法をアウトプットしよう。まだリファレンス読み込んでおらず、感覚で使っているところもあるので間違った認識もあるかも…そこは学んだら追記しよう。
+参考  http://sphinx.shibu.jp/:title http://docutils.sourceforge.net/rst.html:title  基本的にSphinxのサイトに書いてあることを写経してます。
+注意 見出しの文字数より少なくならないように上下囲む、とかテーブルは列・行を合わせるとか結構シビアな書き方が求められるのですが……pre記法にしても揃ってない…！
+見出し系 間違って覚えていたので、見出し系については[http://d.hatena.ne.jp/kk_Ataka/20120816/1345124098:title]を参照。
+ h1見出し  半角イコールで上下を揃えて囲むとh1と同等。
+========================= rst(reStructuredText)解説 ========================= [f:id:kk_Ataka:20111203000832j:image]
+見出しより長くしても問題ないが、見出しより短いと警告される。(Title underline too short.):
+=========================== 怒られない =========================== == 怒られる == 以下の見出しも同様。
+ h2見出し  下だけ半角イコールでh2と同等。
+&amp;lt;h2&amp;gt;になる ========== [f:id:kk_Ataka:20111203000826j:image]
+ h3見出し  ハイフンで上下囲むとh3と同等。
+---------- &amp;lt;h3&amp;gt;になる ---------- [f:id:kk_Ataka:20111203000827j:image]
+ h4見出し  下だけハイフンでh4と同等。
+&amp;lt;h4&amp;gt;になる ---------- [f:id:kk_Ataka:20111203000828j:image]
+リスト系  箇条書きリスト  箇条書きリストの項目。ハイフンで定義。
+- りんご - きのこ - パワーアップ用 - 1UP用 - みかん [f:id:kk_Ataka:20111202231941j:image]|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2011/12/01/1322746718/" class="pagination_overflow previous_page">
+          Prev: 
+          11/12/1
           DAT装置の使い方 超簡易版(Solaris)
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2011/12/03/1322922769/" title="Macで現在の入力モードを判別しやすくするImageUpをインストールした">
-          Macで現在の入力モードを判別しやすくするImageUpをインストールした
+      
+
+      <span class="pagination_center disabled">
+        11/12/2
+        Sphin …
+      </span>
+
+      
+        <a href="/2011/12/03/1322922769/" class="pagination_overflow next_page">
+          Next: 
+          11/12/3
+          Macで現在の入力モードを判別しやすくするImageUpをイ …
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<h1>あらすじ</h1>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">Sphinxでドキュメントを書くためreST記法に入門した</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
+
+  
+    <a href='/tags/sphinx' class="muted-link">
+      [ <span class="Label Label--gray">Sphinx</span> ]
+    </a>
+  
+    <a href='/tags/rest' class="muted-link">
+      [ <span class="Label Label--gray">reST</span> ]
+    </a>
+  
+    <a href='/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2011/12/02</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#sphinx-rest-備忘録-sphinxでドキュメントを書くためrest記法に入門した">[Sphinx][reST][備忘録]Sphinxでドキュメントを書くためreST記法に入門した</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#注意">注意</a></li>
+<li><a href="#見出し系">見出し系</a></li>
+<li><a href="#リスト系">リスト系</a></li>
+<li><a href="#装飾系">装飾系</a></li>
+<li><a href="#テーブル">テーブル</a></li>
+<li><a href="#文章系">文章系</a></li>
+<li><a href="#ディレクティブ">ディレクティブ</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="sphinx-rest-備忘録-sphinxでドキュメントを書くためrest記法に入門した">[Sphinx][reST][備忘録]Sphinxでドキュメントを書くためreST記法に入門した</h2>
+
+<h2 id="あらすじ">あらすじ</h2>
+
 <p>Sphinxを導入した時にまとめたreST(reStructuredText)記法をアウトプットしよう。まだリファレンス読み込んでおらず、感覚で使っているところもあるので間違った認識もあるかも…そこは学んだら追記しよう。</p>
-<h1>参考</h1>
-<ul><li><a href="http://sphinx.shibu.jp/">Overview — Sphinx v1.0 (hg) documentation</a></li><li><a href="http://docutils.sourceforge.net/rst.html">reStructuredText</a></li></ul>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="http://sphinx.shibu.jp/:title">http://sphinx.shibu.jp/:title</a></li>
+<li><a href="http://docutils.sourceforge.net/rst.html:title">http://docutils.sourceforge.net/rst.html:title</a></li>
+</ul>
+
 <p>基本的にSphinxのサイトに書いてあることを写経してます。</p>
-<h1>注意</h1>
+
+<h2 id="注意">注意</h2>
+
 <p>見出しの文字数より少なくならないように上下囲む、とかテーブルは列・行を合わせるとか結構シビアな書き方が求められるのですが……pre記法にしても揃ってない…！</p>
-<h1>見出し系</h1>
-<p><span class="deco" style="color:#FF0000;">間違って覚えていたので、見出し系については<a href="http://d.hatena.ne.jp/kk_Ataka/20120816/1345124098">2012-08-16-1345124098</a>を参照。</span></p>
-<ul><li>h1見出し</li></ul>
+
+<h2 id="見出し系">見出し系</h2>
+
+<p><span class="deco" style="color:#FF0000;">間違って覚えていたので、見出し系については[<a href="http://d.hatena.ne.jp/kk_Ataka/20120816/1345124098:title]を参照">http://d.hatena.ne.jp/kk_Ataka/20120816/1345124098:title]を参照</a>。</span></p>
+
+<ul>
+<li>h1見出し</li>
+</ul>
+
 <p>半角イコールで上下を<span class="deco" style="font-weight:bold;">揃えて囲む</span>とh1と同等。</p>
-<pre>      =========================
+<div class="highlight"><pre class="chroma">      =========================
       rst(reStructuredText)解説
-      =========================</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000832"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000832.jpg"></a></p>
+      =========================</pre></div>
+<p>[f:id:kk_Ataka:20111203000832j:image]</p>
+
 <p><span class="deco" style="color:#FF0000;">見出しより長くしても問題ないが、見出しより短いと警告される。(Title underline too short.):</span></p>
-<pre>      ===========================
+<div class="highlight"><pre class="chroma">      ===========================
       怒られない
-      ===========================</pre>
-<pre>      ==
+      ===========================
+
+      ==
       怒られる
-      ==</pre>
+      ==</pre></div>
 <p><span class="deco" style="color:#FF0000;">以下の見出しも同様。</span></p>
-<ul><li>h2見出し</li></ul>
+
+<ul>
+<li>h2見出し</li>
+</ul>
+
 <p>下だけ半角イコールでh2と同等。</p>
-<pre>      &lt;h2&gt;になる
-      ==========</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000826"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000826.jpg"></a></p>
-<ul><li>h3見出し</li></ul>
+<div class="highlight"><pre class="chroma">      &lt;h2&gt;になる
+      ==========</pre></div>
+<p>[f:id:kk_Ataka:20111203000826j:image]</p>
+
+<ul>
+<li>h3見出し</li>
+</ul>
+
 <p>ハイフンで上下囲むとh3と同等。</p>
-<pre>      ----------
+<div class="highlight"><pre class="chroma">      ----------
       &lt;h3&gt;になる
-      ----------</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000827"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000827.jpg"></a></p>
-<ul><li>h4見出し</li></ul>
+      ----------</pre></div>
+<p>[f:id:kk_Ataka:20111203000827j:image]</p>
+
+<ul>
+<li>h4見出し</li>
+</ul>
+
 <p>下だけハイフンでh4と同等。</p>
-<pre>      &lt;h4&gt;になる
-      ----------</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000828"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000828.jpg"></a></p>
-<h1>リスト系</h1>
-<ul><li>箇条書きリスト</li></ul>
+<div class="highlight"><pre class="chroma">      &lt;h4&gt;になる
+      ----------</pre></div>
+<p>[f:id:kk_Ataka:20111203000828j:image]</p>
+
+<h2 id="リスト系">リスト系</h2>
+
+<ul>
+<li>箇条書きリスト</li>
+</ul>
+
 <p>箇条書きリストの項目。ハイフンで定義。</p>
-<pre>      - りんご
+<div class="highlight"><pre class="chroma">      - りんご
       - きのこ
               - パワーアップ用
               - 1UP用
-      - みかん</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231941"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231941.jpg"></a></p>
-<ul><li>数字つきリスト</li></ul>
+      - みかん</pre></div>
+<p>[f:id:kk_Ataka:20111202231941j:image]</p>
+
+<ul>
+<li>数字つきリスト</li>
+</ul>
+
 <p>数字つきリストの項目。数字・アルファベット等と半角の閉じ括弧で定義。</p>
-<pre>      1) りんご
+<div class="highlight"><pre class="chroma">      1) りんご
       2) きのこ
               a) パワーアップ用
                       i) 毒きのこ
               b) 1UP用
-      3) みかん</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231922"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231922.jpg"></a></p>
+      3) みかん</pre></div>
+<p>[f:id:kk_Ataka:20111202231922j:image]</p>
+
 <p>また、閉じ括弧 は . でもよい様子。</p>
-<ul><li>数字つきリストの項目2</li></ul>
+
+<ul>
+<li>数字つきリストの項目2</li>
+</ul>
+
 <p>シャープで自動発番してくれる。</p>
-<pre>      #. りんご
+<div class="highlight"><pre class="chroma">      #. りんご
       #. きのこ
               #. パワーアップ用
                       #. 毒きのこ
               #. 1UP用
-      #. みかん</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231923"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231923.jpg"></a></p>
-<ul><li>定義項目</li></ul>
+      #. みかん</pre></div>
+<p>[f:id:kk_Ataka:20111202231923j:image]</p>
+
+<ul>
+<li>定義項目</li>
+</ul>
+
 <p><span class="deco" style="font-weight:bold;">一個改行して</span>インデント。二個改行してインデントすると字下げになる。</p>
-<pre>      キノコ
+<div class="highlight"><pre class="chroma">      キノコ
               食べてパワーアップする
       スター
-              一定時間無敵になる</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231924"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231924.jpg"></a></p>
-<h1>装飾系</h1>
-<ul><li>イタリック体</li></ul>
+              一定時間無敵になる</pre></div>
+<p>[f:id:kk_Ataka:20111202231924j:image]</p>
+
+<h2 id="装飾系">装飾系</h2>
+
+<ul>
+<li>イタリック体</li>
+</ul>
+
 <p>アスタリスクで囲んでイタリック体。</p>
-<pre>      *アスタリスクで囲んでイタリック体*</pre>
-<ul><li>ボールド体</li></ul>
+<div class="highlight"><pre class="chroma">      *アスタリスクで囲んでイタリック体*</pre></div>
+<ul>
+<li>ボールド体</li>
+</ul>
+
 <p>アスタリスク2つで囲んでボールド体。</p>
-<pre>      **アスタリスク2つで囲んでボールド体**</pre>
-<ul><li>そのまま表示</li></ul>
+<div class="highlight"><pre class="chroma">      **アスタリスク2つで囲んでボールド体**</pre></div>
+<ul>
+<li>そのまま表示</li>
+</ul>
+
 <p>`` ``で囲んだ文字をそのまま表示。アスタリスクで囲んでもイタリック体にならない。</p>
-<pre>      ``*囲んだ文字をそのまま表示*アスタリスクで囲んでもイタリック体にならない``</pre>
-<ul><li>リンク</li></ul>
+<div class="highlight"><pre class="chroma">      ``*囲んだ文字をそのまま表示*アスタリスクで囲んでもイタリック体にならない``</pre></div>
+<ul>
+<li>リンク</li>
+</ul>
+
 <p>リンクにしたい文字の後ろ _ をつけ、 別の場所でリンクの定義をする。リンク内にスペースが必要な時は` `でくくる。普通の文字とリンク文字の間にはスペースあけがいるようだ。</p>
-<pre>      リンクその1 ggrks_ と やふれかす_ リンク内にスペースが必要な時はくくる `やふれ　かす`_
+<div class="highlight"><pre class="chroma">      リンクその1 ggrks_ と やふれかす_ リンク内にスペースが必要な時はくくる `やふれ　かす`_
       .. _ggrks: http://www.google.com/
       .. _やふれかす: http://www.yahoo.co.jp/
-      .. _やふれ　かす: http://www.yahoo.co.jp/</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231925"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231925.jpg"></a></p>
-<ul><li>リンクその2</li></ul>
+      .. _やふれ　かす: http://www.yahoo.co.jp/</pre></div>
+<p>[f:id:kk_Ataka:20111202231925j:image]</p>
+
+<ul>
+<li>リンクその2</li>
+</ul>
+
 <p>こういう書き方もある。</p>
-<pre>      `グーグル`__ に
-      __ http://www.google.com/</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231926"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231926.jpg"></a></p>
-<ul><li>リンクその3</li></ul>
-<p>URL直打ちも実はリンクになる。<span class="footnote"><a href="#f1" title="これが一番簡単？" name="fn1">*1</a></span></p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231927"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231927.jpg"></a></p>
-<h1>テーブル</h1>
+<div class="highlight"><pre class="chroma">      `グーグル`__ に
+      __ http://www.google.com/</pre></div>
+<p>[f:id:kk_Ataka:20111202231926j:image]</p>
+
+<ul>
+<li>リンクその3</li>
+</ul>
+
+<p>URL直打ちも実はリンクになる。[1]</p>
+
+<p>[f:id:kk_Ataka:20111202231927j:image]</p>
+
+<h2 id="テーブル">テーブル</h2>
+
 <p>半角イコールと半角ハイフンで作れる。イコールで囲んだ行が見出しとなる。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000829"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000829.jpg"></a></p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231928"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231928.jpg"></a></p>
+
+<p>[f:id:kk_Ataka:20111203000829j:image]</p>
+
+<p>[f:id:kk_Ataka:20111202231928j:image]</p>
+
 <p><span class="deco" style="font-weight:bold;">きちんと列と行を揃える</span>必要がある。これがめんどくさいんだよなあ。なんか楽にテーブル組める方法はないんだろうか。</p>
+
 <p>カラム幅の割合をスペースの量で調整する事もできる。一つ前のテーブルよりも1列目が広い。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000830"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000830.jpg"></a></p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231929"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231929.jpg"></a></p>
+
+<p>[f:id:kk_Ataka:20111203000830j:image]</p>
+
+<p>[f:id:kk_Ataka:20111202231929j:image]</p>
+
 <p>また、半角プラスと半角パイプで枠を作ってテーブルにする事もできる。イコールの上が見出しとなる。これも作るのめんどい？</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111203000831"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111203/20111203000831.jpg"></a></p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231930"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231930.jpg"></a></p>
-<h1>文章系</h1>
-<ul><li>基本的な事</li></ul>
+
+<p>[f:id:kk_Ataka:20111203000831j:image]</p>
+
+<p>[f:id:kk_Ataka:20111202231930j:image]</p>
+
+<h2 id="文章系">文章系</h2>
+
+<ul>
+<li>基本的な事</li>
+</ul>
+
 <p>途中の改行は無視される。</p>
-<pre>          途中の改行は
-          無視される</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231931"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231931.jpg"></a></p>
+<div class="highlight"><pre class="chroma">          途中の改行は
+          無視される</pre></div>
+<p>[f:id:kk_Ataka:20111202231931j:image]</p>
+
 <p>二行以上改行してからタブで字下げ。タブを戻したら字下げから復帰。</p>
-<pre>          タブでインデントをかけると字下げされる
+<div class="highlight"><pre class="chroma">          タブでインデントをかけると字下げされる
 
                   この行字下げしてます
 
-          字下げなおしました</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231932"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231932.jpg"></a></p>
+          字下げなおしました</pre></div>
+<p>[f:id:kk_Ataka:20111202231932j:image]</p>
+
 <p>※二行以上改行してから字下げしないと定義分になる。</p>
-<pre>              ※改行してから字下げしないと定義分になる
-                      こんなふうに
-</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231933"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231933.jpg"></a></p>
-<ul><li>整形済みテキスト</li></ul>
+<div class="highlight"><pre class="chroma">              ※改行してから字下げしないと定義分になる
+                      こんなふうに</pre></div>
+<p>[f:id:kk_Ataka:20111202231933j:image]</p>
+
+<ul>
+<li>整形済みテキスト</li>
+</ul>
+
 <p>文末にコロン2つ。で次の文章をインデントするといわゆるpreタグに。</p>
-<pre>        いわゆる&lt;pre&gt;タグ。今までずっと使ってきてる::
+<div class="highlight"><pre class="chroma">        いわゆる&lt;pre&gt;タグ。今までずっと使ってきてる::
 
                 コロン二つのあと字下げで使う？
                 改行も
                         字下げも
                 *文字装飾*も**そのまま表示される**
 
-        字下げを戻せば終了</pre>
-<ul><li>脚注</li></ul>
+        字下げを戻せば終了</pre></div>
+<ul>
+<li>脚注</li>
+</ul>
+
 <p>脚注は [#]_ で定義。別の場所で脚注の説明。</p>
-<pre>    脚注 [#]_ はこう
+<div class="highlight"><pre class="chroma">    脚注 [#]_ はこう
     連番 [#]_ で触れる
 
     .. [#] ただしイケメンに限る
-    .. [#] 連番</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231934"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231934.jpg"></a></p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231935"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231935.jpg"></a></p>
-<ul><li>引用</li></ul>
-<p>引用は [引用内容] で定義。</p>
-<pre>    引用 [reference]_ はこう
+    .. [#] 連番</pre></div>
+<p>[f:id:kk_Ataka:20111202231934j:image]</p>
 
-    .. [reference] Google先生より</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231936"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231936.jpg"></a></p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231937"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231937.jpg"></a></p>
-<ul><li>置換</li></ul>
-<table><tr><td>変数</td><td>を定義して、 ..</td><td>変数</td><td>replaceで置換。</td></tr></table>
-<pre>    ここ置換してね |rep| 。あとここも |rep| ::
+<p>[f:id:kk_Ataka:20111202231935j:image]</p>
 
-    .. |rep| replace:: ★ちかん★</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231938"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231938.jpg"></a></p>
-<h1>ディレクティブ</h1>
-<ul><li>コンテンツ表示</li></ul>
-<p>Sphinxページ最上部にコンテンツ一覧を表示できる。:</p>
-<pre>      .. contents::</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231939"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231939.jpg"></a></p>
-<ul><li>ナビゲーション</li></ul>
-<p>スタート &gt; 全ての... &gt; MS &gt; Excel のような表記を表現できる。:</p>
-<pre>      スタート &gt; 全ての... &gt; MS &gt; Excel のような表記を :menuselection:`スタート --&gt; 全ての... --&gt; MS --&gt; Excel` こう表記できる</pre>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20111202231940"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111202/20111202231940.jpg"></a></p>
-<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: これが一番簡単？</p></div>
-</div>
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2011/12/01/1322746718/" title="DAT装置の使い方 超簡易版(Solaris)">
-          DAT装置の使い方 超簡易版(Solaris)
-        </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2011/12/03/1322922769/" title="Macで現在の入力モードを判別しやすくするImageUpをインストールした">
-          Macで現在の入力モードを判別しやすくするImageUpをインストールした
-        </a>
-      </li>
-    
-  </ul>
-</div>
-
-
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2011/12/02/1322839748/" data-text="kk_Atakaの日記 - Sphinxでドキュメントを書くためreST記法に入門した" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/02/1322839748/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/02/1322839748/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/02/1322839748/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - Sphinxでドキュメントを書くためreST記法に入門した"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/12/02/1322839748//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
-  <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
-  </ul>
-
-  <h2>Recent Entries</h2>
-
-  
-  
-  
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>引用</li>
 </ul>
 
+<p>引用は [引用内容] で定義。</p>
+<div class="highlight"><pre class="chroma">    引用 [reference]_ はこう
 
-  <h2>Tags</h2>
+    .. [reference] Google先生より</pre></div>
+<p>[f:id:kk_Ataka:20111202231936j:image]</p>
 
+<p>[f:id:kk_Ataka:20111202231937j:image]</p>
+
+<ul>
+<li>置換</li>
+</ul>
+
+<p>|変数|を定義して、 .. |変数| replaceで置換。</p>
+<div class="highlight"><pre class="chroma">    ここ置換してね |rep| 。あとここも |rep| ::
+
+    .. |rep| replace:: ★ちかん★</pre></div>
+<p>[f:id:kk_Ataka:20111202231938j:image]</p>
+
+<h2 id="ディレクティブ">ディレクティブ</h2>
+
+<ul>
+<li>コンテンツ表示</li>
+</ul>
+
+<p>Sphinxページ最上部にコンテンツ一覧を表示できる。:</p>
+<div class="highlight"><pre class="chroma">      .. contents::</pre></div>
+<p>[f:id:kk_Ataka:20111202231939j:image]</p>
+
+<ul>
+<li>ナビゲーション</li>
+</ul>
+
+<p>スタート &gt; 全ての&hellip; &gt; MS &gt; Excel のような表記を表現できる。:</p>
+<div class="highlight"><pre class="chroma">      スタート &gt; 全ての... &gt; MS &gt; Excel のような表記を :menuselection:`スタート --&gt; 全ての... --&gt; MS --&gt; Excel` こう表記できる</pre></div>
+<p>[f:id:kk_Ataka:20111202231940j:image]</p>
+
+<p>Sphinx 初心者</p>
+
+<p>今頃すみません　<br>見出し系について勘違いされているようなので<br><br>記号と見出しのレベルの対応は、そのファイル内で出てきた順で決まります。<br>一番最初に出た形式がh1、次に出た形式がh2、となります。<br><br>また、上下に書くのと下に書くのとでは別レベルとして扱われます。</p>
+
+<p>1344825300</p>
+
+<p>kk_Ataka</p>
+
+<p>マニュアルを読み直したらたしかにそのとおりでした。<br>ご指摘ありがとうございます！</p>
+
+<p>1345123434</p>
+
+<p>[1] これが一番簡単？</p>
+
+    </section>
+  </article>
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2011/12/01/1322746718/" class="pagination_overflow previous_page">
+          Prev: 
+          11/12/1
+          DAT装置の使い方 超簡易版(Solaris)
+        </a>
+      
+
+      <span class="pagination_center disabled">
+        11/12/2
+        Sphin …
+      </span>
+
+      
+        <a href="/2011/12/03/1322922769/" class="pagination_overflow next_page">
+          Next: 
+          11/12/3
+          Macで現在の入力モードを判別しやすくするImageUpをイ …
+        </a>
+      
+  </div>
+</nav>
+
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-</aside>
 
 
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#sphinx-rest-備忘録-sphinxでドキュメントを書くためrest記法に入門した">[Sphinx][reST][備忘録]Sphinxでドキュメントを書くためreST記法に入門した</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#注意">注意</a></li>
+<li><a href="#見出し系">見出し系</a></li>
+<li><a href="#リスト系">リスト系</a></li>
+<li><a href="#装飾系">装飾系</a></li>
+<li><a href="#テーブル">テーブル</a></li>
+<li><a href="#文章系">文章系</a></li>
+<li><a href="#ディレクティブ">ディレクティブ</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

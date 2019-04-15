@@ -1,220 +1,230 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>すごいHaskellたのしく学ぼうでHaskellことはじめ4 - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  すごいHaskellたのしく学ぼうでHaskellことはじめ4 &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="前回までのあらすじ すごいHaskellたのしく学ぼうでHaskellことはじめ3
+なんとなーく再帰は書けたかなー？というレベル。
+この先生きのこれるのか……。
+参考  すごいHaskellたのしく学ぼう  5章 高階関数 カリー化  Haskellでは すべての関数が引数を一つだけとる 事になっている。  ……んでも今まで普通に二つとか引数とってなかったっけ？ max とか   max関数 本書より、 max 4 5 の場合……。
+ はじめに max 4 が適用される max 4 の返り値は 5 に適用するための別の関数 別の関数 5 が適用され、最終的な値が返る  ふーむ……？
+max関数の型はこう。
+Prelude&amp;gt; :t max max :: Ord a =&amp;gt; a -&amp;gt; a -&amp;gt; a こう書く事もできる。 a型の値を引数にとり、a型の値を返す
+max :: Ord a =&amp;gt; a -&amp;gt; ( a -&amp;gt; a ) 関数を本来より少ない引数で呼び出すことを 部分適用する という。 部分適用 すると、関数をその場で作りだし、それを他の関数に渡せる。|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2013/02/19/haskell-helloworld5/">すごいHaskellたのしく学ぼうでHaskellことはじめ4</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Haskell" class="tag">Haskell</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2013/02/19</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2013/02/04/haskell-helloworld4/" title="すごいHaskellたのしく学ぼうでHaskellことはじめ3">
-          すごいHaskellたのしく学ぼうでHaskellことはじめ3
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/02/04/haskell-helloworld4/" class="pagination_overflow previous_page">
+          Prev: 
+          13/2/4
+          すごいHaskellたのしく学ぼうでHaskellことはじ …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/02/25/ruby200-helloworld-pik-rvm/" title="Ruby 2.0.0 をpikとrvm経由でインストール&環境構築">
-          Ruby 2.0.0 をpikとrvm経由でインストール&環境構築
+      
+
+      <span class="pagination_center disabled">
+        13/2/19
+        すご …
+      </span>
+
+      
+        <a href="/2013/02/25/ruby200-helloworld-pik-rvm/" class="pagination_overflow next_page">
+          Next: 
+          13/2/25
+          Ruby 2.0.0 をpikとrvm経由でインストール&amp;環 …
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">前回までのあらすじ</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">参考</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">5章 高階関数</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-4">
-                  <a href="#tocAnchor-1-3-1"><span class="tocnumber">3.1</span> <span class="toctext">カリー化</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-5">
-                  <a href="#tocAnchor-1-3-2"><span class="tocnumber">3.2</span> <span class="toctext">セクション</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-6">
-                  <a href="#tocAnchor-1-3-3"><span class="tocnumber">3.3</span> <span class="toctext">関数を表示する</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-7">
-                  <a href="#tocAnchor-1-3-4"><span class="tocnumber">3.4</span> <span class="toctext">高階実演</span></a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h2 id="tocAnchor-1-1">前回までのあらすじ</h2>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">すごいHaskellたのしく学ぼうでHaskellことはじめ4</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
 
-<p>
-  <a href="http://gosyujin.github.com/2013/02/04/haskell-helloworld4/">すごいHaskellたのしく学ぼうでHaskellことはじめ3</a>
-</p>
+  
+    <a href='/tags/haskell' class="muted-link">
+      [ <span class="Label Label--gray">Haskell</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2013/02/19</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#5章-高階関数">5章 高階関数</a>
+<ul>
+<li><a href="#カリー化">カリー化</a>
+<ul>
+<li><a href="#max関数">max関数</a></li>
+</ul></li>
+<li><a href="#セクション">セクション</a></li>
+<li><a href="#関数を表示する">関数を表示する</a></li>
+<li><a href="#高階実演">高階実演</a>
+<ul>
+<li><a href="#zipwith">zipWith</a></li>
+<li><a href="#flip">flip</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="前回までのあらすじ">前回までのあらすじ</h2>
+
+<p><a href="http://gosyujin.github.com/2013/02/04/haskell-helloworld4/">すごいHaskellたのしく学ぼうでHaskellことはじめ3</a></p>
 
 <p>なんとなーく再帰は書けたかなー？というレベル。</p>
 
 <p>この先生きのこれるのか……。</p>
 
-<h2 id="tocAnchor-1-2">参考</h2>
+<h2 id="参考">参考</h2>
 
 <ul>
-  <li>すごいHaskellたのしく学ぼう</li>
+<li>すごいHaskellたのしく学ぼう</li>
 </ul>
 
-<h2 id="tocAnchor-1-3">5章 高階関数</h2>
+<h2 id="5章-高階関数">5章 高階関数</h2>
 
-<h3 id="tocAnchor-1-3-1">カリー化</h3>
+<h3 id="カリー化">カリー化</h3>
 
 <ul>
-  <li>Haskellでは <strong>すべての関数が引数を一つだけとる</strong> 事になっている。
-    <ul>
-      <li>……んでも今まで普通に二つとか引数とってなかったっけ？ <code class="highlighter-rouge">max</code> とか</li>
-    </ul>
-  </li>
+<li>Haskellでは <strong>すべての関数が引数を一つだけとる</strong> 事になっている。
+
+<ul>
+<li>……んでも今まで普通に二つとか引数とってなかったっけ？ <code>max</code> とか</li>
+</ul></li>
 </ul>
 
 <h4 id="max関数">max関数</h4>
 
-<p>本書より、 <code class="highlighter-rouge">max 4 5</code> の場合……。</p>
+<p>本書より、 <code>max 4 5</code> の場合……。</p>
 
 <ul>
-  <li>はじめに <code class="highlighter-rouge">max 4</code> が適用される</li>
-  <li><code class="highlighter-rouge">max 4</code> の返り値は <code class="highlighter-rouge">5 に適用するための別の関数</code></li>
-  <li><code class="highlighter-rouge">別の関数 5</code> が適用され、最終的な値が返る</li>
+<li>はじめに <code>max 4</code> が適用される</li>
+<li><code>max 4</code> の返り値は <code>5 に適用するための別の関数</code></li>
+<li><code>別の関数 5</code> が適用され、最終的な値が返る</li>
 </ul>
 
 <p>ふーむ……？</p>
 
 <p>max関数の型はこう。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">max</span>
-<span class="n">max</span> <span class="o">::</span> <span class="kt">Ord</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span></code>
-  </pre>
-</figure>
-
-<p>こう書く事もできる。 <code class="highlighter-rouge">a型の値を引数にとり、a型の値を返す</code></p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="n">max</span> <span class="o">::</span> <span class="kt">Ord</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="p">(</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="p">)</span></code>
-  </pre>
-</figure>
-
-<p>関数を本来より少ない引数で呼び出すことを <code class="highlighter-rouge">部分適用する</code> という。 <code class="highlighter-rouge">部分適用</code> すると、関数をその場で作りだし、それを他の関数に渡せる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="kt">:</span><span class="nf">t</span> <span class="nf">max</span>
+<span class="nf">max</span> <span class="ow">::</span> <span class="kt">Ord</span> <span class="nf">a</span> <span class="ow">=&gt;</span> <span class="nf">a</span> <span class="ow">-&gt;</span> <span class="nf">a</span> <span class="ow">-&gt;</span> <span class="nf">a</span></code></pre></div>
+<p>こう書く事もできる。 <code>a型の値を引数にとり、a型の値を返す</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="nf">max</span> <span class="ow">::</span> <span class="kt">Ord</span> <span class="nf">a</span> <span class="ow">=&gt;</span> <span class="nf">a</span> <span class="ow">-&gt;</span> <span class="p">(</span> <span class="nf">a</span> <span class="ow">-&gt;</span> <span class="nf">a</span> <span class="p">)</span></code></pre></div>
+<p>関数を本来より少ない引数で呼び出すことを <code>部分適用する</code> という。 <code>部分適用</code> すると、関数をその場で作りだし、それを他の関数に渡せる。</p>
 
 <p>それを踏まえて、max関数。</p>
 
 <ul>
-  <li>はじめに <code class="highlighter-rouge">max 4</code> が適用される (一つ目のa)</li>
-  <li><code class="highlighter-rouge">max 4</code> の返り値は <strong>引数を一つとって関数を返す関数</strong> となる
- ( ( a -&gt; a ) の部分)</li>
-  <li><strong>引数を一つとって関数を返す関数</strong> に5が適用され、最終的な値が返る ( かっこの中の a -&gt; a )</li>
+<li>はじめに <code>max 4</code> が適用される (一つ目のa)</li>
+<li><code>max 4</code> の返り値は <strong>引数を一つとって関数を返す関数</strong> となる
+( ( a -&gt; a ) の部分)</li>
+<li><strong>引数を一つとって関数を返す関数</strong> に5が適用され、最終的な値が返る ( かっこの中の a -&gt; a )</li>
 </ul>
 
 <p>これらから、部分適用できる、というのは何となくだけどわかった。これはかけるのだ。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="kr">let</span> <span class="n">max'</span> <span class="n">x</span> <span class="o">=</span> <span class="n">max</span> <span class="mi">4</span> <span class="n">x</span>
-<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">max'</span>
-<span class="n">max'</span> <span class="o">::</span> <span class="p">(</span><span class="kt">Num</span> <span class="n">a</span><span class="p">,</span> <span class="kt">Ord</span> <span class="n">a</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
-<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">max'</span> <span class="mi">5</span>
-<span class="mi">5</span></code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="kr">let</span> <span class="nf">max&#39;</span> <span class="nf">x</span> <span class="ow">=</span> <span class="nf">max</span> <span class="mi">4</span> <span class="nf">x</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="kt">:</span><span class="nf">t</span> <span class="nf">max&#39;</span>
+<span class="nf">max&#39;</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Num</span> <span class="nf">a</span><span class="p">,</span> <span class="kt">Ord</span> <span class="nf">a</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="nf">a</span> <span class="ow">-&gt;</span> <span class="nf">a</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="nf">max&#39;</span> <span class="mi">5</span>
+<span class="mi">5</span></code></pre></div>
 <p>これがわからない。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="kr">let</span> <span class="n">max''</span> <span class="o">=</span> <span class="n">max</span> <span class="mi">4</span>
-<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">max''</span>
-<span class="n">max''</span> <span class="o">::</span> <span class="kt">Integer</span> <span class="o">-&gt;</span> <span class="kt">Integer</span>
-<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">max''</span> <span class="mi">5</span>
-<span class="mi">5</span></code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="kr">let</span> <span class="nf">max&#39;&#39;</span> <span class="ow">=</span> <span class="nf">max</span> <span class="mi">4</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="kt">:</span><span class="nf">t</span> <span class="nf">max&#39;&#39;</span>
+<span class="nf">max&#39;&#39;</span> <span class="ow">::</span> <span class="kt">Integer</span> <span class="ow">-&gt;</span> <span class="kt">Integer</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="nf">max&#39;&#39;</span> <span class="mi">5</span>
+<span class="mi">5</span></code></pre></div>
 <p>やっていることは上と等価なはずなんだけど、関数定義の部分に変数xがいない。</p>
 
-<p>max 4 の返り値が <strong>引数を一つとって関数を返す関数</strong> であるから、max’’ も引数を一つとれるということ？</p>
+<p>max 4 の返り値が <strong>引数を一つとって関数を返す関数</strong> であるから、max&rdquo; も引数を一つとれるということ？</p>
 
-<h3 id="tocAnchor-1-3-2">セクション</h3>
+<h3 id="セクション">セクション</h3>
 
 <p>中置関数(divとか)も部分適用ができる。</p>
 
@@ -223,30 +233,18 @@
 <p>カリー化=部分適用……ではないんだよね？ - <a href="http://d.hatena.ne.jp/kazu-yamamoto/20110906/1315279311">カリー化談義 - あどけない話</a></p>
 
 <p>ともあれ、中置関数はこう書く。かっこでくくって部分適用したい方の引数に値を書く。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="n">divideByTen</span>  <span class="o">=</span> <span class="p">(`</span><span class="n">div</span><span class="p">`</span> <span class="mi">10</span><span class="p">)</span>
-<span class="n">divideByTen'</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span> <span class="p">`</span><span class="n">div</span><span class="p">`)</span></code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">divideByTen</span> <span class="mi">200</span> <span class="o">#</span> <span class="mi">200</span> <span class="o">/</span> <span class="mi">10</span>
+<div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="nf">divideByTen</span>  <span class="ow">=</span> <span class="p">(`</span><span class="nf">div</span><span class="p">`</span> <span class="mi">10</span><span class="p">)</span>
+<span class="nf">divideByTen&#39;</span> <span class="ow">=</span> <span class="p">(</span><span class="mi">10</span> <span class="p">`</span><span class="nf">div</span><span class="p">`)</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="nf">divideByTen</span> <span class="mi">200</span> <span class="o">#</span> <span class="mi">200</span> <span class="o">/</span> <span class="mi">10</span>
 <span class="mi">20</span>
-<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">divideByTen</span> <span class="mi">10</span> <span class="o">#</span> <span class="mi">10</span> <span class="o">/</span> <span class="mi">10</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="nf">divideByTen</span> <span class="mi">10</span> <span class="o">#</span> <span class="mi">10</span> <span class="o">/</span> <span class="mi">10</span>
 <span class="mi">1</span>
-<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">divideByTen'</span> <span class="mi">2</span> <span class="o">#</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">10</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="nf">divideByTen&#39;</span> <span class="mi">2</span> <span class="o">#</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">10</span>
 <span class="mi">5</span>
-<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">divideByTen'</span> <span class="mi">10</span> <span class="o">#</span> <span class="mi">10</span> <span class="o">/</span> <span class="mi">10</span>
-<span class="mi">1</span></code>
-  </pre>
-</figure>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="nf">divideByTen&#39;</span> <span class="mi">10</span> <span class="o">#</span> <span class="mi">10</span> <span class="o">/</span> <span class="mi">10</span>
+<span class="mi">1</span></code></pre></div>
+<p>ただし、引き算を使うときだけ注意しなければならない。 <code>(-4)</code> は <code>マイナス4</code> として扱われる。(引きたい時は <code>subtract</code> 関数を使う)</p>
 
-<p>ただし、引き算を使うときだけ注意しなければならない。 <code class="highlighter-rouge">(-4)</code> は <code class="highlighter-rouge">マイナス4</code> として扱われる。(引きたい時は <code class="highlighter-rouge">subtract</code> 関数を使う)</p>
-
-<h3 id="tocAnchor-1-3-3">関数を表示する</h3>
+<h3 id="関数を表示する">関数を表示する</h3>
 
 <p>これがどうなのか知りたかった！……んだけど「Show型クラスのインスタンスでないとエラーとなる」だって。</p>
 
@@ -254,612 +252,749 @@
 
 <p>うーん。</p>
 
-<h3 id="tocAnchor-1-3-4">高階実演</h3>
+<h3 id="高階実演">高階実演</h3>
 
 <p>Haskellでは関数も引数にとれる。同じ関数を二回適用する。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="n">applyTwice</span> <span class="n">f</span> <span class="n">x</span> <span class="o">=</span> <span class="n">f</span> <span class="p">(</span><span class="n">f</span> <span class="n">x</span><span class="p">)</span></code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">applyTwice</span> <span class="n">tail</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
-<span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span></code>
-  </pre>
-</figure>
-
-<p>
-  <code class="highlighter-rouge">f (f x) -&gt; f (tail [1,2,3,4]) -&gt; f ([2,3,4]) -&gt; tail [2,3,4] -&gt; [3,4]</code>
-</p>
+<div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="nf">applyTwice</span> <span class="nf">f</span> <span class="nf">x</span> <span class="ow">=</span> <span class="nf">f</span> <span class="p">(</span><span class="nf">f</span> <span class="nf">x</span><span class="p">)</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="nf">applyTwice</span> <span class="nf">tail</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span></code></pre></div>
+<p><code>f (f x) -&gt; f (tail [1,2,3,4]) -&gt; f ([2,3,4]) -&gt; tail [2,3,4] -&gt; [3,4]</code></p>
 
 <p>ってことかな。</p>
+<div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="nf">applyTwice</span> <span class="p">(</span><span class="o">++</span> <span class="s">&#34;Hoge&#34;</span><span class="p">)</span> <span class="s">&#34;A&#34;</span>
+<span class="s">&#34;AHogeHoge&#34;</span>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">applyTwice</span> <span class="p">(</span><span class="o">++</span> <span class="s">"Hoge"</span><span class="p">)</span> <span class="s">"A"</span>
-<span class="s">"AHogeHoge"</span>
-
-<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">applyTwice</span> <span class="p">(</span><span class="s">"Hoge"</span> <span class="o">++</span><span class="p">)</span> <span class="s">"A"</span>
-<span class="s">"HogeHogeA"</span></code>
-  </pre>
-</figure>
-
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="nf">applyTwice</span> <span class="p">(</span><span class="s">&#34;Hoge&#34;</span> <span class="o">++</span><span class="p">)</span> <span class="s">&#34;A&#34;</span>
+<span class="s">&#34;HogeHogeA&#34;</span></code></pre></div>
 <p>こういうのに対しては部分適用が使われている。</p>
 
-<p>
-  <code class="highlighter-rouge">f (f x) -&gt; f ((++ "Hoge") "A" -&gt; f ("AHoge") -&gt; (++ "Hoge") "AHoge" -&gt; "AHogeHoge"</code>
-</p>
+<p><code>f (f x) -&gt; f ((++ &quot;Hoge&quot;) &quot;A&quot; -&gt; f (&quot;AHoge&quot;) -&gt; (++ &quot;Hoge&quot;) &quot;AHoge&quot; -&gt; &quot;AHogeHoge&quot;</code></p>
 
 <p>こういうことか！順番あってる？</p>
 
 <h4 id="zipwith">zipWith</h4>
 
 <p>こんな関数。1つの関数と2つのリストを引数に持ち、リストの各要素に関数を適用する。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">zipWith</span> <span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">]</span>
-<span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">13</span><span class="p">]</span></code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="n">zipWith'</span> <span class="kr">_</span> <span class="kt">[]</span> <span class="kr">_</span> <span class="o">=</span> <span class="kt">[]</span>
-<span class="n">zipWith'</span> <span class="kr">_</span> <span class="kr">_</span> <span class="kt">[]</span> <span class="o">=</span> <span class="kt">[]</span>
-<span class="n">zipWith'</span> <span class="n">f</span> <span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">xs</span><span class="p">)</span> <span class="p">(</span><span class="n">y</span><span class="o">:</span><span class="n">ys</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span> <span class="n">x</span> <span class="n">y</span> <span class="o">:</span> <span class="n">zipWith'</span> <span class="n">f</span> <span class="n">xs</span> <span class="n">ys</span></code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="nf">zipWith</span> <span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">13</span><span class="p">]</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="nf">zipWith&#39;</span> <span class="kr">_</span> <span class="kt">[]</span> <span class="kr">_</span> <span class="ow">=</span> <span class="kt">[]</span>
+<span class="nf">zipWith&#39;</span> <span class="kr">_</span> <span class="kr">_</span> <span class="kt">[]</span> <span class="ow">=</span> <span class="kt">[]</span>
+<span class="nf">zipWith&#39;</span> <span class="nf">f</span> <span class="p">(</span><span class="nf">x</span><span class="kt">:</span><span class="nf">xs</span><span class="p">)</span> <span class="p">(</span><span class="nf">y</span><span class="kt">:</span><span class="nf">ys</span><span class="p">)</span> <span class="ow">=</span> <span class="nf">f</span> <span class="nf">x</span> <span class="nf">y</span> <span class="kt">:</span> <span class="nf">zipWith&#39;</span> <span class="nf">f</span> <span class="nf">xs</span> <span class="nf">ys</span></code></pre></div>
 <h4 id="flip">flip</h4>
 
 <p>これも関数と2つの値をとる。で、値の順番を入れ替える。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">flip</span> <span class="p">(</span><span class="n">div</span><span class="p">)</span> <span class="mi">2</span> <span class="mi">0</span>
+<div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="nf">flip</span> <span class="p">(</span><span class="nf">div</span><span class="p">)</span> <span class="mi">2</span> <span class="mi">0</span>
 <span class="mi">0</span>
-<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">flip</span> <span class="p">(</span><span class="n">div</span><span class="p">)</span> <span class="mi">0</span> <span class="mi">2</span>
-<span class="o">***</span> <span class="kt">Exception</span><span class="o">:</span> <span class="n">divide</span> <span class="n">by</span> <span class="n">zero</span>
-<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">flip</span> <span class="p">(</span><span class="o">++</span><span class="p">)</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="nf">flip</span> <span class="p">(</span><span class="nf">div</span><span class="p">)</span> <span class="mi">0</span> <span class="mi">2</span>
+<span class="o">***</span> <span class="kt">Exception:</span> <span class="nf">divide</span> <span class="nf">by</span> <span class="nf">zero</span>
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="nf">flip</span> <span class="p">(</span><span class="o">++</span><span class="p">)</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
-<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="n">flip</span> <span class="p">(</span><span class="o">++</span><span class="p">)</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-<span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span></code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="n">flip'</span> <span class="n">f</span> <span class="n">x</span> <span class="n">y</span> <span class="o">=</span> <span class="n">f</span> <span class="n">y</span> <span class="n">x</span></code>
-  </pre>
-</figure>
-
+<span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="nf">flip</span> <span class="p">(</span><span class="o">++</span><span class="p">)</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="nf">flip&#39;</span> <span class="nf">f</span> <span class="nf">x</span> <span class="nf">y</span> <span class="ow">=</span> <span class="nf">f</span> <span class="nf">y</span> <span class="nf">x</span></code></pre></div>
 <p>んー何となく書けたんだけど、解説がわからないぞ……。(解説ではxとyが逆になってる)</p>
 
 <blockquote>
-  <p>この新しいバージョンのflip’ では、関数がカリー化されていることをうまく使っています。flip’ f を引数y とx なしで呼び出したら、2 つの引数を取る、引数の入れ替わったf が返るでしょう。</p>
+<p>この新しいバージョンのflip&rsquo; では、関数がカリー化されていることをうまく使っています。flip&rsquo; f を引数y とx なしで呼び出したら、2 つの引数を取る、引数の入れ替わったf が返るでしょう。</p>
 </blockquote>
 
 <p>そうなの？</p>
 
 <p>型を調べてみる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">flip'</span>
-<span class="n">flip'</span> <span class="o">::</span> <span class="p">(</span><span class="n">t1</span> <span class="o">-&gt;</span> <span class="n">t2</span> <span class="o">-&gt;</span> <span class="n">t</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">t2</span> <span class="o">-&gt;</span> <span class="n">t1</span> <span class="o">-&gt;</span> <span class="n">t</span></code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="o">*</span><span class="kt">Main</span><span class="o">&gt;</span> <span class="kt">:</span><span class="nf">t</span> <span class="nf">flip&#39;</span>
+<span class="nf">flip&#39;</span> <span class="ow">::</span> <span class="p">(</span><span class="nf">t1</span> <span class="ow">-&gt;</span> <span class="nf">t2</span> <span class="ow">-&gt;</span> <span class="nf">t</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="nf">t2</span> <span class="ow">-&gt;</span> <span class="nf">t1</span> <span class="ow">-&gt;</span> <span class="nf">t</span></code></pre></div>
 <p>あ、わかったかも。並べて、</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-haskell" data-lang="haskell"><span class="n">flip'</span> <span class="o">::</span> <span class="p">(</span><span class="n">t1</span> <span class="o">-&gt;</span> <span class="n">t2</span> <span class="o">-&gt;</span> <span class="n">t</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">t2</span> <span class="o">-&gt;</span> <span class="n">t1</span> <span class="o">-&gt;</span> <span class="n">t</span>
-<span class="n">flip'</span> <span class="n">f</span> <span class="n">x</span> <span class="n">y</span> <span class="o">=</span> <span class="n">f</span> <span class="n">y</span> <span class="n">x</span></code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-haskell" data-lang="haskell"><span class="nf">flip&#39;</span> <span class="ow">::</span> <span class="p">(</span><span class="nf">t1</span> <span class="ow">-&gt;</span> <span class="nf">t2</span> <span class="ow">-&gt;</span> <span class="nf">t</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="nf">t2</span> <span class="ow">-&gt;</span> <span class="nf">t1</span> <span class="ow">-&gt;</span> <span class="nf">t</span>
+<span class="nf">flip&#39;</span> <span class="nf">f</span> <span class="nf">x</span> <span class="nf">y</span> <span class="ow">=</span> <span class="nf">f</span> <span class="nf">y</span> <span class="nf">x</span></code></pre></div>
 <ul>
-  <li>最初の引数(f)は <code class="highlighter-rouge">引数を二つ(t1, t2)をとり、関数(t)を返す関数</code> <code class="highlighter-rouge">(div) y x</code></li>
-  <li>最初の引数(f)に次の引数(x / t2)を適用すると <code class="highlighter-rouge">最初の引数(f)に引数t2を適用した関数を返す関数</code> を返す <code class="highlighter-rouge">(div) y 0</code></li>
-  <li><code class="highlighter-rouge">最初の引数(f)に引数t2を適用した関数を返す関数</code> に次の次の引数(y /t1)を適用すると <code class="highlighter-rouge">結果をshowする関数？</code> を返す？ <code class="highlighter-rouge">(div) 2 0</code> = 0</li>
+<li>最初の引数(f)は <code>引数を二つ(t1, t2)をとり、関数(t)を返す関数</code> <code>(div) y x</code></li>
+<li>最初の引数(f)に次の引数(x / t2)を適用すると <code>最初の引数(f)に引数t2を適用した関数を返す関数</code> を返す <code>(div) y 0</code></li>
+<li><code>最初の引数(f)に引数t2を適用した関数を返す関数</code> に次の次の引数(y /t1)を適用すると <code>結果をshowする関数？</code> を返す？ <code>(div) 2 0</code> = 0</li>
 </ul>
 
 <p>……？</p>
 
 <p>あれ？違うっぽいな……。</p>
 
-<p>
-  <strong>続く！</strong>
-</p>
+<p><strong>続く！</strong></p>
 
-</div>
+    </section>
+  </article>
 
-<div class="pagination">
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/02/04/haskell-helloworld4/" class="pagination_overflow previous_page">
+          Prev: 
+          13/2/4
+          すごいHaskellたのしく学ぼうでHaskellことはじ …
+        </a>
+      
+
+      <span class="pagination_center disabled">
+        13/2/19
+        すご …
+      </span>
+
+      
+        <a href="/2013/02/25/ruby200-helloworld-pik-rvm/" class="pagination_overflow next_page">
+          Next: 
+          13/2/25
+          Ruby 2.0.0 をpikとrvm経由でインストール&amp;環 …
+        </a>
+      
+  </div>
+</nav>
+
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    
-      <li class="prev">
-        <a href="/2013/02/04/haskell-helloworld4/" title="すごいHaskellたのしく学ぼうでHaskellことはじめ3">
-          すごいHaskellたのしく学ぼうでHaskellことはじめ3
-        </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/02/25/ruby200-helloworld-pik-rvm/" title="Ruby 2.0.0 をpikとrvm経由でインストール&環境構築">
-          Ruby 2.0.0 をpikとrvm経由でインストール&環境構築
-        </a>
-      </li>
-    
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
 </div>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2013/02/19/haskell-helloworld5/" data-text="kk_Atakaの日記 - すごいHaskellたのしく学ぼうでHaskellことはじめ4" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/02/19/haskell-helloworld5/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/02/19/haskell-helloworld5/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/02/19/haskell-helloworld5/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - すごいHaskellたのしく学ぼうでHaskellことはじめ4"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/02/19/haskell-helloworld5//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
 
 
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
     
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
 
 
-      </article>
 
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
 
-  <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
-  </ul>
-
-  <h2>Recent Entries</h2>
-
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#5章-高階関数">5章 高階関数</a>
+<ul>
+<li><a href="#カリー化">カリー化</a>
+<ul>
+<li><a href="#max関数">max関数</a></li>
+</ul></li>
+<li><a href="#セクション">セクション</a></li>
+<li><a href="#関数を表示する">関数を表示する</a></li>
+<li><a href="#高階実演">高階実演</a>
+<ul>
+<li><a href="#zipwith">zipWith</a></li>
+<li><a href="#flip">flip</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

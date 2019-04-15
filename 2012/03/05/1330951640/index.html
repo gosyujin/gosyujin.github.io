@@ -1,318 +1,393 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>Pro Gitと入門gitでGitの復習 基本操作編 - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Pro Gitと入門gitでGitの復習 基本操作編 &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Git][備忘録][Windows]Pro Gitと入門gitでGitの復習 基本操作編 あらすじ めっきりadd, commitくらいしか使っていないGitをもう一回さわってみて学びなおす。Pro Gitのページもブクマしただけで真剣に読んでいなかったので読み進める。
+続き。
+ http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title  参考  http://progit.org/:title 入門git  リポジトリの作成 リポジトリにしたいディレクトリの中でinitコマンドで作成 or init ディレクトリ で生成。
+$ git init Initialized empty Git repository in c:/project/testRemote/test/.git/ 以後は基本的にリポジトリの中で作業。
+コンフィグ コンフィグファイルの適用範囲と優先度 下に行くほど適用範囲は狭くなり、優先度が上がる。(同じオプションがあったら下のものが適用される)
+   ファイル Windows(msysGit)では 範囲 優先度 configコマンドでの設定方法     /etc/gitconfig (msysのルート)/etc/gitconfig システム全体 低 &amp;ndash;system   ~/.gitconfig %USERPROFILE%\.gitconfig あるユーザ 中 &amp;ndash;global   (リポジトリ内).git/config (リポジトリ内).git/config そのリポジトリ 高 (指定なし)    コンフィグの一覧を見る そのリポジトリのコンフィグを見る。|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2012/03/05/1330951640/">Pro Gitと入門gitでGitの復習 基本操作編</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Git" class="tag">Git</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#備忘録" class="tag">備忘録</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#Windows" class="tag">Windows</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2012/03/05</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2012/02/29/1330528564/" title="Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など">
-          Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2012/02/29/1330528564/" class="pagination_overflow previous_page">
+          Prev: 
+          12/2/29
+          Rails3レシピブックを読みながらRailsを学ぶ モデ …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2012/03/11/1331472478/" title="Pro Gitと入門gitでGitの復習 ブランチ編">
+      
+
+      <span class="pagination_center disabled">
+        12/3/5
+        Pro …
+      </span>
+
+      
+        <a href="/2012/03/11/1331472478/" class="pagination_overflow next_page">
+          Next: 
+          12/3/11
           Pro Gitと入門gitでGitの復習 ブランチ編
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">コンフィグファイルの適用範囲と優先度</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">コンフィグの一覧を見る</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">コンフィグの確認(特定の)</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-4">
-              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">コンフィグの編集</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-5">
-              <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">リポジトリを作成する</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-6">
-              <a href="#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">既存リポジトリのクローン</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-7">
-              <a href="#tocAnchor-1-7"><span class="tocnumber">7</span> <span class="toctext">作業ツリーの状態確認</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-8">
-              <a href="#tocAnchor-1-8"><span class="tocnumber">8</span> <span class="toctext">リポジトリに追加(追跡の開始)</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-9">
-              <a href="#tocAnchor-1-9"><span class="tocnumber">9</span> <span class="toctext">ステージング</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-10">
-              <a href="#tocAnchor-1-10"><span class="tocnumber">10</span> <span class="toctext">ファイルの比較</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-11">
-              <a href="#tocAnchor-1-11"><span class="tocnumber">11</span> <span class="toctext">ファイルの削除(追跡の除外)</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-12">
-              <a href="#tocAnchor-1-12"><span class="tocnumber">12</span> <span class="toctext">コミットを行う</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-13">
-              <a href="#tocAnchor-1-13"><span class="tocnumber">13</span> <span class="toctext">コミットを行う(コミットログまでワンライナー)</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-14">
-              <a href="#tocAnchor-1-14"><span class="tocnumber">14</span> <span class="toctext">追跡ファイルのステージを省略</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-15">
-              <a href="#tocAnchor-1-15"><span class="tocnumber">15</span> <span class="toctext">(リモート)リポジトリの作成</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-16">
-              <a href="#tocAnchor-1-16"><span class="tocnumber">16</span> <span class="toctext">リモートリポジトリの追加</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-17">
-              <a href="#tocAnchor-1-17"><span class="tocnumber">17</span> <span class="toctext">リモートリポジトリのリネーム</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-18">
-              <a href="#tocAnchor-1-18"><span class="tocnumber">18</span> <span class="toctext">リモートリポジトリの削除</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-19">
-              <a href="#tocAnchor-1-19"><span class="tocnumber">19</span> <span class="toctext">リモートリポジトリの確認</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-20">
-              <a href="#tocAnchor-1-20"><span class="tocnumber">20</span> <span class="toctext">リモートリポジトリからデータ取得(フェッチ、プル)</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-21">
-              <a href="#tocAnchor-1-21"><span class="tocnumber">21</span> <span class="toctext">リモートリポジトリへのデータ登録(プッシュ)</span></a>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h1>あらすじ</h1>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">Pro Gitと入門gitでGitの復習 基本操作編</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
+
+  
+    <a href='/tags/git' class="muted-link">
+      [ <span class="Label Label--gray">Git</span> ]
+    </a>
+  
+    <a href='/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+    <a href='/tags/windows' class="muted-link">
+      [ <span class="Label Label--gray">Windows</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2012/03/05</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#git-備忘録-windows-pro-gitと入門gitでgitの復習-基本操作編">[Git][備忘録][Windows]Pro Gitと入門gitでGitの復習 基本操作編</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#リポジトリの作成">リポジトリの作成</a></li>
+<li><a href="#コンフィグ">コンフィグ</a>
+<ul>
+<li><a href="#コンフィグファイルの適用範囲と優先度">コンフィグファイルの適用範囲と優先度</a></li>
+<li><a href="#コンフィグの一覧を見る">コンフィグの一覧を見る</a></li>
+<li><a href="#コンフィグの確認-特定の">コンフィグの確認(特定の)</a></li>
+<li><a href="#コンフィグの編集">コンフィグの編集</a></li>
+</ul></li>
+<li><a href="#リポジトリ作成">リポジトリ作成</a>
+<ul>
+<li><a href="#リポジトリを作成する">リポジトリを作成する</a></li>
+</ul></li>
+<li><a href="#リポジトリのクローン">リポジトリのクローン</a>
+<ul>
+<li><a href="#既存リポジトリのクローン">既存リポジトリのクローン</a></li>
+</ul></li>
+<li><a href="#状態確認">状態確認</a>
+<ul>
+<li><a href="#作業ツリーの状態確認">作業ツリーの状態確認</a></li>
+</ul></li>
+<li><a href="#ファイル追加-追跡">ファイル追加(追跡)</a>
+<ul>
+<li><a href="#リポジトリに追加-追跡の開始">リポジトリに追加(追跡の開始)</a></li>
+<li><a href="#ステージング">ステージング</a></li>
+</ul></li>
+<li><a href="#ファイル比較">ファイル比較</a>
+<ul>
+<li><a href="#ファイルの比較">ファイルの比較</a></li>
+</ul></li>
+<li><a href="#ファイル削除-追跡除外">ファイル削除(追跡除外)</a>
+<ul>
+<li><a href="#ファイルの削除-追跡の除外">ファイルの削除(追跡の除外)</a></li>
+</ul></li>
+<li><a href="#コミット">コミット</a>
+<ul>
+<li><a href="#コミットを行う">コミットを行う</a></li>
+<li><a href="#コミットを行う-コミットログまでワンライナー">コミットを行う(コミットログまでワンライナー)</a></li>
+<li><a href="#追跡ファイルのステージを省略">追跡ファイルのステージを省略</a></li>
+</ul></li>
+<li><a href="#コミットのやり直し">コミットのやり直し</a></li>
+<li><a href="#ステージのやり直し">ステージのやり直し</a></li>
+<li><a href="#変更の取り消し">変更の取り消し</a></li>
+<li><a href="#リモート関連">リモート関連</a>
+<ul>
+<li><a href="#リモート-リポジトリの作成">(リモート)リポジトリの作成</a></li>
+<li><a href="#リモートリポジトリの追加">リモートリポジトリの追加</a></li>
+<li><a href="#リモートリポジトリのリネーム">リモートリポジトリのリネーム</a></li>
+<li><a href="#リモートリポジトリの削除">リモートリポジトリの削除</a></li>
+<li><a href="#リモートリポジトリの確認">リモートリポジトリの確認</a></li>
+<li><a href="#リモートリポジトリからデータ取得-フェッチ-プル">リモートリポジトリからデータ取得(フェッチ、プル)</a></li>
+<li><a href="#リモートリポジトリへのデータ登録-プッシュ">リモートリポジトリへのデータ登録(プッシュ)</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="git-備忘録-windows-pro-gitと入門gitでgitの復習-基本操作編">[Git][備忘録][Windows]Pro Gitと入門gitでGitの復習 基本操作編</h2>
+
+<h2 id="あらすじ">あらすじ</h2>
+
 <p>めっきりadd, commitくらいしか使っていないGitをもう一回さわってみて学びなおす。Pro Gitのページもブクマしただけで真剣に読んでいなかったので読み進める。</p>
+
 <p>続き。</p>
+
 <ul>
-  <li>
-    <a href="http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478">2012-03-11-1331472478</a>
-  </li>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title">http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title</a></li>
 </ul>
-<h1>参考</h1>
+
+<h2 id="参考">参考</h2>
+
 <ul>
-  <li>
-    <a href="http://progit.org/">Git - Book</a>
-  </li>
-  <li>入門git</li>
+<li><a href="http://progit.org/:title">http://progit.org/:title</a></li>
+<li>入門git</li>
 </ul>
-<h1>リポジトリの作成</h1>
+
+<h2 id="リポジトリの作成">リポジトリの作成</h2>
+
 <p>リポジトリにしたいディレクトリの中でinitコマンドで作成 or init ディレクトリ で生成。</p>
-<pre>$ git init
-Initialized empty Git repository in c:/project/testRemote/test/.git/</pre>
+<div class="highlight"><pre class="chroma">$ git init
+Initialized empty Git repository in c:/project/testRemote/test/.git/</pre></div>
 <p>以後は基本的にリポジトリの中で作業。</p>
-<h1>コンフィグ</h1>
-<h2 id="tocAnchor-1-1">コンフィグファイルの適用範囲と優先度</h2>
+
+<h2 id="コンフィグ">コンフィグ</h2>
+
+<h3 id="コンフィグファイルの適用範囲と優先度">コンフィグファイルの適用範囲と優先度</h3>
+
 <p>下に行くほど適用範囲は狭くなり、優先度が上がる。(同じオプションがあったら下のものが適用される)</p>
+
 <table>
-  <tr>
-    <th>ファイル</th>
-    <th>Windows(msysGit)では</th>
-    <th>範囲</th>
-    <th>優先度</th>
-    <th>configコマンドでの設定方法</th>
-  </tr>
-  <tr>
-    <td>/etc/gitconfig</td>
-    <td>(msysのルート)/etc/gitconfig</td>
-    <td>システム全体</td>
-    <td>低</td>
-    <td>--system</td>
-  </tr>
-  <tr>
-    <td>~/.gitconfig</td>
-    <td>%USERPROFILE%\.gitconfig</td>
-    <td>あるユーザ</td>
-    <td>中</td>
-    <td>--global</td>
-  </tr>
-  <tr>
-    <td>(リポジトリ内).git/config</td>
-    <td>(リポジトリ内).git/config</td>
-    <td>そのリポジトリ</td>
-    <td>高</td>
-    <td>(指定なし)</td>
-  </tr>
+<thead>
+<tr>
+<th>ファイル</th>
+<th>Windows(msysGit)では</th>
+<th>範囲</th>
+<th>優先度</th>
+<th>configコマンドでの設定方法</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>/etc/gitconfig</td>
+<td>(msysのルート)/etc/gitconfig</td>
+<td>システム全体</td>
+<td>低</td>
+<td>&ndash;system</td>
+</tr>
+
+<tr>
+<td>~/.gitconfig</td>
+<td>%USERPROFILE%\.gitconfig</td>
+<td>あるユーザ</td>
+<td>中</td>
+<td>&ndash;global</td>
+</tr>
+
+<tr>
+<td>(リポジトリ内).git/config</td>
+<td>(リポジトリ内).git/config</td>
+<td>そのリポジトリ</td>
+<td>高</td>
+<td>(指定なし)</td>
+</tr>
+</tbody>
 </table>
-<h2 id="tocAnchor-1-2">コンフィグの一覧を見る</h2>
+
+<h3 id="コンフィグの一覧を見る">コンフィグの一覧を見る</h3>
+
 <p>そのリポジトリのコンフィグを見る。</p>
-<pre>$ git config --list
+<div class="highlight"><pre class="chroma">$ git config --list
 user.name=kk_Ataka
-...</pre>
+...</pre></div>
 <p>あるユーザのコンフィグを見る。</p>
-<pre>$ git config --list --global</pre>
+<div class="highlight"><pre class="chroma">$ git config --list --global</pre></div>
 <p>システム全体のコンフィグを見る。</p>
-<pre>$ git config --list --system</pre>
-<h2 id="tocAnchor-1-3">コンフィグの確認(特定の)</h2>
-<pre>$ git config user.name
-kk_Ataka</pre>
-<h2 id="tocAnchor-1-4">コンフィグの編集</h2>
-<pre>$ git config --global user.name "kk_Ataka"
-$ git config --global user.email "test@example.com"</pre>
-<h1>リポジトリ作成</h1>
+<div class="highlight"><pre class="chroma">$ git config --list --system</pre></div>
+<h3 id="コンフィグの確認-特定の">コンフィグの確認(特定の)</h3>
+<div class="highlight"><pre class="chroma">$ git config user.name
+kk_Ataka</pre></div>
+<h3 id="コンフィグの編集">コンフィグの編集</h3>
+<div class="highlight"><pre class="chroma">$ git config --global user.name &#34;kk_Ataka&#34;
+$ git config --global user.email &#34;test@example.com&#34;</pre></div>
+<h2 id="リポジトリ作成">リポジトリ作成</h2>
+
 <p>.git ファイルを作成し、その中にGitリポジトリのスケルトンが格納される。→スケルトン？</p>
-<h2 id="tocAnchor-1-5">リポジトリを作成する</h2>
-<pre>$ git init testdir
-Initialized empty Git repository in c:/project/testdir/.git/</pre>
-<h1>リポジトリのクローン</h1>
+
+<h3 id="リポジトリを作成する">リポジトリを作成する</h3>
+<div class="highlight"><pre class="chroma">$ git init testdir
+Initialized empty Git repository in c:/project/testdir/.git/</pre></div>
+<h2 id="リポジトリのクローン">リポジトリのクローン</h2>
+
 <p>既存のリポジトリを歴史毎ごっそり持ってくる。プロトコルにはhttp,https,git等がある。</p>
-<h2 id="tocAnchor-1-6">既存リポジトリのクローン</h2>
-<pre>$ git clone http://github.com/gosyujin/excel_for_ruby.git
+
+<h3 id="既存リポジトリのクローン">既存リポジトリのクローン</h3>
+<div class="highlight"><pre class="chroma">$ git clone http://github.com/gosyujin/excel_for_ruby.git
 Cloning into excel_for_ruby...
 remote: Counting objects: 22, done.
 remote: Compressing objects: 100% (13/13), done.
 remote: Total 22 (delta 2), reused 21 (delta 1)
-Unpacking objects: 100% (22/22), done.</pre>
-<pre>$ cd excel_for_ruby\
+Unpacking objects: 100% (22/22), done.
+
+$ cd excel_for_ruby\
 $ git log
 commit b6cd9964b1e586d8be280acd40c9719f6cc045c0
 Author: kk_Ataka &lt;kk_ataka@---.---.jp&gt;
 Date:   Sun Dec 25 17:36:53 2011 +0900
 
-    .gitignore追加</pre>
-<h1>状態確認</h1>
-<h2 id="tocAnchor-1-7">作業ツリーの状態確認</h2>
+    .gitignore追加</pre></div>
+<h2 id="状態確認">状態確認</h2>
+
+<h3 id="作業ツリーの状態確認">作業ツリーの状態確認</h3>
+
 <ul>
-  <li>変更なし</li>
+<li>変更なし</li>
 </ul>
-<pre>$ git status
+
+<!-- -->
+<div class="highlight"><pre class="chroma">$ git status
 # On branch master
-nothing to commit (working directory clean)</pre>
+nothing to commit (working directory clean)</pre></div>
 <ul>
-  <li>変更あり</li>
-  <li>Untracked files</li>
+<li>変更あり</li>
+<li>Untracked files</li>
 </ul>
+
 <p>まだGitに追跡されていないファイル。(＝前回コミット時になかったファイル)これからaddする必要がある。赤く表示される。</p>
-<pre>$ git status
+<div class="highlight"><pre class="chroma">$ git status
 # On branch master
 # Untracked files:
-#   (use "git add &lt;file&gt;..." to include in what will be committed)
+#   (use &#34;git add &lt;file&gt;...&#34; to include in what will be committed)
 #
 #       README
-nothing added to commit but untracked files present (use "git add" to track)</pre>
+nothing added to commit but untracked files present (use &#34;git add&#34; to track)</pre></div>
 <ul>
-  <li>new file</li>
+<li>new file</li>
 </ul>
+
 <p>addで新しく追跡開始されたファイルmenu.htmlがステージされている。緑で表示される。</p>
-<pre># On branch master
+<div class="highlight"><pre class="chroma"># On branch master
 # Changes to be committed:
-#   (use "git reset HEAD &lt;file&gt;..." to unstage)
+#   (use &#34;git reset HEAD &lt;file&gt;...&#34; to unstage)
 #
-#       new file:   menu.html</pre>
+#       new file:   menu.html</pre></div>
 <ul>
-  <li>modified</li>
+<li>modified</li>
 </ul>
+
 <p>既に追跡されているファイルが変更された。赤で表示される。これからaddでステージする。</p>
-<pre>$ git status
+<div class="highlight"><pre class="chroma">$ git status
 # On branch master
 # Changed but not updated:
-#   (use "git add &lt;file&gt;..." to update what will be committed)
-#   (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+#   (use &#34;git add &lt;file&gt;...&#34; to update what will be committed)
+#   (use &#34;git checkout -- &lt;file&gt;...&#34; to discard changes in working directory)
 #
 #       modified:   index.html
 #
-no changes added to commit (use "git add" and/or "git commit -a")</pre>
-<h1>ファイル追加(追跡)</h1>
-<h2 id="tocAnchor-1-8">リポジトリに追加(追跡の開始)</h2>
-<h2 id="tocAnchor-1-9">ステージング</h2>
+no changes added to commit (use &#34;git add&#34; and/or &#34;git commit -a&#34;)</pre></div>
+<h2 id="ファイル追加-追跡">ファイル追加(追跡)</h2>
+
+<h3 id="リポジトリに追加-追跡の開始">リポジトリに追加(追跡の開始)</h3>
+
+<h3 id="ステージング">ステージング</h3>
+
 <p>追跡の開始ともいうらしい。ディレクトリを指定すると、その下を再帰的に追跡する。</p>
-<pre>$ git add index.html</pre>
-<h1>ファイル比較</h1>
-<h2 id="tocAnchor-1-10">ファイルの比較</h2>
+<div class="highlight"><pre class="chroma">$ git add index.html</pre></div>
+<h2 id="ファイル比較">ファイル比較</h2>
+
+<h3 id="ファイルの比較">ファイルの比較</h3>
+
 <ul>
-  <li>作業ツリーの内容とステージングエリアの比較</li>
+<li>作業ツリーの内容とステージングエリアの比較</li>
 </ul>
-<pre>$ git status
+
+<!-- -->
+<div class="highlight"><pre class="chroma">$ git status
 # On branch master
 # Changed but not updated:
-#   (use "git add &lt;file&gt;..." to update what will be committed)
-#   (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+#   (use &#34;git add &lt;file&gt;...&#34; to update what will be committed)
+#   (use &#34;git checkout -- &lt;file&gt;...&#34; to discard changes in working directory)
 #
 #       modified:   index.html
 #
-no changes added to commit (use "git add" and/or "git commit -a")</pre>
-<pre>$ git diff
+no changes added to commit (use &#34;git add&#34; and/or &#34;git commit -a&#34;)
+
+$ git diff
 diff --git a/index.html b/index.html
 index a633da3..bc2a94f 100644
 --- a/index.html
@@ -327,21 +402,23 @@ index a633da3..bc2a94f 100644
      &lt;h1&gt;Hello&lt;/h1&gt;
 +    &lt;p&gt;Hello world&lt;/p&gt;
    &lt;/body&gt;
- &lt;/html&gt;</pre>
+ &lt;/html&gt;</pre></div>
 <ul>
-  <li>ステージされた内容と直近のコミットの比較</li>
+<li>ステージされた内容と直近のコミットの比較</li>
 </ul>
-<pre>$ git add index.html
+
+<!-- -->
+<div class="highlight"><pre class="chroma">$ git add index.html
 $ git status
 # On branch master
 # Changes to be committed:
-#   (use "git reset HEAD &lt;file&gt;..." to unstage)
+#   (use &#34;git reset HEAD &lt;file&gt;...&#34; to unstage)
 #
 #       modified:   index.html
 #
-$ git diff</pre>
-<p>add してdiff すると出力はなし。--cached, --stagedオプションをつけるとステージされた内容との比較を取る。</p>
-<pre>$ git diff --cached
+$ git diff</pre></div>
+<p>add してdiff すると出力はなし。&ndash;cached, &ndash;stagedオプションをつけるとステージされた内容との比較を取る。</p>
+<div class="highlight"><pre class="chroma">$ git diff --cached
 diff --git a/index.html b/index.html
 index a633da3..bc2a94f 100644
 --- a/index.html
@@ -372,22 +449,22 @@ index a633da3..bc2a94f 100644
      &lt;h1&gt;Hello&lt;/h1&gt;
 +    &lt;p&gt;Hello world&lt;/p&gt;
    &lt;/body&gt;
- &lt;/html&gt;</pre>
+ &lt;/html&gt;</pre></div>
 <p>ステージした後に編集。</p>
-<pre>$ git status
+<div class="highlight"><pre class="chroma">$ git status
 # On branch master
 # Changes to be committed:
-#   (use "git reset HEAD &lt;file&gt;..." to unstage)
+#   (use &#34;git reset HEAD &lt;file&gt;...&#34; to unstage)
 #
 #       modified:   index.html
 #
 # Changed but not updated:
-#   (use "git add &lt;file&gt;..." to update what will be committed)
-#   (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+#   (use &#34;git add &lt;file&gt;...&#34; to update what will be committed)
+#   (use &#34;git checkout -- &lt;file&gt;...&#34; to discard changes in working directory)
 #
-#       modified:   index.html</pre>
-<p>これをdiff, diff --stagedで比較すると……。</p>
-<pre>$ git diff
+#       modified:   index.html</pre></div>
+<p>これをdiff, diff &ndash;stagedで比較すると……。</p>
+<div class="highlight"><pre class="chroma">$ git diff
 diff --git a/index.html b/index.html
 index bc2a94f..341bb47 100644
 --- a/index.html
@@ -416,62 +493,68 @@ index a633da3..bc2a94f 100644
      &lt;h1&gt;Hello&lt;/h1&gt;
 +    &lt;p&gt;Hello world&lt;/p&gt;
    &lt;/body&gt;
- &lt;/html&gt;</pre>
-<p>diffが作業ツリーの内容とステージングエリアの比較でdiff --stagedがステージされた内容と直近のコミットの比較だから歴史としてはa633da3 -&gt; bc2a94f -&gt; 341bb47こうか。</p>
-<h1>ファイル削除(追跡除外)</h1>
-<h2 id="tocAnchor-1-11">ファイルの削除(追跡の除外)</h2>
+ &lt;/html&gt;</pre></div>
+<p>diffが作業ツリーの内容とステージングエリアの比較でdiff &ndash;stagedがステージされた内容と直近のコミットの比較だから歴史としてはa633da3 -&gt; bc2a94f -&gt; 341bb47こうか。</p>
+
+<h2 id="ファイル削除-追跡除外">ファイル削除(追跡除外)</h2>
+
+<h3 id="ファイルの削除-追跡の除外">ファイルの削除(追跡の除外)</h3>
+
 <p>通常のrmだと作業ツリーからファイルを消しただけ。</p>
-<pre>$ rm VERSION
+<div class="highlight"><pre class="chroma">$ rm VERSION
 
 $ git status
 # On branch master
 # Changed but not updated:
-#   (use "git add/rm &lt;file&gt;..." to update what will be committed)
-#   (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+#   (use &#34;git add/rm &lt;file&gt;...&#34; to update what will be committed)
+#   (use &#34;git checkout -- &lt;file&gt;...&#34; to discard changes in working directory)
 #
 #       deleted:    VERSION
 #
-no changes added to commit (use "git add" and/or "git commit -a")</pre>
+no changes added to commit (use &#34;git add&#34; and/or &#34;git commit -a&#34;)</pre></div>
 <p>git rm 後にcommitする事で追跡対象から除外する。</p>
-<pre>$ git rm VERSION
-rm 'VERSION'
+<div class="highlight"><pre class="chroma">$ git rm VERSION
+rm &#39;VERSION&#39;
 
 $ git status
 # On branch master
 # Changes to be committed:
-#   (use "git reset HEAD &lt;file&gt;..." to unstage)
+#   (use &#34;git reset HEAD &lt;file&gt;...&#34; to unstage)
 #
 #       deleted:    VERSION
 #
-$ git commit -m "Deleted VERSION file"
+$ git commit -m &#34;Deleted VERSION file&#34;
 [master 5981baf] Deleted VERSION file
  0 files changed, 0 insertions(+), 0 deletions(-)
  delete mode 100644 VERSION
 
 $ git status
 # On branch master
-nothing to commit (working directory clean)</pre>
-<h1>コミット</h1>
-<h2 id="tocAnchor-1-12">コミットを行う</h2>
+nothing to commit (working directory clean)</pre></div>
+<h2 id="コミット">コミット</h2>
+
+<h3 id="コミットを行う">コミットを行う</h3>
+
 <p>ログ記述のためにgit config core.editorや環境変数EDITORに適切なエディタが設定されている必要がある。VIなど</p>
-<pre>$ git commit index.html</pre>
-<pre> 1
+<div class="highlight"><pre class="chroma">$ git commit index.html
+
+ 1
  2 # Please enter the commit message for your changes. Lines starting
- 3 # with '#' will be ignored, and an empty message aborts the commit.
+ 3 # with &#39;#&#39; will be ignored, and an empty message aborts the commit.
  4 # On branch master
  5 # Changes to be committed:
- 6 #   (use "git reset HEAD &lt;file&gt;..." to unstage)
+ 6 #   (use &#34;git reset HEAD &lt;file&gt;...&#34; to unstage)
  7 #
  8 #       modified:   index.html
- 9 #</pre>
+ 9 #</pre></div>
 <p>commit -v でdiffを確認する事も出来る。</p>
-<pre> 1
+<div class="highlight"><pre class="chroma"> 1
  2 # Please enter the commit message for your changes. Lines starting
- 3 # with '#' will be ignored, and an empty message aborts the commit.
+ 3 # with &#39;#&#39; will be ignored, and an empty message aborts the commit.
  4 # Explicit paths specified without -i nor -o; assuming --only paths...
  5 # On branch master
  6 # Changes to be committed:
- 7 #   (use "git reset HEAD &lt;file&gt;..." to unstage)
+ 7 #   (use &#34;git reset HEAD &lt;file&gt;...&#34; to unstage)
  8 #
  9 #       modified:   index.html
 10 #
@@ -487,49 +570,55 @@ nothing to commit (working directory clean)</pre>
 20    &lt;/head&gt;
 21    &lt;body&gt;
 22      &lt;h1&gt;Hello&lt;/h1&gt;
-23 +    &lt;p&gt;Hello world !!&lt;/p&gt;</pre>
-<pre>[master (root-commit) 4b5c302] First commit.
+23 +    &lt;p&gt;Hello world !!&lt;/p&gt;
+
+[master (root-commit) 4b5c302] First commit.
  1 files changed, 8 insertions(+), 0 deletions(-)
- create mode 100644 index.html</pre>
-<h2 id="tocAnchor-1-13">コミットを行う(コミットログまでワンライナー)</h2>
+ create mode 100644 index.html</pre></div>
+<h3 id="コミットを行う-コミットログまでワンライナー">コミットを行う(コミットログまでワンライナー)</h3>
+
 <p>commit -mでコミットログを指定できる。-mを打つ毎に改行される</p>
-<pre>$ git commit -m "Modified index.html title" -m "Added menu.html"
+<div class="highlight"><pre class="chroma">$ git commit -m &#34;Modified index.html title&#34; -m &#34;Added menu.html&#34;
 [master eaa9ebc] Modified index.html title
  2 files changed, 6 insertions(+), 1 deletions(-)
- create mode 100644 menu.html</pre>
-<h2 id="tocAnchor-1-14">追跡ファイルのステージを省略</h2>
+ create mode 100644 menu.html</pre></div>
+<h3 id="追跡ファイルのステージを省略">追跡ファイルのステージを省略</h3>
+
 <p>addを省く。</p>
-<pre>$ git status
+<div class="highlight"><pre class="chroma">$ git status
 # On branch master
 # Changed but not updated:
-#   (use "git add &lt;file&gt;..." to update what will be committed)
-#   (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+#   (use &#34;git add &lt;file&gt;...&#34; to update what will be committed)
+#   (use &#34;git checkout -- &lt;file&gt;...&#34; to discard changes in working directory)
 #
 #       modified:   menu.html
 #
-no changes added to commit (use "git add" and/or "git commit -a")</pre>
-<pre>$ git commit -a -m "Added head tag"
-[master 1d4d741] Added head tag
- 1 files changed, 2 insertions(+), 0 deletions(-)</pre>
-<pre>$ git status
-# On branch master
-nothing to commit (working directory clean)</pre>
-<p>追跡可能じゃないとできない？</p>
-<pre>$ touch VERSION
+no changes added to commit (use &#34;git add&#34; and/or &#34;git commit -a&#34;)
 
-$ git commit -a -m "Added VERSION file"
+$ git commit -a -m &#34;Added head tag&#34;
+[master 1d4d741] Added head tag
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+$ git status
+# On branch master
+nothing to commit (working directory clean)</pre></div>
+<p>追跡可能じゃないとできない？</p>
+<div class="highlight"><pre class="chroma">$ touch VERSION
+
+$ git commit -a -m &#34;Added VERSION file&#34;
 # On branch master
 # Untracked files:
-#   (use "git add &lt;file&gt;..." to include in what will be committed)
+#   (use &#34;git add &lt;file&gt;...&#34; to include in what will be committed)
 #
 #       VERSION
-nothing added to commit but untracked files present (use "git add" to track)</pre>
-<h1>コミットのやり直し</h1>
+nothing added to commit but untracked files present (use &#34;git add&#34; to track)</pre></div>
+<h2 id="コミットのやり直し">コミットのやり直し</h2>
+
 <p>誤ってtypoしたままコミットしてしまった。</p>
-<pre>$ cat README
+<div class="highlight"><pre class="chroma">$ cat README
 Haloo Wold
 
-$ git commit -a -m "Typo commit"
+$ git commit -a -m &#34;Typo commit&#34;
 [master 663daa6] Typo commit
  1 files changed, 1 insertions(+), 0 deletions(-)
 
@@ -544,9 +633,9 @@ commit 5981baf9b3a9bd4a1d5a9cf5f26738391fbb9fff
 Author: kk_Ataka &lt;test@example.com&gt;
 Date:   Tue Feb 21 13:10:02 2012 +0900
 
-    Deleted VERSION file</pre>
-<p>コミットした後commit --amendで前回のコミット直前からやり直せる？</p>
-<pre>$ vi README
+    Deleted VERSION file</pre></div>
+<p>コミットした後commit &ndash;amendで前回のコミット直前からやり直せる？</p>
+<div class="highlight"><pre class="chroma">$ vi README
 $ git add README
 $ git commit --amend
 
@@ -560,45 +649,49 @@ commit 5981baf9b3a9bd4a1d5a9cf5f26738391fbb9fff
 Author: kk_Ataka &lt;test@example.com&gt;
 Date:   Tue Feb 21 13:10:02 2012 +0900
 
-    Deleted VERSION file</pre>
-<h1>ステージのやり直し</h1>
+    Deleted VERSION file</pre></div>
+<h2 id="ステージのやり直し">ステージのやり直し</h2>
+
 <p>ステージングエリアに入れたファイルを取り消したいときはresetコマンドを使う。</p>
-<pre>$ git status
+<div class="highlight"><pre class="chroma">$ git status
 # On branch master
 # Changed but not updated:
-#   (use "git add &lt;file&gt;..." to update what will be committed)
-#   (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+#   (use &#34;git add &lt;file&gt;...&#34; to update what will be committed)
+#   (use &#34;git checkout -- &lt;file&gt;...&#34; to discard changes in working directory)
 #
 #       modified:   README
 #
-no changes added to commit (use "git add" and/or "git commit -a")
+no changes added to commit (use &#34;git add&#34; and/or &#34;git commit -a&#34;)
 
 $ git add README
 
 $ git status
 # On branch master
 # Changes to be committed:
-#   (use "git reset HEAD &lt;file&gt;..." to unstage)
+#   (use &#34;git reset HEAD &lt;file&gt;...&#34; to unstage)
 #
 #       modified:   README
-#</pre>
+#</pre></div>
 <p>ここでステージングエリアに入れたREADMEファイルをreset。</p>
-<pre>$ git reset HEAD README
+<div class="highlight"><pre class="chroma">$ git reset HEAD README
 Unstaged changes after reset:
-M       README</pre>
-<pre>$ git status
+M       README
+
+$ git status
 # On branch master
 # Changed but not updated:
-#   (use "git add &lt;file&gt;..." to update what will be committed)
-#   (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+#   (use &#34;git add &lt;file&gt;...&#34; to update what will be committed)
+#   (use &#34;git checkout -- &lt;file&gt;...&#34; to discard changes in working directory)
 #
 #       modified:   README
 #
-no changes added to commit (use "git add" and/or "git commit -a")</pre>
+no changes added to commit (use &#34;git add&#34; and/or &#34;git commit -a&#34;)</pre></div>
 <p>HEADってなんじゃらほい？　今自分が作業じているローカルブランチへのポインタ。上から見ていくと今はmasterから動いていないので作業しているブランチはmasterのまま=HEADもmaster。</p>
-<h1>変更の取り消し</h1>
+
+<h2 id="変更の取り消し">変更の取り消し</h2>
+
 <p>SubversionでいうところのRevertであっている？　編集したファイルを直前のコミットの状態まで戻す。実はずっとgit statusコマンド打っていたときに出ていた。</p>
-<pre>$ git diff README
+<div class="highlight"><pre class="chroma">$ git diff README
 diff --git a/README b/README
 index 27f338f..557db03 100644
 --- a/README
@@ -610,38 +703,41 @@ index 27f338f..557db03 100644
 $ git status
 # On branch master
 # Changed but not updated:
-#   (use "git add &lt;file&gt;..." to update what will be committed)
-#   (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+#   (use &#34;git add &lt;file&gt;...&#34; to update what will be committed)
+#   (use &#34;git checkout -- &lt;file&gt;...&#34; to discard changes in working directory)
 #
 #       modified:   README
 #
-no changes added to commit (use "git add" and/or "git commit -a")</pre>
-<p>checkout -- <file>で戻せるようだ。</file></p>
-<pre>$ git checkout -- README
+no changes added to commit (use &#34;git add&#34; and/or &#34;git commit -a&#34;)</pre></div>
+<p>checkout &ndash; <file>で戻せるようだ。</p>
+<div class="highlight"><pre class="chroma">$ git checkout -- README
 
 $ git diff README
 
 $ cat README
-Hello Wrld</pre>
-<h1>リモート関連</h1>
-<h2 id="tocAnchor-1-15">(リモート)リポジトリの作成</h2>
-<p>作業ディレクトリがいらない場合はinit --bareオプションをつける。ディレクトリ名に.gitをつけるのは慣例……だったかな？　何かに書いてあった気がする。</p>
-<pre>$ git init --bare remote1.git
-Initialized empty Git repository in c:/project/testRemote/remote1.git/</pre>
-<h2 id="tocAnchor-1-16">リモートリポジトリの追加</h2>
+Hello Wrld</pre></div>
+<h2 id="リモート関連">リモート関連</h2>
+
+<h3 id="リモート-リポジトリの作成">(リモート)リポジトリの作成</h3>
+
+<p>作業ディレクトリがいらない場合はinit &ndash;bareオプションをつける。ディレクトリ名に.gitをつけるのは慣例……だったかな？　何かに書いてあった気がする。</p>
+<div class="highlight"><pre class="chroma">$ git init --bare remote1.git
+Initialized empty Git repository in c:/project/testRemote/remote1.git/</pre></div>
+<h3 id="リモートリポジトリの追加">リモートリポジトリの追加</h3>
+
 <p>追加はremote add [shortname] [url]で行う。以後、gitコマンドからはshortnameで指定できるようになる。</p>
-<pre>$ git remote add rem1 c:/project/testRemote/remote1</pre>
+<div class="highlight"><pre class="chroma">$ git remote add rem1 c:/project/testRemote/remote1</pre></div>
 <p>ここでURLを間違えていた事に気づく。(.git忘れた)が、同じshortnameにaddしても既にあるよって言われてしまうので削除しないといけない。</p>
-<pre>$ git remote add rem1 c:/project/testRemote/remote1.git
-fatal: remote rem1 already exists.</pre>
+<div class="highlight"><pre class="chroma">$ git remote add rem1 c:/project/testRemote/remote1.git
+fatal: remote rem1 already exists.</pre></div>
 <p>また、Windows？msysGit？を使っている場合は、Windows感覚でパスを打ちこむとエスケープされる。</p>
-<pre>$ git remote add rem1 c:\project\testRemote\remote1.git
+<div class="highlight"><pre class="chroma">$ git remote add rem1 c:\project\testRemote\remote1.git
 
 $ git remote -v
 rem1    c:projecttestRemoteremote1.git (fetch)
-rem1    c:projecttestRemoteremote1.git (push)</pre>
+rem1    c:projecttestRemoteremote1.git (push)</pre></div>
 <p>円マークを重ねるのとスラッシュとでは表記は変わるけど違いはないようだ。</p>
-<pre>$ git remote add rem1 c:/project/testRemote/remote1.git
+<div class="highlight"><pre class="chroma">$ git remote add rem1 c:/project/testRemote/remote1.git
 
 $ git remote add rem2 c:\\project\\testRemote\\remote2.git
 
@@ -649,54 +745,59 @@ $ git remote -v
 rem1    c:/project/testRemote/remote1.git (fetch)
 rem1    c:/project/testRemote/remote1.git (push)
 rem2    c:\project\testRemote\remote2.git (fetch)
-rem2    c:\project\testRemote\remote2.git (push)</pre>
-<h2 id="tocAnchor-1-17">リモートリポジトリのリネーム</h2>
+rem2    c:\project\testRemote\remote2.git (push)</pre></div>
+<h3 id="リモートリポジトリのリネーム">リモートリポジトリのリネーム</h3>
+
 <p>remote rename [shortname_now] [shortname_after]でいける。</p>
-<pre>$ git remote rename rem1 remo
+<div class="highlight"><pre class="chroma">$ git remote rename rem1 remo
 
 $ git remote
 rem2
-remo</pre>
-<h2 id="tocAnchor-1-18">リモートリポジトリの削除</h2>
+remo</pre></div>
+<h3 id="リモートリポジトリの削除">リモートリポジトリの削除</h3>
+
 <p>remote rm [shortname]</p>
-<pre>$ git remote rm rem1</pre>
-<h2 id="tocAnchor-1-19">リモートリポジトリの確認</h2>
+<div class="highlight"><pre class="chroma">$ git remote rm rem1</pre></div>
+<h3 id="リモートリポジトリの確認">リモートリポジトリの確認</h3>
+
 <p>リポジトリからcloneしてきた場合はoriginという名前が付けられる。Gitがデフォルトでつけるshortname。よくgit push origin masterとかで出てくるorigin。</p>
-<pre>$ git remote -v
+<div class="highlight"><pre class="chroma">$ git remote -v
 origin  http://github.com/gosyujin/evernote_for_ruby.git (fetch)
-origin  http://github.com/gosyujin/evernote_for_ruby.git (push)</pre>
+origin  http://github.com/gosyujin/evernote_for_ruby.git (push)</pre></div>
 <p>git initでローカルに作成したリポジトリだとoriginもないので何も表示されない。</p>
-<pre>$ git remote
-</pre>
+<div class="highlight"><pre class="chroma">$ git remote</pre></div>
 <p>addした後はそのリポジトリのshortnameが列挙される。</p>
-<pre>$ git remote
+<div class="highlight"><pre class="chroma">$ git remote
 rem1
-rem2</pre>
+rem2</pre></div>
 <p>remote -vでURLも。</p>
-<pre>$ git remote -v
+<div class="highlight"><pre class="chroma">$ git remote -v
 rem1    c:/project/testRemote/remote1.git (fetch)
 rem1    c:/project/testRemote/remote1.git (push)
 rem2    c:\project\testRemote\remote2.git (fetch)
-rem2    c:\project\testRemote\remote2.git (push)</pre>
+rem2    c:\project\testRemote\remote2.git (push)</pre></div>
 <p>remote show [shortname]でより詳しく。</p>
-<pre>$ git remote show rem1
+<div class="highlight"><pre class="chroma">$ git remote show rem1
  * remote rem1
    Fetch URL: c:/project/testRemote/remote1.git
    Push  URL: c:/project/testRemote/remote1.git
    HEAD branch: master
    Remote branch:
      master tracked
-   Local ref configured for 'git push':
-     master pushes to master (up to date)</pre>
-<h2 id="tocAnchor-1-20">リモートリポジトリからデータ取得(フェッチ、プル)</h2>
-<p>リモートにあるデータの内、まだ持っていないものを取得できる。fetchコマンドを使う。</p>
-<pre>$ git fetch rem1
+   Local ref configured for &#39;git push&#39;:
+     master pushes to master (up to date)</pre></div>
+<h3 id="リモートリポジトリからデータ取得-フェッチ-プル">リモートリポジトリからデータ取得(フェッチ、プル)</h3>
 
-$ git fetch rem2</pre>
+<p>リモートにあるデータの内、まだ持っていないものを取得できる。fetchコマンドを使う。</p>
+<div class="highlight"><pre class="chroma">$ git fetch rem1
+
+$ git fetch rem2</pre></div>
 <p>空のリポジトリからfetchしているので特に何も起こらなかった……。cloneした後(最近fetchした後)からの変更を取得できる。ただし、これだと取得しただけなのでfetch後マージをしてやる必要がある。フェッチ、マージを一気にやってくれるgit pullというコマンドもある。</p>
-<h2 id="tocAnchor-1-21">リモートリポジトリへのデータ登録(プッシュ)</h2>
+
+<h3 id="リモートリポジトリへのデータ登録-プッシュ">リモートリポジトリへのデータ登録(プッシュ)</h3>
+
 <p>ローカルにコミットしたデータをプッシュ。という事でpushコマンドを使用。push [shortname] [branch]でプッシュ先とプッシュするブランチを指定。</p>
-<pre>$ git push rem1 master
+<div class="highlight"><pre class="chroma">$ git push rem1 master
 Counting objects: 26, done.
 Delta compression using up to 2 threads.
 Compressing objects: 100% (22/22), done.
@@ -704,491 +805,728 @@ Writing objects: 100% (26/26), 2.33 KiB, done.
 Total 26 (delta 5), reused 0 (delta 0)
 Unpacking objects: 100% (26/26), done.
 To c:/project/testRemote/remote1.git
- * [new branch]      master -&gt; master</pre>
+ * [new branch]      master -&gt; master</pre></div>
 <p>次はブランチから。</p>
-</div>
 
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2012/02/29/1330528564/" title="Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など">
-          Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など
+    </section>
+  </article>
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2012/02/29/1330528564/" class="pagination_overflow previous_page">
+          Prev: 
+          12/2/29
+          Rails3レシピブックを読みながらRailsを学ぶ モデ …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2012/03/11/1331472478/" title="Pro Gitと入門gitでGitの復習 ブランチ編">
+      
+
+      <span class="pagination_center disabled">
+        12/3/5
+        Pro …
+      </span>
+
+      
+        <a href="/2012/03/11/1331472478/" class="pagination_overflow next_page">
+          Next: 
+          12/3/11
           Pro Gitと入門gitでGitの復習 ブランチ編
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2012/03/05/1330951640/" data-text="kk_Atakaの日記 - Pro Gitと入門gitでGitの復習 基本操作編" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/03/05/1330951640/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2012/03/05/1330951640/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2012/03/05/1330951640/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - Pro Gitと入門gitでGitの復習 基本操作編"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+      </div>
 
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2012/03/05/1330951640//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-  <h2>Recent Entries</h2>
 
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#git-備忘録-windows-pro-gitと入門gitでgitの復習-基本操作編">[Git][備忘録][Windows]Pro Gitと入門gitでGitの復習 基本操作編</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#リポジトリの作成">リポジトリの作成</a></li>
+<li><a href="#コンフィグ">コンフィグ</a>
+<ul>
+<li><a href="#コンフィグファイルの適用範囲と優先度">コンフィグファイルの適用範囲と優先度</a></li>
+<li><a href="#コンフィグの一覧を見る">コンフィグの一覧を見る</a></li>
+<li><a href="#コンフィグの確認-特定の">コンフィグの確認(特定の)</a></li>
+<li><a href="#コンフィグの編集">コンフィグの編集</a></li>
+</ul></li>
+<li><a href="#リポジトリ作成">リポジトリ作成</a>
+<ul>
+<li><a href="#リポジトリを作成する">リポジトリを作成する</a></li>
+</ul></li>
+<li><a href="#リポジトリのクローン">リポジトリのクローン</a>
+<ul>
+<li><a href="#既存リポジトリのクローン">既存リポジトリのクローン</a></li>
+</ul></li>
+<li><a href="#状態確認">状態確認</a>
+<ul>
+<li><a href="#作業ツリーの状態確認">作業ツリーの状態確認</a></li>
+</ul></li>
+<li><a href="#ファイル追加-追跡">ファイル追加(追跡)</a>
+<ul>
+<li><a href="#リポジトリに追加-追跡の開始">リポジトリに追加(追跡の開始)</a></li>
+<li><a href="#ステージング">ステージング</a></li>
+</ul></li>
+<li><a href="#ファイル比較">ファイル比較</a>
+<ul>
+<li><a href="#ファイルの比較">ファイルの比較</a></li>
+</ul></li>
+<li><a href="#ファイル削除-追跡除外">ファイル削除(追跡除外)</a>
+<ul>
+<li><a href="#ファイルの削除-追跡の除外">ファイルの削除(追跡の除外)</a></li>
+</ul></li>
+<li><a href="#コミット">コミット</a>
+<ul>
+<li><a href="#コミットを行う">コミットを行う</a></li>
+<li><a href="#コミットを行う-コミットログまでワンライナー">コミットを行う(コミットログまでワンライナー)</a></li>
+<li><a href="#追跡ファイルのステージを省略">追跡ファイルのステージを省略</a></li>
+</ul></li>
+<li><a href="#コミットのやり直し">コミットのやり直し</a></li>
+<li><a href="#ステージのやり直し">ステージのやり直し</a></li>
+<li><a href="#変更の取り消し">変更の取り消し</a></li>
+<li><a href="#リモート関連">リモート関連</a>
+<ul>
+<li><a href="#リモート-リポジトリの作成">(リモート)リポジトリの作成</a></li>
+<li><a href="#リモートリポジトリの追加">リモートリポジトリの追加</a></li>
+<li><a href="#リモートリポジトリのリネーム">リモートリポジトリのリネーム</a></li>
+<li><a href="#リモートリポジトリの削除">リモートリポジトリの削除</a></li>
+<li><a href="#リモートリポジトリの確認">リモートリポジトリの確認</a></li>
+<li><a href="#リモートリポジトリからデータ取得-フェッチ-プル">リモートリポジトリからデータ取得(フェッチ、プル)</a></li>
+<li><a href="#リモートリポジトリへのデータ登録-プッシュ">リモートリポジトリへのデータ登録(プッシュ)</a></li>
+</ul></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

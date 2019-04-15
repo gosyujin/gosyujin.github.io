@@ -1,670 +1,961 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>RubyではてなのWSSE認証をしてはてブにブクマをポストする - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  RubyではてなのWSSE認証をしてはてブにブクマをポストする &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Ruby][API]RubyではてなのWSSE認証をしてはてブにブクマをポストする ReadItLaterの続きをやろうと思ったのですが、GitHubにはてブスクリプトをコミットしたので先にまとめる。
+結構前に作ったので、OAuthではなくWSSE認証を使っています。
+手順  X-WSSEヘッダを作成する ブックマークするUrl・コメントを記述したxmlデータと、X-WSSEヘッダを含めたリクエストをhttp://b.hatena.ne.jp/atom/postへPOSTする  手順はこれだけ。次に詳細を…。
+ヘッダを作成する 以下のデータを用意します
+|*Username|はてなID|
+|*Nonce|HTTPリクエスト毎に生成したセキュリティ・トークンをBASE64エンコードしたもの[1]|
+|*Created|Nonce作成時のタイムスタンプをISO-8601表記で記述したもの|
+|*PasswordDigest|「Nonce&#43;Created&#43;はてなのパスワード」をSHA1でダイジェスト化しBASE64エンコードしたもの|
+これらのデータをX-WSSEヘッダに以下の形式で格納します。
+UsernameToken Username=&amp;#34;USERNAME&amp;#34;, PasswordDigest=&amp;#34;PASSWORDDIGEST&amp;#34;, Nonce=&amp;#34;NONCE&amp;#34;, Created=&amp;#34;CREATED&amp;#34; POSTする ヘッダは完成したので、次にブックマークする情報を用意します。形式はxmlで以下のようなフォーマットで作成します。[2]
+&amp;lt;entry xmlns=&amp;#34;http://purl.org/atom/ns#&amp;#34;&amp;gt; &amp;lt;title&amp;gt;dummy&amp;lt;/title&amp;gt; &amp;lt;link rel=&amp;#34;related&amp;#34; type=&amp;#34;text/html&amp;#34; href=&amp;#34;ブックマークするURL&amp;#34; /&amp;gt; &amp;lt;summary type=&amp;#34;text/plain&amp;#34;&amp;gt;ブックマークコメント&amp;lt;/summary&amp;gt; &amp;lt;/entry&amp;gt; 作成されたヘッダとデータはこんな感じになります。
+[f:id:kk_Ataka:20110308213639j:image]
+最後に作成したヘッダとブックマークデータをhttp://b.hatena.ne.jp/atom/postへポストすると。
+[f:id:kk_Ataka:20110308213640j:image]
+おお。
+正常に作成された場合は、ステータスコードは201が返ってくるようです。
+ソース Gistは直接貼れるけどGitHubは貼れないのね…。ここにあります。[https://github.com/gosyujin/hatena:title]
+require &amp;#39;rubygems&amp;#39; require &amp;#39;pit&amp;#39; require &amp;#39;time&amp;#39; require &amp;#39;digest/sha1&amp;#39; require &amp;#39;net/http&amp;#39; require &amp;#39;uri&amp;#39; require &amp;#39;nkf&amp;#39; # wsse認証を行う def wsse(hatena_id, password) # 一意な値(仮実装) nonce = [Time.now.to_i.to_s].pack(&amp;#39;m&amp;#39;).gsub(/\n/, &amp;#39;&amp;#39;) # nonce作成時のタイムスタンプをISO-8601表記で記述したもの now = Time.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2011/03/08/1299588433/">RubyではてなのWSSE認証をしてはてブにブクマをポストする</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Ruby" class="tag">Ruby</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#API" class="tag">API</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2011/03/08</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2011/03/02/1299062938/" title="Read it LaterをRubyで取得する">
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2011/03/02/1299062938/" class="pagination_overflow previous_page">
+          Prev: 
+          11/3/2
           Read it LaterをRubyで取得する
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2011/04/23/1303489798/" title="さくらVPSにDropboxをインストールした">
+      
+
+      <span class="pagination_center disabled">
+        11/3/8
+        Rubyで …
+      </span>
+
+      
+        <a href="/2011/04/23/1303489798/" class="pagination_overflow next_page">
+          Next: 
+          11/4/23
           さくらVPSにDropboxをインストールした
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<p>ReadItLaterの続きをやろうと思ったのですが、GitHubにはてブスクリプトをコミットしたので先にまとめる。</p>
-<p>結構前に作ったので、OAuthではなくWSSE認証を使っています。</p>
-<h1>手順</h1>
-<ol><li>X-WSSEヘッダを作成する</li><li>ブックマークするUrl・コメントを記述したxmlデータと、X-WSSEヘッダを含めたリクエストを<a href="http://b.hatena.ne.jp/atom/post">http://b.hatena.ne.jp/atom/post</a>へPOSTする</li></ol>
-<p>手順はこれだけ。次に詳細を…。</p>
-<h1>ヘッダを作成する</h1>
-<p>以下のデータを用意します</p>
-<table><tr><th>Username</th><td>はてなID</td></tr><tr><th>Nonce</th><td>HTTPリクエスト毎に生成したセキュリティ・トークンをBASE64エンコードしたもの<span class="footnote"><a href="#f1" title="一意な値ならとりあえず動くようです。" name="fn1">*1</a></span></td></tr><tr><th>Created</th><td>Nonce作成時のタイムスタンプをISO-8601表記で記述したもの</td></tr><tr><th>PasswordDigest</th><td>「Nonce+Created+はてなのパスワード」をSHA1でダイジェスト化しBASE64エンコードしたもの</td></tr></table>
-<p>これらのデータをX-WSSEヘッダに以下の形式で格納します。</p>
-<pre>UsernameToken Username=&quot;USERNAME&quot;, PasswordDigest=&quot;PASSWORDDIGEST&quot;, Nonce=&quot;NONCE&quot;, Created=&quot;CREATED&quot;</pre>
-<h1>POSTする</h1>
-<p>ヘッダは完成したので、次にブックマークする情報を用意します。形式はxmlで以下のようなフォーマットで作成します。<span class="footnote"><a href="#f2" title="ブックマークコメントを[]でくくるとタグになります。[Google]みたいな。" name="fn2">*2</a></span></p>
-<pre>&lt;entry xmlns=&quot;http://purl.org/atom/ns#&quot;&gt;
-                &lt;title&gt;dummy&lt;/title&gt;
-                &lt;link rel=&quot;related&quot; type=&quot;text/html&quot; href=&quot;ブックマークするURL&quot; /&gt;
-                &lt;summary type=&quot;text/plain&quot;&gt;ブックマークコメント&lt;/summary&gt;
-&lt;/entry&gt;</pre>
-<p>作成されたヘッダとデータはこんな感じになります。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20110308213639"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20110308/20110308213639.jpg"></a></p>
-<p>最後に作成したヘッダとブックマークデータを<a href="http://b.hatena.ne.jp/atom/post">http://b.hatena.ne.jp/atom/post</a>へポストすると。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20110308213640"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20110308/20110308213640.jpg"></a></p>
-<p>おお。</p>
-<p>正常に作成された場合は、ステータスコードは201が返ってくるようです。</p>
-<h1>ソース</h1>
-<p>Gistは直接貼れるけどGitHubは貼れないのね…。ここにあります。<a href="https://github.com/gosyujin/hatena">gosyujin/hatena · GitHub</a></p>
-<pre class="ruby">require 'rubygems'
-require 'pit'
-require 'time'
-require 'digest/sha1'
-require 'net/http'
-require 'uri'
-require 'nkf'
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">RubyではてなのWSSE認証をしてはてブにブクマをポストする</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
 
-# wsse認証を行う
-def wsse(hatena_id, password)
-	# 一意な値(仮実装)
-	nonce = [Time.now.to_i.to_s].pack('m').gsub(/\n/, '')
-	# nonce作成時のタイムスタンプをISO-8601表記で記述したもの
-	now = Time.now.utc.iso8601
-	
-	# SHA1ダイジェスト化した文字列をBase64エンコード
-	digest = [Digest::SHA1.digest(nonce + now + password)].pack(&quot;m&quot;).gsub(/\n/, '')
-	
-	{ 'X-WSSE' =&gt; sprintf(
-		%Q&lt;UsernameToken Username=&quot;%s&quot;, PasswordDigest=&quot;%s&quot;, Nonce=&quot;%s&quot;, Created=&quot;%s&quot;&gt;,
-		hatena_id, digest, nonce, now)
-	}
-end
-
-# はてブ登録用xmlを生成する
-def getXml(link, summary)
-	%Q(
-	&lt;entry xmlns=&quot;http://purl.org/atom/ns#&quot;&gt;
-		&lt;title&gt;dummy&lt;/title&gt;
-		&lt;link rel=&quot;related&quot; type=&quot;text/html&quot; href=&quot;#{link}&quot; /&gt;
-		&lt;summary type=&quot;text/plain&quot;&gt;#{summary}&lt;/summary&gt;
-	&lt;/entry&gt;
-	)
-end
-
-b_url = ARGV.shift || abort(&quot;Usage: hatenabookmark.rb &lt;url&gt; &lt;comment&gt;&quot;)
-b_comment = ARGV.shift
-
-# エンドポイント
-url = &quot;http://b.hatena.ne.jp/atom/post&quot;
-
-# ユーザ情報読み込み
-hatena = Pit.get(&quot;hatena&quot;, :require =&gt; {
-	# はてなIDとパスワード
-	&quot;hatena_id&quot; =&gt; &quot;your hatena_id&quot;, 
-	&quot;password&quot; =&gt; &quot;your password&quot;, 
-})
-# pitを使わずにべた書き用
-# hatena = {
-#	hatena_id =&gt; HATENA_ID, 
-#	password = PASSWORD
-# }
-
-# WSSE認証
-header = wsse(hatena[&quot;hatena_id&quot;], hatena[&quot;password&quot;])
-
-uri = URI.parse(url)
-proxy_class = Net::HTTP::Proxy(ENV[&quot;PROXY&quot;], 8080)
-http = proxy_class.new(uri.host)
-http.start do |http|
-	# 読み込んだ文字列をutf-8に変換
-	# b_url = NKF.nkf('-w', b_url)
-	# b_comment = NKF.nkf('-w', b_comment)
-	
-	# エンドポイントへPOST
-	res = http.post(uri.path, getXml(b_url, b_comment), header)
-	if res.code == &quot;201&quot; then
-		print &quot;Bookmark success: #{b_url}\n&quot;
-	else
-		print &quot;#{res.code} Error: #{b_url}\n&quot;
-	end
-end</pre>
-<p>参考にしたサイトにトラックバック打とうと思ったけど前すぎて忘れた＞＜　見つけたら追記します。</p>
-<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: 一意な値ならとりあえず動くようです。</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: ブックマークコメントを[]でくくるとタグになります。[Google]みたいな。</p></div>
-</div>
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2011/03/02/1299062938/" title="Read it LaterをRubyで取得する">
-          Read it LaterをRubyで取得する
-        </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2011/04/23/1303489798/" title="さくらVPSにDropboxをインストールした">
-          さくらVPSにDropboxをインストールした
-        </a>
-      </li>
-    
-  </ul>
-</div>
-
-
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2011/03/08/1299588433/" data-text="kk_Atakaの日記 - RubyではてなのWSSE認証をしてはてブにブクマをポストする" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/03/08/1299588433/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/03/08/1299588433/" />
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
     </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/03/08/1299588433/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - RubyではてなのWSSE認証をしてはてブにブクマをポストする"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+  
+    <a href='/tags/api' class="muted-link">
+      [ <span class="Label Label--gray">API</span> ]
     </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  
 
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/03/08/1299588433//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
-  <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
-  </ul>
-
-  <h2>Recent Entries</h2>
+ 
+        Published: <span>2011/03/08</span>
+      </div>
+    </div>
+  </div>
 
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#ruby-api-rubyではてなのwsse認証をしてはてブにブクマをポストする">[Ruby][API]RubyではてなのWSSE認証をしてはてブにブクマをポストする</a></li>
+<li><a href="#手順">手順</a></li>
+<li><a href="#ヘッダを作成する">ヘッダを作成する</a></li>
+<li><a href="#postする">POSTする</a></li>
+<li><a href="#ソース">ソース</a></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
 
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="ruby-api-rubyではてなのwsse認証をしてはてブにブクマをポストする">[Ruby][API]RubyではてなのWSSE認証をしてはてブにブクマをポストする</h2>
+
+<p>ReadItLaterの続きをやろうと思ったのですが、GitHubにはてブスクリプトをコミットしたので先にまとめる。</p>
+
+<p>結構前に作ったので、OAuthではなくWSSE認証を使っています。</p>
+
+<h2 id="手順">手順</h2>
+
+<ol>
+<li>X-WSSEヘッダを作成する</li>
+<li>ブックマークするUrl・コメントを記述したxmlデータと、X-WSSEヘッダを含めたリクエストを<a href="http://b.hatena.ne.jp/atom/postへPOSTする">http://b.hatena.ne.jp/atom/postへPOSTする</a></li>
+</ol>
+
+<p>手順はこれだけ。次に詳細を…。</p>
+
+<h2 id="ヘッダを作成する">ヘッダを作成する</h2>
+
+<p>以下のデータを用意します</p>
+
+<p>|*Username|はてなID|</p>
+
+<p>|*Nonce|HTTPリクエスト毎に生成したセキュリティ・トークンをBASE64エンコードしたもの[1]|</p>
+
+<p>|*Created|Nonce作成時のタイムスタンプをISO-8601表記で記述したもの|</p>
+
+<p>|*PasswordDigest|「Nonce+Created+はてなのパスワード」をSHA1でダイジェスト化しBASE64エンコードしたもの|</p>
+
+<p>これらのデータをX-WSSEヘッダに以下の形式で格納します。</p>
+<div class="highlight"><pre class="chroma">UsernameToken Username=&#34;USERNAME&#34;, PasswordDigest=&#34;PASSWORDDIGEST&#34;, Nonce=&#34;NONCE&#34;, Created=&#34;CREATED&#34;</pre></div>
+<h2 id="postする">POSTする</h2>
+
+<p>ヘッダは完成したので、次にブックマークする情報を用意します。形式はxmlで以下のようなフォーマットで作成します。[2]</p>
+<div class="highlight"><pre class="chroma">&lt;entry xmlns=&#34;http://purl.org/atom/ns#&#34;&gt;
+                &lt;title&gt;dummy&lt;/title&gt;
+                &lt;link rel=&#34;related&#34; type=&#34;text/html&#34; href=&#34;ブックマークするURL&#34; /&gt;
+                &lt;summary type=&#34;text/plain&#34;&gt;ブックマークコメント&lt;/summary&gt;
+&lt;/entry&gt;</pre></div>
+<p>作成されたヘッダとデータはこんな感じになります。</p>
+
+<p>[f:id:kk_Ataka:20110308213639j:image]</p>
+
+<p>最後に作成したヘッダとブックマークデータを<a href="http://b.hatena.ne.jp/atom/postへポストすると">http://b.hatena.ne.jp/atom/postへポストすると</a>。</p>
+
+<p>[f:id:kk_Ataka:20110308213640j:image]</p>
+
+<p>おお。</p>
+
+<p>正常に作成された場合は、ステータスコードは201が返ってくるようです。</p>
+
+<h2 id="ソース">ソース</h2>
+
+<p>Gistは直接貼れるけどGitHubは貼れないのね…。ここにあります。[<a href="https://github.com/gosyujin/hatena:title">https://github.com/gosyujin/hatena:title</a>]</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;pit&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;time&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;digest/sha1&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;net/http&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;uri&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;nkf&#39;</span>
+
+<span class="c1"># wsse認証を行う</span>
+<span class="k">def</span> <span class="nf">wsse</span><span class="p">(</span><span class="n">hatena_id</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+    <span class="c1"># 一意な値(仮実装)</span>
+    <span class="n">nonce</span> <span class="o">=</span> <span class="o">[</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">to_i</span><span class="o">.</span><span class="n">to_s</span><span class="o">].</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/\n/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="c1"># nonce作成時のタイムスタンプをISO-8601表記で記述したもの</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">utc</span><span class="o">.</span><span class="n">iso8601</span>
+    
+    <span class="c1"># SHA1ダイジェスト化した文字列をBase64エンコード</span>
+    <span class="n">digest</span> <span class="o">=</span> <span class="o">[</span><span class="no">Digest</span><span class="o">::</span><span class="no">SHA1</span><span class="o">.</span><span class="n">digest</span><span class="p">(</span><span class="n">nonce</span> <span class="o">+</span> <span class="n">now</span> <span class="o">+</span> <span class="n">password</span><span class="p">)</span><span class="o">].</span><span class="n">pack</span><span class="p">(</span><span class="s2">&#34;m&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/\n/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    
+    <span class="p">{</span> <span class="s1">&#39;X-WSSE&#39;</span> <span class="o">=&gt;</span> <span class="nb">sprintf</span><span class="p">(</span>
+        <span class="sx">%Q&lt;UsernameToken Username=&#34;%s&#34;, PasswordDigest=&#34;%s&#34;, Nonce=&#34;%s&#34;, Created=&#34;%s&#34;&gt;</span><span class="p">,</span>
+        <span class="n">hatena_id</span><span class="p">,</span> <span class="n">digest</span><span class="p">,</span> <span class="n">nonce</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="k">end</span>
+
+<span class="c1"># はてブ登録用xmlを生成する</span>
+<span class="k">def</span> <span class="nf">getXml</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">summary</span><span class="p">)</span>
+    <span class="sx">%Q(
+</span><span class="sx">    &lt;entry xmlns=&#34;http://purl.org/atom/ns#&#34;&gt;
+</span><span class="sx">        &lt;title&gt;dummy&lt;/title&gt;
+</span><span class="sx">        &lt;link rel=&#34;related&#34; type=&#34;text/html&#34; href=&#34;</span><span class="si">#{</span><span class="n">link</span><span class="si">}</span><span class="sx">&#34; /&gt;
+</span><span class="sx">        &lt;summary type=&#34;text/plain&#34;&gt;</span><span class="si">#{</span><span class="n">summary</span><span class="si">}</span><span class="sx">&lt;/summary&gt;
+</span><span class="sx">    &lt;/entry&gt;
+</span><span class="sx">    )</span>
+<span class="k">end</span>
+
+<span class="n">b_url</span> <span class="o">=</span> <span class="no">ARGV</span><span class="o">.</span><span class="n">shift</span> <span class="o">||</span> <span class="nb">abort</span><span class="p">(</span><span class="s2">&#34;Usage: hatenabookmark.rb &lt;url&gt; &lt;comment&gt;&#34;</span><span class="p">)</span>
+<span class="n">b_comment</span> <span class="o">=</span> <span class="no">ARGV</span><span class="o">.</span><span class="n">shift</span>
+
+<span class="c1"># エンドポイント</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;http://b.hatena.ne.jp/atom/post&#34;</span>
+
+<span class="c1"># ユーザ情報読み込み</span>
+<span class="n">hatena</span> <span class="o">=</span> <span class="no">Pit</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;hatena&#34;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1"># はてなIDとパスワード</span>
+    <span class="s2">&#34;hatena_id&#34;</span> <span class="o">=&gt;</span> <span class="s2">&#34;your hatena_id&#34;</span><span class="p">,</span> 
+    <span class="s2">&#34;password&#34;</span> <span class="o">=&gt;</span> <span class="s2">&#34;your password&#34;</span><span class="p">,</span> 
+<span class="p">})</span>
+<span class="c1"># pitを使わずにべた書き用</span>
+<span class="c1"># hatena = {</span>
+<span class="c1">#   hatena_id =&gt; HATENA_ID, </span>
+<span class="c1">#   password = PASSWORD</span>
+<span class="c1"># }</span>
+
+<span class="c1"># WSSE認証</span>
+<span class="n">header</span> <span class="o">=</span> <span class="n">wsse</span><span class="p">(</span><span class="n">hatena</span><span class="o">[</span><span class="s2">&#34;hatena_id&#34;</span><span class="o">]</span><span class="p">,</span> <span class="n">hatena</span><span class="o">[</span><span class="s2">&#34;password&#34;</span><span class="o">]</span><span class="p">)</span>
+
+<span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">proxy_class</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Proxy</span><span class="p">(</span><span class="no">ENV</span><span class="o">[</span><span class="s2">&#34;PROXY&#34;</span><span class="o">]</span><span class="p">,</span> <span class="mi">8080</span><span class="p">)</span>
+<span class="n">http</span> <span class="o">=</span> <span class="n">proxy_class</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+<span class="n">http</span><span class="o">.</span><span class="n">start</span> <span class="k">do</span> <span class="o">|</span><span class="n">http</span><span class="o">|</span>
+    <span class="c1"># 読み込んだ文字列をutf-8に変換</span>
+    <span class="c1"># b_url = NKF.nkf(&#39;-w&#39;, b_url)</span>
+    <span class="c1"># b_comment = NKF.nkf(&#39;-w&#39;, b_comment)</span>
+    
+    <span class="c1"># エンドポイントへPOST</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">getXml</span><span class="p">(</span><span class="n">b_url</span><span class="p">,</span> <span class="n">b_comment</span><span class="p">),</span> <span class="n">header</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="s2">&#34;201&#34;</span> <span class="k">then</span>
+        <span class="nb">print</span> <span class="s2">&#34;Bookmark success: </span><span class="si">#{</span><span class="n">b_url</span><span class="si">}</span><span class="se">\n</span><span class="s2">&#34;</span>
+    <span class="k">else</span>
+        <span class="nb">print</span> <span class="s2">&#34;</span><span class="si">#{</span><span class="n">res</span><span class="o">.</span><span class="n">code</span><span class="si">}</span><span class="s2"> Error: </span><span class="si">#{</span><span class="n">b_url</span><span class="si">}</span><span class="se">\n</span><span class="s2">&#34;</span>
+    <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+<p>参考にしたサイトにトラックバック打とうと思ったけど前すぎて忘れた＞＜　見つけたら追記します。</p>
+
+<p>[1] 一意な値ならとりあえず動くようです。</p>
+
+<p>[2] ブックマークコメントを[]でくくるとタグになります。[Google]みたいな。</p>
+
+    </section>
+  </article>
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2011/03/02/1299062938/" class="pagination_overflow previous_page">
+          Prev: 
+          11/3/2
+          Read it LaterをRubyで取得する
+        </a>
+      
+
+      <span class="pagination_center disabled">
+        11/3/8
+        Rubyで …
+      </span>
+
+      
+        <a href="/2011/04/23/1303489798/" class="pagination_overflow next_page">
+          Next: 
+          11/4/23
+          さくらVPSにDropboxをインストールした
+        </a>
+      
+  </div>
+</nav>
+
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-</aside>
 
 
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ruby-api-rubyではてなのwsse認証をしてはてブにブクマをポストする">[Ruby][API]RubyではてなのWSSE認証をしてはてブにブクマをポストする</a></li>
+<li><a href="#手順">手順</a></li>
+<li><a href="#ヘッダを作成する">ヘッダを作成する</a></li>
+<li><a href="#postする">POSTする</a></li>
+<li><a href="#ソース">ソース</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

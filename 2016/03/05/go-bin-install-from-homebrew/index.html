@@ -1,275 +1,290 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>Golangで作ったスクリプトをbrew install&brew updateできるようにする - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Golangで作ったスクリプトをbrew install&amp;brew updateできるようにする &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ Golangでスクリプトを作ったので、バイナリにしてhomebrewでインストール/アップデートできるようにしてみた。
+細かく色々できるけど、とりあえず今回は最小で。
+参考  HomeBrewで自作ツールを配布する ｜ SOTA Go言語でつくったツールをHomebrewで配布する · THINKING MEGANE Mackerel  mackerelio/homebrew-mackerel-agent mackerelio/mackerel-agent   環境  MacOS X El Capitan 10.11.3 go version go1.5.3 darwin/amd64 ruby 2.1.4p265  要件  GitHubに上げたスクリプトをbrew install xxxでインストールできるようにしたい でもたまにはgo get github.com/xxxでもインストールしたい  ブツ まずはブツを作った。
+ gosyujin/bulkrenamer  引数にディレクトリ与えたら、最下層のファイルを直前のディレクトリ名にリネームするっ的なスクリプト。こちらは特に意識する必要はない。
+なんとなく動くようになったら、go buildして作ったファイルをGitHubのReleasesからv0.1として追加した。(割愛/今回は配布先のPCにgoコマンドがない前提なので、実行ファイルをそのまま配る)
+ 実行ファイルのUrlを覚えておく  https://github.com/gosyujin/bulkrenamer/releases/download/v0.1/bulkrenamer  sha1のハッシュ値を取っておく  Homebrew用設定 Formulaの作成  gosyujin/homebrew-bulkrenamer  brew createで作れるみたいだけど、とりあえず手打ち。
+リポジトリの名前はhomebrew-APPNAMEとするルール。今回はbulkrenamerなのでhomebrew-bulkrenamerリポジトリを作った。
+ファイルはAPPNAME.rb。今回はbulkrenamer.rb
+class Bulkrenamer &amp;lt; Formula desc &amp;#34;BulkRenamer&amp;#34; homepage &amp;#34;https://github.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2016/03/05/go-bin-install-from-homebrew/">Golangで作ったスクリプトをbrew install&brew updateできるようにする</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Golang" class="tag">Golang</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#Homebrew" class="tag">Homebrew</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2016/03/05</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" title="El Capitan上に古いpumaをインストールすると失敗する">
-          El Capitan上に古いpumaをインストールすると失敗する
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" class="pagination_overflow previous_page">
+          Prev: 
+          16/2/17
+          El Capitan上に古いpumaをインストールすると失敗 …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2016/04/30/android-minimum-account-manager/" title="AndroidのAccountManagerをとりあえず動かすところまで">
-          AndroidのAccountManagerをとりあえず動かすところまで
+      
+
+      <span class="pagination_center disabled">
+        16/3/5
+        Golan …
+      </span>
+
+      
+        <a href="/2016/04/30/android-minimum-account-manager/" class="pagination_overflow next_page">
+          Next: 
+          16/4/30
+          AndroidのAccountManagerをとりあえず動か …
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">参考</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">環境</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-4">
-              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">要件</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-5">
-              <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">ブツ</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-6">
-              <a href="#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">Homebrew用設定</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-7">
-                  <a href="#tocAnchor-1-6-1"><span class="tocnumber">6.1</span> <span class="toctext">Formulaの作成</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="toc_level-1 toc_section-8">
-              <a href="#tocAnchor-1-8"><span class="tocnumber">7</span> <span class="toctext">インストールとアップデート</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-9">
-                  <a href="#tocAnchor-1-8-1"><span class="tocnumber">7.1</span> <span class="toctext">Homebrewでインストール</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-10">
-                  <a href="#tocAnchor-1-8-2"><span class="tocnumber">7.2</span> <span class="toctext">Homebrewでアップデート</span></a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h2 id="tocAnchor-1-1">あらすじ</h2>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">Golangで作ったスクリプトをbrew install&amp;brew updateできるようにする</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
 
-<p>Golangでスクリプトを作ったので、バイナリにして<code class="highlighter-rouge">homebrew</code>でインストール/アップデートできるようにしてみた。</p>
+  
+    <a href='/tags/golang' class="muted-link">
+      [ <span class="Label Label--gray">Golang</span> ]
+    </a>
+  
+    <a href='/tags/homebrew' class="muted-link">
+      [ <span class="Label Label--gray">Homebrew</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2016/03/05</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#要件">要件</a></li>
+<li><a href="#ブツ">ブツ</a></li>
+<li><a href="#homebrew用設定">Homebrew用設定</a>
+<ul>
+<li><a href="#formulaの作成">Formulaの作成</a></li>
+</ul></li>
+<li><a href="#インストールとアップデート">インストールとアップデート</a>
+<ul>
+<li><a href="#homebrewでインストール">Homebrewでインストール</a></li>
+<li><a href="#homebrewでアップデート">Homebrewでアップデート</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>Golangでスクリプトを作ったので、バイナリにして<code>homebrew</code>でインストール/アップデートできるようにしてみた。</p>
 
 <p>細かく色々できるけど、とりあえず今回は最小で。</p>
 
-<h2 id="tocAnchor-1-2">参考</h2>
+<h2 id="参考">参考</h2>
 
 <ul>
-  <li><a href="http://deeeet.com/writing/2014/05/20/brew-tap/">HomeBrewで自作ツールを配布する ｜ SOTA</a></li>
-  <li><a href="http://blog.monochromegane.com/blog/2014/05/19/homebrew-formula-for-golang/">Go言語でつくったツールをHomebrewで配布する · THINKING MEGANE</a></li>
-  <li>Mackerel
-    <ul>
-      <li><a href="https://github.com/mackerelio/homebrew-mackerel-agent">mackerelio/homebrew-mackerel-agent</a></li>
-      <li><a href="https://github.com/mackerelio/mackerel-agent">mackerelio/mackerel-agent</a></li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="tocAnchor-1-3">環境</h2>
+<li><a href="http://deeeet.com/writing/2014/05/20/brew-tap/">HomeBrewで自作ツールを配布する ｜ SOTA</a></li>
+<li><a href="http://blog.monochromegane.com/blog/2014/05/19/homebrew-formula-for-golang/">Go言語でつくったツールをHomebrewで配布する · THINKING MEGANE</a></li>
+<li>Mackerel
 
 <ul>
-  <li>MacOS X El Capitan 10.11.3</li>
-  <li>go version go1.5.3 darwin/amd64</li>
-  <li>ruby 2.1.4p265</li>
+<li><a href="https://github.com/mackerelio/homebrew-mackerel-agent">mackerelio/homebrew-mackerel-agent</a></li>
+<li><a href="https://github.com/mackerelio/mackerel-agent">mackerelio/mackerel-agent</a></li>
+</ul></li>
 </ul>
 
-<h2 id="tocAnchor-1-4">要件</h2>
+<h2 id="環境">環境</h2>
 
 <ul>
-  <li>GitHubに上げたスクリプトを<code class="highlighter-rouge">brew install xxx</code>でインストールできるようにしたい</li>
-  <li>でもたまには<code class="highlighter-rouge">go get github.com/xxx</code>でもインストールしたい</li>
+<li>MacOS X El Capitan 10.11.3</li>
+<li>go version go1.5.3 darwin/amd64</li>
+<li>ruby 2.1.4p265</li>
 </ul>
 
-<h2 id="tocAnchor-1-5">ブツ</h2>
+<h2 id="要件">要件</h2>
+
+<ul>
+<li>GitHubに上げたスクリプトを<code>brew install xxx</code>でインストールできるようにしたい</li>
+<li>でもたまには<code>go get github.com/xxx</code>でもインストールしたい</li>
+</ul>
+
+<h2 id="ブツ">ブツ</h2>
 
 <p>まずはブツを作った。</p>
 
 <ul>
-  <li><a href="https://github.com/gosyujin/bulkrenamer">gosyujin/bulkrenamer</a></li>
+<li><a href="https://github.com/gosyujin/bulkrenamer">gosyujin/bulkrenamer</a></li>
 </ul>
 
 <p>引数にディレクトリ与えたら、最下層のファイルを直前のディレクトリ名にリネームするっ的なスクリプト。こちらは特に意識する必要はない。</p>
 
-<p>なんとなく動くようになったら、<code class="highlighter-rouge">go build</code>して作ったファイルを<a href="https://github.com/gosyujin/bulkrenamer/releases">GitHubのReleases</a>から<code class="highlighter-rouge">v0.1</code>として追加した。(割愛/今回は配布先のPCにgoコマンドがない前提なので、実行ファイルをそのまま配る)</p>
+<p>なんとなく動くようになったら、<code>go build</code>して作ったファイルを<a href="https://github.com/gosyujin/bulkrenamer/releases">GitHubのReleases</a>から<code>v0.1</code>として追加した。(割愛/今回は配布先のPCにgoコマンドがない前提なので、実行ファイルをそのまま配る)</p>
 
 <ul>
-  <li>実行ファイルのUrlを覚えておく
-    <ul>
-      <li><code class="highlighter-rouge">https://github.com/gosyujin/bulkrenamer/releases/download/v0.1/bulkrenamer</code></li>
-    </ul>
-  </li>
-  <li>sha1のハッシュ値を取っておく</li>
-</ul>
-
-<h2 id="tocAnchor-1-6">Homebrew用設定</h2>
-
-<h3 id="tocAnchor-1-6-1">Formulaの作成</h3>
+<li>実行ファイルのUrlを覚えておく
 
 <ul>
-  <li><a href="https://github.com/gosyujin/homebrew-bulkrenamer">gosyujin/homebrew-bulkrenamer</a></li>
+<li><code>https://github.com/gosyujin/bulkrenamer/releases/download/v0.1/bulkrenamer</code></li>
+</ul></li>
+<li>sha1のハッシュ値を取っておく</li>
 </ul>
 
-<p><code class="highlighter-rouge">brew create</code>で作れるみたいだけど、とりあえず手打ち。</p>
+<h2 id="homebrew用設定">Homebrew用設定</h2>
 
-<p>リポジトリの名前は<code class="highlighter-rouge">homebrew-APPNAME</code>とするルール。今回はbulkrenamerなので<code class="highlighter-rouge">homebrew-bulkrenamer</code>リポジトリを作った。</p>
+<h3 id="formulaの作成">Formulaの作成</h3>
 
-<p>ファイルは<code class="highlighter-rouge">APPNAME.rb</code>。今回は<code class="highlighter-rouge">bulkrenamer.rb</code></p>
+<ul>
+<li><a href="https://github.com/gosyujin/homebrew-bulkrenamer">gosyujin/homebrew-bulkrenamer</a></li>
+</ul>
 
-<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Bulkrenamer</span> <span class="o">&lt;</span> <span class="no">Formula</span>
-  <span class="n">desc</span> <span class="s2">"BulkRenamer"</span>
-  <span class="n">homepage</span> <span class="s2">"https://github.com/gosyujin/bulkrenamer"</span>
-  <span class="n">head</span> <span class="s2">"https://github.com/gosyujin/homebrew-bulkrenamer.git"</span>
-  <span class="n">version</span> <span class="s2">"v0.1"</span>
-  <span class="n">url</span> <span class="s2">"</span><span class="si">#{</span><span class="n">homepage</span><span class="si">}</span><span class="s2">/releases/download/</span><span class="si">#{</span><span class="n">version</span><span class="si">}</span><span class="s2">/bulkrenamer"</span>
-  <span class="n">sha1</span> <span class="s2">"5e3ac6469395aae60a00c61f45b5343207cca330"</span>
+<p><code>brew create</code>で作れるみたいだけど、とりあえず手打ち。</p>
+
+<p>リポジトリの名前は<code>homebrew-APPNAME</code>とするルール。今回はbulkrenamerなので<code>homebrew-bulkrenamer</code>リポジトリを作った。</p>
+
+<p>ファイルは<code>APPNAME.rb</code>。今回は<code>bulkrenamer.rb</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Bulkrenamer</span> <span class="o">&lt;</span> <span class="no">Formula</span>
+  <span class="n">desc</span> <span class="s2">&#34;BulkRenamer&#34;</span>
+  <span class="n">homepage</span> <span class="s2">&#34;https://github.com/gosyujin/bulkrenamer&#34;</span>
+  <span class="n">head</span> <span class="s2">&#34;https://github.com/gosyujin/homebrew-bulkrenamer.git&#34;</span>
+  <span class="n">version</span> <span class="s2">&#34;v0.1&#34;</span>
+  <span class="n">url</span> <span class="s2">&#34;</span><span class="si">#{</span><span class="n">homepage</span><span class="si">}</span><span class="s2">/releases/download/</span><span class="si">#{</span><span class="n">version</span><span class="si">}</span><span class="s2">/bulkrenamer&#34;</span>
+  <span class="n">sha1</span> <span class="s2">&#34;5e3ac6469395aae60a00c61f45b5343207cca330&#34;</span>
 
   <span class="k">def</span> <span class="nf">install</span>
-    <span class="n">bin</span><span class="p">.</span><span class="nf">install</span> <span class="no">Dir</span><span class="p">[</span><span class="s1">'bulkrenamer'</span><span class="p">]</span>
+    <span class="n">bin</span><span class="o">.</span><span class="n">install</span> <span class="no">Dir</span><span class="o">[</span><span class="s1">&#39;bulkrenamer&#39;</span><span class="o">]</span>
   <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div>
-
+<span class="k">end</span></code></pre></div>
 <p>sha1で比較とか他にも色々できるが、ひとまず</p>
 
 <ul>
-  <li><code class="highlighter-rouge">url</code>はツールの場所</li>
-  <li><code class="highlighter-rouge">version</code>はFormulaのバージョン。バージョンアップ時に使う</li>
+<li><code>url</code>はツールの場所</li>
+<li><code>version</code>はFormulaのバージョン。バージョンアップ時に使う</li>
 </ul>
 
 <p>だけ。</p>
 
-<h2 id="tocAnchor-1-8">インストールとアップデート</h2>
+<h2 id="インストールとアップデート">インストールとアップデート</h2>
 
-<h3 id="tocAnchor-1-8-1">Homebrewでインストール</h3>
+<h3 id="homebrewでインストール">Homebrewでインストール</h3>
 
-<p><code class="highlighter-rouge">tap</code>して<code class="highlighter-rouge">install</code>でいける！</p>
-
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew tap gosyujin/bulkrenamer
-<span class="gp">==&gt; </span>Tapping gosyujin/bulkrenamer
-Cloning into <span class="s1">'/usr/local/Library/Taps/gosyujin/homebrew-bulkrenamer'</span>...
-remote: Counting objects: 3, <span class="k">done</span>.
-remote: Compressing objects: 100% <span class="o">(</span>2/2<span class="o">)</span>, <span class="k">done</span>.
-remote: Total 3 <span class="o">(</span>delta 0<span class="o">)</span>, reused 0 <span class="o">(</span>delta 0<span class="o">)</span>, pack-reused 0
-Unpacking objects: 100% <span class="o">(</span>3/3<span class="o">)</span>, <span class="k">done</span>.
+<p><code>tap</code>して<code>install</code>でいける！</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">$ brew tap gosyujin/bulkrenamer
+<span class="o">==</span>&gt; Tapping gosyujin/bulkrenamer
+Cloning into <span class="s1">&#39;/usr/local/Library/Taps/gosyujin/homebrew-bulkrenamer&#39;</span>...
+remote: Counting objects: <span class="m">3</span>, <span class="k">done</span>.
+remote: Compressing objects: <span class="m">100</span>% <span class="o">(</span><span class="m">2</span>/2<span class="o">)</span>, <span class="k">done</span>.
+remote: Total <span class="m">3</span> <span class="o">(</span>delta <span class="m">0</span><span class="o">)</span>, reused <span class="m">0</span> <span class="o">(</span>delta <span class="m">0</span><span class="o">)</span>, pack-reused <span class="m">0</span>
+Unpacking objects: <span class="m">100</span>% <span class="o">(</span><span class="m">3</span>/3<span class="o">)</span>, <span class="k">done</span>.
 Checking connectivity... <span class="k">done</span>.
-Tapped 1 formula <span class="o">(</span>25 files, 16.8K<span class="o">)</span>
-<span class="gp">$ </span>brew install bulkrenamer
-<span class="gp">==&gt; </span>Installing bulkrenamer from gosyujin/bulkrenamer
-<span class="gp">==&gt; </span>Downloading https://github.com/gosyujin/bulkrenamer/releases/download/v0.1/bulkrenamer
-<span class="gp">==&gt; </span>Downloading from https://github-cloud.s3.amazonaws.com/releases/52855923/178f416a-dfc8-11e5-9f9c-fc48ca5e1c98?X-Amz-Algorithm<span class="o">=</span>AWS4-HMAC-SHA256&amp;X-Amz-Credential<span class="o">=</span>AKIAISTNZFOVBIJM
+Tapped <span class="m">1</span> formula <span class="o">(</span><span class="m">25</span> files, <span class="m">16</span>.8K<span class="o">)</span>
+$ brew install <span class="nv">bulkrenamer</span>
+<span class="o">==</span>&gt; Installing bulkrenamer from gosyujin/bulkrenamer
+<span class="o">==</span>&gt; Downloading https://github.com/gosyujin/bulkrenamer/releases/download/v0.1/bulkrenamer
+<span class="o">==</span>&gt; Downloading from https://github-cloud.s3.amazonaws.com/releases/52855923/178f416a-dfc8-11e5-9f9c-fc48ca5e1c98?X-Amz-Algorithm<span class="o">=</span>AWS4-HMAC-SHA256<span class="p">&amp;</span>X-Amz-Credential<span class="o">=</span>AKIAISTNZFOVBIJM
 <span class="o">(</span>略<span class="o">)</span>
-🍺  /usr/local/Cellar/bulkrenamer/v0.1: 2 files, 7M, built <span class="k">in </span>8 seconds
-<span class="gp">$ </span>bulkrenamer -v
-BulkRenamer ver.0.1
-</code></pre>
-</div>
+🍺  /usr/local/Cellar/bulkrenamer/v0.1: <span class="m">2</span> files, 7M, built in <span class="m">8</span> seconds
+$ bulkrenamer -v
+BulkRenamer ver.0.1</code></pre></div>
+<h3 id="homebrewでアップデート">Homebrewでアップデート</h3>
 
-<h3 id="tocAnchor-1-8-2">Homebrewでアップデート</h3>
-
-<p><a href="https://github.com/gosyujin/homebrew-bulkrenamer">homebrew-bulkrenamer</a>を更新して<code class="highlighter-rouge">brew update</code>してもらう。</p>
+<p><a href="https://github.com/gosyujin/homebrew-bulkrenamer">homebrew-bulkrenamer</a>を更新して<code>brew update</code>してもらう。</p>
 
 <p>今回は配布ファイル変えずにバージョンだけ上げてみた。</p>
 
 <ul>
-  <li>v0.2になっているのは一回試した後だから</li>
-  <li>本来の流れ的にはブツ(bulkrenamer)を更新してreleasesに新しいバージョンを登録後、この操作を行う</li>
+<li>v0.2になっているのは一回試した後だから</li>
+<li>本来の流れ的にはブツ(bulkrenamer)を更新してreleasesに新しいバージョンを登録後、この操作を行う</li>
 </ul>
 
 <script src="https://gist.github.com/gosyujin/5c5ee96c7cc405405749.js"></script>
 
-<p>
-  <code class="highlighter-rouge">brew update</code>
-</p>
-
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew update
+<p><code>brew update</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">$ brew update
 Updated Homebrew from 468adbc to 215cb53.
-Updated 3 taps <span class="o">(</span>caskroom/cask, caskroom/versions, gosyujin/bulkrenamer<span class="o">)</span>.
+Updated <span class="m">3</span> taps <span class="o">(</span>caskroom/cask, caskroom/versions, gosyujin/bulkrenamer<span class="o">)</span>.
  <span class="o">==</span>&gt; New Formulae
 dropbox-uploader         gnu-complexity
  <span class="o">==</span>&gt; Updated Formulae
@@ -277,517 +292,699 @@ cromwell                 mitmproxy
 dcd                      nss
 dmd                      planck
 gosyujin/bulkrenamer/bulkrenamer ✔               rust
-libpagemaker
-</code></pre>
-</div>
-
-<p><code class="highlighter-rouge">brew outdated</code>で更新があるツールの確認。</p>
-
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew outdated
+libpagemaker</code></pre></div>
+<p><code>brew outdated</code>で更新があるツールの確認。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">$ brew outdated
 gosyujin/bulkrenamer/bulkrenamer <span class="o">(</span>v0.1, v0.2 &lt; v0.3<span class="o">)</span>
-go <span class="o">(</span>1.5.3 &lt; 1.6<span class="o">)</span>
-openssl <span class="o">(</span>1.0.2f &lt; 1.0.2g<span class="o">)</span>
-</code></pre>
-</div>
-
-<p>
-  <code class="highlighter-rouge">brew upgrade</code>
-</p>
-
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>brew upgrade bulkrenamer
-<span class="gp">==&gt; </span>Upgrading 1 outdated package, with result:
+go <span class="o">(</span><span class="m">1</span>.5.3 &lt; <span class="m">1</span>.6<span class="o">)</span>
+openssl <span class="o">(</span><span class="m">1</span>.0.2f &lt; <span class="m">1</span>.0.2g<span class="o">)</span></code></pre></div>
+<p><code>brew upgrade</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">$ brew upgrade <span class="nv">bulkrenamer</span>
+<span class="o">==</span>&gt; Upgrading <span class="m">1</span> outdated package, with result:
 gosyujin/bulkrenamer/bulkrenamer v0.3
-<span class="gp">==&gt; </span>Upgrading gosyujin/bulkrenamer/bulkrenamer
-<span class="gp">==&gt; </span>Downloading https://github.com/gosyujin/bulkrenamer/releases/download/v0.3/bulkrenamer
-<span class="gp">==&gt; </span>Downloading from https://github-cloud.s3.amazonaws.com/releases/52855923/c0686154-e21b-11e5-92d2-6d76b5ceb265?X-Amz-Algorithm<span class="o">=</span>AWS4-HMAC-SHA256&amp;X-Amz-Credential<span class="o">=</span>AKIAISTNZFOVBIJM
+<span class="o">==</span>&gt; Upgrading gosyujin/bulkrenamer/bulkrenamer
+<span class="o">==</span>&gt; Downloading https://github.com/gosyujin/bulkrenamer/releases/download/v0.3/bulkrenamer
+<span class="o">==</span>&gt; Downloading from https://github-cloud.s3.amazonaws.com/releases/52855923/c0686154-e21b-11e5-92d2-6d76b5ceb265?X-Amz-Algorithm<span class="o">=</span>AWS4-HMAC-SHA256<span class="p">&amp;</span>X-Amz-Credential<span class="o">=</span>AKIAISTNZFOVBIJM
 <span class="o">(</span>略<span class="o">)</span>
-🍺  /usr/local/Cellar/bulkrenamer/v0.3: 2 files, 7M, built <span class="k">in </span>8 seconds
-</code></pre>
-</div>
+🍺  /usr/local/Cellar/bulkrenamer/v0.3: <span class="m">2</span> files, 7M, built in <span class="m">8</span> seconds</code></pre></div>
+    </section>
+  </article>
 
-</div>
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" class="pagination_overflow previous_page">
+          Prev: 
+          16/2/17
+          El Capitan上に古いpumaをインストールすると失敗 …
+        </a>
+      
 
-<div class="pagination">
+      <span class="pagination_center disabled">
+        16/3/5
+        Golan …
+      </span>
+
+      
+        <a href="/2016/04/30/android-minimum-account-manager/" class="pagination_overflow next_page">
+          Next: 
+          16/4/30
+          AndroidのAccountManagerをとりあえず動か …
+        </a>
+      
+  </div>
+</nav>
+
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    
-      <li class="prev">
-        <a href="/2016/02/17/bundle-install-old-version-puma-for-el-capitan/" title="El Capitan上に古いpumaをインストールすると失敗する">
-          El Capitan上に古いpumaをインストールすると失敗する
-        </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2016/04/30/android-minimum-account-manager/" title="AndroidのAccountManagerをとりあえず動かすところまで">
-          AndroidのAccountManagerをとりあえず動かすところまで
-        </a>
-      </li>
-    
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
 </div>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" data-text="kk_Atakaの日記 - Golangで作ったスクリプトをbrew install&brew updateできるようにする" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - Golangで作ったスクリプトをbrew install&brew updateできるようにする"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2016/03/05/go-bin-install-from-homebrew//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
 
 
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
     
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
 
 
-      </article>
 
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
 
-  <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
-  </ul>
-
-  <h2>Recent Entries</h2>
-
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#要件">要件</a></li>
+<li><a href="#ブツ">ブツ</a></li>
+<li><a href="#homebrew用設定">Homebrew用設定</a>
+<ul>
+<li><a href="#formulaの作成">Formulaの作成</a></li>
+</ul></li>
+<li><a href="#インストールとアップデート">インストールとアップデート</a>
+<ul>
+<li><a href="#homebrewでインストール">Homebrewでインストール</a></li>
+<li><a href="#homebrewでアップデート">Homebrewでアップデート</a></li>
+</ul></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

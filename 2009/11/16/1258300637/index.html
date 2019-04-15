@@ -1,628 +1,980 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>OracleにおけるWHERE句、BETWEEN句、IN句、LIKE句、ORDER BY句のまとめ - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  OracleにおけるWHERE句、BETWEEN句、IN句、LIKE句、ORDER BY句のまとめ &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Oracle][SQL]OracleにおけるWHERE句、BETWEEN句、IN句、LIKE句、ORDER BY句のまとめ 　まずは基本的な句のまとめから。
+論理演算子の優先順位  NOT &amp;gt; AND &amp;gt; OR  　本当はもっと演算子の優先順位はあるけど、とりあえず引っかかったところだけ。ANDの方がORよりも早いです。
+WHERE句  文字、日付は&amp;rsquo;(シングルクォーテーション)で囲む 文字列の大文字小文字は区別される 日付データのデフォルト値はDD-MON-RR WHERE句では列別名は使えない！  ただし、ORDER BY句では使用できる！[1]   　例。普通のSQL文です。。
+[f:id:kk_Ataka:20091106011618p:image]
+　id列をXYZと名前付けてこいつをWHERE句で使おうとすると…。
+[f:id:kk_Ataka:20091106011755p:image]
+　エラーになります。しかし、name列をXYZと名前付けてORDER BY句で使おうとすると…。
+[f:id:kk_Ataka:20091106011756p:image]
+　使えます！
+BETWEEN &amp;lsquo;○&amp;rsquo; AND &amp;lsquo;△&amp;rsquo; 　○～△で合致するものを探す。こんなテーブルで…
+[f:id:kk_Ataka:20091106010119p:image]
+　nameが1から9で合致するものを探す。
+[f:id:kk_Ataka:20091106010120p:image]
+　1から2で合致するもの。
+[f:id:kk_Ataka:20091106010121p:image]
+[2]
+name (NOT) IN(&amp;lsquo;AA&amp;rsquo;, &amp;lsquo;BB&amp;rsquo;) 　AA、BBいずれかに合致すれば取得します。下図の場合はname列の中からY&amp;rsquo;s IかY&amp;rsquo;s II[3]に合致する値を探してくるので、
+[f:id:kk_Ataka:20091116003449j:image]
+　こうなります。
+　一方、NOTは合致しないものを取得します。Y&amp;rsquo;s IとY&amp;rsquo;s II以外の値を取得します。
+[f:id:kk_Ataka:20091116003450j:image]
+name LIKE &amp;lsquo;%AA%&amp;rsquo; 　(任意の文字列)AA(任意の文字列)に合致するものを探します。他には_(アンダーバー)があります。|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2009/11/16/1258300637/">OracleにおけるWHERE句、BETWEEN句、IN句、LIKE句、ORDER BY句のまとめ</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Oracle" class="tag">Oracle</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#SQL" class="tag">SQL</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2009/11/16</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2009/11/05/1257433826/" title="Oracle Database 10g Express Editionの日本語版を導入します">
-          Oracle Database 10g Express Editionの日本語版を導入します
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2009/11/05/1257433826/" class="pagination_overflow previous_page">
+          Prev: 
+          09/11/5
+          Oracle Database 10g Express …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2009/12/08/1260268590/" title="Macの"書類"とか"ライブラリ"みたいに日本語化されているフォルダを英語化する">
-          Macの"書類"とか"ライブラリ"みたいに日本語化されているフォルダを英語化する
+      
+
+      <span class="pagination_center disabled">
+        09/11/16
+        Oracl …
+      </span>
+
+      
+        <a href="/2009/12/08/1260268590/" class="pagination_overflow next_page">
+          Next: 
+          09/12/8
+          Macの書類とかライブラリみたいに日本語化されているフォルダ …
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<p>　まずは基本的な句のまとめから。</p>
-<h1>論理演算子の優先順位</h1>
-<ul><li>NOT &gt; AND &gt; OR</li></ul>
-<p>　本当はもっと演算子の優先順位はあるけど、とりあえず引っかかったところだけ。ANDの方がORよりも早いです。</p>
-<h1>WHERE句</h1>
-<ul><li>文字、日付は&#39;(シングルクォーテーション)で囲む</li><li>文字列の大文字小文字は区別される</li><li>日付データのデフォルト値はDD-MON-RR</li><li>WHERE句では列別名は使えない！<ul><li>ただし、ORDER BY句では使用できる！<span class="footnote"><a href="#f1" title="これなんでなんだろう？　処理の順番とか優先順位的なものがあるのかな？" name="fn1">*1</a></span></li></ul></li></ul>
-<p>　例。普通のSQL文です。。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091106011618"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091106/20091106011618.png"></a></p>
-<p>　id列をXYZと名前付けてこいつをWHERE句で使おうとすると…。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091106011755"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091106/20091106011755.png"></a></p>
-<p>　エラーになります。しかし、name列をXYZと名前付けてORDER BY句で使おうとすると…。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091106011756"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091106/20091106011756.png"></a></p>
-<p>　使えます！</p>
-<h1>BETWEEN &#39;○&#39; AND &#39;△&#39;</h1>
-<p>　○～△で合致するものを探す。こんなテーブルで…</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091106010119"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091106/20091106010119.png"></a></p>
-<p>　nameが1から9で合致するものを探す。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091106010120"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091106/20091106010120.png"></a></p>
-<p>　1から2で合致するもの。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091106010121"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091106/20091106010121.png"></a></p>
-<p><span class="footnote"><a href="#f2" title="何か、文字列でBETWEEN使ってるシーンをどこかで見た事ある気がするんだけど幻覚かなぁ。" name="fn2">*2</a></span></p>
-<h1>name (NOT) IN(&#39;AA&#39;, &#39;BB&#39;)</h1>
-<p>　AA、BBいずれかに合致すれば取得します。下図の場合はname列の中からY&#39;s IかY&#39;s II<span class="footnote"><a href="#f3" title="以前使ったシングルクォーテーション重ねと代替引用符を使用しています。" name="fn3">*3</a></span>に合致する値を探してくるので、</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091116003449"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091116/20091116003449.jpg"></a></p>
-<p>　こうなります。</p>
-<p>　一方、NOTは合致しないものを取得します。Y&#39;s IとY&#39;s II以外の値を取得します。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091116003450"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091116/20091116003450.jpg"></a></p>
-<h1>name LIKE &#39;%AA%&#39;</h1>
-<p>　(任意の文字列)AA(任意の文字列)に合致するものを探します。他には_(アンダーバー)があります。</p>
-<p>　NAME = &#39;%AA%&#39;のように=で比較してしまうと完全なる%AA%この文字列と合致するものを探します。</p>
-<h1>name LIKE &#39;%A\_A%&#39; ESCAPE &#39;\&#39;</h1>
-<p>　(任意の文字列)A_A(任意の文字列)を探したい時にname LIKE &#39;%A_A%&#39;としてしまうと、_はワイルドカードと判断されてしまうのでエスケープ。</p>
-<h1>name &gt;= &#39;SQL&#39;</h1>
-<p>　指定文字よりも文字コードが前のものに合致(？)。SQLは満たすとして、○SQK、○SP、○S、×SQM、×SR、×Tとなります。</p>
-<h1>name IS (NOT) NULL</h1>
-<p>　name = NULLではUNKNOWNが返ってくるのでNULLは取得できません。また、値が設定されていないカラムはNULLとされるので、検索するにはIS NULLしかありません。=で比較してしまうと結果は不定となってしまうようです。</p>
-<p>　例。id1から5までのtimstaが値なし、つまりNULLとなっています。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091116001633"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091116/20091116001633.jpg"></a></p>
-<p>　timsta IS NULLでNULLの行を選択すると…。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091116001634"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091116/20091116001634.jpg"></a></p>
-<p>　逆に、timsta IS NOT NULLでは…。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091116001636"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091116/20091116001636.jpg"></a></p>
-<p>　では、timsta = NULLだと…。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091116001635"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091116/20091116001635.jpg"></a></p>
-<p>　なぜ=NULLがダメなのかは<a href="http://www.geocities.jp/mickindex/database/idx_database.html">リレーショナル・データベースの世界</a>＞NULLにまつわる諸問題にとても詳しく書かれています。一回読んだだけじゃふーん…？　くらいにしかならなかったけど＞＜</p>
-<h1>ORDER BY</h1>
-<p>　SELECT文の最後に記述。ASC(昇順)、DESC(降順)でソート可能。デフォルトはASC。</p>
-<p>　ちなみに、1, 2, 3…とかa, b, c…が昇順のはず。昇順と降順が全然覚えられなかった僕です。が！</p>
-<ul><li><a href="http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1315415703">昇順と降順が覚えられません。何か良い覚え方はありますか？ - Yahoo!知恵袋</a></li></ul>
-<p>　階段を1階、2階…と昇るように昇順！　これで忘れない！</p>
-<h1>ソート時のNULLの扱い</h1>
-<p>　NULLはどうやら∞と見なされるようなので、昇順では1, 2…∞となり最後。降順では∞…2, 1となり最初ということに。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091116003451"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091116/20091116003451.jpg"></a></p>
-<p>　一応 NULLS [ FIRST | LAST ] というものがあって指定は可能です。</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20091116003452"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20091116/20091116003452.jpg"></a></p>
-<p>　みたいな感じで。こうすると昇順でもNULLは最初に来るようにできます。</p>
-<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: これなんでなんだろう？　処理の順番とか優先順位的なものがあるのかな？</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: 何か、文字列でBETWEEN使ってるシーンをどこかで見た事ある気がするんだけど幻覚かなぁ。</p><p class="footnote"><a href="#fn3" name="f3">*3</a>: 以前使ったシングルクォーテーション重ねと代替引用符を使用しています。</p></div>
-</div>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">OracleにおけるWHERE句、BETWEEN句、IN句、LIKE句、ORDER BY句のまとめ</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
 
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2009/11/05/1257433826/" title="Oracle Database 10g Express Editionの日本語版を導入します">
-          Oracle Database 10g Express Editionの日本語版を導入します
-        </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2009/12/08/1260268590/" title="Macの"書類"とか"ライブラリ"みたいに日本語化されているフォルダを英語化する">
-          Macの"書類"とか"ライブラリ"みたいに日本語化されているフォルダを英語化する
-        </a>
-      </li>
-    
-  </ul>
-</div>
-
-
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2009/11/16/1258300637/" data-text="kk_Atakaの日記 - OracleにおけるWHERE句、BETWEEN句、IN句、LIKE句、ORDER BY句のまとめ" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2009/11/16/1258300637/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2009/11/16/1258300637/" />
+  
+    <a href='/tags/oracle' class="muted-link">
+      [ <span class="Label Label--gray">Oracle</span> ]
     </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2009/11/16/1258300637/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - OracleにおけるWHERE句、BETWEEN句、IN句、LIKE句、ORDER BY句のまとめ"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+  
+    <a href='/tags/sql' class="muted-link">
+      [ <span class="Label Label--gray">SQL</span> ]
     </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  
 
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2009/11/16/1258300637//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
-  <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
-  </ul>
-
-  <h2>Recent Entries</h2>
+ 
+        Published: <span>2009/11/16</span>
+      </div>
+    </div>
+  </div>
 
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#oracle-sql-oracleにおけるwhere句-between句-in句-like句-order-by句のまとめ">[Oracle][SQL]OracleにおけるWHERE句、BETWEEN句、IN句、LIKE句、ORDER BY句のまとめ</a></li>
+<li><a href="#論理演算子の優先順位">論理演算子の優先順位</a></li>
+<li><a href="#where句">WHERE句</a></li>
+<li><a href="#between-and">BETWEEN &lsquo;○&rsquo; AND &lsquo;△&rsquo;</a></li>
+<li><a href="#name-not-in-aa-bb">name (NOT) IN(&lsquo;AA&rsquo;, &lsquo;BB&rsquo;)</a></li>
+<li><a href="#name-like-aa">name LIKE &lsquo;%AA%&rsquo;</a></li>
+<li><a href="#name-like-a-a-escape">name LIKE &lsquo;%A\_A%&rsquo; ESCAPE &lsquo;\&lsquo;</a></li>
+<li><a href="#name-gt-sql">name &gt;= &lsquo;SQL&rsquo;</a></li>
+<li><a href="#name-is-not-null">name IS (NOT) NULL</a></li>
+<li><a href="#order-by">ORDER BY</a></li>
+<li><a href="#ソート時のnullの扱い">ソート時のNULLの扱い</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="oracle-sql-oracleにおけるwhere句-between句-in句-like句-order-by句のまとめ">[Oracle][SQL]OracleにおけるWHERE句、BETWEEN句、IN句、LIKE句、ORDER BY句のまとめ</h2>
+
+<p>　まずは基本的な句のまとめから。</p>
+
+<h2 id="論理演算子の優先順位">論理演算子の優先順位</h2>
+
+<ul>
+<li>NOT &gt; AND &gt; OR</li>
 </ul>
 
+<p>　本当はもっと演算子の優先順位はあるけど、とりあえず引っかかったところだけ。ANDの方がORよりも早いです。</p>
 
-  <h2>Tags</h2>
+<h2 id="where句">WHERE句</h2>
 
+<ul>
+<li>文字、日付は&rsquo;(シングルクォーテーション)で囲む</li>
+<li>文字列の大文字小文字は区別される</li>
+<li>日付データのデフォルト値はDD-MON-RR</li>
+<li>WHERE句では列別名は使えない！
+
+<ul>
+<li>ただし、ORDER BY句では使用できる！[1]</li>
+</ul></li>
+</ul>
+
+<p>　例。普通のSQL文です。。</p>
+
+<p>[f:id:kk_Ataka:20091106011618p:image]</p>
+
+<p>　id列をXYZと名前付けてこいつをWHERE句で使おうとすると…。</p>
+
+<p>[f:id:kk_Ataka:20091106011755p:image]</p>
+
+<p>　エラーになります。しかし、name列をXYZと名前付けてORDER BY句で使おうとすると…。</p>
+
+<p>[f:id:kk_Ataka:20091106011756p:image]</p>
+
+<p>　使えます！</p>
+
+<h2 id="between-and">BETWEEN &lsquo;○&rsquo; AND &lsquo;△&rsquo;</h2>
+
+<p>　○～△で合致するものを探す。こんなテーブルで…</p>
+
+<p>[f:id:kk_Ataka:20091106010119p:image]</p>
+
+<p>　nameが1から9で合致するものを探す。</p>
+
+<p>[f:id:kk_Ataka:20091106010120p:image]</p>
+
+<p>　1から2で合致するもの。</p>
+
+<p>[f:id:kk_Ataka:20091106010121p:image]</p>
+
+<p>[2]</p>
+
+<h2 id="name-not-in-aa-bb">name (NOT) IN(&lsquo;AA&rsquo;, &lsquo;BB&rsquo;)</h2>
+
+<p>　AA、BBいずれかに合致すれば取得します。下図の場合はname列の中からY&rsquo;s IかY&rsquo;s II[3]に合致する値を探してくるので、</p>
+
+<p>[f:id:kk_Ataka:20091116003449j:image]</p>
+
+<p>　こうなります。</p>
+
+<p>　一方、NOTは合致しないものを取得します。Y&rsquo;s IとY&rsquo;s II以外の値を取得します。</p>
+
+<p>[f:id:kk_Ataka:20091116003450j:image]</p>
+
+<h2 id="name-like-aa">name LIKE &lsquo;%AA%&rsquo;</h2>
+
+<p>　(任意の文字列)AA(任意の文字列)に合致するものを探します。他には_(アンダーバー)があります。</p>
+
+<p>　NAME = &lsquo;%AA%&lsquo;のように=で比較してしまうと完全なる%AA%この文字列と合致するものを探します。</p>
+
+<h2 id="name-like-a-a-escape">name LIKE &lsquo;%A\_A%&rsquo; ESCAPE &lsquo;\&lsquo;</h2>
+
+<p>　(任意の文字列)A_A(任意の文字列)を探したい時にname LIKE &lsquo;%A_A%&lsquo;としてしまうと、_はワイルドカードと判断されてしまうのでエスケープ。</p>
+
+<h2 id="name-gt-sql">name &gt;= &lsquo;SQL&rsquo;</h2>
+
+<p>　指定文字よりも文字コードが前のものに合致(？)。SQLは満たすとして、○SQK、○SP、○S、×SQM、×SR、×Tとなります。</p>
+
+<h2 id="name-is-not-null">name IS (NOT) NULL</h2>
+
+<p>　name = NULLではUNKNOWNが返ってくるのでNULLは取得できません。また、値が設定されていないカラムはNULLとされるので、検索するにはIS NULLしかありません。=で比較してしまうと結果は不定となってしまうようです。</p>
+
+<p>　例。id1から5までのtimstaが値なし、つまりNULLとなっています。</p>
+
+<p>[f:id:kk_Ataka:20091116001633j:image]</p>
+
+<p>　timsta IS NULLでNULLの行を選択すると…。</p>
+
+<p>[f:id:kk_Ataka:20091116001634j:image]</p>
+
+<p>　逆に、timsta IS NOT NULLでは…。</p>
+
+<p>[f:id:kk_Ataka:20091116001636j:image]</p>
+
+<p>　では、timsta = NULLだと…。</p>
+
+<p>[f:id:kk_Ataka:20091116001635j:image]</p>
+
+<p>　なぜ=NULLがダメなのかは<a href="http://www.geocities.jp/mickindex/database/idx_database.html:title">http://www.geocities.jp/mickindex/database/idx_database.html:title</a>＞NULLにまつわる諸問題にとても詳しく書かれています。一回読んだだけじゃふーん…？　くらいにしかならなかったけど＞＜</p>
+
+<h2 id="order-by">ORDER BY</h2>
+
+<p>　SELECT文の最後に記述。ASC(昇順)、DESC(降順)でソート可能。デフォルトはASC。</p>
+
+<p>　ちなみに、1, 2, 3…とかa, b, c…が昇順のはず。昇順と降順が全然覚えられなかった僕です。が！</p>
+
+<ul>
+<li><a href="http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1315415703:title">http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1315415703:title</a></li>
+</ul>
+
+<p>　階段を1階、2階…と昇るように昇順！　これで忘れない！</p>
+
+<h2 id="ソート時のnullの扱い">ソート時のNULLの扱い</h2>
+
+<p>　NULLはどうやら∞と見なされるようなので、昇順では1, 2…∞となり最後。降順では∞…2, 1となり最初ということに。</p>
+
+<p>[f:id:kk_Ataka:20091116003451j:image]</p>
+
+<p>　一応 NULLS [ FIRST | LAST ] というものがあって指定は可能です。</p>
+
+<p>[f:id:kk_Ataka:20091116003452j:image]</p>
+
+<p>　みたいな感じで。こうすると昇順でもNULLは最初に来るようにできます。</p>
+
+<p>[1] これなんでなんだろう？　処理の順番とか優先順位的なものがあるのかな？</p>
+
+<p>[2] 何か、文字列でBETWEEN使ってるシーンをどこかで見た事ある気がするんだけど幻覚かなぁ。</p>
+
+<p>[3] 以前使ったシングルクォーテーション重ねと代替引用符を使用しています。</p>
+
+    </section>
+  </article>
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2009/11/05/1257433826/" class="pagination_overflow previous_page">
+          Prev: 
+          09/11/5
+          Oracle Database 10g Express …
+        </a>
+      
+
+      <span class="pagination_center disabled">
+        09/11/16
+        Oracl …
+      </span>
+
+      
+        <a href="/2009/12/08/1260268590/" class="pagination_overflow next_page">
+          Next: 
+          09/12/8
+          Macの書類とかライブラリみたいに日本語化されているフォルダ …
+        </a>
+      
+  </div>
+</nav>
+
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-</aside>
 
 
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#oracle-sql-oracleにおけるwhere句-between句-in句-like句-order-by句のまとめ">[Oracle][SQL]OracleにおけるWHERE句、BETWEEN句、IN句、LIKE句、ORDER BY句のまとめ</a></li>
+<li><a href="#論理演算子の優先順位">論理演算子の優先順位</a></li>
+<li><a href="#where句">WHERE句</a></li>
+<li><a href="#between-and">BETWEEN &lsquo;○&rsquo; AND &lsquo;△&rsquo;</a></li>
+<li><a href="#name-not-in-aa-bb">name (NOT) IN(&lsquo;AA&rsquo;, &lsquo;BB&rsquo;)</a></li>
+<li><a href="#name-like-aa">name LIKE &lsquo;%AA%&rsquo;</a></li>
+<li><a href="#name-like-a-a-escape">name LIKE &lsquo;%A\_A%&rsquo; ESCAPE &lsquo;\&lsquo;</a></li>
+<li><a href="#name-gt-sql">name &gt;= &lsquo;SQL&rsquo;</a></li>
+<li><a href="#name-is-not-null">name IS (NOT) NULL</a></li>
+<li><a href="#order-by">ORDER BY</a></li>
+<li><a href="#ソート時のnullの扱い">ソート時のNULLの扱い</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

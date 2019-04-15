@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>GitHub on kk_Atakaの日記</title>
+    <link>/tags/github/</link>
+    <description>Recent content in GitHub on kk_Atakaの日記</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>jp</language>
+    <lastBuildDate>Tue, 28 Jan 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/github/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Jekyllドキュメントの日本語翻訳リポジトリ「jekyllrb.com.jp」を作成しました</title>
+      <link>/2014/03/13/jekyll-make-jekyllrb-com-jp/</link>
+      <pubDate>Thu, 13 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/2014/03/13/jekyll-make-jekyllrb-com-jp/</guid>
+      <description>あらすじ Jekyll プロジェクトに対していろいろやった。
+ Jekyll プロジェクトのリポジトリルートにある README.markdown と CONTRIBUTING.markdown を日本語訳してプルリクした！ 人生初のプルリクエストをささげ、マージしてもらえた。やった！ いきなりカットインしてきた PR に対してすごく親身に対応してもらえた あわせて Jekyllドキュメントの日本語翻訳リポジトリ を作成した！ 手伝ってくれる人募集中です！お願いします！ 推敲、翻訳してくれる人の募集(切実) · Issue #14 · gosyujin/jekyllrb.com.jp  所感 今回のやり取りを通じて、ドキュメントに対して以下のような観点で考える力が足りないと感じた。
+まだ明確な答えは出ていないので、これからドキュメントを育てつつ答えを探していきたい。
+ 意訳 or 直訳？ 若干意味が通らない文章になってもいいから、出てくる単語を全て愚直に訳す？ 経験(実際にライブラリを使うと、「このコマンドはこう動くから、この文章ではこう言いたいのだろう」的なニュアンスはわかったりする)をもとに意訳する？  前者だと文章がごちゃっとなりそうで、後者だと大事な表現を落としてしまう事が多そう 他プロジェクトなどで翻訳された文章を読んでいると、前者が多いような気がする… もちろんおそろしくカッコよくて読みやすい文章に訳せるならば、それに越したことはない  原文はどうしよう？ 原文(英語)の扱い  残す？残さない？また、残す場合はコメントアウト？ 文章を比較する場合や本家の更新に追従する場合、原文がないとわけわからなくならない？ diff とかとるのに  本家への追従の仕方  本家のドキュメントにどうやってついていく？  誰が、どこで、どう管理するか？ Author と Committer が読めない(管理できない)ブツはどのように管理すべきなのか  本家のリポジトリに jp とか en みたいにディレクトリ切ってそこで管理していく 翻訳したドキュメントは、その言語を取り扱える別の人が所有し、本家はそこをフォークしておく   この辺、他のプロジェクトではどうやっているんだろう。
+プルリクに至るまでの思考と行動の流れ 以下、おまけ。
+いかにして Jekyll にプルリクするに至ったかの経緯。</description>
+    </item>
+    
+    <item>
+      <title>Jekyllプロジェクトへpull requestを行う手順(したとは言っていない)</title>
+      <link>/2014/01/28/pull-request-to-jekyll/</link>
+      <pubDate>Tue, 28 Jan 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/2014/01/28/pull-request-to-jekyll/</guid>
+      <description>あらすじ  Jekyll に一点気になるところがあったのでなおしかたを調べた せっかくなのでプルリクエストしてみたい！ …が、知らないこと多すぎて頓挫 とりあえず、今わかったところまでまとめた ← 今ここ  なおした内容 Jekyll でかき集められた tags (タグのリスト) がバラバラのため、 tags.html ページから探すのがつらいのでソートをしたい。
+修正内容 Jekyll のソースを追っていった結果、 jekyll/lib/jekyll/site.rb 内の一行をいじるだけでいけた。
+def post_attr_hash(post_attr) # Build a hash map based on the specified post attribute ( post attr =&amp;gt; # array of posts ) then sort each array in reverse order. hash = Hash.new { |hsh, key| hsh[key] = Array.new } self.posts.each { |p| p.send(post_attr.to_sym).each { |t| hash[t] &amp;lt;&amp;lt; p } } hash.</description>
+    </item>
+    
+  </channel>
+</rss>

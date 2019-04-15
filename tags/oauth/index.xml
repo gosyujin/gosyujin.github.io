@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>OAuth on kk_Atakaの日記</title>
+    <link>/tags/oauth/</link>
+    <description>Recent content in OAuth on kk_Atakaの日記</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>jp</language>
+    <lastBuildDate>Sun, 03 Mar 2013 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/oauth/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>自作EvernoteスクリプトをOAuth対応する</title>
+      <link>/2013/03/03/evernote-oauth/</link>
+      <pubDate>Sun, 03 Mar 2013 00:00:00 +0000</pubDate>
+      
+      <guid>/2013/03/03/evernote-oauth/</guid>
+      <description>あらすじ 結構前に、Evernoteの認証方法がOAuthになるので、変更してくださいねーというメールがEvernoteからきていた。
+ユーザ名とパスワードによる認証から OAuth 認証への移行 - Evernote Developers
+そのまま従来のスクリプトを動かしていると、認証エラーになるので、OAuth認証ができるように修正した。
+主に自分用メモ。
+環境  Ruby 1.8.7  注: Evernoteスクリプトは自分しか使っていない。
+参考サイト  認証 - Evernote Developers  手順  サンドボックス用のデベロッパトークンを取得 » ログイン必要 テストの完了後、プロダクション用のデベロッパトークンを取得 » ログイン必要  他の人が使っていない、自分だけで使っている場合は以降の箇所だけ修正すればよい。
+修正箇所 上記のDeveloperTokenをソース上で取得できるようにする。(今まで使っていたuserid、パスワードはいらない)以下では、Pitを使ってtokenなどを別出ししているので、そこを修正。
+user = Pit.get(&amp;#34;evernote&amp;#34;, :require =&amp;gt; { + &amp;#34;developerToken&amp;#34; =&amp;gt; &amp;#34;your evernote token.&amp;#34;, }) 従来は、 userStore.authenticate() で認証を通して、 authenticationToken を使うようにしていたが、このくだりを まるまるカット 。
+この authenticationToken を developerToken に置き換えてやる。
+# 認証 - @auth = auth(user, userStore) - @authToken = @auth.</description>
+    </item>
+    
+  </channel>
+</rss>

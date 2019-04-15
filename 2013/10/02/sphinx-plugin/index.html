@@ -1,124 +1,156 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>Sphinxのプラグインの作り方を学ぶ - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Sphinxのプラグインの作り方を学ぶ &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ Sphinx のタグを拡張してみたい。具体的には打ち消し記法がほしい。
+という事で Sphinx 拡張に手を出す。
+ただし、 Python は Hello World くらい…。
+参考サイト  Sphinx拡張 Sphinx v1.0.6 documentation Sphinx拡張 Sphinx 1.2b1 documentation  打ち消し線は既に実例があったので、これを写経する方針で。
+ Sphinxで打ち消し線を使う - TIM Labs  環境  Windows XP Python 2.7.3 Sphinx 1.1.3  と、
+ Windows 7 Python 2.7.4 Sphinx 1.2b.1  Sphinxの拡張の仕方 Sphinx 1.1.3 時に調べていた感じでは、拡張には大きく3通りある模様。
+ 新出力形式対応やパース時のアクションサポート(ビルダー追加で実現) reSTのマークアップ拡張 いろいろなフックポイントで諸処理を記述  今回はreSTのマークアップ拡張が該当するかな。
+拡張は基本的にPythonで記述する。(setup関数を呼び出す)
+作成した拡張機能は conf.py の中で読み込むように設定を変更する。
+以下、打ち消し線を導入しつつ何してるのか写経してみる。
+作成 conf.py(修正) sys.path.append(os.path.abspath(&amp;#39;exts&amp;#39;)) extensions &#43;= [&amp;#39;sphinxcontrib_roles&amp;#39;] # configuration case.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2013/10/02/sphinx-plugin/">Sphinxのプラグインの作り方を学ぶ</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Sphinx" class="tag">Sphinx</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2013/10/02</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2013/09/25/ios-uiwebview-cache/" title="iOSのUIWebViewのキャッシュがどういうタイミングでリセットされているのかわからんという話">
-          iOSのUIWebViewのキャッシュがどういうタイミングでリセットされているのかわからんという話
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/09/25/ios-uiwebview-cache/" class="pagination_overflow previous_page">
+          Prev: 
+          13/9/25
+          iOSのUIWebViewのキャッシュがどういうタイミングで …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/10/25/sphinx-recommend/" title="「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた">
-          「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた
+      
+
+      <span class="pagination_center disabled">
+        13/10/2
+        Sphin …
+      </span>
+
+      
+        <a href="/2013/10/25/sphinx-recommend/" class="pagination_overflow next_page">
+          Next: 
+          13/10/25
+          「Sphinxをはじめよう」を読んで導入したいと思ったので色 …
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">参考サイト</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">環境</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-4">
-              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">Sphinxの拡張の仕方</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-5">
-              <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">作成</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-6">
-                  <a href="#tocAnchor-1-5-1"><span class="tocnumber">5.1</span> <span class="toctext">conf.py(修正)</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-7">
-                  <a href="#tocAnchor-1-5-2"><span class="tocnumber">5.2</span> <span class="toctext">sphinxcontrib_roles.py(新規)</span></a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h2 id="tocAnchor-1-1">あらすじ</h2>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">Sphinxのプラグインの作り方を学ぶ</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
+
+  
+    <a href='/tags/sphinx' class="muted-link">
+      [ <span class="Label Label--gray">Sphinx</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2013/10/02</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#sphinxの拡張の仕方">Sphinxの拡張の仕方</a></li>
+<li><a href="#作成">作成</a>
+<ul>
+<li><a href="#conf-py-修正">conf.py(修正)</a></li>
+<li><a href="#sphinxcontrib-roles-py-新規">sphinxcontrib_roles.py(新規)</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="あらすじ">あらすじ</h2>
 
 <p>Sphinx のタグを拡張してみたい。具体的には打ち消し記法がほしい。</p>
 
@@ -126,252 +158,230 @@
 
 <p>ただし、 Python は Hello World くらい…。</p>
 
-<h2 id="tocAnchor-1-2">参考サイト</h2>
+<h2 id="参考サイト">参考サイト</h2>
 
 <ul>
-  <li><a href="http://sphinx-users.jp/doc10/extensions.html">Sphinx拡張 Sphinx v1.0.6 documentation</a></li>
-  <li><a href="http://docs.sphinx-users.jp/extensions.html">Sphinx拡張 Sphinx 1.2b1 documentation</a></li>
+<li><a href="http://sphinx-users.jp/doc10/extensions.html">Sphinx拡張 Sphinx v1.0.6 documentation</a></li>
+<li><a href="http://docs.sphinx-users.jp/extensions.html">Sphinx拡張 Sphinx 1.2b1 documentation</a></li>
 </ul>
 
 <p>打ち消し線は既に実例があったので、これを写経する方針で。</p>
 
 <ul>
-  <li><a href="http://labs.timedia.co.jp/2012/04/sphinx.html">Sphinxで打ち消し線を使う - TIM Labs</a></li>
+<li><a href="http://labs.timedia.co.jp/2012/04/sphinx.html">Sphinxで打ち消し線を使う - TIM Labs</a></li>
 </ul>
 
-<h2 id="tocAnchor-1-3">環境</h2>
+<h2 id="環境">環境</h2>
 
 <ul>
-  <li>Windows XP</li>
-  <li>Python 2.7.3</li>
-  <li>Sphinx 1.1.3</li>
+<li>Windows XP</li>
+<li>Python 2.7.3</li>
+<li>Sphinx 1.1.3</li>
 </ul>
 
 <p>と、</p>
 
 <ul>
-  <li>Windows 7</li>
-  <li>Python 2.7.4</li>
-  <li>Sphinx 1.2b.1</li>
+<li>Windows 7</li>
+<li>Python 2.7.4</li>
+<li>Sphinx 1.2b.1</li>
 </ul>
 
-<h2 id="tocAnchor-1-4">Sphinxの拡張の仕方</h2>
+<h2 id="sphinxの拡張の仕方">Sphinxの拡張の仕方</h2>
 
 <p>Sphinx 1.1.3 時に調べていた感じでは、拡張には大きく3通りある模様。</p>
 
 <ul>
-  <li>新出力形式対応やパース時のアクションサポート(ビルダー追加で実現)</li>
-  <li>reSTのマークアップ拡張</li>
-  <li>いろいろなフックポイントで諸処理を記述</li>
+<li>新出力形式対応やパース時のアクションサポート(ビルダー追加で実現)</li>
+<li>reSTのマークアップ拡張</li>
+<li>いろいろなフックポイントで諸処理を記述</li>
 </ul>
 
 <p>今回はreSTのマークアップ拡張が該当するかな。</p>
 
 <p>拡張は基本的にPythonで記述する。(setup関数を呼び出す)</p>
 
-<p>作成した拡張機能は <code class="highlighter-rouge">conf.py</code> の中で読み込むように設定を変更する。</p>
+<p>作成した拡張機能は <code>conf.py</code> の中で読み込むように設定を変更する。</p>
 
 <p>以下、打ち消し線を導入しつつ何してるのか写経してみる。</p>
 
-<h2 id="tocAnchor-1-5">作成</h2>
+<h2 id="作成">作成</h2>
 
-<h3 id="tocAnchor-1-5-1">conf.py(修正)</h3>
+<h3 id="conf-py-修正">conf.py(修正)</h3>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;exts&#39;</span><span class="p">))</span>
+<span class="n">extensions</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;sphinxcontrib_roles&#39;</span><span class="p">]</span>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-python" data-lang="python"><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s">'exts'</span><span class="p">))</span>
-<span class="n">extensions</span> <span class="o">+=</span> <span class="p">[</span><span class="s">'sphinxcontrib_roles'</span><span class="p">]</span>
+<span class="c1"># configuration case.1: define roles as list (define only roles)</span>
+<span class="n">roles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;strike&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">]</span>
 
-<span class="c"># configuration case.1: define roles as list (define only roles)</span>
-<span class="n">roles</span> <span class="o">=</span> <span class="p">[</span><span class="s">'strike'</span><span class="p">,</span> <span class="s">'red'</span><span class="p">]</span>
-
-<span class="c"># configuration case.2: define roles as dict (define roles and its style on HTML)</span>
-<span class="n">roles</span> <span class="o">=</span> <span class="p">{</span><span class="s">'strike'</span><span class="p">:</span> <span class="s">"text-decoration: line-through;"</span><span class="p">,</span> <span class="s">'red'</span><span class="p">:</span> <span class="s">"color: red;"</span> <span class="p">}</span></code>
-  </pre>
-</figure>
+<span class="c1"># configuration case.2: define roles as dict (define roles and its style on HTML)</span>
+<span class="n">roles</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;strike&#39;</span><span class="p">:</span> <span class="s2">&#34;text-decoration: line-through;&#34;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">:</span> <span class="s2">&#34;color: red;&#34;</span> <span class="p">}</span></code></pre></div>
+<ul>
+<li>. <a href="http://docs.sphinx-users.jp/extensions.html#where-to-put-your-own-extensions">自分自身の拡張機能はどこに置くべき？</a> という事で、プラグインファイルを置く場所を <code>conf.py</code> の <code>sys.path</code> に追加する</li>
+<li><code>extensions</code>
 
 <ul>
-  <li>. <a href="http://docs.sphinx-users.jp/extensions.html#where-to-put-your-own-extensions">自分自身の拡張機能はどこに置くべき？</a> という事で、プラグインファイルを置く場所を <code class="highlighter-rouge">conf.py</code> の <code class="highlighter-rouge">sys.path</code> に追加する</li>
-  <li><code class="highlighter-rouge">extensions</code>
-    <ul>
-      <li>使用したいSphinx拡張モジュールを格納する(配列)</li>
-      <li>絶対パスで指定</li>
-    </ul>
-  </li>
+<li>使用したいSphinx拡張モジュールを格納する(配列)</li>
+<li>絶対パスで指定</li>
+</ul></li>
 </ul>
 
 <p>rolesは <strong>設定値</strong> 。これから作る sphinxcontrib_roles.py で定義する。</p>
 
-<h3 id="tocAnchor-1-5-2">sphinxcontrib_roles.py(新規)</h3>
+<h3 id="sphinxcontrib-roles-py-新規">sphinxcontrib_roles.py(新規)</h3>
 
-<p>一番はじめは <code class="highlighter-rouge">setup(app)</code> 関数。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s">'roles'</span><span class="p">,</span> <span class="p">[],</span> <span class="s">'html'</span><span class="p">)</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">"builder-inited"</span><span class="p">,</span> <span class="n">on_builder_inited</span><span class="p">)</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">"html-collect-pages"</span><span class="p">,</span> <span class="n">on_html_collect_pages</span><span class="p">)</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">"html-page-context"</span><span class="p">,</span> <span class="n">html_page_context</span><span class="p">)</span></code>
-  </pre>
-</figure>
+<p>一番はじめは <code>setup(app)</code> 関数。</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;roles&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="s1">&#39;html&#39;</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&#34;builder-inited&#34;</span><span class="p">,</span> <span class="n">on_builder_inited</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&#34;html-collect-pages&#34;</span><span class="p">,</span> <span class="n">on_html_collect_pages</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&#34;html-page-context&#34;</span><span class="p">,</span> <span class="n">html_page_context</span><span class="p">)</span></code></pre></div>
+<ul>
+<li><code>app.add_config_value(name, default, rebuild)</code>
 
 <ul>
-  <li><code class="highlighter-rouge">app.add_config_value(name, default, rebuild)</code>
-    <ul>
-      <li>新しい設定値 <code class="highlighter-rouge">"roles"</code> を追加する(名前衝突を避けるため、 <code class="highlighter-rouge">name</code> <strong>には拡張機能名を入れなければならない</strong> )</li>
-      <li><code class="highlighter-rouge">default</code> はデフォルト値</li>
-      <li><code class="highlighter-rouge">rebuild</code> はリビルドする時の設定。 <code class="highlighter-rouge">"html"</code> の場合は出力が <code class="highlighter-rouge">html</code> だった時リビルドされる。</li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">sphinx.connect(event, collback)</code>
-    <ul>
-      <li><code class="highlighter-rouge">event</code> が発行された時に呼ばれる <code class="highlighter-rouge">collback</code> を登録。</li>
-    </ul>
-  </li>
+<li>新しい設定値 <code>&quot;roles&quot;</code> を追加する(名前衝突を避けるため、 <code>name</code> <strong>には拡張機能名を入れなければならない</strong> )</li>
+<li><code>default</code> はデフォルト値</li>
+<li><code>rebuild</code> はリビルドする時の設定。 <code>&quot;html&quot;</code> の場合は出力が <code>html</code> だった時リビルドされる。</li>
+</ul></li>
+<li><code>sphinx.connect(event, collback)</code>
+
+<ul>
+<li><code>event</code> が発行された時に呼ばれる <code>collback</code> を登録。</li>
+</ul></li>
 </ul>
 
 <p>eventは以下のようなものがある。</p>
 
 <table>
-  <thead>
-    <tr>
-      <th>event</th>
-      <th>説明</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>builder-inited</td>
-      <td>ビルダーオブジェクト作成時に発行</td>
-    </tr>
-    <tr>
-      <td>html-collect-pages</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>html-page-context</td>
-      <td>テンプレートを使用してレンダリングを行う時に発行</td>
-    </tr>
-  </tbody>
+<thead>
+<tr>
+<th>event</th>
+<th>説明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>builder-inited</td>
+<td>ビルダーオブジェクト作成時に発行</td>
+</tr>
+
+<tr>
+<td>html-collect-pages</td>
+<td></td>
+</tr>
+
+<tr>
+<td>html-page-context</td>
+<td>テンプレートを使用してレンダリングを行う時に発行</td>
+</tr>
+</tbody>
 </table>
 
 <p>他にも…。</p>
 
 <table>
-  <thead>
-    <tr>
-      <th>event</th>
-      <th>説明</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>source-read</td>
-      <td>ソースファイルが読み込まれる時に発行</td>
-    </tr>
-    <tr>
-      <td>build-finished</td>
-      <td>ビルド完了時、例外としてビルドが例外を投げた時も発行</td>
-    </tr>
-  </tbody>
+<thead>
+<tr>
+<th>event</th>
+<th>説明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>source-read</td>
+<td>ソースファイルが読み込まれる時に発行</td>
+</tr>
+
+<tr>
+<td>build-finished</td>
+<td>ビルド完了時、例外としてビルドが例外を投げた時も発行</td>
+</tr>
+</tbody>
 </table>
 
 <p>html-collect-pagesってなんだろう？</p>
 
 <p>できあがったのはこう。(というか、まんま)</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-python" data-lang="python"><span class="c"># -*- coding: utf-8 -*-</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">docutils.parsers.rst</span> <span class="kn">import</span> <span class="n">roles</span>
 
 <span class="k">def</span> <span class="nf">_define_role</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-<span class="c">#    print "sphinxcontrib_roles#_define_role name:", name</span>
-    <span class="c">#=&gt; strike, red</span>
+<span class="c1">#    print &#34;sphinxcontrib_roles#_define_role name:&#34;, name</span>
+    <span class="c1">#=&gt; strike, red</span>
     <span class="n">base_role</span> <span class="o">=</span> <span class="n">roles</span><span class="o">.</span><span class="n">generic_custom_role</span>
-    <span class="n">role</span> <span class="o">=</span> <span class="n">roles</span><span class="o">.</span><span class="n">CustomRole</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">base_role</span><span class="p">,</span> <span class="p">{</span><span class="s">'class'</span><span class="p">:</span> <span class="p">[</span><span class="n">name</span><span class="p">]},</span> <span class="p">[])</span>
+    <span class="n">role</span> <span class="o">=</span> <span class="n">roles</span><span class="o">.</span><span class="n">CustomRole</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">base_role</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">name</span><span class="p">]},</span> <span class="p">[])</span>
     <span class="n">roles</span><span class="o">.</span><span class="n">register_local_role</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">role</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">on_builder_inited</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
-<span class="c">#    print "sphinxcontrib_roles#onbuilder_inited item", app.builder.config.roles.items()</span>
-    <span class="c">#=&gt; [('strike', 'text-decoration: line-through;'), ('red', 'color: red;')]</span>
+<span class="c1">#    print &#34;sphinxcontrib_roles#onbuilder_inited item&#34;, app.builder.config.roles.items()</span>
+    <span class="c1">#=&gt; [(&#39;strike&#39;, &#39;text-decoration: line-through;&#39;), (&#39;red&#39;, &#39;color: red;&#39;)]</span>
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">roles</span><span class="p">:</span>
         <span class="n">_define_role</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">on_html_collect_pages</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">roles</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">roles</span><span class="p">:</span>
-        <span class="n">cssdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">outdir</span><span class="p">,</span> <span class="s">'_static'</span><span class="p">)</span>
-        <span class="n">cssfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cssdir</span><span class="p">,</span> <span class="s">'roles.css'</span><span class="p">)</span>
+        <span class="n">cssdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">outdir</span><span class="p">,</span> <span class="s1">&#39;_static&#39;</span><span class="p">)</span>
+        <span class="n">cssfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cssdir</span><span class="p">,</span> <span class="s1">&#39;roles.css&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cssdir</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">cssdir</span><span class="p">)</span>
 
-        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">cssfile</span><span class="p">,</span> <span class="s">'wt'</span><span class="p">)</span>
-<span class="c">#        print "sphinxcontrib_roles#on_html_collect_pages write cssfile", cssfile</span>
-        <span class="c">#=&gt; C:\work\sphinx\_build\html\_static\roles.css</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">cssfile</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span>
+<span class="c1">#        print &#34;sphinxcontrib_roles#on_html_collect_pages write cssfile&#34;, cssfile</span>
+        <span class="c1">#=&gt; C:\work\sphinx\_build\html\_static\roles.css</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">style</span> <span class="ow">in</span> <span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">roles</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"span.</span><span class="si">%</span><span class="s">s { </span><span class="si">%</span><span class="s">s }</span><span class="se">\n</span><span class="s">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">style</span><span class="p">))</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&#34;span.</span><span class="si">%s</span><span class="s2"> { </span><span class="si">%s</span><span class="s2"> }</span><span class="se">\n</span><span class="s2">&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">style</span><span class="p">))</span>
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">return</span> <span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">html_page_context</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">pagename</span><span class="p">,</span> <span class="n">templatename</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">doctree</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">roles</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">roles</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s">'css_files'</span> <span class="ow">in</span> <span class="n">context</span><span class="p">:</span>
-<span class="c">#            print "sphinxcontrib_roles#html_page_context pagename", pagename</span>
-            <span class="n">context</span><span class="p">[</span><span class="s">'css_files'</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">'_static/roles.css'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;css_files&#39;</span> <span class="ow">in</span> <span class="n">context</span><span class="p">:</span>
+<span class="c1">#            print &#34;sphinxcontrib_roles#html_page_context pagename&#34;, pagename</span>
+            <span class="n">context</span><span class="p">[</span><span class="s1">&#39;css_files&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;_static/roles.css&#39;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
-    <span class="k">print</span> <span class="s">"sphinxcontrib_roles#setup"</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s">'roles'</span><span class="p">,</span> <span class="p">[],</span> <span class="s">'html'</span><span class="p">)</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">"builder-inited"</span><span class="p">,</span> <span class="n">on_builder_inited</span><span class="p">)</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">"html-collect-pages"</span><span class="p">,</span> <span class="n">on_html_collect_pages</span><span class="p">)</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">"html-page-context"</span><span class="p">,</span> <span class="n">html_page_context</span><span class="p">)</span></code>
-  </pre>
-</figure>
+    <span class="k">print</span> <span class="s2">&#34;sphinxcontrib_roles#setup&#34;</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">add_config_value</span><span class="p">(</span><span class="s1">&#39;roles&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="s1">&#39;html&#39;</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&#34;builder-inited&#34;</span><span class="p">,</span> <span class="n">on_builder_inited</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&#34;html-collect-pages&#34;</span><span class="p">,</span> <span class="n">on_html_collect_pages</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&#34;html-page-context&#34;</span><span class="p">,</span> <span class="n">html_page_context</span><span class="p">)</span></code></pre></div>
+<p><code>index.rst</code> を作成。</p>
+<div class="highlight"><pre class="chroma"><code class="language-rst" data-lang="rst"><span class="cp">.. project documentation master file, created by
+</span><span class="cp">   sphinx-quickstart on Thu Aug 22 18:15:35 2013.
+</span><span class="cp">   You can adapt this file completely to your liking, but it should at least
+</span><span class="cp">   contain the root `toctree` directive.
+</span><span class="cp">
+</span><span class="cp"></span><span class="gh">Welcome to project&#39;s documentation!</span>
+<span class="gh">===================================</span>
+<span class="err">
+</span><span class="err"></span>Contents:<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="p">..</span> <span class="ow">toctree</span><span class="p">::</span><span class="err">
+</span><span class="err"></span>   <span class="nc">:maxdepth:</span> <span class="nf">2</span>
 
-<p><code class="highlighter-rouge">index.rst</code> を作成。</p>
+<span class="m">-</span> <span class="na">:strike:</span><span class="nv">`thids ahas`</span><span class="err">
+</span><span class="err"></span><span class="m">-</span> <span class="na">:red:</span><span class="nv">`red`</span><span class="err">
+</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="gh">Indices and tables</span>
+<span class="gh">==================</span>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-rst" data-lang="rst">.. project documentation master file, created by
-   sphinx-quickstart on Thu Aug 22 18:15:35 2013.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to project's documentation!
-===================================
-
-Contents:
-
-.. toctree::
-   :maxdepth: 2
-
-- :strike:`thids ahas`
-- :red:`red`
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`</code>
-  </pre>
-</figure>
-
+<span class="m">*</span> <span class="na">:ref:</span><span class="nv">`genindex`</span><span class="err">
+</span><span class="err"></span><span class="m">*</span> <span class="na">:ref:</span><span class="nv">`modindex`</span><span class="err">
+</span><span class="err"></span>* <span class="na">:ref:</span><span class="nv">`search`</span></code></pre></div>
 <p>ビルドもしてみる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">make</span> <span class="n">html</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">make</span> <span class="n">html</span>
 <span class="n">Making</span> <span class="n">output</span> <span class="n">directory</span><span class="o">...</span>
 <span class="n">Running</span> <span class="n">Sphinx</span> <span class="n">v1</span><span class="o">.</span><span class="mi">2</span><span class="n">b1</span>
-<span class="n">sphinxcontrib_roles</span><span class="c">#setup</span>
+<span class="n">sphinxcontrib_roles</span><span class="c1">#setup</span>
 <span class="n">loading</span> <span class="n">pickled</span> <span class="n">environment</span><span class="o">...</span> <span class="ow">not</span> <span class="n">yet</span> <span class="n">created</span>
-<span class="n">sphinxcontrib_roles</span><span class="c">#onbuilder_inited item [('strike', 'text-decoration: line-through;'), ('red', 'color: red;')]</span>
-<span class="n">sphinxcontrib_roles</span><span class="c">#_define_role name: strike</span>
-<span class="n">sphinxcontrib_roles</span><span class="c">#_define_role name: red</span>
+<span class="n">sphinxcontrib_roles</span><span class="c1">#onbuilder_inited item [(&#39;strike&#39;, &#39;text-decoration: line-through;&#39;), (&#39;red&#39;, &#39;color: red;&#39;)]</span>
+<span class="n">sphinxcontrib_roles</span><span class="c1">#_define_role name: strike</span>
+<span class="n">sphinxcontrib_roles</span><span class="c1">#_define_role name: red</span>
 <span class="n">building</span> <span class="p">[</span><span class="n">html</span><span class="p">]:</span> <span class="n">targets</span> <span class="k">for</span> <span class="mi">1</span> <span class="n">source</span> <span class="n">files</span> <span class="n">that</span> <span class="n">are</span> <span class="n">out</span> <span class="n">of</span> <span class="n">date</span>
 <span class="n">updating</span> <span class="n">environment</span><span class="p">:</span> <span class="mi">1</span> <span class="n">added</span><span class="p">,</span> <span class="mi">0</span> <span class="n">changed</span><span class="p">,</span> <span class="mi">0</span> <span class="n">removed</span>
 <span class="n">reading</span> <span class="n">sources</span><span class="o">...</span> <span class="p">[</span><span class="mi">100</span><span class="o">%</span><span class="p">]</span> <span class="n">index</span>
@@ -381,523 +391,704 @@ Indices and tables
 <span class="n">checking</span> <span class="n">consistency</span><span class="o">...</span> <span class="n">done</span>
 <span class="n">preparing</span> <span class="n">documents</span><span class="o">...</span> <span class="n">done</span>
 <span class="n">writing</span> <span class="n">output</span><span class="o">...</span> <span class="p">[</span><span class="mi">100</span><span class="o">%</span><span class="p">]</span> <span class="n">index</span>
-<span class="n">sphinxcontrib_roles</span><span class="c">#html_page_context pagename index</span>
+<span class="n">sphinxcontrib_roles</span><span class="c1">#html_page_context pagename index</span>
 
-<span class="n">writing</span> <span class="n">additional</span> <span class="n">files</span><span class="o">...</span><span class="n">sphinxcontrib_roles</span><span class="c">#on_html_collect_pages write cssfile C:\work\sphinx\_build\html\_static\roles.css</span>
- <span class="n">genindexsphinxcontrib_roles</span><span class="c">#html_page_context pagename genindex</span>
- <span class="n">searchsphinxcontrib_roles</span><span class="c">#html_page_context pagename search</span>
+<span class="n">writing</span> <span class="n">additional</span> <span class="n">files</span><span class="o">...</span><span class="n">sphinxcontrib_roles</span><span class="c1">#on_html_collect_pages write cssfile C:\work\sphinx\_build\html\_static\roles.css</span>
+ <span class="n">genindexsphinxcontrib_roles</span><span class="c1">#html_page_context pagename genindex</span>
+ <span class="n">searchsphinxcontrib_roles</span><span class="c1">#html_page_context pagename search</span>
 
 <span class="n">copying</span> <span class="n">static</span> <span class="n">files</span><span class="o">...</span> <span class="n">done</span>
 <span class="n">dumping</span> <span class="n">search</span> <span class="n">index</span><span class="o">...</span> <span class="n">done</span>
 <span class="n">dumping</span> <span class="nb">object</span> <span class="n">inventory</span><span class="o">...</span> <span class="n">done</span>
 <span class="n">build</span> <span class="n">succeeded</span><span class="o">.</span>
 
-<span class="n">Build</span> <span class="n">finished</span><span class="o">.</span> <span class="n">The</span> <span class="n">HTML</span> <span class="n">pages</span> <span class="n">are</span> <span class="ow">in</span> <span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">.</span></code>
-  </pre>
-</figure>
-
+<span class="n">Build</span> <span class="n">finished</span><span class="o">.</span> <span class="n">The</span> <span class="n">HTML</span> <span class="n">pages</span> <span class="n">are</span> <span class="ow">in</span> <span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">.</span></code></pre></div>
 <p>生成されたソースの抜粋。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-html" data-lang="html"><span class="nt">&lt;p&gt;</span>Contents:<span class="nt">&lt;/p&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"toctree-wrapper compound"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"simple"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;/ul&gt;</span>
-<span class="nt">&lt;/div&gt;</span>
-<span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"simple"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;li&gt;&lt;span</span> <span class="na">class=</span><span class="s">"strike"</span><span class="nt">&gt;</span>thids ahas<span class="nt">&lt;/span&gt;&lt;/li&gt;</span>
-<span class="nt">&lt;li&gt;&lt;span</span> <span class="na">class=</span><span class="s">"red"</span><span class="nt">&gt;</span>red<span class="nt">&lt;/span&gt;&lt;/li&gt;</span>
-<span class="nt">&lt;/ul&gt;</span>
-<span class="nt">&lt;/div&gt;</span></code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Contents:<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;toctree-wrapper compound&#34;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;simple&#34;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;simple&#34;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;strike&#34;</span><span class="p">&gt;</span>thids ahas<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;red&#34;</span><span class="p">&gt;</span>red<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span></code></pre></div>
 <p>とりあえずこんな感じ。</p>
 
-</div>
+    </section>
+  </article>
 
-<div class="pagination">
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/09/25/ios-uiwebview-cache/" class="pagination_overflow previous_page">
+          Prev: 
+          13/9/25
+          iOSのUIWebViewのキャッシュがどういうタイミングで …
+        </a>
+      
+
+      <span class="pagination_center disabled">
+        13/10/2
+        Sphin …
+      </span>
+
+      
+        <a href="/2013/10/25/sphinx-recommend/" class="pagination_overflow next_page">
+          Next: 
+          13/10/25
+          「Sphinxをはじめよう」を読んで導入したいと思ったので色 …
+        </a>
+      
+  </div>
+</nav>
+
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    
-      <li class="prev">
-        <a href="/2013/09/25/ios-uiwebview-cache/" title="iOSのUIWebViewのキャッシュがどういうタイミングでリセットされているのかわからんという話">
-          iOSのUIWebViewのキャッシュがどういうタイミングでリセットされているのかわからんという話
-        </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/10/25/sphinx-recommend/" title="「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた">
-          「Sphinxをはじめよう」を読んで導入したいと思ったので色々考えてみた
-        </a>
-      </li>
-    
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
 </div>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2013/10/02/sphinx-plugin/" data-text="kk_Atakaの日記 - Sphinxのプラグインの作り方を学ぶ" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/10/02/sphinx-plugin/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/10/02/sphinx-plugin/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/10/02/sphinx-plugin/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - Sphinxのプラグインの作り方を学ぶ"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/10/02/sphinx-plugin//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
 
 
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
     
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
 
 
-      </article>
 
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
 
-  <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
-  </ul>
-
-  <h2>Recent Entries</h2>
-
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#sphinxの拡張の仕方">Sphinxの拡張の仕方</a></li>
+<li><a href="#作成">作成</a>
+<ul>
+<li><a href="#conf-py-修正">conf.py(修正)</a></li>
+<li><a href="#sphinxcontrib-roles-py-新規">sphinxcontrib_roles.py(新規)</a></li>
+</ul></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

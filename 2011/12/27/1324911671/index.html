@@ -1,932 +1,1198 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>EvernoteのAPIをRubyから叩きたい - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  EvernoteのAPIをRubyから叩きたい &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Evernote][備忘録][Ruby][API]EvernoteのAPIをRubyから叩きたい はじめに この記事は[http://atnd.org/events/22021:title]の27日目の記事です。
+26日目はid:tackunさんの[http://d.hatena.ne.jp/tackun/20111226/1324908770:title]でした。
+28日目はr7kamuraさんのRubyでGPUを使おう - &amp;amp;#10008;&amp;amp;#9593;&amp;amp;#9697;&amp;amp;#9593;&amp;amp;#10008;です。
+今日はターミナル(or コマンドプロンプト)経由でEvernoteのAPIを叩き、自分のノートブックを取得してみようとしてみます。ソースを書く前にAPIの申請からやっていきます。
+APIの申請…の前に developer用サイトからAPI SDKを入手。
+ http://www.evernote.com/about/developer/api/:title  [f:id:kk_Ataka:20111226235624j:image]
+上記のリンクを叩くとzipがDLできるので、これを解凍しruby/lib以下のファイルを用意しておく。
+APIの申請  http://www.evernote.com/about/developer/api/:title  同じページを下へスクロールしていくとRequest an API Keyという箇所があるので以下の項目を入力する。
+|*Evernote username|Evernoteのユーザ名|
+|*Your Name|氏名|
+|*Your Email|メールアドレス|
+|*Organization|組織や団体、だが、個人で使う場合は氏名でよい|
+|*Web or Client|今回は自分で使う用なのでClient Keysを選択(既に持っているので下の画像ではWebを選択している)|
+|*Application Details|どうやってAPIを使いたいか|
+つたない英語でDetailsを書く。以前は審査に時間がかかったらしいが今はSUBMITすればすぐKeyが発行されるみたい。
+[f:id:kk_Ataka:20111218113115j:image]
+WebApplicationを選んだ場合。
+[f:id:kk_Ataka:20111218113113j:image]
+Clientを選んだ場合。
+[f:id:kk_Ataka:20111218113114j:image]
+これでConsumer KeyとConsumer Secretをもらえた。ただし、この状態では砂場(sandbox.evernote.com)でしか使えない。
+上記画像のNext Steps 2.によると[https://sandbox.evernote.com/Registration.action:title]で砂場用アカウントを作成し、砂場で開発をしてくださいという事でいきなり本家(www.evernote.com)で動かせないようになっている。
+Activate 今回のエントリではやらないが、本家で動かす時はActivateサイト(Next Steps 3.のlet us knowリンクから行ける)でActivateしてもらう必要がある。(ここは昔の事なので少し曖昧)
+|*Email|メールアドレス|
+|*API Consumer Key|登録時にもらったConsumer Key|
+|*Additional Info|その他何かあれば？(何か書いたっけ…？)|
+[f:id:kk_Ataka:20111218115757j:image]
+ソース iitHubに。 https://github.com/gosyujin/evernote_for_ruby/blob/master/myEvernote.rb
+ここから実際に取得していきます。
+パス追加 プロジェクト内にあるライブラリ(さっき落としたAPI SDK)を読み込む。|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
-    </div>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2011/12/27/1324911671/">EvernoteのAPIをRubyから叩きたい</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Evernote" class="tag">Evernote</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#備忘録" class="tag">備忘録</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#Ruby" class="tag">Ruby</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#API" class="tag">API</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2011/12/27</span>
-          
-        </div>
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
 
-
-
-<div class="pagination">
-  <ul>
+  
     
-      <li class="prev">
-        <a href="/2011/12/26/1324910284/" title="SinatraでHaml入門">
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2011/12/26/1324910284/" class="pagination_overflow previous_page">
+          Prev: 
+          11/12/26
           SinatraでHaml入門
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2011/12/28/1325118790/" title="2011年KPT">
+      
+
+      <span class="pagination_center disabled">
+        11/12/27
+        Evern …
+      </span>
+
+      
+        <a href="/2011/12/28/1325118790/" class="pagination_overflow next_page">
+          Next: 
+          11/12/28
           2011年KPT
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">流れ</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">パスワードなどの情報を取得する</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">UserStore作成</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-4">
-              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">認証</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-5">
-              <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">NoteStore作成</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-6">
-              <a href="#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">Thrift</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-7">
-              <a href="#tocAnchor-1-7"><span class="tocnumber">7</span> <span class="toctext">EDAM(Evernote Data Access and Management)</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-8">
-              <a href="#tocAnchor-1-8"><span class="tocnumber">8</span> <span class="toctext">UserStoreとは</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-9">
-              <a href="#tocAnchor-1-9"><span class="tocnumber">9</span> <span class="toctext">NoteStoreとは</span></a>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h1>はじめに</h1>
-<p>この記事は<a href="http://atnd.org/events/22021">Ruby Advent Calendar jp: 2011 : ATND</a>の27日目の記事です。</p>
-<p>26日目は<a href="http://d.hatena.ne.jp/tackun/">id:tackun</a>さんの<a href="http://d.hatena.ne.jp/tackun/20111226/1324908770">Sinatraを使って、RESTFulなWeb-APIを作ってみたい - tackun note</a>でした。</p>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">EvernoteのAPIをRubyから叩きたい</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
+
+  
+    <a href='/tags/evernote' class="muted-link">
+      [ <span class="Label Label--gray">Evernote</span> ]
+    </a>
+  
+    <a href='/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
+    </a>
+  
+    <a href='/tags/api' class="muted-link">
+      [ <span class="Label Label--gray">API</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2011/12/27</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#evernote-備忘録-ruby-api-evernoteのapiをrubyから叩きたい">[Evernote][備忘録][Ruby][API]EvernoteのAPIをRubyから叩きたい</a></li>
+<li><a href="#はじめに">はじめに</a></li>
+<li><a href="#apiの申請-の前に">APIの申請…の前に</a></li>
+<li><a href="#apiの申請">APIの申請</a></li>
+<li><a href="#activate">Activate</a></li>
+<li><a href="#ソース">ソース</a></li>
+<li><a href="#パス追加">パス追加</a></li>
+<li><a href="#初期化">初期化</a>
+<ul>
+<li><a href="#流れ">流れ</a></li>
+<li><a href="#パスワードなどの情報を取得する">パスワードなどの情報を取得する</a></li>
+<li><a href="#userstore作成">UserStore作成</a></li>
+<li><a href="#認証">認証</a></li>
+<li><a href="#notestore作成">NoteStore作成</a></li>
+</ul></li>
+<li><a href="#ノートブックを取得していく">ノートブックを取得していく。</a></li>
+<li><a href="#終わりに">終わりに</a></li>
+<li><a href="#参考サイト-兼自分で調べる用">参考サイト、兼自分で調べる用</a>
+<ul>
+<li><a href="#thrift">Thrift</a></li>
+<li><a href="#edam-evernote-data-access-and-management">EDAM(Evernote Data Access and Management)</a></li>
+<li><a href="#userstoreとは">UserStoreとは</a></li>
+<li><a href="#notestoreとは">NoteStoreとは</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="evernote-備忘録-ruby-api-evernoteのapiをrubyから叩きたい">[Evernote][備忘録][Ruby][API]EvernoteのAPIをRubyから叩きたい</h2>
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>この記事は[<a href="http://atnd.org/events/22021:title]の27日目の記事です">http://atnd.org/events/22021:title]の27日目の記事です</a>。</p>
+
+<p>26日目はid:tackunさんの[<a href="http://d.hatena.ne.jp/tackun/20111226/1324908770:title]でした">http://d.hatena.ne.jp/tackun/20111226/1324908770:title]でした</a>。</p>
+
 <p>28日目はr7kamuraさんの<a href="http://r7kamura.hatenablog.com/entry/2011/12/28/234717">RubyでGPUを使おう - &amp;#10008;&amp;#9593;&amp;#9697;&amp;#9593;&amp;#10008;</a>です。</p>
-<br />
+
 <p>今日はターミナル(or コマンドプロンプト)経由でEvernoteのAPIを叩き、自分のノートブックを取得してみようとしてみます。ソースを書く前にAPIの申請からやっていきます。</p>
-<h1>APIの申請…の前に</h1>
+
+<h2 id="apiの申請-の前に">APIの申請…の前に</h2>
+
 <p>developer用サイトからAPI SDKを入手。</p>
+
 <ul>
-  <li>
-    <a href="http://www.evernote.com/about/developer/api/">Cloud API - Evernote Developers</a>
-  </li>
+<li><a href="http://www.evernote.com/about/developer/api/:title">http://www.evernote.com/about/developer/api/:title</a></li>
 </ul>
-<p>
-  <a href="http://f.hatena.ne.jp/kk_Ataka/20111226235624">
-    <img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111226/20111226235624.jpg" />
-  </a>
-</p>
+
+<p>[f:id:kk_Ataka:20111226235624j:image]</p>
+
 <p>上記のリンクを叩くとzipがDLできるので、これを解凍しruby/lib以下のファイルを用意しておく。</p>
-<h1>APIの申請</h1>
+
+<h2 id="apiの申請">APIの申請</h2>
+
 <ul>
-  <li>
-    <a href="http://www.evernote.com/about/developer/api/">Cloud API - Evernote Developers</a>
-  </li>
+<li><a href="http://www.evernote.com/about/developer/api/:title">http://www.evernote.com/about/developer/api/:title</a></li>
 </ul>
+
 <p>同じページを下へスクロールしていくとRequest an API Keyという箇所があるので以下の項目を入力する。</p>
-<table>
-  <tr>
-    <th>Evernote username</th>
-    <td>Evernoteのユーザ名</td>
-  </tr>
-  <tr>
-    <th>Your Name</th>
-    <td>氏名</td>
-  </tr>
-  <tr>
-    <th>Your Email</th>
-    <td>メールアドレス</td>
-  </tr>
-  <tr>
-    <th>Organization</th>
-    <td>組織や団体、だが、個人で使う場合は氏名でよい</td>
-  </tr>
-  <tr>
-    <th>Web or Client</th>
-    <td>今回は自分で使う用なのでClient Keysを選択(既に持っているので下の画像ではWebを選択している)</td>
-  </tr>
-  <tr>
-    <th>Application Details</th>
-    <td>どうやってAPIを使いたいか</td>
-  </tr>
-</table>
+
+<p>|*Evernote username|Evernoteのユーザ名|</p>
+
+<p>|*Your Name|氏名|</p>
+
+<p>|*Your Email|メールアドレス|</p>
+
+<p>|*Organization|組織や団体、だが、個人で使う場合は氏名でよい|</p>
+
+<p>|*Web or Client|今回は自分で使う用なのでClient Keysを選択(既に持っているので下の画像ではWebを選択している)|</p>
+
+<p>|*Application Details|どうやってAPIを使いたいか|</p>
+
 <p>つたない英語でDetailsを書く。以前は審査に時間がかかったらしいが今はSUBMITすればすぐKeyが発行されるみたい。</p>
-<p>
-  <a href="http://f.hatena.ne.jp/kk_Ataka/20111218113115">
-    <img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111218/20111218113115.jpg" />
-  </a>
-</p>
+
+<p>[f:id:kk_Ataka:20111218113115j:image]</p>
+
 <p>WebApplicationを選んだ場合。</p>
-<p>
-  <a href="http://f.hatena.ne.jp/kk_Ataka/20111218113113">
-    <img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111218/20111218113113.jpg" />
-  </a>
-</p>
+
+<p>[f:id:kk_Ataka:20111218113113j:image]</p>
+
 <p>Clientを選んだ場合。</p>
-<p>
-  <a href="http://f.hatena.ne.jp/kk_Ataka/20111218113114">
-    <img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111218/20111218113114.jpg" />
-  </a>
-</p>
+
+<p>[f:id:kk_Ataka:20111218113114j:image]</p>
+
 <p>これでConsumer KeyとConsumer Secretをもらえた。ただし、この状態では砂場(sandbox.evernote.com)でしか使えない。</p>
-<p>上記画像のNext Steps 2.によると<a href="https://sandbox.evernote.com/Registration.action">Create an Evernote Account</a>で砂場用アカウントを作成し、砂場で開発をしてくださいという事でいきなり本家(www.evernote.com)で動かせないようになっている。</p>
-<h1>Activate</h1>
+
+<p>上記画像のNext Steps 2.によると[<a href="https://sandbox.evernote.com/Registration.action:title]で砂場用アカウントを作成し、砂場で開発をしてくださいという事でいきなり本家(www.evernote.com)で動かせないようになっている。">https://sandbox.evernote.com/Registration.action:title]で砂場用アカウントを作成し、砂場で開発をしてくださいという事でいきなり本家(www.evernote.com)で動かせないようになっている。</a></p>
+
+<h2 id="activate">Activate</h2>
+
 <p>今回のエントリではやらないが、本家で動かす時はActivateサイト(Next Steps 3.のlet us knowリンクから行ける)でActivateしてもらう必要がある。(ここは昔の事なので少し曖昧)</p>
-<table>
-  <tr>
-    <th>Email</th>
-    <td>メールアドレス</td>
-  </tr>
-  <tr>
-    <th>API Consumer Key</th>
-    <td>登録時にもらったConsumer Key</td>
-  </tr>
-  <tr>
-    <th>Additional Info</th>
-    <td>その他何かあれば？(何か書いたっけ…？)</td>
-  </tr>
-</table>
-<p>
-  <a href="http://f.hatena.ne.jp/kk_Ataka/20111218115757">
-    <img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111218/20111218115757.jpg" />
-  </a>
-</p>
-<h1>ソース</h1>
+
+<p>|*Email|メールアドレス|</p>
+
+<p>|*API Consumer Key|登録時にもらったConsumer Key|</p>
+
+<p>|*Additional Info|その他何かあれば？(何か書いたっけ…？)|</p>
+
+<p>[f:id:kk_Ataka:20111218115757j:image]</p>
+
+<h2 id="ソース">ソース</h2>
+
 <p>iitHubに。 <a href="https://github.com/gosyujin/evernote_for_ruby/blob/master/myEvernote.rb">https://github.com/gosyujin/evernote_for_ruby/blob/master/myEvernote.rb</a></p>
+
 <p>ここから実際に取得していきます。</p>
-<h1>パス追加</h1>
+
+<h2 id="パス追加">パス追加</h2>
+
 <p>プロジェクト内にあるライブラリ(さっき落としたAPI SDK)を読み込む。</p>
-<pre class="ruby">dir = File.expand_path(File.dirname(__FILE__))
-$LOAD_PATH.push("#{dir}/lib/ruby")
-$LOAD_PATH.push("#{dir}/lib/ruby/Evernote/EDAM")
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">dir</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">))</span>
+<span class="vg">$LOAD_PATH</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">#{</span><span class="n">dir</span><span class="si">}</span><span class="s2">/lib/ruby&#34;</span><span class="p">)</span>
+<span class="vg">$LOAD_PATH</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">#{</span><span class="n">dir</span><span class="si">}</span><span class="s2">/lib/ruby/Evernote/EDAM&#34;</span><span class="p">)</span>
 
-require 'thrift/types'
-(略)
-require 'Evernote/EDAM/user_store'
-(略)</pre>
+<span class="nb">require</span> <span class="s1">&#39;thrift/types&#39;</span>
+<span class="p">(</span><span class="err">略</span><span class="p">)</span>
+<span class="nb">require</span> <span class="s1">&#39;Evernote/EDAM/user_store&#39;</span>
+<span class="p">(</span><span class="err">略</span><span class="p">)</span></code></pre></div>
 <p>File.expand_path(File.dirname(__FILE__))は出力するとそれぞれこのようになる。</p>
-<p>&gt;|?|</p>
-<p>&gt; puts __FILE__</p>
-<p>#=&gt; ./myEvernote.rb</p>
-<p>&gt; puts File.dirname(__FILE__)</p>
-<p>#=&gt; .</p>
-<p>&gt; puts File.expand_path(File.dirname(__FILE__))</p>
-<p>#=&gt; C:/project/evernotexxx</p>
-<table>
-  <tr>
-    <td>&lt;</td>
-  </tr>
-</table>
+<div class="highlight"><pre class="chroma"><code class="language-?" data-lang="?">&gt; puts __FILE__
+#=&gt; ./myEvernote.rb
+&gt; puts File.dirname(__FILE__)
+#=&gt; .
+&gt; puts File.expand_path(File.dirname(__FILE__))
+#=&gt; C:/project/evernotexxx</code></pre></div>
 <p>プロジェクトディレクトリを指定できる。そして、</p>
-<pre class="ruby">$LOAD_PATH.push("#{dir}/lib/ruby")</pre>
-<p>で組み込み変数$LOAD_PATH<span class="footnote"><a href="#f1" title="requireがファイルを読み込むときに検索するディレクトリの名前を含む配列 - たのしいRuby 第三版 P373" name="fn1" id="fn1">*1</a></span>にプロジェクト内のlib/rubyを含めている。これで読み込める。</p>
-<h1>初期化</h1>
-<h2 id="tocAnchor-1-1">流れ</h2>
-<ol>
-  <li>パスワードなどの情報を取得する</li>
-  <li>UserStoreを作成し、認証する</li>
-  <li>NoteStoreを作成し、Evernoteのノートをいじれるようにする</li>
-</ol>
-<h2 id="tocAnchor-1-2">パスワードなどの情報を取得する</h2>
-<pre class="ruby">  def initialize()
-    @core = Pit.get("evernote", :require =&gt; {
-      "userName" =&gt; "your evernote userName.",
-      "password" =&gt; "your evernote password.",
-      "consumerKey" =&gt; "your evernote consumerKey.",
-      "consumerSecret" =&gt; "your evernote consumerSecret.",
-    })
-    
-    host = "sandbox.evernote.com"
-    userStoreUrl = "https://#{host}/edam/user"
-    userStoreTransport = Thrift::HTTPClientTransport.new(userStoreUrl)
-    userStoreProtocol = Thrift::BinaryProtocol.new(userStoreTransport)
-    userStore = Evernote::EDAM::UserStore::UserStore::Client.new(userStoreProtocol)</pre>
-<p>初期化時にまず</p>
-<ul>
-  <li>userName(登録時の)</li>
-  <li>password(登録時の)</li>
-  <li>consumer_key(Evernoteからもらったもの)</li>
-  <li>consumer_secret(Evernoteからもらったもの)</li>
-</ul>
-<p>を取得する。ソースにべた書きしてもいいのだが、パスワードとかはGitHubにあげる時に消しておきたいのでpit</p>
-<p>を使って情報を外出しする事に。</p>
-<ul>
-  <li>
-    <a href="http://subtech.g.hatena.ne.jp/cho45/20080102/1199257680">アカウント情報を管理するコマンド pit - 冬通りに消え行く制服ガールは✖夢物語にリアルを求めない。 - subtech</a>
-  </li>
-  <li>
-    <a href="http://d.hatena.ne.jp/snaka72/20090409/1239286994">WindowsでPitの落とし穴(pit)にはまった - 今日もスミマセン。</a>
-  </li>
-</ul>
-<p>pitを使う事で%USERPROFILE%\.pit\下にyaml形式で情報を保存しておくことができる。</p>
-<h2 id="tocAnchor-1-3">UserStore作成</h2>
-<p>次にUserStoreを作成する。UserStoreはとりあえず、ユーザの情報をほげほげするものという認識。hostはテスト環境なのでsandbox.evernote.comを指定している。</p>
-<h2 id="tocAnchor-1-4">認証</h2>
-<pre class="ruby">  def auth(userStore)
-    # バージョンチェック
-    versionOK = userStore.checkVersion("MyEvernote",
-      Evernote::EDAM::UserStore::EDAM_VERSION_MAJOR,
-      Evernote::EDAM::UserStore::EDAM_VERSION_MINOR)
-#      puts "Is my EDAM protocol version up to date? #{versionOK}"
-    if (!versionOK) then
-      exit(1)
-    end
-    begin
-      auth = userStore.authenticate(
-        @core["userName"],
-        @core["password"],
-        @core["consumerKey"],
-        @core["consumerSecret"])
-#        puts "Auth Success: #{auth.user.username}"
-      return auth
-    rescue Evernote::EDAM::Error::EDAMUserException =&gt; ex
-      parameter = ex.parameter
-      errorCode = ex.errorCode
-      errorText = Evernote::EDAM::Error::EDAMErrorCode::VALUE_MAP[errorCode]
-      puts "Auth Error: #{errorText}(ErrorCode: #{errorCode}), Parameter: #{parameter}"
-      exit
-    end
-  end</pre>
-<p>まずは、checkVersionメソッド(後述)の呼び出し。<span class="footnote"><a href="#f2" title="キャメルケースを多用してる…？　と思ったけど、xxx_yyyZzzzみたいなメソッドもあるなあ。どっちにあわせれば…" name="fn2" id="fn2">*2</a></span></p>
-<pre class="ruby">bool UserStore.checkVersion(clientname, edamVersionMajor, edamVersionMinor)</pre>
-<p>チェックが終わったら次はauthenticateでユーザの認証を行う。</p>
-<pre class="ruby">AuthenticationResult UserStore.authenticate(userName, password, consumer_key, consumer_secret)</pre>
-<p>認証が成功したらAuthenticationResultオブジェクトが返ってくる。ユーザ情報なんかも返ってくるが、この中のauthenticationTokenが、この先ノートを新規作成したり更新したりする時に必ず必要になるので控えておく。Tokenを使っている例は下記の通り。</p>
-<pre class="ruby"># ノートブック作成。第一引数がauthenticationToken。
-Types.Notebook createNotebook(string authenticationToken, Types.Notebook notebook)
-# ノートブック更新。第一引数が以下同文。
-i32 updateNotebook(string authenticationToken, Types.Notebook notebook)
-# ノートブック取得。略。
-Types.Notebook getNotebook(string authenticationToken, Types.Guid guid)</pre>
-<h2 id="tocAnchor-1-5">NoteStore作成</h2>
-<pre class="ruby">    noteStoreUrlBase = "https://#{host}/edam/note/"
-    noteStoreUrl = noteStoreUrlBase + @authentication.user.shardId
-    noteStoreTransport = Thrift::HTTPClientTransport.new(noteStoreUrl)
-    noteStoreProtocol = Thrift::BinaryProtocol.new(noteStoreTransport)
-    @noteStore = Evernote::EDAM::NoteStore::NoteStore::Client.new(noteStoreProtocol)</pre>
-<p>で、最後にNoteStoreを作成する。shardIdを指定する必要がある。shardIdは何かっていうと…。</p>
-<blockquote>
-  <p>The name of the virtual server that manages the state of this user. This value is used internally to determine which system should service requests about this user's data. It is also used to construct the appropriate URL to make requests from the NoteStore.</p>
-</blockquote>
-<p>ユーザ状態を管理する仮想サーバ名？</p>
-<h1>ノートブックを取得していく。</h1>
-<p>準備はできたのでノートブックを取得していく。今のEvernote(砂場)の構造はこう。</p>
-<p>
-  <a href="http://f.hatena.ne.jp/kk_Ataka/20111225163340">
-    <img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20111225/20111225163340.jpg" />
-  </a>
-</p>
-<p>それに対して全ノートを取得してくるとこんな感じ。</p>
-<pre class="ruby">@e = MyEvernote.new()
-# 全ノートブックを取得
-pp @e.getNotebooks()</pre>
-<pre class="ruby">  # 全ノートブックを取得する
-  def getNotebooks()
-    @noteStore.listNotebooks(@token)
-  end</pre>
-<p>全ノートブックはNoteStore.listNotebooks(authenticationToken)で取得する事ができる。</p>
-<pre class="ruby">[&lt;Evernote::EDAM::Type::Notebook guid:"2d8ec8b5-5706-434d-a1dc-4ea0c6ba1993", name:"Wait", updateSequenceNum:745, defaultNotebook:false, serviceCreated:1312818684000, serviceUpdated:1324051378000&gt;,
- &lt;Evernote::EDAM::Type::Notebook guid:"33880e53-4c9f-4104-a6e6-777ed1e3cef2", name:"Sandbox", updateSequenceNum:871, defaultNotebook:true, serviceCreated:1309536176000, serviceUpdated:1324051378000&gt;,
- &lt;Evernote::EDAM::Type::Notebook guid:"71cdd6f9-5070-4508-bc80-a3f835a61a55", name:"UpDeleteNotebook", updateSequenceNum:1468, defaultNotebook:false, serviceCreated:1324099155000, serviceUpdated:1324099155000&gt;,
- &lt;Evernote::EDAM::Type::Notebook guid:"450b52e6-2daa-4b04-9012-4623a8e12ef5", name:"TestNotebook", updateSequenceNum:1469, defaultNotebook:false, serviceCreated:1324099138000, serviceUpdated:1324099166000&gt;]</pre>
-<p>おお、取れた！</p>
-<p>nameは文字通りノートブック名。defaultNoteBookはデフォルトの設定true|false。以下略。guid(globally unique identifier)は、ノートブック、ノート、タグなどに対して振られる一意のID。フォーマットはこんな感じ。<span class="footnote"><a href="#f3" title="Evernote::EDAM::Limits::EDAM_GUID_REGEX" name="fn3" id="fn3">*3</a></span></p>
-<pre>^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$</pre>
-<p>GUIDがわかれば、特定のノートブックを引っ張ってくる事もできる。例えばGUID: 450b52e6-2daa-4b04-9012-4623a8e12ef5がTestNotebookなので…。</p>
-<pre class="ruby">    @e = MyEvernote.new()
-    @NotebookGuid = '450b52e6-2daa-4b04-9012-4623a8e12ef5'
-    # 特定のノートブックを取得
-    pp @e.getNotebook(@NotebookGuid).name
-    pp @e.getNotebook(@NotebookGuid)</pre>
-<pre class="ruby">  def getNotebook(key)
-    if isGuid(key) then
-      # GUIDから検索
-      return @noteStore.getNotebook(@token, key)
-    end
-  end</pre>
-<pre class="ruby">"TestNotebook"
-&lt;Evernote::EDAM::Type::Notebook guid:"450b52e6-2daa-4b04-9012-4623a8e12ef5", name:"TestNotebook", updateSequenceNum:1469, defaultNotebook:false, serviceCreated:1324099138000, serviceUpdated:1324099166000&gt;</pre>
-<p>TestNotebookが取れた！</p>
-<p>さらにfilterをかける事でノートブック内から特定のノートを取得できる。</p>
-<pre class="ruby">@e = MyEvernote.new()
-@NotebookGuid = '450b52e6-2daa-4b04-9012-4623a8e12ef5'
-# ノートブック内のノートを取得
-pp @e.getNote(@NotebookGuid)</pre>
-<pre class="ruby">  def getNote(notebookGuid, count=100)
-    filter = Evernote::EDAM::NoteStore::NoteFilter.new
-    filter.notebookGuid = notebookGuid
-    @noteStore.findNotes(@token, filter, 0, count)
-  end</pre>
-<pre class="ruby">&lt;Evernote::EDAM::NoteStore::NoteList startIndex:0, totalNotes:2, 
-  notes:[
-    &lt;Evernote::EDAM::Type::Note guid:"fa05f909-97d3-4504-8015-125fb026c8be", 
-      title:"Images", contentHash:6dd62d0a9b187cbea4350b1ada8fda74, contentLength:1200,
-      created:1324099541000, updated:1324099550000, active:true, updateSequenceNum:1473,
-      notebookGuid:"450b52e6-2daa-4b04-9012-4623a8e12ef5",
-      resources:[&lt;Evernote::EDAM::Type::Resource guid:"536abe91-3ad3-48f6-8add-9fbcad7b95ab", 
-      noteGuid:"fa05f909-97d3-4504-8015-125fb026c8be", 
-      data:&lt;Evernote::EDAM::Type::Data bodyHash:203b77ab9cb177e5406340445b64e78c, size:2044&gt;, 
-      mime:"image/jpeg", width:64, height:64, active:true, 
-      recognition:&lt;Evernote::EDAM::Type::Data bodyHash:68b3bd35f22b01ac57e55e7a7974ed8d, size:533&gt;, 
-      attributes:&lt;Evernote::EDAM::Type::ResourceAttributes &gt;, updateSequenceNum:1476&gt;, 
-      &lt;Evernote::EDAM::Type::Resource guid:"8c329667-4c20-4e0a-a291-e437baf99f2d", 
-      noteGuid:"fa05f909-97d3-4504-8015-125fb026c8be", 
-      data:&lt;Evernote::EDAM::Type::Data bodyHash:b1bdcdc515d937fb3e16a1e654abfffb, size:453&gt;,
-      mime:"image/png", width:14, height:13, active:true, 
-      attributes:&lt;Evernote::EDAM::Type::ResourceAttributes &gt;, updateSequenceNum:1474&gt;], 
-      attributes:&lt;Evernote::EDAM::Type::NoteAttributes sourceURL:"http://google.com"&gt;&gt;,
-    &lt;Evernote::EDAM::Type::Note guid:"19c20dac-6d90-4e8c-bbf9-f11450416c48", title:"TestNote", 
-      contentHash:401df83bfdb6fd1f152c4d226fa1d0b6, contentLength:189, created:1324099587000, 
-      updated:1324099587000, active:true, updateSequenceNum:1477, 
-      notebookGuid:"450b52e6-2daa-4b04-9012-4623a8e12ef5", 
-      attributes:&lt;Evernote::EDAM::Type::NoteAttributes &gt;&gt;], updateCount:1477&gt;</pre>
-<h1>終わりに</h1>
-<p>という事で、EvernoteAPI登録からノート取得までをする事ができました。もっと画像をアップしたりタグ埋め込んだりもできるのですが、それはこれから学んでいくという事で。</p>
-<h1>参考サイト、兼自分で調べる用</h1>
-<h2 id="tocAnchor-1-6">Thrift</h2>
-<ul>
-  <li>
-    <a href="http://blog.broomie.net/index.cgi?id=36">BLOG::broomie.net: Thriftが便利すぎる</a>
-  </li>
-  <li>
-    <a href="http://www.atmarkit.co.jp/news/200704/03/thrift.html">巨大SNSを支える多言語混在RPC開発フレームワーク“Thrift” − ＠IT</a>
-  </li>
-</ul>
-<h2 id="tocAnchor-1-7">EDAM(Evernote Data Access and Management)</h2>
-<ul>
-  <li>
-    <a href="http://d.hatena.ne.jp/soutaro/20110910/1315645433">Evernote Synchronization via EDAMを読みました - soutaroにっき</a>
-  </li>
-</ul>
-<h2 id="tocAnchor-1-8">UserStoreとは</h2>
-<blockquote>
-  <p>The UserStore service is primarily used by EDAM clients to establish authentication via username and password over a trusted connection (e.g. SSL). A client's first call to this interface should be checkVersion() to ensure that the client's software is up to date. </p>
-</blockquote>
-<p>ユーザ名やパスワードを信頼された接続上で認証するためEDAMクライアントで利用される。はじめにcheckVersion()メソッドを呼び、クライアントのソフトのバージョンが最新である事を保障すべき。</p>
-<h2 id="tocAnchor-1-9">NoteStoreとは</h2>
-<blockquote>
-  <p>The NoteStore service is used by EDAM clients to exchange information about the collection of notes in an account. This is primarily used for synchronization, but could also be used by a "thin" client without a full local cache.</p>
-  <p>All functions take an "authenticationToken" parameter, which is the value returned by the UserStore which permits access to the account. This parameter is mandatory for all functions. </p>
-</blockquote>
-<p>アカウントのノート収集情報を交換、同期するためEDAMクライアントで利用される。(ローカルキャッシュのない新クライアントでも使われた)全ての機能はauthenticationTokenのパラメータを使用する。これはアクセス認証が通ったアカウントのUserStoreの値を使用する。</p>
-<div class="footnote">
-  <p class="footnote"><a href="#fn1" name="f1" id="f1">*1</a>: requireがファイルを読み込むときに検索するディレクトリの名前を含む配列 - たのしいRuby 第三版 P373</p>
-  <p class="footnote"><a href="#fn2" name="f2" id="f2">*2</a>: キャメルケースを多用してる…？　と思ったけど、xxx_yyyZzzzみたいなメソッドもあるなあ。どっちにあわせれば…</p>
-  <p class="footnote"><a href="#fn3" name="f3" id="f3">*3</a>: Evernote::EDAM::Limits::EDAM_GUID_REGEX</p>
-</div>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="vg">$LOAD_PATH</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">#{</span><span class="n">dir</span><span class="si">}</span><span class="s2">/lib/ruby&#34;</span><span class="p">)</span></code></pre></div>
+<p>で組み込み変数$LOAD_PATH[1]にプロジェクト内のlib/rubyを含めている。これで読み込める。</p>
 
-<div class="pagination">
-  <ul>
+<h2 id="初期化">初期化</h2>
+
+<h3 id="流れ">流れ</h3>
+
+<ol>
+<li>パスワードなどの情報を取得する</li>
+<li>UserStoreを作成し、認証する</li>
+<li>NoteStoreを作成し、Evernoteのノートをいじれるようにする</li>
+</ol>
+
+<h3 id="パスワードなどの情報を取得する">パスワードなどの情報を取得する</h3>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">initialize</span><span class="p">()</span>
+    <span class="vi">@core</span> <span class="o">=</span> <span class="no">Pit</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;evernote&#34;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="s2">&#34;userName&#34;</span> <span class="o">=&gt;</span> <span class="s2">&#34;your evernote userName.&#34;</span><span class="p">,</span>
+      <span class="s2">&#34;password&#34;</span> <span class="o">=&gt;</span> <span class="s2">&#34;your evernote password.&#34;</span><span class="p">,</span>
+      <span class="s2">&#34;consumerKey&#34;</span> <span class="o">=&gt;</span> <span class="s2">&#34;your evernote consumerKey.&#34;</span><span class="p">,</span>
+      <span class="s2">&#34;consumerSecret&#34;</span> <span class="o">=&gt;</span> <span class="s2">&#34;your evernote consumerSecret.&#34;</span><span class="p">,</span>
+    <span class="p">})</span>
     
-      <li class="prev">
-        <a href="/2011/12/26/1324910284/" title="SinatraでHaml入門">
+    <span class="n">host</span> <span class="o">=</span> <span class="s2">&#34;sandbox.evernote.com&#34;</span>
+    <span class="n">userStoreUrl</span> <span class="o">=</span> <span class="s2">&#34;https://</span><span class="si">#{</span><span class="n">host</span><span class="si">}</span><span class="s2">/edam/user&#34;</span>
+    <span class="n">userStoreTransport</span> <span class="o">=</span> <span class="no">Thrift</span><span class="o">::</span><span class="no">HTTPClientTransport</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">userStoreUrl</span><span class="p">)</span>
+    <span class="n">userStoreProtocol</span> <span class="o">=</span> <span class="no">Thrift</span><span class="o">::</span><span class="no">BinaryProtocol</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">userStoreTransport</span><span class="p">)</span>
+    <span class="n">userStore</span> <span class="o">=</span> <span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">UserStore</span><span class="o">::</span><span class="no">UserStore</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">userStoreProtocol</span><span class="p">)</span></code></pre></div>
+<p>初期化時にまず</p>
+
+<ul>
+<li>userName(登録時の)</li>
+<li>password(登録時の)</li>
+<li>consumer_key(Evernoteからもらったもの)</li>
+<li>consumer_secret(Evernoteからもらったもの)</li>
+</ul>
+
+<p>を取得する。ソースにべた書きしてもいいのだが、パスワードとかはGitHubにあげる時に消しておきたいのでpit</p>
+
+<p>を使って情報を外出しする事に。</p>
+
+<ul>
+<li><a href="http://subtech.g.hatena.ne.jp/cho45/20080102/1199257680:title">http://subtech.g.hatena.ne.jp/cho45/20080102/1199257680:title</a></li>
+<li><a href="http://d.hatena.ne.jp/snaka72/20090409/1239286994:title">http://d.hatena.ne.jp/snaka72/20090409/1239286994:title</a></li>
+</ul>
+
+<p>pitを使う事で%USERPROFILE%\.pit\下にyaml形式で情報を保存しておくことができる。</p>
+
+<h3 id="userstore作成">UserStore作成</h3>
+
+<p>次にUserStoreを作成する。UserStoreはとりあえず、ユーザの情報をほげほげするものという認識。hostはテスト環境なのでsandbox.evernote.comを指定している。</p>
+
+<h3 id="認証">認証</h3>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">auth</span><span class="p">(</span><span class="n">userStore</span><span class="p">)</span>
+    <span class="c1"># バージョンチェック</span>
+    <span class="n">versionOK</span> <span class="o">=</span> <span class="n">userStore</span><span class="o">.</span><span class="n">checkVersion</span><span class="p">(</span><span class="s2">&#34;MyEvernote&#34;</span><span class="p">,</span>
+      <span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">UserStore</span><span class="o">::</span><span class="no">EDAM_VERSION_MAJOR</span><span class="p">,</span>
+      <span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">UserStore</span><span class="o">::</span><span class="no">EDAM_VERSION_MINOR</span><span class="p">)</span>
+<span class="c1">#      puts &#34;Is my EDAM protocol version up to date? #{versionOK}&#34;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">versionOK</span><span class="p">)</span> <span class="k">then</span>
+      <span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">end</span>
+    <span class="k">begin</span>
+      <span class="n">auth</span> <span class="o">=</span> <span class="n">userStore</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span>
+        <span class="vi">@core</span><span class="o">[</span><span class="s2">&#34;userName&#34;</span><span class="o">]</span><span class="p">,</span>
+        <span class="vi">@core</span><span class="o">[</span><span class="s2">&#34;password&#34;</span><span class="o">]</span><span class="p">,</span>
+        <span class="vi">@core</span><span class="o">[</span><span class="s2">&#34;consumerKey&#34;</span><span class="o">]</span><span class="p">,</span>
+        <span class="vi">@core</span><span class="o">[</span><span class="s2">&#34;consumerSecret&#34;</span><span class="o">]</span><span class="p">)</span>
+<span class="c1">#        puts &#34;Auth Success: #{auth.user.username}&#34;</span>
+      <span class="k">return</span> <span class="n">auth</span>
+    <span class="k">rescue</span> <span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Error</span><span class="o">::</span><span class="no">EDAMUserException</span> <span class="o">=&gt;</span> <span class="n">ex</span>
+      <span class="n">parameter</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">parameter</span>
+      <span class="n">errorCode</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">errorCode</span>
+      <span class="n">errorText</span> <span class="o">=</span> <span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Error</span><span class="o">::</span><span class="no">EDAMErrorCode</span><span class="o">::</span><span class="no">VALUE_MAP</span><span class="o">[</span><span class="n">errorCode</span><span class="o">]</span>
+      <span class="nb">puts</span> <span class="s2">&#34;Auth Error: </span><span class="si">#{</span><span class="n">errorText</span><span class="si">}</span><span class="s2">(ErrorCode: </span><span class="si">#{</span><span class="n">errorCode</span><span class="si">}</span><span class="s2">), Parameter: </span><span class="si">#{</span><span class="n">parameter</span><span class="si">}</span><span class="s2">&#34;</span>
+      <span class="nb">exit</span>
+    <span class="k">end</span>
+  <span class="k">end</span></code></pre></div>
+<p>まずは、checkVersionメソッド(後述)の呼び出し。[2]</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">bool</span> <span class="no">UserStore</span><span class="o">.</span><span class="n">checkVersion</span><span class="p">(</span><span class="n">clientname</span><span class="p">,</span> <span class="n">edamVersionMajor</span><span class="p">,</span> <span class="n">edamVersionMinor</span><span class="p">)</span></code></pre></div>
+<p>チェックが終わったら次はauthenticateでユーザの認証を行う。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="no">AuthenticationResult</span> <span class="no">UserStore</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">userName</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">consumer_key</span><span class="p">,</span> <span class="n">consumer_secret</span><span class="p">)</span></code></pre></div>
+<p>認証が成功したらAuthenticationResultオブジェクトが返ってくる。ユーザ情報なんかも返ってくるが、この中のauthenticationTokenが、この先ノートを新規作成したり更新したりする時に必ず必要になるので控えておく。Tokenを使っている例は下記の通り。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="c1"># ノートブック作成。第一引数がauthenticationToken。</span>
+<span class="no">Types</span><span class="o">.</span><span class="n">Notebook</span> <span class="n">createNotebook</span><span class="p">(</span><span class="n">string</span> <span class="n">authenticationToken</span><span class="p">,</span> <span class="no">Types</span><span class="o">.</span><span class="n">Notebook</span> <span class="n">notebook</span><span class="p">)</span>
+<span class="c1"># ノートブック更新。第一引数が以下同文。</span>
+<span class="n">i32</span> <span class="n">updateNotebook</span><span class="p">(</span><span class="n">string</span> <span class="n">authenticationToken</span><span class="p">,</span> <span class="no">Types</span><span class="o">.</span><span class="n">Notebook</span> <span class="n">notebook</span><span class="p">)</span>
+<span class="c1"># ノートブック取得。略。</span>
+<span class="no">Types</span><span class="o">.</span><span class="n">Notebook</span> <span class="n">getNotebook</span><span class="p">(</span><span class="n">string</span> <span class="n">authenticationToken</span><span class="p">,</span> <span class="no">Types</span><span class="o">.</span><span class="n">Guid</span> <span class="n">guid</span><span class="p">)</span></code></pre></div>
+<h3 id="notestore作成">NoteStore作成</h3>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">    <span class="n">noteStoreUrlBase</span> <span class="o">=</span> <span class="s2">&#34;https://</span><span class="si">#{</span><span class="n">host</span><span class="si">}</span><span class="s2">/edam/note/&#34;</span>
+    <span class="n">noteStoreUrl</span> <span class="o">=</span> <span class="n">noteStoreUrlBase</span> <span class="o">+</span> <span class="vi">@authentication</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">shardId</span>
+    <span class="n">noteStoreTransport</span> <span class="o">=</span> <span class="no">Thrift</span><span class="o">::</span><span class="no">HTTPClientTransport</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">noteStoreUrl</span><span class="p">)</span>
+    <span class="n">noteStoreProtocol</span> <span class="o">=</span> <span class="no">Thrift</span><span class="o">::</span><span class="no">BinaryProtocol</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">noteStoreTransport</span><span class="p">)</span>
+    <span class="vi">@noteStore</span> <span class="o">=</span> <span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">NoteStore</span><span class="o">::</span><span class="no">NoteStore</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">noteStoreProtocol</span><span class="p">)</span></code></pre></div>
+<p>で、最後にNoteStoreを作成する。shardIdを指定する必要がある。shardIdは何かっていうと…。</p>
+
+<blockquote>
+<p>The name of the virtual server that manages the state of this user. This value is used internally to determine which system should service requests about this user&rsquo;s data. It is also used to construct the appropriate URL to make requests from the NoteStore.</p>
+</blockquote>
+
+<p>ユーザ状態を管理する仮想サーバ名？</p>
+
+<h2 id="ノートブックを取得していく">ノートブックを取得していく。</h2>
+
+<p>準備はできたのでノートブックを取得していく。今のEvernote(砂場)の構造はこう。</p>
+
+<p>[f:id:kk_Ataka:20111225163340j:image]</p>
+
+<p>それに対して全ノートを取得してくるとこんな感じ。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="vi">@e</span> <span class="o">=</span> <span class="no">MyEvernote</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+<span class="c1"># 全ノートブックを取得</span>
+<span class="n">pp</span> <span class="vi">@e</span><span class="o">.</span><span class="n">getNotebooks</span><span class="p">()</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">  <span class="c1"># 全ノートブックを取得する</span>
+  <span class="k">def</span> <span class="nf">getNotebooks</span><span class="p">()</span>
+    <span class="vi">@noteStore</span><span class="o">.</span><span class="n">listNotebooks</span><span class="p">(</span><span class="vi">@token</span><span class="p">)</span>
+  <span class="k">end</span></code></pre></div>
+<p>全ノートブックはNoteStore.listNotebooks(authenticationToken)で取得する事ができる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="o">[&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">Notebook</span> <span class="ss">guid</span><span class="p">:</span><span class="s2">&#34;2d8ec8b5-5706-434d-a1dc-4ea0c6ba1993&#34;</span><span class="p">,</span> <span class="nb">name</span><span class="ss">:&#34;Wait&#34;</span><span class="p">,</span> <span class="ss">updateSequenceNum</span><span class="p">:</span><span class="mi">745</span><span class="p">,</span> <span class="ss">defaultNotebook</span><span class="p">:</span><span class="kp">false</span><span class="p">,</span> <span class="ss">serviceCreated</span><span class="p">:</span><span class="mi">1312818684000</span><span class="p">,</span> <span class="ss">serviceUpdated</span><span class="p">:</span><span class="mi">1324051378000</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">Notebook</span> <span class="ss">guid</span><span class="p">:</span><span class="s2">&#34;33880e53-4c9f-4104-a6e6-777ed1e3cef2&#34;</span><span class="p">,</span> <span class="nb">name</span><span class="ss">:&#34;Sandbox&#34;</span><span class="p">,</span> <span class="ss">updateSequenceNum</span><span class="p">:</span><span class="mi">871</span><span class="p">,</span> <span class="ss">defaultNotebook</span><span class="p">:</span><span class="kp">true</span><span class="p">,</span> <span class="ss">serviceCreated</span><span class="p">:</span><span class="mi">1309536176000</span><span class="p">,</span> <span class="ss">serviceUpdated</span><span class="p">:</span><span class="mi">1324051378000</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">Notebook</span> <span class="ss">guid</span><span class="p">:</span><span class="s2">&#34;71cdd6f9-5070-4508-bc80-a3f835a61a55&#34;</span><span class="p">,</span> <span class="nb">name</span><span class="ss">:&#34;UpDeleteNotebook&#34;</span><span class="p">,</span> <span class="ss">updateSequenceNum</span><span class="p">:</span><span class="mi">1468</span><span class="p">,</span> <span class="ss">defaultNotebook</span><span class="p">:</span><span class="kp">false</span><span class="p">,</span> <span class="ss">serviceCreated</span><span class="p">:</span><span class="mi">1324099155000</span><span class="p">,</span> <span class="ss">serviceUpdated</span><span class="p">:</span><span class="mi">1324099155000</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">Notebook</span> <span class="ss">guid</span><span class="p">:</span><span class="s2">&#34;450b52e6-2daa-4b04-9012-4623a8e12ef5&#34;</span><span class="p">,</span> <span class="nb">name</span><span class="ss">:&#34;TestNotebook&#34;</span><span class="p">,</span> <span class="ss">updateSequenceNum</span><span class="p">:</span><span class="mi">1469</span><span class="p">,</span> <span class="ss">defaultNotebook</span><span class="p">:</span><span class="kp">false</span><span class="p">,</span> <span class="ss">serviceCreated</span><span class="p">:</span><span class="mi">1324099138000</span><span class="p">,</span> <span class="ss">serviceUpdated</span><span class="p">:</span><span class="mi">1324099166000</span><span class="o">&gt;]</span></code></pre></div>
+<p>おお、取れた！</p>
+
+<p>nameは文字通りノートブック名。defaultNoteBookはデフォルトの設定true|false。以下略。guid(globally unique identifier)は、ノートブック、ノート、タグなどに対して振られる一意のID。フォーマットはこんな感じ。[3]</p>
+<div class="highlight"><pre class="chroma">^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$</pre></div>
+<p>GUIDがわかれば、特定のノートブックを引っ張ってくる事もできる。例えばGUID: 450b52e6-2daa-4b04-9012-4623a8e12ef5がTestNotebookなので…。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">    <span class="vi">@e</span> <span class="o">=</span> <span class="no">MyEvernote</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+    <span class="vi">@NotebookGuid</span> <span class="o">=</span> <span class="s1">&#39;450b52e6-2daa-4b04-9012-4623a8e12ef5&#39;</span>
+    <span class="c1"># 特定のノートブックを取得</span>
+    <span class="n">pp</span> <span class="vi">@e</span><span class="o">.</span><span class="n">getNotebook</span><span class="p">(</span><span class="vi">@NotebookGuid</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">pp</span> <span class="vi">@e</span><span class="o">.</span><span class="n">getNotebook</span><span class="p">(</span><span class="vi">@NotebookGuid</span><span class="p">)</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">getNotebook</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">isGuid</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">then</span>
+      <span class="c1"># GUIDから検索</span>
+      <span class="k">return</span> <span class="vi">@noteStore</span><span class="o">.</span><span class="n">getNotebook</span><span class="p">(</span><span class="vi">@token</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="s2">&#34;TestNotebook&#34;</span>
+<span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">Notebook</span> <span class="ss">guid</span><span class="p">:</span><span class="s2">&#34;450b52e6-2daa-4b04-9012-4623a8e12ef5&#34;</span><span class="p">,</span> <span class="nb">name</span><span class="ss">:&#34;TestNotebook&#34;</span><span class="p">,</span> <span class="ss">updateSequenceNum</span><span class="p">:</span><span class="mi">1469</span><span class="p">,</span> <span class="ss">defaultNotebook</span><span class="p">:</span><span class="kp">false</span><span class="p">,</span> <span class="ss">serviceCreated</span><span class="p">:</span><span class="mi">1324099138000</span><span class="p">,</span> <span class="ss">serviceUpdated</span><span class="p">:</span><span class="mi">1324099166000</span><span class="o">&gt;</span></code></pre></div>
+<p>TestNotebookが取れた！</p>
+
+<p>さらにfilterをかける事でノートブック内から特定のノートを取得できる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="vi">@e</span> <span class="o">=</span> <span class="no">MyEvernote</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+<span class="vi">@NotebookGuid</span> <span class="o">=</span> <span class="s1">&#39;450b52e6-2daa-4b04-9012-4623a8e12ef5&#39;</span>
+<span class="c1"># ノートブック内のノートを取得</span>
+<span class="n">pp</span> <span class="vi">@e</span><span class="o">.</span><span class="n">getNote</span><span class="p">(</span><span class="vi">@NotebookGuid</span><span class="p">)</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">getNote</span><span class="p">(</span><span class="n">notebookGuid</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">filter</span> <span class="o">=</span> <span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">NoteStore</span><span class="o">::</span><span class="no">NoteFilter</span><span class="o">.</span><span class="n">new</span>
+    <span class="n">filter</span><span class="o">.</span><span class="n">notebookGuid</span> <span class="o">=</span> <span class="n">notebookGuid</span>
+    <span class="vi">@noteStore</span><span class="o">.</span><span class="n">findNotes</span><span class="p">(</span><span class="vi">@token</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+  <span class="k">end</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">NoteStore</span><span class="o">::</span><span class="no">NoteList</span> <span class="ss">startIndex</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="ss">totalNotes</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> 
+  <span class="ss">notes</span><span class="p">:</span><span class="o">[</span>
+    <span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">Note</span> <span class="ss">guid</span><span class="p">:</span><span class="s2">&#34;fa05f909-97d3-4504-8015-125fb026c8be&#34;</span><span class="p">,</span> 
+      <span class="ss">title</span><span class="p">:</span><span class="s2">&#34;Images&#34;</span><span class="p">,</span> <span class="ss">contentHash</span><span class="p">:</span><span class="mi">6</span><span class="n">dd62d0a9b187cbea4350b1ada8fda74</span><span class="p">,</span> <span class="ss">contentLength</span><span class="p">:</span><span class="mi">1200</span><span class="p">,</span>
+      <span class="ss">created</span><span class="p">:</span><span class="mi">1324099541000</span><span class="p">,</span> <span class="ss">updated</span><span class="p">:</span><span class="mi">1324099550000</span><span class="p">,</span> <span class="ss">active</span><span class="p">:</span><span class="kp">true</span><span class="p">,</span> <span class="ss">updateSequenceNum</span><span class="p">:</span><span class="mi">1473</span><span class="p">,</span>
+      <span class="ss">notebookGuid</span><span class="p">:</span><span class="s2">&#34;450b52e6-2daa-4b04-9012-4623a8e12ef5&#34;</span><span class="p">,</span>
+      <span class="ss">resources</span><span class="p">:</span><span class="o">[&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">Resource</span> <span class="ss">guid</span><span class="p">:</span><span class="s2">&#34;536abe91-3ad3-48f6-8add-9fbcad7b95ab&#34;</span><span class="p">,</span> 
+      <span class="ss">noteGuid</span><span class="p">:</span><span class="s2">&#34;fa05f909-97d3-4504-8015-125fb026c8be&#34;</span><span class="p">,</span> 
+      <span class="ss">data</span><span class="p">:</span><span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">Data</span> <span class="ss">bodyHash</span><span class="p">:</span><span class="mi">203</span><span class="n">b77ab9cb177e5406340445b64e78c</span><span class="p">,</span> <span class="ss">size</span><span class="p">:</span><span class="mi">2044</span><span class="o">&gt;</span><span class="p">,</span> 
+      <span class="ss">mime</span><span class="p">:</span><span class="s2">&#34;image/jpeg&#34;</span><span class="p">,</span> <span class="ss">width</span><span class="p">:</span><span class="mi">64</span><span class="p">,</span> <span class="ss">height</span><span class="p">:</span><span class="mi">64</span><span class="p">,</span> <span class="ss">active</span><span class="p">:</span><span class="kp">true</span><span class="p">,</span> 
+      <span class="ss">recognition</span><span class="p">:</span><span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">Data</span> <span class="ss">bodyHash</span><span class="p">:</span><span class="mi">68</span><span class="n">b3bd35f22b01ac57e55e7a7974ed8d</span><span class="p">,</span> <span class="ss">size</span><span class="p">:</span><span class="mi">533</span><span class="o">&gt;</span><span class="p">,</span> 
+      <span class="ss">attributes</span><span class="p">:</span><span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">ResourceAttributes</span> <span class="o">&gt;</span><span class="p">,</span> <span class="ss">updateSequenceNum</span><span class="p">:</span><span class="mi">1476</span><span class="o">&gt;</span><span class="p">,</span> 
+      <span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">Resource</span> <span class="ss">guid</span><span class="p">:</span><span class="s2">&#34;8c329667-4c20-4e0a-a291-e437baf99f2d&#34;</span><span class="p">,</span> 
+      <span class="ss">noteGuid</span><span class="p">:</span><span class="s2">&#34;fa05f909-97d3-4504-8015-125fb026c8be&#34;</span><span class="p">,</span> 
+      <span class="ss">data</span><span class="p">:</span><span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">Data</span> <span class="ss">bodyHash</span><span class="p">:</span><span class="n">b1bdcdc515d937fb3e16a1e654abfffb</span><span class="p">,</span> <span class="ss">size</span><span class="p">:</span><span class="mi">453</span><span class="o">&gt;</span><span class="p">,</span>
+      <span class="ss">mime</span><span class="p">:</span><span class="s2">&#34;image/png&#34;</span><span class="p">,</span> <span class="ss">width</span><span class="p">:</span><span class="mi">14</span><span class="p">,</span> <span class="ss">height</span><span class="p">:</span><span class="mi">13</span><span class="p">,</span> <span class="ss">active</span><span class="p">:</span><span class="kp">true</span><span class="p">,</span> 
+      <span class="ss">attributes</span><span class="p">:</span><span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">ResourceAttributes</span> <span class="o">&gt;</span><span class="p">,</span> <span class="ss">updateSequenceNum</span><span class="p">:</span><span class="mi">1474</span><span class="o">&gt;]</span><span class="p">,</span> 
+      <span class="ss">attributes</span><span class="p">:</span><span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">NoteAttributes</span> <span class="ss">sourceURL</span><span class="p">:</span><span class="s2">&#34;http://google.com&#34;</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+    <span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">Note</span> <span class="ss">guid</span><span class="p">:</span><span class="s2">&#34;19c20dac-6d90-4e8c-bbf9-f11450416c48&#34;</span><span class="p">,</span> <span class="ss">title</span><span class="p">:</span><span class="s2">&#34;TestNote&#34;</span><span class="p">,</span> 
+      <span class="ss">contentHash</span><span class="p">:</span><span class="mi">401</span><span class="n">df83bfdb6fd1f152c4d226fa1d0b6</span><span class="p">,</span> <span class="ss">contentLength</span><span class="p">:</span><span class="mi">189</span><span class="p">,</span> <span class="ss">created</span><span class="p">:</span><span class="mi">1324099587000</span><span class="p">,</span> 
+      <span class="ss">updated</span><span class="p">:</span><span class="mi">1324099587000</span><span class="p">,</span> <span class="ss">active</span><span class="p">:</span><span class="kp">true</span><span class="p">,</span> <span class="ss">updateSequenceNum</span><span class="p">:</span><span class="mi">1477</span><span class="p">,</span> 
+      <span class="ss">notebookGuid</span><span class="p">:</span><span class="s2">&#34;450b52e6-2daa-4b04-9012-4623a8e12ef5&#34;</span><span class="p">,</span> 
+      <span class="ss">attributes</span><span class="p">:</span><span class="o">&lt;</span><span class="no">Evernote</span><span class="o">::</span><span class="no">EDAM</span><span class="o">::</span><span class="no">Type</span><span class="o">::</span><span class="no">NoteAttributes</span> <span class="o">&gt;&gt;]</span><span class="p">,</span> <span class="ss">updateCount</span><span class="p">:</span><span class="mi">1477</span><span class="o">&gt;</span></code></pre></div>
+<h2 id="終わりに">終わりに</h2>
+
+<p>という事で、EvernoteAPI登録からノート取得までをする事ができました。もっと画像をアップしたりタグ埋め込んだりもできるのですが、それはこれから学んでいくという事で。</p>
+
+<h2 id="参考サイト-兼自分で調べる用">参考サイト、兼自分で調べる用</h2>
+
+<h3 id="thrift">Thrift</h3>
+
+<ul>
+<li><a href="http://blog.broomie.net/index.cgi?id=36:title">http://blog.broomie.net/index.cgi?id=36:title</a></li>
+<li><a href="http://www.atmarkit.co.jp/news/200704/03/thrift.html:title">http://www.atmarkit.co.jp/news/200704/03/thrift.html:title</a></li>
+</ul>
+
+<h3 id="edam-evernote-data-access-and-management">EDAM(Evernote Data Access and Management)</h3>
+
+<ul>
+<li><a href="http://d.hatena.ne.jp/soutaro/20110910/1315645433:title">http://d.hatena.ne.jp/soutaro/20110910/1315645433:title</a></li>
+</ul>
+
+<h3 id="userstoreとは">UserStoreとは</h3>
+
+<blockquote>
+<p>The UserStore service is primarily used by EDAM clients to establish authentication via username and password over a trusted connection (e.g. SSL). A client&rsquo;s first call to this interface should be checkVersion() to ensure that the client&rsquo;s software is up to date.</p>
+</blockquote>
+
+<p>ユーザ名やパスワードを信頼された接続上で認証するためEDAMクライアントで利用される。はじめにcheckVersion()メソッドを呼び、クライアントのソフトのバージョンが最新である事を保障すべき。</p>
+
+<h3 id="notestoreとは">NoteStoreとは</h3>
+
+<blockquote>
+<p>The NoteStore service is used by EDAM clients to exchange information about the collection of notes in an account. This is primarily used for synchronization, but could also be used by a &ldquo;thin&rdquo; client without a full local cache.</p>
+
+<p>All functions take an &ldquo;authenticationToken&rdquo; parameter, which is the value returned by the UserStore which permits access to the account. This parameter is mandatory for all functions.</p>
+</blockquote>
+
+<p>アカウントのノート収集情報を交換、同期するためEDAMクライアントで利用される。(ローカルキャッシュのない新クライアントでも使われた)全ての機能はauthenticationTokenのパラメータを使用する。これはアクセス認証が通ったアカウントのUserStoreの値を使用する。</p>
+
+<p>[1] requireがファイルを読み込むときに検索するディレクトリの名前を含む配列 - たのしいRuby 第三版 P373</p>
+
+<p>[2] キャメルケースを多用してる…？　と思ったけど、xxx_yyyZzzzみたいなメソッドもあるなあ。どっちにあわせれば…</p>
+
+<p>[3] Evernote::EDAM::Limits::EDAM_GUID_REGEX</p>
+
+    </section>
+  </article>
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2011/12/26/1324910284/" class="pagination_overflow previous_page">
+          Prev: 
+          11/12/26
           SinatraでHaml入門
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2011/12/28/1325118790/" title="2011年KPT">
+      
+
+      <span class="pagination_center disabled">
+        11/12/27
+        Evern …
+      </span>
+
+      
+        <a href="/2011/12/28/1325118790/" class="pagination_overflow next_page">
+          Next: 
+          11/12/28
           2011年KPT
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2011/12/27/1324911671/" data-text="kk_Atakaの日記 - EvernoteのAPIをRubyから叩きたい" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/27/1324911671/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/12/27/1324911671/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/12/27/1324911671/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - EvernoteのAPIをRubyから叩きたい"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+      </div>
 
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/12/27/1324911671//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-  <h2>Recent Entries</h2>
 
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#evernote-備忘録-ruby-api-evernoteのapiをrubyから叩きたい">[Evernote][備忘録][Ruby][API]EvernoteのAPIをRubyから叩きたい</a></li>
+<li><a href="#はじめに">はじめに</a></li>
+<li><a href="#apiの申請-の前に">APIの申請…の前に</a></li>
+<li><a href="#apiの申請">APIの申請</a></li>
+<li><a href="#activate">Activate</a></li>
+<li><a href="#ソース">ソース</a></li>
+<li><a href="#パス追加">パス追加</a></li>
+<li><a href="#初期化">初期化</a>
+<ul>
+<li><a href="#流れ">流れ</a></li>
+<li><a href="#パスワードなどの情報を取得する">パスワードなどの情報を取得する</a></li>
+<li><a href="#userstore作成">UserStore作成</a></li>
+<li><a href="#認証">認証</a></li>
+<li><a href="#notestore作成">NoteStore作成</a></li>
+</ul></li>
+<li><a href="#ノートブックを取得していく">ノートブックを取得していく。</a></li>
+<li><a href="#終わりに">終わりに</a></li>
+<li><a href="#参考サイト-兼自分で調べる用">参考サイト、兼自分で調べる用</a>
+<ul>
+<li><a href="#thrift">Thrift</a></li>
+<li><a href="#edam-evernote-data-access-and-management">EDAM(Evernote Data Access and Management)</a></li>
+<li><a href="#userstoreとは">UserStoreとは</a></li>
+<li><a href="#notestoreとは">NoteStoreとは</a></li>
+</ul></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

@@ -1,0 +1,1117 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>備忘録 on kk_Atakaの日記</title>
+    <link>/tags/%E5%82%99%E5%BF%98%E9%8C%B2/</link>
+    <description>Recent content in 備忘録 on kk_Atakaの日記</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>jp</language>
+    <lastBuildDate>Mon, 30 Mar 2009 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/%E5%82%99%E5%BF%98%E9%8C%B2/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…</title>
+      <link>/2012/09/13/1347508570/</link>
+      <pubDate>Thu, 13 Sep 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/09/13/1347508570/</guid>
+      <description>[Ruby][備忘録][Fluentd]Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる… あらすじ [http://d.hatena.ne.jp/kk_Ataka/20120817/1345209899:title=前回]までに簡単なプラグインを作成する事はできた。
+次はプラグインをGem化しようかなと思って色々いじってたら、実行時になんかうまくプラグインが読めない……。なんで？
+参考サイト  [https://github.com/fluent/fluentd:title] http://d.hatena.ne.jp/tagomoris/20120715/1342368392:title http://blog.ksauzz.com/?p=37:title  今できてる事とできてない事 BundlerでFluentdをインストールし、
+$ bundle exec fluentd -c /hoge/fluent.conf -p /hoge/plugin  を実行した時……
+ gem installで入れたfluentdのプラグインはちゃんとロードできる  Gemにしちゃえばロードできる  プラグインディレクトリ直下(-p /hoge/plugin)にササッと作ってみたプラグインもロードでき、動いた  直下に放り込めばロードできる   /hoge/plugin └in_hoge.rb # これはロードできる  gem未満、ササッと作った以上のプラグインがロードできない  fluent-pluginっぽいディレクトリ構成にした程度のもの。まだローカルに置いてあるだけでgemには成り切れていない   /hoge/plugin ├in_hoge.rb # これはロードできる └fluent-plugin-hogehoge ├lib │└fluent │　└plugin │　└in_hogehoge.rb # これがロードできない ├fluent-plugin-hogehoge.gemspec └他 調査結果と(暫定)解決策 fluentdのプラグインロード順番 fluentdコマンドを実行すると、 なんやかんやあって プラグインをロードしにいく。ソースは$FLUENTD_HOME/lib/fluent/plugin.rb
+ $FLUENTD_HOME/lib/fluent/plugin/直下のrbファイルをロードする  in_exec.rbとか  gem_pluginをロードする  これは今回空だった  /etc/fluent/plugin/直下のrbファイルをロードする  デフォルトのプラグイン置き場 デフォルトの設定は$FLUENTD_HOME/lib/fluent/env.</description>
+    </item>
+    
+    <item>
+      <title>Git add, commitをした時、中でどんな事が起こっているのか</title>
+      <link>/2012/08/29/1346242547/</link>
+      <pubDate>Wed, 29 Aug 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/08/29/1346242547/</guid>
+      <description>[Git][備忘録]Git add, commitをした時、中でどんな事が起こっているのか あらすじ いまだにファイルがどういうタイミングでリポジトリ、インデックス、ワーキングエリア間を行き来しているのかわからんので色々調べてみることに。
+参考資料、サイト  実用Git http://www8.atwiki.jp/git_jp/pub/Documentation.ja/tutorial-2.html:title http://keijinsonyaban.blogspot.jp/2011/05/git.html:title http://git-scm.com/book/ja/Git%E3%81%AE%E5%86%85%E5%81%B4-Git%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88:title  やってみる まずは、空のREADMEファイルを作ってFirst commit。
+$ git init Initialized empty Git repository in /tmp/repos/.git/ $ touch README $ git add README $ git commit -m &amp;#34;first commit&amp;#34; [master (root-commit) b0d99b3] first commit 0 files changed create mode 100644 README $ git log --graph --date-order --all --date=short -C -M --pretty=format:&amp;#34;%h&amp;#34;\ %t\ %ad\ %Cblue%cn%Creset\ %Cgreen%d%Creset\ %s * b0d99b3 543b9be 2012-08-29 kk_Ataka (HEAD, master) first commit 色々確認 ※確認スクリプト</description>
+    </item>
+    
+    <item>
+      <title>Fluentdのプラグインを作成してみる(練習用)</title>
+      <link>/2012/08/17/1345209899/</link>
+      <pubDate>Fri, 17 Aug 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/08/17/1345209899/</guid>
+      <description>[Fluentd][備忘録][Ruby]Fluentdのプラグインを作成してみる(練習用) 前回までのあらすじ http://d.hatena.ne.jp/kk_Ataka/20120712/1342098141:title で、confファイルのコメントアウトを外してとりあえず動くっていうところまではいけた。今度は簡単なプラグインを作ってみる。
+参考サイト  http://fluentd.org/doc/:title http://d.hatena.ne.jp/erukiti/20120205/1328452455:title http://d.hatena.ne.jp/tagomoris/20120221/1329815126:title  ひたすら何かを吐き続けるプラグイン Inputプラグインの場合 Fluent::Inputクラスを継承する。
+class SimpleInput &amp;lt; Fluent::Input # 第一引数がプラグインの名前、&amp;lt;source&amp;gt; typeに指定される Fluent::Plugin.register_input(&amp;#34;simple_in&amp;#34;, self) def start @thread = Thread.new(&amp;amp;method(:run)) end def run loop do # emitメソッドの第一引数が &amp;lt;match **.**&amp;gt; の**に該当すればその形式で出力される # fluent.confでdebug.**はstdoutで出力すると定義されている Fluent::Engine.emit(&amp;#34;debug.debug&amp;#34;, Fluent::Engine.now, {&amp;#34;simple&amp;#34; =&amp;gt; &amp;#34;debudebu&amp;#34;}) # fluent.confに&amp;lt;match simple.output&amp;gt; type simple_outを定義したので、以下のOutput形式で出力される Fluent::Engine.emit(&amp;#34;simple.output&amp;#34;, Fluent::Engine.now, {&amp;#34;simple&amp;#34; =&amp;gt; &amp;#34;simout&amp;#34;}) sleep(1) end end end 上のソースには書かれていないけど、他にもメソッドがいくつか。(公式サイトより)
+ configure メソッド  スタート前に呼び出される confハッシュにパラメータを入れられる？ エラーはFluent::ConfigErrorを投げる  start メソッド  スタート時に呼ばれる ここでスレッドを作ったりファイルをオープンしたり  shutdown メソッド  シャットダウン時に呼ばれる スレッドやファイルのクローズはここで。  イベントをsubmitするためにはFluent::Engine.</description>
+    </item>
+    
+    <item>
+      <title>Sphinxの見出しについて学びなおし</title>
+      <link>/2012/08/16/1345124098/</link>
+      <pubDate>Thu, 16 Aug 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/08/16/1345124098/</guid>
+      <description>[備忘録][reST][Sphinx]Sphinxの見出しについて学びなおし 前回までのあらすじ  [http://d.hatena.ne.jp/kk_Ataka/20111202/1322839748:title]で見出しの理解が間違っている事をSphinx 初心者 さんに教えてもらった もう一度ドキュメントを見なおしてみる事に  参考サイト  http://sphinx.shibu.jp/rest.html#id9:title http://docutils.sourceforge.net/docs/user/rst/quickstart.html#sections:title  見出し周辺を読み直し  セクションのヘッダは、セクションのタイトルを句読点などの記号の文字でアンダーラインを引くことで設定します。必要に応じてでオーバーラインも併用することができます。
+使用していない種類のアンダーラインが出てくると、見出しのレベルが一段変わる、というルールになっています。
+. These are a single line of text (one or more words) with adornment: an underline alone, or an underline and an overline together, in dashes &amp;ldquo;&amp;mdash;&amp;ndash;&amp;rdquo;, equals &amp;ldquo;======&amp;rdquo;, tildes &amp;ldquo;~~~~~~&amp;rdquo; or any of the non-alphanumeric characters = - ` : &amp;lsquo; &amp;ldquo; ~ ^ _ * + # &amp;lt; &amp;gt; that you feel comfortable with.</description>
+    </item>
+    
+    <item>
+      <title>Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり)</title>
+      <link>/2012/07/17/1342535044/</link>
+      <pubDate>Tue, 17 Jul 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/07/17/1342535044/</guid>
+      <description>[Ruby][備忘録][Windows][Redmine]Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり) あらすじ タイトル通り、サービスに登録してよろしく起動してほしい。mongrelを使えばサービスから起動できる……らしいが、名前は聞いたことあるけど、mongrelが何かは知らない……。
+ Ruby + C(拡張ライブラリ) で書かれた httpd。
+http://d.hatena.ne.jp/keyword/mongrel
+ なるほど。
+環境  Windows XP Ruby 1.9.3  Bundler 1.0.21 Mongrel 1.2.0.pre2  Redmine 1.4  手順 前提  Redmineの環境構築が完了している事  bundle exec ruby script/server -e production で起動できる事   インストールから起動まで  まずはRedmineデフォルトのGemfileにmongrelを追加し、bundle install  gem &amp;#34;mongrel&amp;#34; $ bundle install Fetching source index for http://rubygems.org/ Using rake (0.9.2.2) Using activesupport (2.3.14) Using rack (1.1.3) Using actionpack (2.3.14) Using actionmailer (2.</description>
+    </item>
+    
+    <item>
+      <title>Fluentdというログ収集ツールを使ってApacheのログを取得するまで</title>
+      <link>/2012/07/12/1342098141/</link>
+      <pubDate>Thu, 12 Jul 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/07/12/1342098141/</guid>
+      <description>[Fluentd][備忘録][Ruby]Fluentdというログ収集ツールを使ってApacheのログを取得するまで あらすじ  Twitterで@[https://twitter.com/tosikawa:title=tosikawa]さんにこんなツールあるよ、と教えてもらった …が、未見だったためすぐググる とりあえずどんなものか動かしてみる事に  Fluentdとは  Log everything in JSON
+http://fluentd.org/
+ Oh&amp;hellip;シンプルイズベスト…。
+ Fluentd is a log collector daemon written in Ruby. Fluentd receives logs as JSON streams, buffers them, and sends them to other systems like MySQL, MongoDB, or even other instances of Fluentd.
+ Rubyで作られたログ収集ツール。ただし、JSONで……？
+参考サイト  http://fluentd.org/:title  公式のDocumentationがSphinx  http://d.hatena.ne.jp/viver/20110929:title http://d.hatena.ne.jp/wyukawa/20120207/1328625443:title http://d.hatena.ne.jp/zakihaya/20120616/1339856226:title http://d.hatena.ne.jp/fat47/20120426/1335428063:title http://shinobra.com/2012/02/sawanoboly/gluent_getting_start:title  環境  CentOS 6.2 Ruby 1.9.3 RubyGems 1.</description>
+    </item>
+    
+    <item>
+      <title>JenkinsでAdmin権限を持つユーザのパスワードを全て忘れた時の復旧方法</title>
+      <link>/2012/06/19/1340106125/</link>
+      <pubDate>Tue, 19 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/06/19/1340106125/</guid>
+      <description>[Jenkins][備忘録]JenkinsでAdmin権限を持つユーザのパスワードを全て忘れた時の復旧方法 あらすじ  ローカルで動かしているJenkinsでAdministrator権限を持っているユーザ、およびそのパスワードを忘れたので、色々な事ができなくなった また、Administrator権限を持つユーザがいない = Jenkinsの管理画面が開けなくなった事で権限復旧もできなくなった  環境  Windows XP Jenkins 1.470  ユーザ情報: Jenkinsのユーザデータベース 権限管理: 行列による権限設定 ローカルで運用している JenkinsはWindowsサービスに登録している   原因と解決手順 気づき  プラグインを入れようと思ったら、なんでかJenkinsの管理リンクが見当たらなくなった 管理画面のアドレスは /manage なので直にアクセスしてみる Firefoxだとこんなエラーが出た[1]  ！　内容符号化 (Content-Encoding) に問題があります 不正または不明な形式で圧縮されているため、ページを表示できません。 ・この問題を Web サイトの管理者に報告してください。 [再試行]  試しにChromeでもやってみたがこう  このウェブページにアクセスできません http://localhost:8080/manage のウェブページは一時的に停止しているか、 新しい http://localhost:8080/manage に移動した可能性があります。 エラー 330 (net::ERR_CONTENT_DECODING_FAILED): 不明なエラーです。  まさかのIE6。ログイン画面からレイアウト崩れてて(さすがにサポートしてないよなぁ)とか思いつつアクセスすると…  アクセスできません kk_Ataka には、Administer パーミッションがありません。 なんだと！？　…でも管理画面にいけないんだから、権限も振れないよ。どうしよう。
+解決策  とりあえず、Jenkinsのディレクトリをユーザ名(kk_Atakaなど)で検索してみた…[2] すると引っかかったのはJenkinsのルートにある config.xml と大量の build.</description>
+    </item>
+    
+    <item>
+      <title>Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編</title>
+      <link>/2012/04/24/1335270486/</link>
+      <pubDate>Tue, 24 Apr 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/04/24/1335270486/</guid>
+      <description>[Git][Windows][備忘録]Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640:title http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title http://d.hatena.ne.jp/kk_Ataka/20120315/1331816663:title http://d.hatena.ne.jp/kk_Ataka/20120410/1334058674:title http://d.hatena.ne.jp/kk_Ataka/20120423/1335185906:title  参考  http://progit.org/:title 入門Git 入門git 実用Git  無名ブランチ(detached HEAD)とは 要約すると「過去のコミットの状態を眺めるための&amp;rdquo;便利機能&amp;rdquo;なのでここに永続的な変更をするなんてとんでもない！」という事らしい。
+無名ブランチ状態で作業するとどうなるか ちょっと「ブランチにいると思いこんだまま無名ブランチで作業し、さーてmasterブランチに戻ってmergeするかぁ……はぁ！？」な状況を作り出してみる。
+まずは無名ブランチの準備としてnobraブランチを作る。(これ以降の作業は、本当はnobraブランチでやっていきたいと思っている)
+$ git checkout -b nobra Switched to a new branch &amp;#39;nobra&amp;#39; $ touch nobra $ git add nobra $ git commit -m &amp;#34;Add nobra&amp;#34; [nobra d62e4cb] Add nobra 0 files changed, 0 insertions(+), 0 deletions(-) create mode 100644 nobra $ git g * d62e4cb (HEAD, nobra, master) Add nobra * 7ab5db8 (topic) Add message line 3 * cf6c3d6 Add message line 2 * 38f8aff Add message line 1 * 93b8e52 Add message line 4 * 0b91a9f Add message line 5 * 15f636f Add line number * fa9eabc first commit $ git br master d62e4cb Add nobra * nobra d62e4cb Add nobra topic 7ab5db8 Add message line 3 次に、このnobraブランチのSHA1を指定してcheckoutする。</description>
+    </item>
+    
+    <item>
+      <title>Pro Gitと入門Gitと入門gitと実用GitとGit道場#1でGitの復習 rebase編</title>
+      <link>/2012/04/23/1335185906/</link>
+      <pubDate>Mon, 23 Apr 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/04/23/1335185906/</guid>
+      <description>[Git][備忘録][Windows]Pro Gitと入門Gitと入門gitと実用GitとGit道場#1でGitの復習 rebase編 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640:title http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title http://d.hatena.ne.jp/kk_Ataka/20120315/1331816663:title http://d.hatena.ne.jp/kk_Ataka/20120410/1334058674:title   http://d.hatena.ne.jp/kk_Ataka/20120422/1335108555:title  参考  http://progit.org/:title 入門Git 入門git 実用Git New !! Git道場#1 講義 http://speakerdeck.com/u/ogawa/p/git New !!  rebaseとは  入門git P126
+土台の置き換え(リベース)にはgit rebaseコマンドを使う。
+実用Git P176
+一連のコミットのもととなるもの(基点)を変更する際に使います。
+Git道場 講義
+コミットをかぶせる事[1]
+ コミットの基を変更すると。
+パターン1 一般的な？場合(前方移植(forward-port)) Git道場で繰り返したパターンに近いかな。こういうブランチを作る。
+1---2---3(topic) / A---B---C---D(master) まずは1-5行目にそれぞれ1-5と入力したファイルを用意。
+$ touch num $ git add num $ git commit -am&amp;#34;first commit&amp;#34; [master (root-commit) fa9eabc] first commit 0 files changed, 0 insertions(+), 0 deletions(-) create mode 100644 num $ vi num $ cat num $ git commit -am &amp;#34;Add line number&amp;#34; [master 15f636f] Add line number 1 files changed, 5 insertions(+), 0 deletions(-) $ git g * 15f636f (HEAD, master) Add line number * fa9eabc first commit 次にtopicブランチを作成しを育てる。</description>
+    </item>
+    
+    <item>
+      <title>ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした</title>
+      <link>/2012/04/20/1334933158/</link>
+      <pubDate>Fri, 20 Apr 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/04/20/1334933158/</guid>
+      <description>[Ruby][Windows][備忘録]ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20111207/1323291938:title  前回は、ファイル編集する -&amp;gt; alt+tabでウィンドウ切り替える -&amp;gt; プロンプトでrspecコマンドうつ…の繰り返しを改善することができた。
+今回は、コード修正、保存 -&amp;gt; 違うターミナル切り替え -&amp;gt; ZenTestで自動実行された結果を見る…の繰り返しを改善する。テスト結果通知にGrowlを使用する事でいけそう。
+参考サイト  http://d.hatena.ne.jp/gan2/20080413/1208081539:title http://www.edit.ne.jp/~koic/?date=20070731:title http://d.hatena.ne.jp/amacou/20090606/1244260607:title [https://github.com/rspec/rspec/wiki/autotest:title] http://blog.masashi-fujiwara.net/2010/11/script-test.html:title [https://github.com/karl/autotest-growl:title] http://rubyist.g.hatena.ne.jp/rochefort/20100414/p1:title http://d.hatena.ne.jp/zariganitosh/20080312/1205305079:title http://blog.champierre.com/774:title  環境  Windows XP Ruby 1.9.3  Rubygems 1.8.11 Bundler 1.0.21 ZenTest 4.6.2 autotest-growl 0.2.16(だったか？) rspec 2.8.0  Growl for Windows 2.0.9  Macに置き換えてもいけるかは後で確認。
+手順 Growls for Windowsインストール  http://www.growlforwindows.com/gfw/displays.aspx:title ここから落とす。  Gem入手  Gemfileファイルを作って以下のgemファイルを記載  gem &amp;#39;ZenTest&amp;#39; gem &amp;#39;autotest-growl&amp;#39;  bundle install  .</description>
+    </item>
+    
+    <item>
+      <title>Subversionで2ヶ所のリポジトリの同期を取るメモ</title>
+      <link>/2012/04/17/1334669770/</link>
+      <pubDate>Tue, 17 Apr 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/04/17/1334669770/</guid>
+      <description>[Solaris][備忘録][Subversion]Subversionで2ヶ所のリポジトリの同期を取るメモ 前回のあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120115/1326624864:title  参考サイト  http://www.asahi-net.or.jp/~iu9m-tcym/svndoc/svn_backup.html:title http://www.ilovex.co.jp/blog/system/other/subversion.html:title http://www.02.246.ne.jp/~torutk/subversion/intro.html:title http://d.hatena.ne.jp/pasela/20090206/svn_backup:title http://terai.xrea.jp/Subversion.html:title  前提  以下の二つのサーバがある  Aサーバ:開発を進んでいるリポジトリがある(r222) Bサーバ:これからAサーバのリポジトリと同期をとりたいリポジトリがある(r111)   差分のdumpとってload(失敗) Aサーバ  進んでいる分のダンプを取る。  rオプションでダンプを取るリビジョンを指定できる。一つだけだとそのリビジョンだけ。(222ならリビジョン222)範囲指定する場合はAAA:BBBとする   $ svnadmin dump リポジトリパス(/home/xxx/yyyなど) -r 111:222 --incremental &amp;gt; repo.dump  これをなんらかの方法でBサーバへ移動する(ftpでもUSBでも)  Bサーバ  svnadmin loadコマンドで差分ダンプファイルを流しこむ。  リビジョンがかぶっているとエラー(リビジョン111未満のもの)   $ svnadmin load リポジトリパス(/home/xxx/yyyなど) &amp;lt; repo.dump &amp;lt;&amp;lt;&amp;lt; オリジナルのリビジョン 111 に基づき、新しいトランザクションを開始しました * パスを追加しています : trunk/xxx ...svnadmin: ファイルが既に存在します: ファイルシステム &amp;#39;リポジトリパス&amp;#39;, トランザクション xxx-xx, パス &amp;#39;trunk/xxx&amp;#39;  - 112からダンプしたファイルをloadする…とうまくいく予定だったのだが、なんかファイルのチェックサムが違うといわれた……。  $ svnadmin load リポジトリパス(/home/xxx/yyyなど) &amp;lt; repo.</description>
+    </item>
+    
+    <item>
+      <title>Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編</title>
+      <link>/2012/04/10/1334058674/</link>
+      <pubDate>Tue, 10 Apr 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/04/10/1334058674/</guid>
+      <description>[Git][備忘録][Windows]Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640:title http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title http://d.hatena.ne.jp/kk_Ataka/20120315/1331816663:title  GitHubで他の人の.gitconfigとかを見たりすると、HEAD^とかHEAD~~とかにエイリアスが貼ってあるけど、これってなんなの？
+今の認識: 書いた分だけリビジョンが戻ってくれる程度
+参考  http://progit.org/:title 入門Git New !! 入門git  調査 入門Git P87 コミットの祖先の指定によると、
+   記法 意味     ^ 指定したコミットの1番目の親   ^番号 指定したコミットのN番目の親   ~ 指定したコミットの1世代前の親   ~世代 指定したコミットのN世代前の親    という事らしい……が、番目と世代は何が違うんだろう？　とりあえずこんな歴史があるとして、masterから戻ってみる。
+確認 * b467307 2012-04-05 kk_Ataka (HEAD, origin/master, master) Add get_sheetname.rb(convert exe file b | * b025b6b 2012-04-05 kk_Ataka (1.</description>
+    </item>
+    
+    <item>
+      <title>VimでBundler(プラグイン管理)するvundleインストール手順</title>
+      <link>/2012/04/05/1333553936/</link>
+      <pubDate>Thu, 05 Apr 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/04/05/1333553936/</guid>
+      <description>[Vim][備忘録]VimでBundler(プラグイン管理)するvundleインストール手順 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20111218/1324219740:title  普通に使っているだけだった。プラグインとかも使ってみたい、入れ方メモる。
+参考サイト  http://vim-users.jp/2011/04/hack215/:title [https://github.com/vim-jp/vimdoc-ja/:title]  環境  WindowsXP Vim 7.3 香り屋版 msysGit  プラグイン管理 プラグインを入れようと思った矢先、どうもプラグイン管理をするプラグイン？　がある模様。名前がvundleといって、RubyのGem管理に使われているBundlerに影響を受けたものみたい。Bundlerなら使ったことあるし、それなら入れやすいかも。
+vundleインストール [http://github.com/gmarik/vundle.git:title=Github]にリポジトリがあるのでgitでホームの.vimディレクトリにcloneする。
+$ git clone http://github.com/gmarik/vundle.git ~/.vim/vundle.git Cloning into %USERPROFILE%/.vim/vundle.git... remote: Counting objects: 2239, done. remote: Compressing objects: 100% (1464/1464), done. remote: Total 2239 (delta 736), reused 2183 (delta 685) Receiving objects: 100% (2239/2239), 269.48 KiB | 66 KiB/s, done. Resolving deltas: 100% (736/736), done. 設定 _vimrcまたは.vimrcを開き、まず以下の設定を記載。</description>
+    </item>
+    
+    <item>
+      <title>Subversionでファイルを分けてコミットする</title>
+      <link>/2012/04/02/1333369857/</link>
+      <pubDate>Mon, 02 Apr 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/04/02/1333369857/</guid>
+      <description>[Subversion][備忘録]Subversionでファイルを分けてコミットする あらすじ コマンドラインからファイルをたくさんコミットしたいんだけど、コミットログを分けたいので分割してコミットしたい。
+参考サイト  http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.svn.c.changelist.html:title http://d.hatena.ne.jp/namutaka/20110125/1295964889:title http://www-aos.eps.s.u-tokyo.ac.jp/~takagi/subversion.html#sec16 http://blog.cgfm.jp/garyu/archives/83:title  方法 なんかいっぱいファイルがあるとする。
+$ ls a001.html a019.html a037.html a055.html a073.html a091.html a002.html a020.html a038.html a056.html a074.html a092.html a003.html a021.html a039.html a057.html a075.html a093.html a004.html a022.html a040.html a058.html a076.html a094.html a005.html a023.html a041.html a059.html a077.html a095.html a006.html a024.html a042.html a060.html a078.html a096.html a007.html a025.html a043.html a061.html a079.html a097.html a008.html a026.html a044.html a062.html a080.html a098.html a009.html a027.html a045.html a063.html a081.html a099.html a010.html a028.</description>
+    </item>
+    
+    <item>
+      <title>simplecovとsimplecov-rcovを使ってJenkinsでカバレッジを確認</title>
+      <link>/2012/03/27/1332856400/</link>
+      <pubDate>Tue, 27 Mar 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/03/27/1332856400/</guid>
+      <description>[Windows][Jenkins][Ruby][備忘録]simplecovとsimplecov-rcovを使ってJenkinsでカバレッジを確認 あらすじ rcovインストールに思いの他てこずったので他のツールを検討してみる。
+調べるとsimplecov,simplecov-rcovというツールでもいける様子。Ruby1.9系のカバレッジツールらしいが1.8でも使えるだろうか。あとRailsじゃなくても使えるのかな。
+参考サイト  [https://github.com/colszowka/simplecov:title] [https://github.com/fguillen/simplecov-rcov:title]  手順(Getting Startedをかなりはしょりながら) Simplecov Gemfileに以下を追加。
+gem &amp;#39;simplecov&amp;#39; 次にspecファイルに以下のrequireを追加。
+require &amp;#39;simplecov&amp;#39; SimpleCov.start そしてrspecを実行。
+$ bundle exec rspec -fs spec\convert_spec.rb WARNING: SimpleCov is activated, but you&amp;#39;re not running Ruby 1.9+ - no coverage analysis will happen WARNING: SimpleCov is activated, but you&amp;#39;re not running Ruby 1.9+ - no coverage analysis will happen やっぱ1.8じゃだめかー。ちょっとRuby1.9系で試してみる。
+$ bundle exec rspec -fs spec\convert_spec.rb (略) Coverage report generated for RSpec to C:/project/excel_for_ruby/coverage.</description>
+    </item>
+    
+    <item>
+      <title>Windows環境用にrcovをビルドしなおす手順</title>
+      <link>/2012/03/20/1332240122/</link>
+      <pubDate>Tue, 20 Mar 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/03/20/1332240122/</guid>
+      <description>[Windows][Jenkins][Ruby][備忘録]Windows環境用にrcovをビルドしなおす手順 あらすじ Jenkinsでビルドしていくとともにカバレッジの調査もしたい。rcovというツールでカバレッジを出す事ができるらしい。
+参考サイト  [https://github.com/relevance/rcov:title] http://rubygems.org/gems/rcov:title http://www.freia.jp/taka/blog/762/:title  先に結論 Windows環境ではWindows用に自力でビルドしなければならない！
+ [http://rubygems.org/gems/rcov:title]よりgemをDL [http://www.microsoft.com/japan/msdn/vstudio/express/:title]からVisual C++ 2010 Express Editionを入手しインストール 全てのプログラム -&amp;gt; Microsoft Visual Studio 2010 Express -&amp;gt; Visual Studio コマンド プロンプト (2010)を起動。以後ビルドはこのプロンプトで実施する %RUBY_HOME%\lib\ruby\1.8\i386-mswin32\のconfig.hのMSC_VERの記述を一旦消す  #if _MSC_VER != 1200 #error MSC version unmatch: _MSC_VER: 1200 is expected. #endif  env.hのFRAMEを以下のように編集  extern struct FRAME { extern __declspec(dllimport) struct FRAME {  gem install！！  以下は四苦八苦した記録の残骸。
+手順(本当に順番をメモっているのでいらない操作が多い) rcovインストール BundlerでGemを管理するのでGemfileにrcovを追加。
+gem &amp;#39;rcov&amp;#39; 追加後、インストール……</description>
+    </item>
+    
+    <item>
+      <title>Pro Gitと入門gitでGitの復習 マージ編</title>
+      <link>/2012/03/15/1331816663/</link>
+      <pubDate>Thu, 15 Mar 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/03/15/1331816663/</guid>
+      <description>[Git][備忘録][Windows]Pro Gitと入門gitでGitの復習 マージ編 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640:title http://d.hatena.ne.jp/kk_Ataka/:title  今回はマージから。
+参考  http://progit.org/:title 入門git  マージ 前準備 ここでブランチ用にリポジトリを作りなおした。
+$ cat field.html &amp;lt;h1&amp;gt;僕にその手を汚せというのか&amp;lt;/h1&amp;gt; というファイルを作成し、chapter1というブランチを切る。
+$ git branch chapter1 $ git branch chapter1 * master ブランチはこうなるはず。
+*master/chapter1/HEAD ↓ ↓ ○  次にchapter2を作成し、ブランチ切り替え。
+$ git checkout -b chapter2law chapter1 Switched to a new branch &amp;#39;chapter2law&amp;#39; 文言を追加し、コミット。
+$ cat field.html &amp;lt;h1&amp;gt;僕にその手を汚せというのか&amp;lt;/h1&amp;gt; &amp;lt;h2&amp;gt;誰も僕を責めることはできない&amp;lt;/h2&amp;gt; $ git commit -a -m &amp;#34;Add chapter2 law route&amp;#34; ブランチはこうなるはず。chapter2lawに切り替えているのでHEADもこちらへ。
+master/chapter1 ↓　*chapter2law/HEAD ↓　↓ ↓┌○ ○┘  同様にchapter3lawも作る。</description>
+    </item>
+    
+    <item>
+      <title>Pro Gitと入門gitでGitの復習 ブランチ編</title>
+      <link>/2012/03/11/1331472478/</link>
+      <pubDate>Sun, 11 Mar 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/03/11/1331472478/</guid>
+      <description>[Git][備忘録][Windows]Pro Gitと入門gitでGitの復習 ブランチ編 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640:title  今回はローカルブランチから。
+参考  http://progit.org/:title 入門git  他のVCSとの違い  Subversionなどは各ファイルに対しての差分を時間軸で持っていた Gitではコミットのたびにその時のリポジトリ全体のスナップショットをとる  ただし、変更がなかったファイルは以前のスナップショットで格納したファイルへのリンクを貼っている   Gitのオブジェクト Gitには大きく分けて4つのオブジェクトが存在する。
+ Commitオブジェクト Treeオブジェクト Blobオブジェクト Tagオブジェクト  Commitオブジェクト リポジトリのルート。ファイル情報(ツリー)やメタデータを格納している。以下のコミットのCommitオブジェクトを見てみる。
+$ git log --pretty=oneline 5f431a8cf6023e7398102dfef8b88baf1c581023 Typo 4 log &amp;ndash;pretty=rawコマンドを実行するとハッシュタグがいろいろと。
+$ git log --pretty=raw 5f431a8cf6023e7398102dfef8b88baf1c581023 commit 5f431a8cf6023e7398102dfef8b88baf1c581023 tree de445cf5b526c554dea465d09cea6d65059d1f80 parent a59ff99de68cbf359c814f25cda9c926ef9cdad9 author kk_Ataka &amp;lt;test@example.com&amp;gt; 1329818747 +0900 committer kk_Ataka &amp;lt;test@example.com&amp;gt; 1329819044 +0900 Typo 4 |*commit|このコミットに対するSHA1名|
+|*tree|このコミットの中身を記載しているSHA1名|
+|*parent|一つ前のコミットのSHA1名。存在しない場合はそれが一発目(Rootコミット)、マージされた場合は1つ以上になる場合もある|
+|*author|作成者|
+|*committer|コミッター|
+author, committerあたりがメタデータになるのかな。</description>
+    </item>
+    
+    <item>
+      <title>Pro Gitと入門gitでGitの復習 基本操作編</title>
+      <link>/2012/03/05/1330951640/</link>
+      <pubDate>Mon, 05 Mar 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/03/05/1330951640/</guid>
+      <description>[Git][備忘録][Windows]Pro Gitと入門gitでGitの復習 基本操作編 あらすじ めっきりadd, commitくらいしか使っていないGitをもう一回さわってみて学びなおす。Pro Gitのページもブクマしただけで真剣に読んでいなかったので読み進める。
+続き。
+ http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title  参考  http://progit.org/:title 入門git  リポジトリの作成 リポジトリにしたいディレクトリの中でinitコマンドで作成 or init ディレクトリ で生成。
+$ git init Initialized empty Git repository in c:/project/testRemote/test/.git/ 以後は基本的にリポジトリの中で作業。
+コンフィグ コンフィグファイルの適用範囲と優先度 下に行くほど適用範囲は狭くなり、優先度が上がる。(同じオプションがあったら下のものが適用される)
+   ファイル Windows(msysGit)では 範囲 優先度 configコマンドでの設定方法     /etc/gitconfig (msysのルート)/etc/gitconfig システム全体 低 &amp;ndash;system   ~/.gitconfig %USERPROFILE%\.gitconfig あるユーザ 中 &amp;ndash;global   (リポジトリ内).git/config (リポジトリ内).git/config そのリポジトリ 高 (指定なし)    コンフィグの一覧を見る そのリポジトリのコンフィグを見る。</description>
+    </item>
+    
+    <item>
+      <title>Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など</title>
+      <link>/2012/02/29/1330528564/</link>
+      <pubDate>Wed, 29 Feb 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/02/29/1330528564/</guid>
+      <description>[Ruby][Rails][Windows][備忘録]Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120228/1330436604:title  Railsをインストールして起動する所まではできた。
+参考  Rail3レシピブック 190の技  環境  WindowsXP Ruby1.8.7 Rails3.2.1  MVCを自動生成する アプリケーションのscaffold(足場)の作成 scaffoldジェネレータを実行する事でCRUD操作が可能な簡単なアプリケーションの足場が生成できる。コマンドはrails generate ジェネレータ モデル名 カラム名:型 カラム名:型 (以下繰り返せる)&amp;hellip;
+$ bundle exec rails generate scaffold Blog name:string user_id:integer invoke active_record create db/migrate/20120229022816_create_blogs.rb create app/models/blog.rb invoke test_unit create test/unit/blog_test.rb create test/fixtures/blogs.yml route resources :blogs invoke scaffold_controller create app/controllers/blogs_controller.rb invoke erb create app/views/blogs create app/views/blogs/index.html.erb create app/views/blogs/edit.html.erb create app/views/blogs/show.html.erb create app/views/blogs/new.html.erb create app/views/blogs/_form.html.erb invoke test_unit create test/functional/blogs_controller_test.</description>
+    </item>
+    
+    <item>
+      <title>Rails3レシピブックを読みながらRailsを学ぶ</title>
+      <link>/2012/02/28/1330436604/</link>
+      <pubDate>Tue, 28 Feb 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/02/28/1330436604/</guid>
+      <description>[Ruby][備忘録][Windows][Rails]Rails3レシピブックを読みながらRailsを学ぶ あらすじ Redmineプラグインの作り方を学ぶ前にRailsの基本的な事を学ばねばなりますまい。そういやあ。
+参考  Rail3レシピブック 190の技  環境  WindowsXP Ruby 1.8.7 Rails 3.2.1  準備  はじめにbundleでrailsをインストールする……が、なんかエラーが。  Gem::InstallError: The &amp;#39;json&amp;#39; native gem requires installed build tools. Please update your PATH to include build tools or download the DevKit from &amp;#39;http://rubyinstaller.org/downloads&amp;#39; and follow the instructions at &amp;#39;http://github.com/oneclick/rubyinstaller/wiki/Development-Kit&amp;#39; An error occured while installing json (1.6.5), and Bundler cannot continue. Make sure that `gem install json -v &amp;#39;1.6.5&amp;#39;` succeeds before bundling.</description>
+    </item>
+    
+    <item>
+      <title>GitプロジェクトをコミットしたタイミングでJenkinsにビルドをしてもらいたい！</title>
+      <link>/2012/02/23/1330001338/</link>
+      <pubDate>Thu, 23 Feb 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/02/23/1330001338/</guid>
+      <description>[Jenkins][備忘録][Git]GitプロジェクトをコミットしたタイミングでJenkinsにビルドをしてもらいたい！ あらすじ  全然CIっぽくJenkinsを使っていなかったので本格的に使ってみたい。 Gitを連携させたい GitリポジトリにコミットしたタイミングでJenkinsにビルドさせてみたい  …のだが、いきなりビルド時にcloneできないという現象でハマっていた。
+ERROR: Error cloning remote repo &amp;#39;origin&amp;#39; : Could not clone C:/project/excel_for_ruby.git 上記の原因 cloneできない問題はJenkins実行時にgit.exeにパスが通ってなかった、設定していなかったという非常に残念なものだった。Jenkins実践入門にも手順が書いてあった。[1]
+Jenkinsの「ビルド実行」でGitリポジトリのソースのテストをする  Jenkinsの管理 =&amp;gt; プラグインの管理 =&amp;gt; Jenkins GIT plugin をインストール 新規ジョブ作成 =&amp;gt; フリースタイル・プロジェクト でプロジェクト作成 ソースコードシステム  Gitを選択 リポジトリを入力  C:\project\excel_for_ruby   ビルド  Windowsバッチコマンドの実行  rspecを実行できるように記述する    cd &amp;#34;C:\project\excel_for_ruby&amp;#34; rspec -fs spec\* これでビルドするとはじめのcloneできないエラー。
+Error cloning remote repo &amp;#39;origin&amp;#39; : Could not clone C:\project\excel_for_ruby  Jenkinsから見たGitのパスを設定  Jenkinsの管理 =&amp;gt; システムの設定  Gitのパスを追加するフォームがあるのでこれを追加 Nameもなんでもいいから入力する(Defaultにした)    GitでCommitしたらJenkinsがビルドをしてくれるようにする 「wget ビルド実行パス」というコマンドをGitのフックスクリプトに記述すればコミット時にビルド実行できるらしい。とりあえずWindows用のwgetを取得。http://users.</description>
+    </item>
+    
+    <item>
+      <title>Rubyの実行ファイルを作成するExerbとOcraを試してみた</title>
+      <link>/2012/02/20/1329744294/</link>
+      <pubDate>Mon, 20 Feb 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/02/20/1329744294/</guid>
+      <description>[Ruby][備忘録][Windows]Rubyの実行ファイルを作成するExerbとOcraを試してみた あらすじ Rubyが入っていないWindows環境でも(要は自分以外)Rubyスクリプトを実行したいのでexe化する方法を模索する。というか、昔模索した後の結果を今更まとめる。
+対象プロジェクト win32oleを使ってExcelファイルを読み込みシートを取得し連番で吐くというRubyスクリプトをexe化。ソースはこんな感じ。
+ 出力結果はこう。
+$ ruby getSheetname.rb Book1.xlsx Book1.xlsx --- Sheet1 Sheet2 Sheet3 Sheet4 Sheet5 --- end. ExerbとOcraをためしてみた。
+Exerb(ダメだった) 最新は5.4.0らしいが、今回はなんでか4.3.0を入れていた。(理由不明)
+手順(失念)  [http://exerb.sourceforge.jp/:title]よりExerbをダウンロード後、setup.rbを実行？だけでいいんだっけ？ mkexy.batとexerb.batがRubyのbinに入るはず exyファイルを作成する  $ mkexy.bat getSheetname.rb --- end.  成功するとgetSheetname.exyというファイルが作成される(GemfileにおけるGemfile.lockのようなもん？)  # Generated by mkexy # on 2012-02-15 22:05 general: startup: getSheetname.rb core: cui kcode: none file: getSheetname.rb: win32ole.so: file: C:/rubies/Ruby/lib/ruby/1.8/i386-mswin32/win32ole.so type: extension-library nkf.so: file: C:/rubies/Ruby/lib/ruby/1.8/i386-mswin32/nkf.so type: extension-library kconv.rb: file: C:/rubies/Ruby/lib/ruby/1.8/kconv.rb rational.rb: file: C:/rubies/Ruby/lib/ruby/1.</description>
+    </item>
+    
+    <item>
+      <title>BASE64エンコーディングをRubyで自力実装した</title>
+      <link>/2012/01/30/1327931393/</link>
+      <pubDate>Mon, 30 Jan 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/01/30/1327931393/</guid>
+      <description>[Ruby][備忘録]BASE64エンコーディングをRubyで自力実装した あらすじ BASE64エンコーディングをおまじないのように使っていたので車輪の再発明で原理を学ぶ。
+参考サイト  http://www5d.biglobe.ne.jp/~stssk/rfc/rfc3548j.html:title http://program.station.ez-net.jp/mini/encode/base64.asp:title http://blog.livedoor.jp/maru_tak/archives/50438057.html:title http://d.hatena.ne.jp/gan2/20070603/1180888302:title http://wind-master.dip.jp/soft-info/item/7/catid/3:title http://www.sea-bird.org/doc/Cygwin/BASE64enc.html:title http://yakinikunotare.boo.jp/orebase/index.php?Ruby%2F%CA%B8%BB%FA%CE%F3%A4%AB%A4%E91%CA%B8%BB%FA%CC%DC%A4%F2%BC%E8%A4%EA%BD%D0%A4%B9:title http://www.syuhitu.org/other/b64.html:title  BASE64  Base64は、データを64種類の印字可能な英数字のみを用いて、それ以外の文字を扱うことの出来ない通信環境にてマルチバイト文字やバイナリデータを扱うためのエンコード方式である。
+http://ja.wikipedia.org/wiki/Base64
+  データ変換形式 メール等でも使われている やりかた  元データを6bitに分割  ちょうど6bitにならない場合は0を足す  6bitデータを対応する文字に4文字ずつ変換(A-Za-z0-9+/)  4文字にならない場合は=を足す  全部くっつける   ふむう。。何か書けそう？　ちょっとやってみるか。
+ソース   まず、変換したい文字のASCII値を取得 次にそれを2進数に変換(1と2はまとめてもいいかも) 6bit毎に分けて割り切れない分は0を足す 6bitのデータを変換テーブルと照らしあわせて対応する1文字と変換 4文字になるまで=を足す  検証  テスト文字列: kk_Ataka  己 $ ruby base64.rb kk_Ataka BYTE16:6b6b5f4174616b61 BYTE2 :0110101101101011010111110100000101110100011000010110101101100001 ADD 0 :011010110110101101011111010000010111010001100001011010110110000100 TRANS :a2tfQXRha2E ADD = :a2tfQXRha2E= a2tfQXRha2E= http://hogehoge.tk/tool/:title  プレーンTEXT, 変換不要, 未指定, BASE64  a2tfQXRha2E= http://tociyuki.</description>
+    </item>
+    
+    <item>
+      <title>Rubyで固定長の値を扱う方法sprintfとパーセント演算子</title>
+      <link>/2012/01/23/1327323360/</link>
+      <pubDate>Mon, 23 Jan 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/01/23/1327323360/</guid>
+      <description>[Ruby][備忘録]Rubyで固定長の値を扱う方法sprintfとパーセント演算子 あらすじ  Rubyで固定長の値を扱うときはどうしたらいいんだろう  必ず5ケタにしたい！　255の場合は00255になってほしい   参考サイト http://www.ruby-lang.org/ja/old-man/html/sprintf_A5D5A5A9A1BCA5DEA5C3A5C8.html:title
+http://www.oki-osk.jp/esc/ruby/tut-04.html:title の4.2
+方法 調べてみるとsprintfメソッドというものがあった。
+irb(main):020:0&amp;gt; sprintf(&amp;#34;Number:%10d&amp;#34;, 255) =&amp;gt; &amp;#34;Number: 255&amp;#34; irb(main):021:0&amp;gt; sprintf(&amp;#34;Number:%010d&amp;#34;, 255) =&amp;gt; &amp;#34;Number:0000000255&amp;#34; なるほど、これを使えば良いのかと思っていたら、次にStringクラスに%(パーセント演算子)というものが存在している事を発見。どんな事をしてくれるのかというと…
+irb(main):022:0&amp;gt; &amp;#34;Number:%010d&amp;#34; % 255 =&amp;gt;  &amp;#34;Number:0000000255&amp;#34; とりあえず、使ってないと見慣れない物体に見えるなぁ。
+という事で、方法を二種類見つけたんだけど、これどっち使うのがいいんだろう。個人的にはsprintfの方が何やっているかはわかりやすいけど、これは慣れの問題っぽいしな。</description>
+    </item>
+    
+    <item>
+      <title>Subversionのリポジトリをサーバ間でまるごと移動する</title>
+      <link>/2012/01/15/1326624864/</link>
+      <pubDate>Sun, 15 Jan 2012 00:00:00 +0000</pubDate>
+      
+      <guid>/2012/01/15/1326624864/</guid>
+      <description>[Solaris][備忘録][Subversion]Subversionのリポジトリをサーバ間でまるごと移動する あらすじ AサーバからBサーバにリポジトリを引っ越しする。
+参考サイト http://hain.jp/index.php/tech-j/2008/03/24/p199:title
+手順 引っ越し元のサーバ まずはリポジトリのダンプファイルを作成。
+$ svnadmin dump リポジトリパス(/home/xxx/yyyなど) &amp;gt; repo.dump * リビジョン 0 をダンプしました。 * リビジョン 1 をダンプしました。 * リビジョン 2 をダンプしました。 * リビジョン 3 をダンプしました。 * リビジョン 4 をダンプしました。 * リビジョン 5 をダンプしました。 引っ越し先のサーバ まずリポジトリを作る。
+$ svnadmin create repos 次に引っ越し元で作ったdumpファイルを引っ越し先のサーバに持って来る。(FTPでもなんでも)
+そして、svnadmin loadコマンドでダンプファイルを流しこむ。
+$ svnadmin load repos &amp;lt; repo.dump * パスを追加しています... (略) ------- リビジョン xxx をコミットしました。 同期を取るため、最新のリビジョンを移動するとかもできるそうなので、必要になったらその辺も調べてみる。</description>
+    </item>
+    
+    <item>
+      <title>EvernoteのAPIをRubyから叩きたい</title>
+      <link>/2011/12/27/1324911671/</link>
+      <pubDate>Tue, 27 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/27/1324911671/</guid>
+      <description>[Evernote][備忘録][Ruby][API]EvernoteのAPIをRubyから叩きたい はじめに この記事は[http://atnd.org/events/22021:title]の27日目の記事です。
+26日目はid:tackunさんの[http://d.hatena.ne.jp/tackun/20111226/1324908770:title]でした。
+28日目はr7kamuraさんのRubyでGPUを使おう - &amp;amp;#10008;&amp;amp;#9593;&amp;amp;#9697;&amp;amp;#9593;&amp;amp;#10008;です。
+今日はターミナル(or コマンドプロンプト)経由でEvernoteのAPIを叩き、自分のノートブックを取得してみようとしてみます。ソースを書く前にAPIの申請からやっていきます。
+APIの申請…の前に developer用サイトからAPI SDKを入手。
+ http://www.evernote.com/about/developer/api/:title  [f:id:kk_Ataka:20111226235624j:image]
+上記のリンクを叩くとzipがDLできるので、これを解凍しruby/lib以下のファイルを用意しておく。
+APIの申請  http://www.evernote.com/about/developer/api/:title  同じページを下へスクロールしていくとRequest an API Keyという箇所があるので以下の項目を入力する。
+|*Evernote username|Evernoteのユーザ名|
+|*Your Name|氏名|
+|*Your Email|メールアドレス|
+|*Organization|組織や団体、だが、個人で使う場合は氏名でよい|
+|*Web or Client|今回は自分で使う用なのでClient Keysを選択(既に持っているので下の画像ではWebを選択している)|
+|*Application Details|どうやってAPIを使いたいか|
+つたない英語でDetailsを書く。以前は審査に時間がかかったらしいが今はSUBMITすればすぐKeyが発行されるみたい。
+[f:id:kk_Ataka:20111218113115j:image]
+WebApplicationを選んだ場合。
+[f:id:kk_Ataka:20111218113113j:image]
+Clientを選んだ場合。
+[f:id:kk_Ataka:20111218113114j:image]
+これでConsumer KeyとConsumer Secretをもらえた。ただし、この状態では砂場(sandbox.evernote.com)でしか使えない。
+上記画像のNext Steps 2.によると[https://sandbox.evernote.com/Registration.action:title]で砂場用アカウントを作成し、砂場で開発をしてくださいという事でいきなり本家(www.evernote.com)で動かせないようになっている。
+Activate 今回のエントリではやらないが、本家で動かす時はActivateサイト(Next Steps 3.のlet us knowリンクから行ける)でActivateしてもらう必要がある。(ここは昔の事なので少し曖昧)
+|*Email|メールアドレス|
+|*API Consumer Key|登録時にもらったConsumer Key|
+|*Additional Info|その他何かあれば？(何か書いたっけ…？)|
+[f:id:kk_Ataka:20111218115757j:image]
+ソース iitHubに。 https://github.com/gosyujin/evernote_for_ruby/blob/master/myEvernote.rb
+ここから実際に取得していきます。
+パス追加 プロジェクト内にあるライブラリ(さっき落としたAPI SDK)を読み込む。</description>
+    </item>
+    
+    <item>
+      <title>SinatraでHaml入門</title>
+      <link>/2011/12/26/1324910284/</link>
+      <pubDate>Mon, 26 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/26/1324910284/</guid>
+      <description>[Ruby][備忘録][Haml][Sinatra]SinatraでHaml入門 あらすじ Sinatraとか使っていてもHtmlべた書きばかりなのでHamlに入門してみる。
+参考サイト  http://haml.ursm.jp/getting-started:title  日本ハム！
+Hamlとは  HamlはHTML/XHTMLを生成するためのマークアップ言語です。インデントや簡略構文によって簡潔な記述が行えます。
+http://haml.ursm.jp/
+ 今まで require &amp;#39;rubygems&amp;#39; require &amp;#39;sinatra&amp;#39; get &amp;#39;/&amp;#39; do &amp;#34;&amp;lt;style type=&amp;#39;text/css&amp;#39;&amp;gt;.head {border-bottom: 1px solid #CCCCCC;border-left: 5px solid #CCCCCC;}.time {color: #CCCCCC;}.tweet {}&amp;lt;/style&amp;gt;&amp;lt;h1&amp;gt;Hello Tycoon-Timeline powerd by Heroku!!&amp;lt;/h1&amp;gt;&amp;lt;a href=&amp;#39;&amp;#39;&amp;gt;Reload&amp;lt;/a&amp;gt;&amp;lt;dl&amp;gt;&amp;lt;dt class=&amp;#39;head&amp;#39;&amp;gt;User &amp;lt;span class=&amp;#39;time&amp;#39;&amp;gt;2011/12/26 02:25:00&amp;lt;/span&amp;gt;&amp;lt;/dt&amp;gt;&amp;lt;dd class=&amp;#39;tweet&amp;#39;&amp;gt;ついーと&amp;lt;/dd ...&amp;#34; end 全部こんな感じ。なのでページがでかくなっていくことを考えると非常につらい。
+準備 構成 Gemfile app.rb views ┗index.haml Gemfile Bundlerを使うのでGemfileを作成。
+source :rubygems source &amp;#34;http://rubygems.org&amp;#34; gem &amp;#39;sinatra&amp;#39; gem &amp;#39;haml&amp;#39; SinatraとHamlをインストール。
+gemインストール $ bundle install ./vendor/bundle app.rb require &amp;#39;rubygems&amp;#39; require &amp;#39;sinatra&amp;#39; require &amp;#39;haml&amp;#39; get &amp;#39;/&amp;#39; do haml :index end 今までhtmlタグを書いていた返り値をhtml :indexとする。するとここではviews/index.</description>
+    </item>
+    
+    <item>
+      <title>VB6からVB.NETにソース移行すると特定のIf文でInvalidCastException</title>
+      <link>/2011/12/25/1324852724/</link>
+      <pubDate>Sun, 25 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/25/1324852724/</guid>
+      <description>[VB][備忘録]VB6からVB.NETにソース移行すると特定のIf文でInvalidCastException あらすじ VB6の時、If (value = 1)のような条件式でvalueに数値・文字どちらが入ってきてもエラーになっていなかった。[1]
+しかし、VB.NETになりvalueに文字が入ってきた場合、InvalidCastExceptionが発生するようになった。どうも、VB6のときと評価の方法が変わっている模様…。
+参考サイト  http://msdn.microsoft.com/ja-jp/library/cey92b0t(v=VS.80).aspx:title  検証 Option Strict が Off の場合の比較は、実行時の型で比較方法が変わる。
+   比較対象 例 結果     どちらもString If (“a” = “b”) 文字列比較を行う   どちらも数値 If (1 = 3) Doubleに変換され数値比較を行う   数値とString If (1 = “1”)&amp;lt;br /&amp;gt;If (1 = “a”) 文字列がDoubleに変換(※)され数値比較を行う。&amp;lt;br /&amp;gt;文字列をDoubleに変換できない場合 InvalidCastException    (※)どうも、この部分がVB6のときと変わっている？
+数値と文字(数値以外)の比較がダメなようなので、不本意ながらIf (value = &amp;ldquo;1&amp;rdquo;)にしてその場を凌いだが…。
+なお、Nothingは比較対象が数値なら0,文字列なら”“となる。
+[1] 結果は覚えていないけど、1以外は全てfalseになったような。</description>
+    </item>
+    
+    <item>
+      <title>特定のファイルを探したり除外したり(メモ)</title>
+      <link>/2011/12/24/1324741031/</link>
+      <pubDate>Sat, 24 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/24/1324741031/</guid>
+      <description>[Unix][備忘録]特定のファイルを探したり除外したり(メモ) 特定のファイル群を一括で何かする 状況 .cblファイルをコンパイルした後、同一ディレクトリにできる拡張子なしのファイルを別のディレクトリにコピーしたい…という。
+/tmp ┣file01.cbl ┣file02.cbl ┣file01 ┗file02 file01とfile02を/usr/local/userに移動したい。
+コマンド find /tmp/* ! -name &amp;#34;*.cbl&amp;#34; | xargs -i mv {} /usr/local/user  nameの前に!で条件の否定ができる(知らなかった) findコマンドでfile01, file02を引っかけたあと、xargsでmvコマンド実行する iオプションを使用する事でfindの結果を{}にもってこれる  特定のファイル群を一括で何かする その2 状況 ファイル検索でリポジトリ内の .svn ファイルを除外したいなーと思った。
+コマンド find ./ -name &amp;#34;.svn&amp;#34; -prune -o -print この結果に xargs をつけると除外はできたの……だが、どうも
+! -name &amp;#34;XXX&amp;#34; -name &amp;#34;XXX&amp;#34; -prune は挙動が違う模様……以下メモ。
+ pruneオプションは引数より下のディレクトリやファイルを捜査しない oオプション はor演算子と同じ ワイルドカード指定で隠しファイルは検索できない  とりあえずここまで。</description>
+    </item>
+    
+    <item>
+      <title>Vimコマンドよく使うものと覚えたいコマンドまとめ</title>
+      <link>/2011/12/23/1324651460/</link>
+      <pubDate>Fri, 23 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/23/1324651460/</guid>
+      <description>[Unix][備忘録][Vim]Vimコマンドよく使うものと覚えたいコマンドまとめ コマンドモード    コマンド 解説      :w 保存    :q  終了   :wq 保存して終了    :w! 強制的な保存    :q! 強制的な終了    :w ファイル名 任意のファイル名で保存    :e ファイル名 複数ファイルを開く    :br 前のバッファへ    :bn 次のバッファへ    :ls バッファの一覧を表示    :!コマンド コマンドを実行し標準出力に出力&amp;lt;br /&amp;gt;(:!ls でファイル一覧を表示)    :r ファイル 指定したファイルの内容を現在のファイルに流しこみ    :r !</description>
+    </item>
+    
+    <item>
+      <title>SolarisにSubversionをインストールするときのメモ</title>
+      <link>/2011/12/22/1324573161/</link>
+      <pubDate>Thu, 22 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/22/1324573161/</guid>
+      <description>[Solaris][備忘録][Subversion]SolarisにSubversionをインストールするときのメモ インストール  http://www.sunfreeware.com/ ftp://ftp.ne.jp/Sun/sunfreeware/  から必要なライブラリをダウンロード。
+ - neon 0.29.5[1]  swig 1.3.40[2] expat 2.0.1[3] libxml2 2.7.8[4] db 4.2.52 REV=1.0.12[5] openssl 1.0.0d[6] libiconv 1.13.1[7] libintl 3.4.0[8] sasl 2.1.21[9] gcc(libgcc 3.4.6((The GNU C compiler and related programs - installs in /usr/local. This package includes the GNU C, C++, and f77 suites and support files. These gcc packages require the installation of libiconv. It was compiled to use the SUN assembler and loader usually in /usr/ccs/bin if the SUNW developer packages are installed.</description>
+    </item>
+    
+    <item>
+      <title>Ruby実行時のオプションをよろしく解析してくれるoptparseを使ってみる</title>
+      <link>/2011/12/21/1324477125/</link>
+      <pubDate>Wed, 21 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/21/1324477125/</guid>
+      <description>[Ruby][備忘録]Ruby実行時のオプションをよろしく解析してくれるoptparseを使ってみる あらすじ コマンドラインから引数つきでRubyを実行する時は
+ruby xxxx.rb ARG1 ARG2 とかして、中でARGVをifで条件分岐とかしていたが…何か他にやり方があるのではと調べたらやっぱりあった。optparseを使えばよろしく解析してくれるようだ。
+参考サイト  http://www.ruby-lang.org/ja/old-man/html/optparse_A5C1A5E5A1BCA5C8A5EAA5A2A5EB.html:title    OptionParser オブジェクト opt を生成する。
+ オプションを取り扱うブロックを opt に登録する。
+ opt.parse(ARGV) でコマンドラインを実際に parse する。
+   基本はこういう事らしい。
+サンプルソース とりあえずGistに。色々試してみる。
+ 実行結果 単純なオプション # short option opt.on(&amp;#39;-a&amp;#39;, &amp;#39;DESCRIPTION&amp;#39;) do |v| puts &amp;#34;v class is #{v.class}&amp;#34; puts &amp;#34;-a is #{v}&amp;#34; end オプションに-aを指定するだけ。真偽値で返ってくる。第二引数のDESCRIPTIONは後述。
+$ ruby optparse.rb -a v class is TrueClass -a is true オプションの後に値(必須) # short option with require argument opt.</description>
+    </item>
+    
+    <item>
+      <title>CapsLockキーとCtrlキーを入れ替える(置き換える)方法</title>
+      <link>/2011/12/20/1324386674/</link>
+      <pubDate>Tue, 20 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/20/1324386674/</guid>
+      <description>[Windows][備忘録]CapsLockキーとCtrlキーを入れ替える(置き換える)方法 あらすじ CapsLockいらない！　ここにCtrlキーほしい！
+方法 レジストリをいじってキーを置き換える事に。この例では無変換キーもまとめてCtrlキーに変更する。レジストリをいじるため一か八か細心の注意を払う。
+ ファイルを指定して実行で regedit を起動 HKEY_LOCAL_MACHINE -&amp;gt; SYSTEM -&amp;gt; CurrentControlSet -&amp;gt; Control -&amp;gt; Keyboard Layout を選択し右クリック 新規 -&amp;gt; バイナリ で新しいキーを作成 新しいキーを選択し右クリック -&amp;gt; 名前の変更 で Scancode Map に変更 同じく右クリック -&amp;gt; 修正 でバイナリデータを以下のように編集  0000 00 00 00 00 00 00 00 00 ........ 0008 04 00 00 00 1D 00 3A 00 ......:. 0010 1D 00 7B 00 00 00 00 00 ..{..... 0018  0000はヘッダらしい。全て0固定 0008前半部の04 00 00 00 は使用するキー+1を入力する。今回は下記キーを使用するため04となる  左Ctrlキー 無変換キー CapsLockキー プラス1  0008後半部の 1D 00 3A 00 と 0010前半部の 1D 00 7B 00 がキーをカスタマイズしている箇所 0010後半部の残りは 00 埋め  対応  キーとバイナリ値は下記のようになっている  が、書き込むときはひっくり返す事。(CapsLockなら 3A 00 となる)リトルエンディアンだとそうなるらしい http://ja.</description>
+    </item>
+    
+    <item>
+      <title>Excelの備忘録</title>
+      <link>/2011/12/19/1324307879/</link>
+      <pubDate>Mon, 19 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/19/1324307879/</guid>
+      <description> [Windows][備忘録]Excelの備忘録 あらすじ Excelの備忘録。ただし個人でExcel持ってないのでスクリーンショットはなし。
+シート名の取得 - Excel2003,2007で確認 =MID(CELL(&amp;#34;filename&amp;#34;, $A$1 ), FIND(&amp;#34;]&amp;#34;, CELL(&amp;#34;filename&amp;#34;, $A$1))+1, 99) グラフ関係 - Excel2007で確認 単位などを表示する用  グラフを選択 -&amp;gt; レイアウトタブ -&amp;gt; ラベル -&amp;gt; グラフタイトル、軸ラベル  複合グラフ  分けたいグラフを選択 -&amp;gt; レイアウトタブ -&amp;gt; 現在の選択範囲 -&amp;gt; 選択対象の書式設定 -&amp;gt; 系列のオプション -&amp;gt; 第2軸  グラフタイトル等を動的に決める  グラフタイトル等をクリック -&amp;gt; 入力エリアではなく関数エリアを選択し「=シート名!A1」とする  あらかじめ規定の場所に(例えばA1)タイトルとしたい文言をセットしておく シート名を明記しないと「SERIES式では、ワークシートを外部参照していなければなりません。」エラーとなる   シートの保護解除 - Excel2007で確認  ホーム -&amp;gt; セル -&amp;gt; 書式 -&amp;gt; シート保護の解除  入力規則変更(カラムの文字制限、リストから選択など) - Excel2007で確認  データ -&amp;gt; データツール -&amp;gt; データの入力規則  画像の圧縮 - Excel2007で確認  画像を選択 -&amp;gt; 書式リボン(図ツールで出る？) -&amp;gt; 調整エリア -&amp;gt; 図の圧縮  選択した画像のみに適用にチェック -&amp;gt; (オプションでトリミング部分削除などにチェック) -&amp;gt; OK 2003等？　では画像右クリック -&amp;gt; 図のプロパティからいけたらしい   </description>
+    </item>
+    
+    <item>
+      <title>Vimを使い始めるためにインストールから設定まで行った</title>
+      <link>/2011/12/18/1324219740/</link>
+      <pubDate>Sun, 18 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/18/1324219740/</guid>
+      <description>[Unix][備忘録][Vim]Vimを使い始めるためにインストールから設定まで行った あらすじ  http://atnd.org/events/21925:title を見てvim使いたいと思った！  参考サイト  http://d.hatena.ne.jp/osyo-manga/20111201/1322665228:title http://d.hatena.ne.jp/arcright/20100207/1265551998:title http://sites.google.com/site/vimdocja/various-html http://www.hazama.nu/t2o2/archives/002696.shtml:title http://blog.ville.jp/2011/03/11/536:title http://ystyle.jpn.org/geekstyle/archives/9:title  ダウンロード はじめにVimをgetする。
+$ wget ftp://ftp.vim.org/pub/vim/unix/vim-7.3.tar.bz2 次にvim7.3の最新のパッチファイルを確認して、ftp://ftp.vim.org/pub/vim/patches/7.3/からダウンロードする。今382だった。
+$ cd vim73 $ mkdir patches $ curl -O &amp;#39;ftp://ftp.vim.org/pub/vim/patches/7.3/7.3.[001-382]&amp;#39; $ cd ../ $ cat patches/7.3.* | patch -p0 patching file src/misc1.c patching file src/version.c patching file src/ex_docmd.c patching file src/version.c . . . patchコマンドって使った事ないなーと思い、-p0ってなんぞやとman patchしてみる……。
+ -pnum または &amp;ndash;strip=num
+　パッチファイルで見つかったファイル名それぞれについて、 num 個の
+　スラッシュを含む最小のプレフィクスを取り除く。隣接した 1 個また</description>
+    </item>
+    
+    <item>
+      <title>Unixでwmvファイルを他のファイルフォーマットに変換したい</title>
+      <link>/2011/12/17/1324168464/</link>
+      <pubDate>Sat, 17 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/17/1324168464/</guid>
+      <description>[Unix][備忘録]Unixでwmvファイルを他のファイルフォーマットに変換したい 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20111206/1323186439:title  ダウンロードしたwmvファイルを他のファイルフォーマットに変換したい。
+参考サイト  http://d.hatena.ne.jp/griffith181/20090302/1235980536:title  インストール ソースをgit clone で取得してくる。
+$ git clone git://source.ffmpeg.org/ffmpeg.git ffmpeg Cloning into ffmpeg... remote: Counting objects: 192168, done. remote: Compressing objects: 100% (43840/43840), done. remote: Total 192168 (delta 150640), reused 188926 (delta 148049) Receiving objects: 100% (192168/192168), 49.63 MiB | 278 KiB/s, done. Resolving deltas: 100% (150640/150640), done. $ ./configure --disable-yasm $ make $ sudo make install 使い方 基本的に-iオプションでインプットファイルを選択すれば使えるはずなのだが……。
+$ ffmpeg -i input.</description>
+    </item>
+    
+    <item>
+      <title>svn infoコマンドでリビジョン番号を抜き出す</title>
+      <link>/2011/12/16/1324086694/</link>
+      <pubDate>Fri, 16 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/16/1324086694/</guid>
+      <description>[Subversion][Unix][備忘録]svn infoコマンドでリビジョン番号を抜き出す 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20111213/1323783496:title  もっとよい方法 どう考えても他にやり方があるだろうと思っていたらやっぱりあった。[http://twitter.com/#!/jun66j5:title=@jun66j5]さんよりTwitterで教えてもらいました。ありがとうございます。
+[twitter:147687551027781632:detail]
+svn infoコマンドで見られるのか。というわけで(全然使ってない)プロジェクトで試してみた。まず普通。
+$ svn info パス: . URL: file:///home/kk_Ataka/svn/xxxx リポジトリのルート: file:///home/kk_Ataka/svn/xxxx リポジトリ UUID: 99999999-9999-9999-9999-999999999999 リビジョン: 4 ノード種別: ディレクトリ 準備中の処理: 特になし 最終変更者: user 最終変更リビジョン: 4 最終変更日時: 2010-12-29 21:31:44 +0900 (水, 29 12月 2010) ロケールをen_USに。
+$ LC_ALL=en_US.UTF8 svn info Path: . URL: file:///home/kk_Ataka/svn/xxxx Repository Root: file:///home/kk_Ataka/svn/xxxx Repository UUID: 99999999-9999-9999-9999-999999999999 Revision: 4 Node Kind: directory Schedule: normal Last Changed Author: user Last Changed Rev: 4 Last Changed Date: 2010-12-29 21:31:44 +0900 (Wed, 29 Dec 2010) xml形式で出力もできる。</description>
+    </item>
+    
+    <item>
+      <title>RedmineとApacheを連携させるPassengerをインストールできなかった</title>
+      <link>/2011/12/15/1323951847/</link>
+      <pubDate>Thu, 15 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/15/1323951847/</guid>
+      <description>[Ruby][Solaris][備忘録][Redmine]RedmineとApacheを連携させるPassengerをインストールできなかった あらすじ  Redmineを自動起動するようにしたい  Phusion Passenger(mod_rails for Apache)を使えばApacheと連携できるらしい    特徴
+\* Apache単独でRailsアプリケーションを実行可能です。Apacheのモジュールとして実装されており、別途デーモンを起動する必要がありません。tcpポートも使いません。 \* Railsアプリケーションのデプロイが簡単になります。ファイルをアップロードするだけ。ほぼPHP感覚です。 \* サーバのメモリを節約できます。Railsインスタンスは必要なタイミングで生成します。また、一定時間アクセスがなければインスタンスを終了させます。 http://redmine.jp/tech_note/apache-passenger/
+ ふーむ。
+参考サイト  http://redmine.jp/faq/system_management/redmine-auto-start/:title http://redmine.jp/tech_note/apache-passenger/:title http://d.hatena.ne.jp/rx7/20080412/p1:title http://d.hatena.ne.jp/r7kamura/20110212/1297452845:title  手順 passengerインストール Passengerを使うにはfastthread、daemon_controllerが必要らしい。
+$ gem install --local fastthread-1.0.7.gem $ gem install --local daemon_controller-0.2.6.gem $ gem install --local passenger-3.0.9.gem ※スタンドアロンなマシンだったため。ネットにつながっていればgem install passengerで全部入るはず。
+passenger-install-apache2-module実行 対話形式でApacheのモジュール等を確認・インストールしていく。はじめにpassener-install-apache2-moduleを実行するとこんなメッセージが出てくる。
+$ passenger-install-apache2-module Welcome to the Phusion Passenger Apache 2 module installer, v3.0.9. This installer will guide you through the entire installation process.</description>
+    </item>
+    
+    <item>
+      <title>さくらVPSの初期設定メモ</title>
+      <link>/2011/12/14/1323868360/</link>
+      <pubDate>Wed, 14 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/14/1323868360/</guid>
+      <description>[Unix][備忘録][さくらVPS][StartUp]さくらVPSの初期設定メモ さくらVPSで最初に行ったとりあえず最低クラスの設定を発掘したのでメモ。OSはCentOSか。
+参考サイト  http://blog.myfinder.jp/2010/09/vpsssh.html:title http://d.hatena.ne.jp/h-yano/20080225/1203952174:title http://d.hatena.ne.jp/rubellum/20100901/1283321253:title http://havelog.ayumusato.com/develop/server/e135-sakura-vps-setup1.html:title  サーバ ユーザを作成する。
+# useradd kk_Ataka # passwd kk_Ataka ユーザをwheelグループに。
+# usermod -G wheel kk_Ataka クライアント 鍵を作る。
+$ ssh-keygen -t rsa 鍵をサーバに送る。(既に作ってある場合は~/.ssh/にあるid_rsa.pubを)
+$ scp id_rsa.pub USER@ADDRESS:PATH ※ポート変えた場合はscpコマンドに -P ポート番号 をつける。
+$ scp -P PORT id_rsa.pub USER@ADDRESS:PATH 再びサーバ SSHの設定 鍵を受け取ったらホームディレクトリに.sshディレクトリを作りコピー。
+$ mkdir .ssh $ mv id_rsa.pub .ssh/authorized_keys 権限を変更。
+$ chmod 700 ~demo/.ssh $ chmod 600 ~demo/.ssh/authorized_keys sshd_configファイルを編集。
+# vi /etc/ssh/sshd_config# 使用ポートをデフォルトから変更 Port XXXXX # sshでrootでのログインを許可しない PermitRootLogin no # パスワード認証でのsshログインを許可しない PasswordAuthentication no # PAMによる認証を許可しない UsePAM no 編集したら再起動。[1]</description>
+    </item>
+    
+    <item>
+      <title>svn updateコマンド以外でリビジョン番号を抜き出す</title>
+      <link>/2011/12/13/1323783496/</link>
+      <pubDate>Tue, 13 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/13/1323783496/</guid>
+      <description>[Subversion][備忘録][Unix]svn updateコマンド以外でリビジョン番号を抜き出す あらすじ svnのリビジョン番号だけ抜き出したい。アップデートなしで！　svn updateするとリビジョンは出てくれるんだけど、アップデート走らせないようにリビジョン番号だけ抜き出したい。
+$ svn up リビジョン 111 です 続編  http://d.hatena.ne.jp/kk_Ataka/20111216/1324086694:title  以下はとてもめんどくさい方法での実現となります。
+試行錯誤 svn log svn logで表示したリビジョンを抽出する。limit N で出力するログを制御。
+$ /usr/local/bin/svn log --limit 1 ------------------------------------------------------------------------ r111 | kk_Ataka | 2011-12-17 11:51:11 +0900 ((金), 17 12月 2011) | 3 lines コミットログ ... ... まずは最新ログをひとつだけ取得。
+grep 次にリビジョンが記載してある行だけ抽出。
+$ /usr/local/bin/svn log --limit 1 | grep ^r.*lines$ r111 | kk_Ataka | 2011-12-17 11:51:11 +0900 ((金), 17 12月 2011) | 3 lines sed 最後にその行からsedコマンドで「rXX」だけを抜き出し。</description>
+    </item>
+    
+    <item>
+      <title>ファイルの拡張子を見て適切なコマンドで解凍してくれるスクリプトを組んだ</title>
+      <link>/2011/12/12/1323701022/</link>
+      <pubDate>Mon, 12 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/12/1323701022/</guid>
+      <description> [Unix][Shell][備忘録][Solaris]ファイルの拡張子を見て適切なコマンドで解凍してくれるスクリプトを組んだ  http://d.hatena.ne.jp/kk_Ataka/20111209/1323474254:title http://d.hatena.ne.jp/kk_Ataka/20111210/1323541524:title  を基に引数に指定したらよろしく解凍してくれるスクリプトを組んでみる。とりあえずオプション指定できないし圧縮できないけど必要になったら実装していこう。
+ </description>
+    </item>
+    
+    <item>
+      <title>tarコマンドでzオプションを使わずにファイルを解凍する</title>
+      <link>/2011/12/10/1323541524/</link>
+      <pubDate>Sat, 10 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/10/1323541524/</guid>
+      <description>[Solaris][備忘録]tarコマンドでzオプションを使わずにファイルを解凍する あらすじ Solarisにデフォルトで入っているtarではzオプションなどが使えない。のでtar.gzやtar.bz2ファイルを一発で解凍するにはパイプでつないでやる必要がある。
+コマンド $ gzip -cd xxxx.tar.gz | tar -xvf - こんな感じ。cオプションを指定してやる。……やってる事はわかるけど、tarの最後にあるハイフンはなんじゃろう。tar -f -で標準入力から持ってくるルール？
+ http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1120031991:title  ふむ。マニュアルを見てみる。
+ tarfile の名前が - である場合は、tarは標準出 力への書き込みあるいは標準入力からの読み取り のいずれか適当な操作を行います。tarはパイプ ラインの先頭もしくは末尾として使用することが できます。また、次のコマンドを使えば、tar は、 ディレクトリ階層を移動するためにも使用す ることができます。 ルールだったようだ。</description>
+    </item>
+    
+    <item>
+      <title>Unixでファイル圧縮・解凍するときに使うコマンドをまとめた</title>
+      <link>/2011/12/09/1323474254/</link>
+      <pubDate>Fri, 09 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/09/1323474254/</guid>
+      <description>[Unix][備忘録][Solaris]Unixでファイル圧縮・解凍するときに使うコマンドをまとめた あらすじ 不意に.Zファイルがやってきて解凍の仕方を調べてしまった。あとだいたいオプションを忘れるのでメモ。対象ファイルは以下。
+ .zip .Z .gz .bz2 .tar.gz .tgz .tar.bz2 .tbz .tar.Z  こんなファイルを固めたり解凍したり。
+extracted ┣direct/ ┃┗ls.txt # man ls &amp;gt;&amp;gt; ls.txt ┣slink ┣tar.txt # man tar &amp;gt;&amp;gt; tar.txt ┗zip.txt # man zip &amp;gt;&amp;gt; zip.txt tar ┗sample.tar $ tar tvf sample.tar ../extracted drwxr-xr-x 9999/9999 0 12月 8日 19:14 2011年 ../extracted/ lrwxrwxrwx 9999/9999 7 12月 8日 19:13 2011年 ../extracted/slink tar.txt へのシンボリックリンク drwxr-xr-x 9999/9999 0 12月 8日 19:37 2011年 ../extracted/direct/ -rw-r--r-- 9999/9999 36890 12月 8日 19:37 2011年 .</description>
+    </item>
+    
+    <item>
+      <title>Solarisで現在のOSバージョンやパッチバージョンを確認する</title>
+      <link>/2011/12/08/1323357042/</link>
+      <pubDate>Thu, 08 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/08/1323357042/</guid>
+      <description>[Solaris][備忘録]Solarisで現在のOSバージョンやパッチバージョンを確認する SPARC向けだろうか。そんなことなかったぜ！
+参考サイト  http://www.rose.sannet.ne.jp/nterasim/solaris/patch.html:title  unameコマンドでパッチ確認+α uname(現在のシステム名の表示)コマンドを使用していろいろ取得する。
+   コマンド 引数 意味 出力内容     uname OSの表示 SunOS   uname -n ホスト名の表示 XXXXXXX   uname -r OSリリースレベルの表示 5.10   uname -v カーネルパッチバージョンの表示 Generic_999999-99   uname -m マシンタイプの表示 sunXX   uname -p プロセッサタイプの表示 sparc   uname -i プラットフォーム名の表示 SUNXX,SPARC-ZZZZZZZZZZ   uname -a 全部 SunOS XXXXXXX 5.10 Generic_141999-99 (以下略)    [f:id:kk_Ataka:20111210091242j:image]</description>
+    </item>
+    
+    <item>
+      <title>ZenTestでRSpecを自動実行できるようにした</title>
+      <link>/2011/12/07/1323291938/</link>
+      <pubDate>Wed, 07 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/07/1323291938/</guid>
+      <description>[Ruby][備忘録]ZenTestでRSpecを自動実行できるようにした あらすじ ZenTestを使えばテストを*specファイルを変更したタイミングで実行できるという事を知った。
+ファイル編集する -&amp;gt; alt+tabでウィンドウ切り替える -&amp;gt; プロンプトでrspecコマンドうつ…の繰り返しとはなんだったのか……。
+参考サイト  http://randd.kwappa.net/2011/08/07/338:title http://d.hatena.ne.jp/seiunsky/20100131/1264913047:title  環境  Windows XP 導入済み  Ruby 1.8.7 Rspec 2.5 Rubygems バージョン失念   手順 ZenTest導入 まずはZenTestをgemで導入……しようと思ったらgem自体のアップデートを要求された。
+gem update --system アップした後はgem 1.8.10となった。gemを最新にしたらZenTestを導入。
+gem install ZenTest 次にソースファイルを用意。Growlで何かしら通知するファイルを作りたかったのでそんな感じの名前に。
+growl_for_ruby ┣.autotest ┣autotest ┃┗discover.rb ┣growl.rb　# 実際にソースをゴリゴリ書いていく ┗spec ┗growl_spec.rb # テストコード .autotest これにはまだ何も書いていない。設定を書いていくらしい。
+autotest/discover.rb autotestコマンド実行時にautotestフォルダに入っているdiscover.rbを読みに行くようだ。中身は以下。
+Autotest.add_discovery { &amp;#34;rspec2&amp;#34; } autotestでrspec 2.Xを使うよってことかな。
+spec/growl_spec.rb テストコード。rspecの書き方にならってテストを書いていく。注意しないといけないのは、テストコードはspecフォルダ以下に入れないと読み込んでくれない。[1]
+テスト実行 一つ新しいプロンプトを開き、プロジェクトルートへ移動。そしてautotest実行。
+$ autotest loading autotest/rspec2 C:\ruby1.8\bin\ruby -rrubygems -S C:/ruby1.</description>
+    </item>
+    
+    <item>
+      <title>UnixでストリーミングファイルをDLしたい</title>
+      <link>/2011/12/06/1323186439/</link>
+      <pubDate>Tue, 06 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/06/1323186439/</guid>
+      <description>[Unix][備忘録]UnixでストリーミングファイルをDLしたい あらすじ ミルキィホームズのラジオ(番組はなんでも可)を毎週自動的にサーバにDLするスクリプトを組みたい！
+調べること  ラジオはMMSプロトコルのASFファイル  wgetでDLできる？  MMSに対応してない模様？　wget proなら対応しているらしいが…  mplayerというソフトウェアでUnixでもMMSファイルをDLできるらしい http://ja.wikipedia.org/wiki/MPlayer:title   というわけでまずはmplayerを使ってUnixでストリーミングファイルをDLできるようにしてみる。
+ダウンロード、インストール ソースからDL。まずはzlibそしてGitが必要。
+http://zlib.net/:title
+$ wget http://zlib.net/zlib-1.2.5.tar.gz $ gunzip zlib-1.2.5.tar.gz $ tar xf zlib-1.2.5.tar $ cd zlib-1.2.5/ $ ./configure $ make $ sudo make install http://git-scm.com/:title
+$ wget http://git-core.googlecode.com/files/git-1.7.7.4.tar.gz $ gunzip git-1.7* $ tar xf git -1.7* $ cd git-1.7* $ ./configure $ make $ sudo make install http://www.mplayerhq.hu/design7/dload.html:title
+$ wget http://www.mplayerhq.hu/MPlayer/releases/mplayer-export-snapshot.tar.bz2 $ bunzip2 mplayer-export-* $ tar xf mplayer-export-* $ cd mplayer-export-* $ .</description>
+    </item>
+    
+    <item>
+      <title>RedmineでプラグインインストールしたらTemplateErrorが出た</title>
+      <link>/2011/12/05/1323092947/</link>
+      <pubDate>Mon, 05 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/05/1323092947/</guid>
+      <description>[Ruby][備忘録][Redmine]RedmineでプラグインインストールしたらTemplateErrorが出た あらすじ Redmineにプラグインをインストールした後で動かそうとしたらエラーが。
+調査 下記の例はredmine_importerというCSVでチケット一括登録するプラグイン。
+ActionView::TemplateError (No plugin called &amp;#39;redmine_importer&amp;#39; - please use the full name of a loaded plugin.) on line #2 of vendor/plugins/idlysphere-redmine_importer-7a19e8d/app/views/importer/match.html.erb: 1: &amp;lt;% content_for :header_tags do %&amp;gt; 2: &amp;lt;%= stylesheet_link_tag &amp;#39;importer&amp;#39;, :plugin =&amp;gt; &amp;#39;redmine_importer&amp;#39; %&amp;gt; 3: &amp;lt;% end %&amp;gt; 4: 5: &amp;lt;h2&amp;gt;&amp;lt;%= l(:label_match_columns) %&amp;gt;&amp;lt;/h2&amp;gt; vendor/plugins/idlysphere-redmine_importer-7a19e8d/app/views/importer/match.html.erb:2 app/helpers/application_helper.rb:764:in `content_for&amp;#39; vendor/plugins/idlysphere-redmine_importer-7a19e8d/app/views/importer/match.html.erb:1 /usr/local/lib/ruby/1.8/webrick/httpserver.rb:104:in `service&amp;#39; /usr/local/lib/ruby/1.8/webrick/httpserver.rb:65:in `run&amp;#39; /usr/local/lib/ruby/1.8/webrick/server.rb:173:in `start_thread&amp;#39; /usr/local/lib/ruby/1.8/webrick/server.rb:162:in `start&amp;#39; /usr/local/lib/ruby/1.8/webrick/server.rb:162:in `start_thread&amp;#39; /usr/local/lib/ruby/1.8/webrick/server.rb:95:in `start&amp;#39; /usr/local/lib/ruby/1.8/webrick/server.rb:92:in `each&amp;#39; /usr/local/lib/ruby/1.8/webrick/server.rb:92:in `start&amp;#39; /usr/local/lib/ruby/1.8/webrick/server.rb:23:in `start&amp;#39; /usr/local/lib/ruby/1.</description>
+    </item>
+    
+    <item>
+      <title>複数のRuby環境の管理・切替ができるrvmをインストールした</title>
+      <link>/2011/12/04/1323009249/</link>
+      <pubDate>Sun, 04 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/04/1323009249/</guid>
+      <description>[Ruby][備忘録][Mac][Unix]複数のRuby環境の管理・切替ができるrvmをインストールした あらすじ 先にWindowsにてRubyのバージョン管理ができるpikをインストールしていたので、今度はWindows以外にrvmをインストールする。
+参考サイト  https://rvm.beginrescueend.com/rvm/install http://www.machu.jp/diary/20110521.html#p01:title http://d.hatena.ne.jp/mirakui/20100502/1272849327:title  まとめ とりあえず以下のコマンドを覚える。
+ rvm list known  インストールできるRubyの一覧  rvm list  インストールしているRubyの一覧  rvm install x.x.x  インストール  rvm use x.x.x  Rubyの切り替え   事前準備  既にインストールされていたRubyは全部消した。  手順 インストールのため下記コマンドをうつ。
+$ bash &amp;lt; &amp;lt;(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer ) ホームディレクトリに.rvmが生成される。list knownでインストールできるRuby一覧が表示される。
+(2012/04/07追記)command not foundが出る場合はPATHが通ってない。
+ Installing RVM to /Users/kk_Ataka/.rvm/
+Adding rvm PATH line to /Users/kk\_Ataka/.bashrc /Users/kk\_Ataka/.zshrc. RVM sourcing line found in /Users/kk\_Ataka/.</description>
+    </item>
+    
+    <item>
+      <title>Sphinxでドキュメントを書くためreST記法に入門した</title>
+      <link>/2011/12/02/1322839748/</link>
+      <pubDate>Fri, 02 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/02/1322839748/</guid>
+      <description>[Sphinx][reST][備忘録]Sphinxでドキュメントを書くためreST記法に入門した あらすじ Sphinxを導入した時にまとめたreST(reStructuredText)記法をアウトプットしよう。まだリファレンス読み込んでおらず、感覚で使っているところもあるので間違った認識もあるかも…そこは学んだら追記しよう。
+参考  http://sphinx.shibu.jp/:title http://docutils.sourceforge.net/rst.html:title  基本的にSphinxのサイトに書いてあることを写経してます。
+注意 見出しの文字数より少なくならないように上下囲む、とかテーブルは列・行を合わせるとか結構シビアな書き方が求められるのですが……pre記法にしても揃ってない…！
+見出し系 間違って覚えていたので、見出し系については[http://d.hatena.ne.jp/kk_Ataka/20120816/1345124098:title]を参照。
+ h1見出し  半角イコールで上下を揃えて囲むとh1と同等。
+========================= rst(reStructuredText)解説 ========================= [f:id:kk_Ataka:20111203000832j:image]
+見出しより長くしても問題ないが、見出しより短いと警告される。(Title underline too short.):
+=========================== 怒られない =========================== == 怒られる == 以下の見出しも同様。
+ h2見出し  下だけ半角イコールでh2と同等。
+&amp;lt;h2&amp;gt;になる ========== [f:id:kk_Ataka:20111203000826j:image]
+ h3見出し  ハイフンで上下囲むとh3と同等。
+---------- &amp;lt;h3&amp;gt;になる ---------- [f:id:kk_Ataka:20111203000827j:image]
+ h4見出し  下だけハイフンでh4と同等。
+&amp;lt;h4&amp;gt;になる ---------- [f:id:kk_Ataka:20111203000828j:image]
+リスト系  箇条書きリスト  箇条書きリストの項目。ハイフンで定義。
+- りんご - きのこ - パワーアップ用 - 1UP用 - みかん [f:id:kk_Ataka:20111202231941j:image]</description>
+    </item>
+    
+    <item>
+      <title>DAT装置の使い方 超簡易版(Solaris)</title>
+      <link>/2011/12/01/1322746718/</link>
+      <pubDate>Thu, 01 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/01/1322746718/</guid>
+      <description>[Solaris][備忘録]DAT装置の使い方 超簡易版(Solaris) あらすじ 結局はtarコマンド+αなんだけど、どうもDAT装置とテープというデバイスが使い慣れないので操作方法をメモしておく。とりあえず
+ 状態確認 何も考えずに書き込み 全部取り出し  くらい。
+コマンド 使用するコマンドはmt(磁気テープの制御)とtar。まずはmt。
+テープの状態表示  -fオプションでテープデバイスの指定 /dev/rmt/0はテープデバイスのパス  $ mt -f /dev/rmt/0 status テープの巻き戻し 今回は使わなかった。
+$ mt -f /dev/rmt/0 rewind テープの取り出し データの取り出しではなく、DAT装置からの取り出し。
+$ mt -f /dev/rmt/0 offline ここからtar。
+ fオプションはtarファイル引数の指定。  fを省略した場合は$TAPE(設定されている場合) $TAPEもない場合は/etc/default/tarを見に行く[1]  vオプションはファイル名の出力  テープの内容を表示  tオプションは指定されたtarファイルの内容一覧表示  $ tar tvf /dev/rmt/0 tオプションで表示される内容はこんな感じ。
+$ tar tf test.tar test/aaa.txt ... vオプションと併用すると詳細に。
+$ tar tvf openssl-xxx.tar -rw-r--r-- 9/9 99999 3月 19日 22:22 2011年 test/aaa.</description>
+    </item>
+    
+    <item>
+      <title>rvm環境でRuby実行時にReadlineエラーが起きた時の対処法</title>
+      <link>/2011/11/30/1322662743/</link>
+      <pubDate>Wed, 30 Nov 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/11/30/1322662743/</guid>
+      <description>[Ruby][備忘録][Heroku]rvm環境でRuby実行時にReadlineエラーが起きた時の対処法 タイトル通り。さくらVPS(CentOS)にrvmでRubyをインストールし、Heroku環境を構築しようとしたらReadlineエラーが起きた。
+$ rvm install 1.9.2 (略) $ rvm use 1.9.2 $ gem install heroku (略) $ heroku /home/kk_Ataka/.rvm/rubies/ruby-1.9.2-p290/lib/ruby/site_ruby/1.9.1/rubygems/custom_require.rb:36:in `require&amp;#39;: no such file to load -- readline (LoadError) from /home/kk_Ataka/.rvm/rubies/ruby-1.9.2-p290/lib/ruby/site_ruby/1.9.1/rubygems/custom_require.rb:36:in `require&amp;#39; from /home/kk_Ataka/.rvm/gems/ruby-1.9.2-p290/gems/heroku-2.14.0/lib/heroku/command/run.rb:1:in `&amp;lt;top (required)&amp;gt;&amp;#39; from /home/kk_Ataka/.rvm/rubies/ruby-1.9.2-p290/lib/ruby/site_ruby/1.9.1/rubygems/custom_require.rb:36:in `require&amp;#39; from /home/kk_Ataka/.rvm/rubies/ruby-1.9.2-p290/lib/ruby/site_ruby/1.9.1/rubygems/custom_require.rb:36:in `require&amp;#39; from /home/kk_Ataka/.rvm/gems/ruby-1.9.2-p290/gems/heroku-2.14.0/lib/heroku/command.rb:17:in `block in load&amp;#39; from /home/kk_Ataka/.rvm/gems/ruby-1.9.2-p290/gems/heroku-2.14.0/lib/heroku/command.rb:16:in `each&amp;#39; from /home/kk_Ataka/.rvm/gems/ruby-1.9.2-p290/gems/heroku-2.14.0/lib/heroku/command.rb:16:in `load&amp;#39; from /home/kk_Ataka/.rvm/gems/ruby-1.9.2-p290/gems/heroku-2.14.0/bin/heroku:13:in `&amp;lt;top (required)&amp;gt;&amp;#39; from /home/kk_Ataka/.rvm/gems/ruby-1.9.2-p290/bin/heroku:19:in `load&amp;#39; from /home/kk_Ataka/.rvm/gems/ruby-1.9.2-p290/bin/heroku:19:in `&amp;lt;main&amp;gt;&amp;#39; readlineが入っていなかったのだろうか？
+$ sudo yum install readline-devel $ cd $rvm_path/src/RUBYVERSION/ext/readline $ ruby extconf.</description>
+    </item>
+    
+    <item>
+      <title>pikでインストールしたRubyでbundle exec rubyしたらエラーになった 解決編</title>
+      <link>/2011/11/29/1322569582/</link>
+      <pubDate>Tue, 29 Nov 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/11/29/1322569582/</guid>
+      <description>[Ruby][備忘録]pikでインストールしたRubyでbundle exec rubyしたらエラーになった 解決編 前回までのあらすじ [http://d.hatena.ne.jp/kk_Ataka/20111128/1322482230:title]で出たRubyオプションのエラー。
+$ bundle exec ruby app.rb ruby: invalid switch in RUBYOPT: -a (RuntimeError) この-aオプションはどこから出てきたのかというと、&amp;rdquo;Documents and Settings&amp;rdquo;のaだという事がわかった。
+結論  Rubyのインストールパスにスペースを含めない pikでRubyをインストールする前にpik config install_dir=XXXでパス指定する  先に結論を書くと、やっぱりこうだった。以下、調査ログ。
+調査 試しに以下のディレクトリに設置したRubyを使用しようとしたところ、下記のエラーが。(whichとか使えてるのはnyaosを使っているからです)
+ C:\rubies\Ru by
+  $ which ruby C:\rubies\Ru by\bin\ruby.exe $ bundle exec ruby myapp.rb ruby: illegal switch in RUBYOPT: -b (RuntimeError)  C:\rubies\R uby
+  $ which ruby C:\rubies\R uby\bin\ruby.exe $ bundle exec ruby myapp.rb ruby: illegal switch in RUBYOPT: -u (RuntimeError) あぁやっぱりかー。</description>
+    </item>
+    
+    <item>
+      <title>pikでインストールしたRubyでbundle exec rubyしたらエラーになった</title>
+      <link>/2011/11/28/1322482230/</link>
+      <pubDate>Mon, 28 Nov 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/11/28/1322482230/</guid>
+      <description>[Ruby][備忘録]pikでインストールしたRubyでbundle exec rubyしたらエラーになった 解決編 - http://d.hatena.ne.jp/kk_Ataka/20111129/1322569582:title
+あらすじ  デフォルトのRubyからpikでインストールしたRubyに切り替えた後bundle exec rubyをしたら下記のようなエラーが出た  $ bundle exec ruby app.rb ruby: invalid switch in RUBYOPT: -a (RuntimeError) ン？　なんだこれ。
+調査  pikでインストールしたRubyはバージョン等関係なしにことごとくこけた  1.8.7 patch352 1.9.3  デフォルトでインストールしたRubyでは無事起動した / 下記ログ  1.8.7 patch330   $ bundle exec ruby app.rb [2011-11-28 19:31:55] INFO WEBrick 1.3.1 [2011-11-28 19:31:55] INFO ruby 1.8.7 (2010-12-23) [i386-mswin32] == Sinatra/1.3.1 has taken the stage on 4567 for development with backup from WEBrick [2011-11-28 19:31:55] INFO WEBrick::HTTPServer#start: pid=964 port=4567 1.</description>
+    </item>
+    
+    <item>
+      <title>LokkaをインストールしてHerokuにデプロイした</title>
+      <link>/2011/11/27/1322329546/</link>
+      <pubDate>Sun, 27 Nov 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/11/27/1322329546/</guid>
+      <description>[Ruby][備忘録][Heroku][Lokka]LokkaをインストールしてHerokuにデプロイした あらすじ Herokuを使い出したのでLokkaを触ってみる。
+参考サイト  http://lokka.org/getting-started:title  公式ページの手順だけでなんとかなりそう。
+手順 Lokka入手、インストール LokkaをGitHubからCloneして、Bundle install。&amp;ndash;withoutオプションでmysql, postgresql, sqliteから使わないDBを指定できる。
+$ git clone git://github.com/komagata/lokka.git$ cd lokka $ bundle install ./vendor/bundle --without development mysql sqlite ん、何かエラッた。
+Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native extension. (略) Gem files will remain installed in /home/kk_Ataka/github/lokka/vendor/bundle/ruby/1.9.1/bundler/gems/do-d7cb262d89a1/do_postgres for inspection. Results logged to /home/kk_Ataka/github/lokka/vendor/bundle/ruby/1.9.1/bundler/gems/do-d7cb262d89a1/do_postgres/ext/do_postgres/gem_make.out An error occured while installing do_postgres (0.10.6), and Bundler cannot continue. Make sure that `gem install do_postgres -v &amp;#39;0.</description>
+    </item>
+    
+    <item>
+      <title>HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた</title>
+      <link>/2011/11/26/1322240459/</link>
+      <pubDate>Sat, 26 Nov 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/11/26/1322240459/</guid>
+      <description>[Ruby][備忘録][Sinatra][Heroku]HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた あらすじ いよいよHerokuをはじめる。
+参考サイト  http://d.hatena.ne.jp/ruedap/20110209/ruby_heroku_twitter_bot:title http://studyheroku.wiki.fc2.com/wiki/Heroku%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89:title http://kuranuki.sonicgarden.jp/2009/05/rubypaasherokurails.html:title  事前準備  Ruby 1.9.3 Git 1.7.3 rvm 1.9.2 gem 1.8.10  gem管理にbundlerを使いたい   プロジェクト作成 Bundler準備 プロジェクトフォルダ(heroku_sample)を作成し、その中にGemfileファイルを作成する。gem &amp;lsquo;heroku&amp;rsquo;は後ほどHerokuに対してプロジェクトを作ったりするのに使用する。
+$ mkdir heroku_sample $ cd heroku_sample $ vi Gemfile source :rubygems source &amp;#39;http://rubygems.org&amp;#39; gem &amp;#39;sinatra&amp;#39; gem &amp;#39;heroku&amp;#39; bundleでインストール。場所は任意で。今回はカレントのvendor/bundleにインストール。
+$ bundle install ./vendor/bundle Sinatra準備 SinatraでHello World!!できるようにサンプルファイルapp.rbを作成。
+$ vi app.rb require &amp;#39;rubygems&amp;#39; require &amp;#39;sinatra&amp;#39; get &amp;#39;/&amp;#39; do &amp;#34;Hello World!&amp;#34; end Rackアプリケーションとして起動するためconfig.ruファイルを作成する。
+require &amp;#39;./app.rb&amp;#39; run Sinatra::Application ※ちょっと先の話になるけど、始めは1行目をrequire &amp;lsquo;app.</description>
+    </item>
+    
+    <item>
+      <title>複数のRuby環境の管理・切替ができるpikを実行できた nyaos編</title>
+      <link>/2011/11/24/1322138944/</link>
+      <pubDate>Thu, 24 Nov 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/11/24/1322138944/</guid>
+      <description>[Ruby][備忘録]複数のRuby環境の管理・切替ができるpikを実行できた nyaos編 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20111004/1317660186:title  まず、環境変数がおかしいとpikが正常に動きませんよというのが一つ。もう一つの原因がコマンドプロンプトではなくnyaosを使っていたという事。
+参考サイト  http://d.hatena.ne.jp/miyamuko/20100905/nyaos_with_pik:title  修正方法 そのままだと、nyaosでPATH追加シェルを起動しても親シェルであるnyaosには反映されませんよってんで、動かすには_nyaファイルに以下のコードを追加する。
+pik{ pik_runner.exe pik.bat %* if exist &amp;#34;%USERPROFILE%\.pik\pik.bat&amp;#34; then source &amp;#34;%USERPROFILE%\.pik\pik.bat&amp;#34; 2&amp;gt; nul endif } msysgitを使ってる時も同じ感じで追加すればいいのかな。</description>
+    </item>
+    
+    <item>
+      <title>Word2007でCtrl&#43;hjklで移動できるようにする</title>
+      <link>/2011/11/17/1321537502/</link>
+      <pubDate>Thu, 17 Nov 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/11/17/1321537502/</guid>
+      <description> [Windows][備忘録]Word2007でCtrl+hjklで移動できるようにする あらすじ  あーWord使ってる時hjklで移動してーあとバックスペースも  手順 テンプレートファイルを編集するとできるよう。で、それはApplication Data下にある。
+ Word2007を起動し、左上のWindowsマークから開くを選択  ファイルの種類で「Word マクロ有効テンプレート(.dotm)」を選択  %APPDATA%\Microsoft\Templates\Normal.dotmを開く   開発タブ -&amp;gt; VisualBasic -&amp;gt; Normal -&amp;gt; Microsoft Word Objects -&amp;gt; ThisDocumentに以下をペーストする  Sub BkSpPrc() Selection.TypeBackspace End Sub Sub MoveLeft() Selection.MoveLeft End Sub Sub MoveRight() Selection.MoveRight End Sub Sub MoveUp() Selection.MoveUp End Sub Sub MoveDown() Selection.MoveDown End Sub  左上のWindowsマーク -&amp;gt; Wordのオプション -&amp;gt; ユーザー設定 -&amp;gt; ショートカットキー:ユーザー設定 -&amp;gt; 分類:マクロ  マクロに上記で記載した関数が表示されていることを確認 マクロを選択してMoveLeftはCtrl+h、MoveDownはCtrl+j&amp;hellip;とキーを割り当てていく   </description>
+    </item>
+    
+    <item>
+      <title>Excel2007のF1キーを無効化する</title>
+      <link>/2011/11/16/1321447232/</link>
+      <pubDate>Wed, 16 Nov 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/11/16/1321447232/</guid>
+      <description>[Windows][備忘録]Excel2007のF1キーを無効化する あらすじ ExcelのF1キーを殺したい…。Wordとかは百歩譲っていいとして、ExcelにはF2キーにセル編集が割当たっているので、それを使うときに暴発してしまうため。
+案  F1キーそのものを引っこ抜く 何かしらの方法で無効化する  ググってみると、F1キーをぶちぬくという方法も割とメジャーらしいのですが、いずれ返却しなければいけないPCのため物理的な方法は却下。なので無効化する方向でいきます。レジストリをいじってなんとかする。Accessの履歴といい、なんでMicrosoft製品は何かしようとしたらレジストリいじらないといけないんだ…。
+手順 Windowsキー+r -&amp;gt; regedit でレジストリエディタ起動、まずは下記パスを掘っていく。
+HKEY_CURRENT_USER ┗Software ┗Policies ┗Microsoft ┗Office Officeフォルダ直下になにかしら数字フォルダがあるかもしれないが、これはOfficeのバージョン。
+ 12.0 = Office2007  という事らしい。今回は2007なので12.0を掘る。ここから下の階層はなければ作成する。(作成したい階層で右クリック -&amp;gt; 新規 -&amp;gt; キー)
+HKEY_CURRENT_USER ┗Software ┗Policies ┗Microsoft ┗Office ┗12.0 ┗Excel ┗DisabledShortcutKeysCheckBoxes DisabledShortcutKeysCheckBoxesを作り、DisabledShortcutKeysCheckBoxesで右クリック -&amp;gt; 新規 -&amp;gt; 文字列値を選択しF1Key(わかればなんでもよい)と入力。作成したF1Keyをダブルクリックし
+112,0 と入力しOK押下。
+Excelを再起動するとF1キーを押しても何も起こらなくなった！！　よし！</description>
+    </item>
+    
+    <item>
+      <title>Windowsのローカル環境にWordPressをインストールした</title>
+      <link>/2011/10/11/1318334855/</link>
+      <pubDate>Tue, 11 Oct 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/10/11/1318334855/</guid>
+      <description>[Windows][備忘録]Windowsのローカル環境にWordPressをインストールした あらすじ  Wordpress上ではてな記法を使うことができるというプラグイン http://rewish.org/wp/hatena_notation_plugin:title を見つけて使ってみたい！　と思ったのでWordpress備忘録も兼ねてインストール  参考サイト  WordPress  http://ja.wordpress.org/:title http://ja.wordpress.org/install/:title http://www.webcreatorbox.com/tech/wordpress-install-local/:title  MySQL  http://y-kit.jp/saba/xp/mysqlinst.htm:title http://www.mysql.com/downloads/installer/:title   推奨環境  WordPress 3.2 の場合  PHP 5.2.4 以上 MySQL 5.0 以上   実行環境  Windows XP WordPress 3.2 Apache 2.2.1 PHP 5.3.8 MySQL 5.5.15  MySQL インストール、設定  [http://www.mysql.com/downloads/installer/:title]よりMySQLをDL。登録がめんどかったら[http://download.softagency.net/mysql/Downloads/MySQL-5.5/:title]この辺から msi実行。基本的に次へ次へ C:\windows直下にmy.iniファイルを作成以下のように記述  basedirはMySQLのルート(msiでデフォルトインストールするとC:/Program Files/MySQL/MySQL Server 5.5に入る) datadirはその中のdataフォルダ   [mysqld] basedir=&amp;#34;C:/Program Files/MySQL/MySQL Server 5.5&amp;#34; datadir=&amp;#34;C:/Program Files/MySQL/MySQL Server 5.</description>
+    </item>
+    
+    <item>
+      <title>さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする</title>
+      <link>/2011/10/08/1318068887/</link>
+      <pubDate>Sat, 08 Oct 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/10/08/1318068887/</guid>
+      <description>[Unix][備忘録][Dropbox][さくらVPS]さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする あらすじ DropboxにはEnable LAN syncというオプションがあり、これをONにすると同じLAN内のマシンはインターネットを経由しないで同期ができる。
+f:id:kk_Ataka:20111008190858j:image
+ただし、17500ポートに向けてUDPパケットがやまほど投げているようで、同じLAN内に自分以外のマシンがある状態でこのオプションをONにしていると近隣の方へやまほどパケットを投げまくりで非常に迷惑がかかります……。基本的にDropboxのオプションからEnable LAN sync(LAN同期を有効にする)をOFFにすればよい。
+……のだが、CUIからDropboxをインストールしている場合は少し手順を踏んでこのオプションを切る必要があります。
+参考サイト  http://d.hatena.ne.jp/otn/20110502/p1:title http://blog.7kai.org/2011/04/dropbox-lan-sync-disable/:title  というか、前回の記事http://d.hatena.ne.jp/kk_Ataka/20110423/1303489798:title でインストールするときに参考にしたサイトにこの問題が書いてあった……。
+ To stop dropbox from sending LAN Sync broadcasts every 30 seconds over port 17500 (http://forums.dropbox.com/topic.php?id=16253) see DropboxAddons/DisableLanSync
+http://wiki.dropbox.com/TipsAndTricks/TextBasedLinuxInstall#SuppressLANSyncbroadcasts
+ 必要環境 |*Python|2.6|
+スクリプトDL  http://wiki.dropbox.com/DropboxAddons/PyDropboxValues から pyDropboxValues.py をDLする  設定値を表示できる  http://wiki.dropbox.com/DropboxAddons/DisableLanSync から dropbox_set_lansync.py をDLする  LAN syncオプションを切り替える   手順  pyDropboxValue.pyで設定をバックアップする  $ PYTHON2.6 pyDropboxValues.py _backup Backed up &amp;#39;config.</description>
+    </item>
+    
+    <item>
+      <title>複数のRuby環境の管理・切替ができるpikを実行できた</title>
+      <link>/2011/10/04/1317660186/</link>
+      <pubDate>Tue, 04 Oct 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/10/04/1317660186/</guid>
+      <description>[Ruby][備忘録]複数のRuby環境の管理・切替ができるpikを実行できた あらすじ  [http://d.hatena.ne.jp/kk_Ataka/20111003/1317642705:title]にてBundlerでのgem管理に失敗した 別の方法はないかと調べているとRubyをバージョンごとに管理できるrvmとpikを見つけた  とりあえず別出ししておいて安定させたい環境と色々試行錯誤したい環境に分けられる？  Windows環境なのでpikを使ってみようとインストールしてみた  インストール手順(gem) ※gemでは実際にRubyをinstallする段階の所で失敗したので、実際は次のmsiを使ってインストールした。
+ gemでOK  gem install pik  pikをインストールするにはpik_installコマンドを実行する必要があるが、フォルダを作成し、PATHに追加してから実行してくれと言われる  $ pik_install Usage: pik_install path\to\install You should install to a directory that is in your system path, or add the directory to your system path. Do not install to your ruby&amp;#39;s bin directory because pik will remove it from the path when switching versions. Example: C:\&amp;gt;path PATH=C:\tools;C:\ruby\Ruby-186-p383\bin;C:\WINDOWS\system32;... C:\&amp;gt;pik_install C:\tools  C:\pikフォルダ作成しPATHに追加し再度  $ pik_install C:\pik Thank you for using pik.</description>
+    </item>
+    
+    <item>
+      <title>Rubyのgemバージョン管理ができるBundlerを実行できなかった</title>
+      <link>/2011/10/03/1317642705/</link>
+      <pubDate>Mon, 03 Oct 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/10/03/1317642705/</guid>
+      <description>[Ruby][備忘録]Rubyのgemバージョン管理ができるBundlerを実行できなかった あらすじ  gemでライブラリを入れまくり、updateしまくりでバージョンの不整合が起こり復旧不可能になった 同じ過ちは繰り返したくない…ので今度はうまく管理したい Bundlerを使えばgemのバージョン管理ができるみたい  設定さえあればどの環境も同じにする事が出来る？   Bundlerを入れてみます。
+環境  Windows XP Ruby 1.8.7  RubyのパスはC:\ruby  必要なDLLなど  zlib.dll readline.dll iconv.dll iconv.lib iconv_a.lib ssleay32.dll libeay32.dll   手順 Rubygemsインストール  [http://rubyforge.org/frs/?group_id=126:title]よりRubygemsをDL。バージョンは1.7.2  gemは入っていないとするので、zipファイルからインストールする。   $ ruby setup.rb RubyGems 1.7.2 installed ・ｿ=== 1.7.2 / 2011-04-05 * 1 Bug Fix: * Warn on loading bad spec array values (ntlm-http gem has nil in its cert chain) ------------------------------------------------------------------------------ RubyGems installed the following executables: C:/ruby/bin/gem  バージョン、環境を確認  $ gem -v 1.</description>
+    </item>
+    
+    <item>
+      <title>.msgファイルをパースして中から添付ファイルを抜き出す</title>
+      <link>/2011/09/30/1317312438/</link>
+      <pubDate>Fri, 30 Sep 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/09/30/1317312438/</guid>
+      <description>[Java][Windows][Ruby][備忘録].msgファイルをパースして中から添付ファイルを抜き出す 正確にはRubyというには微妙なんですが…。
+前回までのあらすじ  選んだメール(本文と添付ファイル)をまとめてDLしてくるだけの簡単なお仕事はできるようになった  http://d.hatena.ne.jp/kk_Ataka/20110517/1305560776:title http://d.hatena.ne.jp/kk_Ataka/20110709/1310140318:title http://d.hatena.ne.jp/kk_Ataka/20110823/1314103220:title   しかし、社内セキュリティGWの設定？　のためかzipとかexeとか怪しい拡張子が付いている添付ファイルは一旦msgファイルに固められるという仕様のためそのままでは添付ファイルが見れない。
+こういうメールが
+メール ┗添付ファイル.zip 届いた時にはこうなっている
+メール ┗ラップ.msg(＼あやしいファイルだから注意してDLしてね／) ┗本来の添付ファイル.zip なんとかRubyからmsgファイル内を解析して添付ファイルを引っこ抜いて保存ができまいか…というのが今回の問題。
+結論 以下のライブラリを駆使して実現しました。
+ msgparser(Auxiliiという所のJava用msgファイルパースライブラリ) jrb(Java Ruby Bridge: RubyからJavaVMを操作できるライブラリ)  一応Rubyでmsgファイルを解析するライブラリも探してみたのですが、あまりないのかな？　http://en.sourceforge.jp/projects/sfnet_ssfiledll/downloads/SSFileDLL%20%28MAPI%29/1.0/SSFileDLL-MAPI-1.0-Source.zip/:title こういうdllは見つけたのですが、MAPIがよくわからん上に説明を見る限りHasAttach(添付ファイルを持ってるか持ってないか？)くらいしかわからない？　ようなのであきらめました。
+あと、msgparserはJavaライブラリなので当初はJRubyで書けば何とかなるかなと思ってました。簡単なサンプルは http://www.rgagnon.com/javadetails/java-0613.html:title このページのような感じ。が、今まで書いたコードをJRubyで実行すると失敗してしまったので方向転換；；　RubyからJavaVMを操作できるrjbというライブラリを使う事に。
+ダウンロード・インストール  msgparser  http://auxilii.com/msgparser/Page.php?id=16000:title よりmsgparserをDL  [http://poi.apache.org/poifs/:title]や[http://www.freeutils.net/source/jtnef/:title]とかが必要になるのですが、上記のmsgparse.zipの中に全部入ってます[1]  distよりmasparser-X.XX.jarを、libよりpoi-X.X-YYYYMMDD.jarとtnef-X.X.X.jarを取得し、同じプロジェクト内にコピー。とりあえずlibフォルダを作ってそこに入れました  rjb  gemで。ただし、当然というかJavaが入っていないと失敗する模様。環境変数JAVA_HOMEも設定している必要があるみたい   gem install rjb ソース ソース全体は [https://github.com/gosyujin/outlook_for_ruby:title] 。msgParse.rbが本体、ライブラリがlibに入っています。
+使い方としてはMsgParseをnewしてinputMsgで.msgファイルのパス指定、saveFileで添付ファイルぶっこぬいて出力先に保存としたい。こんな感じで。
+msg = MsgParse.new msg.inputMsg(MSGFILE) msg.saveFile(SAVEDIR) という事でMsgParser[2]クラスを作成。ソースは [https://github.com/gosyujin/outlook_for_ruby/blob/master/msgParse.rb:title] 。まずは初期化から。</description>
+    </item>
+    
+    <item>
+      <title>Solarisのパッケージを作ってみる もう少し学んだ版</title>
+      <link>/2011/09/14/1316002377/</link>
+      <pubDate>Wed, 14 Sep 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/09/14/1316002377/</guid>
+      <description>[Solaris][備忘録]Solarisのパッケージを作ってみる もう少し学んだ版 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20110912/1315826713:title  もう少し調べてみた。
+参考サイト  http://dlc.sun.com/osol/g11n/content/PACKINSTALL/ja/ch2buildpkg-11300.html:title  必要なもの パッケージコンテンツ
+ディレクトリ含めたソース一式。ざっくりソース一式とか言ってるのでここは作るものによってもう少しブレークダウンする必要がある
+pkginfoファイル
+パッケージ名等のパラメータを定義するファイル。コマンドではなくファイル。
+Prototypeファイル
+パッケージのコンポーネント一覧を記載するファイル
+場合によって用意するもの(必須ではない) compverファイル
+パッケージと互換性がある以前のバージョンのパッケージの定義ファイル
+dependファイル
+パッケージと関連があるパッケージの定義ファイル
+spaceファイル
+インストールに必要なディスク容量の定義ファイル
+copyrightファイル
+インストール時に表示される著作権メッセージの定義ファイル
+パッケージコンテンツの作成 作成ディレクトリと内訳。
+$ pwd /home/kk_Ataka/pkgroot/ MYAPpkg┳bin┳proccess ┃　┗start ┣lib━common.lib ┗etc━etcFile これを/直下にインストールしたい。
+pkginfoファイル作成 /にインストールしたいので、BASEDIRが/でいいのか？
+PKG=&amp;#34;MYAPpkg&amp;#34; NAME=&amp;#34;MyApplyPackage&amp;#34; ARCH=&amp;#34;sparc&amp;#34; VERSION=&amp;#34;release 1.0 /svn revision r222&amp;#34; CATEGORY=&amp;#34;application&amp;#34; DESC=&amp;#34;This is my test packages.&amp;#34; VENDOR=&amp;#34;MYAPPLY&amp;#34; BASEDIR=&amp;#34;/&amp;#34; pkginfoファイル書式 |*PKG|必須|32文字以内|パッケージの省略名 英数字で構成、頭に数字は× 予約語(install, new等)は使用できない。最初の4文字は社名などがお勧め|
+|*NAME|必須|256文字以内 |パッケージの完全名 英数字で構成 必要なタイミング、インストールするパーティション等を明瞭に記載する[1]|
+|*ATCH|必須|16文字以内|アーキテクチャ 複数対応している場合はカンマ区切り|
+|*VERSION|必須|256文字以内|バージョン 先頭に(は×|</description>
+    </item>
+    
+    <item>
+      <title>Solarisのパッケージを作ってみる</title>
+      <link>/2011/09/12/1315826713/</link>
+      <pubDate>Mon, 12 Sep 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/09/12/1315826713/</guid>
+      <description>[Solaris][備忘録]Solarisのパッケージを作ってみる もう少し学んだ。http://d.hatena.ne.jp/kk_Ataka/20110914/1316002377:title
+あらすじ  Solarisのパッケージの作り方を学ぶ刻がきた  参考サイト  http://www.syuhitu.org/other/package/package.html:title http://www.nognog.com/techmemo/Solaris_Package_Creation_HOWTO.php:title http://blogs.oracle.com/yappri/entry/create_solaris_package  インストール後のファイルを作成する 作業用ディレクトリに移動する。
+$ cd /tmp/kk_Ataka 次にインストール後のファイル構成を作る。今回はこんなパッケージを作る。
+/home/kk_Ataka/testpkg /home/kk_Ataka/testpkg/readme.txt 実際に作る。
+$ mkdir /home/kk_Ataka/testpkg $ touch /home/kk_Ataka/testpkg/readme.txt あと、パッケージ名を考えておく。今回はTESTPKGでいいかな。
+Prototypeファイルを作成する 以下のような内容のファイルを作成し保存する。名前は適当でよいので今回はtext.txtとした。これはまだPrototypeファイルではない。
+/home/ /home/kk_Ataka/ /home/kk_Ataka/testpkg/ /home/kk_Ataka/testpkg/readme.txt 次に下記コマンドを実行する。
+pkgproto &amp;lt; test.txt &amp;gt; Prototype 成功したら、カレントディレクトリにPrototypeというファイルが出来ている。中身はこんなもん。
+d none /home 0755 root root d none /home/kk_Ataka 0755 kk_Ataka users d none /home/kk_Ataka/testpkg 0755 kk_Ataka users f none /home/kk_Ataka/testpkg/readme.txt 0644 kk_Ataka users 左がファイルのタイプ？(d:ディレクトリ、f:ファイル)　noneはなんだろう？作成するファイル、権限、ユーザ名、グループ名かな。
+PrototypeファイルができたらPrototypeファイルの先頭に以下を追加する。
+i pkginfo なのでこうなる。</description>
+    </item>
+    
+    <item>
+      <title>Redmineのプラグイン作成のための備忘録と、時々SQLite3</title>
+      <link>/2011/09/07/1315401886/</link>
+      <pubDate>Wed, 07 Sep 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/09/07/1315401886/</guid>
+      <description>[Ruby][Redmine][SQLite3][Windows][備忘録]Redmineのプラグイン作成のための備忘録と、時々SQLite3 あらすじ 今あると幸せになれるもの
+チケットのCSVエクスポート機能。ただし、履歴つきで。これがあるといわゆるバグとかPJ課題の管理がRedmineで一元化できExcelの呪縛から解き放てられる……
+既に履歴つきCSVエクスポートプラグインは存在しているようです。http://d.hatena.ne.jp/suer/20101003/1286120294:title　ただ、履歴の出方が1履歴毎に列を更新なんですよね。。
+No, ... ,履歴 1, ... ,#1の履歴,#2の履歴,#3の履歴 2, ... ,#1の履歴,#2の履歴 今自分が抱えている縛り的にはこう出てほしい。
+No, ... ,履歴 1, ... ,&amp;#34;#1の履歴 #2の履歴, #3の履歴&amp;#34; 2, ... ,&amp;#34;#1の履歴, #2の履歴&amp;#34; 吐き出したときにチケット1つの履歴を1セルの中に収めたい。CSVに改行はどうなんだとか1セルに改行しまくるのはどうなんだとか色々ありますがそこは縛りなので。。。
+だもんで、これを機会にRedmineのプラグインはどう作るのかを調べてみました。
+参考サイト  http://www.r-labs.org/projects/r-labs/wiki/%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E9%96%8B%E7%99%BA%E3%82%AC%E3%82%A4%E3%83%89:title http://gihyo.jp/dev/serial/01/ruby/0038:title  環境  WindowsXP Redmine 1.0.0[1]  Ruby 1.8.7 Rails 2.3.5 Rack 1.0.1  SQLite3 バージョン失念  プラグインのスケルトン作成 まずはプラグインのスケルトンというものを作成する。テンプレートみたいなもの？　以下のコマンドで自動生成してくれます。[2]
+&amp;gt;ruby script\generate redmine_plugin extendCsv するといきなりエラー。
+!!! The bundled mysql.rb driver has been removed from Rails 2.</description>
+    </item>
+    
+    <item>
+      <title>vmstatとかiostatとかsarとかswapコマンドのメモ</title>
+      <link>/2011/09/04/1315146050/</link>
+      <pubDate>Sun, 04 Sep 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/09/04/1315146050/</guid>
+      <description>[Solaris][備忘録]vmstatとかiostatとかsarとかswapコマンドのメモ すぐ忘れるのでメモ。あと略称とかも。
+vmstat  表示  kthr memory page disk faults cpu r b w swap free re mf pi po fr de sr ** ** ** ** in sy cs us sy id  kthr: KernelTHRead  |*r|Run queue|待ち行列内のカーネルスレッド数(mpstatやprstatでも取得可能)|
+|*b|?|I/Oで待たされているカーネルスレッド数|
+|*w|?|スワップアウトされたカーネルスレッド数|
+ memory  |*swap|-|現在利用可能なスワップ領域(ディスク上+メモリ上のスワップ領域)|
+|*free|-|空きメモリ領域|
+ page  |*re|pageREclaims|freeListに入れられた後、復帰したページ数|
+|*mf|MinorFault|HAT faultとAddress Space faultを足した数|
+|*pi|PageIn|ページインされたメモリサイズ(キロバイト)|
+|*po|PageOut|ページアウトされたメモリサイズ(キロバイト)|
+|*fr|FRee?|解放されたメモリサイズ(キロバイト)|
+|*de|DEficit|次のプロセスで必要と予測しSolarisが確保する仮想メモリのバッファ|
+|*sr|?|ページデーモンによってスキャンされたページ数(0以外だと実行されている)|
+ disk  |*最高4台のデータを表示|読み書きした回数|
+ fault  |*in|INterrupt|1秒あたりの割り込み(インタラプト)回数|
+|*sy|SYstemcall|1秒あたりのシステムコース回数|</description>
+    </item>
+    
+    <item>
+      <title>Subversionのauto-props設定ではまった</title>
+      <link>/2011/08/14/1313326346/</link>
+      <pubDate>Sun, 14 Aug 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/08/14/1313326346/</guid>
+      <description>[Subversion][備忘録]Subversionのauto-props設定ではまった SubversionでExcelファイルをコミットしようとするとエラーが発生。
+ファイル &amp;#39;C:\～～～\なんとか管理表.xls&amp;#39; の MIMEタイプ属性はバイナリです んーなんでだっけー？.xlsファイルのmime-typeを指定してないからかなー？ という事でconfigファイルにmime-type指定。http://trac.symfony-project.org/wiki/SymfonyRepositoryTips:title ここを参考に。
+*.xls = svn:mime-type=application/vnd.ms-excel しかしエラーは変わらず。なんでだー。というか今までは別にmime-type指定しなくてもいけてた気がするのに…と、ここまでやってconfigをよく見ると
+*.xls = svn:mime-type=application/vnd.ms-excel * = svn:eol-style=native こうなってた。全部のファイルにeol-style=nativeしている！！[1]　とあるファイル種別以外、みたいな指定はできない？　っぽいので、横着せずに一拡張子毎に設定を書いてうまく行きました。
+*.xls = svn:mime-type=application/vnd.ms-excel *.sh = svn:eol-style=native [1] 自分でやったんだけど</description>
+    </item>
+    
+    <item>
+      <title>Redmineインストール備忘録(Windows)</title>
+      <link>/2011/05/01/1304204171/</link>
+      <pubDate>Sun, 01 May 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/05/01/1304204171/</guid>
+      <description>[Ruby][Redmine][Windows][備忘録]Redmineインストール備忘録(Windows) 参考サイト  http://redmine.jp/tech_note/install/  OSとRubyとか  OSはWindows XP Ruby, RubyGemsインストール済み DBはSQLite3にする  必要なものをDL, インストール  GemでRailsをインストール  &amp;gt;gem install rails  同じくsqlite3をインストール  最新のsqlite3-ruby(1.2.4)ではなく、1.2.3を指定[1]   &amp;gt;gem install sqlite3-ruby --version &amp;#39;= 1.2.3&amp;#39;  http://www.sqlite.org/download.html:title でSQLite3のdllをDLしC:\WINDOWS\system32(パスが通ってるところ)にコピー  コマンドラインから動かす予定はないのでexeは落とさない    http://rubyforge.org/frs/?group_id=1850:title でRedmineをDLし解凍  各種設定  Redmineフォルダ内のconfig/database.ymlを作成し[2]、最低限下記のように編集  production: adapter: sqlite3 # SQLite3を指定 database: db/redmine.db # DB名は任意 timeout: 5000 # タイムアウト時間  config/initializers/session_store.rb作成  &amp;gt;rake generate_session_store  DBの初期化  &amp;gt;rake db:migrate RAILS_ENV=production &amp;gt;rake redmine:load_default_data RAILS_ENV=production  …が、ここでエラー  rackバージョンが1.</description>
+    </item>
+    
+    <item>
+      <title>さくらVPSにDropboxをインストールした</title>
+      <link>/2011/04/23/1303489798/</link>
+      <pubDate>Sat, 23 Apr 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/04/23/1303489798/</guid>
+      <description>[Unix][備忘録][Dropbox][さくらVPS]さくらVPSにDropboxをインストールした ※インストール後、Enable LAN sync(LAN同期を有効にする)オプションをOFFにする必要がある http://d.hatena.ne.jp/kk_Ataka/20111008/1318068887:title
+あらすじ  GUIがなくてもDropboxを使いたい！→CUI版のDropboxがあるらしい  参考サイト  http://wiki.dropbox.com/TipsAndTricks/TextBasedLinuxInstall http://www.hyk-home.com/blog/infra/archives/2009/05/05-202601-137.html:title  上記のサイトの情報だけで全部できました。以下自分用メモ。
+OSとかPythonとか |*CentOS|5.5 x86_64|
+|*Python|2.6.2|
+ Pythonはデフォルトで2.4.3が入っているがこれじゃあ動かなかった。2.6が必須らしい。 http://www.python.org/ftp/python/:title 必要に応じてダウンロードしておく。  Dropboxを手に入れる～インストール  Step-by-stepversion の1.～7.まで順番に実行していく。 (2012/04/07追記)手順を一部修正  [https://www.dropbox.com/install?os=lnx:title]   $ cd ~ &amp;amp;&amp;amp; wget -O - &amp;#34;http://www.dropbox.com/download?plat=lnx.x86&amp;#34; | tar xzf -  - 1. ホームディレクトリに移動する。[1]  2. 32bit版Dropbox をダウンロードする。 3.～5. ダウンロードしたファイルを解凍する。解凍するとホームディレクトリに.dropbox-dist/が生成される。ドットファイルなので隠しファイル。[2] 6. .dropbox-dist/dropboxd を実行する。実行するとリンクしてください！　と言われる。他のPCから指定のアドレスへアクセスし、自分のDropboxアカウントでログインする。   [f:id:kk_Ataka:20110423012022j:image]
+ - リンクすると、自動で同期が始まる。  確認  dropbox.py でステータスなどが確認できる。  $python dropbox.</description>
+    </item>
+    
+    <item>
+      <title>Logicool MX Revolutionの副ボタンでExpos&amp;#233;とかSpacesを使いたい＠Snow Leopard</title>
+      <link>/2009/12/26/1261792712/</link>
+      <pubDate>Sat, 26 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>/2009/12/26/1261792712/</guid>
+      <description>[Mac][備忘録]Logicool MX Revolutionの副ボタンでExpos&amp;#233;とかSpacesを使いたい＠Snow Leopard なんか対応されてるみたいです。  http://www.logicool.co.jp/index.cfm/428/4676&amp;amp;hub=1&amp;amp;cl=jp,ja?osid=9:title  　一生懸命やったのに＞＜　トラックバック先もちゃんとおけば良かった＞＜　もう～オバカ！(矢部的な意味で)　このエントリはMX Revolution自分設定備忘録として残しとこ。
+とりあえず、  親指戻るボタン  クリック＞中央クリック   [f:id:kk_Ataka:20091226103507p:image]
+ 親指進むボタン  アプリケーションの切り替え＞次の右のアプリケーションに切り替える   [f:id:kk_Ataka:20091226103508p:image]
+ One-Touch Searchボタン  キーストローク＞command+W   [f:id:kk_Ataka:20091226103509p:image]
+ サムホイールボタン  画面のキャプチャ＞領域、ファイル   [f:id:kk_Ataka:20091226103510p:image]
+　この辺は設定できました。[1]
+　でも、サムホイール前回転と後回転にすべてのウィンドウ(Expoc&amp;#233;)とSpacesを割り当ててもうまく動いてくれなかった。。。どうもSnow Leopardには現段階で対応してない模様？
+調べ中…… 　そこで、[http://blog.livedoor.jp/perfectionist0519/archives/759441.html:title]を参考にしてやってみました。
+　結論としては動いた！　ボタン設定に用意されているExpos&amp;#233;, Dashboard、およびSpacesを使用せずに、キーストロークでやってしまおうという考え。
+　まずすべてのウィンドウから。これってExpos&amp;#233;デフォルトだとF9になっているはず……。これをF9からずらす。F8がボタンかぶってる！　って言われてるけどすぐ直すからキニシナイ！
+[f:id:kk_Ataka:20091226103511p:image]
+　移したらマウスの設定に戻り、
+ サムホイール前回転  キーストローク＞F9   [f:id:kk_Ataka:20091226103512p:image]</description>
+    </item>
+    
+    <item>
+      <title>Mac OS X 再インストール(クリーンインストール)手順</title>
+      <link>/2009/12/12/1260621685/</link>
+      <pubDate>Sat, 12 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>/2009/12/12/1260621685/</guid>
+      <description> [Mac][備忘録]Mac OS X 再インストール(クリーンインストール)手順 　やり方忘れたのでメモ。
+言語選択  主に日本語を使用する  ディスク初期化  上のユーティリティ＞ディスクユーティリティ ディスクを選択＞消去タブ  フォーマットはMac OS 拡張(ジャーナリング) 名前はデフォルトでいいや  消去&amp;hellip;ボタン 消去が終了したら閉じる  Mac OS X インストール  続ける 規約に同意  インストールする前にカスタマイズ！  インストールするディスクを選択 カスタマイズ  プリンタサポート、追加フォント、言語環境のチェックをすべて外す  その後でインストール……20分くらい？ インストールが完了したら再起動  　ここから先は個人的なメモ。
+====
+ようこそ  日本を選択  キーボード入力環境を選択  ことえりを選択  すでにMacをお持ちですか？  情報を今すぐ転送しない  インターネットの接続方法  AirMacワイヤレス コンピュータをインターネットに接続しないを選択した場合は一個飛ばし  ワイヤレスネットワークを選択  ネットワークを選択してKEYを入力  ユーザ登録の情報  そのまま続ける 警告が出ても続ける  ローカルアカウントの作成  フルネーム、アカウント名、パスワードと確認を入力し続ける ヒントを入力しなくても～と出るが続ける  このアカウントのピクチャを選択  とりあえず雪の結晶の気分  MobileMeのフリートライアル(ネット接続時のみ？)  今はフリートライアルを利用しない  時間帯の設定  最も近い都市を入力し続ける  登録を忘れずに&amp;hellip;  完了  </description>
+    </item>
+    
+    <item>
+      <title>Macの日本語入力で数字を入力するときに最初から半角にしたい＋α</title>
+      <link>/2009/12/09/1260354373/</link>
+      <pubDate>Wed, 09 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>/2009/12/09/1260354373/</guid>
+      <description>[Mac][備忘録]Macの日本語入力で数字を入力するときに最初から半角にしたい＋α 　僕はMac＠日本語入力に
+ l行(la, li, lu, le, lo)でぁぃぅぇぉが出てほしい ？/キーで・(なかぐろ)が出てほしい 数字をうったら半角で12345みたいに出てほしい  　こういう事を求めたいので、これらの設定方法をメモ。使うてないと完全に忘れますな……。ずっと違うところ探してて時間無駄にした。
+　まず、画面上のバー[1]の「あ」とか「A」とかなってる場所をクリック。環境設定を表示という項目を選択。
+[f:id:kk_Ataka:20091209192432p:image]
+　入力操作では、「Windows風のキー操作」という項目があるのでチェック。[2]することで、一つ目のl行でぁぃぅぇぉが満たせます。
+[f:id:kk_Ataka:20091209192433p:image]
+　次に入力文字。/キーで入力する文字という項目を・(なかぐろ)に。数字を全角で入力という項目のチェックを外す。これで残り二つも満たせました！
+[f:id:kk_Ataka:20091209192435p:image]
+[1] 何バー？　タスクバー？
+[2] 意識して使ったことないけど、Windowsではかな入力中にshift押すと英字モードに切り替わるらしい。Macだとない？　これに拘りがある人は設定いじれないかも……。</description>
+    </item>
+    
+    <item>
+      <title>Macの書類とかライブラリみたいに日本語化されているフォルダを英語化する</title>
+      <link>/2009/12/08/1260268590/</link>
+      <pubDate>Tue, 08 Dec 2009 00:00:00 +0000</pubDate>
+      
+      <guid>/2009/12/08/1260268590/</guid>
+      <description>[Mac][備忘録]Macの&amp;rdquo;書類&amp;rdquo;とか&amp;rdquo;ライブラリ&amp;rdquo;みたいに日本語化されているフォルダを英語化する 　※この作業を行うことによるデメリットはわかんないです。トーシロだからとりあえずガンガン消してみるよ！
+　Macの/Users/ユーザ直下のフォルダ[1]って&amp;rdquo;書類&amp;rdquo;とか&amp;rdquo;ライブラリ&amp;rdquo;とか日本語化されてるくせに、ターミナルから見ると&amp;rdquo;Document&amp;rdquo;とか&amp;rdquo;Library&amp;rdquo;になっててすごい気になる。でも、言語自体を英語にするのもちょっと……。
+[f:id:kk_Ataka:20091208193648p:image]
+　ということで、なんとかこの日本語フォルダだけ英語表記にできないもんだろうかと思って調べてみた。原因(？)としては、日本語化されているフォルダには「.localized」っていうファイルがあるようで、こいつが日本語にしている模様。[2]
+　消します！
+[f:id:kk_Ataka:20091208193649p:image]
+　消し消し……。
+[f:id:kk_Ataka:20091208193650p:image]
+　全部英語になった！
+[f:id:kk_Ataka:20091208193651p:image]
+[1] Macってフォルダっていうんだっけ？　ディレクトリ？
+[2] 消してしまったので、どんなファイルだったのかわからな；</description>
+    </item>
+    
+    <item>
+      <title>MacbookからCDが取り出せなくなったときの対処法</title>
+      <link>/2009/03/30/1238392970/</link>
+      <pubDate>Mon, 30 Mar 2009 00:00:00 +0000</pubDate>
+      
+      <guid>/2009/03/30/1238392970/</guid>
+      <description>[Mac][備忘録]MacbookからCDが取り出せなくなったときの対処法 　Macbookが起動画面[1]からウンともスンともいわなくなった！　起動ディスクがCDドライブに入っているんだけどそいつも取り出せなくなった！　強制排出ボタン的なものもない！
+　むりくり取り出す前に、色々調べてみると、起動時に色々なオプションをつけることができるのね＞Mac
+起動時にマウスボタンを押しっぱなしにする
+CDがイジェクトされる(らしい)
+起動時にoptionキーを(ry
+MacとかWindowsとか起動するボリュームを選択できる
+起動時にcキー
+CDから起動できる(らしい)
+起動時にxキー
+強制的にMac OS Xを起動できる(らしい)
+起動時にshiftキー
+セーブモードで起動できる(らしい)
+　他にもいっぱいあったけど、とりあえず試したのはこのくらい。(らしい)とついているのは今回初めて使用したコマンド。でも効果は上がらず……。
+　Mac OSは起動しないわ、ボリューム選択もできないわ、CD排出もできないわで、グレー画面を出したまま←(ここ重要)数分間途方にくれていたら、突然ウィ、ウィ、ウィーンとCDを排出しだした！　排出したらいつも通りMac OSが起動した！[2]
+　こんなん知らんわ！
+tasa
+当方もCDが排出されずに困っていました。起動時に、放置するワザを試してみたところうまく取り出すことができました。ありがとうございました。
+1302280899
+kk_Ataka
+ありがとうございます！参考になってよかったです！
+1303489836
+[1] グレーの画面＝ジャーン♪　ってなる所
+[2] Macを起動させたまま放置してたら勝手に吐き出すのだろうか？</description>
+    </item>
+    
+  </channel>
+</rss>

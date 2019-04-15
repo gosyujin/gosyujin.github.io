@@ -1,127 +1,156 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>WEB+DB PRESS vol.82を参考にHubotと戯れてみた - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  WEB&#43;DB PRESS vol.82を参考にHubotと戯れてみた &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ 最近よくHubotという単語を聞くのでちょっといじってみたかったが、要素技術的に普段全然使わないものが多くてけっこう敷居が高かった。
+そんな折、WEB&#43;DB PRESS vol.82にちょうどHubot特集が掲載されていたのでこれ幸いと読み進めてみた。
+というわけで、以下の内容は「Hubotの環境を整えてHerokuにデプロイ、idobataに常駐させる」ところまでの作業備忘録。
+idobataに云々以外の詳しい説明はWEB&#43;DB PRESSのほうがくわしいよ。
+環境構築 node.jsとnpm(Node Package Manager)をインストールする。
+$ sudo yum install nodejs npm (略) $ node -v v0.10.29 $ npm -v 1.3.6 npmでhubotとcoffee-scriptをインストールする。
+オプションの-gはグローバルなパスにインストール。
+$ sudo npm install -g hubot coffee-script (略) /usr/bin/hubot -&amp;gt; /usr/lib/node_modules/hubot/bin/hubot coffee-script@1.8.0 /usr/lib/node_modules/coffee-script └── mkdirp@0.3.5 hubot@2.8.1 /usr/lib/node_modules/hubot ├── optparse@1.0.4 ├── log@1.4.0 ├── scoped-http-client@0.9.8 ├── coffee-script@1.6.3 └── express@3.3.4 (methods@0.0.1, fresh@0.1.0, cookie-signature@1.0.1, range-parser@0.0.4, buffer-crc32@0.2.1, cookie@0.1.0, mkdirp@0.3.5, debug@2.0.0, commander@1.2.0, send@0.1.3, connect@2.8.4) $ hubot -v 2.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2014/09/24/hubot-helloworld/">WEB+DB PRESS vol.82を参考にHubotと戯れてみた</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#node.js" class="tag">node.js</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#Hubot" class="tag">Hubot</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2014/09/24</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2014/08/28/kawasakirb-015/" title="kawasaki.rb #015 でSphinx導入事例の発表をしてきました #kwskrb #sphinxjp">
-          kawasaki.rb #015 でSphinx導入事例の発表をしてきました #kwskrb #sphinxjp
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2014/08/28/kawasakirb-015/" class="pagination_overflow previous_page">
+          Prev: 
+          14/8/28
+          kawasaki.rb #015 でSphinx導入事例の発 …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2014/10/27/sphinxconjp-2014/" title="SphinxCon JP 2014 で発表してきました #sphinxjp">
-          SphinxCon JP 2014 で発表してきました #sphinxjp
+      
+
+      <span class="pagination_center disabled">
+        14/9/24
+        WEB+D …
+      </span>
+
+      
+        <a href="/2014/10/27/sphinxconjp-2014/" class="pagination_overflow next_page">
+          Next: 
+          14/10/27
+          SphinxCon JP 2014 …
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">環境構築</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">bot初期化</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-4">
-              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">スクリプト作成</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-5">
-              <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">公式リポジトリのスクリプトを使う</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-6">
-              <a href="#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">idobataに登録</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-7">
-              <a href="#tocAnchor-1-7"><span class="tocnumber">7</span> <span class="toctext">herokuに登録</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-8">
-              <a href="#tocAnchor-1-8"><span class="tocnumber">8</span> <span class="toctext">永遠の命</span></a>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h2 id="tocAnchor-1-1">あらすじ</h2>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">WEB&#43;DB PRESS vol.82を参考にHubotと戯れてみた</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
+
+  
+    <a href='/tags/node.js' class="muted-link">
+      [ <span class="Label Label--gray">node.js</span> ]
+    </a>
+  
+    <a href='/tags/hubot' class="muted-link">
+      [ <span class="Label Label--gray">Hubot</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2014/09/24</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境構築">環境構築</a></li>
+<li><a href="#bot初期化">bot初期化</a></li>
+<li><a href="#スクリプト作成">スクリプト作成</a></li>
+<li><a href="#公式リポジトリのスクリプトを使う">公式リポジトリのスクリプトを使う</a></li>
+<li><a href="#idobataに登録">idobataに登録</a></li>
+<li><a href="#herokuに登録">herokuに登録</a></li>
+<li><a href="#永遠の命">永遠の命</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="あらすじ">あらすじ</h2>
 
 <p>最近よくHubotという単語を聞くのでちょっといじってみたかったが、要素技術的に普段全然使わないものが多くてけっこう敷居が高かった。</p>
 
@@ -131,29 +160,20 @@
 
 <p>idobataに云々以外の詳しい説明はWEB+DB PRESSのほうがくわしいよ。</p>
 
-<h2 id="tocAnchor-1-2">環境構築</h2>
+<h2 id="環境構築">環境構築</h2>
 
 <p>node.jsとnpm(Node Package Manager)をインストールする。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">sudo</span><span class="kv"> yum install nodejs npm
-</span>(略)
-<span class="w">$ </span><span class="nc">node</span><span class="kv"> -v 
-</span>v0.10.29
-<span class="w">$ </span><span class="nc">npm</span><span class="kv"> -v
-</span><span class="err">1.3.6</span></code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ sudo yum install nodejs npm
+(略)
+$ node -v 
+v0.10.29
+$ npm -v
+1.3.6</code></pre></div>
 <p>npmでhubotとcoffee-scriptをインストールする。</p>
 
 <p>オプションの-gはグローバルなパスにインストール。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">sudo</span><span class="kv"> npm install -g hubot coffee-script
-</span>(略)
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ sudo npm install -g hubot coffee-script
+(略)
 /usr/bin/hubot -&gt; /usr/lib/node_modules/hubot/bin/hubot
 coffee-script@1.8.0 /usr/lib/node_modules/coffee-script
 └── mkdirp@0.3.5
@@ -164,19 +184,13 @@ hubot@2.8.1 /usr/lib/node_modules/hubot
 ├── scoped-http-client@0.9.8
 ├── coffee-script@1.6.3
 └── express@3.3.4 (methods@0.0.1, fresh@0.1.0, cookie-signature@1.0.1, range-parser@0.0.4, buffer-crc32@0.2.1, cookie@0.1.0, mkdirp@0.3.5, debug@2.0.0, commander@1.2.0, send@0.1.3, connect@2.8.4)
-<span class="w">$ </span><span class="nc">hubot</span><span class="kv"> -v
-</span>2.8.1
-<span class="w">$ </span><span class="nc">coffee</span><span class="kv"> -v
-</span><span class="err">CoffeeScript version 1.8.0</span></code>
-  </pre>
-</figure>
-
-<h2 id="tocAnchor-1-3">bot初期化</h2>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">hubot</span><span class="kv"> --create webhubot
-</span>Creating a hubot install at webhubot
+$ hubot -v
+2.8.1
+$ coffee -v
+CoffeeScript version 1.8.0</code></pre></div>
+<h2 id="bot初期化">bot初期化</h2>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ hubot --create webhubot
+Creating a hubot install at webhubot
 Copying /usr/lib/node_modules/hubot/src/scripts/events.coffee -&gt; /home/test/webhubot/scripts/events.coffee
 Copying /usr/lib/node_modules/hubot/src/scripts/google-images.coffee -&gt; /home/test/webhubot/scripts/google-images.coffee
 Copying /usr/lib/node_modules/hubot/src/scripts/help.coffee -&gt; /home/test/webhubot/scripts/help.coffee
@@ -197,18 +211,12 @@ Copying /usr/lib/node_modules/hubot/src/templates/hubot-scripts.json -&gt; /home
 Copying /usr/lib/node_modules/hubot/src/templates/external-scripts.json -&gt; /home/test/webhubot/external-scripts.json
 Copying /usr/lib/node_modules/hubot/src/templates/bin/hubot -&gt; /home/test/webhubot/bin/hubot
 Copying /usr/lib/node_modules/hubot/src/templates/bin/hubot.cmd -&gt; /home/test/webhubot/bin/hubot.cmd
-<span class="err">Renaming /home/test/webhubot/gitignore -&gt; /home/test/webhubot/.gitignore</span></code>
-  </pre>
-</figure>
-
+Renaming /home/test/webhubot/gitignore -&gt; /home/test/webhubot/.gitignore</code></pre></div>
 <p>hubotコマンドを実行するとエラーが出たけどRedisが入ってないよエラーという事なので、とりあえず問題なさげ。
 今のところ永続的なデータは使わない。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">cd</span><span class="kv"> webhubot/
-</span><span class="w">$ </span><span class="nc">bin/hubot</span><span class="kv">
-</span>hubot-scripts@2.5.15 node_modules/hubot-scripts
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ cd webhubot/
+$ bin/hubot
+hubot-scripts@2.5.15 node_modules/hubot-scripts
 └── redis@0.8.4
 
 hubot@2.8.1 node_modules/hubot
@@ -225,83 +233,42 @@ Hubot&gt; [Mon Sep 01 2014 17:22:26 GMT+0900 (JST)] ERROR Error: listen EADDRINU
   at dns.js:72:18
   at process._tickCallback (node.js:419:13)
 
-<span class="err">[Mon Sep 01 2014 17:22:26 GMT+0900 (JST)] ERROR [Error: Redis connection to localhost:6379 failed - connect ECONNREFUSED]</span></code>
-  </pre>
-</figure>
-
+[Mon Sep 01 2014 17:22:26 GMT+0900 (JST)] ERROR [Error: Redis connection to localhost:6379 failed - connect ECONNREFUSED]</code></pre></div>
 <p>hubotコマンドも実行できた。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">Hubot&gt; hubot translate me こんにちは
+Hubot&gt; &#34; こんにちは&#34; is Japanese for &#34; Hello &#34;</code></pre></div>
+<h2 id="スクリプト作成">スクリプト作成</h2>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">Hubot&gt; hubot translate me こんにちは
-<span class="err">Hubot&gt; " こんにちは" is Japanese for " Hello "</span></code>
-  </pre>
-</figure>
-
-<h2 id="tocAnchor-1-4">スクリプト作成</h2>
-
-<p><code class="highlighter-rouge">HUBOTROOT/scripts</code>の下に<code class="highlighter-rouge">hello.coffee</code>を作成する。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-coffeescript" data-lang="coffeescript"><span class="nx">$</span> <span class="nx">cat</span> <span class="nx">scripts</span><span class="o">/</span><span class="nx">hello</span><span class="p">.</span><span class="na">coffee</span>
-<span class="nx">module</span><span class="p">.</span><span class="na">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">robot</span><span class="p">)</span> <span class="o">-&gt;</span>
-  <span class="nx">robot</span><span class="p">.</span><span class="na">respond</span> <span class="sr">/hello (.+)/i</span><span class="p">,</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="o">-&gt;</span>
-    <span class="nx">msg</span><span class="p">.</span><span class="na">send</span> <span class="s">"Hello </span><span class="si">#{</span><span class="nx">msg</span><span class="p">.</span><span class="na">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s">"</span></code>
-  </pre>
-</figure>
-
+<p><code>HUBOTROOT/scripts</code>の下に<code>hello.coffee</code>を作成する。</p>
+<div class="highlight"><pre class="chroma"><code class="language-coffeescript" data-lang="coffeescript"><span class="nx">$</span> <span class="nx">cat</span> <span class="nx">scripts</span><span class="o">/</span><span class="nx">hello</span><span class="p">.</span><span class="nx">coffee</span>
+<span class="nv">module.exports = </span><span class="nf">(robot) -&gt;</span>
+  <span class="nx">robot</span><span class="p">.</span><span class="nx">respond</span> <span class="sr">/hello (.+)/i</span><span class="p">,</span> <span class="nf">(msg) -&gt;</span>
+    <span class="nx">msg</span><span class="p">.</span><span class="nx">send</span> <span class="s">&#34;Hello </span><span class="si">#{</span><span class="nx">msg</span><span class="p">.</span><span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s">&#34;</span></code></pre></div>
 <p>hubotを実行してみる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">Hubot&gt; hubot hello ataka
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">Hubot&gt; hubot hello ataka
 Hubot&gt; Hello ataka
 Hubot&gt; hubot hello kk_Ataka
-<span class="err">Hubot&gt; Hello kk_Ataka</span></code>
-  </pre>
-</figure>
-
+Hubot&gt; Hello kk_Ataka</code></pre></div>
 <p>helloコマンドできた！</p>
 
-<h2 id="tocAnchor-1-5">公式リポジトリのスクリプトを使う</h2>
+<h2 id="公式リポジトリのスクリプトを使う">公式リポジトリのスクリプトを使う</h2>
 
 <p>公式リポジトリのスクリプトはcreateした段階でnode_modulesディレクトリに格納される。</p>
 
 <p>これらを読み込むにはhubot-scripts.jsonに追記をする。今回はgithubのアクティビティを取得できるスクリプトgithub-activity.coffeeを追加してみる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">cat</span>
-      <span class="kv"> hubot-scripts.json
-</span>
-      <span class="err">["shipit.coffee", "github-activity.coffee"]</span>
-    </code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ cat hubot-scripts.json
+[&#34;shipit.coffee&#34;, &#34;github-activity.coffee&#34;]</code></pre></div>
 <p>依存があるので、npmでインストールする。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-coffeescript" data-lang="coffeescript">  <span class="mi">4</span> <span class="c1"># Dependencies:$</span>
-  <span class="mi">5</span> <span class="c1">#   "date-utils": "&gt;=1.2.5"$</span>
-  <span class="mi">6</span> <span class="c1">#   "githubot": "0.4.x"$</span></code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">npm</span><span class="kv"> install date-utils --save
-</span>npm http GET https://registry.npmjs.org/date-utils
+<div class="highlight"><pre class="chroma"><code class="language-coffeescript" data-lang="coffeescript">  <span class="mi">4</span> <span class="c1"># Dependencies:$
+</span><span class="c1"></span>  <span class="mi">5</span> <span class="c1">#   &#34;date-utils&#34;: &#34;&gt;=1.2.5&#34;$
+</span><span class="c1"></span>  <span class="mi">6</span> <span class="err">#</span>   <span class="s">&#34;githubot&#34;</span><span class="o">:</span> <span class="s">&#34;0.4.x&#34;</span><span class="nx">$</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ npm install date-utils --save
+npm http GET https://registry.npmjs.org/date-utils
 npm http 200 https://registry.npmjs.org/date-utils
 npm http GET https://registry.npmjs.org/date-utils/-/date-utils-1.2.16.tgz
 npm http 200 https://registry.npmjs.org/date-utils/-/date-utils-1.2.16.tgz
 date-utils@1.2.16 node_modules/date-utils
-<span class="w">$ </span><span class="nc">npm</span><span class="kv"> install githubot --save
-</span>npm http GET https://registry.npmjs.org/githubot
+$ npm install githubot --save
+npm http GET https://registry.npmjs.org/githubot
 npm http 200 https://registry.npmjs.org/githubot
 npm http GET https://registry.npmjs.org/githubot/-/githubot-1.0.0-beta2.tgz
 npm http 200 https://registry.npmjs.org/githubot/-/githubot-1.0.0-beta2.tgz
@@ -313,15 +280,9 @@ npm http 200 https://registry.npmjs.org/async/-/async-0.2.10.tgz
 npm http 200 https://registry.npmjs.org/scoped-http-client
 githubot@1.0.0-beta2 node_modules/githubot
 ├── scoped-http-client@0.9.8
-<span class="err">└── async@0.2.10</span></code>
-  </pre>
-</figure>
-
-<p><code class="highlighter-rouge">hubot repo show</code>でリポジトリ確認。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">Hubot&gt; hubot repo show jekyllrb-ja/jekyllrb-ja.github.io
+└── async@0.2.10</code></pre></div>
+<p><code>hubot repo show</code>でリポジトリ確認。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">Hubot&gt; hubot repo show jekyllrb-ja/jekyllrb-ja.github.io
 Hubot&gt; https://github.com/jekyllrb-ja/jekyllrb-ja.github.io
 Hubot&gt; [27/08 10:33 -&gt; kk_Ataka] Merge pull request #263 from tmkoikee/update-index.md
 
@@ -335,163 +296,81 @@ Hubot&gt; [26/08 10:17 -&gt; kk_Ataka] Merge pull request #261 from tmkoikee/upd
 migrations.md の本家への追従
 Hubot&gt; [26/08 10:16 -&gt; kk_Ataka] Merge pull request #262 from tmkoikee/update-installation.md
 
-<span class="err">installation.mdを本家に追従</span></code>
-  </pre>
-</figure>
-
+installation.mdを本家に追従</code></pre></div>
 <p>できた！</p>
 
-<h2 id="tocAnchor-1-6">idobataに登録</h2>
+<h2 id="idobataに登録">idobataに登録</h2>
 
-<p>https://github.com/idobata/hubot-idobata#readme を参考に…。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">npm</span><span class="kv"> install hubot-idobata --save
-</span>(略)
+<p><a href="https://github.com/idobata/hubot-idobata#readme">https://github.com/idobata/hubot-idobata#readme</a> を参考に…。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ npm install hubot-idobata --save
+(略)
 hubot-idobata@0.1.0 node_modules/hubot-idobata
 ├── pusher-client@0.2.2 (eventemitter2@0.4.14, underscore@1.7.0, ws@0.4.32)
-<span class="err">└── request@2.34.0 (json-stringify-safe@5.0.0, aws-sign2@0.5.0, forever-agent@0.5.2, tunnel-agent@0.3.0, qs@0.6.6, oauth-sign@0.3.0, node-uuid@1.4.1, mime@1.2.11, tough-cookie@0.12.1, form-data@0.1.4, hawk@1.0.0, http-signature@0.10.0)</span></code>
-  </pre>
-</figure>
-
-<p>環境変数<code class="highlighter-rouge">HUBOT_IDOBATA_API_TOKEN</code>にidobataのページから取得したトークンを格納し、hubotコマンド実行。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">export</span><span class="kv"> HUBOT_IDOBATA_API_TOKEN=6c5360hogehoge...
-</span><span class="w">$ </span><span class="nc">bin/hubot</span><span class="kv"> --adapter idobata
-</span>Your bot on Idobata is named as 'robo'.
-But this hubot is named as 'Hubot'.
-<span class="err">To respond to mention correctly, it is recommended that HUBOT_NAME=robo is configured.</span></code>
-  </pre>
-</figure>
-
-<p>ん、<code class="highlighter-rouge">HUBOT_NAME</code>もidobataに登録したものにする？</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">export</span>
-      <span class="kv"> HUBOT_NAME=robo</span>
-    </code>
-  </pre>
-</figure>
-
-<h2 id="tocAnchor-1-7">herokuに登録</h2>
+└── request@2.34.0 (json-stringify-safe@5.0.0, aws-sign2@0.5.0, forever-agent@0.5.2, tunnel-agent@0.3.0, qs@0.6.6, oauth-sign@0.3.0, node-uuid@1.4.1, mime@1.2.11, tough-cookie@0.12.1, form-data@0.1.4, hawk@1.0.0, http-signature@0.10.0)</code></pre></div>
+<p>環境変数<code>HUBOT_IDOBATA_API_TOKEN</code>にidobataのページから取得したトークンを格納し、hubotコマンド実行。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ export HUBOT_IDOBATA_API_TOKEN=6c5360hogehoge...
+$ bin/hubot --adapter idobata
+Your bot on Idobata is named as &#39;robo&#39;.
+But this hubot is named as &#39;Hubot&#39;.
+To respond to mention correctly, it is recommended that HUBOT_NAME=robo is configured.</code></pre></div>
+<p>ん、<code>HUBOT_NAME</code>もidobataに登録したものにする？</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ export HUBOT_NAME=robo</code></pre></div>
+<h2 id="herokuに登録">herokuに登録</h2>
 
 <p>上記のままだと、セッション切ったらロボが死んじゃうのでherokuで永遠の命を与える。</p>
 
-<p>今度は https://github.com/idobata/hubot-idobata#deploying-to-heroku から https://github.com/github/hubot/blob/master/docs/deploying/heroku.md を参考に…。</p>
+<p>今度は <a href="https://github.com/idobata/hubot-idobata#deploying-to-heroku">https://github.com/idobata/hubot-idobata#deploying-to-heroku</a> から <a href="https://github.com/github/hubot/blob/master/docs/deploying/heroku.md">https://github.com/github/hubot/blob/master/docs/deploying/heroku.md</a> を参考に…。</p>
 
 <p>まずはheroku toolbeltをインストール(heroku Gemはこれに置き換わる模様)。PATHを通すのを忘れずに。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">wget</span><span class="kv"> -qO- https://toolbelt.heroku.com/install.sh | sh
-</span>This script requires superuser access to install software.
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ wget -qO- https://toolbelt.heroku.com/install.sh | sh
+This script requires superuser access to install software.
 You will be prompted for your password by sudo.
 [sudo] password for kk_Ataka:
 Add the Heroku CLI to your PATH using:
-<span class="w">$ </span><span class="nc">echo</span><span class="kv"> 'PATH="/usr/local/heroku/bin:$PATH"' &gt;&gt; ~/.profile
-</span>Installation complete
+$ echo &#39;PATH=&#34;/usr/local/heroku/bin:$PATH&#34;&#39; &gt;&gt; ~/.profile
+Installation complete
 (略 / PATH通し)
-<span class="w">$ </span><span class="nc">heroku</span><span class="kv"> version
-</span><span class="err">heroku-toolbelt/3.10.5 (x86_64-linux) ruby/2.1.0</span></code>
-  </pre>
-</figure>
-
+$ heroku version
+heroku-toolbelt/3.10.5 (x86_64-linux) ruby/2.1.0</code></pre></div>
 <p>herokuコマンドが入った。ログインしよう。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">heroku</span><span class="kv"> login
-</span>Enter your Heroku credentials.
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ heroku login
+Enter your Heroku credentials.
 Email: メールアドレス
 Password (typing will be hidden):
-<span class="err">Authentication successful.</span></code>
-  </pre>
-</figure>
-
+Authentication successful.</code></pre></div>
 <p>はじめに作ったwebhubotディレクトリを登録しよう。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">cd</span>
-      <span class="kv"> webhubot/
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> add 必要なファイル
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> com 'First commit'</span>
-    </code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ cd webhubot/
+$ git add 必要なファイル
+$ git com &#39;First commit&#39;</code></pre></div>
 <p>herokuアプリケーションを作成。コマンドラインからもできるのか。
 createコマンドでリネームすると、適当な名前がつくので好きな名前にリネーム。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">heroku</span><span class="kv"> create
-</span>Creating young-refuge-9975... done, stack is cedar
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ heroku create
+Creating young-refuge-9975... done, stack is cedar
 http://young-refuge-9975.herokuapp.com/ | git@heroku.com:young-refuge-9975.git
 Git remote heroku added
-<span class="w">$ </span><span class="nc">heroku</span><span class="kv"> apps:rename webhubot
-</span>Renaming young-refuge-9975 to webhubot... done
+$ heroku apps:rename webhubot
+Renaming young-refuge-9975 to webhubot... done
 http://webhubot.herokuapp.com/ | git@heroku.com:webhubot.git
-<span class="err">Git remote heroku updated</span></code>
-  </pre>
-</figure>
-
+Git remote heroku updated</code></pre></div>
 <p>create, renameした段階でgit remote herokuが登録されている模様。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> remote -v
-</span>heroku  git@heroku.com:webhubot.git (fetch)
-<span class="err">heroku  git@heroku.com:webhubot.git (push)</span></code>
-  </pre>
-</figure>
-
-<p>https://github.com/idobata/hubot-idobata#deploying-to-heroku の2に戻りhubotとidobataの連携を登録。
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git remote -v
+heroku  git@heroku.com:webhubot.git (fetch)
+heroku  git@heroku.com:webhubot.git (push)</code></pre></div>
+<p><a href="https://github.com/idobata/hubot-idobata#deploying-to-heroku">https://github.com/idobata/hubot-idobata#deploying-to-heroku</a> の2に戻りhubotとidobataの連携を登録。
 APIトークンとNAME。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">heroku</span><span class="kv"> config:set HUBOT_IDOBATA_API_TOKEN=6c536hogehoge
-</span>Setting config vars and restarting webhubot... done, v3
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ heroku config:set HUBOT_IDOBATA_API_TOKEN=6c536hogehoge
+Setting config vars and restarting webhubot... done, v3
 HUBOT_IDOBATA_API_TOKEN: 6c53600hogehoge
-<span class="w">$ </span><span class="nc">heroku</span><span class="kv"> config:set HUBOT_NAME=robo
-</span>Setting config vars and restarting webhubot... done, v4
-<span class="err">HUBOT_NAME: robo</span></code>
-  </pre>
-</figure>
-
+$ heroku config:set HUBOT_NAME=robo
+Setting config vars and restarting webhubot... done, v4
+HUBOT_NAME: robo</code></pre></div>
 <p>Procfileのコマンドを変更。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="err">web: bin/hubot -a idobata</span>
-    </code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">web: bin/hubot -a idobata</code></pre></div>
 <p>Gitコミットしてherokuにpush</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> add Procfile
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> com "Mod Procfile's using adapter"
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> push heroku master
-</span>Initializing repository, done.
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git add Procfile
+$ git com &#34;Mod Procfile&#39;s using adapter&#34;
+$ git push heroku master
+Initializing repository, done.
 Counting objects: 28, done.
 Delta compression using up to 2 threads.
 Compressing objects: 100% (23/23), done.
@@ -500,7 +379,7 @@ Total 28 (delta 2), reused 0 (delta 0)
 
 -----&gt; Node.js app detected
 
-       PRO TIP: Avoid using semver ranges starting with '&gt;' in engines.node
+       PRO TIP: Avoid using semver ranges starting with &#39;&gt;&#39; in engines.node
        See https://devcenter.heroku.com/articles/nodejs-support
 
 -----&gt; Requested node range:  &gt;= 0.8.x
@@ -512,7 +391,7 @@ Total 28 (delta 2), reused 0 (delta 0)
        &gt; ws@0.4.32 install /tmp/build_74b7efb5-41da-4761-92c4-2a5ed07865d9/node_modules/hubot-idobata/node_modules/pusher-client/node_modules/ws
        &gt; (node-gyp rebuild 2&gt; builderror.log) || (exit 0)
 
-       make: Entering directory `/tmp/build_74b7efb5-41da-4761-92c4-2a5ed07865d9/node_modules/hubot-idobata/node_modules/pusher-client/node_modules/ws/build'
+       make: Entering directory `/tmp/build_74b7efb5-41da-4761-92c4-2a5ed07865d9/node_modules/hubot-idobata/node_modules/pusher-client/node_modules/ws/build&#39;
          CXX(target) Release/obj.target/bufferutil/src/bufferutil.o
          SOLINK_MODULE(target) Release/obj.target/bufferutil.node
          SOLINK_MODULE(target) Release/obj.target/bufferutil.node: Finished
@@ -521,7 +400,7 @@ Total 28 (delta 2), reused 0 (delta 0)
          SOLINK_MODULE(target) Release/obj.target/validation.node
          SOLINK_MODULE(target) Release/obj.target/validation.node: Finished
          COPY Release/validation.node
-       make: Leaving directory `/tmp/build_74b7efb5-41da-4761-92c4-2a5ed07865d9/node_modules/hubot-idobata/node_modules/pusher-client/node_modules/ws/build'
+       make: Leaving directory `/tmp/build_74b7efb5-41da-4761-92c4-2a5ed07865d9/node_modules/hubot-idobata/node_modules/pusher-client/node_modules/ws/build&#39;
        date-utils@1.2.16 node_modules/date-utils
 
        githubot@1.0.0-beta2 node_modules/githubot
@@ -553,511 +432,691 @@ mime@1.2.11, form-data@0.1.4, tough-cookie@0.12.1, http-signature@0.10.0, hawk@1
        http://webhubot.herokuapp.com/ deployed to Heroku
 
 To git@heroku.com:webhubot.git
-<span class="err"> * [new branch]      master -&gt; master</span></code>
-  </pre>
-</figure>
-
+ * [new branch]      master -&gt; master</code></pre></div>
 <p>これで、heroku上でロボが生きはじめた。</p>
 
-<h2 id="tocAnchor-1-8">永遠の命</h2>
+<h2 id="永遠の命">永遠の命</h2>
 
-<p>herokuの変数<code class="highlighter-rouge">HEROKU_URL</code>に今回createしたアプリのURL <code class="highlighter-rouge">http://webhubot.herokuapp.com/</code> を登録する。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">heroku</span><span class="kv"> config:set HEROKU_URL=http://webhubot.herokuapp.com
-</span>Setting config vars and restarting webhubot... done, v7
-<span class="err">HEROKU_URL: http://webhubot.herokuapp.com</span></code>
-  </pre>
-</figure>
-
+<p>herokuの変数<code>HEROKU_URL</code>に今回createしたアプリのURL <code>http://webhubot.herokuapp.com/</code> を登録する。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ heroku config:set HEROKU_URL=http://webhubot.herokuapp.com
+Setting config vars and restarting webhubot... done, v7
+HEROKU_URL: http://webhubot.herokuapp.com</code></pre></div>
 <p>これで「hubotが」定期的にURLを叩いてherokuのアイドリング状態を回避してくれるらしい。</p>
 
 <p>ってことはこの設定はhubot側で使われるのかな？(他のherokuにデプロイしたWebアプリケーションでは？調べてない)</p>
 
-</div>
+    </section>
+  </article>
 
-<div class="pagination">
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2014/08/28/kawasakirb-015/" class="pagination_overflow previous_page">
+          Prev: 
+          14/8/28
+          kawasaki.rb #015 でSphinx導入事例の発 …
+        </a>
+      
+
+      <span class="pagination_center disabled">
+        14/9/24
+        WEB+D …
+      </span>
+
+      
+        <a href="/2014/10/27/sphinxconjp-2014/" class="pagination_overflow next_page">
+          Next: 
+          14/10/27
+          SphinxCon JP 2014 …
+        </a>
+      
+  </div>
+</nav>
+
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    
-      <li class="prev">
-        <a href="/2014/08/28/kawasakirb-015/" title="kawasaki.rb #015 でSphinx導入事例の発表をしてきました #kwskrb #sphinxjp">
-          kawasaki.rb #015 でSphinx導入事例の発表をしてきました #kwskrb #sphinxjp
-        </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2014/10/27/sphinxconjp-2014/" title="SphinxCon JP 2014 で発表してきました #sphinxjp">
-          SphinxCon JP 2014 で発表してきました #sphinxjp
-        </a>
-      </li>
-    
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
 </div>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2014/09/24/hubot-helloworld/" data-text="kk_Atakaの日記 - WEB+DB PRESS vol.82を参考にHubotと戯れてみた" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2014/09/24/hubot-helloworld/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2014/09/24/hubot-helloworld/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2014/09/24/hubot-helloworld/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - WEB+DB PRESS vol.82を参考にHubotと戯れてみた"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2014/09/24/hubot-helloworld//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
 
 
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
     
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
 
 
-      </article>
 
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
 
-  <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
-  </ul>
-
-  <h2>Recent Entries</h2>
-
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境構築">環境構築</a></li>
+<li><a href="#bot初期化">bot初期化</a></li>
+<li><a href="#スクリプト作成">スクリプト作成</a></li>
+<li><a href="#公式リポジトリのスクリプトを使う">公式リポジトリのスクリプトを使う</a></li>
+<li><a href="#idobataに登録">idobataに登録</a></li>
+<li><a href="#herokuに登録">herokuに登録</a></li>
+<li><a href="#永遠の命">永遠の命</a></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

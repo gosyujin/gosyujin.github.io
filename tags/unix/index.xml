@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Unix on kk_Atakaの日記</title>
+    <link>/tags/unix/</link>
+    <description>Recent content in Unix on kk_Atakaの日記</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>jp</language>
+    <lastBuildDate>Sat, 23 Apr 2011 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/unix/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>特定のファイルを探したり除外したり(メモ)</title>
+      <link>/2011/12/24/1324741031/</link>
+      <pubDate>Sat, 24 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/24/1324741031/</guid>
+      <description>[Unix][備忘録]特定のファイルを探したり除外したり(メモ) 特定のファイル群を一括で何かする 状況 .cblファイルをコンパイルした後、同一ディレクトリにできる拡張子なしのファイルを別のディレクトリにコピーしたい…という。
+/tmp ┣file01.cbl ┣file02.cbl ┣file01 ┗file02 file01とfile02を/usr/local/userに移動したい。
+コマンド find /tmp/* ! -name &amp;#34;*.cbl&amp;#34; | xargs -i mv {} /usr/local/user  nameの前に!で条件の否定ができる(知らなかった) findコマンドでfile01, file02を引っかけたあと、xargsでmvコマンド実行する iオプションを使用する事でfindの結果を{}にもってこれる  特定のファイル群を一括で何かする その2 状況 ファイル検索でリポジトリ内の .svn ファイルを除外したいなーと思った。
+コマンド find ./ -name &amp;#34;.svn&amp;#34; -prune -o -print この結果に xargs をつけると除外はできたの……だが、どうも
+! -name &amp;#34;XXX&amp;#34; -name &amp;#34;XXX&amp;#34; -prune は挙動が違う模様……以下メモ。
+ pruneオプションは引数より下のディレクトリやファイルを捜査しない oオプション はor演算子と同じ ワイルドカード指定で隠しファイルは検索できない  とりあえずここまで。</description>
+    </item>
+    
+    <item>
+      <title>Vimコマンドよく使うものと覚えたいコマンドまとめ</title>
+      <link>/2011/12/23/1324651460/</link>
+      <pubDate>Fri, 23 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/23/1324651460/</guid>
+      <description>[Unix][備忘録][Vim]Vimコマンドよく使うものと覚えたいコマンドまとめ コマンドモード    コマンド 解説      :w 保存    :q  終了   :wq 保存して終了    :w! 強制的な保存    :q! 強制的な終了    :w ファイル名 任意のファイル名で保存    :e ファイル名 複数ファイルを開く    :br 前のバッファへ    :bn 次のバッファへ    :ls バッファの一覧を表示    :!コマンド コマンドを実行し標準出力に出力&amp;lt;br /&amp;gt;(:!ls でファイル一覧を表示)    :r ファイル 指定したファイルの内容を現在のファイルに流しこみ    :r !</description>
+    </item>
+    
+    <item>
+      <title>Vimを使い始めるためにインストールから設定まで行った</title>
+      <link>/2011/12/18/1324219740/</link>
+      <pubDate>Sun, 18 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/18/1324219740/</guid>
+      <description>[Unix][備忘録][Vim]Vimを使い始めるためにインストールから設定まで行った あらすじ  http://atnd.org/events/21925:title を見てvim使いたいと思った！  参考サイト  http://d.hatena.ne.jp/osyo-manga/20111201/1322665228:title http://d.hatena.ne.jp/arcright/20100207/1265551998:title http://sites.google.com/site/vimdocja/various-html http://www.hazama.nu/t2o2/archives/002696.shtml:title http://blog.ville.jp/2011/03/11/536:title http://ystyle.jpn.org/geekstyle/archives/9:title  ダウンロード はじめにVimをgetする。
+$ wget ftp://ftp.vim.org/pub/vim/unix/vim-7.3.tar.bz2 次にvim7.3の最新のパッチファイルを確認して、ftp://ftp.vim.org/pub/vim/patches/7.3/からダウンロードする。今382だった。
+$ cd vim73 $ mkdir patches $ curl -O &amp;#39;ftp://ftp.vim.org/pub/vim/patches/7.3/7.3.[001-382]&amp;#39; $ cd ../ $ cat patches/7.3.* | patch -p0 patching file src/misc1.c patching file src/version.c patching file src/ex_docmd.c patching file src/version.c . . . patchコマンドって使った事ないなーと思い、-p0ってなんぞやとman patchしてみる……。
+ -pnum または &amp;ndash;strip=num
+　パッチファイルで見つかったファイル名それぞれについて、 num 個の
+　スラッシュを含む最小のプレフィクスを取り除く。隣接した 1 個また</description>
+    </item>
+    
+    <item>
+      <title>Unixでwmvファイルを他のファイルフォーマットに変換したい</title>
+      <link>/2011/12/17/1324168464/</link>
+      <pubDate>Sat, 17 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/17/1324168464/</guid>
+      <description>[Unix][備忘録]Unixでwmvファイルを他のファイルフォーマットに変換したい 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20111206/1323186439:title  ダウンロードしたwmvファイルを他のファイルフォーマットに変換したい。
+参考サイト  http://d.hatena.ne.jp/griffith181/20090302/1235980536:title  インストール ソースをgit clone で取得してくる。
+$ git clone git://source.ffmpeg.org/ffmpeg.git ffmpeg Cloning into ffmpeg... remote: Counting objects: 192168, done. remote: Compressing objects: 100% (43840/43840), done. remote: Total 192168 (delta 150640), reused 188926 (delta 148049) Receiving objects: 100% (192168/192168), 49.63 MiB | 278 KiB/s, done. Resolving deltas: 100% (150640/150640), done. $ ./configure --disable-yasm $ make $ sudo make install 使い方 基本的に-iオプションでインプットファイルを選択すれば使えるはずなのだが……。
+$ ffmpeg -i input.</description>
+    </item>
+    
+    <item>
+      <title>svn infoコマンドでリビジョン番号を抜き出す</title>
+      <link>/2011/12/16/1324086694/</link>
+      <pubDate>Fri, 16 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/16/1324086694/</guid>
+      <description>[Subversion][Unix][備忘録]svn infoコマンドでリビジョン番号を抜き出す 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20111213/1323783496:title  もっとよい方法 どう考えても他にやり方があるだろうと思っていたらやっぱりあった。[http://twitter.com/#!/jun66j5:title=@jun66j5]さんよりTwitterで教えてもらいました。ありがとうございます。
+[twitter:147687551027781632:detail]
+svn infoコマンドで見られるのか。というわけで(全然使ってない)プロジェクトで試してみた。まず普通。
+$ svn info パス: . URL: file:///home/kk_Ataka/svn/xxxx リポジトリのルート: file:///home/kk_Ataka/svn/xxxx リポジトリ UUID: 99999999-9999-9999-9999-999999999999 リビジョン: 4 ノード種別: ディレクトリ 準備中の処理: 特になし 最終変更者: user 最終変更リビジョン: 4 最終変更日時: 2010-12-29 21:31:44 +0900 (水, 29 12月 2010) ロケールをen_USに。
+$ LC_ALL=en_US.UTF8 svn info Path: . URL: file:///home/kk_Ataka/svn/xxxx Repository Root: file:///home/kk_Ataka/svn/xxxx Repository UUID: 99999999-9999-9999-9999-999999999999 Revision: 4 Node Kind: directory Schedule: normal Last Changed Author: user Last Changed Rev: 4 Last Changed Date: 2010-12-29 21:31:44 +0900 (Wed, 29 Dec 2010) xml形式で出力もできる。</description>
+    </item>
+    
+    <item>
+      <title>さくらVPSの初期設定メモ</title>
+      <link>/2011/12/14/1323868360/</link>
+      <pubDate>Wed, 14 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/14/1323868360/</guid>
+      <description>[Unix][備忘録][さくらVPS][StartUp]さくらVPSの初期設定メモ さくらVPSで最初に行ったとりあえず最低クラスの設定を発掘したのでメモ。OSはCentOSか。
+参考サイト  http://blog.myfinder.jp/2010/09/vpsssh.html:title http://d.hatena.ne.jp/h-yano/20080225/1203952174:title http://d.hatena.ne.jp/rubellum/20100901/1283321253:title http://havelog.ayumusato.com/develop/server/e135-sakura-vps-setup1.html:title  サーバ ユーザを作成する。
+# useradd kk_Ataka # passwd kk_Ataka ユーザをwheelグループに。
+# usermod -G wheel kk_Ataka クライアント 鍵を作る。
+$ ssh-keygen -t rsa 鍵をサーバに送る。(既に作ってある場合は~/.ssh/にあるid_rsa.pubを)
+$ scp id_rsa.pub USER@ADDRESS:PATH ※ポート変えた場合はscpコマンドに -P ポート番号 をつける。
+$ scp -P PORT id_rsa.pub USER@ADDRESS:PATH 再びサーバ SSHの設定 鍵を受け取ったらホームディレクトリに.sshディレクトリを作りコピー。
+$ mkdir .ssh $ mv id_rsa.pub .ssh/authorized_keys 権限を変更。
+$ chmod 700 ~demo/.ssh $ chmod 600 ~demo/.ssh/authorized_keys sshd_configファイルを編集。
+# vi /etc/ssh/sshd_config# 使用ポートをデフォルトから変更 Port XXXXX # sshでrootでのログインを許可しない PermitRootLogin no # パスワード認証でのsshログインを許可しない PasswordAuthentication no # PAMによる認証を許可しない UsePAM no 編集したら再起動。[1]</description>
+    </item>
+    
+    <item>
+      <title>svn updateコマンド以外でリビジョン番号を抜き出す</title>
+      <link>/2011/12/13/1323783496/</link>
+      <pubDate>Tue, 13 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/13/1323783496/</guid>
+      <description>[Subversion][備忘録][Unix]svn updateコマンド以外でリビジョン番号を抜き出す あらすじ svnのリビジョン番号だけ抜き出したい。アップデートなしで！　svn updateするとリビジョンは出てくれるんだけど、アップデート走らせないようにリビジョン番号だけ抜き出したい。
+$ svn up リビジョン 111 です 続編  http://d.hatena.ne.jp/kk_Ataka/20111216/1324086694:title  以下はとてもめんどくさい方法での実現となります。
+試行錯誤 svn log svn logで表示したリビジョンを抽出する。limit N で出力するログを制御。
+$ /usr/local/bin/svn log --limit 1 ------------------------------------------------------------------------ r111 | kk_Ataka | 2011-12-17 11:51:11 +0900 ((金), 17 12月 2011) | 3 lines コミットログ ... ... まずは最新ログをひとつだけ取得。
+grep 次にリビジョンが記載してある行だけ抽出。
+$ /usr/local/bin/svn log --limit 1 | grep ^r.*lines$ r111 | kk_Ataka | 2011-12-17 11:51:11 +0900 ((金), 17 12月 2011) | 3 lines sed 最後にその行からsedコマンドで「rXX」だけを抜き出し。</description>
+    </item>
+    
+    <item>
+      <title>ファイルの拡張子を見て適切なコマンドで解凍してくれるスクリプトを組んだ</title>
+      <link>/2011/12/12/1323701022/</link>
+      <pubDate>Mon, 12 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/12/1323701022/</guid>
+      <description> [Unix][Shell][備忘録][Solaris]ファイルの拡張子を見て適切なコマンドで解凍してくれるスクリプトを組んだ  http://d.hatena.ne.jp/kk_Ataka/20111209/1323474254:title http://d.hatena.ne.jp/kk_Ataka/20111210/1323541524:title  を基に引数に指定したらよろしく解凍してくれるスクリプトを組んでみる。とりあえずオプション指定できないし圧縮できないけど必要になったら実装していこう。
+ </description>
+    </item>
+    
+    <item>
+      <title>Unixでファイル圧縮・解凍するときに使うコマンドをまとめた</title>
+      <link>/2011/12/09/1323474254/</link>
+      <pubDate>Fri, 09 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/09/1323474254/</guid>
+      <description>[Unix][備忘録][Solaris]Unixでファイル圧縮・解凍するときに使うコマンドをまとめた あらすじ 不意に.Zファイルがやってきて解凍の仕方を調べてしまった。あとだいたいオプションを忘れるのでメモ。対象ファイルは以下。
+ .zip .Z .gz .bz2 .tar.gz .tgz .tar.bz2 .tbz .tar.Z  こんなファイルを固めたり解凍したり。
+extracted ┣direct/ ┃┗ls.txt # man ls &amp;gt;&amp;gt; ls.txt ┣slink ┣tar.txt # man tar &amp;gt;&amp;gt; tar.txt ┗zip.txt # man zip &amp;gt;&amp;gt; zip.txt tar ┗sample.tar $ tar tvf sample.tar ../extracted drwxr-xr-x 9999/9999 0 12月 8日 19:14 2011年 ../extracted/ lrwxrwxrwx 9999/9999 7 12月 8日 19:13 2011年 ../extracted/slink tar.txt へのシンボリックリンク drwxr-xr-x 9999/9999 0 12月 8日 19:37 2011年 ../extracted/direct/ -rw-r--r-- 9999/9999 36890 12月 8日 19:37 2011年 .</description>
+    </item>
+    
+    <item>
+      <title>UnixでストリーミングファイルをDLしたい</title>
+      <link>/2011/12/06/1323186439/</link>
+      <pubDate>Tue, 06 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/06/1323186439/</guid>
+      <description>[Unix][備忘録]UnixでストリーミングファイルをDLしたい あらすじ ミルキィホームズのラジオ(番組はなんでも可)を毎週自動的にサーバにDLするスクリプトを組みたい！
+調べること  ラジオはMMSプロトコルのASFファイル  wgetでDLできる？  MMSに対応してない模様？　wget proなら対応しているらしいが…  mplayerというソフトウェアでUnixでもMMSファイルをDLできるらしい http://ja.wikipedia.org/wiki/MPlayer:title   というわけでまずはmplayerを使ってUnixでストリーミングファイルをDLできるようにしてみる。
+ダウンロード、インストール ソースからDL。まずはzlibそしてGitが必要。
+http://zlib.net/:title
+$ wget http://zlib.net/zlib-1.2.5.tar.gz $ gunzip zlib-1.2.5.tar.gz $ tar xf zlib-1.2.5.tar $ cd zlib-1.2.5/ $ ./configure $ make $ sudo make install http://git-scm.com/:title
+$ wget http://git-core.googlecode.com/files/git-1.7.7.4.tar.gz $ gunzip git-1.7* $ tar xf git -1.7* $ cd git-1.7* $ ./configure $ make $ sudo make install http://www.mplayerhq.hu/design7/dload.html:title
+$ wget http://www.mplayerhq.hu/MPlayer/releases/mplayer-export-snapshot.tar.bz2 $ bunzip2 mplayer-export-* $ tar xf mplayer-export-* $ cd mplayer-export-* $ .</description>
+    </item>
+    
+    <item>
+      <title>複数のRuby環境の管理・切替ができるrvmをインストールした</title>
+      <link>/2011/12/04/1323009249/</link>
+      <pubDate>Sun, 04 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/12/04/1323009249/</guid>
+      <description>[Ruby][備忘録][Mac][Unix]複数のRuby環境の管理・切替ができるrvmをインストールした あらすじ 先にWindowsにてRubyのバージョン管理ができるpikをインストールしていたので、今度はWindows以外にrvmをインストールする。
+参考サイト  https://rvm.beginrescueend.com/rvm/install http://www.machu.jp/diary/20110521.html#p01:title http://d.hatena.ne.jp/mirakui/20100502/1272849327:title  まとめ とりあえず以下のコマンドを覚える。
+ rvm list known  インストールできるRubyの一覧  rvm list  インストールしているRubyの一覧  rvm install x.x.x  インストール  rvm use x.x.x  Rubyの切り替え   事前準備  既にインストールされていたRubyは全部消した。  手順 インストールのため下記コマンドをうつ。
+$ bash &amp;lt; &amp;lt;(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer ) ホームディレクトリに.rvmが生成される。list knownでインストールできるRuby一覧が表示される。
+(2012/04/07追記)command not foundが出る場合はPATHが通ってない。
+ Installing RVM to /Users/kk_Ataka/.rvm/
+Adding rvm PATH line to /Users/kk\_Ataka/.bashrc /Users/kk\_Ataka/.zshrc. RVM sourcing line found in /Users/kk\_Ataka/.</description>
+    </item>
+    
+    <item>
+      <title>さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする</title>
+      <link>/2011/10/08/1318068887/</link>
+      <pubDate>Sat, 08 Oct 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/10/08/1318068887/</guid>
+      <description>[Unix][備忘録][Dropbox][さくらVPS]さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする あらすじ DropboxにはEnable LAN syncというオプションがあり、これをONにすると同じLAN内のマシンはインターネットを経由しないで同期ができる。
+f:id:kk_Ataka:20111008190858j:image
+ただし、17500ポートに向けてUDPパケットがやまほど投げているようで、同じLAN内に自分以外のマシンがある状態でこのオプションをONにしていると近隣の方へやまほどパケットを投げまくりで非常に迷惑がかかります……。基本的にDropboxのオプションからEnable LAN sync(LAN同期を有効にする)をOFFにすればよい。
+……のだが、CUIからDropboxをインストールしている場合は少し手順を踏んでこのオプションを切る必要があります。
+参考サイト  http://d.hatena.ne.jp/otn/20110502/p1:title http://blog.7kai.org/2011/04/dropbox-lan-sync-disable/:title  というか、前回の記事http://d.hatena.ne.jp/kk_Ataka/20110423/1303489798:title でインストールするときに参考にしたサイトにこの問題が書いてあった……。
+ To stop dropbox from sending LAN Sync broadcasts every 30 seconds over port 17500 (http://forums.dropbox.com/topic.php?id=16253) see DropboxAddons/DisableLanSync
+http://wiki.dropbox.com/TipsAndTricks/TextBasedLinuxInstall#SuppressLANSyncbroadcasts
+ 必要環境 |*Python|2.6|
+スクリプトDL  http://wiki.dropbox.com/DropboxAddons/PyDropboxValues から pyDropboxValues.py をDLする  設定値を表示できる  http://wiki.dropbox.com/DropboxAddons/DisableLanSync から dropbox_set_lansync.py をDLする  LAN syncオプションを切り替える   手順  pyDropboxValue.pyで設定をバックアップする  $ PYTHON2.6 pyDropboxValues.py _backup Backed up &amp;#39;config.</description>
+    </item>
+    
+    <item>
+      <title>さくらVPSにDropboxをインストールした</title>
+      <link>/2011/04/23/1303489798/</link>
+      <pubDate>Sat, 23 Apr 2011 00:00:00 +0000</pubDate>
+      
+      <guid>/2011/04/23/1303489798/</guid>
+      <description>[Unix][備忘録][Dropbox][さくらVPS]さくらVPSにDropboxをインストールした ※インストール後、Enable LAN sync(LAN同期を有効にする)オプションをOFFにする必要がある http://d.hatena.ne.jp/kk_Ataka/20111008/1318068887:title
+あらすじ  GUIがなくてもDropboxを使いたい！→CUI版のDropboxがあるらしい  参考サイト  http://wiki.dropbox.com/TipsAndTricks/TextBasedLinuxInstall http://www.hyk-home.com/blog/infra/archives/2009/05/05-202601-137.html:title  上記のサイトの情報だけで全部できました。以下自分用メモ。
+OSとかPythonとか |*CentOS|5.5 x86_64|
+|*Python|2.6.2|
+ Pythonはデフォルトで2.4.3が入っているがこれじゃあ動かなかった。2.6が必須らしい。 http://www.python.org/ftp/python/:title 必要に応じてダウンロードしておく。  Dropboxを手に入れる～インストール  Step-by-stepversion の1.～7.まで順番に実行していく。 (2012/04/07追記)手順を一部修正  [https://www.dropbox.com/install?os=lnx:title]   $ cd ~ &amp;amp;&amp;amp; wget -O - &amp;#34;http://www.dropbox.com/download?plat=lnx.x86&amp;#34; | tar xzf -  - 1. ホームディレクトリに移動する。[1]  2. 32bit版Dropbox をダウンロードする。 3.～5. ダウンロードしたファイルを解凍する。解凍するとホームディレクトリに.dropbox-dist/が生成される。ドットファイルなので隠しファイル。[2] 6. .dropbox-dist/dropboxd を実行する。実行するとリンクしてください！　と言われる。他のPCから指定のアドレスへアクセスし、自分のDropboxアカウントでログインする。   [f:id:kk_Ataka:20110423012022j:image]
+ - リンクすると、自動で同期が始まる。  確認  dropbox.py でステータスなどが確認できる。  $python dropbox.</description>
+    </item>
+    
+  </channel>
+</rss>

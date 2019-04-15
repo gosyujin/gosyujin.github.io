@@ -1,338 +1,300 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>Gitの.git/objectsの中身を追ってみる - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Gitの.git/objectsの中身を追ってみる &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ この記事は Git Advent Calendar 2013 の 14 日目の記事です。
+ 12 日目: @ton1517さん - gitのサブコマンドを自分で作る - ton-tech-ton 13 日目: @horimislimeさん - git mergeでコンフリクトが発生するか前もって調べる方法 - Qiita [キータ] 14 日目: ここ 15 日目: kyanroさん - git - rebase 直後に、自分が修正していたファイルが変更されたかどうかを調べる - Qiita [キータ]  とりあえず 12 日目へつなげておきますね。
+最近 Subversion を使うことが多く、めっきり Git を使っていないので、復習として .git/objects の中身を追ってみた。
+参考  Pro Git 9章 Git - Gitの内側 アリスとボブのGit入門レッスン Chapter 14 Dive into .git 日本語版 - SlideShare 見えないチカラ: 【翻訳】Gitをボトムアップから理解する  結論 とりあえず add さえしていれば 、ファイルを救える。|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2013/12/14/git-dotgit-objects/">Gitの.git/objectsの中身を追ってみる</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Git" class="tag">Git</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2013/12/14</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2013/11/25/jekyll-plugin-reference/" title="Jekyllのプラグイン作成で複数ファイルにまたがったタグをどう扱えばいいのかわからない話">
-          Jekyllのプラグイン作成で複数ファイルにまたがったタグをどう扱えばいいのかわからない話
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/11/25/jekyll-plugin-reference/" class="pagination_overflow previous_page">
+          Prev: 
+          13/11/25
+          Jekyllのプラグイン作成で複数ファイルにまたがったタグを …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/12/24/ruby-qr/" title="RubyでQRコードを生成してみる">
+      
+
+      <span class="pagination_center disabled">
+        13/12/14
+        Git …
+      </span>
+
+      
+        <a href="/2013/12/24/ruby-qr/" class="pagination_overflow next_page">
+          Next: 
+          13/12/24
           RubyでQRコードを生成してみる
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">参考</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">結論</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-4">
-                  <a href="#tocAnchor-1-3-1"><span class="tocnumber">3.1</span> <span class="toctext">git add したとき</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-5">
-                  <a href="#tocAnchor-1-3-2"><span class="tocnumber">3.2</span> <span class="toctext">git commit したとき</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-6">
-                  <a href="#tocAnchor-1-3-3"><span class="tocnumber">3.3</span> <span class="toctext">git rm したとき</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="toc_level-1 toc_section-7">
-              <a href="#tocAnchor-1-7"><span class="tocnumber">4</span> <span class="toctext">実際にやってみる</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-8">
-                  <a href="#tocAnchor-1-7-1"><span class="tocnumber">4.1</span> <span class="toctext">前準備</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-9">
-                  <a href="#tocAnchor-1-7-2"><span class="tocnumber">4.2</span> <span class="toctext">git add でファイルを追加</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-10">
-                  <a href="#tocAnchor-1-7-3"><span class="tocnumber">4.3</span> <span class="toctext">git commit でファイルコミット</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-11">
-                  <a href="#tocAnchor-1-7-4"><span class="tocnumber">4.4</span> <span class="toctext">親が複数あるとき</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-12">
-                  <a href="#tocAnchor-1-7-5"><span class="tocnumber">4.5</span> <span class="toctext">リポジトリからファイルを消したとき</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="toc_level-1 toc_section-13">
-              <a href="#tocAnchor-1-13"><span class="tocnumber">5</span> <span class="toctext">課題</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-14">
-              <a href="#tocAnchor-1-14"><span class="tocnumber">6</span> <span class="toctext">メモ</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-15">
-                  <a href="#tocAnchor-1-14-1"><span class="tocnumber">6.1</span> <span class="toctext">cat-file</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-16">
-                  <a href="#tocAnchor-1-14-2"><span class="tocnumber">6.2</span> <span class="toctext">hash-object</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-17">
-                  <a href="#tocAnchor-1-14-3"><span class="tocnumber">6.3</span> <span class="toctext">rev-parse</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-18">
-                  <a href="#tocAnchor-1-14-4"><span class="tocnumber">6.4</span> <span class="toctext">ls-tree</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-19">
-                  <a href="#tocAnchor-1-14-5"><span class="tocnumber">6.5</span> <span class="toctext">ls-files</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-20">
-                  <a href="#tocAnchor-1-14-6"><span class="tocnumber">6.6</span> <span class="toctext">show</span></a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h2 id="tocAnchor-1-1">あらすじ</h2>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">Gitの.git/objectsの中身を追ってみる</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
+
+  
+    <a href='/tags/git' class="muted-link">
+      [ <span class="Label Label--gray">Git</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2013/12/14</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#結論">結論</a>
+<ul>
+<li><a href="#git-add-したとき">git add したとき</a></li>
+<li><a href="#git-commit-したとき">git commit したとき</a></li>
+<li><a href="#git-rm-したとき">git rm したとき</a></li>
+</ul></li>
+<li><a href="#実際にやってみる">実際にやってみる</a>
+<ul>
+<li><a href="#前準備">前準備</a></li>
+<li><a href="#git-add-でファイルを追加">git add でファイルを追加</a>
+<ul>
+<li><a href="#操作手順">操作手順</a></li>
+</ul></li>
+<li><a href="#git-commit-でファイルコミット">git commit でファイルコミット</a>
+<ul>
+<li><a href="#操作手順-1">操作手順</a></li>
+</ul></li>
+<li><a href="#親が複数あるとき">親が複数あるとき</a></li>
+<li><a href="#リポジトリからファイルを消したとき">リポジトリからファイルを消したとき</a></li>
+</ul></li>
+<li><a href="#課題">課題</a></li>
+<li><a href="#メモ">メモ</a>
+<ul>
+<li><a href="#cat-file">cat-file</a></li>
+<li><a href="#hash-object">hash-object</a></li>
+<li><a href="#rev-parse">rev-parse</a></li>
+<li><a href="#ls-tree">ls-tree</a></li>
+<li><a href="#ls-files">ls-files</a></li>
+<li><a href="#show">show</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="あらすじ">あらすじ</h2>
 
 <p>この記事は <a href="http://qiita.com/advent-calendar/2013/git">Git Advent Calendar 2013</a> の 14 日目の記事です。</p>
 
 <ul>
-  <li>12 日目: <a href="https://twitter.com/ton1517">@ton1517</a>さん - <a href="http://ton-up.net/technote/2013/12/12/git-subcommand">gitのサブコマンドを自分で作る - ton-tech-ton</a></li>
-  <li>13 日目: <a href="https://twitter.com/horimislime">@horimislime</a>さん - <a href="http://qiita.com/horimislime/items/84fa431460c8d39f37e6">git mergeでコンフリクトが発生するか前もって調べる方法 - Qiita [キータ]</a></li>
-  <li>14 日目: ここ</li>
-  <li>15 日目: <a href="http://qiita.com/kyanro@github">kyanro</a>さん - <a href="http://qiita.com/kyanro@github/items/67056e9e4316b2cfe00f">git - rebase 直後に、自分が修正していたファイルが変更されたかどうかを調べる - Qiita [キータ]</a></li>
+<li>12 日目: <a href="https://twitter.com/ton1517">@ton1517</a>さん - <a href="http://ton-up.net/technote/2013/12/12/git-subcommand">gitのサブコマンドを自分で作る - ton-tech-ton</a></li>
+<li>13 日目: <a href="https://twitter.com/horimislime">@horimislime</a>さん - <a href="http://qiita.com/horimislime/items/84fa431460c8d39f37e6">git mergeでコンフリクトが発生するか前もって調べる方法 - Qiita [キータ]</a></li>
+<li>14 日目: ここ</li>
+<li>15 日目: <a href="http://qiita.com/kyanro@github">kyanro</a>さん - <a href="http://qiita.com/kyanro@github/items/67056e9e4316b2cfe00f">git - rebase 直後に、自分が修正していたファイルが変更されたかどうかを調べる - Qiita [キータ]</a></li>
 </ul>
 
 <p>とりあえず 12 日目へつなげておきますね。</p>
 
-<p>最近 Subversion を使うことが多く、めっきり Git を使っていないので、復習として <code class="highlighter-rouge">.git/objects</code> の中身を追ってみた。</p>
+<p>最近 Subversion を使うことが多く、めっきり Git を使っていないので、復習として <code>.git/objects</code> の中身を追ってみた。</p>
 
-<h2 id="tocAnchor-1-2">参考</h2>
+<h2 id="参考">参考</h2>
 
 <ul>
-  <li>Pro Git 9章 <a href="http://git-scm.com/book/ja/Git%E3%81%AE%E5%86%85%E5%81%B4">Git - Gitの内側</a></li>
-  <li>アリスとボブのGit入門レッスン Chapter 14</li>
-  <li><a href="http://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDQQFjAB&amp;url=http%3A%2F%2Fwww.slideshare.net%2Fnishio%2Fdive-into-git-13060995&amp;ei=6veWUperFciAkQWEioCYBg&amp;usg=AFQjCNFMnXUnpMosnZUk7pSxZBb9vEX-PQ&amp;bvm=bv.57155469,d.dGI">Dive into .git 日本語版 - SlideShare</a></li>
-  <li><a href="http://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0CCkQFjAA&amp;url=http%3A%2F%2Fkeijinsonyaban.blogspot.com%2F2011%2F05%2Fgit.html&amp;ei=-_eWUoJ1gYyTBc-LgPgE&amp;usg=AFQjCNGwMB97m7YLFQppj0QjaPOrpz9Hzw&amp;bvm=bv.57155469,d.dGI&amp;cad=rja">見えないチカラ: 【翻訳】Gitをボトムアップから理解する</a></li>
+<li>Pro Git 9章 <a href="http://git-scm.com/book/ja/Git%E3%81%AE%E5%86%85%E5%81%B4">Git - Gitの内側</a></li>
+<li>アリスとボブのGit入門レッスン Chapter 14</li>
+<li><a href="http://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;ved=0CDQQFjAB&amp;url=http%3A%2F%2Fwww.slideshare.net%2Fnishio%2Fdive-into-git-13060995&amp;ei=6veWUperFciAkQWEioCYBg&amp;usg=AFQjCNFMnXUnpMosnZUk7pSxZBb9vEX-PQ&amp;bvm=bv.57155469,d.dGI">Dive into .git 日本語版 - SlideShare</a></li>
+<li><a href="http://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0CCkQFjAA&amp;url=http%3A%2F%2Fkeijinsonyaban.blogspot.com%2F2011%2F05%2Fgit.html&amp;ei=-_eWUoJ1gYyTBc-LgPgE&amp;usg=AFQjCNGwMB97m7YLFQppj0QjaPOrpz9Hzw&amp;bvm=bv.57155469,d.dGI&amp;cad=rja">見えないチカラ: 【翻訳】Gitをボトムアップから理解する</a></li>
 </ul>
 
-<h2 id="tocAnchor-1-3">結論</h2>
+<h2 id="結論">結論</h2>
 
 <p>とりあえず <em>add さえしていれば</em> 、ファイルを救える。</p>
 
-<p>以下、 <code class="highlighter-rouge">.git/objects</code> 下で起こる事。</p>
+<p>以下、 <code>.git/objects</code> 下で起こる事。</p>
 
-<h3 id="tocAnchor-1-3-1">git add したとき</h3>
-
-<ul>
-  <li><code class="highlighter-rouge">$ git add</code> した瞬間、 add したファイルが <code class="highlighter-rouge">.git/objects</code> 下に生成される
-    <ul>
-      <li>Git で決められたヘッダ情報と、ファイル中身から算出される SHA1 でファイル構造が決定する</li>
-      <li>具体的には頭 2 文字でディレクトリを作り、残りの文字でファイル名</li>
-    </ul>
-  </li>
-</ul>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">  SHA1 557db03de997c86a4a028e1ebd3a1ceb225be238
-<span class="err">  ファイル .git/objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238</span></code>
-  </pre>
-</figure>
+<h3 id="git-add-したとき">git add したとき</h3>
 
 <ul>
-  <li>add したときに作られるこのファイルは <code class="highlighter-rouge">blob</code> オブジェクトと呼ばれる
-    <ul>
-      <li><code class="highlighter-rouge">blob</code> オブジェクトは構造など持たない</li>
-      <li>構造を管理するのは後述する他のオブジェクト</li>
-    </ul>
-  </li>
-  <li>このファイルは <code class="highlighter-rouge">$ git cat-file</code> で中身を確認できる(他のコマンドでもいける)
-    <ul>
-      <li>zlib 圧縮されているだけなので、自力で解凍して中身を確認することもできる</li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="tocAnchor-1-3-2">git commit したとき</h3>
+<li><code>$ git add</code> した瞬間、 add したファイルが <code>.git/objects</code> 下に生成される
 
 <ul>
-  <li><code class="highlighter-rouge">$ git commit</code> すると、 2 つ以上のファイルが <code class="highlighter-rouge">.git/objects</code> 下に生成される
-    <ul>
-      <li><code class="highlighter-rouge">commit</code> オブジェクトと <code class="highlighter-rouge">tree</code> オブジェクト</li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">commit</code> オブジェクトからは、以下のことがわかる
-    <ul>
-      <li><code class="highlighter-rouge">tree</code> オブジェクト(コミットした時のファイル一覧)</li>
-      <li>1つ前の <code class="highlighter-rouge">commit</code> オブジェクト
-        <ul>
-          <li>merge した場合など、複数の親を持つ場合は親の分だけ前のオブジェクトの情報を持つ</li>
-        </ul>
-      </li>
-      <li>作成した人、コミットした人</li>
-      <li>コミットログ</li>
-    </ul>
-  </li>
+<li>Git で決められたヘッダ情報と、ファイル中身から算出される SHA1 でファイル構造が決定する</li>
+<li>具体的には頭 2 文字でディレクトリを作り、残りの文字でファイル名</li>
+</ul></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">  SHA1 557db03de997c86a4a028e1ebd3a1ceb225be238
+  ファイル .git/objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238</code></pre></div>
+<ul>
+<li>add したときに作られるこのファイルは <code>blob</code> オブジェクトと呼ばれる
+
+<ul>
+<li><code>blob</code> オブジェクトは構造など持たない</li>
+<li>構造を管理するのは後述する他のオブジェクト</li>
+</ul></li>
+<li>このファイルは <code>$ git cat-file</code> で中身を確認できる(他のコマンドでもいける)
+
+<ul>
+<li>zlib 圧縮されているだけなので、自力で解凍して中身を確認することもできる</li>
+</ul></li>
 </ul>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 047f8f6f81e483c5c3004cd80d5ecb81a7f64090
-</span>tree c3b5990fc81599cd04934d349b2c08a952f16c18               # コミットした時のファイル一覧
+<h3 id="git-commit-したとき">git commit したとき</h3>
+
+<ul>
+<li><code>$ git commit</code> すると、 2 つ以上のファイルが <code>.git/objects</code> 下に生成される
+
+<ul>
+<li><code>commit</code> オブジェクトと <code>tree</code> オブジェクト</li>
+</ul></li>
+<li><code>commit</code> オブジェクトからは、以下のことがわかる
+
+<ul>
+<li><code>tree</code> オブジェクト(コミットした時のファイル一覧)</li>
+<li>1つ前の <code>commit</code> オブジェクト</li>
+<li>merge した場合など、複数の親を持つ場合は親の分だけ前のオブジェクトの情報を持つ</li>
+<li>作成した人、コミットした人</li>
+<li>コミットログ</li>
+</ul></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git cat-file -p 047f8f6f81e483c5c3004cd80d5ecb81a7f64090
+tree c3b5990fc81599cd04934d349b2c08a952f16c18               # コミットした時のファイル一覧
 parent c11123084bd99af451ddf8eaad378b9a0a5ae695             # 1つ前の commit オブジェクト
 author kk_Ataka &lt;kk_ataka@example.com&gt; 1385538273 +0000     # 作成した人
 committer kk_Ataka &lt;kk_ataka@example.com&gt; 1385538273 +0000  # コミットした人
 
-<span class="err">add test.txt                                                # コミットログ</span></code>
-  </pre>
-</figure>
+add test.txt                                                # コミットログ</code></pre></div>
+<ul>
+<li><code>tree</code> オブジェクトからは、以下のことがわかる
 
 <ul>
-  <li><code class="highlighter-rouge">tree</code> オブジェクトからは、以下のことがわかる
-    <ul>
-      <li>Git リポジトリルートからのファイル一覧</li>
-      <li>それらの SHA1</li>
-      <li><code class="highlighter-rouge">blob</code> オブジェクトか <code class="highlighter-rouge">tree</code> オブジェクトか(ファイルかディレクトリか)</li>
-      <li>パーミッション</li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">tree</code> オブジェクトは構造をもたない <code class="highlighter-rouge">blob</code> オブジェクトをまとめてくれる</li>
+<li>Git リポジトリルートからのファイル一覧</li>
+<li>それらの SHA1</li>
+<li><code>blob</code> オブジェクトか <code>tree</code> オブジェクトか(ファイルかディレクトリか)</li>
+<li>パーミッション</li>
+</ul></li>
+<li><code>tree</code> オブジェクトは構造をもたない <code>blob</code> オブジェクトをまとめてくれる</li>
 </ul>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git cat-file -p c3b5990fc81599cd04934d349b2c08a952f16c18
+100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
+040000 tree 85a2934a71f7385034f934f9ccc8c746b73d4f44    testdir</code></pre></div>
+<p><code>tree</code> オブジェクト(ディレクトリ) は続く限り繰り返される。</p>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p c3b5990fc81599cd04934d349b2c08a952f16c18
-</span>100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
-<span class="err">040000 tree 85a2934a71f7385034f934f9ccc8c746b73d4f44    testdir</span></code>
-  </pre>
-</figure>
-
-<p><code class="highlighter-rouge">tree</code> オブジェクト(ディレクトリ) は続く限り繰り返される。</p>
-
-<h3 id="tocAnchor-1-3-3">git rm したとき</h3>
+<h3 id="git-rm-したとき">git rm したとき</h3>
 
 <ul>
-  <li>何も起こらない</li>
-  <li>コミットした時は、いつもどおり <code class="highlighter-rouge">commit</code> オブジェクトと <code class="highlighter-rouge">tree</code> オブジェクトができる
-    <ul>
-      <li>ただし、 <code class="highlighter-rouge">tree</code> オブジェクトからは rm したファイルが除外されている</li>
-    </ul>
-  </li>
+<li>何も起こらない</li>
+<li>コミットした時は、いつもどおり <code>commit</code> オブジェクトと <code>tree</code> オブジェクトができる
+
+<ul>
+<li>ただし、 <code>tree</code> オブジェクトからは rm したファイルが除外されている</li>
+</ul></li>
 </ul>
 
 <p>ここから先、実際にごちゃごちゃ Git をいじってみて心で理解する。</p>
 
-<h2 id="tocAnchor-1-7">実際にやってみる</h2>
+<h2 id="実際にやってみる">実際にやってみる</h2>
 
-<h3 id="tocAnchor-1-7-1">前準備</h3>
+<h3 id="前準備">前準備</h3>
 
 <p>test 用ディレクトリを作成。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">mkdir</span>
-      <span class="kv"> git_test
-</span>
-      <span class="w">$ </span>
-      <span class="nc">cd</span>
-      <span class="kv"> git_test/</span>
-    </code>
-  </pre>
-</figure>
-
-<p>ここで <code class="highlighter-rouge">$ git init</code> 。 <code class="highlighter-rouge">.git</code> ディレクトリが作成され、通常はここにソースなどを置いていく。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> init
-</span>Initialized empty Git repository in /home/vagrant/git_test/.git/
-<span class="w">$ </span><span class="nc">ls</span><span class="kv"> -la
-</span>total 12
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ mkdir git_test
+$ cd git_test/</code></pre></div>
+<p>ここで <code>$ git init</code> 。 <code>.git</code> ディレクトリが作成され、通常はここにソースなどを置いていく。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git init
+Initialized empty Git repository in /home/vagrant/git_test/.git/
+$ ls -la
+total 12
 drwxrwxr-x 3 vagrant vagrant 4096 Nov 26 03:08 .
 drwx------ 4 vagrant vagrant 4096 Nov 26 03:08 ..
-<span class="err">drwxrwxr-x 7 vagrant vagrant 4096 Nov 26 03:08 .git</span></code>
-  </pre>
-</figure>
-
+drwxrwxr-x 7 vagrant vagrant 4096 Nov 26 03:08 .git</code></pre></div>
 <p>今回は、さらに深く進んでいく。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">cd</span><span class="kv"> .git
-</span><span class="w">$ </span><span class="nc">ls</span><span class="kv"> -la
-</span>total 40
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ cd .git
+$ ls -la
+total 40
 drwxrwxr-x 7 vagrant vagrant 4096 Nov 26 03:08 .
 drwxrwxr-x 3 vagrant vagrant 4096 Nov 26 03:08 ..
 drwxrwxr-x 2 vagrant vagrant 4096 Nov 26 03:08 branches
@@ -342,1190 +304,1126 @@ drwxrwxr-x 2 vagrant vagrant 4096 Nov 26 03:08 branches
 drwxrwxr-x 2 vagrant vagrant 4096 Nov 26 03:08 hooks
 drwxrwxr-x 2 vagrant vagrant 4096 Nov 26 03:08 info
 drwxrwxr-x 4 vagrant vagrant 4096 Nov 26 03:08 objects
-<span class="err">drwxrwxr-x 4 vagrant vagrant 4096 Nov 26 03:08 refs</span></code>
-  </pre>
-</figure>
-
+drwxrwxr-x 4 vagrant vagrant 4096 Nov 26 03:08 refs</code></pre></div>
 <p>各ファイルの役割はこんな感じ。全てはわかっていない。</p>
 
 <table>
-  <thead>
-    <tr>
-      <th>ファイル</th>
-      <th>役割</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>branches/</td>
-      <td>新しいバージョンでは使用しない</td>
-    </tr>
-    <tr>
-      <td>config</td>
-      <td>リポジトリ固有の設定</td>
-    </tr>
-    <tr>
-      <td>description</td>
-      <td>GitWebプログラムで使用する</td>
-    </tr>
-    <tr>
-      <td>HEAD</td>
-      <td>現在チェックアウトされているブランチ</td>
-    </tr>
-    <tr>
-      <td>index</td>
-      <td>Gitのステージングエリアの情報を保管</td>
-    </tr>
-    <tr>
-      <td>hooks/</td>
-      <td>フックスクリプト集</td>
-    </tr>
-    <tr>
-      <td>info/</td>
-      <td><code class="highlighter-rouge">.gitignore</code> に記述したくない無視パターンをを保持</td>
-    </tr>
-    <tr>
-      <td>objects/</td>
-      <td>Gitで管理しているファイルの格納場所</td>
-    </tr>
-    <tr>
-      <td>refs/</td>
-      <td>ブランチ内のコミットオブジェクトをさすポインタ</td>
-    </tr>
-  </tbody>
+<thead>
+<tr>
+<th>ファイル</th>
+<th>役割</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>branches/</td>
+<td>新しいバージョンでは使用しない</td>
+</tr>
+
+<tr>
+<td>config</td>
+<td>リポジトリ固有の設定</td>
+</tr>
+
+<tr>
+<td>description</td>
+<td>GitWebプログラムで使用する</td>
+</tr>
+
+<tr>
+<td>HEAD</td>
+<td>現在チェックアウトされているブランチ</td>
+</tr>
+
+<tr>
+<td>index</td>
+<td>Gitのステージングエリアの情報を保管</td>
+</tr>
+
+<tr>
+<td>hooks/</td>
+<td>フックスクリプト集</td>
+</tr>
+
+<tr>
+<td>info/</td>
+<td><code>.gitignore</code> に記述したくない無視パターンをを保持</td>
+</tr>
+
+<tr>
+<td>objects/</td>
+<td>Gitで管理しているファイルの格納場所</td>
+</tr>
+
+<tr>
+<td>refs/</td>
+<td>ブランチ内のコミットオブジェクトをさすポインタ</td>
+</tr>
+</tbody>
 </table>
 
-<p>今回は、この <code class="highlighter-rouge">.git</code> ディレクトリの中でさらに <code class="highlighter-rouge">git init</code> して <code class="highlighter-rouge">.git</code> ディレクトリ内の変更を管理できるようにした。とりあえず全部 add 。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> init
-</span>Initialized empty Git repository in /home/vagrant/git_test/.git/.git/
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> add branches/ config description HEAD hooks/ info/ objects/ refs/
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "fitst commit"</span></code>
-  </pre>
-</figure>
-
+<p>今回は、この <code>.git</code> ディレクトリの中でさらに <code>git init</code> して <code>.git</code> ディレクトリ内の変更を管理できるようにした。とりあえず全部 add 。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git init
+Initialized empty Git repository in /home/vagrant/git_test/.git/.git/
+$ git add branches/ config description HEAD hooks/ info/ objects/ refs/
+$ git commit -m &#34;fitst commit&#34;</code></pre></div>
 <p>まだ変更点はなし。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> status
-</span>
-      <span class="ni"># </span>
-      <span class="nc">On</span>
-      <span class="kv"> branch master
-</span>
-      <span class="err">nothing to commit (working directory clean)</span>
-    </code>
-  </pre>
-</figure>
-
-<h3 id="tocAnchor-1-7-2">git add でファイルを追加</h3>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git status
+# On branch master
+nothing to commit (working directory clean)</code></pre></div>
+<h3 id="git-add-でファイルを追加">git add でファイルを追加</h3>
 
 <h4 id="操作手順">操作手順</h4>
 
-<p>Git で管理するファイルは <code class="highlighter-rouge">.git/objects</code> ディレクトリ下で管理される。</p>
+<p>Git で管理するファイルは <code>.git/objects</code> ディレクトリ下で管理される。</p>
 
 <p>何かファイルを作ってみる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">echo</span>
-      <span class="kv"> "Hello World" &gt;&gt; README
-</span>
-      <span class="w">$ </span>
-      <span class="nc">cat</span>
-      <span class="kv"> README
-</span>
-      <span class="err">Hello World</span>
-    </code>
-  </pre>
-</figure>
-
-<p>作っただけでは、 <code class="highlighter-rouge">.git</code> ディレクトリに変化は起きない。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">cd</span>
-      <span class="kv"> .git
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> status
-</span>
-      <span class="ni"># </span>
-      <span class="nc">On</span>
-      <span class="kv"> branch master
-</span>
-      <span class="err">nothing to commit (working directory clean)</span>
-    </code>
-  </pre>
-</figure>
-
-<p>ここで <code class="highlighter-rouge">$ git add</code> してみる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> add README
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> status
-</span><span class="ni"># </span><span class="nc">On</span><span class="kv"> branch master
-</span>#
-<span class="ni"># </span><span class="nc">Initial</span><span class="kv"> commit
-</span>#
-<span class="ni"># </span><span class="nc">Changes</span><span class="kv"> to be committed:
-</span><span class="ni"># </span><span class="kv">  (use "git rm --cached &lt;file&gt;..." to unstage)
-</span>#
-<span class="ni"># </span><span class="kv">      new file:   README
-</span><span class="err">#</span></code>
-  </pre>
-</figure>
-
-<p><code class="highlighter-rouge">.git/objects</code> 下が何か変わっている。(indexも変わっているが、今はスルー)</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">cd</span><span class="kv"> .git
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> status
-</span><span class="ni"># </span><span class="nc">On</span><span class="kv"> branch master
-</span><span class="ni"># </span><span class="nc">Untracked</span><span class="kv"> files:
-</span><span class="ni"># </span><span class="kv">  (use "git add &lt;file&gt;..." to include in what will be committed)
-</span>#
-<span class="ni"># </span><span class="kv">      index
-</span><span class="ni"># </span><span class="kv">      objects/</span></code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ echo &#34;Hello World&#34; &gt;&gt; README
+$ cat README
+Hello World</code></pre></div>
+<p>作っただけでは、 <code>.git</code> ディレクトリに変化は起きない。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ cd .git
+$ git status
+# On branch master
+nothing to commit (working directory clean)</code></pre></div>
+<p>ここで <code>$ git add</code> してみる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git add README
+$ git status
+# On branch master
+#
+# Initial commit
+#
+# Changes to be committed:
+#   (use &#34;git rm --cached &lt;file&gt;...&#34; to unstage)
+#
+#       new file:   README
+#</code></pre></div>
+<p><code>.git/objects</code> 下が何か変わっている。(indexも変わっているが、今はスルー)</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ cd .git
+$ git status
+# On branch master
+# Untracked files:
+#   (use &#34;git add &lt;file&gt;...&#34; to include in what will be committed)
+#
+#       index
+#       objects/</code></pre></div>
 <p>ファイルがひとつできてる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">find</span>
-      <span class="kv"> ./objects/ -type f
-</span>
-      <span class="err">./objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238</span>
-    </code>
-  </pre>
-</figure>
-
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ find ./objects/ -type f
+./objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238</code></pre></div>
 <p>これは、今 add した README ファイルの SHA1 ハッシュ。</p>
 
 <ul>
-  <li>はじめの 2 文字でディレクトリを作り、残り 38 文字でファイル名</li>
-  <li>なんでこういう分けかたになっているかは調べ切れなかった</li>
+<li>はじめの 2 文字でディレクトリを作り、残り 38 文字でファイル名</li>
+<li>なんでこういう分けかたになっているかは調べ切れなかった</li>
 </ul>
 
-<p><code class="highlighter-rouge">$ git cat-file</code> コマンドでこのハッシュからファイルの中身を確認できる。(中身は　<code class="highlighter-rouge">$ git show</code> でも見ることができる)</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 557db03de997c86a4a028e1ebd3a1ceb225be238
-</span>blob # type
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -s 557db03de997c86a4a028e1ebd3a1ceb225be238
-</span>12 # size
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 557db03de997c86a4a028e1ebd3a1ceb225be238
-</span><span class="err">Hello World # 中身</span></code>
-  </pre>
-</figure>
-
+<p><code>$ git cat-file</code> コマンドでこのハッシュからファイルの中身を確認できる。(中身は　<code>$ git show</code> でも見ることができる)</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git cat-file -t 557db03de997c86a4a028e1ebd3a1ceb225be238
+blob # type
+$ git cat-file -s 557db03de997c86a4a028e1ebd3a1ceb225be238
+12 # size
+$ git cat-file -p 557db03de997c86a4a028e1ebd3a1ceb225be238
+Hello World # 中身</code></pre></div>
 <p>また、Git のオブジェクトは zlib 圧縮されているファイルなので、自力で展開することもできる。(ただし、validなフォーマットで圧縮はされていないのでgunzipなどでは展開できないらしい)</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">cd</span><span class="kv"> .git/objects/55
-</span><span class="w">$ </span><span class="nc">ls
-</span><span class="kv">
-</span>7db03de997c86a4a028e1ebd3a1ceb225be238
-<span class="w">$ </span><span class="nc">irb</span></code>
-  </pre>
-</figure>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-ruby" data-lang="ruby"><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">001</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="nb">require</span> <span class="s1">'zlib'</span>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ cd .git/objects/55
+$ ls
+7db03de997c86a4a028e1ebd3a1ceb225be238
+$ irb</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">001</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="nb">require</span> <span class="s1">&#39;zlib&#39;</span>
 <span class="o">=&gt;</span> <span class="kp">true</span>
-<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">002</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="no">File</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="s1">'7db03de997c86a4a028e1ebd3a1ceb225be238'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span>
-<span class="o">=&gt;</span> <span class="c1">#&lt;File:7db03de997c86a4a028e1ebd3a1ceb225be238&gt;
-</span>
-<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">003</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="no">Zlib</span><span class="o">::</span><span class="no">Inflate</span><span class="p">.</span><span class="nf">inflate</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">)</span>
-<span class="o">=&gt;</span> <span class="s2">"blob 12</span><span class="se">\x00</span><span class="s2">Hello World</span><span class="se">\n</span><span class="s2">"</span></code>
-  </pre>
-</figure>
+<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">002</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;7db03de997c86a4a028e1ebd3a1ceb225be238&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="c1">#&lt;File:7db03de997c86a4a028e1ebd3a1ceb225be238&gt;</span>
+<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">003</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="no">Zlib</span><span class="o">::</span><span class="no">Inflate</span><span class="o">.</span><span class="n">inflate</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="s2">&#34;blob 12</span><span class="se">\x00</span><span class="s2">Hello World</span><span class="se">\n</span><span class="s2">&#34;</span></code></pre></div>
+<p>ヘッダ+ファイルの中身が確認できた。 <code>blob</code> オブジェクトは 「 <code>&quot;blob&quot; + スペース + ファイルサイズ + &quot;\x00&quot; (NUL 制御コード) + 中身</code> 」というという構造らしいので、これで OK のようだ。</p>
 
-<p>ヘッダ+ファイルの中身が確認できた。 <code class="highlighter-rouge">blob</code> オブジェクトは 「 <code class="highlighter-rouge">"blob" + スペース + ファイルサイズ + "\x00" (NUL 制御コード) + 中身</code> 」というという構造らしいので、これで OK のようだ。</p>
-
-<p>ここで出てきた <code class="highlighter-rouge">blob</code> っていうのは、 Git のオブジェクトの種類の1つ。全部で4つある。</p>
+<p>ここで出てきた <code>blob</code> っていうのは、 Git のオブジェクトの種類の1つ。全部で4つある。</p>
 
 <ul>
-  <li>blob</li>
-  <li>tree</li>
-  <li>commit</li>
-  <li>tag</li>
+<li>blob</li>
+<li>tree</li>
+<li>commit</li>
+<li>tag</li>
 </ul>
 
-<h3 id="tocAnchor-1-7-3">git commit でファイルコミット</h3>
+<h3 id="git-commit-でファイルコミット">git commit でファイルコミット</h3>
 
 <p>いよいよコミットしてみる。</p>
 
 <h4 id="操作手順-1">操作手順</h4>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "README first commit"
-</span>[master (root-commit) c111230] README first commit
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git commit -m &#34;README first commit&#34;
+[master (root-commit) c111230] README first commit
  1 files changed, 1 insertions(+), 0 deletions(-)
-<span class="err"> create mode 100644 README</span></code>
-  </pre>
-</figure>
-
-<p>一心不乱に <code class="highlighter-rouge">.git/objects</code> へ。(それ以外にもいろいろできてる)</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">cd</span><span class="kv"> .git/
-</span><span class="w">$ </span><span class="nc">find</span><span class="kv"> ./objects/ -type f
-</span>./objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238
+ create mode 100644 README</code></pre></div>
+<p>一心不乱に <code>.git/objects</code> へ。(それ以外にもいろいろできてる)</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ cd .git/
+$ find ./objects/ -type f
+./objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238
 ./objects/67/dc4302383b2715f4e0b8c41840eb05b1873697
-<span class="err">./objects/c1/1123084bd99af451ddf8eaad378b9a0a5ae695</span></code>
-  </pre>
-</figure>
+./objects/c1/1123084bd99af451ddf8eaad378b9a0a5ae695</code></pre></div>
+<p>何か新しいオブジェクトが 2 個( <code>67dc</code> と <code>c111</code> )増えてる。</p>
 
-<p>何か新しいオブジェクトが 2 個( <code class="highlighter-rouge">67dc</code> と <code class="highlighter-rouge">c111</code> )増えてる。</p>
-
-<p>中身を見ると、さっき出てきた 4 つのオブジェクトの中の <code class="highlighter-rouge">commit</code> オブジェクトと、 <code class="highlighter-rouge">tree</code> オブジェクトだ。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t c11123084bd99af451ddf8eaad378b9a0a5ae695
-</span>commit
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -s c11123084bd99af451ddf8eaad378b9a0a5ae695
-</span>182
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p c11123084bd99af451ddf8eaad378b9a0a5ae695
-</span>tree 67dc4302383b2715f4e0b8c41840eb05b1873697
+<p>中身を見ると、さっき出てきた 4 つのオブジェクトの中の <code>commit</code> オブジェクトと、 <code>tree</code> オブジェクトだ。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git cat-file -t c11123084bd99af451ddf8eaad378b9a0a5ae695
+commit
+$ git cat-file -s c11123084bd99af451ddf8eaad378b9a0a5ae695
+182
+$ git cat-file -p c11123084bd99af451ddf8eaad378b9a0a5ae695
+tree 67dc4302383b2715f4e0b8c41840eb05b1873697
 author kk_Ataka &lt;kk_ataka@example.com&gt; 1385505619 +0000
 committer kk_Ataka &lt;kk_ataka@example.com&gt; 1385505619 +0000
 
-<span class="err">README first commit</span></code>
-  </pre>
-</figure>
-
-<p>この <code class="highlighter-rouge">commit</code> オブジェクトからは以下のようなことがわかる。</p>
+README first commit</code></pre></div>
+<p>この <code>commit</code> オブジェクトからは以下のようなことがわかる。</p>
 
 <ul>
-  <li><code class="highlighter-rouge">tree</code> オブジェクトの SHA1</li>
-  <li>作成した人、コミットした人</li>
-  <li>コミットログ</li>
+<li><code>tree</code> オブジェクトの SHA1</li>
+<li>作成した人、コミットした人</li>
+<li>コミットログ</li>
 </ul>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 67dc4302383b2715f4e0b8c41840eb05b1873697
-</span>tree
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -s 67dc4302383b2715f4e0b8c41840eb05b1873697
-</span>34
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 67dc4302383b2715f4e0b8c41840eb05b1873697
-</span><span class="err">100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README</span></code>
-  </pre>
-</figure>
-
-<p>この <code class="highlighter-rouge">tree</code> オブジェクトからは以下のようなことがわかる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git cat-file -t 67dc4302383b2715f4e0b8c41840eb05b1873697
+tree
+$ git cat-file -s 67dc4302383b2715f4e0b8c41840eb05b1873697
+34
+$ git cat-file -p 67dc4302383b2715f4e0b8c41840eb05b1873697
+100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README</code></pre></div>
+<p>この <code>tree</code> オブジェクトからは以下のようなことがわかる。</p>
 
 <ul>
-  <li>Git リポジトリルートからのファイル一覧</li>
-  <li>SHA1</li>
-  <li>種類</li>
-  <li>パーミッション</li>
+<li>Git リポジトリルートからのファイル一覧</li>
+<li>SHA1</li>
+<li>種類</li>
+<li>パーミッション</li>
 </ul>
 
-<p>※ <code class="highlighter-rouge">tree</code> オブジェクトは <code class="highlighter-rouge">$ git ls-tree</code> でも確認できる。</p>
+<p>※ <code>tree</code> オブジェクトは <code>$ git ls-tree</code> でも確認できる。</p>
 
 <p>次に、コミットログを増やしたいのと、もうちょっと複雑にしたいので、以下のようにディレクトリを作ってその中にファイルを作る。</p>
 
 <ol>
-  <li><code class="highlighter-rouge">testdir</code> ディレクトリを作る</li>
-  <li>その下に <code class="highlighter-rouge">test.txt</code> を作る</li>
+<li><code>testdir</code> ディレクトリを作る</li>
+<li>その下に <code>test.txt</code> を作る</li>
 </ol>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">mkdir</span><span class="kv"> testdir
-</span><span class="w">$ </span><span class="nc">echo</span><span class="kv"> "test file" &gt;&gt; testdir/test.txt
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> add testdir/test.txt
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "add test.txt"
-</span>[master 047f8f6] add test.txt
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ mkdir testdir
+$ echo &#34;test file&#34; &gt;&gt; testdir/test.txt
+$ git add testdir/test.txt
+$ git commit -m &#34;add test.txt&#34;
+[master 047f8f6] add test.txt
  1 files changed, 1 insertions(+), 0 deletions(-)
-<span class="err"> create mode 100644 testdir/test.txt</span></code>
-  </pre>
-</figure>
-
+ create mode 100644 testdir/test.txt</code></pre></div>
 <p>オブジェクト。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">find</span><span class="kv"> .git/objects/ -type f
-</span>.git/objects/04/7f8f6f81e483c5c3004cd80d5ecb81a7f64090
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ find .git/objects/ -type f
+.git/objects/04/7f8f6f81e483c5c3004cd80d5ecb81a7f64090
 .git/objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238
 .git/objects/c3/b5990fc81599cd04934d349b2c08a952f16c18
 .git/objects/67/dc4302383b2715f4e0b8c41840eb05b1873697
 .git/objects/85/a2934a71f7385034f934f9ccc8c746b73d4f44
 .git/objects/c1/1123084bd99af451ddf8eaad378b9a0a5ae695
-<span class="err">.git/objects/16/b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe</span></code>
-  </pre>
-</figure>
-
-<p><code class="highlighter-rouge">047f</code> <code class="highlighter-rouge">c3b5</code> <code class="highlighter-rouge">85a2</code> <code class="highlighter-rouge">16b1</code> が増えた。</p>
+.git/objects/16/b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe</code></pre></div>
+<p><code>047f</code> <code>c3b5</code> <code>85a2</code> <code>16b1</code> が増えた。</p>
 
 <p>中身を確認すると、さっきまでとは趣きが違うところがいくつかある。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 047f8f6f81e483c5c3004cd80d5ecb81a7f64090
-</span>commit
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 047f8f6f81e483c5c3004cd80d5ecb81a7f64090
-</span>tree c3b5990fc81599cd04934d349b2c08a952f16c18
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git cat-file -t 047f8f6f81e483c5c3004cd80d5ecb81a7f64090
+commit
+$ git cat-file -p 047f8f6f81e483c5c3004cd80d5ecb81a7f64090
+tree c3b5990fc81599cd04934d349b2c08a952f16c18
 parent c11123084bd99af451ddf8eaad378b9a0a5ae695
 author kk_Ataka &lt;kk_ataka@example.com&gt; 1385508273 +0000
 committer kk_Ataka &lt;kk_ataka@example.com&gt; 1385508273 +0000
 
-<span class="err">add test.txt</span></code>
-  </pre>
-</figure>
-
-<p><code class="highlighter-rouge">parent</code> として、このコミットの親がわかるようになってる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t c3b5990fc81599cd04934d349b2c08a952f16c18
-</span>tree
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p c3b5990fc81599cd04934d349b2c08a952f16c18
-</span>100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
+add test.txt</code></pre></div>
+<p><code>parent</code> として、このコミットの親がわかるようになってる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git cat-file -t c3b5990fc81599cd04934d349b2c08a952f16c18
+tree
+$ git cat-file -p c3b5990fc81599cd04934d349b2c08a952f16c18
+100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
 040000 tree 85a2934a71f7385034f934f9ccc8c746b73d4f44    testdir
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 85a2934a71f7385034f934f9ccc8c746b73d4f44
-</span>tree
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 85a2934a71f7385034f934f9ccc8c746b73d4f44
-</span><span class="err">100644 blob 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe    test.txt</span></code>
-  </pre>
-</figure>
+$ git cat-file -t 85a2934a71f7385034f934f9ccc8c746b73d4f44
+tree
+$ git cat-file -p 85a2934a71f7385034f934f9ccc8c746b73d4f44
+100644 blob 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe    test.txt</code></pre></div>
+<p><code>tree</code> オブジェクトとして、 testdir が追加されてる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git cat-file -t 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe
+blob
+$ git cat-file -p 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe
+test file</code></pre></div>
+<p><code>blob</code> はファイルの内容なのでとりあえず特筆する点なし。</p>
 
-<p><code class="highlighter-rouge">tree</code> オブジェクトとして、 testdir が追加されてる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe
-</span>blob
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe
-</span><span class="err">test file</span></code>
-  </pre>
-</figure>
-
-<p><code class="highlighter-rouge">blob</code> はファイルの内容なのでとりあえず特筆する点なし。</p>
-
-<h3 id="tocAnchor-1-7-4">親が複数あるとき</h3>
+<h3 id="親が複数あるとき">親が複数あるとき</h3>
 
 <p>merge したときなど、親を複数持つときもあるんじゃなかろうか。</p>
 
-<p>ということで試してみる。まずは <code class="highlighter-rouge">test</code> ブランチを新しく作成し、ファイルを適当に作ってコミット。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> checkout -b test
-</span>Switched to a new branch 'test'
-<span class="w">$ </span><span class="nc">echo</span><span class="kv"> "test branch" &gt;&gt; README
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> add README
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "test branch"
-</span>[test 38c9e30] test branch
-<span class="err"> 1 files changed, 1 insertions(+), 0 deletions(-)</span></code>
-  </pre>
-</figure>
-
-<p>リポジトリのグラフを見てみる。(「g」コマンドは <code class="highlighter-rouge">$ git log --graph</code> に色々手を加えたもののエイリアス)</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> g
-</span>* 38c9e30 f60ab37 2013-11-28 kk_Ataka  (HEAD, test) test branch
+<p>ということで試してみる。まずは <code>test</code> ブランチを新しく作成し、ファイルを適当に作ってコミット。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git checkout -b test
+Switched to a new branch &#39;test&#39;
+$ echo &#34;test branch&#34; &gt;&gt; README
+$ git add README
+$ git commit -m &#34;test branch&#34;
+[test 38c9e30] test branch
+ 1 files changed, 1 insertions(+), 0 deletions(-)</code></pre></div>
+<p>リポジトリのグラフを見てみる。(「g」コマンドは <code>$ git log --graph</code> に色々手を加えたもののエイリアス)</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git g
+* 38c9e30 f60ab37 2013-11-28 kk_Ataka  (HEAD, test) test branch
 * c2333bd 1a53959 2013-11-28 kk_Ataka  (master) master branch
 * 047f8f6 c3b5990 2013-11-27 kk_Ataka  add test.txt
-<span class="err">* c111230 67dc430 2013-11-27 kk_Ataka  README first commit</span></code>
-  </pre>
-</figure>
-
-<p>では、 <code class="highlighter-rouge">master</code> ブランチに戻り、 <code class="highlighter-rouge">master</code> ブランチに <code class="highlighter-rouge">test</code> ブランチをマージ。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> checkout master
-</span>Switched to branch 'master'
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> merge --no-ff test
-</span>Merge made by recursive.
+* c111230 67dc430 2013-11-27 kk_Ataka  README first commit</code></pre></div>
+<p>では、 <code>master</code> ブランチに戻り、 <code>master</code> ブランチに <code>test</code> ブランチをマージ。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git checkout master
+Switched to branch &#39;master&#39;
+$ git merge --no-ff test
+Merge made by recursive.
  README |    1 +
-<span class="err"> 1 files changed, 1 insertions(+), 0 deletions(-)</span></code>
-  </pre>
-</figure>
-
-<p>改めてグラフ。現在の <code class="highlighter-rouge">master</code> ブランチ(= <code class="highlighter-rouge">b870b7</code> )はさっきまで <code class="highlighter-rouge">master</code> だったもの(= <code class="highlighter-rouge">c2333</code> )と、 <code class="highlighter-rouge">test</code> ブランチのもの(= <code class="highlighter-rouge">38c9e3</code> )が親になっているように見える。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> g
-</span>*   b870b73 f60ab37 2013-11-28 kk_Ataka  (HEAD, master) Merge branch 'test'
+ 1 files changed, 1 insertions(+), 0 deletions(-)</code></pre></div>
+<p>改めてグラフ。現在の <code>master</code> ブランチ(= <code>b870b7</code> )はさっきまで <code>master</code> だったもの(= <code>c2333</code> )と、 <code>test</code> ブランチのもの(= <code>38c9e3</code> )が親になっているように見える。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git g
+*   b870b73 f60ab37 2013-11-28 kk_Ataka  (HEAD, master) Merge branch &#39;test&#39;
 |\
 | * 38c9e30 f60ab37 2013-11-28 kk_Ataka  (test) test branch
 |/
 * c2333bd 1a53959 2013-11-28 kk_Ataka  master branch
 * 047f8f6 c3b5990 2013-11-27 kk_Ataka  add test.txt
-<span class="err">* c111230 67dc430 2013-11-27 kk_Ataka  README first commit</span></code>
-  </pre>
-</figure>
-
-<p>ということで確認。まずは今の場所の <code class="highlighter-rouge">commit</code> オブジェクトのハッシュを改めて取得。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> rev-parse HEAD
-</span>
-      <span class="err">b870b7313d2fcfda308204b12d5534c5ccac95cb</span>
-    </code>
-  </pre>
-</figure>
-
-<p><code class="highlighter-rouge">commit</code> オブジェクトの中身を見てみる。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p b870b7313d2fcfda30
-</span>tree f60ab375c7a4408527f814167a0dc9285f1cbcca
+* c111230 67dc430 2013-11-27 kk_Ataka  README first commit</code></pre></div>
+<p>ということで確認。まずは今の場所の <code>commit</code> オブジェクトのハッシュを改めて取得。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git rev-parse HEAD
+b870b7313d2fcfda308204b12d5534c5ccac95cb</code></pre></div>
+<p><code>commit</code> オブジェクトの中身を見てみる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git cat-file -p b870b7313d2fcfda30
+tree f60ab375c7a4408527f814167a0dc9285f1cbcca
 parent c2333bd833a82784ca06a960890a739d43f32c5e
 parent 38c9e304d897e71c479bf78fe4def6bcb3ad1b72
 author kk_Ataka &lt;kk_ataka@example.com&gt; 1385633710 +0000
 committer kk_Ataka &lt;kk_ataka@example.com&gt; 1385633710 +0000
 
-<span class="err">Merge branch 'test'</span></code>
-  </pre>
-</figure>
-
+Merge branch &#39;test&#39;</code></pre></div>
 <p>2つある！</p>
 
-<h3 id="tocAnchor-1-7-5">リポジトリからファイルを消したとき</h3>
+<h3 id="リポジトリからファイルを消したとき">リポジトリからファイルを消したとき</h3>
 
 <p>消したらどうなるんだろう。</p>
 
 <p>まずは適当なファイルを追加する。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">echo</span>
-      <span class="kv"> "hello" &gt;&gt; hello.txt
-</span>
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> add hello.txt
-</span>
-      <span class="w">$ </span>
-      <span class="nc">find</span>
-      <span class="kv"> .git/objects/ -type f
-</span>
-      <span class="err">.git/objects/ce/013625030ba8dba906f756967f9e9ca394464a</span>
-    </code>
-  </pre>
-</figure>
-
-<p>add したらひとつできてる。 commit したら <code class="highlighter-rouge">commit</code> オブジェクトと <code class="highlighter-rouge">tree</code> オブジェクトのふたつができて、計みっつになるはず。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "first commit"
-</span>(略)
-<span class="w">$ </span><span class="nc">find</span><span class="kv"> .git/objects/ -type f
-</span>.git/objects/aa/a96ced2d9a1c8e72c56b253a0e2fe78393feb7    # tree
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ echo &#34;hello&#34; &gt;&gt; hello.txt
+$ git add hello.txt
+$ find .git/objects/ -type f
+.git/objects/ce/013625030ba8dba906f756967f9e9ca394464a</code></pre></div>
+<p>add したらひとつできてる。 commit したら <code>commit</code> オブジェクトと <code>tree</code> オブジェクトのふたつができて、計みっつになるはず。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git commit -m &#34;first commit&#34;
+(略)
+$ find .git/objects/ -type f
+.git/objects/aa/a96ced2d9a1c8e72c56b253a0e2fe78393feb7    # tree
 .git/objects/30/5fd379be250870d1e55584241637dacb44ec82    # commit
 .git/objects/ce/013625030ba8dba906f756967f9e9ca394464a    # blob  hello.txt
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> status
-</span><span class="ni"># </span><span class="nc">On</span><span class="kv"> branch master
-</span><span class="err">nothing to commit (working directory clean)</span></code>
-  </pre>
-</figure>
-
+$ git status
+# On branch master
+nothing to commit (working directory clean)</code></pre></div>
 <p>なってる。</p>
 
 <p>次に、ファイルを削除。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> rm hello.txt
-</span>rm 'hello.txt'
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> status
-</span><span class="ni"># </span><span class="nc">On</span><span class="kv"> branch master
-</span><span class="ni"># </span><span class="nc">Changes</span><span class="kv"> to be committed:
-</span><span class="ni"># </span><span class="kv">  (use "git reset HEAD &lt;file&gt;..." to unstage)
-</span>#
-<span class="ni"># </span><span class="kv">      deleted:    hello.txt
-</span>#
-<span class="w">$ </span><span class="nc">find</span><span class="kv"> .git/objects/ -type f
-</span>.git/objects/aa/a96ced2d9a1c8e72c56b253a0e2fe78393feb7
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git rm hello.txt
+rm &#39;hello.txt&#39;
+$ git status
+# On branch master
+# Changes to be committed:
+#   (use &#34;git reset HEAD &lt;file&gt;...&#34; to unstage)
+#
+#       deleted:    hello.txt
+#
+$ find .git/objects/ -type f
+.git/objects/aa/a96ced2d9a1c8e72c56b253a0e2fe78393feb7
 .git/objects/30/5fd379be250870d1e55584241637dacb44ec82
-<span class="err">.git/objects/ce/013625030ba8dba906f756967f9e9ca394464a</span></code>
-  </pre>
-</figure>
-
+.git/objects/ce/013625030ba8dba906f756967f9e9ca394464a</code></pre></div>
 <p>削除しただけだと変わらないか。</p>
 
 <p>コミットするとどうか。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "delete hello.txt"
-</span>(略)
-<span class="w">$ </span><span class="nc">find</span><span class="kv"> .git/objects/ -type f
-</span>.git/objects/aa/a96ced2d9a1c8e72c56b253a0e2fe78393feb7    # tree
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git commit -m &#34;delete hello.txt&#34;
+(略)
+$ find .git/objects/ -type f
+.git/objects/aa/a96ced2d9a1c8e72c56b253a0e2fe78393feb7    # tree
 .git/objects/30/5fd379be250870d1e55584241637dacb44ec82    # commit
 .git/objects/4b/825dc642cb6eb9a060e54bf8d69288fbee4904
 .git/objects/ce/013625030ba8dba906f756967f9e9ca394464a    # blob  hello.txt
-<span class="err">.git/objects/72/e0a285935e33b62877ecb809fd4b6fac6d416d</span></code>
-  </pre>
-</figure>
-
-<p>新たにふたつできてる。 <code class="highlighter-rouge">commit</code> オブジェクトと <code class="highlighter-rouge">tree</code> オブジェクトか。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 72e0
-</span>commit
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 72e0
-</span>tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904
+.git/objects/72/e0a285935e33b62877ecb809fd4b6fac6d416d</code></pre></div>
+<p>新たにふたつできてる。 <code>commit</code> オブジェクトと <code>tree</code> オブジェクトか。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git cat-file -t 72e0
+commit
+$ git cat-file -p 72e0
+tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904
 parent 305fd379be250870d1e55584241637dacb44ec82
 author kk_Ataka &lt;kk_ataka@example.com&gt; 1386303674 +0000
 committer kk_Ataka &lt;kk_ataka@example.com&gt; 1386303674 +0000
 
-<span class="err">delete hello.txt</span></code>
-  </pre>
-</figure>
+delete hello.txt</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git cat-file -t 4b82
+tree
+$ git cat-file -p 4b82
+$</code></pre></div>
+<p>あ、 <code>tree</code> オブジェクトのリストから消えるだけか。</p>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -t 4b82
-</span>tree
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p 4b82
-</span><span class="err">$</span></code>
-  </pre>
-</figure>
+<p>というか、よく考えたら <code>git rm</code> したからってオブジェクトが消えたらチェックアウトで戻せなくなるな。</p>
 
-<p>あ、 <code class="highlighter-rouge">tree</code> オブジェクトのリストから消えるだけか。</p>
-
-<p>というか、よく考えたら <code class="highlighter-rouge">git rm</code> したからってオブジェクトが消えたらチェックアウトで戻せなくなるな。</p>
-
-<h2 id="tocAnchor-1-13">課題</h2>
+<h2 id="課題">課題</h2>
 
 <p>まだよくわかってない。</p>
 
 <ol>
-  <li><code class="highlighter-rouge">.git/index</code> がどうなっているのか。
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/nishiohirokazu/20120523/1337766796">git indexの中身 - 西尾泰和のはてなダイアリー</a></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">.git/objects</code> 下の info と pack
-    <ul>
-      <li><code class="highlighter-rouge">$ git gc</code> コマンドを使って整理した場合に複数のオブジェクトのファイルを pack ファイルに圧縮する</li>
-    </ul>
-  </li>
-  <li>オブジェクトが勝手に消えるときはあるのか。
-    <ul>
-      <li>detached HEAD 状態になったコミットは gc とか走ると消えそうなんだけど…</li>
-    </ul>
-  </li>
+<li><code>.git/index</code> がどうなっているのか。
+
+<ul>
+<li><a href="http://d.hatena.ne.jp/nishiohirokazu/20120523/1337766796">git indexの中身 - 西尾泰和のはてなダイアリー</a></li>
+</ul></li>
+<li><code>.git/objects</code> 下の info と pack
+
+<ul>
+<li><code>$ git gc</code> コマンドを使って整理した場合に複数のオブジェクトのファイルを pack ファイルに圧縮する</li>
+</ul></li>
+<li>オブジェクトが勝手に消えるときはあるのか。
+
+<ul>
+<li>detached HEAD 状態になったコミットは gc とか走ると消えそうなんだけど…</li>
+</ul></li>
 </ol>
 
-<h2 id="tocAnchor-1-14">メモ</h2>
+<h2 id="メモ">メモ</h2>
 
 <p>今回使った色々なコマンド。</p>
 
-<h3 id="tocAnchor-1-14-1">cat-file</h3>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p HEAD # HEAD = commit オブジェクト
-</span>tree c3b5990fc81599cd04934d349b2c08a952f16c18
+<h3 id="cat-file">cat-file</h3>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git cat-file -p HEAD # HEAD = commit オブジェクト
+tree c3b5990fc81599cd04934d349b2c08a952f16c18
 parent c11123084bd99af451ddf8eaad378b9a0a5ae695
 author kk_Ataka &lt;kk_ataka@example.com&gt; 1385508273 +0000
 committer kk_Ataka &lt;kk_ataka@example.com&gt; 1385508273 +0000
 
 add test.txt
 
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> cat-file -p c3b5990 # tree オブジェクト
-</span>100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
-<span class="err">040000 tree 85a2934a71f7385034f934f9ccc8c746b73d4f44    testdir</span></code>
-  </pre>
-</figure>
-
-<h3 id="tocAnchor-1-14-2">hash-object</h3>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> hash-object README # blob オブジェクト
-</span>
-      <span class="err">557db03de997c86a4a028e1ebd3a1ceb225be238</span>
-    </code>
-  </pre>
-</figure>
-
-<h3 id="tocAnchor-1-14-3">rev-parse</h3>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console">
-      <span class="w">$ </span>
-      <span class="nc">git</span>
-      <span class="kv"> rev-parse HEAD
-</span>
-      <span class="err">047f8f6f81e483c5c3004cd80d5ecb81a7f64090</span>
-    </code>
-  </pre>
-</figure>
-
-<h3 id="tocAnchor-1-14-4">ls-tree</h3>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> ls-tree HEAD
-</span>100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
+$ git cat-file -p c3b5990 # tree オブジェクト
+100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
+040000 tree 85a2934a71f7385034f934f9ccc8c746b73d4f44    testdir</code></pre></div>
+<h3 id="hash-object">hash-object</h3>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git hash-object README # blob オブジェクト
+557db03de997c86a4a028e1ebd3a1ceb225be238</code></pre></div>
+<h3 id="rev-parse">rev-parse</h3>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git rev-parse HEAD
+047f8f6f81e483c5c3004cd80d5ecb81a7f64090</code></pre></div>
+<h3 id="ls-tree">ls-tree</h3>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git ls-tree HEAD
+100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    README
 040000 tree 85a2934a71f7385034f934f9ccc8c746b73d4f44    testdir
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> ls-tree 85a293
-</span><span class="err">100644 blob 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe    test.txt</span></code>
-  </pre>
-</figure>
-
-<h3 id="tocAnchor-1-14-5">ls-files</h3>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> ls-files --stage
-</span>100644 d7f3c505ac2e28aaac5fa9210adb1115b8c57d72 0       README
+$ git ls-tree 85a293
+100644 blob 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe    test.txt</code></pre></div>
+<h3 id="ls-files">ls-files</h3>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git ls-files --stage
+100644 d7f3c505ac2e28aaac5fa9210adb1115b8c57d72 0       README
 100644 9daeafb9864cf43055ae93beb0afd6c7d144bfa4 0       new.txt
-<span class="err">100644 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe 0       testdir/test.txt</span></code>
-  </pre>
-</figure>
-
-<h3 id="tocAnchor-1-14-6">show</h3>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">git</span><span class="kv"> show d7f3c505ac2e28a
-</span>Hello World
+100644 16b14f5da9e2fcd6f3f38cc9e584cef2f3c90ebe 0       testdir/test.txt</code></pre></div>
+<h3 id="show">show</h3>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git show d7f3c505ac2e28a
+Hello World
 master branch
 test branch
 
-<span class="w">$ </span><span class="nc">git</span><span class="kv"> show HEAD
-</span>commit b870b7313d2fcfda308204b12d5534c5ccac95cb
+$ git show HEAD
+commit b870b7313d2fcfda308204b12d5534c5ccac95cb
 Merge: c2333bd 38c9e30
 Author: kk_Ataka &lt;kk_ataka@example.com&gt;
 Date:   Thu Nov 28 20:15:10 2013 +0000
 
-<span class="err">    Merge branch 'test'</span></code>
-  </pre>
-</figure>
+    Merge branch &#39;test&#39;</code></pre></div>
+    </section>
+  </article>
 
-
-</div>
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2013/11/25/jekyll-plugin-reference/" title="Jekyllのプラグイン作成で複数ファイルにまたがったタグをどう扱えばいいのかわからない話">
-          Jekyllのプラグイン作成で複数ファイルにまたがったタグをどう扱えばいいのかわからない話
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/11/25/jekyll-plugin-reference/" class="pagination_overflow previous_page">
+          Prev: 
+          13/11/25
+          Jekyllのプラグイン作成で複数ファイルにまたがったタグを …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/12/24/ruby-qr/" title="RubyでQRコードを生成してみる">
+      
+
+      <span class="pagination_center disabled">
+        13/12/14
+        Git …
+      </span>
+
+      
+        <a href="/2013/12/24/ruby-qr/" class="pagination_overflow next_page">
+          Next: 
+          13/12/24
           RubyでQRコードを生成してみる
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2013/12/14/git-dotgit-objects/" data-text="kk_Atakaの日記 - Gitの.git/objectsの中身を追ってみる" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/12/14/git-dotgit-objects/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/12/14/git-dotgit-objects/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/12/14/git-dotgit-objects/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - Gitの.git/objectsの中身を追ってみる"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+      </div>
 
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/12/14/git-dotgit-objects//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-  <h2>Recent Entries</h2>
 
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#結論">結論</a>
+<ul>
+<li><a href="#git-add-したとき">git add したとき</a></li>
+<li><a href="#git-commit-したとき">git commit したとき</a></li>
+<li><a href="#git-rm-したとき">git rm したとき</a></li>
+</ul></li>
+<li><a href="#実際にやってみる">実際にやってみる</a>
+<ul>
+<li><a href="#前準備">前準備</a></li>
+<li><a href="#git-add-でファイルを追加">git add でファイルを追加</a>
+<ul>
+<li><a href="#操作手順">操作手順</a></li>
+</ul></li>
+<li><a href="#git-commit-でファイルコミット">git commit でファイルコミット</a>
+<ul>
+<li><a href="#操作手順-1">操作手順</a></li>
+</ul></li>
+<li><a href="#親が複数あるとき">親が複数あるとき</a></li>
+<li><a href="#リポジトリからファイルを消したとき">リポジトリからファイルを消したとき</a></li>
+</ul></li>
+<li><a href="#課題">課題</a></li>
+<li><a href="#メモ">メモ</a>
+<ul>
+<li><a href="#cat-file">cat-file</a></li>
+<li><a href="#hash-object">hash-object</a></li>
+<li><a href="#rev-parse">rev-parse</a></li>
+<li><a href="#ls-tree">ls-tree</a></li>
+<li><a href="#ls-files">ls-files</a></li>
+<li><a href="#show">show</a></li>
+</ul></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

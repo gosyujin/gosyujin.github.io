@@ -1,175 +1,202 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 - kk_Atakaの日記</title>
-    <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
-  </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
-
-
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
-    </div>
-
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2013/08/21/sphinx-install-python-proxy/">Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Python" class="tag">Python</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#Sphinx" class="tag">Sphinx</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2013/08/21</span>
-          
-        </div>
-
-
-
-<div class="pagination">
-  <ul>
     
-      <li class="prev">
-        <a href="/2013/08/20/rails3-log-not-colorize/" title="Rails3のログ出力にANSIカラーコードを使用しない設定">
+      
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ Sphinx を導入しようとして Python周りの環境を整えていたら easy_install がやたら失敗したりして困った。
+環境  Windows 7 Python 2.7  Python インストール …は、以前入れるだけ入れていた 2.7 があったので割愛。
+Sphinx-Users.jp のインストール手順では 2.6 が使われていたので、 2.7 でも大丈夫そう。
+環境変数 PATH に以下のパスを追加。
+ C:\Python27  Pythonのコマンドが含まれるフォルダ  C:\Python27\Scripts  次に説明するeasy_installコマンドや、Sphinxのコマンドが格納されるフォルダ   easy_install インストール(distribute_setup.py) Ruby でいうところの Bundler のようなもの？
+ setuptools - 清水川Web  setuptoolsの互換パッケージを導入。
+ python-distribute.org から distribute_setup.py をDLし実行。  $ python distribute_setup.py Downloading http://pypi.python.org/packages/source/d/distribute/distribute-0.6.49.tar.gz Extracting in c:\users\USER\appdata\local\temp\tmp00_lbf Now working in c:\users\USER\appdata\local\temp\tmp00_lbf\distribute-0.6.49 Installing Distribute Before install bootstrap.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/08/20/rails3-log-not-colorize/" class="pagination_overflow previous_page">
+          Prev: 
+          13/8/20
           Rails3のログ出力にANSIカラーコードを使用しない設定
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/08/23/sphinx-install-python-proxy2/" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き">
-          Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き
+      
+
+      <span class="pagination_center disabled">
+        13/8/21
+        Sphin …
+      </span>
+
+      
+        <a href="/2013/08/23/sphinx-install-python-proxy2/" class="pagination_overflow next_page">
+          Next: 
+          13/8/23
+          Sphinxをインストールしようとしたら全然関係な …
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">環境</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">Python インストール</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-4">
-              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">easy_install インストール(distribute_setup.py)</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-5">
-                  <a href="#tocAnchor-1-4-1"><span class="tocnumber">4.1</span> <span class="toctext">実行時に urllib2.URLError エラー</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="toc_level-1 toc_section-6">
-              <a href="#tocAnchor-1-6"><span class="tocnumber">5</span> <span class="toctext">Sphinx インストール</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-7">
-              <a href="#tocAnchor-1-7"><span class="tocnumber">6</span> <span class="toctext">おまけ easy_install インストール(ez_setup.py)</span></a>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h2 id="tocAnchor-1-1">あらすじ</h2>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
+
+  
+    <a href='/tags/python' class="muted-link">
+      [ <span class="Label Label--gray">Python</span> ]
+    </a>
+  
+    <a href='/tags/sphinx' class="muted-link">
+      [ <span class="Label Label--gray">Sphinx</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2013/08/21</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#python-インストール">Python インストール</a></li>
+<li><a href="#easy-install-インストール-distribute-setup-py">easy_install インストール(distribute_setup.py)</a>
+<ul>
+<li><a href="#実行時に-urllib2-urlerror-エラー">実行時に urllib2.URLError エラー</a></li>
+</ul></li>
+<li><a href="#sphinx-インストール">Sphinx インストール</a></li>
+<li><a href="#おまけ-easy-install-インストール-ez-setup-py">おまけ easy_install インストール(ez_setup.py)</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="あらすじ">あらすじ</h2>
 
 <p>Sphinx を導入しようとして Python周りの環境を整えていたら easy_install がやたら失敗したりして困った。</p>
 
-<h2 id="tocAnchor-1-2">環境</h2>
+<h2 id="環境">環境</h2>
 
 <ul>
-  <li>Windows 7</li>
-  <li>Python 2.7</li>
+<li>Windows 7</li>
+<li>Python 2.7</li>
 </ul>
 
-<h2 id="tocAnchor-1-3">Python インストール</h2>
+<h2 id="python-インストール">Python インストール</h2>
 
 <p>…は、以前入れるだけ入れていた 2.7 があったので割愛。</p>
 
 <p>Sphinx-Users.jp のインストール手順では 2.6 が使われていたので、 2.7 でも大丈夫そう。</p>
 
-<p>環境変数 <code class="highlighter-rouge">PATH</code> に以下のパスを追加。</p>
+<p>環境変数 <code>PATH</code> に以下のパスを追加。</p>
 
 <ul>
-  <li><code class="highlighter-rouge">C:\Python27</code>
-    <ul>
-      <li>Pythonのコマンドが含まれるフォルダ</li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">C:\Python27\Scripts</code>
-    <ul>
-      <li>次に説明するeasy_installコマンドや、Sphinxのコマンドが格納されるフォルダ</li>
-    </ul>
-  </li>
+<li><code>C:\Python27</code>
+
+<ul>
+<li>Pythonのコマンドが含まれるフォルダ</li>
+</ul></li>
+<li><code>C:\Python27\Scripts</code>
+
+<ul>
+<li>次に説明するeasy_installコマンドや、Sphinxのコマンドが格納されるフォルダ</li>
+</ul></li>
 </ul>
 
-<h2 id="tocAnchor-1-4">easy_install インストール(distribute_setup.py)</h2>
+<h2 id="easy-install-インストール-distribute-setup-py">easy_install インストール(distribute_setup.py)</h2>
 
 <p>Ruby でいうところの Bundler のようなもの？</p>
 
 <ul>
-  <li><a href="http://www.freia.jp/taka/docs/pyhack4/setuptools/index.html">setuptools - 清水川Web</a></li>
+<li><a href="http://www.freia.jp/taka/docs/pyhack4/setuptools/index.html">setuptools - 清水川Web</a></li>
 </ul>
 
 <p>setuptoolsの互換パッケージを導入。</p>
 
 <ul>
-  <li><a href="http://python-distribute.org/">python-distribute.org</a> から <code class="highlighter-rouge">distribute_setup.py</code> をDLし実行。</li>
+<li><a href="http://python-distribute.org/">python-distribute.org</a> から <code>distribute_setup.py</code> をDLし実行。</li>
 </ul>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">python</span><span class="kv"> distribute_setup.py
-</span>Downloading http://pypi.python.org/packages/source/d/distribute/distribute-0.6.49.tar.gz
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ python distribute_setup.py
+Downloading http://pypi.python.org/packages/source/d/distribute/distribute-0.6.49.tar.gz
 Extracting in c:\users\USER\appdata\local\temp\tmp00_lbf
 Now working in c:\users\USER\appdata\local\temp\tmp00_lbf\distribute-0.6.49
 Installing Distribute
@@ -187,88 +214,73 @@ running egg_info
 (略)
 
 After install bootstrap.
-<span class="err">C:\Python27\Lib\site-packages\setuptools-0.6c11-py2.7.egg-info already exists</span></code>
-  </pre>
-</figure>
+C:\Python27\Lib\site-packages\setuptools-0.6c11-py2.7.egg-info already exists</code></pre></div>
+<p>これで、 <code>PYTHON/Scripts</code> 下に <code>easy_install</code> コマンドが入る。</p>
 
-<p>これで、 <code class="highlighter-rouge">PYTHON/Scripts</code> 下に <code class="highlighter-rouge">easy_install</code> コマンドが入る。</p>
-
-<h3 id="tocAnchor-1-4-1">実行時に urllib2.URLError エラー</h3>
+<h3 id="実行時に-urllib2-urlerror-エラー">実行時に urllib2.URLError エラー</h3>
 
 <p>ところで、初回に distribute_setup.py を実行するとこんなエラーになった。(原因はわかってない)</p>
 
 <p>状況はこんな感じ。</p>
 
 <ul>
-  <li>proxyが必要な環境</li>
-  <li>環境変数 <code class="highlighter-rouge">HTTP_PROXY</code> は設定している</li>
+<li>proxyが必要な環境</li>
+<li>環境変数 <code>HTTP_PROXY</code> は設定している</li>
 </ul>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">echo</span><span class="kv"> %http_proxy%
-</span>http://PROXY_URL:PORT/
-<span class="w">$ </span><span class="nc">python</span><span class="kv"> distribute_setup.py
-</span>Downloading http://pypi.python.org/packages/source/d/distribute/distribute-0.6.49.tar.gz
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ echo %http_proxy%
+http://PROXY_URL:PORT/
+$ python distribute_setup.py
+Downloading http://pypi.python.org/packages/source/d/distribute/distribute-0.6.49.tar.gz
 Traceback (most recent call last):
-  File "distribute_setup.py", line 564, in &lt;module&gt;
+  File &#34;distribute_setup.py&#34;, line 564, in &lt;module&gt;
     sys.exit(main())
-  File "distribute_setup.py", line 560, in main
+  File &#34;distribute_setup.py&#34;, line 560, in main
     tarball = download_setuptools(download_base=options.download_base)
-  File "distribute_setup.py", line 219, in download_setuptools
+  File &#34;distribute_setup.py&#34;, line 219, in download_setuptools
     src = urlopen(url)
-  File "C:\Python27\lib\urllib2.py", line 126, in urlopen
+  File &#34;C:\Python27\lib\urllib2.py&#34;, line 126, in urlopen
     return _opener.open(url, data, timeout)
-  File "C:\Python27\lib\urllib2.py", line 400, in open
+  File &#34;C:\Python27\lib\urllib2.py&#34;, line 400, in open
     response = meth(req, response)
-  File "C:\Python27\lib\urllib2.py", line 513, in http_response
-    'http', request, response, code, msg, hdrs)
-  File "C:\Python27\lib\urllib2.py", line 432, in error
+  File &#34;C:\Python27\lib\urllib2.py&#34;, line 513, in http_response
+    &#39;http&#39;, request, response, code, msg, hdrs)
+  File &#34;C:\Python27\lib\urllib2.py&#34;, line 432, in error
     result = self._call_chain(*args)
-  File "C:\Python27\lib\urllib2.py", line 372, in _call_chain
+  File &#34;C:\Python27\lib\urllib2.py&#34;, line 372, in _call_chain
     result = func(*args)
-  File "C:\Python27\lib\urllib2.py", line 619, in http_error_302
+  File &#34;C:\Python27\lib\urllib2.py&#34;, line 619, in http_error_302
     return self.parent.open(new, timeout=req.timeout)
-  File "C:\Python27\lib\urllib2.py", line 394, in open
+  File &#34;C:\Python27\lib\urllib2.py&#34;, line 394, in open
     response = self._open(req, data)
-  File "C:\Python27\lib\urllib2.py", line 412, in _open
-    '_open', req)
-  File "C:\Python27\lib\urllib2.py", line 372, in _call_chain
+  File &#34;C:\Python27\lib\urllib2.py&#34;, line 412, in _open
+    &#39;_open&#39;, req)
+  File &#34;C:\Python27\lib\urllib2.py&#34;, line 372, in _call_chain
     result = func(*args)
-  File "C:\Python27\lib\urllib2.py", line 1207, in https_open
+  File &#34;C:\Python27\lib\urllib2.py&#34;, line 1207, in https_open
     return self.do_open(httplib.HTTPSConnection, req)
-  File "C:\Python27\lib\urllib2.py", line 1174, in do_open
+  File &#34;C:\Python27\lib\urllib2.py&#34;, line 1174, in do_open
     raise URLError(err)
-<span class="err">urllib2.URLError: &lt;urlopen error [Errno 11004] getaddrinfo failed&gt;</span></code>
-  </pre>
-</figure>
-
-<p>ん？Pythonは <code class="highlighter-rouge">HTTP_PROXY</code> じゃダメなの？</p>
+urllib2.URLError: &lt;urlopen error [Errno 11004] getaddrinfo failed&gt;</code></pre></div>
+<p>ん？Pythonは <code>HTTP_PROXY</code> じゃダメなの？</p>
 
 <p>こんな話もあるようだが…。</p>
 
 <ul>
-  <li><a href="http://d.hatena.ne.jp/orangeclover/20121020/1350689017">blockdiagシリーズのseqdiagとactdiagが、[Errno 10060]のダウンロードエラーでeasy_installのインストールに失敗する - みちしるべ</a></li>
+<li><a href="http://d.hatena.ne.jp/orangeclover/20121020/1350689017">blockdiagシリーズのseqdiagとactdiagが、[Errno 10060]のダウンロードエラーでeasy_installのインストールに失敗する - みちしるべ</a></li>
 </ul>
 
 <p>今回は URL 直接指定でもエラーが変わらなかった。</p>
 
-<p>色々試行錯誤し、 <strong>とりあえず環境を一回きれいにしてみようと <code class="highlighter-rouge">HTTP_PROXY</code> もクリアした</strong> 状態でダメ元で実行してみた…らいけた…だと…。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">set</span><span class="kv"> http_proxy=
-</span><span class="w">$ </span><span class="nc">python</span><span class="kv"> distribute_setup.py
-</span>Downloading http://pypi.python.org/packages/source/d/distribute/distribute-0.6.49.tar.gz
+<p>色々試行錯誤し、 <strong>とりあえず環境を一回きれいにしてみようと <code>HTTP_PROXY</code> もクリアした</strong> 状態でダメ元で実行してみた…らいけた…だと…。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ set http_proxy=
+$ python distribute_setup.py
+Downloading http://pypi.python.org/packages/source/d/distribute/distribute-0.6.49.tar.gz
 Extracting in c:\users\USER\appdata\local\temp\tmp00_lbf
 
 (略)
 
 After install bootstrap.
-<span class="err">C:\Python27\Lib\site-packages\setuptools-0.6c11-py2.7.egg-info already exists</span></code>
-  </pre>
-</figure>
-
+C:\Python27\Lib\site-packages\setuptools-0.6c11-py2.7.egg-info already exists</code></pre></div>
 <p>後述する、 Sphinx インストール時も同じエラーでハマったんだけどこの方法(環境変数クリア)で解決した。</p>
 
 <p>proxy必要な環境で、proxyを明示的に指定してないのになんでつながるの？どっか見てる？こわい。</p>
@@ -276,121 +288,126 @@ After install bootstrap.
 <p>というわけで、ちょっと urllib のドキュメントを調べる…。</p>
 
 <ul>
-  <li><a href="http://docs.python.jp/2/library/urllib.html#module-urllib">20.5. urllib — URL による任意のリソースへのアクセス — Python 2.7ja1 documentation</a></li>
+<li><a href="http://docs.python.jp/2/library/urllib.html#module-urllib">20.5. urllib — URL による任意のリソースへのアクセス — Python 2.7ja1 documentation</a></li>
 </ul>
 
 <blockquote>
-  <p>Windows 環境では、プロキシを指定する環境変数が設定されていない場合、プロキシの設定値はレジストリの Internet Settings セクションから取得されます。</p>
+<p>Windows 環境では、プロキシを指定する環境変数が設定されていない場合、プロキシの設定値はレジストリの Internet Settings セクションから取得されます。</p>
 </blockquote>
 
 <ul>
-  <li><a href="http://docs.python.jp/2/library/urllib2.html#module-urllib2">20.6. urllib2 — URL を開くための拡張可能なライブラリ — Python 2.7ja1 documentation</a></li>
+<li><a href="http://docs.python.jp/2/library/urllib2.html#module-urllib2">20.6. urllib2 — URL を開くための拡張可能なライブラリ — Python 2.7ja1 documentation</a></li>
 </ul>
 
 <blockquote>
-  <p>このクラスはプロキシを通過してリクエストを送らせます。引数 proxies を与える場合、プロトコル名からプロキシの URL へ対応付ける辞書でなくてはなりません。標準では、プロキシのリストを環境変数 <protocol>_proxy から読み出します。</protocol></p>
+<p>このクラスはプロキシを通過してリクエストを送らせます。引数 proxies を与える場合、プロトコル名からプロキシの URL へ対応付ける辞書でなくてはなりません。標準では、プロキシのリストを環境変数 <protocol>_proxy から読み出します。</p>
 
-  <p>プロキシ環境変数が設定されていない場合は、 Windows 環境では、レジストリのインターネット設定セクションからプロキシ設定を手に入れ、 Mac OS X 環境では、 OS X システム設定フレームワーク (System Configuration Framework) からプロキシ情報を取得します。</p>
+<p>プロキシ環境変数が設定されていない場合は、 Windows 環境では、レジストリのインターネット設定セクションからプロキシ設定を手に入れ、 Mac OS X 環境では、 OS X システム設定フレームワーク (System Configuration Framework) からプロキシ情報を取得します。</p>
 </blockquote>
 
 <p>なに？レジストリ見てんの？</p>
 
-<p>というわけでレジストリから <code class="highlighter-rouge">Internet Settings</code> を探すと、</p>
+<p>というわけでレジストリから <code>Internet Settings</code> を探すと、</p>
 
 <ul>
-  <li>HKEY_USERS
-    <ul>
-      <li>S-1-5-21-xxxxxxxx-xxxxxxxx…
-        <ul>
-          <li>Software
-            <ul>
-              <li>Microsoft
-                <ul>
-                  <li>Windows
-                    <ul>
-                      <li>CurrentVersion
-                        <ul>
-                          <li>Internet Settings</li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
+<li>HKEY_USERS
+
+<ul>
+<li>S-1-5-21-xxxxxxxx-xxxxxxxx&hellip;</li>
+<li>Software
+
+<ul>
+<li>Microsoft</li>
+<li>Windows
+
+<ul>
+<li>CurrentVersion</li>
+<li>Internet Settings</li>
+</ul></li>
+</ul></li>
+</ul></li>
 </ul>
 
-<p>ここに <code class="highlighter-rouge">ProxyServer</code> という値があった！</p>
+<p>ここに <code>ProxyServer</code> という値があった！</p>
 
 <p>どうやらこれはIEのインターネットオプションから設定する値らしい。</p>
 
 <p>※ HKEY_USERSの下のS-xxx文字列</p>
 
 <blockquote>
-  <p>HKEY_USERS以下には、次のようなサブキーが存在します。</p>
+<p>HKEY_USERS以下には、次のようなサブキーが存在します。</p>
 
-  <table>
-    <thead>
-      <tr>
-        <th>サブキー</th>
-        <th>サブキーを参照するユーザー</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>.DEFAULT</td>
-        <td>プロファイルがロードされていないユーザーが参照する。</td>
-      </tr>
-    </tbody>
-    <tbody>
-      <tr>
-        <td>S-1-5-18</td>
-        <td>SYSTEMが参照する。</td>
-      </tr>
-    </tbody>
-    <tbody>
-      <tr>
-        <td>S-1-5-19</td>
-        <td>LOCAL SERVICEが参照する。</td>
-      </tr>
-    </tbody>
-    <tbody>
-      <tr>
-        <td>S-1-5-20</td>
-        <td>NETWORK SERVICEが参照する</td>
-      </tr>
-    </tbody>
-    <tbody>
-      <tr>
-        <td>S-1-5-21-XXXXXXXXXX-XXXXXXXXXX-XXXXXXXXXX-XXXX</td>
-        <td>特定のユーザーが参照する。SIDの最後の4文字はRIDであり、各ユーザーはこれで識別される。 RIDを除いた残りのSIDは、コンピュータのSIDである。</td>
-      </tr>
-    </tbody>
-  </table>
+<table>
+<thead>
+<tr>
+<th>サブキー</th>
+<th>サブキーを参照するユーザー</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>.DEFAULT</td>
+<td>プロファイルがロードされていないユーザーが参照する。</td>
+</tr>
+
+<tr>
+<td>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-</td>
+<td>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;</td>
+</tr>
+
+<tr>
+<td>S-1-5-18</td>
+<td>SYSTEMが参照する。</td>
+</tr>
+
+<tr>
+<td>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-</td>
+<td>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;</td>
+</tr>
+
+<tr>
+<td>S-1-5-19</td>
+<td>LOCAL SERVICEが参照する。</td>
+</tr>
+
+<tr>
+<td>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-</td>
+<td>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;</td>
+</tr>
+
+<tr>
+<td>S-1-5-20</td>
+<td>NETWORK SERVICEが参照する</td>
+</tr>
+
+<tr>
+<td>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-</td>
+<td>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;</td>
+</tr>
+
+<tr>
+<td>S-1-5-21-XXXXXXXXXX-XXXXXXXXXX-XXXXXXXXXX-XXXX</td>
+<td>特定のユーザーが参照する。SIDの最後の4文字はRIDであり、各ユーザーはこれで識別される。 RIDを除いた残りのSIDは、コンピュータのSIDである。</td>
+</tr>
+</tbody>
+</table>
 </blockquote>
 
-<p>なるほど。これを見にきたから <code class="highlighter-rouge">HTTP_PROXY</code> をクリアしてもOKだったわけか。</p>
+<p>なるほど。これを見にきたから <code>HTTP_PROXY</code> をクリアしてもOKだったわけか。</p>
 
-<p>でも、 <strong>なんで環境変数 <code class="highlighter-rouge">HTTP_PROXY</code> に値を入れている状態</strong> だとインストール失敗したんだろう？( 環境変数 <code class="highlighter-rouge">HTTP_PROXY</code> と レジストリ <code class="highlighter-rouge">ProxyServer</code> はまったく同じ値)</p>
+<p>でも、 <strong>なんで環境変数 <code>HTTP_PROXY</code> に値を入れている状態</strong> だとインストール失敗したんだろう？( 環境変数 <code>HTTP_PROXY</code> と レジストリ <code>ProxyServer</code> はまったく同じ値)</p>
 
 <p>ここから先中身を追ってみないと分からないか…。</p>
 
-<h2 id="tocAnchor-1-6">Sphinx インストール</h2>
+<h2 id="sphinx-インストール">Sphinx インストール</h2>
 
 <p>やっと Sphinx。</p>
 
-<p>easy_install で入れる。当環境では <code class="highlighter-rouge">HTTP_PROXY</code> を事前にクリアする必要があった。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">set</span><span class="kv"> http_proxy=
-</span><span class="w">$ </span><span class="nc">Scripts\easy_install</span><span class="kv"> sphinx
-</span>Searching for sphinx
+<p>easy_install で入れる。当環境では <code>HTTP_PROXY</code> を事前にクリアする必要があった。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ set http_proxy=
+$ Scripts\easy_install sphinx
+Searching for sphinx
 Reading http://pypi.python.org/simple/sphinx/
 Best match: Sphinx 1.2b1
 Downloading https://pypi.python.org/packages/2.7/S/Sphinx/Sphinx-1.2b1-py2.7.egg#md5=60fbf057bc586dce8ceb55a404f5a9be
@@ -420,12 +437,12 @@ Downloading https://pypi.python.org/packages/source/d/docutils/docutils-0.11.tar
 Processing docutils-0.11.tar.gz
 Writing c:\users\USER\appdata\local\temp\easy_install-kytfku\docutils-0.11\setup.cfg
 Running docutils-0.11\setup.py -q bdist_egg --dist-dir c:\users\USER\appdata\local\temp\easy_install-kytfku\docutils-0.11\egg-dist-tmp-l7szgx
-warning: no files found matching 'MANIFEST'
-warning: no files found matching '*' under directory 'extras'
-warning: no previously-included files matching '.cvsignore' found under directory '*'
-warning: no previously-included files matching '*.pyc' found under directory '*'
-warning: no previously-included files matching '*~' found under directory '*'
-warning: no previously-included files matching '.DS_Store' found under directory '*'
+warning: no files found matching &#39;MANIFEST&#39;
+warning: no files found matching &#39;*&#39; under directory &#39;extras&#39;
+warning: no previously-included files matching &#39;.cvsignore&#39; found under directory &#39;*&#39;
+warning: no previously-included files matching &#39;*.pyc&#39; found under directory &#39;*&#39;
+warning: no previously-included files matching &#39;*~&#39; found under directory &#39;*&#39;
+warning: no previously-included files matching &#39;.DS_Store&#39; found under directory &#39;*&#39;
 zip_safe flag not set; analyzing archive contents...
 docutils.parsers.rst.directives.misc: module references __file__
 docutils.writers.docutils_xml: module references __path__
@@ -454,12 +471,12 @@ Downloading https://pypi.python.org/packages/source/J/Jinja2/Jinja2-2.7.1.tar.gz
 Processing Jinja2-2.7.1.tar.gz
 Writing c:\users\USER\appdata\local\temp\easy_install-ewpoxa\Jinja2-2.7.1\setup.cfg
 Running Jinja2-2.7.1\setup.py -q bdist_egg --dist-dir c:\users\USER\appdata\local\temp\easy_install-ewpoxa\Jinja2-2.7.1\egg-dist-tmp-xvfdqy
-warning: no files found matching '*' under directory 'custom_fixers'
-warning: no previously-included files matching '*' found under directory 'docs\_build'
-warning: no previously-included files matching '*.pyc' found under directory 'jinja2'
-warning: no previously-included files matching '*.pyc' found under directory 'docs'
-warning: no previously-included files matching '*.pyo' found under directory 'jinja2'
-warning: no previously-included files matching '*.pyo' found under directory 'docs'
+warning: no files found matching &#39;*&#39; under directory &#39;custom_fixers&#39;
+warning: no previously-included files matching &#39;*&#39; found under directory &#39;docs\_build&#39;
+warning: no previously-included files matching &#39;*.pyc&#39; found under directory &#39;jinja2&#39;
+warning: no previously-included files matching &#39;*.pyc&#39; found under directory &#39;docs&#39;
+warning: no previously-included files matching &#39;*.pyo&#39; found under directory &#39;jinja2&#39;
+warning: no previously-included files matching &#39;*.pyo&#39; found under directory &#39;docs&#39;
 Adding jinja2 2.7.1 to easy-install.pth file
 
 Installed c:\python27\lib\site-packages\jinja2-2.7.1-py2.7.egg
@@ -495,120 +512,102 @@ Plain-Python installation succeeded.
 Adding markupsafe 0.18 to easy-install.pth file
 
 Installed c:\python27\lib\site-packages\markupsafe-0.18-py2.7.egg
-<span class="err">Finished processing dependencies for sphinx</span></code>
-  </pre>
-</figure>
-
+Finished processing dependencies for sphinx</code></pre></div>
 <p>とりあえずインストールまで。</p>
 
 <p>設定までしようと思ったけど、思わぬ所でハマってしまった…。</p>
 
 <hr />
 
-<h2 id="tocAnchor-1-7">おまけ easy_install インストール(ez_setup.py)</h2>
+<h2 id="おまけ-easy-install-インストール-ez-setup-py">おまけ easy_install インストール(ez_setup.py)</h2>
 
 <p>すごいはまった挙句、結局ローカルに落としてインストールした時の記録。</p>
 
-<p>多分 distrybute_setup.py と同様、 <code class="highlighter-rouge">HTTP_PROXY</code> をクリアすれば IE の proxy 設定を参照しにいって無事にインストールされるのではないかと思われる。</p>
+<p>多分 distrybute_setup.py と同様、 <code>HTTP_PROXY</code> をクリアすれば IE の proxy 設定を参照しにいって無事にインストールされるのではないかと思われる。</p>
 
 <p>しかし、こちらは現在メンテナンスされていないらしい。</p>
 
 <ul>
-  <li><a href="http://sphinx-users.jp/gettingstarted/install_windows.html">Windowsへのインストール :: ドキュメンテーションツール スフィンクス Sphinx-users.jp</a></li>
+<li><a href="http://sphinx-users.jp/gettingstarted/install_windows.html">Windowsへのインストール :: ドキュメンテーションツール スフィンクス Sphinx-users.jp</a></li>
 </ul>
 
-<p><code class="highlighter-rouge">ez_setup.py</code> をダウンロードし、実行すると以下のようなエラー。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">python</span><span class="kv"> ez_setup.py
-</span>Downloading http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg
+<p><code>ez_setup.py</code> をダウンロードし、実行すると以下のようなエラー。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ python ez_setup.py
+Downloading http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg
 Traceback (most recent call last):
-  File "ez_setup.py", line 278, in &lt;module&gt;
+  File &#34;ez_setup.py&#34;, line 278, in &lt;module&gt;
     main(sys.argv[1:])
-  File "ez_setup.py", line 210, in main
+  File &#34;ez_setup.py&#34;, line 210, in main
     egg = download_setuptools(version, delay=0)
-  File "ez_setup.py", line 158, in download_setuptools
+  File &#34;ez_setup.py&#34;, line 158, in download_setuptools
     src = urllib2.urlopen(url)
-  File "C:\python27\lib\urllib2.py", line 127, in urlopen
+  File &#34;C:\python27\lib\urllib2.py&#34;, line 127, in urlopen
     return _opener.open(url, data, timeout)
-  File "C:\python27\lib\urllib2.py", line 410, in open
+  File &#34;C:\python27\lib\urllib2.py&#34;, line 410, in open
     response = meth(req, response)
-  File "C:\python27\lib\urllib2.py", line 523, in http_response
-    'http', request, response, code, msg, hdrs)
-  File "C:\python27\lib\urllib2.py", line 442, in error
+  File &#34;C:\python27\lib\urllib2.py&#34;, line 523, in http_response
+    &#39;http&#39;, request, response, code, msg, hdrs)
+  File &#34;C:\python27\lib\urllib2.py&#34;, line 442, in error
     result = self._call_chain(*args)
-  File "C:\python27\lib\urllib2.py", line 382, in _call_chain
+  File &#34;C:\python27\lib\urllib2.py&#34;, line 382, in _call_chain
     result = func(*args)
-  File "C:\python27\lib\urllib2.py", line 629, in http_error_302
+  File &#34;C:\python27\lib\urllib2.py&#34;, line 629, in http_error_302
     return self.parent.open(new, timeout=req.timeout)
-  File "C:\python27\lib\urllib2.py", line 404, in open
+  File &#34;C:\python27\lib\urllib2.py&#34;, line 404, in open
     response = self._open(req, data)
-  File "C:\python27\lib\urllib2.py", line 422, in _open
-    '_open', req)
-  File "C:\python27\lib\urllib2.py", line 382, in _call_chain
+  File &#34;C:\python27\lib\urllib2.py&#34;, line 422, in _open
+    &#39;_open&#39;, req)
+  File &#34;C:\python27\lib\urllib2.py&#34;, line 382, in _call_chain
     result = func(*args)
-  File "C:\python27\lib\urllib2.py", line 1222, in https_open
+  File &#34;C:\python27\lib\urllib2.py&#34;, line 1222, in https_open
     return self.do_open(httplib.HTTPSConnection, req)
-  File "C:\python27\lib\urllib2.py", line 1184, in do_open
+  File &#34;C:\python27\lib\urllib2.py&#34;, line 1184, in do_open
     raise URLError(err)
-<span class="err">urllib2.URLError: &lt;urlopen error [Errno 11004] getaddrinfo failed&gt;</span></code>
-  </pre>
-</figure>
-
+urllib2.URLError: &lt;urlopen error [Errno 11004] getaddrinfo failed&gt;</code></pre></div>
 <p>Downloading のurlにブラウザからアクセスするとダウンロードできるので、多分proxyの設定が適切になされていない。</p>
 
-<p>「urllib2 proxy」で調べると ProxyHandler を使えばよいということ(というか、環境変数 <code class="highlighter-rouge">HTTP_PROXY</code> (設定済み) を呼んでくれそうな気がするんだけど)なので、 ez_setup.py の中で明示的に proxy を指定してみた。</p>
+<p>「urllib2 proxy」で調べると ProxyHandler を使えばよいということ(というか、環境変数 <code>HTTP_PROXY</code> (設定済み) を呼んでくれそうな気がするんだけど)なので、 ez_setup.py の中で明示的に proxy を指定してみた。</p>
 
 <ul>
-  <li><a href="http://docs.python.jp/2/library/urllib2.html#urllib2.urlopen">20.6. urllib2 ? URL を開くための拡張可能なライブラリ ? Python 2.7ja1 documentation</a></li>
+<li><a href="http://docs.python.jp/2/library/urllib2.html#urllib2.urlopen">20.6. urllib2 ? URL を開くための拡張可能なライブラリ ? Python 2.7ja1 documentation</a></li>
 </ul>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-python" data-lang="python"><span class="o">+</span> <span class="n">proxy_handler</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">ProxyHandler</span><span class="p">({</span><span class="s">'http'</span><span class="p">:</span> <span class="s">'http://PROXY:PORT/'</span><span class="p">})</span>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">+</span> <span class="n">proxy_handler</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">ProxyHandler</span><span class="p">({</span><span class="s1">&#39;http&#39;</span><span class="p">:</span> <span class="s1">&#39;http://PROXY:PORT/&#39;</span><span class="p">})</span>
 <span class="o">+</span> <span class="n">opener</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">proxy_handler</span><span class="p">)</span>
 <span class="o">+</span> <span class="n">src</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-<span class="o">-</span> <span class="n">src</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></code>
-  </pre>
-</figure>
-
+<span class="o">-</span> <span class="n">src</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></code></pre></div>
 <p>が、エラー変わらず。 proxy が原因じゃないのか。今度は Errno でググってみた。</p>
 
 <ul>
-  <li><a href="http://ss9neco.blog.fc2.com/category3-1.html">ss_9’s log　 Python</a></li>
+<li><a href="http://ss9neco.blog.fc2.com/category3-1.html">ss_9&rsquo;s log　 Python</a></li>
 </ul>
 
 <blockquote>
-  <p>その際、proxy環境の場合は、</p>
+<p>その際、proxy環境の場合は、</p>
 
-  <blockquote>
-    <p>＃ export http_proxy=http://[proxy名]:[ポート番号]</p>
-  </blockquote>
+<blockquote>
+<p>＃ export http_proxy=http://[proxy名]:[ポート番号]</p>
+</blockquote>
 
-  <p>にてproxy環境を整えてください。</p>
+<p>にてproxy環境を整えてください。</p>
 </blockquote>
 
 <p>お、やっぱり環境変数から呼んでくれるみたい。そして、</p>
 
 <blockquote>
-  <p>また、ez_setupを取得して、以下のようなurllib2のエラーが出た時は、</p>
+<p>また、ez_setupを取得して、以下のようなurllib2のエラーが出た時は、</p>
 
-  <p>urllib2.URLError:</p>
+<p>urllib2.URLError:</p>
 
-  <p>setuptoolsをez_setupと同じディレクトリに置いてください。</p>
+<p>setuptoolsをez_setupと同じディレクトリに置いてください。</p>
 
-  <blockquote>
-    <p>＃ sudo wget http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg#md5=fe1f997bc722265116870bc7919059ea</p>
-  </blockquote>
+<blockquote>
+<p>＃ sudo wget <a href="http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg#md5=fe1f997bc722265116870bc7919059ea">http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg#md5=fe1f997bc722265116870bc7919059ea</a></p>
+</blockquote>
 </blockquote>
 
-<p>ということなので、この setuptools <code class="highlighter-rouge">setuptools-0.6c11-py2.7.egg</code> をDLし再び実行すると無事にインストールできた。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">python</span><span class="kv"> ez_setup.py
-</span>Processing setuptools-0.6c11-py2.7.egg
+<p>ということなので、この setuptools <code>setuptools-0.6c11-py2.7.egg</code> をDLし再び実行すると無事にインストールできた。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ python ez_setup.py
+Processing setuptools-0.6c11-py2.7.egg
 Copying setuptools-0.6c11-py2.7.egg to c:\python27\lib\site-packages
 Adding setuptools 0.6c11 to easy-install.pth file
 Installing easy_install-script.py script to C:\Python27\Scripts
@@ -620,540 +619,720 @@ Installing easy_install-2.7.exe.manifest script to C:\Python27\Scripts
 
 Installed c:\python27\lib\site-packages\setuptools-0.6c11-py2.7.egg
 Processing dependencies for setuptools==0.6c11
-<span class="err">Finished processing dependencies for setuptools==0.6c11</span></code>
-  </pre>
-</figure>
-
+Finished processing dependencies for setuptools==0.6c11</code></pre></div>
 <p>実行できた。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"><span class="err">$</span> <span class="nx">easy_install</span> <span class="o">--</span><span class="nx">help</span>
 
-<figure class="highlight">
-  <pre>
-    <code class="language-console" data-lang="console"><span class="w">$ </span><span class="nc">easy_install</span><span class="kv"> --help
-</span>
-Global options:
-  --verbose (-v)  run verbosely (default)
-  --quiet (-q)    run quietly (turns verbosity off)
-  --dry-run (-n)  don't actually do anything
-  --help (-h)     show detailed help message
-  --no-user-cfg   ignore pydistutils.cfg in your home directory
+<span class="nx">Global</span> <span class="nx">options</span><span class="p">:</span>
+  <span class="o">--</span><span class="nx">verbose</span> <span class="p">(</span><span class="o">-</span><span class="nx">v</span><span class="p">)</span>  <span class="nx">run</span> <span class="nx">verbosely</span> <span class="p">(</span><span class="k">default</span><span class="p">)</span>
+  <span class="o">--</span><span class="nx">quiet</span> <span class="p">(</span><span class="o">-</span><span class="nx">q</span><span class="p">)</span>    <span class="nx">run</span> <span class="nx">quietly</span> <span class="p">(</span><span class="nx">turns</span> <span class="nx">verbosity</span> <span class="nx">off</span><span class="p">)</span>
+  <span class="o">--</span><span class="nx">dry</span><span class="o">-</span><span class="nx">run</span> <span class="p">(</span><span class="o">-</span><span class="nx">n</span><span class="p">)</span>  <span class="nx">don</span><span class="err">&#39;</span><span class="nx">t</span> <span class="nx">actually</span> <span class="nx">do</span> <span class="nx">anything</span>
+  <span class="o">--</span><span class="nx">help</span> <span class="p">(</span><span class="o">-</span><span class="nx">h</span><span class="p">)</span>     <span class="nx">show</span> <span class="nx">detailed</span> <span class="nx">help</span> <span class="nx">message</span>
+  <span class="o">--</span><span class="nx">no</span><span class="o">-</span><span class="nx">user</span><span class="o">-</span><span class="nx">cfg</span>   <span class="nx">ignore</span> <span class="nx">pydistutils</span><span class="p">.</span><span class="nx">cfg</span> <span class="nx">in</span> <span class="nx">your</span> <span class="nx">home</span> <span class="nx">directory</span>
 
-Options for 'easy_install' command:
-  --prefix                       installation prefix
-  --zip-ok (-z)                  install package as a zipfile
-  --multi-version (-m)           make apps have to require() a version
-  --upgrade (-U)                 force upgrade (searches PyPI for latest
-                                 versions)
-  --install-dir (-d)             install package to DIR
-  --script-dir (-s)              install scripts to DIR
-  --exclude-scripts (-x)         Don't install scripts
-  --always-copy (-a)             Copy all needed packages to install dir
-  --index-url (-i)               base URL of Python Package Index
-  --find-links (-f)              additional URL(s) to search for packages
-  --delete-conflicting (-D)      no longer needed; don't use this
-  --ignore-conflicts-at-my-risk  no longer needed; don't use this
-  --build-directory (-b)         download/extract/build in DIR; keep the
-                                 results
-  --optimize (-O)                also compile with optimization: -O1 for
-                                 "python -O", -O2 for "python -OO", and -O0 to
-                                 disable [default: -O0]
-  --record                       filename in which to record list of installed
-                                 files
-  --always-unzip (-Z)            don't install as a zipfile, no matter what
-  --site-dirs (-S)               list of directories where .pth files work
-  --editable (-e)                Install specified packages in editable form
-  --no-deps (-N)                 don't install dependencies
-  --allow-hosts (-H)             pattern(s) that hostnames must match
-  --local-snapshots-ok (-l)      allow building eggs from local checkouts
+<span class="nx">Options</span> <span class="k">for</span> <span class="err">&#39;</span><span class="nx">easy_install</span><span class="err">&#39;</span> <span class="nx">command</span><span class="p">:</span>
+  <span class="o">--</span><span class="nx">prefix</span>                       <span class="nx">installation</span> <span class="nx">prefix</span>
+  <span class="o">--</span><span class="nx">zip</span><span class="o">-</span><span class="nx">ok</span> <span class="p">(</span><span class="o">-</span><span class="nx">z</span><span class="p">)</span>                  <span class="nx">install</span> <span class="kn">package</span> <span class="nx">as</span> <span class="nx">a</span> <span class="nx">zipfile</span>
+  <span class="o">--</span><span class="nx">multi</span><span class="o">-</span><span class="nx">version</span> <span class="p">(</span><span class="o">-</span><span class="nx">m</span><span class="p">)</span>           <span class="nx">make</span> <span class="nx">apps</span> <span class="nx">have</span> <span class="nx">to</span> <span class="nx">require</span><span class="p">()</span> <span class="nx">a</span> <span class="nx">version</span>
+  <span class="o">--</span><span class="nx">upgrade</span> <span class="p">(</span><span class="o">-</span><span class="nx">U</span><span class="p">)</span>                 <span class="nx">force</span> <span class="nx">upgrade</span> <span class="p">(</span><span class="nx">searches</span> <span class="nx">PyPI</span> <span class="k">for</span> <span class="nx">latest</span>
+                                 <span class="nx">versions</span><span class="p">)</span>
+  <span class="o">--</span><span class="nx">install</span><span class="o">-</span><span class="nx">dir</span> <span class="p">(</span><span class="o">-</span><span class="nx">d</span><span class="p">)</span>             <span class="nx">install</span> <span class="kn">package</span> <span class="nx">to</span> <span class="nx">DIR</span>
+  <span class="o">--</span><span class="nx">script</span><span class="o">-</span><span class="nx">dir</span> <span class="p">(</span><span class="o">-</span><span class="nx">s</span><span class="p">)</span>              <span class="nx">install</span> <span class="nx">scripts</span> <span class="nx">to</span> <span class="nx">DIR</span>
+  <span class="o">--</span><span class="nx">exclude</span><span class="o">-</span><span class="nx">scripts</span> <span class="p">(</span><span class="o">-</span><span class="nx">x</span><span class="p">)</span>         <span class="nx">Don</span><span class="err">&#39;</span><span class="nx">t</span> <span class="nx">install</span> <span class="nx">scripts</span>
+  <span class="o">--</span><span class="nx">always</span><span class="o">-</span><span class="nx">copy</span> <span class="p">(</span><span class="o">-</span><span class="nx">a</span><span class="p">)</span>             <span class="nx">Copy</span> <span class="nx">all</span> <span class="nx">needed</span> <span class="nx">packages</span> <span class="nx">to</span> <span class="nx">install</span> <span class="nx">dir</span>
+  <span class="o">--</span><span class="nx">index</span><span class="o">-</span><span class="nx">url</span> <span class="p">(</span><span class="o">-</span><span class="nx">i</span><span class="p">)</span>               <span class="nx">base</span> <span class="nx">URL</span> <span class="nx">of</span> <span class="nx">Python</span> <span class="nx">Package</span> <span class="nx">Index</span>
+  <span class="o">--</span><span class="nx">find</span><span class="o">-</span><span class="nx">links</span> <span class="p">(</span><span class="o">-</span><span class="nx">f</span><span class="p">)</span>              <span class="nx">additional</span> <span class="nx">URL</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span> <span class="nx">to</span> <span class="nx">search</span> <span class="k">for</span> <span class="nx">packages</span>
+  <span class="o">--</span><span class="nx">delete</span><span class="o">-</span><span class="nx">conflicting</span> <span class="p">(</span><span class="o">-</span><span class="nx">D</span><span class="p">)</span>      <span class="nx">no</span> <span class="nx">longer</span> <span class="nx">needed</span><span class="p">;</span> <span class="nx">don</span><span class="err">&#39;</span><span class="nx">t</span> <span class="nx">use</span> <span class="nx">this</span>
+  <span class="o">--</span><span class="nx">ignore</span><span class="o">-</span><span class="nx">conflicts</span><span class="o">-</span><span class="nx">at</span><span class="o">-</span><span class="nx">my</span><span class="o">-</span><span class="nx">risk</span>  <span class="nx">no</span> <span class="nx">longer</span> <span class="nx">needed</span><span class="p">;</span> <span class="nx">don</span><span class="err">&#39;</span><span class="nx">t</span> <span class="nx">use</span> <span class="nx">this</span>
+  <span class="o">--</span><span class="nx">build</span><span class="o">-</span><span class="nx">directory</span> <span class="p">(</span><span class="o">-</span><span class="nx">b</span><span class="p">)</span>         <span class="nx">download</span><span class="o">/</span><span class="nx">extract</span><span class="o">/</span><span class="nx">build</span> <span class="nx">in</span> <span class="nx">DIR</span><span class="p">;</span> <span class="nx">keep</span> <span class="nx">the</span>
+                                 <span class="nx">results</span>
+  <span class="o">--</span><span class="nx">optimize</span> <span class="p">(</span><span class="o">-</span><span class="nx">O</span><span class="p">)</span>                <span class="nx">also</span> <span class="nx">compile</span> <span class="nx">with</span> <span class="nx">optimization</span><span class="p">:</span> <span class="o">-</span><span class="nx">O1</span> <span class="k">for</span>
+                                 <span class="s">&#34;python -O&#34;</span><span class="p">,</span> <span class="o">-</span><span class="nx">O2</span> <span class="k">for</span> <span class="s">&#34;python -OO&#34;</span><span class="p">,</span> <span class="nx">and</span> <span class="o">-</span><span class="nx">O0</span> <span class="nx">to</span>
+                                 <span class="nx">disable</span> <span class="p">[</span><span class="k">default</span><span class="p">:</span> <span class="o">-</span><span class="nx">O0</span><span class="p">]</span>
+  <span class="o">--</span><span class="nx">record</span>                       <span class="nx">filename</span> <span class="nx">in</span> <span class="nx">which</span> <span class="nx">to</span> <span class="nx">record</span> <span class="nx">list</span> <span class="nx">of</span> <span class="nx">installed</span>
+                                 <span class="nx">files</span>
+  <span class="o">--</span><span class="nx">always</span><span class="o">-</span><span class="nx">unzip</span> <span class="p">(</span><span class="o">-</span><span class="nx">Z</span><span class="p">)</span>            <span class="nx">don</span><span class="err">&#39;</span><span class="nx">t</span> <span class="nx">install</span> <span class="nx">as</span> <span class="nx">a</span> <span class="nx">zipfile</span><span class="p">,</span> <span class="nx">no</span> <span class="nx">matter</span> <span class="nx">what</span>
+  <span class="o">--</span><span class="nx">site</span><span class="o">-</span><span class="nx">dirs</span> <span class="p">(</span><span class="o">-</span><span class="nx">S</span><span class="p">)</span>               <span class="nx">list</span> <span class="nx">of</span> <span class="nx">directories</span> <span class="nx">where</span> <span class="p">.</span><span class="nx">pth</span> <span class="nx">files</span> <span class="nx">work</span>
+  <span class="o">--</span><span class="nx">editable</span> <span class="p">(</span><span class="o">-</span><span class="nx">e</span><span class="p">)</span>                <span class="nx">Install</span> <span class="nx">specified</span> <span class="nx">packages</span> <span class="nx">in</span> <span class="nx">editable</span> <span class="nx">form</span>
+  <span class="o">--</span><span class="nx">no</span><span class="o">-</span><span class="nx">deps</span> <span class="p">(</span><span class="o">-</span><span class="nx">N</span><span class="p">)</span>                 <span class="nx">don</span><span class="err">&#39;</span><span class="nx">t</span> <span class="nx">install</span> <span class="nx">dependencies</span>
+  <span class="o">--</span><span class="nx">allow</span><span class="o">-</span><span class="nx">hosts</span> <span class="p">(</span><span class="o">-</span><span class="nx">H</span><span class="p">)</span>             <span class="nx">pattern</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span> <span class="nx">that</span> <span class="nx">hostnames</span> <span class="nx">must</span> <span class="nx">match</span>
+  <span class="o">--</span><span class="nx">local</span><span class="o">-</span><span class="nx">snapshots</span><span class="o">-</span><span class="nx">ok</span> <span class="p">(</span><span class="o">-</span><span class="nx">l</span><span class="p">)</span>      <span class="nx">allow</span> <span class="nx">building</span> <span class="nx">eggs</span> <span class="nx">from</span> <span class="nx">local</span> <span class="nx">checkouts</span>
 
-usage: easy_install-script.py [options] requirement_or_url ...
-<span class="err">   or: easy_install-script.py --help</span></code>
-  </pre>
-</figure>
+<span class="nx">usage</span><span class="p">:</span> <span class="nx">easy_install</span><span class="o">-</span><span class="nx">script</span><span class="p">.</span><span class="nx">py</span> <span class="p">[</span><span class="nx">options</span><span class="p">]</span> <span class="nx">requirement_or_url</span> <span class="o">...</span>
+   <span class="nx">or</span><span class="p">:</span> <span class="nx">easy_install</span><span class="o">-</span><span class="nx">script</span><span class="p">.</span><span class="nx">py</span> <span class="o">--</span><span class="nx">help</span></code></pre></div>
+    </section>
+  </article>
 
-
-</div>
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2013/08/20/rails3-log-not-colorize/" title="Rails3のログ出力にANSIカラーコードを使用しない設定">
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/08/20/rails3-log-not-colorize/" class="pagination_overflow previous_page">
+          Prev: 
+          13/8/20
           Rails3のログ出力にANSIカラーコードを使用しない設定
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/08/23/sphinx-install-python-proxy2/" title="Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き">
-          Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話 続き
+      
+
+      <span class="pagination_center disabled">
+        13/8/21
+        Sphin …
+      </span>
+
+      
+        <a href="/2013/08/23/sphinx-install-python-proxy2/" class="pagination_overflow next_page">
+          Next: 
+          13/8/23
+          Sphinxをインストールしようとしたら全然関係な …
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy/" data-text="kk_Atakaの日記 - Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - Sphinxをインストールしようとしたら全然関係ないproxy周りでハマった話"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+      </div>
 
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/08/21/sphinx-install-python-proxy//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-  <h2>Recent Entries</h2>
 
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#python-インストール">Python インストール</a></li>
+<li><a href="#easy-install-インストール-distribute-setup-py">easy_install インストール(distribute_setup.py)</a>
+<ul>
+<li><a href="#実行時に-urllib2-urlerror-エラー">実行時に urllib2.URLError エラー</a></li>
+</ul></li>
+<li><a href="#sphinx-インストール">Sphinx インストール</a></li>
+<li><a href="#おまけ-easy-install-インストール-ez-setup-py">おまけ easy_install インストール(ez_setup.py)</a></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

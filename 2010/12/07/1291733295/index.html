@@ -1,746 +1,1052 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>RubyでTwitterのタイムラインを取得してみる - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  RubyでTwitterのタイムラインを取得してみる &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Ruby][Twitter][API]RubyでTwitterのタイムラインを取得してみる 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20101121/1290271210:title http://d.hatena.ne.jp/kk_Ataka/20101130/1291125511:title  前回までで、なんとかOAuth認証を突破する事ができました。目標は達成できたっちゃあできたんですが……せっかくなので、取得したアクセストークンを使ってTwitterからタイムラインを取得してみます！
+タイムラインの取得方法  signatureを作成する 以下のパラメータをアルファベット順にxxx=yyy&amp;amp;vvv=zzz……の形で連結した値を[http://api.twitter.com/1/statuses/home_timeline.json]のおしりにくっつけてGET or POST  oauth_consumer_key oauth_nonce oauth_signature oauth_signature_method oauth_timestamp oauth_token oauth_version   取得はこれで完了。
+signatureの作成方法は今までと同じで、
+ 認証用の値を生成する(以下の3つの値を&amp;amp;で連結する)  &amp;ldquo;GET&amp;rdquo; &amp;ldquo;http://api.twitter.com/1/statuses/home_timeline.json&amp;ldquo;をエスケープしたもの oauth_signature以外のパラメータ[1]をアルファベット順に並べてxxx=yyy&amp;amp;vvv=zzz……の形で連結した値をエスケープしたもの  署名キーを生成する  &amp;ldquo;consumer_secret&amp;amp;oauth_token_secret&amp;rdquo;  キーを元に値をHMAC-SHA1方式で暗号化した値をbase64形式でエンコードする  です。OAuth認証して獲得したアクセストークン、oauth_tokenとoauth_token_secretを随所で使います。そして作成したsignatureと他のパラメータを[http://api.twitter.com/1/statuses/home_timeline.json]のおしりにくっつけて(今回は)GETリクエスト。
+戻ってきたタイムライン タイムラインらしきものはjsonという形式のデータで戻って来ます。home_timeline.jsonのjson部分をxmlとかrssに変えるとxml形式のタイムライン、rss形式のタイムラインが返ってくるようですが今回はこのjsonを何とかしてみます。
+jsonの詳細は後にググるとして、一人当たりの情報はこんな感じ。[2]
+.......},{ \&amp;#34;coordinates\&amp;#34;:null, \&amp;#34;created_at\&amp;#34;:\&amp;#34;Tue Dec 07 13:50:49 &#43;0000 2010\&amp;#34;, . (略) . \&amp;#34;in_reply_to_screen_name\&amp;#34;:null, \&amp;#34;in_reply_to_status_id_str\&amp;#34;:null, \&amp;#34;id_str\&amp;#34;:\&amp;#34;99999999999999999\&amp;#34;, \&amp;#34;contributors\&amp;#34;:null, \&amp;#34;retweet_count\&amp;#34;:null, \&amp;#34;in_reply_to_user_id\&amp;#34;:null, \&amp;#34;in_reply_to_user_id_str\&amp;#34;:null, \&amp;#34;user\&amp;#34;:{ . (略) . \&amp;#34;screen_name\&amp;#34;:\&amp;#34;kk_Ataka\&amp;#34;, \&amp;#34;profile_sidebar_border_color\&amp;#34;:\&amp;#34;C0DEED\&amp;#34;, \&amp;#34;follow_request_sent\&amp;#34;:false, \&amp;#34;location\&amp;#34;:\&amp;#34;Kawasaki, Kanagawa, Japan\&amp;#34;, .|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2010/12/07/1291733295/">RubyでTwitterのタイムラインを取得してみる</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Ruby" class="tag">Ruby</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#Twitter" class="tag">Twitter</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#API" class="tag">API</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2010/12/07</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2010/11/30/1291125511/" title="RubyでTwitterのOAuth認証をしてみる その2">
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2010/11/30/1291125511/" class="pagination_overflow previous_page">
+          Prev: 
+          10/11/30
           RubyでTwitterのOAuth認証をしてみる その2
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2010/12/11/1292077752/" title="java-ja忘年会に参加しました2010">
+      
+
+      <span class="pagination_center disabled">
+        10/12/7
+        Ruby …
+      </span>
+
+      
+        <a href="/2010/12/11/1292077752/" class="pagination_overflow next_page">
+          Next: 
+          10/12/11
           java-ja忘年会に参加しました2010
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<h1>前回までのあらすじ</h1>
-<ol><li><a href="http://d.hatena.ne.jp/kk_Ataka/20101121/1290271210">2010-11-21-1290271210</a></li><li><a href="http://d.hatena.ne.jp/kk_Ataka/20101130/1291125511">2010-11-30-1291125511</a></li></ol>
-<p>前回までで、なんとかOAuth認証を突破する事ができました。目標は達成できたっちゃあできたんですが……せっかくなので、取得したアクセストークンを使ってTwitterからタイムラインを取得してみます！</p>
-<h1>タイムラインの取得方法</h1>
-<ol><li>signatureを作成する</li><li>以下のパラメータをアルファベット順にxxx=yyy&amp;vvv=zzz……の形で連結した値を<a href="http://api.twitter.com/1/statuses/home_timeline.json">http://api.twitter.com/1/statuses/home_timeline.json</a>のおしりにくっつけてGET or POST<ol><li>oauth_consumer_key</li><li>oauth_nonce</li><li>oauth_signature</li><li>oauth_signature_method</li><li>oauth_timestamp</li><li>oauth_token</li><li>oauth_version</li></ol></li></ol>
-<p>取得はこれで完了。</p>
-<p>signatureの作成方法は今までと同じで、</p>
-<ol><li>認証用の値を生成する(以下の3つの値を&amp;で連結する)<ol><li>&quot;GET&quot;</li><li>&quot;<a href="http://api.twitter.com/1/statuses/home_timeline.json">http://api.twitter.com/1/statuses/home_timeline.json</a>&quot;をエスケープしたもの</li><li>oauth_signature以外のパラメータ<span class="footnote"><a href="#f1" title="oauth_consumer_key, oauth_nonce, oauth_signature_method, oauth_timestamp, oauth_token, oauth_versionの6個っすねー。oauth_tokenを忘れずに。" name="fn1">*1</a></span>をアルファベット順に並べてxxx=yyy&amp;vvv=zzz……の形で連結した値をエスケープしたもの</li></ol></li><li>署名キーを生成する<ol><li>&quot;consumer_secret&amp;oauth_token_secret&quot;</li></ol></li><li>キーを元に値をHMAC-SHA1方式で暗号化した値をbase64形式でエンコードする</li></ol>
-<p>です。OAuth認証して獲得したアクセストークン、oauth_tokenとoauth_token_secretを随所で使います。そして作成したsignatureと他のパラメータを<a href="http://api.twitter.com/1/statuses/home_timeline.json">http://api.twitter.com/1/statuses/home_timeline.json</a>のおしりにくっつけて(今回は)GETリクエスト。</p>
-<h1>戻ってきたタイムライン</h1>
-<p>タイムラインらしきものはjsonという形式のデータで戻って来ます。home_timeline.jsonのjson部分をxmlとかrssに変えるとxml形式のタイムライン、rss形式のタイムラインが返ってくるようですが今回はこのjsonを何とかしてみます。</p>
-<p>jsonの詳細は後にググるとして、一人当たりの情報はこんな感じ。<span class="footnote"><a href="#f2" title="本来は一行で取得します" name="fn2">*2</a></span></p>
-<pre class="json">.......},{
-	\&quot;coordinates\&quot;:null,
-	\&quot;created_at\&quot;:\&quot;Tue Dec 07 13:50:49 +0000 2010\&quot;,
-.
-(略)
-.
-	\&quot;in_reply_to_screen_name\&quot;:null,
-	\&quot;in_reply_to_status_id_str\&quot;:null,
-	\&quot;id_str\&quot;:\&quot;99999999999999999\&quot;,
-	\&quot;contributors\&quot;:null,
-	\&quot;retweet_count\&quot;:null,
-	\&quot;in_reply_to_user_id\&quot;:null,
-	\&quot;in_reply_to_user_id_str\&quot;:null,
-	\&quot;user\&quot;:{
-.
-(略)
-.
-		\&quot;screen_name\&quot;:\&quot;kk_Ataka\&quot;,
-		\&quot;profile_sidebar_border_color\&quot;:\&quot;C0DEED\&quot;,
-		\&quot;follow_request_sent\&quot;:false,
-		\&quot;location\&quot;:\&quot;Kawasaki, Kanagawa, Japan\&quot;,
-.
-(略)
-.
-		\&quot;profile_link_color\&quot;:\&quot;0084B4\&quot;},
-	\&quot;geo\&quot;:null,
-	\&quot;retweeted\&quot;:false,
-	\&quot;id\&quot;:99999999999999999,
-	\&quot;text\&quot;:\&quot;test\&quot;
-},{......</pre>
-<p>初見だとこれ×20件のデータが改行なしでずらりと画面に並ぶので、面食らったのですが、よく見てみると見覚えがあるデータもちらほら……。</p>
-<p>例えば、userの中にあるscreen_nameはkk_Ataka……これ俺や！　あとは、text:testも、testってツイートした後だったので、ツイート内容なのかなと。</p>
-<p>リプライしたときはin_reply_to系のキーにリプライ相手のidやscreen_nameが入っていると思います。</p>
-<p>んで、このデータをどうやって解析しようか……と思ってググってみると、jsonをparseしてハッシュにしてくれるプログラムが。@webos_goodiesさんの<a href="http://webos-goodies.jp/archives/51071565.html">Ruby 用 JSON パーサーを更新、 JSON への変換も追加 - WebOS Goodies</a>このプログラムをありがたく使わせていただきました。</p>
-<p>ソースはこんな感じ。上記のparserは下記のrbファイルと同じディレクトリ、もしくはパスの通っている場所にsimplejsonparser.rbとして配備しました。</p>
-<pre class="ruby">require 'openssl'
-require 'uri'
-require 'net/http'
-# http://webos-goodies.jp/archives/51071565.html
-require 'simplejsonparser'
-require 'nkf'
-require 'time'
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">RubyでTwitterのタイムラインを取得してみる</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
 
-# signature作成
-def signature(method, consumer_secret, oauth_token_secret, url, oauth_header)
-	# signature_keyの作成
-	# リクエストトークン時は&quot;CONSUMER_SECRET&amp;&quot;(アンドが入っている)
-	# アクセストークン時は&quot;CONSUMER_SECRET&amp;OAUTH_TOKEN_SECRET&quot;として使用
-	signature_key = consumer_secret + &quot;&amp;&quot;
-	if !oauth_token_secret.nil? then
-		signature_key += oauth_token_secret
-	end
-
-	# oauth_headerのパラメータをソートして連結
-	param = sort_and_concat(oauth_header)
-
-	# httpメソッドとURLとパラメータを&amp;で連結する
-	value = method + &quot;&amp;&quot; + escape(url) + &quot;&amp;&quot; + escape(param)
-	# hmac_sha1
-	sha1 = OpenSSL::HMAC.digest(OpenSSL::Digest::SHA1.new, signature_key, value)
-	# base64
-	base64 = [sha1].pack('m').gsub(/\n/, '')
-	return base64
-end
-
-# 文字列のエスケープ(: / = %をエスケープする。. _ -はそのまま)
-def escape(value)
-	URI.escape(value, Regexp.new(&quot;[^a-zA-Z0-9._-]&quot;))
-end
-
-# oauth_headerの情報をアルファベット順に並べ替え &amp; で結合
-def sort_and_concat(oauth_header)
-	oauth_header_array = oauth_header.sort
-	param = &quot;&quot;
-	oauth_header_array.each do |params|
-		for i in 1..params.length
-			param += params[i-1]
-			if i % params.length == 0
-				param += &quot;&amp;&quot;
-			else
-				param += &quot;=&quot;
-			end
-		end
-	end
-	param = param.slice(0, param.length-1)
-end
-
-# 自分のタイムライン取得用のURL
-home_timeline_url = &quot;http://api.twitter.com/1/statuses/home_timeline.json&quot;
-
-# Twitterで登録したらもらえる
-consumer_key = &quot;XXXXXXXXXXXXXXXXXXX&quot;
-consumer_secret = &quot;YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY&quot;
-
-# Twitterからもらえるアクセストークン
-oauth_token = &quot;11111111-ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ&quot;
-oauth_token_secret = &quot;VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV&quot;
-
-# oauthパラメータたち
-oauth_header = {
-	# Consumer Key
-	&quot;oauth_consumer_key&quot; =&gt; consumer_key,
-	# 一意な値(今回は適当に実装)
-	&quot;oauth_nonce&quot; =&gt; &quot;AAAAAAAA&quot;,
-	# 署名方式(HMAC-SHA1)
-	&quot;oauth_signature_method&quot; =&gt; &quot;HMAC-SHA1&quot;,
-	# リクエスト生成時のタイムスタンプ(ミリ秒)
-	&quot;oauth_timestamp&quot; =&gt; Time.now.to_i.to_s,
-	# バージョン(1.0)
-	&quot;oauth_version&quot; =&gt; &quot;1.0&quot;,
-
-	# アクセストークン
-	&quot;oauth_token&quot; =&gt; oauth_token 
-}
-
-# signature作成
-oauth_header[&quot;oauth_signature&quot;] = signature(&quot;GET&quot;, 
-					consumer_secret, 
-					oauth_token_secret, 
-					home_timeline_url, 
-					oauth_header)
-
-# GETする
-uri = URI.parse(home_timeline_url)
-proxy_class = Net::HTTP::Proxy(ARGV[0], 8080)
-http = proxy_class.new(uri.host)
-http.start do |http|
-	# oauth_headerのパラメータをソートして連結
-	param = sort_and_concat(oauth_header)
-	
-	res = http.get(uri.path + &quot;?#{param}&quot;)
-	if res.code == &quot;200&quot; then
-		json = res.body
-		# simplejsonparserでparseしてもらう
-		jsonparse = JsonParser.new.parse(json)
-
-		# 逆順にして古い物から取得する
-		jsonparse = jsonparse.reverse
-
-		for i in 0..jsonparse.length-1
-
-			# 日付フォーマットを年/月/日 時間に変更
-			time = Time.parse(jsonparse[i][&quot;created_at&quot;]).strftime(&quot;%Y/%m/%d %X&quot;)
-
-			# SJIS変換(コマンドプロンプトで見る用)
-			# print NKF.nkf('-s', &quot;■#{jsonparse[i][&quot;user&quot;][&quot;screen_name&quot;]} (#{jsonparse[i][&quot;user&quot;][&quot;name&quot;]}) #{time}\n　#{jsonparse[i][&quot;text&quot;]}\n&quot;)
-			print &quot;■#{jsonparse[i][&quot;user&quot;][&quot;screen_name&quot;]} (#{jsonparse[i][&quot;user&quot;][&quot;name&quot;]}) #{time}\n　#{jsonparse[i][&quot;text&quot;]}\n&quot;
-		end
-	else
-		print &quot;#{res.code}\n&quot;
-	end
-end</pre>
-<p>結果はこう。タイムラインゲットー！</p>
-<p><a href="http://f.hatena.ne.jp/kk_Ataka/20101207233454"><img src="http://f.hatena.ne.jp/images/fotolife/k/kk_Ataka/20101207/20101207233454.jpg"></a></p>
-<h1>Windows用……</h1>
-<p>ソースの最後、parseも終わってその中からほしいキーの値を取り出してるところで。</p>
-<pre class="ruby">			# SJIS変換(コマンドプロンプトで見る用)
-			# print NKF.nkf('-s', &quot;■#{jsonparse[i][&quot;user&quot;][&quot;screen_name&quot;]} (#{jsonparse[i][&quot;user&quot;][&quot;name&quot;]}) #{time}\n　#{jsonparse[i][&quot;text&quot;]}\n&quot;)</pre>
-<p>SJIS変換してるところがあるんですが、これ、もともとWindowsのコマンドプロンプトで動かしたくて作っていたものなんです。でもコマンドプロンプトって文字コードがSJISのようでそのまま表示すると文字化け起こすのでこういう対応を。</p>
-<p>一応軽くググった感じだと、コマンドプロンプトでもUnicode文字を読めるようなのですが……。</p>
-<div class="footnote"><p class="footnote"><a href="#fn1" name="f1">*1</a>: oauth_consumer_key, oauth_nonce, oauth_signature_method, oauth_timestamp, oauth_token, oauth_versionの6個っすねー。oauth_tokenを忘れずに。</p><p class="footnote"><a href="#fn2" name="f2">*2</a>: 本来は一行で取得します</p></div>
-</div>
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2010/11/30/1291125511/" title="RubyでTwitterのOAuth認証をしてみる その2">
-          RubyでTwitterのOAuth認証をしてみる その2
-        </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2010/12/11/1292077752/" title="java-ja忘年会に参加しました2010">
-          java-ja忘年会に参加しました2010
-        </a>
-      </li>
-    
-  </ul>
-</div>
-
-
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2010/12/07/1291733295/" data-text="kk_Atakaの日記 - RubyでTwitterのタイムラインを取得してみる" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2010/12/07/1291733295/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2010/12/07/1291733295/" />
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
     </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2010/12/07/1291733295/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - RubyでTwitterのタイムラインを取得してみる"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
+  
+    <a href='/tags/twitter' class="muted-link">
+      [ <span class="Label Label--gray">Twitter</span> ]
     </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  
+    <a href='/tags/api' class="muted-link">
+      [ <span class="Label Label--gray">API</span> ]
+    </a>
+  
 
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2010/12/07/1291733295//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
-  <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
-  </ul>
-
-  <h2>Recent Entries</h2>
+ 
+        Published: <span>2010/12/07</span>
+      </div>
+    </div>
+  </div>
 
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#ruby-twitter-api-rubyでtwitterのタイムラインを取得してみる">[Ruby][Twitter][API]RubyでTwitterのタイムラインを取得してみる</a></li>
+<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
+<li><a href="#タイムラインの取得方法">タイムラインの取得方法</a></li>
+<li><a href="#戻ってきたタイムライン">戻ってきたタイムライン</a></li>
+<li><a href="#windows用">Windows用……</a></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
 
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="ruby-twitter-api-rubyでtwitterのタイムラインを取得してみる">[Ruby][Twitter][API]RubyでTwitterのタイムラインを取得してみる</h2>
+
+<h2 id="前回までのあらすじ">前回までのあらすじ</h2>
+
+<ol>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20101121/1290271210:title">http://d.hatena.ne.jp/kk_Ataka/20101121/1290271210:title</a></li>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20101130/1291125511:title">http://d.hatena.ne.jp/kk_Ataka/20101130/1291125511:title</a></li>
+</ol>
+
+<p>前回までで、なんとかOAuth認証を突破する事ができました。目標は達成できたっちゃあできたんですが……せっかくなので、取得したアクセストークンを使ってTwitterからタイムラインを取得してみます！</p>
+
+<h2 id="タイムラインの取得方法">タイムラインの取得方法</h2>
+
+<ol>
+<li>signatureを作成する</li>
+<li>以下のパラメータをアルファベット順にxxx=yyy&amp;vvv=zzz……の形で連結した値を[<a href="http://api.twitter.com/1/statuses/home_timeline.json]のおしりにくっつけてGET">http://api.twitter.com/1/statuses/home_timeline.json]のおしりにくっつけてGET</a> or POST
+
+<ol>
+<li>oauth_consumer_key</li>
+<li>oauth_nonce</li>
+<li>oauth_signature</li>
+<li>oauth_signature_method</li>
+<li>oauth_timestamp</li>
+<li>oauth_token</li>
+<li>oauth_version</li>
+</ol></li>
+</ol>
+
+<p>取得はこれで完了。</p>
+
+<p>signatureの作成方法は今までと同じで、</p>
+
+<ol>
+<li>認証用の値を生成する(以下の3つの値を&amp;で連結する)
+
+<ol>
+<li>&ldquo;GET&rdquo;</li>
+<li>&ldquo;<a href="http://api.twitter.com/1/statuses/home_timeline.json">http://api.twitter.com/1/statuses/home_timeline.json</a>&ldquo;をエスケープしたもの</li>
+<li>oauth_signature以外のパラメータ[1]をアルファベット順に並べてxxx=yyy&amp;vvv=zzz……の形で連結した値をエスケープしたもの</li>
+</ol></li>
+<li>署名キーを生成する
+
+<ol>
+<li>&ldquo;consumer_secret&amp;oauth_token_secret&rdquo;</li>
+</ol></li>
+<li>キーを元に値をHMAC-SHA1方式で暗号化した値をbase64形式でエンコードする</li>
+</ol>
+
+<p>です。OAuth認証して獲得したアクセストークン、oauth_tokenとoauth_token_secretを随所で使います。そして作成したsignatureと他のパラメータを[<a href="http://api.twitter.com/1/statuses/home_timeline.json]のおしりにくっつけて(今回は)GETリクエスト">http://api.twitter.com/1/statuses/home_timeline.json]のおしりにくっつけて(今回は)GETリクエスト</a>。</p>
+
+<h2 id="戻ってきたタイムライン">戻ってきたタイムライン</h2>
+
+<p>タイムラインらしきものはjsonという形式のデータで戻って来ます。home_timeline.jsonのjson部分をxmlとかrssに変えるとxml形式のタイムライン、rss形式のタイムラインが返ってくるようですが今回はこのjsonを何とかしてみます。</p>
+
+<p>jsonの詳細は後にググるとして、一人当たりの情報はこんな感じ。[2]</p>
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="err">.......},</span><span class="p">{</span>
+    <span class="err">\</span><span class="nt">&#34;coordinates\&#34;:null,
+</span><span class="nt">    \&#34;created_at\&#34;:\&#34;Tue Dec 07 13:50:49 +0000 2010\&#34;,
+</span><span class="nt">.
+</span><span class="nt">(略)
+</span><span class="nt">.
+</span><span class="nt">    \&#34;in_reply_to_screen_name\&#34;:null,
+</span><span class="nt">    \&#34;in_reply_to_status_id_str\&#34;:null,
+</span><span class="nt">    \&#34;id_str\&#34;:\&#34;99999999999999999\&#34;,
+</span><span class="nt">    \&#34;contributors\&#34;:null,
+</span><span class="nt">    \&#34;retweet_count\&#34;:null,
+</span><span class="nt">    \&#34;in_reply_to_user_id\&#34;:null,
+</span><span class="nt">    \&#34;in_reply_to_user_id_str\&#34;:null,
+</span><span class="nt">    \&#34;user\&#34;:{
+</span><span class="nt">.
+</span><span class="nt">(略)
+</span><span class="nt">.
+</span><span class="nt">        \&#34;screen_name\&#34;:\&#34;kk_Ataka\&#34;,
+</span><span class="nt">        \&#34;profile_sidebar_border_color\&#34;:\&#34;C0DEED\&#34;,
+</span><span class="nt">        \&#34;follow_request_sent\&#34;:false,
+</span><span class="nt">        \&#34;location\&#34;:\&#34;Kawasaki, Kanagawa, Japan\&#34;,
+</span><span class="nt">.
+</span><span class="nt">(略)
+</span><span class="nt">.
+</span><span class="nt">        \&#34;profile_link_color\&#34;:\&#34;0084B4\&#34;},
+</span><span class="nt">    \&#34;geo\&#34;:null,
+</span><span class="nt">    \&#34;retweeted\&#34;:false,
+</span><span class="nt">    \&#34;id\&#34;:99999999999999999,
+</span><span class="nt">    \&#34;text\&#34;:\&#34;test\&#34;</span>
+<span class="p">}</span><span class="err">,</span><span class="p">{</span><span class="err">......</span></code></pre></div>
+<p>初見だとこれ×20件のデータが改行なしでずらりと画面に並ぶので、面食らったのですが、よく見てみると見覚えがあるデータもちらほら……。</p>
+
+<p>例えば、userの中にあるscreen_nameはkk_Ataka……これ俺や！　あとは、text:testも、testってツイートした後だったので、ツイート内容なのかなと。</p>
+
+<p>リプライしたときはin_reply_to系のキーにリプライ相手のidやscreen_nameが入っていると思います。</p>
+
+<p>んで、このデータをどうやって解析しようか……と思ってググってみると、jsonをparseしてハッシュにしてくれるプログラムが。@webos_goodiesさんの[<a href="http://webos-goodies.jp/archives/51071565.html:title]このプログラムをありがたく使わせていただきました">http://webos-goodies.jp/archives/51071565.html:title]このプログラムをありがたく使わせていただきました</a>。</p>
+
+<p>ソースはこんな感じ。上記のparserは下記のrbファイルと同じディレクトリ、もしくはパスの通っている場所にsimplejsonparser.rbとして配備しました。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;openssl&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;uri&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;net/http&#39;</span>
+<span class="c1"># http://webos-goodies.jp/archives/51071565.html</span>
+<span class="nb">require</span> <span class="s1">&#39;simplejsonparser&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;nkf&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;time&#39;</span>
+
+<span class="c1"># signature作成</span>
+<span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="nb">method</span><span class="p">,</span> <span class="n">consumer_secret</span><span class="p">,</span> <span class="n">oauth_token_secret</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">oauth_header</span><span class="p">)</span>
+    <span class="c1"># signature_keyの作成</span>
+    <span class="c1"># リクエストトークン時は&#34;CONSUMER_SECRET&amp;&#34;(アンドが入っている)</span>
+    <span class="c1"># アクセストークン時は&#34;CONSUMER_SECRET&amp;OAUTH_TOKEN_SECRET&#34;として使用</span>
+    <span class="n">signature_key</span> <span class="o">=</span> <span class="n">consumer_secret</span> <span class="o">+</span> <span class="s2">&#34;&amp;&#34;</span>
+    <span class="k">if</span> <span class="o">!</span><span class="n">oauth_token_secret</span><span class="o">.</span><span class="n">nil?</span> <span class="k">then</span>
+        <span class="n">signature_key</span> <span class="o">+=</span> <span class="n">oauth_token_secret</span>
+    <span class="k">end</span>
+
+    <span class="c1"># oauth_headerのパラメータをソートして連結</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="n">sort_and_concat</span><span class="p">(</span><span class="n">oauth_header</span><span class="p">)</span>
+
+    <span class="c1"># httpメソッドとURLとパラメータを&amp;で連結する</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="nb">method</span> <span class="o">+</span> <span class="s2">&#34;&amp;&#34;</span> <span class="o">+</span> <span class="n">escape</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&#34;&amp;&#34;</span> <span class="o">+</span> <span class="n">escape</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+    <span class="c1"># hmac_sha1</span>
+    <span class="n">sha1</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">HMAC</span><span class="o">.</span><span class="n">digest</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">Digest</span><span class="o">::</span><span class="no">SHA1</span><span class="o">.</span><span class="n">new</span><span class="p">,</span> <span class="n">signature_key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="c1"># base64</span>
+    <span class="n">base64</span> <span class="o">=</span> <span class="o">[</span><span class="n">sha1</span><span class="o">].</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/\n/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">base64</span>
+<span class="k">end</span>
+
+<span class="c1"># 文字列のエスケープ(: / = %をエスケープする。. _ -はそのまま)</span>
+<span class="k">def</span> <span class="nf">escape</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="no">URI</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="no">Regexp</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&#34;[^a-zA-Z0-9._-]&#34;</span><span class="p">))</span>
+<span class="k">end</span>
+
+<span class="c1"># oauth_headerの情報をアルファベット順に並べ替え &amp; で結合</span>
+<span class="k">def</span> <span class="nf">sort_and_concat</span><span class="p">(</span><span class="n">oauth_header</span><span class="p">)</span>
+    <span class="n">oauth_header_array</span> <span class="o">=</span> <span class="n">oauth_header</span><span class="o">.</span><span class="n">sort</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+    <span class="n">oauth_header_array</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">params</span><span class="o">|</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="o">..</span><span class="n">params</span><span class="o">.</span><span class="n">length</span>
+            <span class="n">param</span> <span class="o">+=</span> <span class="n">params</span><span class="o">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="sx">% params.length </span> <span class="o">==</span> <span class="mi">0</span>
+                <span class="n">param</span> <span class="o">+=</span> <span class="s2">&#34;&amp;&#34;</span>
+            <span class="k">else</span>
+                <span class="n">param</span> <span class="o">+=</span> <span class="s2">&#34;=&#34;</span>
+            <span class="k">end</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">length</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="c1"># 自分のタイムライン取得用のURL</span>
+<span class="n">home_timeline_url</span> <span class="o">=</span> <span class="s2">&#34;http://api.twitter.com/1/statuses/home_timeline.json&#34;</span>
+
+<span class="c1"># Twitterで登録したらもらえる</span>
+<span class="n">consumer_key</span> <span class="o">=</span> <span class="s2">&#34;XXXXXXXXXXXXXXXXXXX&#34;</span>
+<span class="n">consumer_secret</span> <span class="o">=</span> <span class="s2">&#34;YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY&#34;</span>
+
+<span class="c1"># Twitterからもらえるアクセストークン</span>
+<span class="n">oauth_token</span> <span class="o">=</span> <span class="s2">&#34;11111111-ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ&#34;</span>
+<span class="n">oauth_token_secret</span> <span class="o">=</span> <span class="s2">&#34;VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV&#34;</span>
+
+<span class="c1"># oauthパラメータたち</span>
+<span class="n">oauth_header</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># Consumer Key</span>
+    <span class="s2">&#34;oauth_consumer_key&#34;</span> <span class="o">=&gt;</span> <span class="n">consumer_key</span><span class="p">,</span>
+    <span class="c1"># 一意な値(今回は適当に実装)</span>
+    <span class="s2">&#34;oauth_nonce&#34;</span> <span class="o">=&gt;</span> <span class="s2">&#34;AAAAAAAA&#34;</span><span class="p">,</span>
+    <span class="c1"># 署名方式(HMAC-SHA1)</span>
+    <span class="s2">&#34;oauth_signature_method&#34;</span> <span class="o">=&gt;</span> <span class="s2">&#34;HMAC-SHA1&#34;</span><span class="p">,</span>
+    <span class="c1"># リクエスト生成時のタイムスタンプ(ミリ秒)</span>
+    <span class="s2">&#34;oauth_timestamp&#34;</span> <span class="o">=&gt;</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">to_i</span><span class="o">.</span><span class="n">to_s</span><span class="p">,</span>
+    <span class="c1"># バージョン(1.0)</span>
+    <span class="s2">&#34;oauth_version&#34;</span> <span class="o">=&gt;</span> <span class="s2">&#34;1.0&#34;</span><span class="p">,</span>
+
+    <span class="c1"># アクセストークン</span>
+    <span class="s2">&#34;oauth_token&#34;</span> <span class="o">=&gt;</span> <span class="n">oauth_token</span> 
+<span class="p">}</span>
+
+<span class="c1"># signature作成</span>
+<span class="n">oauth_header</span><span class="o">[</span><span class="s2">&#34;oauth_signature&#34;</span><span class="o">]</span> <span class="o">=</span> <span class="n">signature</span><span class="p">(</span><span class="s2">&#34;GET&#34;</span><span class="p">,</span> 
+                    <span class="n">consumer_secret</span><span class="p">,</span> 
+                    <span class="n">oauth_token_secret</span><span class="p">,</span> 
+                    <span class="n">home_timeline_url</span><span class="p">,</span> 
+                    <span class="n">oauth_header</span><span class="p">)</span>
+
+<span class="c1"># GETする</span>
+<span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">home_timeline_url</span><span class="p">)</span>
+<span class="n">proxy_class</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Proxy</span><span class="p">(</span><span class="no">ARGV</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">,</span> <span class="mi">8080</span><span class="p">)</span>
+<span class="n">http</span> <span class="o">=</span> <span class="n">proxy_class</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+<span class="n">http</span><span class="o">.</span><span class="n">start</span> <span class="k">do</span> <span class="o">|</span><span class="n">http</span><span class="o">|</span>
+    <span class="c1"># oauth_headerのパラメータをソートして連結</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="n">sort_and_concat</span><span class="p">(</span><span class="n">oauth_header</span><span class="p">)</span>
+    
+    <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&#34;?</span><span class="si">#{</span><span class="n">param</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="s2">&#34;200&#34;</span> <span class="k">then</span>
+        <span class="n">json</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">body</span>
+        <span class="c1"># simplejsonparserでparseしてもらう</span>
+        <span class="n">jsonparse</span> <span class="o">=</span> <span class="no">JsonParser</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">json</span><span class="p">)</span>
+
+        <span class="c1"># 逆順にして古い物から取得する</span>
+        <span class="n">jsonparse</span> <span class="o">=</span> <span class="n">jsonparse</span><span class="o">.</span><span class="n">reverse</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="n">jsonparse</span><span class="o">.</span><span class="n">length</span><span class="o">-</span><span class="mi">1</span>
+
+            <span class="c1"># 日付フォーマットを年/月/日 時間に変更</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">jsonparse</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="s2">&#34;created_at&#34;</span><span class="o">]</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&#34;%Y/%m/%d %X&#34;</span><span class="p">)</span>
+
+            <span class="c1"># SJIS変換(コマンドプロンプトで見る用)</span>
+            <span class="c1"># print NKF.nkf(&#39;-s&#39;, &#34;■#{jsonparse[i][&#34;user&#34;][&#34;screen_name&#34;]} (#{jsonparse[i][&#34;user&#34;][&#34;name&#34;]}) #{time}\n　#{jsonparse[i][&#34;text&#34;]}\n&#34;)</span>
+            <span class="nb">print</span> <span class="s2">&#34;■</span><span class="si">#{</span><span class="n">jsonparse</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="s2">&#34;user&#34;</span><span class="o">][</span><span class="s2">&#34;screen_name&#34;</span><span class="o">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">jsonparse</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="s2">&#34;user&#34;</span><span class="o">][</span><span class="s2">&#34;name&#34;</span><span class="o">]</span><span class="si">}</span><span class="s2">) </span><span class="si">#{</span><span class="n">time</span><span class="si">}</span><span class="se">\n</span><span class="s2">　</span><span class="si">#{</span><span class="n">jsonparse</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="s2">&#34;text&#34;</span><span class="o">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&#34;</span>
+        <span class="k">end</span>
+    <span class="k">else</span>
+        <span class="nb">print</span> <span class="s2">&#34;</span><span class="si">#{</span><span class="n">res</span><span class="o">.</span><span class="n">code</span><span class="si">}</span><span class="se">\n</span><span class="s2">&#34;</span>
+    <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+<p>結果はこう。タイムラインゲットー！</p>
+
+<p>[f:id:kk_Ataka:20101207233454j:image]</p>
+
+<h2 id="windows用">Windows用……</h2>
+
+<p>ソースの最後、parseも終わってその中からほしいキーの値を取り出してるところで。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">            <span class="c1"># SJIS変換(コマンドプロンプトで見る用)</span>
+            <span class="c1"># print NKF.nkf(&#39;-s&#39;, &#34;■#{jsonparse[i][&#34;user&#34;][&#34;screen_name&#34;]} (#{jsonparse[i][&#34;user&#34;][&#34;name&#34;]}) #{time}\n　#{jsonparse[i][&#34;text&#34;]}\n&#34;)</span></code></pre></div>
+<p>SJIS変換してるところがあるんですが、これ、もともとWindowsのコマンドプロンプトで動かしたくて作っていたものなんです。でもコマンドプロンプトって文字コードがSJISのようでそのまま表示すると文字化け起こすのでこういう対応を。</p>
+
+<p>一応軽くググった感じだと、コマンドプロンプトでもUnicode文字を読めるようなのですが……。</p>
+
+<p>[1] oauth_consumer_key, oauth_nonce, oauth_signature_method, oauth_timestamp, oauth_token, oauth_versionの6個っすねー。oauth_tokenを忘れずに。</p>
+
+<p>[2] 本来は一行で取得します</p>
+
+    </section>
+  </article>
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2010/11/30/1291125511/" class="pagination_overflow previous_page">
+          Prev: 
+          10/11/30
+          RubyでTwitterのOAuth認証をしてみる その2
+        </a>
+      
+
+      <span class="pagination_center disabled">
+        10/12/7
+        Ruby …
+      </span>
+
+      
+        <a href="/2010/12/11/1292077752/" class="pagination_overflow next_page">
+          Next: 
+          10/12/11
+          java-ja忘年会に参加しました2010
+        </a>
+      
+  </div>
+</nav>
+
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-</aside>
 
 
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ruby-twitter-api-rubyでtwitterのタイムラインを取得してみる">[Ruby][Twitter][API]RubyでTwitterのタイムラインを取得してみる</a></li>
+<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
+<li><a href="#タイムラインの取得方法">タイムラインの取得方法</a></li>
+<li><a href="#戻ってきたタイムライン">戻ってきたタイムライン</a></li>
+<li><a href="#windows用">Windows用……</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

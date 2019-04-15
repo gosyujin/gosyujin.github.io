@@ -1,250 +1,265 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段 - kk_Atakaの日記</title>
+    
+      
+    
+
     <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段 &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ iOSのバックアップ/リストア周りでえらいハメられたので、まとめてみた。
+iOS 7 が出るとどうなってしまうのか…。
+バックアップの方式 iTunesの「概要」画面から選べる
+ iCloudにバックアップ このコンピュータにバックアップ  そのまま ローカルのバックアップを暗号化   あまり意識していなかったんだけど、iCloudバックアップは以下の条件を満たす時に実行される模様
+ Wi-Fi 経由でインターネットに接続されている(MUST) 電源に接続されている 画面がロックされている  中でも、Wi-Fiだけは確実に満たす必要がある。(3G回線では、手動でiCloud同期もできない)
+iOS：コンテンツのバックアップと復元方法
+バックアップされる内容 SandboxとKeyChainの大きく2つに分けられる
+Sandboxの内容  Cocoaの日々: [Info] 特定のファイルをiCloudバックアップ対象外にする [XCODE] iPhone iOSのディレクトリ構成について学んだ - YoheiM技術やらずに終われまテン アプリケーションディレクトリの構造とアクセス方法 - プログラミングノート
+ /var/mobile/Applications/01234567-890A-BCDE-FGHI-JKLMNOPQRSTU(ランダム文字列)/ 下のファイルがバックアップマシンに保存されたりされなかったり、 基本的には 以下の階層のバックアップと定義してあるものがそのまま保存される
+ Documents/ バックアップ、アプリに関わる重要なファイル置き場 Library/ Caches/ 非バックアップ、アプリで使用するが消えても大丈夫(また作れる)なファイル置き場 Preferences/ バックアップ、アプリの設定ファイル置き場 tmp/ 非バックアップ、一時ファイル置き場  基本的 じゃない場合が、 このコンピュータにバックアップ ローカルのバックアップを暗号化 した時
+ 「ローカルのバックアップを暗号化」を選んだ時にユーザが入力したパスワードで暗号化され、保存される   どんなファイルが入っているかはXcodeの Organizer =&amp;gt; 任意の端末 =&amp;gt; Applications =&amp;gt; 任意のアプリケーション の Data file in Sandboxで確認できる。|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
   </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 
 
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
     </div>
+  
+</nav>
 
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2013/07/18/ios-backup-restore/">iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#iPhone" class="tag">iPhone</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#iOS" class="tag">iOS</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2013/07/18</span>
-          
-        </div>
+      </div>
 
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
 
-
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2013/06/05/ios-over-the-air/" title="Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある">
-          Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/06/05/ios-over-the-air/" class="pagination_overflow previous_page">
+          Prev: 
+          13/6/5
+          Over-the-Airという形式でiOSアプリのインストー …
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/08/04/android-install-intent/" title="Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件">
-          Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件
+      
+
+      <span class="pagination_center disabled">
+        13/7/18
+        iOSのバ …
+      </span>
+
+      
+        <a href="/2013/08/04/android-install-intent/" class="pagination_overflow next_page">
+          Next: 
+          13/8/4
+          Androidアプリのインストール、起動方法によっ …
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">あらすじ</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">バックアップの方式</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">バックアップされる内容</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-4">
-                  <a href="#tocAnchor-1-3-1"><span class="tocnumber">3.1</span> <span class="toctext">Sandboxの内容</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-5">
-                  <a href="#tocAnchor-1-3-2"><span class="tocnumber">3.2</span> <span class="toctext">KeyChainの内容</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="toc_level-1 toc_section-6">
-              <a href="#tocAnchor-1-6"><span class="tocnumber">4</span> <span class="toctext">バックアップ方法</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-7">
-              <a href="#tocAnchor-1-7"><span class="tocnumber">5</span> <span class="toctext">バックアップ除外方法</span></a>
-              <ul>
-                <li class="toc_level-2 toc_section-8">
-                  <a href="#tocAnchor-1-7-1"><span class="tocnumber">5.1</span> <span class="toctext">iOS 5.0</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-9">
-                  <a href="#tocAnchor-1-7-2"><span class="tocnumber">5.2</span> <span class="toctext">iOS 5.0.1</span></a>
-                </li>
-                <li class="toc_level-2 toc_section-10">
-                  <a href="#tocAnchor-1-7-3"><span class="tocnumber">5.3</span> <span class="toctext">iOS 5.1 以降</span></a>
-                </li>
-              </ul>
-            </li>
-            <li class="toc_level-1 toc_section-11">
-              <a href="#tocAnchor-1-11"><span class="tocnumber">6</span> <span class="toctext">注意点</span></a>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h2 id="tocAnchor-1-1">あらすじ</h2>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
+
+  
+    <a href='/tags/iphone' class="muted-link">
+      [ <span class="Label Label--gray">iPhone</span> ]
+    </a>
+  
+    <a href='/tags/ios' class="muted-link">
+      [ <span class="Label Label--gray">iOS</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2013/07/18</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#バックアップの方式">バックアップの方式</a></li>
+<li><a href="#バックアップされる内容">バックアップされる内容</a>
+<ul>
+<li><a href="#sandboxの内容">Sandboxの内容</a></li>
+<li><a href="#keychainの内容">KeyChainの内容</a></li>
+</ul></li>
+<li><a href="#バックアップ方法">バックアップ方法</a></li>
+<li><a href="#バックアップ除外方法">バックアップ除外方法</a>
+<ul>
+<li><a href="#ios-5-0">iOS 5.0</a></li>
+<li><a href="#ios-5-0-1">iOS 5.0.1</a></li>
+<li><a href="#ios-5-1-以降">iOS 5.1 以降</a></li>
+</ul></li>
+<li><a href="#注意点">注意点</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="あらすじ">あらすじ</h2>
 
 <p>iOSのバックアップ/リストア周りでえらいハメられたので、まとめてみた。</p>
 
 <p>iOS 7 が出るとどうなってしまうのか…。</p>
 
-<h2 id="tocAnchor-1-2">バックアップの方式</h2>
+<h2 id="バックアップの方式">バックアップの方式</h2>
 
 <p>iTunesの「概要」画面から選べる</p>
 
 <ol>
-  <li>iCloudにバックアップ</li>
-  <li>このコンピュータにバックアップ
-    <ul>
-      <li>そのまま</li>
-      <li>ローカルのバックアップを暗号化</li>
-    </ul>
-  </li>
+<li>iCloudにバックアップ</li>
+<li>このコンピュータにバックアップ
+
+<ul>
+<li>そのまま</li>
+<li>ローカルのバックアップを暗号化</li>
+</ul></li>
 </ol>
 
 <p>あまり意識していなかったんだけど、iCloudバックアップは以下の条件を満たす時に実行される模様</p>
 
 <ul>
-  <li>Wi-Fi 経由でインターネットに接続されている(MUST)</li>
-  <li>電源に接続されている</li>
-  <li>画面がロックされている</li>
+<li>Wi-Fi 経由でインターネットに接続されている(MUST)</li>
+<li>電源に接続されている</li>
+<li>画面がロックされている</li>
 </ul>
 
 <p>中でも、Wi-Fiだけは確実に満たす必要がある。(3G回線では、手動でiCloud同期もできない)</p>
 
-<p>
-  <a href="http://support.apple.com/kb/ht1766?viewlocale=ja_JP&amp;locale=ja_JP">iOS：コンテンツのバックアップと復元方法</a>
-</p>
+<p><a href="http://support.apple.com/kb/ht1766?viewlocale=ja_JP&amp;locale=ja_JP">iOS：コンテンツのバックアップと復元方法</a></p>
 
-<h2 id="tocAnchor-1-3">バックアップされる内容</h2>
+<h2 id="バックアップされる内容">バックアップされる内容</h2>
 
 <p>SandboxとKeyChainの大きく2つに分けられる</p>
 
-<h3 id="tocAnchor-1-3-1">Sandboxの内容</h3>
+<h3 id="sandboxの内容">Sandboxの内容</h3>
 
 <ul>
-  <li><a href="http://cocoadays.blogspot.jp/2011/11/info-icloud.html">Cocoaの日々: [Info] 特定のファイルをiCloudバックアップ対象外にする</a></li>
-  <li><a href="http://d.hatena.ne.jp/yoheiM/20110227">[XCODE] iPhone iOSのディレクトリ構成について学んだ - YoheiM技術やらずに終われまテン</a></li>
-  <li>
-    <p><a href="http://d.hatena.ne.jp/ntaku/20110104/1294146555">アプリケーションディレクトリの構造とアクセス方法 - プログラミングノート</a></p>
-  </li>
-  <li><code class="highlighter-rouge">/var/mobile/Applications/01234567-890A-BCDE-FGHI-JKLMNOPQRSTU(ランダム文字列)/</code> 下のファイルがバックアップマシンに保存されたりされなかったり、 <strong>基本的には</strong> 以下の階層のバックアップと定義してあるものがそのまま保存される
-    <ul>
-      <li><code class="highlighter-rouge">Documents/</code> バックアップ、アプリに関わる重要なファイル置き場</li>
-      <li><code class="highlighter-rouge">Library/</code>
-        <ul>
-          <li><code class="highlighter-rouge">Caches/</code> 非バックアップ、アプリで使用するが消えても大丈夫(また作れる)なファイル置き場</li>
-          <li><code class="highlighter-rouge">Preferences/</code> バックアップ、アプリの設定ファイル置き場</li>
-        </ul>
-      </li>
-      <li><code class="highlighter-rouge">tmp/</code> 非バックアップ、一時ファイル置き場</li>
-    </ul>
-  </li>
-  <li><strong>基本的</strong> じゃない場合が、 <strong>このコンピュータにバックアップ ローカルのバックアップを暗号化</strong> した時
-    <ul>
-      <li>「ローカルのバックアップを暗号化」を選んだ時にユーザが入力したパスワードで暗号化され、保存される</li>
-    </ul>
-  </li>
-</ul>
+<li><a href="http://cocoadays.blogspot.jp/2011/11/info-icloud.html">Cocoaの日々: [Info] 特定のファイルをiCloudバックアップ対象外にする</a></li>
+<li><a href="http://d.hatena.ne.jp/yoheiM/20110227">[XCODE] iPhone iOSのディレクトリ構成について学んだ - YoheiM技術やらずに終われまテン</a></li>
 
-<p>どんなファイルが入っているかはXcodeの <code class="highlighter-rouge">Organizer =&gt; 任意の端末 =&gt; Applications =&gt; 任意のアプリケーション</code> の Data file in Sandboxで確認できる。</p>
+<li><p><a href="http://d.hatena.ne.jp/ntaku/20110104/1294146555">アプリケーションディレクトリの構造とアクセス方法 - プログラミングノート</a></p></li>
 
-<h3 id="tocAnchor-1-3-2">KeyChainの内容</h3>
+<li><p><code>/var/mobile/Applications/01234567-890A-BCDE-FGHI-JKLMNOPQRSTU(ランダム文字列)/</code> 下のファイルがバックアップマシンに保存されたりされなかったり、 <strong>基本的には</strong> 以下の階層のバックアップと定義してあるものがそのまま保存される</p>
 
 <ul>
-  <li><a href="http://cocoadays.blogspot.jp/2011/02/ios-keychain-services.html">Cocoaの日々: [iOS] Keychain Services とは</a></li>
-  <li>
-    <p><a href="http://did2memo.net/2012/10/02/iphone-how-to-backup-and-restore-key-chain/">復元が不完全！？iPhoneバックアップで認証情報が復元できない理由とバックアップのオススメ設定 ｜ 情報科学屋さんを目指す人のメモ</a></p>
-  </li>
-  <li>内容はバックアップマシンに保存されるが、 <strong>暗号化</strong> されている</li>
-  <li>暗号化されたKeyChain情報を複合化するための鍵は <strong>基本的には</strong> 暗号化したiOS端末から外に出ない
-    <ul>
-      <li>そのため、同じマシンでバックアップ/リストアをすると…
-        <ul>
-          <li>バックアップ … KeyChain情報をバックアップマシンに格納</li>
-          <li>リストア … 暗号化されたKeyChain情報が端末に戻ってくる</li>
-          <li>同一端末なので、複合化するための鍵は持っている</li>
-          <li>パスワードとか復活できる</li>
-        </ul>
-      </li>
-      <li>一方、機種変更時などで、新端末にリストアすると…
-        <ul>
-          <li>バックアップ … KeyChain情報をバックアップマシンに格納</li>
-          <li>リストア … 暗号化されたKeyChain情報が端末に戻ってくる？(戻ってくることすらないのかな？確認方法がわからん)</li>
-          <li>端末が異なるので、複合化するための鍵が <strong>ない</strong></li>
-          <li>パスワードとか入れ直し…</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li><strong>基本的</strong> じゃない場合が、 <strong>このコンピュータにバックアップ ローカルのバックアップを暗号化</strong> した時
-    <ul>
-      <li>この時、鍵もバックアップマシンに保存され、 <strong>全部丸ごと暗号化</strong> される
-        <ul>
-          <li>「ローカルのバックアップを暗号化」を選んだ時にユーザが入力したパスワードで暗号化される</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
+<li><code>Documents/</code> バックアップ、アプリに関わる重要なファイル置き場</li>
+<li><code>Library/</code></li>
+<li><code>Caches/</code> 非バックアップ、アプリで使用するが消えても大丈夫(また作れる)なファイル置き場</li>
+<li><code>Preferences/</code> バックアップ、アプリの設定ファイル置き場</li>
+<li><code>tmp/</code> 非バックアップ、一時ファイル置き場</li>
+</ul></li>
+
+<li><p><strong>基本的</strong> じゃない場合が、 <strong>このコンピュータにバックアップ ローカルのバックアップを暗号化</strong> した時</p>
+
+<ul>
+<li>「ローカルのバックアップを暗号化」を選んだ時にユーザが入力したパスワードで暗号化され、保存される</li>
+</ul></li>
 </ul>
 
-<h2 id="tocAnchor-1-6">バックアップ方法</h2>
+<p>どんなファイルが入っているかはXcodeの <code>Organizer =&gt; 任意の端末 =&gt; Applications =&gt; 任意のアプリケーション</code> の Data file in Sandboxで確認できる。</p>
+
+<h3 id="keychainの内容">KeyChainの内容</h3>
+
+<ul>
+<li><a href="http://cocoadays.blogspot.jp/2011/02/ios-keychain-services.html">Cocoaの日々: [iOS] Keychain Services とは</a></li>
+
+<li><p><a href="http://did2memo.net/2012/10/02/iphone-how-to-backup-and-restore-key-chain/">復元が不完全！？iPhoneバックアップで認証情報が復元できない理由とバックアップのオススメ設定 ｜ 情報科学屋さんを目指す人のメモ</a></p></li>
+
+<li><p>内容はバックアップマシンに保存されるが、 <strong>暗号化</strong> されている</p></li>
+
+<li><p>暗号化されたKeyChain情報を複合化するための鍵は <strong>基本的には</strong> 暗号化したiOS端末から外に出ない</p>
+
+<ul>
+<li>そのため、同じマシンでバックアップ/リストアをすると…</li>
+<li>バックアップ &hellip; KeyChain情報をバックアップマシンに格納</li>
+<li>リストア &hellip; 暗号化されたKeyChain情報が端末に戻ってくる</li>
+<li>同一端末なので、複合化するための鍵は持っている</li>
+<li>パスワードとか復活できる</li>
+<li>一方、機種変更時などで、新端末にリストアすると…</li>
+<li>バックアップ &hellip; KeyChain情報をバックアップマシンに格納</li>
+<li>リストア &hellip; 暗号化されたKeyChain情報が端末に戻ってくる？(戻ってくることすらないのかな？確認方法がわからん)</li>
+<li>端末が異なるので、複合化するための鍵が <strong>ない</strong></li>
+<li>パスワードとか入れ直し…</li>
+</ul></li>
+
+<li><p><strong>基本的</strong> じゃない場合が、 <strong>このコンピュータにバックアップ ローカルのバックアップを暗号化</strong> した時</p>
+
+<ul>
+<li>この時、鍵もバックアップマシンに保存され、 <strong>全部丸ごと暗号化</strong> される</li>
+<li>「ローカルのバックアップを暗号化」を選んだ時にユーザが入力したパスワードで暗号化される</li>
+</ul></li>
+</ul>
+
+<h2 id="バックアップ方法">バックアップ方法</h2>
 
 <p>上記の仕様でよろしくやってくれる。</p>
 
-<h2 id="tocAnchor-1-7">バックアップ除外方法</h2>
+<h2 id="バックアップ除外方法">バックアップ除外方法</h2>
 
 <p>かといって、全部一括でバックアップとして外部サーバにあげられると困るファイルもあるはず。(著作権、個人情報、etc)</p>
 
@@ -252,564 +267,740 @@
 
 <p>方法はiOSのバージョンによって異なる。</p>
 
-<p>現時点では、 <code class="highlighter-rouge">iOS 5.1 以降</code> と <code class="highlighter-rouge">iOS 5.0.1</code> で場合分けした対応が必須みたい。</p>
+<p>現時点では、 <code>iOS 5.1 以降</code> と <code>iOS 5.0.1</code> で場合分けした対応が必須みたい。</p>
 
 <ul>
-  <li><a href="https://developer.apple.com/library/ios/qa/qa1719/_index.html">Technical Q&amp;A QA1719: Technical Q&amp;A QA1719</a></li>
-  <li><a href="http://stackoverflow.com/questions/10836134/nsurlisexcludedfrombackupkey-can-not-be-set-correctly">iphone - NSURLIsExcludedFromBackupKey can not be set correctly - Stack Overflow</a></li>
+<li><a href="https://developer.apple.com/library/ios/qa/qa1719/_index.html">Technical Q&amp;A QA1719: Technical Q&amp;A QA1719</a></li>
+<li><a href="http://stackoverflow.com/questions/10836134/nsurlisexcludedfrombackupkey-can-not-be-set-correctly">iphone - NSURLIsExcludedFromBackupKey can not be set correctly - Stack Overflow</a></li>
 </ul>
 
-<h3 id="tocAnchor-1-7-1">iOS 5.0</h3>
+<h3 id="ios-5-0">iOS 5.0</h3>
 
 <p>そんなものはない。</p>
 
-<h3 id="tocAnchor-1-7-2">iOS 5.0.1</h3>
+<h3 id="ios-5-0-1">iOS 5.0.1</h3>
 
 <p>上記のdeveloper.apple.comのサンプルベタ貼り。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-objc" data-lang="objc"><span class="cp">#import &lt;sys/xattr.h&gt;
-</span>
-<span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">addSkipBackupAttributeToItemAtURL</span><span class="p">:(</span><span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">URL</span>
+<div class="highlight"><pre class="chroma"><code class="language-objc" data-lang="objc"><span class="cp">#import &lt;sys/xattr.h&gt;
+</span><span class="cp"></span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">addSkipBackupAttributeToItemAtURL:</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">URL</span>
 <span class="p">{</span>
-    <span class="n">assert</span><span class="p">([[</span><span class="n">NSFileManager</span> <span class="nf">defaultManager</span><span class="p">]</span> <span class="nf">fileExistsAtPath</span><span class="p">:</span> <span class="p">[</span><span class="n">URL</span> <span class="nf">path</span><span class="p">]]);</span>
-    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filePath</span> <span class="o">=</span> <span class="p">[[</span><span class="n">URL</span> <span class="nf">path</span><span class="p">]</span> <span class="nf">fileSystemRepresentation</span><span class="p">];</span>
-    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">attrName</span> <span class="o">=</span> <span class="s">"com.apple.MobileBackup"</span><span class="p">;</span>
+    <span class="n">assert</span><span class="p">([[</span><span class="n">NSFileManager</span> <span class="n">defaultManager</span><span class="p">]</span> <span class="nl">fileExistsAtPath</span><span class="p">:</span> <span class="p">[</span><span class="n">URL</span> <span class="n">path</span><span class="p">]]);</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filePath</span> <span class="o">=</span> <span class="p">[[</span><span class="n">URL</span> <span class="n">path</span><span class="p">]</span> <span class="n">fileSystemRepresentation</span><span class="p">];</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">attrName</span> <span class="o">=</span> <span class="s">&#34;com.apple.MobileBackup&#34;</span><span class="p">;</span>
     <span class="n">u_int8_t</span> <span class="n">attrValue</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">setxattr</span><span class="p">(</span><span class="n">filePath</span><span class="p">,</span> <span class="n">attrName</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attrValue</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attrValue</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
     <span class="k">return</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span></code>
-  </pre>
-</figure>
-
-<h3 id="tocAnchor-1-7-3">iOS 5.1 以降</h3>
+<span class="p">}</span></code></pre></div>
+<h3 id="ios-5-1-以降">iOS 5.1 以降</h3>
 
 <p>上記のdeveloper.apple.comのサンプルベタ貼り。</p>
-
-<figure class="highlight">
-  <pre>
-    <code class="language-objc" data-lang="objc"><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">addSkipBackupAttributeToItemAtURL</span><span class="p">:(</span><span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">URL</span>
+<div class="highlight"><pre class="chroma"><code class="language-objc" data-lang="objc"><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">addSkipBackupAttributeToItemAtURL:</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">URL</span>
 <span class="p">{</span>
-    <span class="n">assert</span><span class="p">([[</span><span class="n">NSFileManager</span> <span class="nf">defaultManager</span><span class="p">]</span> <span class="nf">fileExistsAtPath</span><span class="p">:</span> <span class="p">[</span><span class="n">URL</span> <span class="nf">path</span><span class="p">]]);</span>
+    <span class="n">assert</span><span class="p">([[</span><span class="n">NSFileManager</span> <span class="n">defaultManager</span><span class="p">]</span> <span class="nl">fileExistsAtPath</span><span class="p">:</span> <span class="p">[</span><span class="n">URL</span> <span class="n">path</span><span class="p">]]);</span>
     <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
-    <span class="n">BOOL</span> <span class="n">success</span> <span class="o">=</span> <span class="p">[</span><span class="n">URL</span> <span class="nf">setResourceValue</span><span class="p">:</span> <span class="p">[</span><span class="n">NSNumber</span> <span class="nf">numberWithBool</span><span class="p">:</span> <span class="nb">YES</span><span class="p">]</span>
-                          <span class="nf">forKey</span><span class="p">:</span> <span class="n">NSURLIsExcludedFromBackupKey</span> <span class="n">error</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">error</span><span class="p">];</span>
+    <span class="kt">BOOL</span> <span class="n">success</span> <span class="o">=</span> <span class="p">[</span><span class="n">URL</span> <span class="nl">setResourceValue</span><span class="p">:</span> <span class="p">[</span><span class="n">NSNumber</span> <span class="nl">numberWithBool</span><span class="p">:</span> <span class="nb">YES</span><span class="p">]</span>
+                          <span class="nl">forKey</span><span class="p">:</span> <span class="n">NSURLIsExcludedFromBackupKey</span> <span class="nl">error</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">error</span><span class="p">];</span>
     <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">){</span>
-        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Error excluding %@ from backup %@"</span><span class="p">,</span> <span class="p">[</span><span class="n">URL</span> <span class="nf">lastPathComponent</span><span class="p">],</span> <span class="n">error</span><span class="p">);</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;Error excluding %@ from backup %@&#34;</span><span class="p">,</span> <span class="p">[</span><span class="n">URL</span> <span class="n">lastPathComponent</span><span class="p">],</span> <span class="n">error</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span></code>
-  </pre>
-</figure>
-
-<h2 id="tocAnchor-1-11">注意点</h2>
+<span class="p">}</span></code></pre></div>
+<h2 id="注意点">注意点</h2>
 
 <p>addSkipBackupAttributeToItemAtURLメソッドの引数になっているNSURLにおいては、iOS 5.0.1 と 5.1 以降で渡す時のフォーマットが違う。</p>
 
 <p>こんな文字列があった時、</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>filePath = "/var/mobile/Applications/ランダム文字列/Documents/Settings.xml"
-</code></pre>
-</div>
-
+<div class="highlight"><pre class="chroma">filePath = &#34;/var/mobile/Applications/ランダム文字列/Documents/Settings.xml&#34;</pre></div>
 <ul>
-  <li>iOS 5.0.1 <code class="highlighter-rouge">[NSURL URLWithString:filePath]</code> で渡す</li>
-  <li>iOS 5.1 以降 <code class="highlighter-rouge">[NSURL fileURLWithPath:filePath]</code> で渡す</li>
+<li>iOS 5.0.1 <code>[NSURL URLWithString:filePath]</code> で渡す</li>
+<li>iOS 5.1 以降 <code>[NSURL fileURLWithPath:filePath]</code> で渡す</li>
 </ul>
 
 <p>違いはこうなるみたい。スキームが付加される？(詳しく調べていない)</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>[NSURL URLWithString:filePath]
+<div class="highlight"><pre class="chroma">[NSURL URLWithString:filePath]
 =&gt; /var/mobile/Applications/ランダム文字列/Documents/Settings.xml
 [NSURL fileURLWithPath:filePath]
-=&gt; file://localhost/var/mobile/Applications/ランダム文字列/Documents/Settings.xml
-</code></pre>
-</div>
+=&gt; file://localhost/var/mobile/Applications/ランダム文字列/Documents/Settings.xml</pre></div>
+    </section>
+  </article>
 
-</div>
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2013/06/05/ios-over-the-air/" class="pagination_overflow previous_page">
+          Prev: 
+          13/6/5
+          Over-the-Airという形式でiOSアプリのインストー …
+        </a>
+      
 
-<div class="pagination">
+      <span class="pagination_center disabled">
+        13/7/18
+        iOSのバ …
+      </span>
+
+      
+        <a href="/2013/08/04/android-install-intent/" class="pagination_overflow next_page">
+          Next: 
+          13/8/4
+          Androidアプリのインストール、起動方法によっ …
+        </a>
+      
+  </div>
+</nav>
+
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    
-      <li class="prev">
-        <a href="/2013/06/05/ios-over-the-air/" title="Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある">
-          Over-the-Airという形式でiOSアプリのインストールを試みるが失敗する場合がある
-        </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2013/08/04/android-install-intent/" title="Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件">
-          Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件
-        </a>
-      </li>
-    
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
 </div>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2013/07/18/ios-backup-restore/" data-text="kk_Atakaの日記 - iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/07/18/ios-backup-restore/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2013/07/18/ios-backup-restore/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2013/07/18/ios-backup-restore/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
-
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2013/07/18/ios-backup-restore//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
 
 
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
     
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
 
 
-      </article>
 
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
 
-  <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
-  </ul>
-
-  <h2>Recent Entries</h2>
-
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#バックアップの方式">バックアップの方式</a></li>
+<li><a href="#バックアップされる内容">バックアップされる内容</a>
+<ul>
+<li><a href="#sandboxの内容">Sandboxの内容</a></li>
+<li><a href="#keychainの内容">KeyChainの内容</a></li>
+</ul></li>
+<li><a href="#バックアップ方法">バックアップ方法</a></li>
+<li><a href="#バックアップ除外方法">バックアップ除外方法</a>
+<ul>
+<li><a href="#ios-5-0">iOS 5.0</a></li>
+<li><a href="#ios-5-0-1">iOS 5.0.1</a></li>
+<li><a href="#ios-5-1-以降">iOS 5.1 以降</a></li>
+</ul></li>
+<li><a href="#注意点">注意点</a></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>

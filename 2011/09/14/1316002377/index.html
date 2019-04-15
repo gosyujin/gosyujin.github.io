@@ -1,242 +1,275 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <title>Solarisのパッケージを作ってみる もう少し学んだ版 - kk_Atakaの日記</title>
-    <meta charset="utf-8">
-    <link rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/css/github-markdown.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/toc.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/static/js/jquery.tocLight.js"></script>
-    <script type="text/javascript">
-       $(function() {
-         $.toc.clickHideButton();
-       });
-    </script>
-  </head>
-  <body>
-    <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34929069-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
-
-
-    <div class="header">
-      <nav>
-        <ul>
-          <li><a href="/">kk_Atakaの日記</a></li>
-          <li class="main-nav"><a href="/archives/">Archive</a>
-          <li class="main-nav"><a href="/tags/">Tag</a>
-          <li class="main-nav"><a href="/monitor/">Monitor</a>
-        </ul>
-      </nav>
-    </div>
-
-    <div id="container">
-      <article class="markdown-body">
-        <h1><a href="/2011/09/14/1316002377/">Solarisのパッケージを作ってみる もう少し学んだ版</a></h1>
-        <div class="published">
-          
-            <span>Tags: </span>
-            
-              <span>[ <code><a href="/tags/#Solaris" class="tag">Solaris</a></code> ]</span>
-            
-              <span>[ <code><a href="/tags/#備忘録" class="tag">備忘録</a></code> ]</span>
-            
-          
-          
-            <span>Published: 2011/09/14</span>
-          
-        </div>
-
-
-
-<div class="pagination">
-  <ul>
     
-      <li class="prev">
-        <a href="/2011/09/12/1315826713/" title="Solarisのパッケージを作ってみる">
+      
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Solarisのパッケージを作ってみる もう少し学んだ版 &ndash; kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Solaris][備忘録]Solarisのパッケージを作ってみる もう少し学んだ版 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20110912/1315826713:title  もう少し調べてみた。
+参考サイト  http://dlc.sun.com/osol/g11n/content/PACKINSTALL/ja/ch2buildpkg-11300.html:title  必要なもの パッケージコンテンツ
+ディレクトリ含めたソース一式。ざっくりソース一式とか言ってるのでここは作るものによってもう少しブレークダウンする必要がある
+pkginfoファイル
+パッケージ名等のパラメータを定義するファイル。コマンドではなくファイル。
+Prototypeファイル
+パッケージのコンポーネント一覧を記載するファイル
+場合によって用意するもの(必須ではない) compverファイル
+パッケージと互換性がある以前のバージョンのパッケージの定義ファイル
+dependファイル
+パッケージと関連があるパッケージの定義ファイル
+spaceファイル
+インストールに必要なディスク容量の定義ファイル
+copyrightファイル
+インストール時に表示される著作権メッセージの定義ファイル
+パッケージコンテンツの作成 作成ディレクトリと内訳。
+$ pwd /home/kk_Ataka/pkgroot/ MYAPpkg┳bin┳proccess ┃　┗start ┣lib━common.lib ┗etc━etcFile これを/直下にインストールしたい。
+pkginfoファイル作成 /にインストールしたいので、BASEDIRが/でいいのか？
+PKG=&amp;#34;MYAPpkg&amp;#34; NAME=&amp;#34;MyApplyPackage&amp;#34; ARCH=&amp;#34;sparc&amp;#34; VERSION=&amp;#34;release 1.0 /svn revision r222&amp;#34; CATEGORY=&amp;#34;application&amp;#34; DESC=&amp;#34;This is my test packages.&amp;#34; VENDOR=&amp;#34;MYAPPLY&amp;#34; BASEDIR=&amp;#34;/&amp;#34; pkginfoファイル書式 |*PKG|必須|32文字以内|パッケージの省略名 英数字で構成、頭に数字は× 予約語(install, new等)は使用できない。最初の4文字は社名などがお勧め|
+|*NAME|必須|256文字以内 |パッケージの完全名 英数字で構成 必要なタイミング、インストールするパーティション等を明瞭に記載する[1]|
+|*ATCH|必須|16文字以内|アーキテクチャ 複数対応している場合はカンマ区切り|
+|*VERSION|必須|256文字以内|バージョン 先頭に(は×||">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="/">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item " href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item " href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2011/09/12/1315826713/" class="pagination_overflow previous_page">
+          Prev: 
+          11/9/12
           Solarisのパッケージを作ってみる
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2011/09/30/1317312438/" title=".msgファイルをパースして中から添付ファイルを抜き出す">
+      
+
+      <span class="pagination_center disabled">
+        11/9/14
+        Solar …
+      </span>
+
+      
+        <a href="/2011/09/30/1317312438/" class="pagination_overflow next_page">
+          Next: 
+          11/9/30
           .msgファイルをパースして中から添付ファイルを抜き出す
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="content">
-<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>Contents</h2>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">pkginfoファイル書式</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-2">
-              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">Prototypeファイル書式</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-3">
-              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">ftype</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-4">
-              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">path</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-5">
-              <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">pkgproto(コマンド)</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-6">
-              <a href="#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">pkgmk(コマンド)</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-7">
-              <a href="#tocAnchor-1-7"><span class="tocnumber">7</span> <span class="toctext">pkginfo(コマンド)</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-8">
-              <a href="#tocAnchor-1-8"><span class="tocnumber">8</span> <span class="toctext">pkgadd(コマンド)</span></a>
-            </li>
-            <li class="toc_level-1 toc_section-9">
-              <a href="#tocAnchor-1-9"><span class="tocnumber">9</span> <span class="toctext">pkgrm(コマンド)</span></a>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><h1>前回までのあらすじ</h1>
+  <div class="Subhead">
+    <div class="Subhead-heading">
+      <div class="h2 mt-3 mb-1">Solarisのパッケージを作ってみる もう少し学んだ版</div>
+    </div>
+    <div class="Subhead-description">
+      <div class="float-md-right">
+        
+        Tags: 
+
+  
+    <a href='/tags/solaris' class="muted-link">
+      [ <span class="Label Label--gray">Solaris</span> ]
+    </a>
+  
+    <a href='/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+
+ 
+        Published: <span>2011/09/14</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  <li>
-    <a href="http://d.hatena.ne.jp/kk_Ataka/20110912/1315826713">2011-09-12-1315826713</a>
-  </li>
+<li>
+<ul>
+<li><a href="#solaris-備忘録-solarisのパッケージを作ってみる-もう少し学んだ版">[Solaris][備忘録]Solarisのパッケージを作ってみる もう少し学んだ版</a></li>
+<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#必要なもの">必要なもの</a></li>
+<li><a href="#場合によって用意するもの-必須ではない">場合によって用意するもの(必須ではない)</a></li>
+<li><a href="#パッケージコンテンツの作成">パッケージコンテンツの作成</a></li>
+<li><a href="#pkginfoファイル作成">pkginfoファイル作成</a>
+<ul>
+<li><a href="#pkginfoファイル書式">pkginfoファイル書式</a></li>
+</ul></li>
+<li><a href="#prototypeファイル作成">Prototypeファイル作成</a>
+<ul>
+<li><a href="#prototypeファイル書式">Prototypeファイル書式</a></li>
+<li><a href="#ftype">ftype</a></li>
+<li><a href="#path">path</a></li>
+</ul></li>
+<li><a href="#パッケージの構築">パッケージの構築</a></li>
+<li><a href="#パッケージインストール-アンインストール">パッケージインストール、アンインストール</a></li>
+<li><a href="#以下-コマンド">以下、コマンド。</a>
+<ul>
+<li><a href="#pkgproto-コマンド">pkgproto(コマンド)</a></li>
+<li><a href="#pkgmk-コマンド">pkgmk(コマンド)</a></li>
+<li><a href="#pkginfo-コマンド">pkginfo(コマンド)</a></li>
+<li><a href="#pkgadd-コマンド">pkgadd(コマンド)</a></li>
+<li><a href="#pkgrm-コマンド">pkgrm(コマンド)</a></li>
+</ul></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
+
+
+
+  <article>
+   <section class="pb-6 mb-3 border-bottom">
+      
+
+<h2 id="solaris-備忘録-solarisのパッケージを作ってみる-もう少し学んだ版">[Solaris][備忘録]Solarisのパッケージを作ってみる もう少し学んだ版</h2>
+
+<h2 id="前回までのあらすじ">前回までのあらすじ</h2>
+
+<ul>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20110912/1315826713:title">http://d.hatena.ne.jp/kk_Ataka/20110912/1315826713:title</a></li>
+</ul>
+
 <p>もう少し調べてみた。</p>
-<h1>参考サイト</h1>
+
+<h2 id="参考サイト">参考サイト</h2>
+
 <ul>
-  <li>
-    <a href="http://dlc.sun.com/osol/g11n/content/PACKINSTALL/ja/ch2buildpkg-11300.html">pkginfo ファイルの作成 - アプリケーションパッケージ開発者ガイド</a>
-  </li>
+<li><a href="http://dlc.sun.com/osol/g11n/content/PACKINSTALL/ja/ch2buildpkg-11300.html:title">http://dlc.sun.com/osol/g11n/content/PACKINSTALL/ja/ch2buildpkg-11300.html:title</a></li>
 </ul>
-<h1>必要なもの</h1>
-<dl>
-  <dt>パッケージコンテンツ</dt>
-  <dd>ディレクトリ含めたソース一式。ざっくりソース一式とか言ってるのでここは作るものによってもう少しブレークダウンする必要がある</dd>
-  <dt>pkginfoファイル</dt>
-  <dd>パッケージ名等のパラメータを定義するファイル。コマンドではなくファイル。</dd>
-  <dt>Prototypeファイル</dt>
-  <dd>パッケージのコンポーネント一覧を記載するファイル</dd>
-</dl>
-<h1>場合によって用意するもの(必須ではない)</h1>
-<dl>
-  <dt>compverファイル</dt>
-  <dd>パッケージと互換性がある以前のバージョンのパッケージの定義ファイル</dd>
-  <dt>dependファイル</dt>
-  <dd>パッケージと関連があるパッケージの定義ファイル</dd>
-  <dt>spaceファイル</dt>
-  <dd>インストールに必要なディスク容量の定義ファイル</dd>
-  <dt>copyrightファイル</dt>
-  <dd>インストール時に表示される著作権メッセージの定義ファイル</dd>
-</dl>
-<h1>パッケージコンテンツの作成</h1>
+
+<h2 id="必要なもの">必要なもの</h2>
+
+<p>パッケージコンテンツ<br />
+ディレクトリ含めたソース一式。ざっくりソース一式とか言ってるのでここは作るものによってもう少しブレークダウンする必要がある</p>
+
+<p>pkginfoファイル<br />
+パッケージ名等のパラメータを定義するファイル。コマンドではなくファイル。</p>
+
+<p>Prototypeファイル<br />
+パッケージのコンポーネント一覧を記載するファイル</p>
+
+<h2 id="場合によって用意するもの-必須ではない">場合によって用意するもの(必須ではない)</h2>
+
+<p>compverファイル<br />
+パッケージと互換性がある以前のバージョンのパッケージの定義ファイル</p>
+
+<p>dependファイル<br />
+パッケージと関連があるパッケージの定義ファイル</p>
+
+<p>spaceファイル<br />
+インストールに必要なディスク容量の定義ファイル</p>
+
+<p>copyrightファイル<br />
+インストール時に表示される著作権メッセージの定義ファイル</p>
+
+<h2 id="パッケージコンテンツの作成">パッケージコンテンツの作成</h2>
+
 <p>作成ディレクトリと内訳。</p>
-<pre>$ pwd
+<div class="highlight"><pre class="chroma">$ pwd
 /home/kk_Ataka/pkgroot/
 
 MYAPpkg┳bin┳proccess
 　　　 ┃　 ┗start
 　　　 ┣lib━common.lib
-　　　 ┗etc━etcFile</pre>
+　　　 ┗etc━etcFile</pre></div>
 <p>これを/直下にインストールしたい。</p>
-<h1>pkginfoファイル作成</h1>
+
+<h2 id="pkginfoファイル作成">pkginfoファイル作成</h2>
+
 <p>/にインストールしたいので、BASEDIRが/でいいのか？</p>
-<pre>PKG="MYAPpkg"
-NAME="MyApplyPackage"
-ARCH="sparc"
-VERSION="release 1.0 /svn revision r222"
-CATEGORY="application"
-DESC="This is my test packages."
-VENDOR="MYAPPLY"
-BASEDIR="/"</pre>
-<h2 id="tocAnchor-1-1">pkginfoファイル書式</h2>
-<table>
-  <tr>
-    <th>PKG</th>
-    <td>必須</td>
-    <td>32文字以内</td>
-    <td>パッケージの省略名 英数字で構成、頭に数字は× 予約語(install, new等)は使用できない。最初の4文字は社名などがお勧め</td>
-  </tr>
-  <tr>
-    <th>NAME</th>
-    <td>必須</td>
-    <td>256文字以内</td>
-    <td>パッケージの完全名 英数字で構成 必要なタイミング、インストールするパーティション等を明瞭に記載する<span class="footnote"><a href="#f1" title="たとえばこんな感じらしい。「Chip designers need CAD application software to design abc chips.  Runs only on xyz hardware and is installed in the usr partition.」" name="fn1" id="fn1">*1</a></span></td>
-  </tr>
-  <tr>
-    <th>ATCH</th>
-    <td>必須</td>
-    <td>16文字以内</td>
-    <td>アーキテクチャ 複数対応している場合はカンマ区切り</td>
-  </tr>
-  <tr>
-    <th>VERSION</th>
-    <td>必須</td>
-    <td>256文字以内</td>
-    <td>バージョン 先頭に(は×</td>
-  </tr>
-  <tr>
-    <th>CATEGORY</th>
-    <td>必須</td>
-    <td>16文字以内</td>
-    <td>カテゴリ 英数字で構成 最低でもsystemかapplicationには属する 複数に属している場合はカンマ区切り</td>
-  </tr>
-  <tr>
-    <th>DESC</th>
-    <td>必須ではない</td>
-    <td>?</td>
-    <td>パッケージの説明。description</td>
-  </tr>
-  <tr>
-    <th>VENDOR</th>
-    <td>必須ではない</td>
-    <td>?</td>
-    <td>社名など</td>
-  </tr>
-  <tr>
-    <th>BASEDIR</th>
-    <td>必須ではない</td>
-    <td>?</td>
-    <td>ファイルのデフォルトの位置</td>
-  </tr>
-  <tr>
-    <th>PSTAMP</th>
-    <td>必須ではない</td>
-    <td>?</td>
-    <td>プロダクションのスタンプ。pkgmapで使用されるらしい。デフォルト値は「マシン名YYYYMMDDHHMISS」</td>
-  </tr>
-</table>
-<h1>Prototypeファイル作成</h1>
+<div class="highlight"><pre class="chroma">PKG=&#34;MYAPpkg&#34;
+NAME=&#34;MyApplyPackage&#34;
+ARCH=&#34;sparc&#34;
+VERSION=&#34;release 1.0 /svn revision r222&#34;
+CATEGORY=&#34;application&#34;
+DESC=&#34;This is my test packages.&#34;
+VENDOR=&#34;MYAPPLY&#34;
+BASEDIR=&#34;/&#34;</pre></div>
+<h3 id="pkginfoファイル書式">pkginfoファイル書式</h3>
+
+<p>|*PKG|必須|32文字以内|パッケージの省略名 英数字で構成、頭に数字は× 予約語(install, new等)は使用できない。最初の4文字は社名などがお勧め|</p>
+
+<p>|*NAME|必須|256文字以内 |パッケージの完全名 英数字で構成 必要なタイミング、インストールするパーティション等を明瞭に記載する[1]|</p>
+
+<p>|*ATCH|必須|16文字以内|アーキテクチャ 複数対応している場合はカンマ区切り|</p>
+
+<p>|*VERSION|必須|256文字以内|バージョン 先頭に(は×|</p>
+
+<p>|*CATEGORY|必須|16文字以内|カテゴリ 英数字で構成 最低でもsystemかapplicationには属する 複数に属している場合はカンマ区切り|</p>
+
+<p>|*DESC|必須ではない|?|パッケージの説明。description|</p>
+
+<p>|*VENDOR|必須ではない|?|社名など|</p>
+
+<p>|*BASEDIR|必須ではない|?|ファイルのデフォルトの位置|</p>
+
+<p>|*PSTAMP|必須ではない|?|プロダクションのスタンプ。pkgmapで使用されるらしい。デフォルト値は「マシン名YYYYMMDDHHMISS」|</p>
+
+<h2 id="prototypeファイル作成">Prototypeファイル作成</h2>
+
 <p>前回はviでパッケージにしたいパスをゴリゴリ書いてPrototypeファイルに変換したが、Prototype DIRで指定したDIRの下のファイルをPrototypeファイルのフォーマットにしてくれた。</p>
-<pre>$ pkgproto ./MYAPpkg/
+<div class="highlight"><pre class="chroma">$ pkgproto ./MYAPpkg/
 d none MYAPpkg 0755 kk_Ataka users
 d none MYAPpkg/bin 0755 kk_Ataka users
 f none MYAPpkg/bin/proccess 0644 kk_Ataka users
@@ -244,119 +277,73 @@ f none MYAPpkg/bin/testbin 0644 kk_Ataka users
 d none MYAPpkg/lib 0755 kk_Ataka users
 f none MYAPpkg/lib/lib.lib 0644 kk_Ataka users
 d none MYAPpkg/etc 0755 kk_Ataka users
-f none MYAPpkg/etc/etcfile 0644 kk_Ataka users</pre>
+f none MYAPpkg/etc/etcfile 0644 kk_Ataka users</pre></div>
 <p>これをリダイレクトさせてPrototypeファイルを作成する。</p>
-<pre>$ pkgproto ./MYAPpkg/ &gt;&gt; Prototype</pre>
+<div class="highlight"><pre class="chroma">$ pkgproto ./MYAPpkg/ &gt;&gt; Prototype</pre></div>
 <p>作成したPrototypeファイルを微調整。pkginfoファイルを読み込むようにするためファイルの先頭に以下を記述する。</p>
-<pre>i pkginfo</pre>
-<h2 id="tocAnchor-1-2">Prototypeファイル書式</h2>
+<div class="highlight"><pre class="chroma">i pkginfo</pre></div>
+<h3 id="prototypeファイル書式">Prototypeファイル書式</h3>
+
 <p>上の生成されたファイルを見る限り、かっこのものはなくてもよさげ</p>
-<pre>(part) ftype class path (major) (minor) mode owner group</pre>
-<table>
-  <tr>
-    <th>part</th>
-    <td>パッケージ オブジェクトを細かくグループ化できる、省略可能な数値フィールドです。デフォルト値は part 1 です。…らしい。</td>
-  </tr>
-  <tr>
-    <th>ftype</th>
-    <td>オブジェクトの種類を指定するフィールド(後述)</td>
-  </tr>
-  <tr>
-    <th>class</th>
-    <td>オブジェクトが所属するインストールクラス</td>
-  </tr>
-  <tr>
-    <th>path</th>
-    <td>パッケージコンテンツのインストール場所を示すパス(後述)</td>
-  </tr>
-  <tr>
-    <th>major</th>
-    <td>ブロック特殊デバイスまたは文字特殊デバイスのためのメジャーデバイス番号です。…らしい。</td>
-  </tr>
-  <tr>
-    <th>minor</th>
-    <td>ブロック特殊デバイスまたは文字特殊デバイスのためのマイナーデバイス番号です。…らしい。</td>
-  </tr>
-  <tr>
-    <th>mode</th>
-    <td>オブジェクトの実行権限を指定するフィールド</td>
-  </tr>
-  <tr>
-    <th>owner</th>
-    <td>オブジェクトの所有者</td>
-  </tr>
-  <tr>
-    <th>group</th>
-    <td>オブジェクトが所属するグループ</td>
-  </tr>
-</table>
-<h2 id="tocAnchor-1-3">ftype</h2>
+<div class="highlight"><pre class="chroma">(part) ftype class path (major) (minor) mode owner group</pre></div>
+<p>|*part|パッケージ オブジェクトを細かくグループ化できる、省略可能な数値フィールドです。デフォルト値は part 1 です。…らしい。|</p>
+
+<p>|*ftype|オブジェクトの種類を指定するフィールド(後述)|</p>
+
+<p>|*class|オブジェクトが所属するインストールクラス|</p>
+
+<p>|*path|パッケージコンテンツのインストール場所を示すパス(後述)|</p>
+
+<p>|*major|ブロック特殊デバイスまたは文字特殊デバイスのためのメジャーデバイス番号です。…らしい。|</p>
+
+<p>|*minor|ブロック特殊デバイスまたは文字特殊デバイスのためのマイナーデバイス番号です。…らしい。|</p>
+
+<p>|*mode|オブジェクトの実行権限を指定するフィールド|</p>
+
+<p>|*owner|オブジェクトの所有者|</p>
+
+<p>|*group|オブジェクトが所属するグループ|</p>
+
+<h3 id="ftype">ftype</h3>
+
 <p>fとdが主に使用する事になるかな。</p>
-<table>
-  <tr>
-    <th>f</th>
-    <td>実行ファイル等</td>
-  </tr>
-  <tr>
-    <th>d</th>
-    <td>ディレクトリ</td>
-  </tr>
-  <tr>
-    <th>l</th>
-    <td>リンクファイル</td>
-  </tr>
-  <tr>
-    <th>s</th>
-    <td>シンボリックリンク</td>
-  </tr>
-  <tr>
-    <th>i</th>
-    <td>情報ファイル・インストールスクリプト</td>
-  </tr>
-  <tr>
-    <th>e</th>
-    <td>インストール・削除時に編集するファイル</td>
-  </tr>
-  <tr>
-    <th>v</th>
-    <td>ログファイル等の揮発性ファイル</td>
-  </tr>
-  <tr>
-    <th>x</th>
-    <td>このパッケージでのみアクセスできる排他的なディレクトリ</td>
-  </tr>
-  <tr>
-    <th>p</th>
-    <td>名前付きパイプ</td>
-  </tr>
-  <tr>
-    <th>c</th>
-    <td>文字特殊デバイス</td>
-  </tr>
-  <tr>
-    <th>b</th>
-    <td>ブロック特殊デバイス</td>
-  </tr>
-</table>
-<h2 id="tocAnchor-1-4">path</h2>
+
+<p>|*f|実行ファイル等|</p>
+
+<p>|*d|ディレクトリ|</p>
+
+<p>|*l|リンクファイル|</p>
+
+<p>|*s|シンボリックリンク|</p>
+
+<p>|*i|情報ファイル・インストールスクリプト|</p>
+
+<p>|*e|インストール・削除時に編集するファイル|</p>
+
+<p>|*v|ログファイル等の揮発性ファイル|</p>
+
+<p>|*x|このパッケージでのみアクセスできる排他的なディレクトリ|</p>
+
+<p>|*p|名前付きパイプ|</p>
+
+<p>|*c|文字特殊デバイス|</p>
+
+<p>|*b|ブロック特殊デバイス|</p>
+
+<h3 id="path">path</h3>
+
 <p>絶対パス指定と相対パス指定があり、相対パス指定はさらに集合的再配置と個別再配置にわかれる。今回はBASEDIRを指定しているから集合的再配置ってやつだろうか。</p>
-<table>
-  <tr>
-    <th>絶対パス</th>
-    <td>Prototypeファイル内に絶対パスで指定 再配置する事はできない pkginfoファイルのBASEDIRは無視される？</td>
-  </tr>
-  <tr>
-    <th>集合的再配置</th>
-    <td>Prototypeファイル内に相対パスで指定 相対パス+pkginfoのBASEDIRを元にインストール？</td>
-  </tr>
-  <tr>
-    <th>個別再配置</th>
-    <td>Prototypeファイル内に相対パスで指定 そのパスの中にインストール変数を指定し、requestスクリプトというものを作成 インストール時に対話的にパスを決定する？</td>
-  </tr>
-</table>
-<h1>パッケージの構築</h1>
+
+<p>|*絶対パス|Prototypeファイル内に絶対パスで指定 再配置する事はできない pkginfoファイルのBASEDIRは無視される？|</p>
+
+<p>|*集合的再配置|Prototypeファイル内に相対パスで指定 相対パス+pkginfoのBASEDIRを元にインストール？|</p>
+
+<p>|*個別再配置|Prototypeファイル内に相対パスで指定 そのパスの中にインストール変数を指定し、requestスクリプトというものを作成 インストール時に対話的にパスを決定する？|</p>
+
+<h2 id="パッケージの構築">パッケージの構築</h2>
+
 <p>pkginfoファイルとPrototypeファイルを作成したため、構成はこんな感じになった。</p>
-<pre>$ pwd
+<div class="highlight"><pre class="chroma">$ pwd
 /home/kk_Ataka/pkgroot/
 
 MYAPpkg┳bin┳proccess
@@ -365,15 +352,15 @@ MYAPpkg┳bin┳proccess
 　　　 ┗etc━etcFile
 Prototype
 pkginfo
-package━</pre>
+package━</pre></div>
 <p>同じパスでパッケージ作ろうとすると警告が出たので、パッケージ保存用にpackageディレクトリ作成。そしてpackageにパッケージ作成。</p>
-<pre>$ pwd
+<div class="highlight"><pre class="chroma">$ pwd
 /home/kk_Ataka/pkgroot/
 $ pkgmk -o -r . -d ./package
 ## prototype ファイルから pkgmap を作成中です。
 ## pkginfo ファイルを処理中です。
-    警告: パラメータ &lt;PSTAMP&gt; の値は "XXXXXXXX20110914163337" に設定されます。
-    警告: パラメータ &lt;CLASSES&gt; の値は "none" に設定されます。
+    警告: パラメータ &lt;PSTAMP&gt; の値は &#34;XXXXXXXX20110914163337&#34; に設定されます。
+    警告: パラメータ &lt;CLASSES&gt; の値は &#34;none&#34; に設定されます。
 ## pkgmap の 8 個の項目をボリューム単位で分割しようとしています。
 第  1 部-- 37 ブロック, 23 エントリ
 ## 1 部をパッケージ処理中です。
@@ -384,9 +371,9 @@ $ pkgmk -o -r . -d ./package
 /home/kk_Ataka/pkgroot/package/MYAPpkg/reloc/MYAPpkg/etc/etcFile
 /home/kk_Ataka/pkgroot/package/MYAPpkg/reloc/MYAPpkg/lib/common.lib
 ## 制御スクリプトの妥当性検査中です。
-## パッケージ処理は完了しました。</pre>
+## パッケージ処理は完了しました。</pre></div>
 <p>パッケージを作るとこうなる。</p>
-<pre>$ pwd
+<div class="highlight"><pre class="chroma">$ pwd
 /home/kk_Ataka/pkgroot/
 
 MYAPpkg┳bin┳proccess
@@ -400,56 +387,73 @@ package━MYAPpkg┳pkginfo
 　　　　　　　　┗reloc━MYAPpkg┳bin┳proccess
 　　　　　　　　　　　　　　　　┃　 ┗start
 　　　　　　　　　　　　　　　　┣lib━common.lib
-　　　　　　　　　　　　　　　　┗etc━etcFile</pre>
+　　　　　　　　　　　　　　　　┗etc━etcFile</pre></div>
 <p>最後にできたパッケージをひとつに固める。</p>
-<pre>$ pwd
-/home/kk_Ataka/pkgroot/
+<div class="highlight"><pre class="chroma"><span class="err">$</span> <span class="nx">pwd</span>
+<span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">kk_Ataka</span><span class="o">/</span><span class="nx">pkgroot</span><span class="o">/</span>
 
-$ pkgtrans ./package MYAPpkg.pkg
+<span class="err">$</span> <span class="nx">pkgtrans</span> <span class="p">.</span><span class="o">/</span><span class="kn">package</span> <span class="nx">MYAPpkg</span><span class="p">.</span><span class="nx">pkg</span>
 
-The following packages are available:
-  1  MYAPpkg     MyApplyPackage
-                 (sparc) release 1.0 /svn revision r222
+<span class="nx">The</span> <span class="nx">following</span> <span class="nx">packages</span> <span class="nx">are</span> <span class="nx">available</span><span class="p">:</span>
+  <span class="mi">1</span>  <span class="nx">MYAPpkg</span>     <span class="nx">MyApplyPackage</span>
+                 <span class="p">(</span><span class="nx">sparc</span><span class="p">)</span> <span class="nx">release</span> <span class="mf">1.0</span> <span class="o">/</span><span class="nx">svn</span> <span class="nx">revision</span> <span class="nx">r222</span>
 
-Select package(s) you wish to process (or 'all' to process
-all packages). (default: all) [?,??,q]:
-Transferring &lt;MYAPpkg&gt; package instance</pre>
-<p>まだよくわかっていないが、第一引数には作成したパッケージのあるディレクトリ(package)を指定してやらないといけない。第二引数は相対パスにすると第一引数で指定したパス(package)からの相対になる。<span class="footnote"><a href="#f2" title="絶対パスは関係ない" name="fn2" id="fn2">*2</a></span></p>
-<h1>パッケージインストール、アンインストール</h1>
-<pre>$ pkgadd -d package/MYAPpkg.pkg</pre>
+<span class="nx">Select</span> <span class="kn">package</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span> <span class="nx">you</span> <span class="nx">wish</span> <span class="nx">to</span> <span class="nx">process</span> <span class="p">(</span><span class="nx">or</span> <span class="err">&#39;</span><span class="nx">all</span><span class="err">&#39;</span> <span class="nx">to</span> <span class="nx">process</span>
+<span class="nx">all</span> <span class="nx">packages</span><span class="p">).</span> <span class="p">(</span><span class="k">default</span><span class="p">:</span> <span class="nx">all</span><span class="p">)</span> <span class="p">[</span><span class="err">?</span><span class="p">,</span><span class="err">??</span><span class="p">,</span><span class="nx">q</span><span class="p">]:</span>
+<span class="nx">Transferring</span> <span class="p">&lt;</span><span class="nx">MYAPpkg</span><span class="p">&gt;</span> <span class="kn">package</span> <span class="nx">instance</span></pre></div>
+<p>まだよくわかっていないが、第一引数には作成したパッケージのあるディレクトリ(package)を指定してやらないといけない。第二引数は相対パスにすると第一引数で指定したパス(package)からの相対になる。[2]</p>
+
+<h2 id="パッケージインストール-アンインストール">パッケージインストール、アンインストール</h2>
+<div class="highlight"><pre class="chroma">$ pkgadd -d package/MYAPpkg.pkg</pre></div>
 <ul>
-  <li>d をつけないと/var/spool/pkgの下を見に行く。</li>
+<li>d をつけないと/var/spool/pkgの下を見に行く。</li>
 </ul>
-<pre>$ pkgrm MYAPpkg</pre>
+
+<!-- -->
+<div class="highlight"><pre class="chroma">$ pkgrm MYAPpkg</pre></div>
 <p>pkginfoファイルのPKGで定義した名称で選択。探す場合はpkginfoコマンドから。</p>
-<h1>以下、コマンド。</h1>
-<h2 id="tocAnchor-1-5">pkgproto(コマンド)</h2>
+
+<h2 id="以下-コマンド">以下、コマンド。</h2>
+
+<h3 id="pkgproto-コマンド">pkgproto(コマンド)</h3>
+
 <p>Prototypeファイルを作成するコマンド。(まだよくわかってない)</p>
-<h2 id="tocAnchor-1-6">pkgmk(コマンド)</h2>
+
+<h3 id="pkgmk-コマンド">pkgmk(コマンド)</h3>
+
 <ul>
-  <li>pkgmk -o</li>
+<li>pkgmk -o</li>
 </ul>
+
 <p>パッケージに上書き。</p>
+
 <ul>
-  <li>pkgmk -d DEVICE</li>
+<li>pkgmk -d DEVICE</li>
 </ul>
+
 <p>指定したDEVICE(パスでもいい)にパッケージが作成される。</p>
+
 <ul>
-  <li>pkgmk -r ROOTPATH</li>
+<li>pkgmk -r ROOTPATH</li>
 </ul>
+
 <p>パッケージのルートパス指定？</p>
-<h2 id="tocAnchor-1-7">pkginfo(コマンド)</h2>
+
+<h3 id="pkginfo-コマンド">pkginfo(コマンド)</h3>
+
 <ul>
-  <li>pkginfo -i</li>
+<li>pkginfo -i</li>
 </ul>
+
 <p>現在インストールされているパッケージ情報を表示する</p>
-<pre>application SMCsvn1612                       subversion
-system      TESTPKG                          This is a Test Package.</pre>
+<div class="highlight"><pre class="chroma">application SMCsvn1612                       subversion
+system      TESTPKG                          This is a Test Package.</pre></div>
 <ul>
-  <li>pkginfo -l PKG</li>
+<li>pkginfo -l PKG</li>
 </ul>
+
 <p>指定したパッケージの内容を表示する。必須項目しか記載しなかったTESTPKGはこんな感じ。</p>
-<pre>$ pkginfo -l TESTPKG
+<div class="highlight"><pre class="chroma">$ pkginfo -l TESTPKG
    PKGINST:  TESTPKG
       NAME:  This is a Test Package.
   CATEGORY:  system
@@ -461,9 +465,9 @@ system      TESTPKG                          This is a Test Package.</pre>
     STATUS:  完全にインストールされました。
      FILES:        4 のインストールされたパス名
                    1 の共有パス名
-                   3 のディレクトリ</pre>
+                   3 のディレクトリ</pre></div>
 <p>ちなみにzshはこう。</p>
-<pre>$ pkginfo -l SUNWzsh
+<div class="highlight"><pre class="chroma">$ pkginfo -l SUNWzsh
    PKGINST:  SUNWzsh
       NAME:  Z shell (zsh)
   CATEGORY:  system
@@ -481,9 +485,9 @@ system      TESTPKG                          This is a Test Package.</pre>
                    1 のリンクされたファイル
                   32 のディレクトリ
                   30 の実行可能ファイル
-                5585 ブロック (概算値) が使われました</pre>
+                5585 ブロック (概算値) が使われました</pre></div>
 <p>Subversionはこんな感じ。</p>
-<pre>$ pkginfo -l SMCsvn1612
+<div class="highlight"><pre class="chroma">$ pkginfo -l SMCsvn1612
    PKGINST:  SMCsvn1612
       NAME:  subversion
   CATEGORY:  application
@@ -499,512 +503,729 @@ system      TESTPKG                          This is a Test Package.</pre>
                   32 の共有パス名
                  119 のディレクトリ
                  196 の実行可能ファイル
-               32057 ブロック (概算値) が使われま</pre>
-<h2 id="tocAnchor-1-8">pkgadd(コマンド)</h2>
-<ul>
-  <li>pkgadd PKG</li>
-</ul>
-<p>パッケージのインストール</p>
-<ul>
-  <li>pkgadd -n PKG</li>
-</ul>
-<p>パッケージのインストール(選択肢を全てデフォルトとする)</p>
-<h2 id="tocAnchor-1-9">pkgrm(コマンド)</h2>
-<ul>
-  <li>pkgrm PKG</li>
-</ul>
-<p>パッケージのアンインストール</p>
-<ul>
-  <li>pkgrm -n PKG</li>
-</ul>
-<p>パッケージのアンインストール(選択肢を全てデフォルトとする)</p>
-<div class="footnote">
-  <p class="footnote"><a href="#fn1" name="f1" id="f1">*1</a>: たとえばこんな感じらしい。「Chip designers need CAD application software to design abc chips.  Runs only on xyz hardware and is installed in the usr partition.」</p>
-  <p class="footnote"><a href="#fn2" name="f2" id="f2">*2</a>: 絶対パスは関係ない</p>
-</div>
-</div>
+               32057 ブロック (概算値) が使われま</pre></div>
+<h3 id="pkgadd-コマンド">pkgadd(コマンド)</h3>
 
-<div class="pagination">
-  <ul>
-    
-      <li class="prev">
-        <a href="/2011/09/12/1315826713/" title="Solarisのパッケージを作ってみる">
+<ul>
+<li>pkgadd PKG</li>
+</ul>
+
+<p>パッケージのインストール</p>
+
+<ul>
+<li>pkgadd -n PKG</li>
+</ul>
+
+<p>パッケージのインストール(選択肢を全てデフォルトとする)</p>
+
+<h3 id="pkgrm-コマンド">pkgrm(コマンド)</h3>
+
+<ul>
+<li>pkgrm PKG</li>
+</ul>
+
+<p>パッケージのアンインストール</p>
+
+<ul>
+<li>pkgrm -n PKG</li>
+</ul>
+
+<p>パッケージのアンインストール(選択肢を全てデフォルトとする)</p>
+
+<p>[1] たとえばこんな感じらしい。「Chip designers need CAD application software to design abc chips.  Runs only on xyz hardware and is installed in the usr partition.」</p>
+
+<p>[2] 絶対パスは関係ない</p>
+
+    </section>
+  </article>
+
+  <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="/2011/09/12/1315826713/" class="pagination_overflow previous_page">
+          Prev: 
+          11/9/12
           Solarisのパッケージを作ってみる
         </a>
-      </li>
-    
-    <li>
-      <a href="/archives/">Archive</a>
-    </li>
-    
-      <li class="next">
-        <a href="/2011/09/30/1317312438/" title=".msgファイルをパースして中から添付ファイルを抜き出す">
+      
+
+      <span class="pagination_center disabled">
+        11/9/14
+        Solar …
+      </span>
+
+      
+        <a href="/2011/09/30/1317312438/" class="pagination_overflow next_page">
+          Next: 
+          11/9/30
           .msgファイルをパースして中から添付ファイルを抜き出す
         </a>
-      </li>
-    
-  </ul>
-</div>
+      
+  </div>
+</nav>
 
 
-<div class="social-module">
-    <br>
-  <!-- Tweet Button -->
-  <a href="https://twitter.com/share"
-     data-url="http://gosyujin.github.io/2011/09/14/1316002377/" data-text="kk_Atakaの日記 - Solarisのパッケージを作ってみる もう少し学んだ版" data-related="kk_Ataka"
-     data-lang="ja" data-size="horizontal" data-dnt="true" class="twitter-share-button">Tweet</a>
-  <script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8" async="async"></script>
 
-  <!-- Hatena Bookmark Users -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/09/14/1316002377/">
-    <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2011/09/14/1316002377/" />
-    </a>
-  <!-- Hatena Bookmark Button -->
-  <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2011/09/14/1316002377/"
-     data-hatena-bookmark-title="kk_Atakaの日記 - Solarisのパッケージを作ってみる もう少し学んだ版"
-     data-hatena-bookmark-layout="standard" class="hatena-bookmark-button" title="add Hatena bookmark">
-    <img src="http://b.st-hatena.com/images/entry-button/button-only.gif"
-	 alt="add Hatena bookmark" width="20" height="20" style="border: none;" />
-    </a>
-  <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+      </div>
 
-  <!-- Hatena Bookmark comment http://blog.masuidrive.jp/2008/04/17/released-hatena-bookmark-anywhere/ -->
-  <script type= "text/javascript">/*<![CDATA[*/
-var hatena_bookmark_anywhere_limit = 999; // 表示する件数
-// var hatena_bookmark_anywhere_style = true; // trueでデフォルトスタイル falseを設定するとCSSでスタイルの指定が可能
-// var hatena_bookmark_anywhere_collapse = false; // trueにすると、コメントの書いてないブクマを表示しない。指定しない場合は、表示件数を超えた場合のみコメントを表示しない
-var hatena_bookmark_anywhere_url = "http://gosyujin.github.io/2011/09/14/1316002377//"; // 表示するURL 未指定の場合、現在のページ
-/*]]>*/</script>
-  <script src="https://rawgithub.com/masuidrive/hatena-bookmark-anywhere/master/hatena-bookmark-anywhere-0-1.js" type="text/javascript" charset="utf-8"></script>
-  <div id="hatena_bookmark_anywhere"></div>
-</div>
-
-
-<!--
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_developer = 1;
-    var disqus_shortname = 'kkataka'; // required: replace example with your forum shortname
-    
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
-
-      </article>
-
-      <aside class="markdown-body sidebar">
-  <h2>Link</h2>
-
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Profile</h3>
   <ul>
-    <li><a href="http://jekyllrb-ja.github.io">jekyllrb-ja</a></li>
-    <li>kk_Atakaの日記(同じ内容)</li>
-    <ul>
-      <li><a href="http://d.hatena.ne.jp/kk_Ataka/">はてなダイアリー</a></li>
-      <li><a href="http://gosyujin.github.io/">GitHub Pages</a></li>
-    </ul>
-    <li>Sphinxドキュメント</li>
-    <ul>
-      <li><a href="http://gosyujin.github.io/life/">らいふろぐ</a></li>
-      <li><a href="http://gosyujin.github.io/be-side/">ビーサイまとめ</a></li>
-    </ul>
-    <li>Product</li>
-    <ul>
-      <li><a href="https://gosyujin.github.io/nicony">nicony</a></li>
-    </ul>
-    <li>Service</li>
-    <ul>
-      <li><a href="https://secure.sakura.ad.jp/vps/#/login">さくらのVPS コンソール</a></li>
-      <li><a href="http://www5376ue.sakura.ne.jp/">さくらのVPS</a></li>
-      <li><a href="https://mackerel.io/orgs/gosyujin">Mackerel</a></li>
-      <li><a href="https://circleci.com/">CircleCI</a></li>
-      <li><a href="https://readthedocs.org/dashboard/">ReadTheDocs</a></li>
-    </ul>
-    <li>Social</li>
-    <ul>
-      <li><a href="https://twitter.com/kk_ataka">Twitter</a></li>
-      <li><a href="https://github.com/gosyujin">GitHub</a></li>
-      <li><a href="http://www.slideshare.net/kk_Ataka">Slideshare</a></li>
-      <li><a href="http://b.hatena.ne.jp/kk_Ataka/">はてなブックマーク</a></li>
-      <li><a href="http://connpass.com/user/kk_Ataka/">connpass</a></li>
-      <li><a href="http://atnd.org/users/13915">ATND</a></li>
-    </ul>
+      <li>blog</li>
+      <li>google</li>
+      <li>ints</li>
   </ul>
+</div>
 
-  <h2>Recent Entries</h2>
 
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="/"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+        <li>
+          <span>16/9/30 </span>
+          
+          <a class="mb-2" href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
   
-  
-  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
 <ul>
-  
-    
-      <li>
-        <span>2017/06/30</span>
-        
-          <span>[ <code><a href="/tags/#調査ログ">調査ログ</a></code> ]</span>
-        
-        <a href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/06/30/nicorepo/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/06/30/nicorepo/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/05/31</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/05/31/android-lint/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/05/31/android-lint/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/04/30</span>
-        
-          <span>[ <code><a href="/tags/#Dropbox">Dropbox</a></code> ]</span>
-        
-        <a href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/04/30/dropbox-cli/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/04/30/dropbox-cli/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/03/30</span>
-        
-          <span>[ <code><a href="/tags/#Ruby">Ruby</a></code> ]</span>
-        
-        <a href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/03/30/rbenv-update/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/03/30/rbenv-update/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/02/28</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Gradle">Gradle</a></code> ]</span>
-        
-        <a href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/02/28/gradle_res_value/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/02/28/gradle_res_value/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2017/01/11</span>
-        
-          <span>[ <code><a href="/tags/#ネタ">ネタ</a></code> ]</span>
-        
-        <a href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2017/01/11/localhost-hateb/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2017/01/11/localhost-hateb/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/12/31</span>
-        
-          <span>[ <code><a href="/tags/#Gmail">Gmail</a></code> ]</span>
-        
-        <a href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/12/31/gmail_smtp_username_and_password_not_accepted/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/11/30</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#Python">Python</a></code> ]</span>
-        
-          <span>[ <code><a href="/tags/#イベント">イベント</a></code> ]</span>
-        
-        <a href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/11/30/pyconjp-sphinx-handson-kpt/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/10/31</span>
-        
-          <span>[ <code><a href="/tags/#Sphinx">Sphinx</a></code> ]</span>
-        
-        <a href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/10/31/software-design-2016-11/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/10/31/software-design-2016-11/" />
-        </a>
-      </li>
-    
-      <li>
-        <span>2016/09/30</span>
-        
-          <span>[ <code><a href="/tags/#Android">Android</a></code> ]</span>
-        
-        <a href="/2016/09/30/android_multi_dex/">Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</a>
-        <!-- Hatena Bookmark Users -->
-        <a href="http://b.hatena.ne.jp/entry/http://gosyujin.github.io/2016/09/30/android_multi_dex/">
-          <img src="http://b.hatena.ne.jp/entry/image/http://gosyujin.github.io/2016/09/30/android_multi_dex/" />
-        </a>
-      </li>
-    
-  
+<li>
+<ul>
+<li><a href="#solaris-備忘録-solarisのパッケージを作ってみる-もう少し学んだ版">[Solaris][備忘録]Solarisのパッケージを作ってみる もう少し学んだ版</a></li>
+<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#必要なもの">必要なもの</a></li>
+<li><a href="#場合によって用意するもの-必須ではない">場合によって用意するもの(必須ではない)</a></li>
+<li><a href="#パッケージコンテンツの作成">パッケージコンテンツの作成</a></li>
+<li><a href="#pkginfoファイル作成">pkginfoファイル作成</a>
+<ul>
+<li><a href="#pkginfoファイル書式">pkginfoファイル書式</a></li>
+</ul></li>
+<li><a href="#prototypeファイル作成">Prototypeファイル作成</a>
+<ul>
+<li><a href="#prototypeファイル書式">Prototypeファイル書式</a></li>
+<li><a href="#ftype">ftype</a></li>
+<li><a href="#path">path</a></li>
+</ul></li>
+<li><a href="#パッケージの構築">パッケージの構築</a></li>
+<li><a href="#パッケージインストール-アンインストール">パッケージインストール、アンインストール</a></li>
+<li><a href="#以下-コマンド">以下、コマンド。</a>
+<ul>
+<li><a href="#pkgproto-コマンド">pkgproto(コマンド)</a></li>
+<li><a href="#pkgmk-コマンド">pkgmk(コマンド)</a></li>
+<li><a href="#pkginfo-コマンド">pkginfo(コマンド)</a></li>
+<li><a href="#pkgadd-コマンド">pkgadd(コマンド)</a></li>
+<li><a href="#pkgrm-コマンド">pkgrm(コマンド)</a></li>
+</ul></li>
+</ul></li>
 </ul>
+</nav>
+  </div>
 
 
-  <h2>Tags</h2>
-
-  <ul>
-    
-    
-      
-      <li><a href="/tags/#API">API <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Agile">Agile <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Android">Android <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ansible">Ansible <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Application">Application <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Bundle">Bundle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Chef">Chef <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Dropbox">Dropbox <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Eclipse">Eclipse <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Evernote">Evernote <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Firefox">Firefox <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Fluentd">Fluentd <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Git">Git <sub>16</sub></a></li>
-    
-      
-      <li><a href="/tags/#GitHub">GitHub <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gmail">Gmail <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Golang">Golang <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Gradle">Gradle <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haml">Haml <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Haskell">Haskell <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Heroku">Heroku <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Homebrew">Homebrew <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hubot">Hubot <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Hugo">Hugo <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#IE">IE <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Java">Java <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#JavaScript">JavaScript <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jekyll">Jekyll <sub>20</sub></a></li>
-    
-      
-      <li><a href="/tags/#Jenkins">Jenkins <sub>7</sub></a></li>
-    
-      
-      <li><a href="/tags/#Liquid">Liquid <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Lokka">Lokka <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Mac">Mac <sub>8</sub></a></li>
-    
-      
-      <li><a href="/tags/#Markdown">Markdown <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#MySql">MySql <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#OAuth">OAuth <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Oracle">Oracle <sub>5</sub></a></li>
-    
-      
-      <li><a href="/tags/#Python">Python <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#RSpec">RSpec <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Rails">Rails <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Redmine">Redmine <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#Ruby">Ruby <sub>75</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQL">SQL <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#SQLite3">SQLite3 <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Scala">Scala <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Selenium">Selenium <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Shell">Shell <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sinatra">Sinatra <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#SlideShare">SlideShare <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Solaris">Solaris <sub>12</sub></a></li>
-    
-      
-      <li><a href="/tags/#Sphinx">Sphinx <sub>18</sub></a></li>
-    
-      
-      <li><a href="/tags/#StartUp">StartUp <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Subversion">Subversion <sub>9</sub></a></li>
-    
-      
-      <li><a href="/tags/#TDD">TDD <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Test">Test <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Translate">Translate <sub>2</sub></a></li>
-    
-      
-      <li><a href="/tags/#Twitter">Twitter <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#Unix">Unix <sub>13</sub></a></li>
-    
-      
-      <li><a href="/tags/#VB">VB <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Vim">Vim <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wicket">Wicket <sub>6</sub></a></li>
-    
-      
-      <li><a href="/tags/#Wiki">Wiki <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#Windows">Windows <sub>25</sub></a></li>
-    
-      
-      <li><a href="/tags/#iOS">iOS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#iPhone">iPhone <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#java-ja">java-ja <sub>4</sub></a></li>
-    
-      
-      <li><a href="/tags/#node.js">node.js <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#reST">reST <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#さくらVPS">さくらVPS <sub>3</sub></a></li>
-    
-      
-      <li><a href="/tags/#イベント">イベント <sub>27</sub></a></li>
-    
-      
-      <li><a href="/tags/#ネタ">ネタ <sub>1</sub></a></li>
-    
-      
-      <li><a href="/tags/#備忘録">備忘録 <sub>76</sub></a></li>
-    
-      
-      <li><a href="/tags/#日記">日記 <sub>11</sub></a></li>
-    
-      
-      <li><a href="/tags/#調査ログ">調査ログ <sub>1</sub></a></li>
-    
-  </ul>
-
-</aside>
 
 
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
     </div>
-    <hr class="clearfix" />
-    <address>Author: kk_Ataka / Powered by Jekyll on GitHub Pages</address>
-  <body>
-</html>
 
+    
+    
+    
+    
+  </body>
+</html>
