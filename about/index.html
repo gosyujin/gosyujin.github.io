@@ -17,22 +17,14 @@ ga('send', 'pageview');
 
     <title>
       
-  DAT装置の使い方 超簡易版(Solaris) &ndash; kk_Atakaの日記
+  About &ndash; kk_Atakaの日記
 
     </title>
 
     
 
     
-      <meta name="description" property="og:description" content="[Solaris][備忘録]DAT装置の使い方 超簡易版(Solaris) あらすじ 結局はtarコマンド&#43;αなんだけど、どうもDAT装置とテープというデバイスが使い慣れないので操作方法をメモしておく。とりあえず
- 状態確認 何も考えずに書き込み 全部取り出し  くらい。
-コマンド 使用するコマンドはmt(磁気テープの制御)とtar。まずはmt。
-テープの状態表示  -fオプションでテープデバイスの指定 /dev/rmt/0はテープデバイスのパス  $ mt -f /dev/rmt/0 status テープの巻き戻し 今回は使わなかった。
-$ mt -f /dev/rmt/0 rewind テープの取り出し データの取り出しではなく、DAT装置からの取り出し。
-$ mt -f /dev/rmt/0 offline ここからtar。
- fオプションはtarファイル引数の指定。  fを省略した場合は$TAPE(設定されている場合) $TAPEもない場合は/etc/default/tarを見に行く[1]  vオプションはファイル名の出力  テープの内容を表示  tオプションは指定されたtarファイルの内容一覧表示  $ tar tvf /dev/rmt/0 tオプションで表示される内容はこんな感じ。
-$ tar tf test.tar test/aaa.txt ... vオプションと併用すると詳細に。
-$ tar tvf openssl-xxx.tar -rw-r--r-- 9/9 99999 3月 19日 22:22 2011年 test/aaa.|">
+      <meta name="description" property="og:description" content=" te &amp;lt;ul&amp;gt; &amp;lt;li&amp;gt; 2009-2012 &amp;lt;a href=&amp;#34;http://d.hatena.ne.jp/kk_Ataka/&amp;#34;&amp;gt;はてなダイアリー&amp;lt;/a&amp;gt; &amp;lt;/li&amp;gt; &amp;lt;li&amp;gt; 2012-2017 Jekyll &amp;lt;/li&amp;gt; &amp;lt;li&amp;gt; 2019- Hugo &amp;lt;/li&amp;gt; &amp;lt;/ul&amp;gt;|">
     
 
     <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
@@ -89,84 +81,13 @@ $ tar tvf openssl-xxx.tar -rw-r--r-- 9/9 99999 3月 19日 22:22 2011年 test/aaa
         
 
 
-  <nav class="paginate-container">
-  <div class="pagination">
-      
-        <a href="/2011/11/30/1322662743/" class="pagination_overflow previous_page">
-          Prev: 
-          11/11/30
-          rvm環境でRuby実行時にReadlineエラーが起きた時 …
-        </a>
-      
-
-      <span class="pagination_center disabled">
-        11/12/1
-        DAT装置 …
-      </span>
-
-      
-        <a href="/2011/12/02/1322839748/" class="pagination_overflow next_page">
-          Next: 
-          11/12/2
-          Sphinxでドキュメントを書くためreST記法に入門した
-        </a>
-      
-  </div>
-</nav>
-
-
 
   <div class="Subhead">
     <div class="Subhead-heading">
-      <div class="h2 mt-3 mb-1">DAT装置の使い方 超簡易版(Solaris)</div>
-    </div>
-
-    <div class="Subhead-description">
-      <div class="float-md-right">
-        
-        Tags: 
-
-  
-    <a href='/tags/solaris' class="muted-link">
-      [ <span class="Label Label--gray">Solaris</span> ]
-    </a>
-  
-    <a href='/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [ <span class="Label Label--gray">備忘録</span> ]
-    </a>
-  
-
- 
-        Published: <span>2011/12/01</span>
-      </div>
+      <div class="h2 mt-3 mb-1">About</div>
     </div>
 
   </div>
-
-
-  
-  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
-    <h3>Contents</h3>
-    <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#solaris-備忘録-dat装置の使い方-超簡易版-solaris">[Solaris][備忘録]DAT装置の使い方 超簡易版(Solaris)</a></li>
-<li><a href="#あらすじ">あらすじ</a></li>
-<li><a href="#コマンド">コマンド</a>
-<ul>
-<li><a href="#テープの状態表示">テープの状態表示</a></li>
-<li><a href="#テープの巻き戻し">テープの巻き戻し</a></li>
-<li><a href="#テープの取り出し">テープの取り出し</a></li>
-<li><a href="#テープの内容を表示">テープの内容を表示</a></li>
-<li><a href="#テープへ書き込み">テープへ書き込み</a></li>
-<li><a href="#テープ内データの取り出し">テープ内データの取り出し</a></li>
-</ul></li>
-</ul></li>
-</ul>
-</nav>
-  </div>
-
 
 
 
@@ -174,117 +95,20 @@ $ tar tvf openssl-xxx.tar -rw-r--r-- 9/9 99999 3月 19日 22:22 2011年 test/aaa
    <section class="pb-6 mb-3 border-bottom">
       
 
-<h2 id="solaris-備忘録-dat装置の使い方-超簡易版-solaris">[Solaris][備忘録]DAT装置の使い方 超簡易版(Solaris)</h2>
-
-<h2 id="あらすじ">あらすじ</h2>
-
-<p>結局はtarコマンド+αなんだけど、どうもDAT装置とテープというデバイスが使い慣れないので操作方法をメモしておく。とりあえず</p>
-
-<ul>
-<li>状態確認</li>
-<li>何も考えずに書き込み</li>
-<li>全部取り出し</li>
-</ul>
-
-<p>くらい。</p>
-
-<h2 id="コマンド">コマンド</h2>
-
-<p>使用するコマンドはmt(磁気テープの制御)とtar。まずはmt。</p>
-
-<h3 id="テープの状態表示">テープの状態表示</h3>
-
-<ul>
-<li>-fオプションでテープデバイスの指定</li>
-<li>/dev/rmt/0はテープデバイスのパス</li>
-</ul>
-
-<!-- -->
-<div class="highlight"><pre class="chroma">$ mt -f /dev/rmt/0 status</pre></div>
-<h3 id="テープの巻き戻し">テープの巻き戻し</h3>
-
-<p>今回は使わなかった。</p>
-<div class="highlight"><pre class="chroma">$ mt -f /dev/rmt/0 rewind</pre></div>
-<h3 id="テープの取り出し">テープの取り出し</h3>
-
-<p>データの取り出しではなく、DAT装置からの取り出し。</p>
-<div class="highlight"><pre class="chroma">$ mt -f /dev/rmt/0 offline</pre></div>
-<p>ここからtar。</p>
-
-<ul>
-<li>fオプションはtarファイル引数の指定。
-
-<ul>
-<li>fを省略した場合は$TAPE(設定されている場合)</li>
-<li>$TAPEもない場合は/etc/default/tarを見に行く[1]</li>
-</ul></li>
-<li>vオプションはファイル名の出力</li>
-</ul>
-
-<h3 id="テープの内容を表示">テープの内容を表示</h3>
-
-<ul>
-<li>tオプションは指定されたtarファイルの内容一覧表示</li>
-</ul>
-
-<!-- -->
-<div class="highlight"><pre class="chroma">$ tar tvf /dev/rmt/0</pre></div>
-<p>tオプションで表示される内容はこんな感じ。</p>
-<div class="highlight"><pre class="chroma">$ tar tf test.tar
-test/aaa.txt
-...</pre></div>
-<p>vオプションと併用すると詳細に。</p>
-<div class="highlight"><pre class="chroma">$ tar tvf openssl-xxx.tar
--rw-r--r--   9/9    99999  3月 19日 22:22 2011年 test/aaa.txt
-...</pre></div>
-<h3 id="テープへ書き込み">テープへ書き込み</h3>
-
-<ul>
-<li>cオプションは作成</li>
-</ul>
-
-<!-- -->
-<div class="highlight"><pre class="chroma">$ tar cvf /dev/rmt/0 FILE</pre></div>
-<h3 id="テープ内データの取り出し">テープ内データの取り出し</h3>
-
-<ul>
-<li>xオプションはファイルの抽出、復元。テープに入ったデータがそのまま復元される</li>
-</ul>
-
-<!-- -->
-<div class="highlight"><pre class="chroma">$ tar xvf /dev/rmt/0</pre></div>
-<p>テープに/tmp/AAA.tarが書き込まれている場合、上記コマンドを実行すると/tmp/下に復元する。</p>
-
-<p>[1] 必ずf指定してたからこれは知らなかった</p>
-
+<h2 id="te">te</h2>
+<div class="highlight"><pre class="chroma">&lt;ul&gt;
+  &lt;li&gt;
+    2009-2012 &lt;a href=&#34;http://d.hatena.ne.jp/kk_Ataka/&#34;&gt;はてなダイアリー&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    2012-2017 Jekyll
+  &lt;/li&gt;
+  &lt;li&gt;
+    2019- Hugo 
+  &lt;/li&gt;
+&lt;/ul&gt;</pre></div>
     </section>
   </article>
-
-
-  <nav class="paginate-container">
-  <div class="pagination">
-      
-        <a href="/2011/11/30/1322662743/" class="pagination_overflow previous_page">
-          Prev: 
-          11/11/30
-          rvm環境でRuby実行時にReadlineエラーが起きた時 …
-        </a>
-      
-
-      <span class="pagination_center disabled">
-        11/12/1
-        DAT装置 …
-      </span>
-
-      
-        <a href="/2011/12/02/1322839748/" class="pagination_overflow next_page">
-          Next: 
-          11/12/2
-          Sphinxでドキュメントを書くためreST記法に入門した
-        </a>
-      
-  </div>
-</nav>
 
 
 
@@ -911,17 +735,7 @@ test/aaa.txt
 <ul>
 <li>
 <ul>
-<li><a href="#solaris-備忘録-dat装置の使い方-超簡易版-solaris">[Solaris][備忘録]DAT装置の使い方 超簡易版(Solaris)</a></li>
-<li><a href="#あらすじ">あらすじ</a></li>
-<li><a href="#コマンド">コマンド</a>
-<ul>
-<li><a href="#テープの状態表示">テープの状態表示</a></li>
-<li><a href="#テープの巻き戻し">テープの巻き戻し</a></li>
-<li><a href="#テープの取り出し">テープの取り出し</a></li>
-<li><a href="#テープの内容を表示">テープの内容を表示</a></li>
-<li><a href="#テープへ書き込み">テープへ書き込み</a></li>
-<li><a href="#テープ内データの取り出し">テープ内データの取り出し</a></li>
-</ul></li>
+<li><a href="#te">te</a></li>
 </ul></li>
 </ul>
 </nav>
