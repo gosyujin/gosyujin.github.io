@@ -1,6 +1,10 @@
 <ul>
   {{ range .Pages }}
-    <li>
+    {{ if .Draft }}
+      <li class="draft">
+    {{ else }}
+      <li>
+    {{ end }}
       <span>{{ .Date.Format "2006/01/02" }} </span>
       {{ partial "taxonomy.html" . }}
       <a class="mb-2" href="{{ .URL }}">{{ .Title }}</a>
