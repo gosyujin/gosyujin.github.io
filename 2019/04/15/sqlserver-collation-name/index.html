@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  SQL Serverでの照合順序の確認方法 - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ SQLServerでは文字コード、照合順序は特に指定がなければ「規定値」が設定されるらしい。
+ サロゲートペア文字とDB設計を考える | デーコムラボ SQL ServerにUnicodeの文字列を格納する方法 - 大人になったら肺呼吸 SQLServerへのデータ格納時の文字コード（コードページ）について - 大人になったら肺呼吸 SQL Server で照合順序 Japanese_CI_AS どこ消えた？あった。 | 技術的な何か。 SQL Serverにおける日本語文字列の取り扱いで躓いた話 - ShouN-7&amp;rsquo;s tech blog  とりわけAzure環境下で英語→日本語切り替えとかすると躓く模様。
+でも、そもそも規定値ってどこで確認するのという話。
+環境  SQL Server 14.0.1000.169  まとめ  特に指定なしでDB/テーブルを作成する場合は規定値の照合順序(Collation)を使う 照合順序を変更しても、既に作成済のユーザーデータベースのテーブルの照合順序は変わらない  システムテーブル内は変わる ユーザーテーブルはALTER DATABASEで別途変更する必要がある  確認はINFORMATION_SCHEMA.COLUMNSビューで行う  手順A(SQL Serverのシステム情報スキーマビューから確認する) INFORMATION_SCHEMA.COLUMNSビューに欲しい情報全部あった。
+SELECT TABLE_CATALOG , TABLE_SCHEMA , TABLE_NAME , COLUMN_NAME , DATA_TYPE , CHARACTER_MAXIMUM_LENGTH , CHARACTER_OCTET_LENGTH , CHARACTER_SET_NAME , COLLATION_NAME FROM INFORMATION_SCHEMA.COLUMNS;    TABLE_CATALOG TABLE_SCHEMA TABLE_NAME COLUMN_NAME DATA_TYPE CHARACTER_MAXIMUM_LENGTH CHARACTER_OCTET_LENGTH CHARACTER_SET_NAME COLLATION_NAME     SAMPLE_INSTANCE SAMPLE_SCHEMA SAMPLE_TABLE ID varchar 3 3 cp932 Japanese_CI_AS   SAMPLE_INSTANCE SAMPLE_SCHEMA SAMPLE_TABLE NAME nvarchar 10 20 UNICODE Japanese_CI_AS   SAMPLE_INSTANCE SAMPLE_SCHEMA SAMPLE_TABLE ADDRESS nvarchar 25 50 UNICODE Japanese_CI_AS   SAMPLE_INSTANCE SAMPLE_SCHEMA SAMPLE_TABLE UPDATE_DATE date        手順B(頑張る場合) とあるユーザーテーブルのカラムの照合順序を調べる いきなりカラム(sys.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2017/06/30/nicorepo/" class="pagination_overflow previous_page">
+          Prev: 
+          17/6/30
+          ニコレポの仕様が変わったので一覧情報の取得方法を調査した
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <span class="pagination_overflow next_page disabled">
+          Next: -
+        </span>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">SQL Serverでの照合順序の確認方法</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/sql-server' class="muted-link">
+      [ <span class="Label Label--gray">SQL Server</span> ]
+    </a>
+  
+
+
+          Published: <span>2019/04/15</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#まとめ">まとめ</a></li>
+<li><a href="#手順a-sql-serverのシステム情報スキーマビューから確認する">手順A(SQL Serverのシステム情報スキーマビューから確認する)</a></li>
+<li><a href="#手順b-頑張る場合">手順B(頑張る場合)</a>
+<ul>
+<li><a href="#とあるユーザーテーブルのカラムの照合順序を調べる">とあるユーザーテーブルのカラムの照合順序を調べる</a>
+<ul>
+<li><a href="#スキーマのidを取得する">スキーマのIDを取得する</a></li>
+<li><a href="#スキーマidをキーにスキーマ内のテーブルを取得する">スキーマIDをキーにスキーマ内のテーブルを取得する</a></li>
+<li><a href="#オブジェクトidをキーにカラムのcollation-nameを取得する">オブジェクトIDをキーにカラムのcollation_nameを取得する</a></li>
+</ul></li>
+<li><a href="#sql-serverの規定値の設定を調べる">SQL Serverの規定値の設定を調べる</a>
+<ul>
+<li><a href="#サポートされている照合順序を取得する-likeで絞って日本語だけ">サポートされている照合順序を取得する(LIKEで絞って日本語だけ)</a></li>
+<li><a href="#データベースの照合順序を取得する">データベースの照合順序を取得する</a></li>
+<li><a href="#サーバーインスタンスのプロパティを取得する">サーバーインスタンスのプロパティを取得する</a></li>
+<li><a href="#指定データベースのプロパティを取得する">指定データベースのプロパティを取得する</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#参考">参考</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>SQLServerでは文字コード、照合順序は特に指定がなければ「規定値」が設定されるらしい。</p>
+
+<ul>
+<li><a href="https://www.dcom-web.co.jp/lab/database/think_of_surrogate_pair_and_database_design">サロゲートペア文字とDB設計を考える | デーコムラボ</a></li>
+<li><a href="http://d.hatena.ne.jp/replication/20100101/1267972905">SQL ServerにUnicodeの文字列を格納する方法 - 大人になったら肺呼吸</a></li>
+<li><a href="http://d.hatena.ne.jp/replication/20091009/1255092494">SQLServerへのデータ格納時の文字コード（コードページ）について - 大人になったら肺呼吸</a></li>
+<li><a href="http://level69.net/archives/24331">SQL Server で照合順序 Japanese_CI_AS どこ消えた？あった。 | 技術的な何か。</a></li>
+<li><a href="https://np8zkmjc63pmcc09.qrunch.io/entries/dQLi6gqoqEls1u6a">SQL Serverにおける日本語文字列の取り扱いで躓いた話 - ShouN-7&rsquo;s tech blog</a></li>
+</ul>
+
+<p>とりわけAzure環境下で英語→日本語切り替えとかすると躓く模様。</p>
+
+<p>でも、そもそも規定値ってどこで確認するのという話。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>SQL Server 14.0.1000.169</li>
+</ul>
+
+<h2 id="まとめ">まとめ</h2>
+
+<ul>
+<li>特に指定なしでDB/テーブルを作成する場合は規定値の照合順序(Collation)を使う</li>
+<li>照合順序を変更しても、既に作成済のユーザーデータベースのテーブルの照合順序は変わらない
+
+<ul>
+<li>システムテーブル内は変わる</li>
+<li>ユーザーテーブルは<code>ALTER DATABASE</code>で別途変更する必要がある</li>
+</ul></li>
+<li>確認は<code>INFORMATION_SCHEMA.COLUMNS</code>ビューで行う</li>
+</ul>
+
+<h2 id="手順a-sql-serverのシステム情報スキーマビューから確認する">手順A(SQL Serverのシステム情報スキーマビューから確認する)</h2>
+
+<p><code>INFORMATION_SCHEMA.COLUMNS</code>ビューに欲しい情報全部あった。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="n">TABLE_CATALOG</span>
+  <span class="p">,</span> <span class="n">TABLE_SCHEMA</span>
+  <span class="p">,</span> <span class="k">TABLE_NAME</span>
+  <span class="p">,</span> <span class="k">COLUMN_NAME</span>
+  <span class="p">,</span> <span class="n">DATA_TYPE</span>
+  <span class="p">,</span> <span class="n">CHARACTER_MAXIMUM_LENGTH</span>
+  <span class="p">,</span> <span class="n">CHARACTER_OCTET_LENGTH</span>
+  <span class="p">,</span> <span class="k">CHARACTER_SET_NAME</span>
+  <span class="p">,</span> <span class="k">COLLATION_NAME</span> 
+<span class="k">FROM</span>
+  <span class="n">INFORMATION_SCHEMA</span><span class="p">.</span><span class="n">COLUMNS</span><span class="p">;</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th align="left">TABLE_CATALOG</th>
+<th align="left">TABLE_SCHEMA</th>
+<th align="left">TABLE_NAME</th>
+<th align="left">COLUMN_NAME</th>
+<th align="left">DATA_TYPE</th>
+<th align="right">CHARACTER_MAXIMUM_LENGTH</th>
+<th align="right">CHARACTER_OCTET_LENGTH</th>
+<th align="left">CHARACTER_SET_NAME</th>
+<th align="left">COLLATION_NAME</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">SAMPLE_INSTANCE</td>
+<td align="left">SAMPLE_SCHEMA</td>
+<td align="left">SAMPLE_TABLE</td>
+<td align="left">ID</td>
+<td align="left">varchar</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="left">cp932</td>
+<td align="left">Japanese_CI_AS</td>
+</tr>
+
+<tr>
+<td align="left">SAMPLE_INSTANCE</td>
+<td align="left">SAMPLE_SCHEMA</td>
+<td align="left">SAMPLE_TABLE</td>
+<td align="left">NAME</td>
+<td align="left">nvarchar</td>
+<td align="right">10</td>
+<td align="right">20</td>
+<td align="left">UNICODE</td>
+<td align="left">Japanese_CI_AS</td>
+</tr>
+
+<tr>
+<td align="left">SAMPLE_INSTANCE</td>
+<td align="left">SAMPLE_SCHEMA</td>
+<td align="left">SAMPLE_TABLE</td>
+<td align="left">ADDRESS</td>
+<td align="left">nvarchar</td>
+<td align="right">25</td>
+<td align="right">50</td>
+<td align="left">UNICODE</td>
+<td align="left">Japanese_CI_AS</td>
+</tr>
+
+<tr>
+<td align="left">SAMPLE_INSTANCE</td>
+<td align="left">SAMPLE_SCHEMA</td>
+<td align="left">SAMPLE_TABLE</td>
+<td align="left">UPDATE_DATE</td>
+<td align="left">date</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="手順b-頑張る場合">手順B(頑張る場合)</h2>
+
+<h3 id="とあるユーザーテーブルのカラムの照合順序を調べる">とあるユーザーテーブルのカラムの照合順序を調べる</h3>
+
+<p>いきなりカラム(<code>sys.columns</code>)の内容を見てもどれがどれだかわからないので、順番に追っていく。</p>
+
+<h4 id="スキーマのidを取得する">スキーマのIDを取得する</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="n">name</span>
+  <span class="p">,</span> <span class="n">schema_id</span> 
+<span class="k">FROM</span>
+  <span class="n">sys</span><span class="p">.</span><span class="n">schemas</span> 
+<span class="k">WHERE</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SAMPLE_SCHEMA&#39;</span><span class="p">;</span> </code></pre></div>
+<table>
+<thead>
+<tr>
+<th align="left">name</th>
+<th align="right">schema_id</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">SAMPLE_SCHEMA</td>
+<td align="right">9</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="スキーマidをキーにスキーマ内のテーブルを取得する">スキーマIDをキーにスキーマ内のテーブルを取得する</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="n">schema_id</span>
+  <span class="p">,</span> <span class="n">name</span>
+  <span class="p">,</span> <span class="n">object_id</span> 
+<span class="k">FROM</span>
+  <span class="n">sys</span><span class="p">.</span><span class="n">tables</span> 
+<span class="k">WHERE</span>
+  <span class="n">schema_id</span> <span class="o">=</span> <span class="mi">9</span> 
+<span class="k">ORDER</span> <span class="k">BY</span>
+  <span class="n">name</span> <span class="k">ASC</span><span class="p">;</span> </code></pre></div>
+<table>
+<thead>
+<tr>
+<th align="right">schema_id</th>
+<th align="left">name</th>
+<th align="right">object_id</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="right">9</td>
+<td align="left">SAMPLE_TABLE</td>
+<td align="right">1430296111</td>
+</tr>
+
+<tr>
+<td align="right">9</td>
+<td align="left">SAMPLE_TABLE2</td>
+<td align="right">1430296166</td>
+</tr>
+
+<tr>
+<td align="right">以下略</td>
+<td align="left"></td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="オブジェクトidをキーにカラムのcollation-nameを取得する">オブジェクトIDをキーにカラムのcollation_nameを取得する</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="n">object_id</span>
+  <span class="p">,</span> <span class="n">name</span>
+  <span class="p">,</span> <span class="k">collation_name</span> 
+<span class="k">FROM</span>
+  <span class="n">sys</span><span class="p">.</span><span class="n">columns</span> 
+<span class="k">WHERE</span>
+  <span class="n">object_id</span> <span class="o">=</span> <span class="s1">&#39;1430296111&#39;</span><span class="p">;</span> </code></pre></div>
+<table>
+<thead>
+<tr>
+<th align="right">object_id</th>
+<th align="left">name</th>
+<th align="left">collation_name</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="right">1430296111</td>
+<td align="left">NAME</td>
+<td align="left">Japanese_CI_AS</td>
+</tr>
+
+<tr>
+<td align="right">1430296111</td>
+<td align="left">UPDATE_DATE</td>
+<td align="left">(NULL)</td>
+</tr>
+
+<tr>
+<td align="right">以下略</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+
+<p>文字列が入っているカラム(<code>Japanese_CI_AS</code>)と日付が入っているカラム(NULL)の照合順序がわかった。</p>
+
+<p><code>Japanese_CI_AS</code>が規定値なのだろう。</p>
+
+<h3 id="sql-serverの規定値の設定を調べる">SQL Serverの規定値の設定を調べる</h3>
+
+<h4 id="サポートされている照合順序を取得する-likeで絞って日本語だけ">サポートされている照合順序を取得する(LIKEで絞って日本語だけ)</h4>
+
+<ul>
+<li><a href="https://docs.microsoft.com/ja-jp/sql/relational-databases/system-functions/sys-fn-helpcollations-transact-sql?view=sql-server-2017">sys.fn_helpcollations (TRANSACT-SQL) - SQL Server | Microsoft Docs</a></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="n">name</span>
+  <span class="p">,</span> <span class="n">description</span> 
+<span class="k">FROM</span>
+  <span class="n">sys</span><span class="p">.</span><span class="n">fn_helpcollations</span><span class="p">()</span> 
+<span class="k">WHERE</span>
+  <span class="n">name</span> <span class="k">LIKE</span> <span class="s1">&#39;Japanese%&#39;</span><span class="p">;</span> </code></pre></div>
+<table>
+<thead>
+<tr>
+<th align="left">name</th>
+<th align="left">description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">Japanese_BIN</td>
+<td align="left">Japanese, binary sort</td>
+</tr>
+
+<tr>
+<td align="left">Japanese_BIN2</td>
+<td align="left">Japanese, binary code point comparison sort</td>
+</tr>
+
+<tr>
+<td align="left">Japanese_CI_AI</td>
+<td align="left">Japanese, case-insensitive, accent-insensitive, kanatype-insensitive, width-insensitive</td>
+</tr>
+
+<tr>
+<td align="left">以下略</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="データベースの照合順序を取得する">データベースの照合順序を取得する</h4>
+
+<ul>
+<li><a href="https://docs.microsoft.com/ja-jp/sql/relational-databases/system-catalog-views/sys-databases-transact-sql?view=sql-server-2017">sys.databases (TRANSACT-SQL) - SQL Server | Microsoft Docs</a></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="n">name</span>
+  <span class="p">,</span> <span class="k">collation_name</span> 
+<span class="k">FROM</span>
+  <span class="n">sys</span><span class="p">.</span><span class="n">databases</span> 
+<span class="k">WHERE</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;SAMPLE_INSTANCE&#39;</span><span class="p">;</span> </code></pre></div>
+<table>
+<thead>
+<tr>
+<th align="left">name</th>
+<th align="left">collation_name</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">SAMPLE_INSTANCE</td>
+<td align="left">Japanese_CI_AS</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="サーバーインスタンスのプロパティを取得する">サーバーインスタンスのプロパティを取得する</h4>
+
+<ul>
+<li><a href="https://docs.microsoft.com/ja-jp/sql/t-sql/functions/serverproperty-transact-sql?view=sql-server-2017">SERVERPROPERTY (Transact-SQL) - SQL Server | Microsoft Docs</a></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="n">SERVERPROPERTY</span><span class="p">(</span><span class="s1">&#39;InstanceName&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">InstanceName</span>
+  <span class="p">,</span> <span class="n">SERVERPROPERTY</span><span class="p">(</span><span class="s1">&#39;MachineName&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">MachineName</span>
+  <span class="p">,</span> <span class="n">SERVERPROPERTY</span><span class="p">(</span><span class="s1">&#39;Collation&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="k">Collation</span>
+  <span class="p">,</span> <span class="n">SERVERPROPERTY</span><span class="p">(</span><span class="s1">&#39;CollationID&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">CollationID</span>
+  <span class="p">,</span> <span class="n">SERVERPROPERTY</span><span class="p">(</span><span class="s1">&#39;ComparisonStyle&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">ComparisonStyle</span>
+  <span class="p">,</span> <span class="n">SERVERPROPERTY</span><span class="p">(</span><span class="s1">&#39;LCID&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">LCID</span>
+  <span class="p">,</span> <span class="n">SERVERPROPERTY</span><span class="p">(</span><span class="s1">&#39;SqlCharSet&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">SqlCharSet</span>
+  <span class="p">,</span> <span class="n">SERVERPROPERTY</span><span class="p">(</span><span class="s1">&#39;SqlCharSetName&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">SqlCharSetName</span>
+  <span class="p">,</span> <span class="n">SERVERPROPERTY</span><span class="p">(</span><span class="s1">&#39;SqlSortOrder&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">SqlSortOrder</span>
+  <span class="p">,</span> <span class="n">SERVERPROPERTY</span><span class="p">(</span><span class="s1">&#39;SqlSortOrderName&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">SqlSortOrderName</span><span class="p">;</span> </code></pre></div>
+<table>
+<thead>
+<tr>
+<th align="left">InstanceName</th>
+<th align="left">MachineName</th>
+<th align="left">Collation</th>
+<th align="left">CollationID</th>
+<th align="left">ComparisonStyle</th>
+<th align="left">LCID</th>
+<th align="left">SqlCharSet</th>
+<th align="left">SqlCharSetName</th>
+<th align="left">SqlSortOrder</th>
+<th align="left">SqlSortOrderName</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">SAMPLE_INSTANCE</td>
+<td align="left">SQLServerが動いているマシン</td>
+<td align="left">Japanese_CI_AS</td>
+<td align="left">53264</td>
+<td align="left">196609</td>
+<td align="left">1041</td>
+<td align="left">109</td>
+<td align="left">cp932</td>
+<td align="left">0</td>
+<td align="left">bin_ascii_8</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="指定データベースのプロパティを取得する">指定データベースのプロパティを取得する</h4>
+
+<ul>
+<li><a href="https://docs.microsoft.com/ja-jp/sql/t-sql/functions/databasepropertyex-transact-sql?view=sql-server-2017">DATABASEPROPERTYEX (Transact-SQL) - SQL Server | Microsoft Docs</a></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="n">DATABASEPROPERTYEX</span><span class="p">(</span><span class="s1">&#39;SAMPLE_INSTANCE&#39;</span><span class="p">,</span> <span class="s1">&#39;Collation&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="k">Collation</span>
+  <span class="p">,</span> <span class="n">DATABASEPROPERTYEX</span><span class="p">(</span><span class="s1">&#39;SAMPLE_INSTANCE&#39;</span><span class="p">,</span> <span class="s1">&#39;ComparisonStyle&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">ComparisonStyle</span>
+  <span class="p">,</span> <span class="n">DATABASEPROPERTYEX</span><span class="p">(</span><span class="s1">&#39;SAMPLE_INSTANCE&#39;</span><span class="p">,</span> <span class="s1">&#39;LCID &#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">LCID</span>
+  <span class="p">,</span> <span class="n">DATABASEPROPERTYEX</span><span class="p">(</span><span class="s1">&#39;SAMPLE_INSTANCE&#39;</span><span class="p">,</span> <span class="s1">&#39;SQLSortOrder&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">SQLSortOrder</span><span class="p">;</span> </code></pre></div>
+<table>
+<thead>
+<tr>
+<th align="left">Collation</th>
+<th align="left">ComparisonStyle</th>
+<th align="left">LCID</th>
+<th align="left">SQLSortOrder</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">Japanese_CI_AS</td>
+<td align="left">196609</td>
+<td align="left">1041</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>Japanese_CI_AS</code>が規定値みたい。</p>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="https://docs.microsoft.com/ja-jp/sql/t-sql/language-reference?view=sql-server-2017">Transact-SQL リファレンス (データベース エンジン) - SQL Server | Microsoft Docs</a></li>
+</ul>
+
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2019/04/15/sqlserver-collation-name/"
+    data-text="SQL Serverでの照合順序の確認方法 - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2019/04/15/sqlserver-collation-name/"
+    data-hatena-bookmark-title="SQL Serverでの照合順序の確認方法 - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2019/04/15/sqlserver-collation-name/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2019/04/15/sqlserver-collation-name/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2017/06/30/nicorepo/" class="pagination_overflow previous_page">
+          Prev: 
+          17/6/30
+          ニコレポの仕様が変わったので一覧情報の取得方法を調査した
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <span class="pagination_overflow next_page disabled">
+          Next: -
+        </span>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#まとめ">まとめ</a></li>
+<li><a href="#手順a-sql-serverのシステム情報スキーマビューから確認する">手順A(SQL Serverのシステム情報スキーマビューから確認する)</a></li>
+<li><a href="#手順b-頑張る場合">手順B(頑張る場合)</a>
+<ul>
+<li><a href="#とあるユーザーテーブルのカラムの照合順序を調べる">とあるユーザーテーブルのカラムの照合順序を調べる</a>
+<ul>
+<li><a href="#スキーマのidを取得する">スキーマのIDを取得する</a></li>
+<li><a href="#スキーマidをキーにスキーマ内のテーブルを取得する">スキーマIDをキーにスキーマ内のテーブルを取得する</a></li>
+<li><a href="#オブジェクトidをキーにカラムのcollation-nameを取得する">オブジェクトIDをキーにカラムのcollation_nameを取得する</a></li>
+</ul></li>
+<li><a href="#sql-serverの規定値の設定を調べる">SQL Serverの規定値の設定を調べる</a>
+<ul>
+<li><a href="#サポートされている照合順序を取得する-likeで絞って日本語だけ">サポートされている照合順序を取得する(LIKEで絞って日本語だけ)</a></li>
+<li><a href="#データベースの照合順序を取得する">データベースの照合順序を取得する</a></li>
+<li><a href="#サーバーインスタンスのプロパティを取得する">サーバーインスタンスのプロパティを取得する</a></li>
+<li><a href="#指定データベースのプロパティを取得する">指定データベースのプロパティを取得する</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#参考">参考</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>

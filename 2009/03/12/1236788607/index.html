@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較 - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Java][Wicket]CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較 　早速あげあげ。基本はいただいたコメントのソースのまま、項目のBeanなんかは自分が作っていたもの＋Wicket1.3仕様にあわせて……。
+private List&amp;lt;SampleObjectModelBean&amp;gt; selected; public SampleChoiceRenderer() { // 自分が取得している項目  selected = new ArrayList&amp;lt;SampleObjectModelBean&amp;gt;(); selected.add(GenerateBeanUtility.GenerateSampleObjectModelBean(2)); selected.add(GenerateBeanUtility.GenerateSampleObjectModelBean(5)); Form form = new Form(&amp;#34;form&amp;#34;); add(form); // 選択項目全て  final List&amp;lt;SampleObjectModelBean&amp;gt; all = GenerateBeanUtility.GenerateSampleObjectModelBean(); // チェックボックス  final CheckBoxMultipleChoice multiChoice = new CheckBoxMultipleChoice(&amp;#34;list&amp;#34;, new PropertyModel(this, &amp;#34;selected&amp;#34;), all, new ChoiceRenderer(&amp;#34;name&amp;#34;, &amp;#34;outline&amp;#34;)); // 表示用ラベル  final Label label = new Label(&amp;#34;label&amp;#34;, &amp;#34;最初&amp;#34;); form.add(multiChoice); form.add(new Button(&amp;#34;next&amp;#34;) { private static final long serialVersionUID = -1359417135623629179L; // 選択したものを連結してLabelにセット  @Override public void onSubmit() { List&amp;lt;SampleObjectModelBean&amp;gt; list = (List&amp;lt;SampleObjectModelBean&amp;gt;)multiChoice.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2009/03/11/1236776769/" class="pagination_overflow previous_page">
+          Prev: 
+          09/3/11
+          チェックボックスの初期値の続き
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2009/03/16/1237134252/" class="pagination_overflow next_page">
+          Next: 
+          09/3/16
+          Wicketでn行m列で折り返すリストを作る
+        </a>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/java' class="muted-link">
+      [ <span class="Label Label--gray">Java</span> ]
+    </a>
+  
+    <a href='/tags/wicket' class="muted-link">
+      [ <span class="Label Label--gray">Wicket</span> ]
+    </a>
+  
+
+
+          Published: <span>2009/03/12</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#java-wicket-checkboxmultiplechoiceとchoicerendererを使用したチェックボックスの比較">[Java][Wicket]CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="java-wicket-checkboxmultiplechoiceとchoicerendererを使用したチェックボックスの比較">[Java][Wicket]CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較</h2>
+
+<p>　早速あげあげ。基本はいただいたコメントのソースのまま、項目のBeanなんかは自分が作っていたもの＋Wicket1.3仕様にあわせて……。</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">SampleObjectModelBean</span><span class="o">&gt;</span> <span class="n">selected</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">SampleChoiceRenderer</span><span class="o">()</span> <span class="o">{</span>
+<span class="c1">//      自分が取得している項目
+</span><span class="c1"></span>        <span class="n">selected</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">SampleObjectModelBean</span><span class="o">&gt;();</span>
+        <span class="n">selected</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">GenerateBeanUtility</span><span class="o">.</span><span class="na">GenerateSampleObjectModelBean</span><span class="o">(</span><span class="n">2</span><span class="o">));</span>
+        <span class="n">selected</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">GenerateBeanUtility</span><span class="o">.</span><span class="na">GenerateSampleObjectModelBean</span><span class="o">(</span><span class="n">5</span><span class="o">));</span>
+        
+        <span class="n">Form</span> <span class="n">form</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Form</span><span class="o">(</span><span class="s">&#34;form&#34;</span><span class="o">);</span>
+        <span class="n">add</span><span class="o">(</span><span class="n">form</span><span class="o">);</span>
+        
+<span class="c1">//      選択項目全て
+</span><span class="c1"></span>        <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">SampleObjectModelBean</span><span class="o">&gt;</span> <span class="n">all</span> <span class="o">=</span> <span class="n">GenerateBeanUtility</span><span class="o">.</span><span class="na">GenerateSampleObjectModelBean</span><span class="o">();</span>
+<span class="c1">//      チェックボックス
+</span><span class="c1"></span>        <span class="kd">final</span> <span class="n">CheckBoxMultipleChoice</span> <span class="n">multiChoice</span> <span class="o">=</span> 
+            <span class="k">new</span> <span class="n">CheckBoxMultipleChoice</span><span class="o">(</span><span class="s">&#34;list&#34;</span><span class="o">,</span> 
+                        <span class="k">new</span> <span class="n">PropertyModel</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&#34;selected&#34;</span><span class="o">),</span> 
+                        <span class="n">all</span><span class="o">,</span> 
+                        <span class="k">new</span> <span class="n">ChoiceRenderer</span><span class="o">(</span><span class="s">&#34;name&#34;</span><span class="o">,</span> <span class="s">&#34;outline&#34;</span><span class="o">));</span>
+<span class="c1">//      表示用ラベル
+</span><span class="c1"></span>        <span class="kd">final</span> <span class="n">Label</span> <span class="n">label</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Label</span><span class="o">(</span><span class="s">&#34;label&#34;</span><span class="o">,</span> <span class="s">&#34;最初&#34;</span><span class="o">);</span>
+        
+        <span class="n">form</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">multiChoice</span><span class="o">);</span>
+        <span class="n">form</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Button</span><span class="o">(</span><span class="s">&#34;next&#34;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="o">-</span><span class="n">1359417135623629179L</span><span class="o">;</span>
+<span class="c1">//      選択したものを連結してLabelにセット
+</span><span class="c1"></span>            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSubmit</span><span class="o">()</span> <span class="o">{</span>
+                <span class="n">List</span><span class="o">&lt;</span><span class="n">SampleObjectModelBean</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> 
+                    <span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">SampleObjectModelBean</span><span class="o">&gt;)</span><span class="n">multiChoice</span><span class="o">.</span><span class="na">getModelObject</span><span class="o">();</span>
+                <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="s">&#34;&#34;</span><span class="o">;</span>
+                <span class="k">for</span> <span class="o">(</span><span class="n">SampleObjectModelBean</span> <span class="n">bean</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">value</span> <span class="o">+=</span> <span class="n">bean</span><span class="o">.</span><span class="na">getOutline</span><span class="o">()</span> <span class="o">+</span> <span class="s">&#34;, &#34;</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">label</span><span class="o">.</span><span class="na">setModelObject</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">label</span><span class="o">);</span>
+    <span class="o">}</span></code></pre></div>
+<p>　こんな感じにさせてもらいました。ちょっと前回のCheckGroupとCheckのゴリ押しより長く見えるけど、チェック以外のコンポーネントも入っているからで、肝は、</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">//      チェックボックス
+</span><span class="c1"></span>        <span class="kd">final</span> <span class="n">CheckBoxMultipleChoice</span> <span class="n">multiChoice</span> <span class="o">=</span> 
+            <span class="k">new</span> <span class="n">CheckBoxMultipleChoice</span><span class="o">(</span><span class="s">&#34;list&#34;</span><span class="o">,</span> 
+                        <span class="k">new</span> <span class="n">PropertyModel</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&#34;selected&#34;</span><span class="o">),</span> 
+                        <span class="n">all</span><span class="o">,</span> 
+                        <span class="k">new</span> <span class="n">ChoiceRenderer</span><span class="o">(</span><span class="s">&#34;name&#34;</span><span class="o">,</span> <span class="s">&#34;outline&#34;</span><span class="o">));</span></code></pre></div>
+<p>　ここだけ。あと、</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">        <span class="n">selected</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">GenerateBeanUtility</span><span class="o">.</span><span class="na">GenerateSampleObjectModelBean</span><span class="o">(</span><span class="n">2</span><span class="o">));</span>
+        <span class="n">selected</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">GenerateBeanUtility</span><span class="o">.</span><span class="na">GenerateSampleObjectModelBean</span><span class="o">(</span><span class="n">5</span><span class="o">));</span></code></pre></div>
+<p>　ここで、みかんとなしをユーザが取得しているものにaddしています。そして、</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">        <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">SampleObjectModelBean</span><span class="o">&gt;</span> <span class="n">all</span> <span class="o">=</span> <span class="n">GenerateBeanUtility</span><span class="o">.</span><span class="na">GenerateSampleObjectModelBean</span><span class="o">();</span></code></pre></div>
+<p>　こっちで項目全てを取得しています。で、htmlはこう。</p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html">    <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>ChoiceRendererを使用したチェックボックス<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>by id:hayasshさん<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">wicket:id</span><span class="o">=</span><span class="s">&#34;form&#34;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;submit&#34;</span> <span class="na">wicket:id</span><span class="o">=</span><span class="s">&#34;next&#34;</span> <span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nt">table</span> <span class="na">cellspacing</span><span class="o">=</span><span class="s">&#34;0&#34;</span> <span class="na">cellpadding</span><span class="o">=</span><span class="s">&#34;2&#34;</span> <span class="na">border</span><span class="o">=</span><span class="s">&#34;1&#34;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>なんとか一覧<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">span</span> <span class="na">wicket:id</span><span class="o">=</span><span class="s">&#34;list&#34;</span> <span class="p">/&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">wicket:id</span><span class="o">=</span><span class="s">&#34;label&#34;</span> <span class="p">/&gt;</span></code></pre></div>
+<p>　すると、何とチェックが！　→<a href="http://samplewicket.kkataka.staxapps.net/?wicket:bookmarkablePage=:sampleWicket.view.choiceRenderer.SampleChoiceRenderer">http://samplewicket.kkataka.staxapps.net/?wicket:bookmarkablePage=:sampleWicket.view.choiceRenderer.SampleChoiceRenderer</a></p>
+
+<p>　ソースコードも減るし、いい事ずくめでしたとさ。わーい。</p>
+
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2009/03/12/1236788607/"
+    data-text="CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較 - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2009/03/12/1236788607/"
+    data-hatena-bookmark-title="CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較 - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2009/03/12/1236788607/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2009/03/12/1236788607/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2009/03/11/1236776769/" class="pagination_overflow previous_page">
+          Prev: 
+          09/3/11
+          チェックボックスの初期値の続き
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2009/03/16/1237134252/" class="pagination_overflow next_page">
+          Next: 
+          09/3/16
+          Wicketでn行m列で折り返すリストを作る
+        </a>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#java-wicket-checkboxmultiplechoiceとchoicerendererを使用したチェックボックスの比較">[Java][Wicket]CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>

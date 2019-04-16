@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on kk_Atakaの日記</title>
+    <link>https://gosyujin.github.io/tags/java/</link>
+    <description>Recent content in Java on kk_Atakaの日記</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>jp</language>
+    <lastBuildDate>Mon, 09 Mar 2009 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://gosyujin.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Androidの自動テストツール、今(2013年)から使うなら何がよいのか</title>
+      <link>https://gosyujin.github.io/2013/08/28/android-test-tools/</link>
+      <pubDate>Wed, 28 Aug 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2013/08/28/android-test-tools/</guid>
+      <description>あらすじ Androidのテストを自動化したいので、テストツールの選定をしてみたが、昔の記事がヒットする事が多く、何を使えばいいのかよくわからん。
+とはいっても、明確に「どんなテストがしたい」という方針もなく、とっかかりとしてどんなツールがあってどのくらい盛り上がってるのかが知りたかった。
+環境  Windows 7 AndroidDeveloperTools Build: v21.1.0-569685  とりあえず Win メインで。
+とっかかり ロジックまわりのテスト ロジック的なものは、 JUnit 拡張の TestCase クラスを使えば何とか書けそうというのはわかった。
+ Androidアプリ開発テスト入門（2）：Android SDKでビジネスロジックのテストを自動化するには (1/3) - ＠IT  2011 年の記事だけど、 JUnit で書くという大前提は崩れていないはず…。
+画面遷移やGUIまわりのテスト 困ったのはこっち。どう書けばいいんだろう。
+「Android 自動テスト ツール」 とかで調べてみた結果、以下のような記事が引っ掛かった。
+ Androidアプリの自動テストツールで最も有望か - 「NativeDriver」，Google製「WebDriver」の拡張　（公式のAndroid版Selenium） - 主に言語とシステム開発に関して  これも 2011 年の記事だが、この中では NativeDriver , robotium , Scirocco の 3 ツールでは最終的に NativeDriver に集約されていくだろうという結論になっている。
+…が、 2013 年現在においても本当にそうなのか？
+結論 2013 年 08 月の時点ではこんな感じ。
+   ツール ソース Android iOS テスト記述可能な言語 備考     NativeDriver svn - - - 開発終了   robotium GitHub 1.</description>
+    </item>
+    
+    <item>
+      <title>Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件</title>
+      <link>https://gosyujin.github.io/2013/08/04/android-install-intent/</link>
+      <pubDate>Sun, 04 Aug 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2013/08/04/android-install-intent/</guid>
+      <description>あらすじ Androidアプリにおいて、Eclipseからビルドしていた時は想定通り動いていたのに、リリース署名をしたアプリ(apkファイル)をインストールした場合だけ動作が想定していないものになった。
+具体的には、Activityがむちゃくちゃたまる現象が起こるということで非常に困った。
+結論 起動のさせ方により、起動時のIntentフラグが変わる。これはAndroid内部で知らぬ間にやられてしまう。
+onCreate時などでIntentのフラグをチェックして何とかするしかない。
+環境  AndroidDeveloperTools Build: v21.1.0-569685  ソースの中身  メインのActivityには action.Main と category.LAUNCHER しか設定していない。  AndroidManifest.xmlはプロジェクト作成時ほぼそのまま   &amp;lt;uses-sdk android:minSdkVersion=&amp;#34;13&amp;#34; android:targetSdkVersion=&amp;#34;14&amp;#34; /&amp;gt; &amp;lt;application android:allowBackup=&amp;#34;true&amp;#34; android:icon=&amp;#34;@drawable/ic_launcher&amp;#34; android:label=&amp;#34;@string/app_name&amp;#34; android:theme=&amp;#34;@style/AppTheme&amp;#34; &amp;gt; &amp;lt;activity android:name=&amp;#34;com.example.testproject.MainActivity&amp;#34; android:label=&amp;#34;@string/app_name&amp;#34; &amp;gt; &amp;lt;intent-filter&amp;gt; &amp;lt;action android:name=&amp;#34;android.intent.action.MAIN&amp;#34; /&amp;gt; &amp;lt;category android:name=&amp;#34;android.intent.category.LAUNCHER&amp;#34; /&amp;gt; &amp;lt;/intent-filter&amp;gt; &amp;lt;/activity&amp;gt; (略)  FLAG設定は特に記載せず  メインのActivity(MainActivity.java)もほぼそのまま   public class MainActivity extends Activity { @Override protected void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); setContentView(R.layout.activity_main); } @Override public boolean onCreateOptionsMenu(Menu menu) { getMenuInflater().</description>
+    </item>
+    
+    <item>
+      <title>.msgファイルをパースして中から添付ファイルを抜き出す</title>
+      <link>https://gosyujin.github.io/2011/09/30/1317312438/</link>
+      <pubDate>Fri, 30 Sep 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/09/30/1317312438/</guid>
+      <description>[Java][Windows][Ruby][備忘録].msgファイルをパースして中から添付ファイルを抜き出す 正確にはRubyというには微妙なんですが…。
+前回までのあらすじ  選んだメール(本文と添付ファイル)をまとめてDLしてくるだけの簡単なお仕事はできるようになった  http://d.hatena.ne.jp/kk_Ataka/20110517/1305560776:title http://d.hatena.ne.jp/kk_Ataka/20110709/1310140318:title http://d.hatena.ne.jp/kk_Ataka/20110823/1314103220:title   しかし、社内セキュリティGWの設定？　のためかzipとかexeとか怪しい拡張子が付いている添付ファイルは一旦msgファイルに固められるという仕様のためそのままでは添付ファイルが見れない。
+こういうメールが
+メール ┗添付ファイル.zip 届いた時にはこうなっている
+メール ┗ラップ.msg(＼あやしいファイルだから注意してDLしてね／) ┗本来の添付ファイル.zip なんとかRubyからmsgファイル内を解析して添付ファイルを引っこ抜いて保存ができまいか…というのが今回の問題。
+結論 以下のライブラリを駆使して実現しました。
+ msgparser(Auxiliiという所のJava用msgファイルパースライブラリ) jrb(Java Ruby Bridge: RubyからJavaVMを操作できるライブラリ)  一応Rubyでmsgファイルを解析するライブラリも探してみたのですが、あまりないのかな？　http://en.sourceforge.jp/projects/sfnet_ssfiledll/downloads/SSFileDLL%20%28MAPI%29/1.0/SSFileDLL-MAPI-1.0-Source.zip/:title こういうdllは見つけたのですが、MAPIがよくわからん上に説明を見る限りHasAttach(添付ファイルを持ってるか持ってないか？)くらいしかわからない？　ようなのであきらめました。
+あと、msgparserはJavaライブラリなので当初はJRubyで書けば何とかなるかなと思ってました。簡単なサンプルは http://www.rgagnon.com/javadetails/java-0613.html:title このページのような感じ。が、今まで書いたコードをJRubyで実行すると失敗してしまったので方向転換；；　RubyからJavaVMを操作できるrjbというライブラリを使う事に。
+ダウンロード・インストール  msgparser  http://auxilii.com/msgparser/Page.php?id=16000:title よりmsgparserをDL  [http://poi.apache.org/poifs/:title]や[http://www.freeutils.net/source/jtnef/:title]とかが必要になるのですが、上記のmsgparse.zipの中に全部入ってます[1]  distよりmasparser-X.XX.jarを、libよりpoi-X.X-YYYYMMDD.jarとtnef-X.X.X.jarを取得し、同じプロジェクト内にコピー。とりあえずlibフォルダを作ってそこに入れました  rjb  gemで。ただし、当然というかJavaが入っていないと失敗する模様。環境変数JAVA_HOMEも設定している必要があるみたい   gem install rjb ソース ソース全体は [https://github.com/gosyujin/outlook_for_ruby:title] 。msgParse.rbが本体、ライブラリがlibに入っています。
+使い方としてはMsgParseをnewしてinputMsgで.msgファイルのパス指定、saveFileで添付ファイルぶっこぬいて出力先に保存としたい。こんな感じで。
+msg = MsgParse.new msg.inputMsg(MSGFILE) msg.saveFile(SAVEDIR) という事でMsgParser[2]クラスを作成。ソースは [https://github.com/gosyujin/outlook_for_ruby/blob/master/msgParse.rb:title] 。まずは初期化から。</description>
+    </item>
+    
+    <item>
+      <title>Wicket勉強会に参加しました</title>
+      <link>https://gosyujin.github.io/2011/01/12/1294833920/</link>
+      <pubDate>Wed, 12 Jan 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/01/12/1294833920/</guid>
+      <description>[Java][Wicket][イベント]Wicket勉強会に参加しました  詳細: http://atnd.org/events/11066:title  TwitterのTL取得ページを自分用に作った程度ですが、二年連続二回目の出席をキメました。バージョン1.3メインで使っていた(いる？)人なので、もう1.5が出るのかーっといったところです。
+1.5になると矢野さんのWicket本の1/3が意味なくなるらしい…。
+Wicket1.5の新機能 @[http://twitter.com/t_yano:title=t_yano]さん  WebRequestCycleが消えた steps(), step()も消えた  RequestTargetという概念が消えた→IRequestHandlerで代替  UrlCodingStrategy→IRequestMappterで代替 リクエストのサイクル  IRequestHandler ↑　↓ -------------------- IRequestMapper -------------------- ↑　↓ Request Url  RequestHandlerを使えればWicketの世界に入っていける RequestHandlerStack: リクエスト処理の中心でRequestHandlerをスタックとして扱う  Urlマウント  mountBookmarkablePageが消え、代わりにmountPageになった。 ${}で変数をUrlに埋め込めるようになった  /mountpath/${year}/ StringValue year = parameter.get(&amp;#34;year&amp;#34;)  - 現状はページのみ。リソースの場合はインデックスで取れる  /user/t_yano/image/ parameter.get(0) //user parameter.get(1) //t_yano コンポーネントの初期化と設定  コンストラクタ？onBeforeRender？  onInitialize()が追加された  自身がページにadd済みである事を保証。ただし一度しか呼ばれない isVisibleがfalseだったりすると呼ばれない  onConfigure()  レンダリング前にかならず呼ばれる事を保証 全コンポーネントが揃っている事が保証できるタイミング isVisibleがfalseでも呼ばれる   ButtonとかLinkとかPanelに書くもので、Pageに書くものではない  コンポーネントの独立性  密結合  ボタンを押すとあるコンポーネントが消えるという場合…  ボタンと消すコンポーネントを連携させないといけなかった     IEventSink: イベントを受け取るオブジェクト IEventSource: イベントを送信できるオブジェクト  あらゆるコンポーネントはIEventSinkかつIEventSource    Page#sendで送れる範囲  BREADTH: 子に広げる WIDTH: 子から自分まで上がる BUBBLE: 自分から親に上がる  BREADTHしか使わないんじゃないか？    ◯　◯　◯　◯ ↓イベント　↑　↑　↑ フ　レ　ー　ム　ワ　ー　ク  他のコンポーネントを意識しなくてもよくなった！ 今後はページからではなくコンポーネントから考えよう   ajaxコンポーネントを更新するaddComponent()メソッドはadd()になった  最終的な表示処理は誰のもの？ @[http://twitter.</description>
+    </item>
+    
+    <item>
+      <title>JVM勉強会に行ってきました</title>
+      <link>https://gosyujin.github.io/2010/08/11/1281453866/</link>
+      <pubDate>Wed, 11 Aug 2010 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2010/08/11/1281453866/</guid>
+      <description>[Java][イベント]JVM勉強会に行ってきました ふむ、jojo勉強会以来…？　あれ、java-ja温泉の事って書いてなかったっけか。書いてなかったのか……。
+というわけで行ってまいりましたJVM勉強会。
+VMの中の人まで意識した設計をしたことがなく、ClassLoaderをサンプルでちょこちょこって動かした程度のレベルですが。
+参考資料 とりあえず、会場で持ってる人が割といた、もしくは発表内で話題にあがった本など。
+ Java仮想マシン仕様 ガベージコレクションのアルゴリズムと実装 デコンパイリングJava  この辺りを読んでくると、より内容を楽しめた模様。
+本編  @ashigeruさん クラスローダについて  クラスローダはfindClass()をオーバライドする loadClass()を実行すると委譲先クラスを探しにいく。親から見ていって、なかったら自分でロード  親から見ていくので、親が古いライブラリを持っているとそれをロードしてしまう！  某アプリケーションサーバは親を最後に検索する = PARENT_LAST  その名のとおり自分のクラスローダを最初に検索するので、親のライブラリの影響を受けにくい  同じ名前のクラスでも定義ローダーが違えば別のもの。Class.getClassLoader()でどこから呼ばれたか確認できる。 PARENT_LASTの問題点としてドッペルゲンガーという現象。などなど……    @skrbさん Stack on JavaVM  JVMとスタックについて スタックを使用した逆ポーランド法のアニメーション（わかりやすい！） JVMはスタック スタックはThreadひとつにつきひとつ  中にはプログラムカウンタがひとつ フレームの中にはローカル変数とオペランドスタック  JVMの中ではBooleanはIntとして扱われている インスタンスはヒープにアロケーションされる スタックは二段構え（JavaStackとオペランドスタック）    @kmizuさん わかる！Javaバイトコード－30分でわからない？Javaバイトコード入門  Hello Worldの逆アセンブル byte,short,char,boolean -&amp;gt; すべてintとして扱われる ロード/ストア命令…定数をオペランドスタックにロードする命令 ロード/ストア命令2…ローカル変数の値をオペランドスタックにロードする命令 型変換命令…キャストなどint -&amp;gt;longなど 配列関係の命令 オブジェクトの生成・操作命令 モニタ命令 クラスファイルベリファイア  classファイルのフォーマットがJava仮想マシン仕様に従っているかどうかを該当クラスの初期化より前にチェックする。未初期化ローカル変数へのアクセス、型エラー、jasmin……この辺よくわかりませんした＞＜     @cactusmanさん GCについて  GC  ルートを起点として参照できるオブジェクトは生きている ルートに到達できないものがGCされる  GCを学ぶ意義としてメモリ領域の効率的な使い方を意識できる マーク＆スイープ  ルートオブジェクトからたどれるオブジェクトをマークしていく マークのないオブジェクトを回収 メリット：実装は簡単 デメリット：フラグメンテーション、アロケーション速度、停止時間が長い→マークしている期間  参照カウント  自信のオブジェクトが参照されているオブジェクトをカウント 0になった時点でGC メリット：参照が停止されたタイミングで開放、停止時間が短い、参照をたどる必要がない デメリット：循環参照を回収できない、カウンターの値の増減処理が重い、実装が難しい  コピー  メリット：スループットがいい、メモリ回収と同時にコンパクションを行える(フラグメンテーションが起きない) デメリット：ヒープ領域を余分に取る  GCの種類 ScavengeGC - コピーGC    @nekopさん クラスローダリークパターン なにそれおいしいの？  ThreadLocalで設定した値はThreadから強参照される java.</description>
+    </item>
+    
+    <item>
+      <title>Eclipseで優先順位の低いパッケージを補完候補から除外してみた</title>
+      <link>https://gosyujin.github.io/2009/03/26/1238002057/</link>
+      <pubDate>Thu, 26 Mar 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2009/03/26/1238002057/</guid>
+      <description>[Java][Eclipse]Eclipseで優先順位の低いパッケージを補完候補から除外してみた 　id:Yamashiro0217さんのエントリ[http://d.hatena.ne.jp/Yamashiro0217/20090322/1237707686:title]を試した。……確かに、Eclipseの文にも
+ For example &amp;lsquo;java.awt.*&amp;rsquo; will hide all types from the awt packages.
+ 　って書かれてますね。
+[f:id:kk_Ataka:20090326020054p:image]
+　↑早速java.awt.*を足してみたら、確かにListがフィルタリングされて除外されてました。すごい！　あとLabelとかも。個人的には、WicketでWebアプリケーションを書いていくなら、java.awt.*の他にjavax.swing.*もフィルタリングすると良いと思います。
+ 「ListViewでエラーが起こる＞＜」
+「ListView listView = new ListView(&amp;ldquo;list&amp;rdquo;, list) {&amp;hellip;。別に間違ってないと思うけど、何ていうエラーが出てるの？」
+「コンストラクタにこんな引数はない……かな」
+「？？」
+.
+.
+.
+「あーこれWicketのListViewじゃなくてSwingのListViewをインポートしてますね！」
+ちゃんちゃん
+ 　こんな事を自分も何回かやりましたが、周りでも僕の知る限り何人[1]かやっていたので。
+　フィルタリングを追加するだけでもかなり教育コストや開発時間を削減できると思うんですよね。[2]
+[1] 初めのうちはですけど、初めのうちだからこそ無意識にひっかかるというか。
+[2] あんまりフィルタしすぎるのも考えものですが；</description>
+    </item>
+    
+    <item>
+      <title>Wicketでn行m列で折り返すリストを作る</title>
+      <link>https://gosyujin.github.io/2009/03/16/1237134252/</link>
+      <pubDate>Mon, 16 Mar 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2009/03/16/1237134252/</guid>
+      <description>[Java][Wicket]Wicketでn行m列で折り返すリストを作る 　Wicket本が未だに入荷しないので一つ書く。Wicket奮闘記第二弾。困り度的には、最悪1列表示で妥協すれば良かったのでそんなに高くない。
+　ただのリストじゃなくて、要素が何個か横に続き、n個で折り返す……というサンプル。イメージとしては、mixiのマイミクとかマイコミュニティみたいな感じかなぁ。相変わらずバージョンは1.3なのです。
+[f:id:kk_Ataka:20090316004745p:image]
+　こんな感じ。横に2つで折り返し。
+　どういう風に実現するかすごい困ったけれど、調べてみるとGridViewというコンポーネントがあったのでこれは使えそうだと。以下Javaソース。
+// テーブルのcolspanに設定する数  private int column; private List&amp;lt;SampleObjectModelBean&amp;gt; selected; public SampleGridView() { // 行の設定  column = 2; // DBから何らかのリスト一覧を持ってきたという体で  final List&amp;lt;SampleObjectModelBean&amp;gt; list = GenerateBeanUtility.GenerateSampleObjectModelBean(); // 自分が取得している項目という体で  selected = new ArrayList&amp;lt;SampleObjectModelBean&amp;gt;(); selected.add(list.get(2)); selected.add(list.get(5)); // DataProvider 規則的に回すもの  IDataProvider dataProvider = new IDataProvider() { private static final long serialVersionUID = -9120134891423038532L; public Iterator&amp;lt;SampleObjectModelBean&amp;gt; iterator(int first, int count) { return list.</description>
+    </item>
+    
+    <item>
+      <title>CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較</title>
+      <link>https://gosyujin.github.io/2009/03/12/1236788607/</link>
+      <pubDate>Thu, 12 Mar 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2009/03/12/1236788607/</guid>
+      <description>[Java][Wicket]CheckBoxMultipleChoiceとChoiceRendererを使用したチェックボックスの比較 　早速あげあげ。基本はいただいたコメントのソースのまま、項目のBeanなんかは自分が作っていたもの＋Wicket1.3仕様にあわせて……。
+private List&amp;lt;SampleObjectModelBean&amp;gt; selected; public SampleChoiceRenderer() { // 自分が取得している項目  selected = new ArrayList&amp;lt;SampleObjectModelBean&amp;gt;(); selected.add(GenerateBeanUtility.GenerateSampleObjectModelBean(2)); selected.add(GenerateBeanUtility.GenerateSampleObjectModelBean(5)); Form form = new Form(&amp;#34;form&amp;#34;); add(form); // 選択項目全て  final List&amp;lt;SampleObjectModelBean&amp;gt; all = GenerateBeanUtility.GenerateSampleObjectModelBean(); // チェックボックス  final CheckBoxMultipleChoice multiChoice = new CheckBoxMultipleChoice(&amp;#34;list&amp;#34;, new PropertyModel(this, &amp;#34;selected&amp;#34;), all, new ChoiceRenderer(&amp;#34;name&amp;#34;, &amp;#34;outline&amp;#34;)); // 表示用ラベル  final Label label = new Label(&amp;#34;label&amp;#34;, &amp;#34;最初&amp;#34;); form.add(multiChoice); form.add(new Button(&amp;#34;next&amp;#34;) { private static final long serialVersionUID = -1359417135623629179L; // 選択したものを連結してLabelにセット  @Override public void onSubmit() { List&amp;lt;SampleObjectModelBean&amp;gt; list = (List&amp;lt;SampleObjectModelBean&amp;gt;)multiChoice.</description>
+    </item>
+    
+    <item>
+      <title>チェックボックスの初期値の続き</title>
+      <link>https://gosyujin.github.io/2009/03/11/1236776769/</link>
+      <pubDate>Wed, 11 Mar 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2009/03/11/1236776769/</guid>
+      <description>[Java][Wicket]チェックボックスの初期値の続き 　[http://d.hatena.ne.jp/kk_Ataka/20090309/1236590120:title]の続き。
+　id:hayasshさんからCheckBoxMultipleChoiceを使用してみては？　というご指摘があったので使ってみたところ、これは超便利でした。しかも、Labelタグのfor属性もつけてくれるという……。[1]力技でかわしてた自分の強引さに乾杯。hayasshさんありがとうございました。
+　あと、書き忘れていたのですが、自分が使っているWicketのバージョンは1.3です。なのでソースにジェネリクスがなかったり、他諸々1.4とは相違点があります。1.4は矢野さんの本を買ってから勉強しようっと。</description>
+    </item>
+    
+    <item>
+      <title>自作のWicketサンプルを上げてみる</title>
+      <link>https://gosyujin.github.io/2009/03/11/1236706056/</link>
+      <pubDate>Wed, 11 Mar 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2009/03/11/1236706056/</guid>
+      <description>[Java][Wicket]自作のWicketサンプルを上げてみる 　ようそこsampleWicket→http://samplewicket.kkataka.staxapps.net/[2]
+　色々使ってみたいコンポーネントを使って動かしてみたサンプルです。CheckGroup, RadioGroup, ListViewの入れ子, GridView, PagingNavigatorなどなど……。
+　必要になったんだけど、これってどうやって実現するんだろう？　と思ったものを形にしてみました。[3]特に入力チェックもしていないので、空欄でも余裕で通ったりします。
+　まず上げてみただけなので、今はソースは見れません……。
+　あ、Developmentモードで上げてしまった；；
+hayassh
+あぁ、1.4のソースでごめんなさい・・
+しかもHTMLのソースは書いてないという中途半端っぷり・・
+私はWicket使い始めて2年くらいになりますが、実は1年くらいCheckBoxMultipleChoiceの存在を知らずにCheckGroupとCheckでゴリゴリ実装してたのは秘密ですｗ
+1236779514
+kk_Ataka
+やっぱり最初はCheckGroupで力技なんですかねー。
+後、私が触らせて頂いているのが1.3ベースで運用しているWebシステムなので、特に意識せず1.3ベースで載せてしまいました；　バージョン明記してなくて申し訳ないです。
+1236789333
+[1] CheckGroupとCheckではそこまでできるのかな？
+[2] サイドメニュー＞プロフィール＞自作Wicketサンプルからも行けます。
+[3] 例: mixiのマイミクとかマイコミュニティ表示のようなn行m列のリストとか。</description>
+    </item>
+    
+    <item>
+      <title>チェックボックスに初期値（デフォルトでチェック）を入れる方法</title>
+      <link>https://gosyujin.github.io/2009/03/09/1236590120/</link>
+      <pubDate>Mon, 09 Mar 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2009/03/09/1236590120/</guid>
+      <description>[Java][Wicket]チェックボックスに初期値（デフォルトでチェック）を入れる方法 　Wicket奮闘記第一弾。とりあえず、Wicket開発で一番困った所、CheckGroupとCheckコンポーネントを使用したチェックボックスに初期値＝チェックを入れておく処理です。
+　何かユーザ情報を登録するフォームがあってー、入れましたー、編集ボタンを押して編集画面に行きましたー、すると、
+[f:id:kk_Ataka:20090309171545p:image]
+　最初からこう、チェックが入っていてほしいという状況です。
+　テキストのフォーム(TextField)なら、第二引数にDBから引っ張ってきたものを突っ込んでやればこんな感じで表示できるのですが、
+[f:id:kk_Ataka:20090309162050p:image]
+　チェックボックスはもう少しやらなきゃいけないことがあるみたい……。
+//第二引数がユーザが持っている値 CheckGroup checkGroup = new CheckGroup(&amp;#34;checkGroup&amp;#34;, /*ユーザが持っているもののリスト*/); //第二引数が選択項目の値 ListView listView = new ListView(&amp;#34;list&amp;#34;, /*選択肢のリスト*/) { private static final long serialVersionUID = 2972646917485688487L; @Override protected void populateItem(ListItem listItem) { listItem.add(new Check(&amp;#34;check&amp;#34;, listItem.getModel())); listItem.add(new Label(&amp;#34;value&amp;#34;, listItem.getModelObjectAsString())); } }; 　Javaはこう。で、htmlはこうしてみました。
+&amp;lt;table&amp;gt; &amp;lt;span wicket:id=&amp;#34;checkGroup&amp;#34;&amp;gt; &amp;lt;tr&amp;gt; &amp;lt;th&amp;gt;なんとか一覧&amp;lt;/th&amp;gt; &amp;lt;/tr&amp;gt; &amp;lt;tr wicket:id=&amp;#34;list&amp;#34;&amp;gt; &amp;lt;td&amp;gt; &amp;lt;input type=&amp;#34;checkbox&amp;#34; wicket:id=&amp;#34;check&amp;#34; /&amp;gt; &amp;lt;span wicket:id=&amp;#34;value&amp;#34; /&amp;gt; &amp;lt;/td&amp;gt; &amp;lt;/tr&amp;gt; &amp;lt;/span&amp;gt; &amp;lt;/table&amp;gt; 　これらから生成されるページはこうなります。</description>
+    </item>
+    
+  </channel>
+</rss>

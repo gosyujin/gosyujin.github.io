@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編 - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Git][Windows][備忘録]Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640:title http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title http://d.hatena.ne.jp/kk_Ataka/20120315/1331816663:title http://d.hatena.ne.jp/kk_Ataka/20120410/1334058674:title http://d.hatena.ne.jp/kk_Ataka/20120423/1335185906:title  参考  http://progit.org/:title 入門Git 入門git 実用Git  無名ブランチ(detached HEAD)とは 要約すると「過去のコミットの状態を眺めるための&amp;rdquo;便利機能&amp;rdquo;なのでここに永続的な変更をするなんてとんでもない！」という事らしい。
+無名ブランチ状態で作業するとどうなるか ちょっと「ブランチにいると思いこんだまま無名ブランチで作業し、さーてmasterブランチに戻ってmergeするかぁ……はぁ！？」な状況を作り出してみる。
+まずは無名ブランチの準備としてnobraブランチを作る。(これ以降の作業は、本当はnobraブランチでやっていきたいと思っている)
+$ git checkout -b nobra Switched to a new branch &amp;#39;nobra&amp;#39; $ touch nobra $ git add nobra $ git commit -m &amp;#34;Add nobra&amp;#34; [nobra d62e4cb] Add nobra 0 files changed, 0 insertions(&#43;), 0 deletions(-) create mode 100644 nobra $ git g * d62e4cb (HEAD, nobra, master) Add nobra * 7ab5db8 (topic) Add message line 3 * cf6c3d6 Add message line 2 * 38f8aff Add message line 1 * 93b8e52 Add message line 4 * 0b91a9f Add message line 5 * 15f636f Add line number * fa9eabc first commit $ git br master d62e4cb Add nobra * nobra d62e4cb Add nobra topic 7ab5db8 Add message line 3 次に、このnobraブランチのSHA1を指定してcheckoutする。|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2012/04/23/1335185906/" class="pagination_overflow previous_page">
+          Prev: 
+          12/4/23
+          Pro Gitと入門Gitと入門gitと実用GitとGit道 …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2012/04/28/1335575351/" class="pagination_overflow next_page">
+          Next: 
+          12/4/28
+          BPStudy#57に参加しました #bpstudy
+        </a>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/git' class="muted-link">
+      [ <span class="Label Label--gray">Git</span> ]
+    </a>
+  
+    <a href='/tags/windows' class="muted-link">
+      [ <span class="Label Label--gray">Windows</span> ]
+    </a>
+  
+    <a href='/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+
+
+          Published: <span>2012/04/24</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#git-windows-備忘録-pro-gitと入門gitと入門gitと実用gitでgitの復習-無名ブランチ-detached-head-からの復活編">[Git][Windows][備忘録]Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編</a></li>
+<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#無名ブランチ-detached-head-とは">無名ブランチ(detached HEAD)とは</a>
+<ul>
+<li><a href="#無名ブランチ状態で作業するとどうなるか">無名ブランチ状態で作業するとどうなるか</a></li>
+<li><a href="#無名ブランチの救出">無名ブランチの救出</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="git-windows-備忘録-pro-gitと入門gitと入門gitと実用gitでgitの復習-無名ブランチ-detached-head-からの復活編">[Git][Windows][備忘録]Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編</h2>
+
+<h2 id="前回までのあらすじ">前回までのあらすじ</h2>
+
+<ul>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640:title">http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640:title</a></li>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title">http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title</a></li>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20120315/1331816663:title">http://d.hatena.ne.jp/kk_Ataka/20120315/1331816663:title</a></li>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20120410/1334058674:title">http://d.hatena.ne.jp/kk_Ataka/20120410/1334058674:title</a></li>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20120423/1335185906:title">http://d.hatena.ne.jp/kk_Ataka/20120423/1335185906:title</a></li>
+</ul>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="http://progit.org/:title">http://progit.org/:title</a></li>
+<li>入門Git</li>
+<li>入門git</li>
+<li>実用Git</li>
+</ul>
+
+<h2 id="無名ブランチ-detached-head-とは">無名ブランチ(detached HEAD)とは</h2>
+
+<p>要約すると<span class="deco" style="font-weight:bold;">「過去のコミットの状態を眺めるための&rdquo;便利機能&rdquo;なのでここに永続的な変更をするなんてとんでもない！」</span>という事らしい。</p>
+
+<h3 id="無名ブランチ状態で作業するとどうなるか">無名ブランチ状態で作業するとどうなるか</h3>
+
+<p>ちょっと「ブランチにいると思いこんだまま無名ブランチで作業し、さーてmasterブランチに戻ってmergeするかぁ……はぁ！？」な状況を作り出してみる。</p>
+
+<p>まずは無名ブランチの準備としてnobraブランチを作る。(これ以降の作業は、本当はnobraブランチでやっていきたいと思っている)</p>
+<div class="highlight"><pre class="chroma">$ git checkout -b nobra
+Switched to a new branch &#39;nobra&#39;
+
+$ touch nobra
+$ git add nobra
+$ git commit -m &#34;Add nobra&#34;
+[nobra d62e4cb] Add nobra
+ 0 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 nobra
+
+$ git g
+ * d62e4cb  (HEAD, nobra, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit
+
+$ git br
+   master d62e4cb Add nobra
+ * nobra  d62e4cb Add nobra
+   topic  7ab5db8 Add message line 3</pre></div>
+<p>次に、このnobraブランチのSHA1を指定してcheckoutする。</p>
+<div class="highlight"><pre class="chroma">$ git ch d62e4cb
+Note: checking out &#39;d62e4cb&#39;.
+
+You are in &#39;detached HEAD&#39; state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b new_branch_name
+
+HEAD is now at d62e4cb... Add nobra</pre></div>
+<p>detached HEAD状態だよと教えてくれているようだ。このリビジョンのファイル一覧？　を見渡したり、実験的な変更やコミットができる。チェックアウトすれば他のブランチに影響を与えすにこの状態を作れる。変更を保持するために新しいブランチを作りたいなら、checkoutコマンドに-bつけて実行すればいいよ……って感じなのかな。ブランチはno branchと表示される。</p>
+<div class="highlight"><pre class="chroma">$ git br
+ * (no branch) d62e4cb Add nobra
+   master      d62e4cb Add nobra
+   nobra       d62e4cb Add nobra
+   topic       7ab5db8 Add message line 3</pre></div>
+<p>この無名ブランチに対し変更をコミット。</p>
+<div class="highlight"><pre class="chroma">$ echo &#34;no branch&#34; &gt;&gt; nobra
+$ git add nobra
+$ git com &#34;Add message nobra&#34;
+[detached HEAD e45c786] Add message nobra
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+$ echo &#34;detached HEAD&#34; &gt;&gt; nobra
+$ git add nobra
+$ git com &#34;Add message nobra&#34;
+[detached HEAD 3aec83c] Add message nobra
+ 1 files changed, 1 insertions(+), 0 deletions(-)</pre></div>
+<p>グラフで見るとe45c786, 3aec83cがもくもくと作られている。</p>
+<div class="highlight"><pre class="chroma">$ git g
+ * 3aec83c  (HEAD) Add message nobra
+ * e45c786  Add message nobra
+ * d62e4cb  (nobra, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit</pre></div>
+<p>さーて、masterにもどって変更をmergeするかー。[1]</p>
+<div class="highlight"><pre class="chroma">$ git checkout master
+Previous HEAD position was 3aec83c... Add message nobra
+Switched to branch &#39;master&#39;</pre></div>
+<p>グラフを確認するとd62e4cb(masterブランチ)が先頭になっている……だと……。</p>
+<div class="highlight"><pre class="chroma">$ git g
+ * d62e4cb  (HEAD, nobra, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit</pre></div>
+<p>さっきの変更どこいったんだ！　</p>
+
+<h3 id="無名ブランチの救出">無名ブランチの救出</h3>
+
+<p>コンソールを上へ上へ辿って行けばもしかしたら作業ログが残っていて、そこから無名ブランチになってしまったコミットを特定できるかもしれないけど、ここではgit reflogを使って救済してみる。</p>
+<div class="highlight"><pre class="chroma">$ git reflog
+...
+d62e4cb HEAD@{6}: checkout: moving from 3aec83cdbfea0b1e96cf3c48937ab84eae1f4ec0 to nobra
+3aec83c HEAD@{7}: commit: Add message nobra
+e45c786 HEAD@{8}: commit: Add message nobra
+...</pre></div>
+<p>見えなくなってしまったコミットは(今は)HEAD@{7}にあった！(checkoutしたりcommitすれば1ずつログがずれるから)　という事で、この変更が必要だった場合は、ここからトピックブランチでも作成して救出してやればよい。</p>
+<div class="highlight"><pre class="chroma">$ git g
+ * d62e4cb  (HEAD, nobra, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit</pre></div>
+<p>reflogで消えたコミットを確認する。</p>
+<div class="highlight"><pre class="chroma">$ git reflog
+...
+d62e4cb HEAD@{8}: checkout: moving from 3aec83cdbfea0b1e96cf3c48937ab84eae1f4ec0 to nobra
+3aec83c HEAD@{9}: commit: Add message nobra
+e45c786 HEAD@{10}: commit: Add message nobra
+d62e4cb HEAD@{11}: checkout: moving from nobra to d62e4cb</pre></div>
+<p>今はHEAD@{9}になっている。nobraブランチをうつしちゃおう。(新しいブランチを作成してもよい)</p>
+<div class="highlight"><pre class="chroma">$ git branch --f nobra HEAD@{9}
+
+$ git g
+ * 3aec83c  (nobra) Add message nobra
+ * e45c786  Add message nobra
+ * d62e4cb  (HEAD, master) Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit</pre></div>
+<p>3aec..が見えるようになった！　で、merge。</p>
+<div class="highlight"><pre class="chroma">$ git merge nobra
+Updating d62e4cb..3aec83c
+Fast-forward
+ nobra |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+$ git g
+ * 3aec83c  (HEAD, nobra, master) Add message nobra
+ * e45c786  Add message nobra
+ * d62e4cb  Add nobra
+ * 7ab5db8  (topic) Add message line 3
+ * cf6c3d6  Add message line 2
+ * 38f8aff  Add message line 1
+ * 93b8e52  Add message line 4
+ * 0b91a9f  Add message line 5
+ * 15f636f  Add line number
+ * fa9eabc  first commit</pre></div>
+<p>救出完了！</p>
+
+<p>[1] このPrevious HEAD position was &hellip;というメッセージは無名ブランチからチェックアウトしないと表示されないようだ</p>
+
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2012/04/24/1335270486/"
+    data-text="Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編 - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2012/04/24/1335270486/"
+    data-hatena-bookmark-title="Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編 - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2012/04/24/1335270486/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2012/04/24/1335270486/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2012/04/23/1335185906/" class="pagination_overflow previous_page">
+          Prev: 
+          12/4/23
+          Pro Gitと入門Gitと入門gitと実用GitとGit道 …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2012/04/28/1335575351/" class="pagination_overflow next_page">
+          Next: 
+          12/4/28
+          BPStudy#57に参加しました #bpstudy
+        </a>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#git-windows-備忘録-pro-gitと入門gitと入門gitと実用gitでgitの復習-無名ブランチ-detached-head-からの復活編">[Git][Windows][備忘録]Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編</a></li>
+<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#無名ブランチ-detached-head-とは">無名ブランチ(detached HEAD)とは</a>
+<ul>
+<li><a href="#無名ブランチ状態で作業するとどうなるか">無名ブランチ状態で作業するとどうなるか</a></li>
+<li><a href="#無名ブランチの救出">無名ブランチの救出</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>

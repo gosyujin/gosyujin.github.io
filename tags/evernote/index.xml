@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Evernote on kk_Atakaの日記</title>
+    <link>https://gosyujin.github.io/tags/evernote/</link>
+    <description>Recent content in Evernote on kk_Atakaの日記</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>jp</language>
+    <lastBuildDate>Tue, 27 Dec 2011 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://gosyujin.github.io/tags/evernote/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>自作EvernoteスクリプトをOAuth対応する</title>
+      <link>https://gosyujin.github.io/2013/03/03/evernote-oauth/</link>
+      <pubDate>Sun, 03 Mar 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2013/03/03/evernote-oauth/</guid>
+      <description>あらすじ 結構前に、Evernoteの認証方法がOAuthになるので、変更してくださいねーというメールがEvernoteからきていた。
+ユーザ名とパスワードによる認証から OAuth 認証への移行 - Evernote Developers
+そのまま従来のスクリプトを動かしていると、認証エラーになるので、OAuth認証ができるように修正した。
+主に自分用メモ。
+環境  Ruby 1.8.7  注: Evernoteスクリプトは自分しか使っていない。
+参考サイト  認証 - Evernote Developers  手順  サンドボックス用のデベロッパトークンを取得 » ログイン必要 テストの完了後、プロダクション用のデベロッパトークンを取得 » ログイン必要  他の人が使っていない、自分だけで使っている場合は以降の箇所だけ修正すればよい。
+修正箇所 上記のDeveloperTokenをソース上で取得できるようにする。(今まで使っていたuserid、パスワードはいらない)以下では、Pitを使ってtokenなどを別出ししているので、そこを修正。
+user = Pit.get(&amp;#34;evernote&amp;#34;, :require =&amp;gt; { + &amp;#34;developerToken&amp;#34; =&amp;gt; &amp;#34;your evernote token.&amp;#34;, }) 従来は、 userStore.authenticate() で認証を通して、 authenticationToken を使うようにしていたが、このくだりを まるまるカット 。
+この authenticationToken を developerToken に置き換えてやる。
+# 認証 - @auth = auth(user, userStore) - @authToken = @auth.</description>
+    </item>
+    
+    <item>
+      <title>EvernoteのAPIをRubyから叩きたい</title>
+      <link>https://gosyujin.github.io/2011/12/27/1324911671/</link>
+      <pubDate>Tue, 27 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/12/27/1324911671/</guid>
+      <description>[Evernote][備忘録][Ruby][API]EvernoteのAPIをRubyから叩きたい はじめに この記事は[http://atnd.org/events/22021:title]の27日目の記事です。
+26日目はid:tackunさんの[http://d.hatena.ne.jp/tackun/20111226/1324908770:title]でした。
+28日目はr7kamuraさんのRubyでGPUを使おう - &amp;amp;#10008;&amp;amp;#9593;&amp;amp;#9697;&amp;amp;#9593;&amp;amp;#10008;です。
+今日はターミナル(or コマンドプロンプト)経由でEvernoteのAPIを叩き、自分のノートブックを取得してみようとしてみます。ソースを書く前にAPIの申請からやっていきます。
+APIの申請…の前に developer用サイトからAPI SDKを入手。
+ http://www.evernote.com/about/developer/api/:title  [f:id:kk_Ataka:20111226235624j:image]
+上記のリンクを叩くとzipがDLできるので、これを解凍しruby/lib以下のファイルを用意しておく。
+APIの申請  http://www.evernote.com/about/developer/api/:title  同じページを下へスクロールしていくとRequest an API Keyという箇所があるので以下の項目を入力する。
+|*Evernote username|Evernoteのユーザ名|
+|*Your Name|氏名|
+|*Your Email|メールアドレス|
+|*Organization|組織や団体、だが、個人で使う場合は氏名でよい|
+|*Web or Client|今回は自分で使う用なのでClient Keysを選択(既に持っているので下の画像ではWebを選択している)|
+|*Application Details|どうやってAPIを使いたいか|
+つたない英語でDetailsを書く。以前は審査に時間がかかったらしいが今はSUBMITすればすぐKeyが発行されるみたい。
+[f:id:kk_Ataka:20111218113115j:image]
+WebApplicationを選んだ場合。
+[f:id:kk_Ataka:20111218113113j:image]
+Clientを選んだ場合。
+[f:id:kk_Ataka:20111218113114j:image]
+これでConsumer KeyとConsumer Secretをもらえた。ただし、この状態では砂場(sandbox.evernote.com)でしか使えない。
+上記画像のNext Steps 2.によると[https://sandbox.evernote.com/Registration.action:title]で砂場用アカウントを作成し、砂場で開発をしてくださいという事でいきなり本家(www.evernote.com)で動かせないようになっている。
+Activate 今回のエントリではやらないが、本家で動かす時はActivateサイト(Next Steps 3.のlet us knowリンクから行ける)でActivateしてもらう必要がある。(ここは昔の事なので少し曖昧)
+|*Email|メールアドレス|
+|*API Consumer Key|登録時にもらったConsumer Key|
+|*Additional Info|その他何かあれば？(何か書いたっけ…？)|
+[f:id:kk_Ataka:20111218115757j:image]
+ソース iitHubに。 https://github.com/gosyujin/evernote_for_ruby/blob/master/myEvernote.rb
+ここから実際に取得していきます。
+パス追加 プロジェクト内にあるライブラリ(さっき落としたAPI SDK)を読み込む。</description>
+    </item>
+    
+  </channel>
+</rss>

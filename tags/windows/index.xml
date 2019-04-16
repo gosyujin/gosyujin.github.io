@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Windows on kk_Atakaの日記</title>
+    <link>https://gosyujin.github.io/tags/windows/</link>
+    <description>Recent content in Windows on kk_Atakaの日記</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>jp</language>
+    <lastBuildDate>Sun, 01 May 2011 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://gosyujin.github.io/tags/windows/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>bundle execを省略したいのでバッチを作った(Windows版)</title>
+      <link>https://gosyujin.github.io/2012/10/01/bundle-exec-bat/</link>
+      <pubDate>Mon, 01 Oct 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/10/01/bundle-exec-bat/</guid>
+      <description>あらすじ Bundler、非常によいツールなんだけど、bundle exec がめんどい。
+ググってみたところ gemset を使う方法 rvmのgemsetを使ってbundlerと賢く付き合う方法 - Hello, world! - s21g と、 bundler-exec.sh というツールを使う bundle exec を省略する - おもしろWEBサービス開発日記 方法があるみたい。
+Windowsでこれを実現したいんだけど、gemsetはちょっと大げさな気がするので、bundler-exec.shを参考にバッチファイルを作成できないかな。
+参考サイト  コマンドのエイリアス設定(DOSKEY) whichコマンドを作る  コマンドプロンプトを使ってみよう！　－バッチファイル－ Windows 2000 コマンドライン徹底活用 コマンド別/for UNIXライクなパス操作をwindowsのcmd.exeのバッチファイルのみで実現 Windowsのコマンドプロンプトは変態（一部）  調査 ソースを読む限り、やっている処理は
+ ruby とかrspec とかbundle exec hogehogeしたいコマンドにaliasをはる(rubyならbundler-exec.sh rubyとなるように) bundle コマンドが使えるのか探してみる。使えない場合はそのままコマンドを実行する bundle が使える場合、今いるパスに Gemfile ファイルがあるのか調べる。ない場合は一つ階層を上がってまた Gemfile があるか探す 上記をを繰り返す。 Gemfile がない場合はそのままコマンドを実行する Gemfile があった場合、 bundle exec を付加してコマンドを実行する  という感じになっている。
+ソース で、作ってみた。
+gosyujin/bundler-exec-bat
+使い方 aliasをはる コマンドプロンプトの場合にはaliasがないようなので、マクロ定義ファイルを作成し、それを起動時に読むようにバッチファイルを作る。または起動オプションを変更する必要があるらしい。(レジストリに登録などでもいい)</description>
+    </item>
+    
+    <item>
+      <title>Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり)</title>
+      <link>https://gosyujin.github.io/2012/07/17/1342535044/</link>
+      <pubDate>Tue, 17 Jul 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/07/17/1342535044/</guid>
+      <description>[Ruby][備忘録][Windows][Redmine]Windows版Redmineをサービスに登録してブート時に起動させる(宿題あり) あらすじ タイトル通り、サービスに登録してよろしく起動してほしい。mongrelを使えばサービスから起動できる……らしいが、名前は聞いたことあるけど、mongrelが何かは知らない……。
+ Ruby + C(拡張ライブラリ) で書かれた httpd。
+http://d.hatena.ne.jp/keyword/mongrel
+ なるほど。
+環境  Windows XP Ruby 1.9.3  Bundler 1.0.21 Mongrel 1.2.0.pre2  Redmine 1.4  手順 前提  Redmineの環境構築が完了している事  bundle exec ruby script/server -e production で起動できる事   インストールから起動まで  まずはRedmineデフォルトのGemfileにmongrelを追加し、bundle install  gem &amp;#34;mongrel&amp;#34; $ bundle install Fetching source index for http://rubygems.org/ Using rake (0.9.2.2) Using activesupport (2.3.14) Using rack (1.1.3) Using actionpack (2.3.14) Using actionmailer (2.</description>
+    </item>
+    
+    <item>
+      <title>Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編</title>
+      <link>https://gosyujin.github.io/2012/04/24/1335270486/</link>
+      <pubDate>Tue, 24 Apr 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/04/24/1335270486/</guid>
+      <description>[Git][Windows][備忘録]Pro Gitと入門Gitと入門gitと実用GitでGitの復習 無名ブランチ(detached HEAD)からの復活編 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640:title http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title http://d.hatena.ne.jp/kk_Ataka/20120315/1331816663:title http://d.hatena.ne.jp/kk_Ataka/20120410/1334058674:title http://d.hatena.ne.jp/kk_Ataka/20120423/1335185906:title  参考  http://progit.org/:title 入門Git 入門git 実用Git  無名ブランチ(detached HEAD)とは 要約すると「過去のコミットの状態を眺めるための&amp;rdquo;便利機能&amp;rdquo;なのでここに永続的な変更をするなんてとんでもない！」という事らしい。
+無名ブランチ状態で作業するとどうなるか ちょっと「ブランチにいると思いこんだまま無名ブランチで作業し、さーてmasterブランチに戻ってmergeするかぁ……はぁ！？」な状況を作り出してみる。
+まずは無名ブランチの準備としてnobraブランチを作る。(これ以降の作業は、本当はnobraブランチでやっていきたいと思っている)
+$ git checkout -b nobra Switched to a new branch &amp;#39;nobra&amp;#39; $ touch nobra $ git add nobra $ git commit -m &amp;#34;Add nobra&amp;#34; [nobra d62e4cb] Add nobra 0 files changed, 0 insertions(+), 0 deletions(-) create mode 100644 nobra $ git g * d62e4cb (HEAD, nobra, master) Add nobra * 7ab5db8 (topic) Add message line 3 * cf6c3d6 Add message line 2 * 38f8aff Add message line 1 * 93b8e52 Add message line 4 * 0b91a9f Add message line 5 * 15f636f Add line number * fa9eabc first commit $ git br master d62e4cb Add nobra * nobra d62e4cb Add nobra topic 7ab5db8 Add message line 3 次に、このnobraブランチのSHA1を指定してcheckoutする。</description>
+    </item>
+    
+    <item>
+      <title>Pro Gitと入門Gitと入門gitと実用GitとGit道場#1でGitの復習 rebase編</title>
+      <link>https://gosyujin.github.io/2012/04/23/1335185906/</link>
+      <pubDate>Mon, 23 Apr 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/04/23/1335185906/</guid>
+      <description>[Git][備忘録][Windows]Pro Gitと入門Gitと入門gitと実用GitとGit道場#1でGitの復習 rebase編 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640:title http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title http://d.hatena.ne.jp/kk_Ataka/20120315/1331816663:title http://d.hatena.ne.jp/kk_Ataka/20120410/1334058674:title   http://d.hatena.ne.jp/kk_Ataka/20120422/1335108555:title  参考  http://progit.org/:title 入門Git 入門git 実用Git New !! Git道場#1 講義 http://speakerdeck.com/u/ogawa/p/git New !!  rebaseとは  入門git P126
+土台の置き換え(リベース)にはgit rebaseコマンドを使う。
+実用Git P176
+一連のコミットのもととなるもの(基点)を変更する際に使います。
+Git道場 講義
+コミットをかぶせる事[1]
+ コミットの基を変更すると。
+パターン1 一般的な？場合(前方移植(forward-port)) Git道場で繰り返したパターンに近いかな。こういうブランチを作る。
+1---2---3(topic) / A---B---C---D(master) まずは1-5行目にそれぞれ1-5と入力したファイルを用意。
+$ touch num $ git add num $ git commit -am&amp;#34;first commit&amp;#34; [master (root-commit) fa9eabc] first commit 0 files changed, 0 insertions(+), 0 deletions(-) create mode 100644 num $ vi num $ cat num $ git commit -am &amp;#34;Add line number&amp;#34; [master 15f636f] Add line number 1 files changed, 5 insertions(+), 0 deletions(-) $ git g * 15f636f (HEAD, master) Add line number * fa9eabc first commit 次にtopicブランチを作成しを育てる。</description>
+    </item>
+    
+    <item>
+      <title>ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした</title>
+      <link>https://gosyujin.github.io/2012/04/20/1334933158/</link>
+      <pubDate>Fri, 20 Apr 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/04/20/1334933158/</guid>
+      <description>[Ruby][Windows][備忘録]ZenTestで実行したRSpecの結果をGrowlで通知してくれるようにした 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20111207/1323291938:title  前回は、ファイル編集する -&amp;gt; alt+tabでウィンドウ切り替える -&amp;gt; プロンプトでrspecコマンドうつ…の繰り返しを改善することができた。
+今回は、コード修正、保存 -&amp;gt; 違うターミナル切り替え -&amp;gt; ZenTestで自動実行された結果を見る…の繰り返しを改善する。テスト結果通知にGrowlを使用する事でいけそう。
+参考サイト  http://d.hatena.ne.jp/gan2/20080413/1208081539:title http://www.edit.ne.jp/~koic/?date=20070731:title http://d.hatena.ne.jp/amacou/20090606/1244260607:title [https://github.com/rspec/rspec/wiki/autotest:title] http://blog.masashi-fujiwara.net/2010/11/script-test.html:title [https://github.com/karl/autotest-growl:title] http://rubyist.g.hatena.ne.jp/rochefort/20100414/p1:title http://d.hatena.ne.jp/zariganitosh/20080312/1205305079:title http://blog.champierre.com/774:title  環境  Windows XP Ruby 1.9.3  Rubygems 1.8.11 Bundler 1.0.21 ZenTest 4.6.2 autotest-growl 0.2.16(だったか？) rspec 2.8.0  Growl for Windows 2.0.9  Macに置き換えてもいけるかは後で確認。
+手順 Growls for Windowsインストール  http://www.growlforwindows.com/gfw/displays.aspx:title ここから落とす。  Gem入手  Gemfileファイルを作って以下のgemファイルを記載  gem &amp;#39;ZenTest&amp;#39; gem &amp;#39;autotest-growl&amp;#39;  bundle install  .</description>
+    </item>
+    
+    <item>
+      <title>Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編</title>
+      <link>https://gosyujin.github.io/2012/04/10/1334058674/</link>
+      <pubDate>Tue, 10 Apr 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/04/10/1334058674/</guid>
+      <description>[Git][備忘録][Windows]Pro Gitと入門Gitと入門gitでGitの復習 HEADのキャレットとかチルダとか補講編 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640:title http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title http://d.hatena.ne.jp/kk_Ataka/20120315/1331816663:title  GitHubで他の人の.gitconfigとかを見たりすると、HEAD^とかHEAD~~とかにエイリアスが貼ってあるけど、これってなんなの？
+今の認識: 書いた分だけリビジョンが戻ってくれる程度
+参考  http://progit.org/:title 入門Git New !! 入門git  調査 入門Git P87 コミットの祖先の指定によると、
+   記法 意味     ^ 指定したコミットの1番目の親   ^番号 指定したコミットのN番目の親   ~ 指定したコミットの1世代前の親   ~世代 指定したコミットのN世代前の親    という事らしい……が、番目と世代は何が違うんだろう？　とりあえずこんな歴史があるとして、masterから戻ってみる。
+確認 * b467307 2012-04-05 kk_Ataka (HEAD, origin/master, master) Add get_sheetname.rb(convert exe file b | * b025b6b 2012-04-05 kk_Ataka (1.</description>
+    </item>
+    
+    <item>
+      <title>simplecovとsimplecov-rcovを使ってJenkinsでカバレッジを確認</title>
+      <link>https://gosyujin.github.io/2012/03/27/1332856400/</link>
+      <pubDate>Tue, 27 Mar 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/03/27/1332856400/</guid>
+      <description>[Windows][Jenkins][Ruby][備忘録]simplecovとsimplecov-rcovを使ってJenkinsでカバレッジを確認 あらすじ rcovインストールに思いの他てこずったので他のツールを検討してみる。
+調べるとsimplecov,simplecov-rcovというツールでもいける様子。Ruby1.9系のカバレッジツールらしいが1.8でも使えるだろうか。あとRailsじゃなくても使えるのかな。
+参考サイト  [https://github.com/colszowka/simplecov:title] [https://github.com/fguillen/simplecov-rcov:title]  手順(Getting Startedをかなりはしょりながら) Simplecov Gemfileに以下を追加。
+gem &amp;#39;simplecov&amp;#39; 次にspecファイルに以下のrequireを追加。
+require &amp;#39;simplecov&amp;#39; SimpleCov.start そしてrspecを実行。
+$ bundle exec rspec -fs spec\convert_spec.rb WARNING: SimpleCov is activated, but you&amp;#39;re not running Ruby 1.9+ - no coverage analysis will happen WARNING: SimpleCov is activated, but you&amp;#39;re not running Ruby 1.9+ - no coverage analysis will happen やっぱ1.8じゃだめかー。ちょっとRuby1.9系で試してみる。
+$ bundle exec rspec -fs spec\convert_spec.rb (略) Coverage report generated for RSpec to C:/project/excel_for_ruby/coverage.</description>
+    </item>
+    
+    <item>
+      <title>Windows環境用にrcovをビルドしなおす手順</title>
+      <link>https://gosyujin.github.io/2012/03/20/1332240122/</link>
+      <pubDate>Tue, 20 Mar 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/03/20/1332240122/</guid>
+      <description>[Windows][Jenkins][Ruby][備忘録]Windows環境用にrcovをビルドしなおす手順 あらすじ Jenkinsでビルドしていくとともにカバレッジの調査もしたい。rcovというツールでカバレッジを出す事ができるらしい。
+参考サイト  [https://github.com/relevance/rcov:title] http://rubygems.org/gems/rcov:title http://www.freia.jp/taka/blog/762/:title  先に結論 Windows環境ではWindows用に自力でビルドしなければならない！
+ [http://rubygems.org/gems/rcov:title]よりgemをDL [http://www.microsoft.com/japan/msdn/vstudio/express/:title]からVisual C++ 2010 Express Editionを入手しインストール 全てのプログラム -&amp;gt; Microsoft Visual Studio 2010 Express -&amp;gt; Visual Studio コマンド プロンプト (2010)を起動。以後ビルドはこのプロンプトで実施する %RUBY_HOME%\lib\ruby\1.8\i386-mswin32\のconfig.hのMSC_VERの記述を一旦消す  #if _MSC_VER != 1200 #error MSC version unmatch: _MSC_VER: 1200 is expected. #endif  env.hのFRAMEを以下のように編集  extern struct FRAME { extern __declspec(dllimport) struct FRAME {  gem install！！  以下は四苦八苦した記録の残骸。
+手順(本当に順番をメモっているのでいらない操作が多い) rcovインストール BundlerでGemを管理するのでGemfileにrcovを追加。
+gem &amp;#39;rcov&amp;#39; 追加後、インストール……</description>
+    </item>
+    
+    <item>
+      <title>Pro Gitと入門gitでGitの復習 マージ編</title>
+      <link>https://gosyujin.github.io/2012/03/15/1331816663/</link>
+      <pubDate>Thu, 15 Mar 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/03/15/1331816663/</guid>
+      <description>[Git][備忘録][Windows]Pro Gitと入門gitでGitの復習 マージ編 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640:title http://d.hatena.ne.jp/kk_Ataka/:title  今回はマージから。
+参考  http://progit.org/:title 入門git  マージ 前準備 ここでブランチ用にリポジトリを作りなおした。
+$ cat field.html &amp;lt;h1&amp;gt;僕にその手を汚せというのか&amp;lt;/h1&amp;gt; というファイルを作成し、chapter1というブランチを切る。
+$ git branch chapter1 $ git branch chapter1 * master ブランチはこうなるはず。
+*master/chapter1/HEAD ↓ ↓ ○  次にchapter2を作成し、ブランチ切り替え。
+$ git checkout -b chapter2law chapter1 Switched to a new branch &amp;#39;chapter2law&amp;#39; 文言を追加し、コミット。
+$ cat field.html &amp;lt;h1&amp;gt;僕にその手を汚せというのか&amp;lt;/h1&amp;gt; &amp;lt;h2&amp;gt;誰も僕を責めることはできない&amp;lt;/h2&amp;gt; $ git commit -a -m &amp;#34;Add chapter2 law route&amp;#34; ブランチはこうなるはず。chapter2lawに切り替えているのでHEADもこちらへ。
+master/chapter1 ↓　*chapter2law/HEAD ↓　↓ ↓┌○ ○┘  同様にchapter3lawも作る。</description>
+    </item>
+    
+    <item>
+      <title>Pro Gitと入門gitでGitの復習 ブランチ編</title>
+      <link>https://gosyujin.github.io/2012/03/11/1331472478/</link>
+      <pubDate>Sun, 11 Mar 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/03/11/1331472478/</guid>
+      <description>[Git][備忘録][Windows]Pro Gitと入門gitでGitの復習 ブランチ編 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120305/1330951640:title  今回はローカルブランチから。
+参考  http://progit.org/:title 入門git  他のVCSとの違い  Subversionなどは各ファイルに対しての差分を時間軸で持っていた Gitではコミットのたびにその時のリポジトリ全体のスナップショットをとる  ただし、変更がなかったファイルは以前のスナップショットで格納したファイルへのリンクを貼っている   Gitのオブジェクト Gitには大きく分けて4つのオブジェクトが存在する。
+ Commitオブジェクト Treeオブジェクト Blobオブジェクト Tagオブジェクト  Commitオブジェクト リポジトリのルート。ファイル情報(ツリー)やメタデータを格納している。以下のコミットのCommitオブジェクトを見てみる。
+$ git log --pretty=oneline 5f431a8cf6023e7398102dfef8b88baf1c581023 Typo 4 log &amp;ndash;pretty=rawコマンドを実行するとハッシュタグがいろいろと。
+$ git log --pretty=raw 5f431a8cf6023e7398102dfef8b88baf1c581023 commit 5f431a8cf6023e7398102dfef8b88baf1c581023 tree de445cf5b526c554dea465d09cea6d65059d1f80 parent a59ff99de68cbf359c814f25cda9c926ef9cdad9 author kk_Ataka &amp;lt;test@example.com&amp;gt; 1329818747 +0900 committer kk_Ataka &amp;lt;test@example.com&amp;gt; 1329819044 +0900 Typo 4 |*commit|このコミットに対するSHA1名|
+|*tree|このコミットの中身を記載しているSHA1名|
+|*parent|一つ前のコミットのSHA1名。存在しない場合はそれが一発目(Rootコミット)、マージされた場合は1つ以上になる場合もある|
+|*author|作成者|
+|*committer|コミッター|
+author, committerあたりがメタデータになるのかな。</description>
+    </item>
+    
+    <item>
+      <title>Pro Gitと入門gitでGitの復習 基本操作編</title>
+      <link>https://gosyujin.github.io/2012/03/05/1330951640/</link>
+      <pubDate>Mon, 05 Mar 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/03/05/1330951640/</guid>
+      <description>[Git][備忘録][Windows]Pro Gitと入門gitでGitの復習 基本操作編 あらすじ めっきりadd, commitくらいしか使っていないGitをもう一回さわってみて学びなおす。Pro Gitのページもブクマしただけで真剣に読んでいなかったので読み進める。
+続き。
+ http://d.hatena.ne.jp/kk_Ataka/20120311/1331472478:title  参考  http://progit.org/:title 入門git  リポジトリの作成 リポジトリにしたいディレクトリの中でinitコマンドで作成 or init ディレクトリ で生成。
+$ git init Initialized empty Git repository in c:/project/testRemote/test/.git/ 以後は基本的にリポジトリの中で作業。
+コンフィグ コンフィグファイルの適用範囲と優先度 下に行くほど適用範囲は狭くなり、優先度が上がる。(同じオプションがあったら下のものが適用される)
+   ファイル Windows(msysGit)では 範囲 優先度 configコマンドでの設定方法     /etc/gitconfig (msysのルート)/etc/gitconfig システム全体 低 &amp;ndash;system   ~/.gitconfig %USERPROFILE%\.gitconfig あるユーザ 中 &amp;ndash;global   (リポジトリ内).git/config (リポジトリ内).git/config そのリポジトリ 高 (指定なし)    コンフィグの一覧を見る そのリポジトリのコンフィグを見る。</description>
+    </item>
+    
+    <item>
+      <title>Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など</title>
+      <link>https://gosyujin.github.io/2012/02/29/1330528564/</link>
+      <pubDate>Wed, 29 Feb 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/02/29/1330528564/</guid>
+      <description>[Ruby][Rails][Windows][備忘録]Rails3レシピブックを読みながらRailsを学ぶ モデル、コントローラ、ビュー、Railsの規約など 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120228/1330436604:title  Railsをインストールして起動する所まではできた。
+参考  Rail3レシピブック 190の技  環境  WindowsXP Ruby1.8.7 Rails3.2.1  MVCを自動生成する アプリケーションのscaffold(足場)の作成 scaffoldジェネレータを実行する事でCRUD操作が可能な簡単なアプリケーションの足場が生成できる。コマンドはrails generate ジェネレータ モデル名 カラム名:型 カラム名:型 (以下繰り返せる)&amp;hellip;
+$ bundle exec rails generate scaffold Blog name:string user_id:integer invoke active_record create db/migrate/20120229022816_create_blogs.rb create app/models/blog.rb invoke test_unit create test/unit/blog_test.rb create test/fixtures/blogs.yml route resources :blogs invoke scaffold_controller create app/controllers/blogs_controller.rb invoke erb create app/views/blogs create app/views/blogs/index.html.erb create app/views/blogs/edit.html.erb create app/views/blogs/show.html.erb create app/views/blogs/new.html.erb create app/views/blogs/_form.html.erb invoke test_unit create test/functional/blogs_controller_test.</description>
+    </item>
+    
+    <item>
+      <title>Rails3レシピブックを読みながらRailsを学ぶ</title>
+      <link>https://gosyujin.github.io/2012/02/28/1330436604/</link>
+      <pubDate>Tue, 28 Feb 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/02/28/1330436604/</guid>
+      <description>[Ruby][備忘録][Windows][Rails]Rails3レシピブックを読みながらRailsを学ぶ あらすじ Redmineプラグインの作り方を学ぶ前にRailsの基本的な事を学ばねばなりますまい。そういやあ。
+参考  Rail3レシピブック 190の技  環境  WindowsXP Ruby 1.8.7 Rails 3.2.1  準備  はじめにbundleでrailsをインストールする……が、なんかエラーが。  Gem::InstallError: The &amp;#39;json&amp;#39; native gem requires installed build tools. Please update your PATH to include build tools or download the DevKit from &amp;#39;http://rubyinstaller.org/downloads&amp;#39; and follow the instructions at &amp;#39;http://github.com/oneclick/rubyinstaller/wiki/Development-Kit&amp;#39; An error occured while installing json (1.6.5), and Bundler cannot continue. Make sure that `gem install json -v &amp;#39;1.6.5&amp;#39;` succeeds before bundling.</description>
+    </item>
+    
+    <item>
+      <title>Rubyの実行ファイルを作成するExerbとOcraを試してみた</title>
+      <link>https://gosyujin.github.io/2012/02/20/1329744294/</link>
+      <pubDate>Mon, 20 Feb 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2012/02/20/1329744294/</guid>
+      <description>[Ruby][備忘録][Windows]Rubyの実行ファイルを作成するExerbとOcraを試してみた あらすじ Rubyが入っていないWindows環境でも(要は自分以外)Rubyスクリプトを実行したいのでexe化する方法を模索する。というか、昔模索した後の結果を今更まとめる。
+対象プロジェクト win32oleを使ってExcelファイルを読み込みシートを取得し連番で吐くというRubyスクリプトをexe化。ソースはこんな感じ。
+ 出力結果はこう。
+$ ruby getSheetname.rb Book1.xlsx Book1.xlsx --- Sheet1 Sheet2 Sheet3 Sheet4 Sheet5 --- end. ExerbとOcraをためしてみた。
+Exerb(ダメだった) 最新は5.4.0らしいが、今回はなんでか4.3.0を入れていた。(理由不明)
+手順(失念)  [http://exerb.sourceforge.jp/:title]よりExerbをダウンロード後、setup.rbを実行？だけでいいんだっけ？ mkexy.batとexerb.batがRubyのbinに入るはず exyファイルを作成する  $ mkexy.bat getSheetname.rb --- end.  成功するとgetSheetname.exyというファイルが作成される(GemfileにおけるGemfile.lockのようなもん？)  # Generated by mkexy # on 2012-02-15 22:05 general: startup: getSheetname.rb core: cui kcode: none file: getSheetname.rb: win32ole.so: file: C:/rubies/Ruby/lib/ruby/1.8/i386-mswin32/win32ole.so type: extension-library nkf.so: file: C:/rubies/Ruby/lib/ruby/1.8/i386-mswin32/nkf.so type: extension-library kconv.rb: file: C:/rubies/Ruby/lib/ruby/1.8/kconv.rb rational.rb: file: C:/rubies/Ruby/lib/ruby/1.</description>
+    </item>
+    
+    <item>
+      <title>CapsLockキーとCtrlキーを入れ替える(置き換える)方法</title>
+      <link>https://gosyujin.github.io/2011/12/20/1324386674/</link>
+      <pubDate>Tue, 20 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/12/20/1324386674/</guid>
+      <description>[Windows][備忘録]CapsLockキーとCtrlキーを入れ替える(置き換える)方法 あらすじ CapsLockいらない！　ここにCtrlキーほしい！
+方法 レジストリをいじってキーを置き換える事に。この例では無変換キーもまとめてCtrlキーに変更する。レジストリをいじるため一か八か細心の注意を払う。
+ ファイルを指定して実行で regedit を起動 HKEY_LOCAL_MACHINE -&amp;gt; SYSTEM -&amp;gt; CurrentControlSet -&amp;gt; Control -&amp;gt; Keyboard Layout を選択し右クリック 新規 -&amp;gt; バイナリ で新しいキーを作成 新しいキーを選択し右クリック -&amp;gt; 名前の変更 で Scancode Map に変更 同じく右クリック -&amp;gt; 修正 でバイナリデータを以下のように編集  0000 00 00 00 00 00 00 00 00 ........ 0008 04 00 00 00 1D 00 3A 00 ......:. 0010 1D 00 7B 00 00 00 00 00 ..{..... 0018  0000はヘッダらしい。全て0固定 0008前半部の04 00 00 00 は使用するキー+1を入力する。今回は下記キーを使用するため04となる  左Ctrlキー 無変換キー CapsLockキー プラス1  0008後半部の 1D 00 3A 00 と 0010前半部の 1D 00 7B 00 がキーをカスタマイズしている箇所 0010後半部の残りは 00 埋め  対応  キーとバイナリ値は下記のようになっている  が、書き込むときはひっくり返す事。(CapsLockなら 3A 00 となる)リトルエンディアンだとそうなるらしい http://ja.</description>
+    </item>
+    
+    <item>
+      <title>Excelの備忘録</title>
+      <link>https://gosyujin.github.io/2011/12/19/1324307879/</link>
+      <pubDate>Mon, 19 Dec 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/12/19/1324307879/</guid>
+      <description> [Windows][備忘録]Excelの備忘録 あらすじ Excelの備忘録。ただし個人でExcel持ってないのでスクリーンショットはなし。
+シート名の取得 - Excel2003,2007で確認 =MID(CELL(&amp;#34;filename&amp;#34;, $A$1 ), FIND(&amp;#34;]&amp;#34;, CELL(&amp;#34;filename&amp;#34;, $A$1))+1, 99) グラフ関係 - Excel2007で確認 単位などを表示する用  グラフを選択 -&amp;gt; レイアウトタブ -&amp;gt; ラベル -&amp;gt; グラフタイトル、軸ラベル  複合グラフ  分けたいグラフを選択 -&amp;gt; レイアウトタブ -&amp;gt; 現在の選択範囲 -&amp;gt; 選択対象の書式設定 -&amp;gt; 系列のオプション -&amp;gt; 第2軸  グラフタイトル等を動的に決める  グラフタイトル等をクリック -&amp;gt; 入力エリアではなく関数エリアを選択し「=シート名!A1」とする  あらかじめ規定の場所に(例えばA1)タイトルとしたい文言をセットしておく シート名を明記しないと「SERIES式では、ワークシートを外部参照していなければなりません。」エラーとなる   シートの保護解除 - Excel2007で確認  ホーム -&amp;gt; セル -&amp;gt; 書式 -&amp;gt; シート保護の解除  入力規則変更(カラムの文字制限、リストから選択など) - Excel2007で確認  データ -&amp;gt; データツール -&amp;gt; データの入力規則  画像の圧縮 - Excel2007で確認  画像を選択 -&amp;gt; 書式リボン(図ツールで出る？) -&amp;gt; 調整エリア -&amp;gt; 図の圧縮  選択した画像のみに適用にチェック -&amp;gt; (オプションでトリミング部分削除などにチェック) -&amp;gt; OK 2003等？　では画像右クリック -&amp;gt; 図のプロパティからいけたらしい   </description>
+    </item>
+    
+    <item>
+      <title>Word2007でCtrl&#43;hjklで移動できるようにする</title>
+      <link>https://gosyujin.github.io/2011/11/17/1321537502/</link>
+      <pubDate>Thu, 17 Nov 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/11/17/1321537502/</guid>
+      <description> [Windows][備忘録]Word2007でCtrl+hjklで移動できるようにする あらすじ  あーWord使ってる時hjklで移動してーあとバックスペースも  手順 テンプレートファイルを編集するとできるよう。で、それはApplication Data下にある。
+ Word2007を起動し、左上のWindowsマークから開くを選択  ファイルの種類で「Word マクロ有効テンプレート(.dotm)」を選択  %APPDATA%\Microsoft\Templates\Normal.dotmを開く   開発タブ -&amp;gt; VisualBasic -&amp;gt; Normal -&amp;gt; Microsoft Word Objects -&amp;gt; ThisDocumentに以下をペーストする  Sub BkSpPrc() Selection.TypeBackspace End Sub Sub MoveLeft() Selection.MoveLeft End Sub Sub MoveRight() Selection.MoveRight End Sub Sub MoveUp() Selection.MoveUp End Sub Sub MoveDown() Selection.MoveDown End Sub  左上のWindowsマーク -&amp;gt; Wordのオプション -&amp;gt; ユーザー設定 -&amp;gt; ショートカットキー:ユーザー設定 -&amp;gt; 分類:マクロ  マクロに上記で記載した関数が表示されていることを確認 マクロを選択してMoveLeftはCtrl+h、MoveDownはCtrl+j&amp;hellip;とキーを割り当てていく   </description>
+    </item>
+    
+    <item>
+      <title>Excel2007のF1キーを無効化する</title>
+      <link>https://gosyujin.github.io/2011/11/16/1321447232/</link>
+      <pubDate>Wed, 16 Nov 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/11/16/1321447232/</guid>
+      <description>[Windows][備忘録]Excel2007のF1キーを無効化する あらすじ ExcelのF1キーを殺したい…。Wordとかは百歩譲っていいとして、ExcelにはF2キーにセル編集が割当たっているので、それを使うときに暴発してしまうため。
+案  F1キーそのものを引っこ抜く 何かしらの方法で無効化する  ググってみると、F1キーをぶちぬくという方法も割とメジャーらしいのですが、いずれ返却しなければいけないPCのため物理的な方法は却下。なので無効化する方向でいきます。レジストリをいじってなんとかする。Accessの履歴といい、なんでMicrosoft製品は何かしようとしたらレジストリいじらないといけないんだ…。
+手順 Windowsキー+r -&amp;gt; regedit でレジストリエディタ起動、まずは下記パスを掘っていく。
+HKEY_CURRENT_USER ┗Software ┗Policies ┗Microsoft ┗Office Officeフォルダ直下になにかしら数字フォルダがあるかもしれないが、これはOfficeのバージョン。
+ 12.0 = Office2007  という事らしい。今回は2007なので12.0を掘る。ここから下の階層はなければ作成する。(作成したい階層で右クリック -&amp;gt; 新規 -&amp;gt; キー)
+HKEY_CURRENT_USER ┗Software ┗Policies ┗Microsoft ┗Office ┗12.0 ┗Excel ┗DisabledShortcutKeysCheckBoxes DisabledShortcutKeysCheckBoxesを作り、DisabledShortcutKeysCheckBoxesで右クリック -&amp;gt; 新規 -&amp;gt; 文字列値を選択しF1Key(わかればなんでもよい)と入力。作成したF1Keyをダブルクリックし
+112,0 と入力しOK押下。
+Excelを再起動するとF1キーを押しても何も起こらなくなった！！　よし！</description>
+    </item>
+    
+    <item>
+      <title>Windowsのローカル環境にWordPressをインストールした</title>
+      <link>https://gosyujin.github.io/2011/10/11/1318334855/</link>
+      <pubDate>Tue, 11 Oct 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/10/11/1318334855/</guid>
+      <description>[Windows][備忘録]Windowsのローカル環境にWordPressをインストールした あらすじ  Wordpress上ではてな記法を使うことができるというプラグイン http://rewish.org/wp/hatena_notation_plugin:title を見つけて使ってみたい！　と思ったのでWordpress備忘録も兼ねてインストール  参考サイト  WordPress  http://ja.wordpress.org/:title http://ja.wordpress.org/install/:title http://www.webcreatorbox.com/tech/wordpress-install-local/:title  MySQL  http://y-kit.jp/saba/xp/mysqlinst.htm:title http://www.mysql.com/downloads/installer/:title   推奨環境  WordPress 3.2 の場合  PHP 5.2.4 以上 MySQL 5.0 以上   実行環境  Windows XP WordPress 3.2 Apache 2.2.1 PHP 5.3.8 MySQL 5.5.15  MySQL インストール、設定  [http://www.mysql.com/downloads/installer/:title]よりMySQLをDL。登録がめんどかったら[http://download.softagency.net/mysql/Downloads/MySQL-5.5/:title]この辺から msi実行。基本的に次へ次へ C:\windows直下にmy.iniファイルを作成以下のように記述  basedirはMySQLのルート(msiでデフォルトインストールするとC:/Program Files/MySQL/MySQL Server 5.5に入る) datadirはその中のdataフォルダ   [mysqld] basedir=&amp;#34;C:/Program Files/MySQL/MySQL Server 5.5&amp;#34; datadir=&amp;#34;C:/Program Files/MySQL/MySQL Server 5.</description>
+    </item>
+    
+    <item>
+      <title>.msgファイルをパースして中から添付ファイルを抜き出す</title>
+      <link>https://gosyujin.github.io/2011/09/30/1317312438/</link>
+      <pubDate>Fri, 30 Sep 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/09/30/1317312438/</guid>
+      <description>[Java][Windows][Ruby][備忘録].msgファイルをパースして中から添付ファイルを抜き出す 正確にはRubyというには微妙なんですが…。
+前回までのあらすじ  選んだメール(本文と添付ファイル)をまとめてDLしてくるだけの簡単なお仕事はできるようになった  http://d.hatena.ne.jp/kk_Ataka/20110517/1305560776:title http://d.hatena.ne.jp/kk_Ataka/20110709/1310140318:title http://d.hatena.ne.jp/kk_Ataka/20110823/1314103220:title   しかし、社内セキュリティGWの設定？　のためかzipとかexeとか怪しい拡張子が付いている添付ファイルは一旦msgファイルに固められるという仕様のためそのままでは添付ファイルが見れない。
+こういうメールが
+メール ┗添付ファイル.zip 届いた時にはこうなっている
+メール ┗ラップ.msg(＼あやしいファイルだから注意してDLしてね／) ┗本来の添付ファイル.zip なんとかRubyからmsgファイル内を解析して添付ファイルを引っこ抜いて保存ができまいか…というのが今回の問題。
+結論 以下のライブラリを駆使して実現しました。
+ msgparser(Auxiliiという所のJava用msgファイルパースライブラリ) jrb(Java Ruby Bridge: RubyからJavaVMを操作できるライブラリ)  一応Rubyでmsgファイルを解析するライブラリも探してみたのですが、あまりないのかな？　http://en.sourceforge.jp/projects/sfnet_ssfiledll/downloads/SSFileDLL%20%28MAPI%29/1.0/SSFileDLL-MAPI-1.0-Source.zip/:title こういうdllは見つけたのですが、MAPIがよくわからん上に説明を見る限りHasAttach(添付ファイルを持ってるか持ってないか？)くらいしかわからない？　ようなのであきらめました。
+あと、msgparserはJavaライブラリなので当初はJRubyで書けば何とかなるかなと思ってました。簡単なサンプルは http://www.rgagnon.com/javadetails/java-0613.html:title このページのような感じ。が、今まで書いたコードをJRubyで実行すると失敗してしまったので方向転換；；　RubyからJavaVMを操作できるrjbというライブラリを使う事に。
+ダウンロード・インストール  msgparser  http://auxilii.com/msgparser/Page.php?id=16000:title よりmsgparserをDL  [http://poi.apache.org/poifs/:title]や[http://www.freeutils.net/source/jtnef/:title]とかが必要になるのですが、上記のmsgparse.zipの中に全部入ってます[1]  distよりmasparser-X.XX.jarを、libよりpoi-X.X-YYYYMMDD.jarとtnef-X.X.X.jarを取得し、同じプロジェクト内にコピー。とりあえずlibフォルダを作ってそこに入れました  rjb  gemで。ただし、当然というかJavaが入っていないと失敗する模様。環境変数JAVA_HOMEも設定している必要があるみたい   gem install rjb ソース ソース全体は [https://github.com/gosyujin/outlook_for_ruby:title] 。msgParse.rbが本体、ライブラリがlibに入っています。
+使い方としてはMsgParseをnewしてinputMsgで.msgファイルのパス指定、saveFileで添付ファイルぶっこぬいて出力先に保存としたい。こんな感じで。
+msg = MsgParse.new msg.inputMsg(MSGFILE) msg.saveFile(SAVEDIR) という事でMsgParser[2]クラスを作成。ソースは [https://github.com/gosyujin/outlook_for_ruby/blob/master/msgParse.rb:title] 。まずは初期化から。</description>
+    </item>
+    
+    <item>
+      <title>Redmineのプラグイン作成のための備忘録と、時々SQLite3</title>
+      <link>https://gosyujin.github.io/2011/09/07/1315401886/</link>
+      <pubDate>Wed, 07 Sep 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/09/07/1315401886/</guid>
+      <description>[Ruby][Redmine][SQLite3][Windows][備忘録]Redmineのプラグイン作成のための備忘録と、時々SQLite3 あらすじ 今あると幸せになれるもの
+チケットのCSVエクスポート機能。ただし、履歴つきで。これがあるといわゆるバグとかPJ課題の管理がRedmineで一元化できExcelの呪縛から解き放てられる……
+既に履歴つきCSVエクスポートプラグインは存在しているようです。http://d.hatena.ne.jp/suer/20101003/1286120294:title　ただ、履歴の出方が1履歴毎に列を更新なんですよね。。
+No, ... ,履歴 1, ... ,#1の履歴,#2の履歴,#3の履歴 2, ... ,#1の履歴,#2の履歴 今自分が抱えている縛り的にはこう出てほしい。
+No, ... ,履歴 1, ... ,&amp;#34;#1の履歴 #2の履歴, #3の履歴&amp;#34; 2, ... ,&amp;#34;#1の履歴, #2の履歴&amp;#34; 吐き出したときにチケット1つの履歴を1セルの中に収めたい。CSVに改行はどうなんだとか1セルに改行しまくるのはどうなんだとか色々ありますがそこは縛りなので。。。
+だもんで、これを機会にRedmineのプラグインはどう作るのかを調べてみました。
+参考サイト  http://www.r-labs.org/projects/r-labs/wiki/%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E9%96%8B%E7%99%BA%E3%82%AC%E3%82%A4%E3%83%89:title http://gihyo.jp/dev/serial/01/ruby/0038:title  環境  WindowsXP Redmine 1.0.0[1]  Ruby 1.8.7 Rails 2.3.5 Rack 1.0.1  SQLite3 バージョン失念  プラグインのスケルトン作成 まずはプラグインのスケルトンというものを作成する。テンプレートみたいなもの？　以下のコマンドで自動生成してくれます。[2]
+&amp;gt;ruby script\generate redmine_plugin extendCsv するといきなりエラー。
+!!! The bundled mysql.rb driver has been removed from Rails 2.</description>
+    </item>
+    
+    <item>
+      <title>MicrosoftOutlookで消せなくなったフォルダをwin32ole経由でRubyから消してみる</title>
+      <link>https://gosyujin.github.io/2011/08/23/1314103220/</link>
+      <pubDate>Tue, 23 Aug 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/08/23/1314103220/</guid>
+      <description>[Ruby][Windows]MicrosoftOutlookで消せなくなったフォルダをwin32ole経由でRubyから消してみる ※この操作をすると新しくフォルダを追加してもOutlookの画面から見れなくなるようです？win32ole経由だと見えるのになんで…。→Windows再起動したらなおりました。
+あらすじ OutlookのRSSフィード内にどうやっても消えないフォルダが出来てしまい途方に暮れていた。
+何がどうなってこうなのかは定かではないんですが、誤って「RSSフィードフォルダ」内にある「RSSフィード記事」に対して「RSSフィードフォルダ」自体をD&amp;amp;Dしてしまった時に生まれたフォルダだと思いまする。。
+フィードをまるごと削除しようとしても「権限を見直してからまた挑戦してねてへぺろ(・ω＜)」[1]とか言って絶対消えてくれないのでOutlookフォルダとかレジストリとかいじらないと消滅させられないのかなーと悩んでいました。
+……が、正直どこをどういじればいいかわからないので、最後にダメ元でwin32oleにお願いしてみた。
+解法そして解放 これで消えた……。
+require &amp;#39;win32ole&amp;#39; ol = WIN32OLE::connect(&amp;#34;Outlook.Application&amp;#34;) nameSpace = ol.getNameSpace(&amp;#34;MAPI&amp;#34;) # RSSFEEDは「RSS フィード」フォルダのEntryId nameSpace.getFolderFromID(RSSFEED).Folders.Remove(1) # puts nameSpace.getFolderFromID(RSSFEED).Name =&amp;gt; # RSS フィード Removeメソッドはインデックスを指定するとの事。
+ |*メソッド・プロパティ|説明|
+|*Add|指定した名前の Outlook フォルダを追加します。|
+|*GetFirst|最初の Outlookフォルダを取得します。|
+|*GetNext|次の Outlook フォルダを取得します。|
+|*Item|あるインデックスの Outlook フォルダを取得します。|
+|*Remove|あるインデックスの Outlook フォルダを削除します。|
+http://jp.rubyist.net/magazine/?0007-Win32OLE:title
+ また、インデックスは1から始まりフォルダビューの親フォルダ直下にあるフォルダを1とし2, 3&amp;hellip;と並んでいる様子。上記のソースでは「RSS フィード」フォルダ直下の(1番目の)フォルダを削除できた！
+EntryIdを見つけるにはFoldersオブジェクトを回してEntryIdを調べる。これを繰り返せば深い階層までいける。
+folders = nameSpace.Folders folders.each do |f| puts f.Name puts f.EntryId end ありがとうwin32ole…。
+おまけ Windowsのirbにショートカットでペーストする方法をはじめて知ったのでメモ。[2]
+ Shift + insert !</description>
+    </item>
+    
+    <item>
+      <title>MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2</title>
+      <link>https://gosyujin.github.io/2011/07/09/1310140318/</link>
+      <pubDate>Sat, 09 Jul 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/07/09/1310140318/</guid>
+      <description>[Windows][Ruby]MicrosoftOutlookのメールをRuby(win32ole)で操作する！ その2 前回までのあらすじ http://d.hatena.ne.jp/kk_Ataka/20110517/1305560776:title
+あれから色々変えたので追記。前回のTODOは…
+ フォルダ名先頭にYYYYMMDD フォルダ名に使用できない文字を全角に置換 フォルダ存在時の対処 デスクトップに保存したい  全部消化。とりあえずOutlook開いて添付ファイル付きのメールファイルをデスクトップに保存するだけの簡単なお仕事はできるようになりました！やった！
+GitHub [https://github.com/gosyujin/outlook_for_ruby:title]
+なにやってるかの流れ  まず初期化。  # MicrosoftOutlookに接続後初期化処理を行う。 # MicrosoftOutlookが起動していないと終了する。 def initialize begin ol = WIN32OLE::connect(&amp;#34;Outlook.Application&amp;#34;) rescue WIN32OLERuntimeError putsError(&amp;#34;MicrosoftOutlookが起動していません。&amp;#34;) exit else desktopJa = Kconv.tosjis(&amp;#34;デスクトップ&amp;#34;) # NameSpace取得(getNameSpaceの引数は&amp;#34;MAPI&amp;#34;のみ) @nameSpace = ol.getNameSpace(&amp;#34;MAPI&amp;#34;) # 保存パス指定 @saveRootPath = &amp;#34;#{ENV[&amp;#34;USERPROFILE&amp;#34;]}\\&amp;#34; + desktopJa + &amp;#34;\\&amp;#34; # 保存パスに作成するディレクトリ作成 @saveDir = &amp;#34;&amp;#34; # フォルダ選択番号、ハッシュ @folderNum = -1 @folder = Hash.new # メール選択番号、ハッシュ @mailNum = -1 @mail = Hash.</description>
+    </item>
+    
+    <item>
+      <title>MicrosoftOutlookのメールをRubyで操作する！</title>
+      <link>https://gosyujin.github.io/2011/05/17/1305560776/</link>
+      <pubDate>Tue, 17 May 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/05/17/1305560776/</guid>
+      <description>[Ruby][Windows]MicrosoftOutlookのメールをRubyで操作する！ あらすじ  職場のメールはMicrosoftOutlook…添付ファイルとかメール本文を手動で保存するだけの簡単なお仕事がめんどいのでマクロを作った ある日、なんか共通マクロを適用してくださいねとか通達がきたので適用した(今まで使っていた自分のマクロは退避した) 新マクロにはご丁寧にパスワードがかけられていた…編集不可／(^o^)＼ Outlookからマクロを実行するのは諦めて外部からメールを操作しよう…[1] Rubyでできないかな？　…win32oleというものがあるらしい！←今ここ  参考サイト  http://jp.rubyist.net/magazine/?0007-Win32OLE:title  ドンピシャでした。
+やりたい事  メール本文を保存したい(ファイル名は件名.txt) 添付ファイルを保存したい(ファイル名は添付ファイル名のまま) 上記のファイルをYYYYMMDD_添付ファイル名(拡張子なし)フォルダの中へ格納 保存場所はマイドキュメントかデスクトップ  こんな感じ
+[メール] 件名:subsubject 添付ファイル:tmptmpfile.zip ↓ダウンロード [マイドキュメント] └[YYYYMMDD_tmptmpfile] ├tmptmpfile.zip └subsubject.txt 手順 まずソースはこんな感じ。GitHubは [https://github.com/gosyujin/outlook_for_ruby:title]
+# -*- encoding: UTF-8 -*- require &amp;#34;win32ole&amp;#34; # 保存ディレクトリ基準。一応マイドキュメントへ SaveRootPath = &amp;#34;#{ENV[&amp;#34;USERPROFILE&amp;#34;]}\\My Documents&amp;#34; class Outlook def initialize # Outlookに接続 ol = WIN32OLE::connect(&amp;#34;Outlook.Application&amp;#34;) # NameSpace取得(getNameSpaceの引数は&amp;#34;MAPI&amp;#34;のみ) @nameSpace = ol.getNameSpace(&amp;#34;MAPI&amp;#34;) end # EntryIDを元にメールを取得  def mail(entryId) item = @nameSpace.</description>
+    </item>
+    
+    <item>
+      <title>Redmineインストール備忘録(Windows)</title>
+      <link>https://gosyujin.github.io/2011/05/01/1304204171/</link>
+      <pubDate>Sun, 01 May 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/05/01/1304204171/</guid>
+      <description>[Ruby][Redmine][Windows][備忘録]Redmineインストール備忘録(Windows) 参考サイト  http://redmine.jp/tech_note/install/  OSとRubyとか  OSはWindows XP Ruby, RubyGemsインストール済み DBはSQLite3にする  必要なものをDL, インストール  GemでRailsをインストール  &amp;gt;gem install rails  同じくsqlite3をインストール  最新のsqlite3-ruby(1.2.4)ではなく、1.2.3を指定[1]   &amp;gt;gem install sqlite3-ruby --version &amp;#39;= 1.2.3&amp;#39;  http://www.sqlite.org/download.html:title でSQLite3のdllをDLしC:\WINDOWS\system32(パスが通ってるところ)にコピー  コマンドラインから動かす予定はないのでexeは落とさない    http://rubyforge.org/frs/?group_id=1850:title でRedmineをDLし解凍  各種設定  Redmineフォルダ内のconfig/database.ymlを作成し[2]、最低限下記のように編集  production: adapter: sqlite3 # SQLite3を指定 database: db/redmine.db # DB名は任意 timeout: 5000 # タイムアウト時間  config/initializers/session_store.rb作成  &amp;gt;rake generate_session_store  DBの初期化  &amp;gt;rake db:migrate RAILS_ENV=production &amp;gt;rake redmine:load_default_data RAILS_ENV=production  …が、ここでエラー  rackバージョンが1.</description>
+    </item>
+    
+  </channel>
+</rss>

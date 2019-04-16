@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Fluentdのプラグインを作成してみる(練習用) - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Fluentd][備忘録][Ruby]Fluentdのプラグインを作成してみる(練習用) 前回までのあらすじ http://d.hatena.ne.jp/kk_Ataka/20120712/1342098141:title で、confファイルのコメントアウトを外してとりあえず動くっていうところまではいけた。今度は簡単なプラグインを作ってみる。
+参考サイト  http://fluentd.org/doc/:title http://d.hatena.ne.jp/erukiti/20120205/1328452455:title http://d.hatena.ne.jp/tagomoris/20120221/1329815126:title  ひたすら何かを吐き続けるプラグイン Inputプラグインの場合 Fluent::Inputクラスを継承する。
+class SimpleInput &amp;lt; Fluent::Input # 第一引数がプラグインの名前、&amp;lt;source&amp;gt; typeに指定される Fluent::Plugin.register_input(&amp;#34;simple_in&amp;#34;, self) def start @thread = Thread.new(&amp;amp;method(:run)) end def run loop do # emitメソッドの第一引数が &amp;lt;match **.**&amp;gt; の**に該当すればその形式で出力される # fluent.confでdebug.**はstdoutで出力すると定義されている Fluent::Engine.emit(&amp;#34;debug.debug&amp;#34;, Fluent::Engine.now, {&amp;#34;simple&amp;#34; =&amp;gt; &amp;#34;debudebu&amp;#34;}) # fluent.confに&amp;lt;match simple.output&amp;gt; type simple_outを定義したので、以下のOutput形式で出力される Fluent::Engine.emit(&amp;#34;simple.output&amp;#34;, Fluent::Engine.now, {&amp;#34;simple&amp;#34; =&amp;gt; &amp;#34;simout&amp;#34;}) sleep(1) end end end 上のソースには書かれていないけど、他にもメソッドがいくつか。(公式サイトより)
+ configure メソッド  スタート前に呼び出される confハッシュにパラメータを入れられる？ エラーはFluent::ConfigErrorを投げる  start メソッド  スタート時に呼ばれる ここでスレッドを作ったりファイルをオープンしたり  shutdown メソッド  シャットダウン時に呼ばれる スレッドやファイルのクローズはここで。  イベントをsubmitするためにはFluent::Engine.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2012/08/16/1345124098/" class="pagination_overflow previous_page">
+          Prev: 
+          12/8/16
+          Sphinxの見出しについて学びなおし
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2012/08/29/1346242547/" class="pagination_overflow next_page">
+          Next: 
+          12/8/29
+          Git add, commitをした時、中でどんな事が起こっ …
+        </a>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">Fluentdのプラグインを作成してみる(練習用)</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/fluentd' class="muted-link">
+      [ <span class="Label Label--gray">Fluentd</span> ]
+    </a>
+  
+    <a href='/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
+    </a>
+  
+
+
+          Published: <span>2012/08/17</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#fluentd-備忘録-ruby-fluentdのプラグインを作成してみる-練習用">[Fluentd][備忘録][Ruby]Fluentdのプラグインを作成してみる(練習用)</a></li>
+<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#ひたすら何かを吐き続けるプラグイン">ひたすら何かを吐き続けるプラグイン</a>
+<ul>
+<li><a href="#inputプラグインの場合">Inputプラグインの場合</a></li>
+<li><a href="#outputプラグインの場合">Outputプラグインの場合</a></li>
+<li><a href="#プラグインをデバッグしたい場合">プラグインをデバッグしたい場合</a></li>
+</ul></li>
+<li><a href="#configファイル">Configファイル</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="fluentd-備忘録-ruby-fluentdのプラグインを作成してみる-練習用">[Fluentd][備忘録][Ruby]Fluentdのプラグインを作成してみる(練習用)</h2>
+
+<h2 id="前回までのあらすじ">前回までのあらすじ</h2>
+
+<p><a href="http://d.hatena.ne.jp/kk_Ataka/20120712/1342098141:title">http://d.hatena.ne.jp/kk_Ataka/20120712/1342098141:title</a> で、confファイルのコメントアウトを外してとりあえず動くっていうところまではいけた。今度は簡単なプラグインを作ってみる。</p>
+
+<h2 id="参考サイト">参考サイト</h2>
+
+<ul>
+<li><a href="http://fluentd.org/doc/:title">http://fluentd.org/doc/:title</a></li>
+<li><a href="http://d.hatena.ne.jp/erukiti/20120205/1328452455:title">http://d.hatena.ne.jp/erukiti/20120205/1328452455:title</a></li>
+<li><a href="http://d.hatena.ne.jp/tagomoris/20120221/1329815126:title">http://d.hatena.ne.jp/tagomoris/20120221/1329815126:title</a></li>
+</ul>
+
+<h2 id="ひたすら何かを吐き続けるプラグイン">ひたすら何かを吐き続けるプラグイン</h2>
+
+<h3 id="inputプラグインの場合">Inputプラグインの場合</h3>
+
+<p>Fluent::Inputクラスを継承する。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">SimpleInput</span> <span class="o">&lt;</span> <span class="no">Fluent</span><span class="o">::</span><span class="no">Input</span>
+  <span class="c1"># 第一引数がプラグインの名前、&lt;source&gt; typeに指定される</span>
+  <span class="no">Fluent</span><span class="o">::</span><span class="no">Plugin</span><span class="o">.</span><span class="n">register_input</span><span class="p">(</span><span class="s2">&#34;simple_in&#34;</span><span class="p">,</span> <span class="nb">self</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">start</span>
+    <span class="vi">@thread</span> <span class="o">=</span> <span class="no">Thread</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="nb">method</span><span class="p">(</span><span class="ss">:run</span><span class="p">))</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">run</span>
+    <span class="kp">loop</span> <span class="k">do</span>
+      <span class="c1"># emitメソッドの第一引数が &lt;match **.**&gt; の**に該当すればその形式で出力される</span>
+      <span class="c1"># fluent.confでdebug.**はstdoutで出力すると定義されている</span>
+      <span class="no">Fluent</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;debug.debug&#34;</span><span class="p">,</span> <span class="no">Fluent</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">now</span><span class="p">,</span> <span class="p">{</span><span class="s2">&#34;simple&#34;</span> <span class="o">=&gt;</span> <span class="s2">&#34;debudebu&#34;</span><span class="p">})</span>
+      <span class="c1"># fluent.confに&lt;match simple.output&gt; type simple_outを定義したので、以下のOutput形式で出力される</span>
+      <span class="no">Fluent</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;simple.output&#34;</span><span class="p">,</span> <span class="no">Fluent</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">now</span><span class="p">,</span> <span class="p">{</span><span class="s2">&#34;simple&#34;</span> <span class="o">=&gt;</span> <span class="s2">&#34;simout&#34;</span><span class="p">})</span>
+      <span class="nb">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+<p>上のソースには書かれていないけど、他にもメソッドがいくつか。(公式サイトより)</p>
+
+<ul>
+<li>configure メソッド
+
+<ul>
+<li>スタート前に呼び出される</li>
+<li>confハッシュにパラメータを入れられる？</li>
+<li>エラーはFluent::ConfigErrorを投げる</li>
+</ul></li>
+<li>start メソッド
+
+<ul>
+<li>スタート時に呼ばれる</li>
+<li>ここでスレッドを作ったりファイルをオープンしたり</li>
+</ul></li>
+<li>shutdown メソッド
+
+<ul>
+<li>シャットダウン時に呼ばれる</li>
+<li>スレッドやファイルのクローズはここで。</li>
+</ul></li>
+<li>イベントをsubmitするためにはFluent::Engine.emit(tag, time, record)メソッドを使う
+
+<ul>
+<li>tagはString、timeはUnixTime、recordはハッシュ。</li>
+</ul></li>
+</ul>
+
+<h3 id="outputプラグインの場合">Outputプラグインの場合</h3>
+
+<p>まず種類がいろいろ。</p>
+
+<ul>
+<li>Buffered output plugins Fluent::BufferedOutputクラスを継承</li>
+<li>Time sliced output plugins Fluent::TimeSlicedOutputクラスを継承/Buffered output pluginを継承したプラグイン？</li>
+<li>Non-buffered output plugins Fluent::Outputクラスを継承</li>
+</ul>
+
+<p>今回はFluent::Outputを使った。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">SimpleOutput</span> <span class="o">&lt;</span> <span class="no">Fluent</span><span class="o">::</span><span class="no">Output</span>
+  <span class="c1"># 第一引数がプラグインの名前、&lt;match&gt; の typeに指定される</span>
+  <span class="no">Fluent</span><span class="o">::</span><span class="no">Plugin</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="s2">&#34;simple_out&#34;</span><span class="p">,</span> <span class="nb">self</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">emit</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">es</span><span class="p">,</span> <span class="n">chain</span><span class="p">)</span>
+    <span class="n">chain</span><span class="o">.</span><span class="n">next</span>
+    <span class="n">es</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">time</span><span class="p">,</span> <span class="n">record</span><span class="o">|</span>
+      <span class="c1"># 出力内容</span>
+      <span class="nb">puts</span> <span class="s2">&#34;simple_out: </span><span class="si">#{</span><span class="n">time</span><span class="si">}</span><span class="s2"> - </span><span class="si">#{</span><span class="n">record</span><span class="si">}</span><span class="s2">&#34;</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+<ul>
+<li>configure, start, shutdown はInputプラグイン同様にある</li>
+<li>emit メソッドはイベントに到達した場合呼ばれる
+
+<ul>
+<li>esはFluent::EventStreamオブジェクト(イベントが入ってる？)
+
+<ul>
+<li>eachで回すとイベントを検索できる。</li>
+</ul></li>
+<li>chainはトランザクションメッセージのオブジェクト。
+
+<ul>
+<li>適切なポイントでchain.nextを呼ぶとエラーを吐いたときにrollbackしてくれる。</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<h3 id="プラグインをデバッグしたい場合">プラグインをデバッグしたい場合</h3>
+
+<ul>
+<li>fluentdコマンド実行するときに-vvオプションを指定する事でデバッグメッセージが表示できる。</li>
+<li>デバッグにはstdoutかcopyが役に立つ
+
+<ul>
+<li>stdoutはマッチしたイベントをコンソールに出力する</li>
+<li>copyはマッチしたイベントを複数のプラグインにコピーできる
+
+<ul>
+<li>stdoutと一緒に使う事ができる</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<h2 id="configファイル">Configファイル</h2>
+<div class="highlight"><pre class="chroma"><code class="language-?" data-lang="?"># Inputプラグイン指定
+&lt;source&gt;
+  type simple_in
+&lt;/source&gt;
+
+# Fluent::Engine.emit(&#34;simple.output&#34;, Fluent::Engine.now, {&#34;simple&#34; =&gt; &#34;simout&#34;})
+# simple.outputタグ指定した方はsimple_output(Outputプラグイン)出力にマッチする
+&lt;match simple.output&gt;
+  type simple_out
+&lt;/match&gt;
+
+#
+## match tag=debug.** and dump to console
+# Fluent::Engine.emit(&#34;debug.debug&#34;, Fluent::Engine.now, {&#34;simple&#34; =&gt; &#34;debudebu&#34;})  
+# debug.debugタグ指定した方はstdout出力にマッチする
+&lt;match debug.**&gt;
+  type stdout
+&lt;/match&gt;</code></pre></div>
+<p>これを実行すると…。</p>
+<div class="highlight"><pre class="chroma"><code class="language-?" data-lang="?">$ bundle exec fluentd -c /home/kk_Ataka/fluentd/fluent.conf -p /home/kk_Ataka/fluentd/plugin/
+2012-08-17 22:19:41 +0900: starting fluentd-0.10.24
+2012-08-17 22:19:41 +0900: reading config file path=&#34;/home/kk_Ataka/fluentd/fluent.conf&#34;
+(略)
+2012-08-17 22:19:41 +0900: following tail of /usr/local/apache2/logs/access_log
+2012-08-17 22:19:41 +0900: following tail of /usr/local/apache2/logs/error_log
+2012-08-17 22:19:41 +0900 debug.debug: {&#34;simple&#34;:&#34;debudebu&#34;}
+simple_out: 1345209581 - {&#34;simple&#34;=&gt;&#34;simout&#34;}
+2012-08-17 22:19:42 +0900 debug.debug: {&#34;simple&#34;:&#34;debudebu&#34;}
+simple_out: 1345209582 - {&#34;simple&#34;=&gt;&#34;simout&#34;}
+2012-08-17 22:19:43 +0900 debug.debug: {&#34;simple&#34;:&#34;debudebu&#34;}
+simple_out: 1345209583 - {&#34;simple&#34;=&gt;&#34;simout&#34;}
+2012-08-17 22:19:44 +0900 debug.debug: {&#34;simple&#34;:&#34;debudebu&#34;}
+simple_out: 1345209584 - {&#34;simple&#34;=&gt;&#34;simout&#34;}
+2012-08-17 22:19:45 +0900 debug.debug: {&#34;simple&#34;:&#34;debudebu&#34;}
+simple_out: 1345209585 - {&#34;simple&#34;=&gt;&#34;simout&#34;}
+2012-08-17 22:19:46 +0900 debug.debug: {&#34;simple&#34;:&#34;debudebu&#34;}
+simple_out: 1345209586 - {&#34;simple&#34;=&gt;&#34;simout&#34;}</code></pre></div>
+<p>1秒刻みでプラグインに記述した内容が出力される。こっちが標準のstdout出力。</p>
+<div class="highlight"><pre class="chroma"><code class="language-?" data-lang="?">2012-08-17 22:19:46 +0900 debug.debug: {&#34;simple&#34;:&#34;debudebu&#34;}</code></pre></div>
+<p>こっちが自分で記述したOutputプラグイン書式の出力。</p>
+<div class="highlight"><pre class="chroma"><code class="language-?" data-lang="?">simple_out: 1345209586 - {&#34;simple&#34;=&gt;&#34;simout&#34;}</code></pre></div>
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2012/08/17/1345209899/"
+    data-text="Fluentdのプラグインを作成してみる(練習用) - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2012/08/17/1345209899/"
+    data-hatena-bookmark-title="Fluentdのプラグインを作成してみる(練習用) - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2012/08/17/1345209899/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2012/08/17/1345209899/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2012/08/16/1345124098/" class="pagination_overflow previous_page">
+          Prev: 
+          12/8/16
+          Sphinxの見出しについて学びなおし
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2012/08/29/1346242547/" class="pagination_overflow next_page">
+          Next: 
+          12/8/29
+          Git add, commitをした時、中でどんな事が起こっ …
+        </a>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#fluentd-備忘録-ruby-fluentdのプラグインを作成してみる-練習用">[Fluentd][備忘録][Ruby]Fluentdのプラグインを作成してみる(練習用)</a></li>
+<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#ひたすら何かを吐き続けるプラグイン">ひたすら何かを吐き続けるプラグイン</a>
+<ul>
+<li><a href="#inputプラグインの場合">Inputプラグインの場合</a></li>
+<li><a href="#outputプラグインの場合">Outputプラグインの場合</a></li>
+<li><a href="#プラグインをデバッグしたい場合">プラグインをデバッグしたい場合</a></li>
+</ul></li>
+<li><a href="#configファイル">Configファイル</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>

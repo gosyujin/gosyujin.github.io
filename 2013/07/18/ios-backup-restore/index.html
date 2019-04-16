@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段 - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ iOSのバックアップ/リストア周りでえらいハメられたので、まとめてみた。
+iOS 7 が出るとどうなってしまうのか…。
+バックアップの方式 iTunesの「概要」画面から選べる
+ iCloudにバックアップ このコンピュータにバックアップ  そのまま ローカルのバックアップを暗号化   あまり意識していなかったんだけど、iCloudバックアップは以下の条件を満たす時に実行される模様
+ Wi-Fi 経由でインターネットに接続されている(MUST) 電源に接続されている 画面がロックされている  中でも、Wi-Fiだけは確実に満たす必要がある。(3G回線では、手動でiCloud同期もできない)
+iOS：コンテンツのバックアップと復元方法
+バックアップされる内容 SandboxとKeyChainの大きく2つに分けられる
+Sandboxの内容  Cocoaの日々: [Info] 特定のファイルをiCloudバックアップ対象外にする [XCODE] iPhone iOSのディレクトリ構成について学んだ - YoheiM技術やらずに終われまテン アプリケーションディレクトリの構造とアクセス方法 - プログラミングノート
+ /var/mobile/Applications/01234567-890A-BCDE-FGHI-JKLMNOPQRSTU(ランダム文字列)/ 下のファイルがバックアップマシンに保存されたりされなかったり、 基本的には 以下の階層のバックアップと定義してあるものがそのまま保存される
+ Documents/ バックアップ、アプリに関わる重要なファイル置き場 Library/ Caches/ 非バックアップ、アプリで使用するが消えても大丈夫(また作れる)なファイル置き場 Preferences/ バックアップ、アプリの設定ファイル置き場 tmp/ 非バックアップ、一時ファイル置き場  基本的 じゃない場合が、 このコンピュータにバックアップ ローカルのバックアップを暗号化 した時
+ 「ローカルのバックアップを暗号化」を選んだ時にユーザが入力したパスワードで暗号化され、保存される   どんなファイルが入っているかはXcodeの Organizer =&amp;gt; 任意の端末 =&amp;gt; Applications =&amp;gt; 任意のアプリケーション の Data file in Sandboxで確認できる。|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2013/06/05/ios-over-the-air/" class="pagination_overflow previous_page">
+          Prev: 
+          13/6/5
+          Over-the-Airという形式でiOSアプリのインストー …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2013/08/04/android-install-intent/" class="pagination_overflow next_page">
+          Next: 
+          13/8/4
+          Androidアプリのインストール、起動方法によっ …
+        </a>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/iphone' class="muted-link">
+      [ <span class="Label Label--gray">iPhone</span> ]
+    </a>
+  
+    <a href='/tags/ios' class="muted-link">
+      [ <span class="Label Label--gray">iOS</span> ]
+    </a>
+  
+
+
+          Published: <span>2013/07/18</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#バックアップの方式">バックアップの方式</a></li>
+<li><a href="#バックアップされる内容">バックアップされる内容</a>
+<ul>
+<li><a href="#sandboxの内容">Sandboxの内容</a></li>
+<li><a href="#keychainの内容">KeyChainの内容</a></li>
+</ul></li>
+<li><a href="#バックアップ方法">バックアップ方法</a></li>
+<li><a href="#バックアップ除外方法">バックアップ除外方法</a>
+<ul>
+<li><a href="#ios-5-0">iOS 5.0</a></li>
+<li><a href="#ios-5-0-1">iOS 5.0.1</a></li>
+<li><a href="#ios-5-1-以降">iOS 5.1 以降</a></li>
+</ul></li>
+<li><a href="#注意点">注意点</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>iOSのバックアップ/リストア周りでえらいハメられたので、まとめてみた。</p>
+
+<p>iOS 7 が出るとどうなってしまうのか…。</p>
+
+<h2 id="バックアップの方式">バックアップの方式</h2>
+
+<p>iTunesの「概要」画面から選べる</p>
+
+<ol>
+<li>iCloudにバックアップ</li>
+<li>このコンピュータにバックアップ
+
+<ul>
+<li>そのまま</li>
+<li>ローカルのバックアップを暗号化</li>
+</ul></li>
+</ol>
+
+<p>あまり意識していなかったんだけど、iCloudバックアップは以下の条件を満たす時に実行される模様</p>
+
+<ul>
+<li>Wi-Fi 経由でインターネットに接続されている(MUST)</li>
+<li>電源に接続されている</li>
+<li>画面がロックされている</li>
+</ul>
+
+<p>中でも、Wi-Fiだけは確実に満たす必要がある。(3G回線では、手動でiCloud同期もできない)</p>
+
+<p><a href="http://support.apple.com/kb/ht1766?viewlocale=ja_JP&amp;locale=ja_JP">iOS：コンテンツのバックアップと復元方法</a></p>
+
+<h2 id="バックアップされる内容">バックアップされる内容</h2>
+
+<p>SandboxとKeyChainの大きく2つに分けられる</p>
+
+<h3 id="sandboxの内容">Sandboxの内容</h3>
+
+<ul>
+<li><a href="http://cocoadays.blogspot.jp/2011/11/info-icloud.html">Cocoaの日々: [Info] 特定のファイルをiCloudバックアップ対象外にする</a></li>
+<li><a href="http://d.hatena.ne.jp/yoheiM/20110227">[XCODE] iPhone iOSのディレクトリ構成について学んだ - YoheiM技術やらずに終われまテン</a></li>
+
+<li><p><a href="http://d.hatena.ne.jp/ntaku/20110104/1294146555">アプリケーションディレクトリの構造とアクセス方法 - プログラミングノート</a></p></li>
+
+<li><p><code>/var/mobile/Applications/01234567-890A-BCDE-FGHI-JKLMNOPQRSTU(ランダム文字列)/</code> 下のファイルがバックアップマシンに保存されたりされなかったり、 <strong>基本的には</strong> 以下の階層のバックアップと定義してあるものがそのまま保存される</p>
+
+<ul>
+<li><code>Documents/</code> バックアップ、アプリに関わる重要なファイル置き場</li>
+<li><code>Library/</code></li>
+<li><code>Caches/</code> 非バックアップ、アプリで使用するが消えても大丈夫(また作れる)なファイル置き場</li>
+<li><code>Preferences/</code> バックアップ、アプリの設定ファイル置き場</li>
+<li><code>tmp/</code> 非バックアップ、一時ファイル置き場</li>
+</ul></li>
+
+<li><p><strong>基本的</strong> じゃない場合が、 <strong>このコンピュータにバックアップ ローカルのバックアップを暗号化</strong> した時</p>
+
+<ul>
+<li>「ローカルのバックアップを暗号化」を選んだ時にユーザが入力したパスワードで暗号化され、保存される</li>
+</ul></li>
+</ul>
+
+<p>どんなファイルが入っているかはXcodeの <code>Organizer =&gt; 任意の端末 =&gt; Applications =&gt; 任意のアプリケーション</code> の Data file in Sandboxで確認できる。</p>
+
+<h3 id="keychainの内容">KeyChainの内容</h3>
+
+<ul>
+<li><a href="http://cocoadays.blogspot.jp/2011/02/ios-keychain-services.html">Cocoaの日々: [iOS] Keychain Services とは</a></li>
+
+<li><p><a href="http://did2memo.net/2012/10/02/iphone-how-to-backup-and-restore-key-chain/">復元が不完全！？iPhoneバックアップで認証情報が復元できない理由とバックアップのオススメ設定 ｜ 情報科学屋さんを目指す人のメモ</a></p></li>
+
+<li><p>内容はバックアップマシンに保存されるが、 <strong>暗号化</strong> されている</p></li>
+
+<li><p>暗号化されたKeyChain情報を複合化するための鍵は <strong>基本的には</strong> 暗号化したiOS端末から外に出ない</p>
+
+<ul>
+<li>そのため、同じマシンでバックアップ/リストアをすると…</li>
+<li>バックアップ &hellip; KeyChain情報をバックアップマシンに格納</li>
+<li>リストア &hellip; 暗号化されたKeyChain情報が端末に戻ってくる</li>
+<li>同一端末なので、複合化するための鍵は持っている</li>
+<li>パスワードとか復活できる</li>
+<li>一方、機種変更時などで、新端末にリストアすると…</li>
+<li>バックアップ &hellip; KeyChain情報をバックアップマシンに格納</li>
+<li>リストア &hellip; 暗号化されたKeyChain情報が端末に戻ってくる？(戻ってくることすらないのかな？確認方法がわからん)</li>
+<li>端末が異なるので、複合化するための鍵が <strong>ない</strong></li>
+<li>パスワードとか入れ直し…</li>
+</ul></li>
+
+<li><p><strong>基本的</strong> じゃない場合が、 <strong>このコンピュータにバックアップ ローカルのバックアップを暗号化</strong> した時</p>
+
+<ul>
+<li>この時、鍵もバックアップマシンに保存され、 <strong>全部丸ごと暗号化</strong> される</li>
+<li>「ローカルのバックアップを暗号化」を選んだ時にユーザが入力したパスワードで暗号化される</li>
+</ul></li>
+</ul>
+
+<h2 id="バックアップ方法">バックアップ方法</h2>
+
+<p>上記の仕様でよろしくやってくれる。</p>
+
+<h2 id="バックアップ除外方法">バックアップ除外方法</h2>
+
+<p>かといって、全部一括でバックアップとして外部サーバにあげられると困るファイルもあるはず。(著作権、個人情報、etc)</p>
+
+<p>なので、そういうファイルはあらかじめバックアップ対象から除外しておく必要がある。</p>
+
+<p>方法はiOSのバージョンによって異なる。</p>
+
+<p>現時点では、 <code>iOS 5.1 以降</code> と <code>iOS 5.0.1</code> で場合分けした対応が必須みたい。</p>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/qa/qa1719/_index.html">Technical Q&amp;A QA1719: Technical Q&amp;A QA1719</a></li>
+<li><a href="http://stackoverflow.com/questions/10836134/nsurlisexcludedfrombackupkey-can-not-be-set-correctly">iphone - NSURLIsExcludedFromBackupKey can not be set correctly - Stack Overflow</a></li>
+</ul>
+
+<h3 id="ios-5-0">iOS 5.0</h3>
+
+<p>そんなものはない。</p>
+
+<h3 id="ios-5-0-1">iOS 5.0.1</h3>
+
+<p>上記のdeveloper.apple.comのサンプルベタ貼り。</p>
+<div class="highlight"><pre class="chroma"><code class="language-objc" data-lang="objc"><span class="cp">#import &lt;sys/xattr.h&gt;
+</span><span class="cp"></span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">addSkipBackupAttributeToItemAtURL:</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">URL</span>
+<span class="p">{</span>
+    <span class="n">assert</span><span class="p">([[</span><span class="n">NSFileManager</span> <span class="n">defaultManager</span><span class="p">]</span> <span class="nl">fileExistsAtPath</span><span class="p">:</span> <span class="p">[</span><span class="n">URL</span> <span class="n">path</span><span class="p">]]);</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filePath</span> <span class="o">=</span> <span class="p">[[</span><span class="n">URL</span> <span class="n">path</span><span class="p">]</span> <span class="n">fileSystemRepresentation</span><span class="p">];</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">attrName</span> <span class="o">=</span> <span class="s">&#34;com.apple.MobileBackup&#34;</span><span class="p">;</span>
+    <span class="n">u_int8_t</span> <span class="n">attrValue</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">setxattr</span><span class="p">(</span><span class="n">filePath</span><span class="p">,</span> <span class="n">attrName</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attrValue</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attrValue</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+<h3 id="ios-5-1-以降">iOS 5.1 以降</h3>
+
+<p>上記のdeveloper.apple.comのサンプルベタ貼り。</p>
+<div class="highlight"><pre class="chroma"><code class="language-objc" data-lang="objc"><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">addSkipBackupAttributeToItemAtURL:</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">URL</span>
+<span class="p">{</span>
+    <span class="n">assert</span><span class="p">([[</span><span class="n">NSFileManager</span> <span class="n">defaultManager</span><span class="p">]</span> <span class="nl">fileExistsAtPath</span><span class="p">:</span> <span class="p">[</span><span class="n">URL</span> <span class="n">path</span><span class="p">]]);</span>
+    <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+    <span class="kt">BOOL</span> <span class="n">success</span> <span class="o">=</span> <span class="p">[</span><span class="n">URL</span> <span class="nl">setResourceValue</span><span class="p">:</span> <span class="p">[</span><span class="n">NSNumber</span> <span class="nl">numberWithBool</span><span class="p">:</span> <span class="nb">YES</span><span class="p">]</span>
+                          <span class="nl">forKey</span><span class="p">:</span> <span class="n">NSURLIsExcludedFromBackupKey</span> <span class="nl">error</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">error</span><span class="p">];</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">){</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;Error excluding %@ from backup %@&#34;</span><span class="p">,</span> <span class="p">[</span><span class="n">URL</span> <span class="n">lastPathComponent</span><span class="p">],</span> <span class="n">error</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+<h2 id="注意点">注意点</h2>
+
+<p>addSkipBackupAttributeToItemAtURLメソッドの引数になっているNSURLにおいては、iOS 5.0.1 と 5.1 以降で渡す時のフォーマットが違う。</p>
+
+<p>こんな文字列があった時、</p>
+<div class="highlight"><pre class="chroma">filePath = &#34;/var/mobile/Applications/ランダム文字列/Documents/Settings.xml&#34;</pre></div>
+<ul>
+<li>iOS 5.0.1 <code>[NSURL URLWithString:filePath]</code> で渡す</li>
+<li>iOS 5.1 以降 <code>[NSURL fileURLWithPath:filePath]</code> で渡す</li>
+</ul>
+
+<p>違いはこうなるみたい。スキームが付加される？(詳しく調べていない)</p>
+<div class="highlight"><pre class="chroma">[NSURL URLWithString:filePath]
+=&gt; /var/mobile/Applications/ランダム文字列/Documents/Settings.xml
+[NSURL fileURLWithPath:filePath]
+=&gt; file://localhost/var/mobile/Applications/ランダム文字列/Documents/Settings.xml</pre></div>
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2013/07/18/ios-backup-restore/"
+    data-text="iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段 - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2013/07/18/ios-backup-restore/"
+    data-hatena-bookmark-title="iOSのバックアップ/リストアで残るもの/消えるもの それを編集する手段 - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2013/07/18/ios-backup-restore/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2013/07/18/ios-backup-restore/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2013/06/05/ios-over-the-air/" class="pagination_overflow previous_page">
+          Prev: 
+          13/6/5
+          Over-the-Airという形式でiOSアプリのインストー …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2013/08/04/android-install-intent/" class="pagination_overflow next_page">
+          Next: 
+          13/8/4
+          Androidアプリのインストール、起動方法によっ …
+        </a>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#バックアップの方式">バックアップの方式</a></li>
+<li><a href="#バックアップされる内容">バックアップされる内容</a>
+<ul>
+<li><a href="#sandboxの内容">Sandboxの内容</a></li>
+<li><a href="#keychainの内容">KeyChainの内容</a></li>
+</ul></li>
+<li><a href="#バックアップ方法">バックアップ方法</a></li>
+<li><a href="#バックアップ除外方法">バックアップ除外方法</a>
+<ul>
+<li><a href="#ios-5-0">iOS 5.0</a></li>
+<li><a href="#ios-5-0-1">iOS 5.0.1</a></li>
+<li><a href="#ios-5-1-以降">iOS 5.1 以降</a></li>
+</ul></li>
+<li><a href="#注意点">注意点</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>

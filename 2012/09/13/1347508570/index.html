@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる… - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Ruby][備忘録][Fluentd]Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる… あらすじ [http://d.hatena.ne.jp/kk_Ataka/20120817/1345209899:title=前回]までに簡単なプラグインを作成する事はできた。
+次はプラグインをGem化しようかなと思って色々いじってたら、実行時になんかうまくプラグインが読めない……。なんで？
+参考サイト  [https://github.com/fluent/fluentd:title] http://d.hatena.ne.jp/tagomoris/20120715/1342368392:title http://blog.ksauzz.com/?p=37:title  今できてる事とできてない事 BundlerでFluentdをインストールし、
+$ bundle exec fluentd -c /hoge/fluent.conf -p /hoge/plugin  を実行した時……
+ gem installで入れたfluentdのプラグインはちゃんとロードできる  Gemにしちゃえばロードできる  プラグインディレクトリ直下(-p /hoge/plugin)にササッと作ってみたプラグインもロードでき、動いた  直下に放り込めばロードできる   /hoge/plugin └in_hoge.rb # これはロードできる  gem未満、ササッと作った以上のプラグインがロードできない  fluent-pluginっぽいディレクトリ構成にした程度のもの。まだローカルに置いてあるだけでgemには成り切れていない   /hoge/plugin ├in_hoge.rb # これはロードできる └fluent-plugin-hogehoge ├lib │└fluent │　└plugin │　└in_hogehoge.rb # これがロードできない ├fluent-plugin-hogehoge.gemspec └他 調査結果と(暫定)解決策 fluentdのプラグインロード順番 fluentdコマンドを実行すると、 なんやかんやあって プラグインをロードしにいく。ソースは$FLUENTD_HOME/lib/fluent/plugin.rb
+ $FLUENTD_HOME/lib/fluent/plugin/直下のrbファイルをロードする  in_exec.rbとか  gem_pluginをロードする  これは今回空だった  /etc/fluent/plugin/直下のrbファイルをロードする  デフォルトのプラグイン置き場 デフォルトの設定は$FLUENTD_HOME/lib/fluent/env.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2012/08/29/1346242547/" class="pagination_overflow previous_page">
+          Prev: 
+          12/8/29
+          Git add, commitをした時、中でどんな事が起こっ …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2012/09/14/1347595853/" class="pagination_overflow next_page">
+          Next: 
+          12/9/14
+          JekyllとJekyll Bootstrapでかんたん静的 …
+        </a>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
+    </a>
+  
+    <a href='/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+    <a href='/tags/fluentd' class="muted-link">
+      [ <span class="Label Label--gray">Fluentd</span> ]
+    </a>
+  
+
+
+          Published: <span>2012/09/13</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ruby-備忘録-fluentd-fluentdの自作プラグインがロードできないのでソースの中身を追ってみる">[Ruby][備忘録][Fluentd]Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#今できてる事とできてない事">今できてる事とできてない事</a></li>
+<li><a href="#調査結果と-暫定-解決策">調査結果と(暫定)解決策</a>
+<ul>
+<li><a href="#fluentdのプラグインロード順番">fluentdのプラグインロード順番</a></li>
+</ul></li>
+<li><a href="#解決策">解決策</a></li>
+<li><a href="#調査ログ">調査ログ</a></li>
+<li><a href="#bundle-gemコマンドを使ってプラグインを作っていく">bundle gemコマンドを使ってプラグインを作っていく</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="ruby-備忘録-fluentd-fluentdの自作プラグインがロードできないのでソースの中身を追ってみる">[Ruby][備忘録][Fluentd]Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…</h2>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>[<a href="http://d.hatena.ne.jp/kk_Ataka/20120817/1345209899:title=前回]までに簡単なプラグインを作成する事はできた">http://d.hatena.ne.jp/kk_Ataka/20120817/1345209899:title=前回]までに簡単なプラグインを作成する事はできた</a>。</p>
+
+<p>次はプラグインをGem化しようかなと思って色々いじってたら、実行時になんかうまくプラグインが読めない……。なんで？</p>
+
+<h2 id="参考サイト">参考サイト</h2>
+
+<ul>
+<li>[<a href="https://github.com/fluent/fluentd:title">https://github.com/fluent/fluentd:title</a>]</li>
+<li><a href="http://d.hatena.ne.jp/tagomoris/20120715/1342368392:title">http://d.hatena.ne.jp/tagomoris/20120715/1342368392:title</a></li>
+<li><a href="http://blog.ksauzz.com/?p=37:title">http://blog.ksauzz.com/?p=37:title</a></li>
+</ul>
+
+<h2 id="今できてる事とできてない事">今できてる事とできてない事</h2>
+
+<p>BundlerでFluentdをインストールし、</p>
+<div class="highlight"><pre class="chroma">$ bundle exec fluentd -c /hoge/fluent.conf -p /hoge/plugin </pre></div>
+<p>を実行した時……</p>
+
+<ul>
+<li>gem installで入れたfluentdのプラグインはちゃんとロードできる
+
+<ul>
+<li>Gemにしちゃえばロードできる</li>
+</ul></li>
+<li>プラグインディレクトリ直下(-p /hoge/plugin)にササッと作ってみたプラグインもロードでき、動いた
+
+<ul>
+<li>直下に放り込めばロードできる</li>
+</ul></li>
+</ul>
+
+<!-- -->
+<div class="highlight"><pre class="chroma">/hoge/plugin
+└in_hoge.rb              # これはロードできる</pre></div>
+<ul>
+<li><span class="deco" style="color:#FF0000;">gem未満、ササッと作った以上のプラグインがロードできない</span>
+
+<ul>
+<li>fluent-pluginっぽいディレクトリ構成にした程度のもの。まだローカルに置いてあるだけでgemには成り切れていない</li>
+</ul></li>
+</ul>
+
+<!-- -->
+<div class="highlight"><pre class="chroma">/hoge/plugin
+├in_hoge.rb              # これはロードできる
+└fluent-plugin-hogehoge
+　├lib
+　│└fluent
+　│　└plugin
+　│　　└in_hogehoge.rb  # これがロードできない
+　├fluent-plugin-hogehoge.gemspec
+　└他</pre></div>
+<h2 id="調査結果と-暫定-解決策">調査結果と(暫定)解決策</h2>
+
+<h3 id="fluentdのプラグインロード順番">fluentdのプラグインロード順番</h3>
+
+<p>fluentdコマンドを実行すると、 <span class="deco" style="font-weight:bold;">なんやかんやあって</span> プラグインをロードしにいく。ソースは$FLUENTD_HOME/lib/fluent/plugin.rb</p>
+
+<ol>
+<li>$FLUENTD_HOME/lib/fluent/plugin/直下のrbファイルをロードする
+
+<ul>
+<li>in_exec.rbとか</li>
+</ul></li>
+<li>gem_pluginをロードする
+
+<ul>
+<li>これは今回空だった</li>
+</ul></li>
+<li>/etc/fluent/plugin/直下のrbファイルをロードする
+
+<ul>
+<li>デフォルトのプラグイン置き場</li>
+<li>デフォルトの設定は$FLUENTD_HOME/lib/fluent/env.rbに定義されている</li>
+</ul></li>
+<li>オプションで-p /hoge/pluginを指定していた場合、/hoge/plugin直下のrbファイルもロードする
+
+<ul>
+<li>また、<span class="deco" style="color:#FF0000;">-pオプションは複数指定できる</span></li>
+</ul></li>
+<li>fluent.confに定義されている<source> type hogeが今までロードしたファイルにあるか確認。あった場合はそのままロードできる</li>
+<li>なかった場合はもう少し色々な場所の探索にチャレンジする
+
+<ul>
+<li><span class="deco" style="color:#FF0000;">$LOAD_PATHと、gem installしたディレクトリ直下のどこかにlib/fluent/plugin/<type>_<name>.rb</span>が存在するか</li>
+</ul></li>
+</ol>
+
+<h2 id="解決策">解決策</h2>
+
+<ol>
+<li>fluentd自体の$LOAD_PATHに追加
+
+<ul>
+<li>本体に毎回修正かけるの？</li>
+</ul></li>
+<li>in_hogehoge.rbをロードしてくれる場所へコピー(デフォルトプラグイン(/etc/fluent/plugin)など)
+
+<ul>
+<li>コピペ？</li>
+</ul></li>
+<li>さっさと作ってgem installできるようにもっていく
+
+<ul>
+<li>うーん…</li>
+</ul></li>
+<li>オプション-pを複数指定する
+
+<ul>
+<li>上の場合は -p /hoge/plugin -p /hoge/plugin/fluent-plugin-hogehoge/lib/fluent/plugin としてやればよい
+
+<ul>
+<li>fluentd本体でわざわざlib/fluent/plugin下を探すようにコーディングされてるのにこんな指定の仕方するものかな？　何か違う気がする……下みたいに未完成のプラグインが増えていくとオプションガンガン長くなっていく？</li>
+</ul></li>
+</ul></li>
+</ol>
+
+<!-- -->
+<div class="highlight"><pre class="chroma">/hoge/plugin
+├in_hoge.rb
+├fluent-plugin-hogehoge
+│└lib
+│　└fluent
+│　　└plugin
+│　　　└in_hogehoge.rb
+├fluent-plugin-hogehoge2
+│└lib
+│　└fluent
+│　　└plugin
+│　　　└in_hogehoge2.rb
+└fluent-plugin-hogehoge3
+　└lib
+　　└fluent
+　　　└plugin
+　　　　└in_hogehoge3.rb</pre></div>
+<p>以下、調査ログ。</p>
+
+<h2 id="調査ログ">調査ログ</h2>
+
+<p>セットアップをすると指定したディレクトリにconfigファイルとpluginディレクトリができる。</p>
+<div class="highlight"><pre class="chroma">$ fluentd -s fluentd-hoge
+Installed fluentd-hoge/fluent.conf.
+$ ls fluentd-hoge/
+fluent.conf  plugin</pre></div>
+<p>pluginディレクトリにそのままプラグイン(rbファイル)を入れておくと、起動時に読み込まれる。</p>
+
+<h2 id="bundle-gemコマンドを使ってプラグインを作っていく">bundle gemコマンドを使ってプラグインを作っていく</h2>
+<div class="highlight"><pre class="chroma">$ cd plugin # プラグインを作るからとりあえずpluginディレクトリに移動する
+$ bundle gem fluent-plugin-hogehoge
+      create  fluent-plugin-hogehoge/Gemfile
+      create  fluent-plugin-hogehoge/Rakefile
+      create  fluent-plugin-hogehoge/LICENSE
+      create  fluent-plugin-hogehoge/README.md
+      create  fluent-plugin-hogehoge/.gitignore
+      create  fluent-plugin-hogehoge/fluent-plugin-hogehoge.gemspec
+      create  fluent-plugin-hogehoge/lib/fluent-plugin-hogehoge.rb
+      create  fluent-plugin-hogehoge/lib/fluent-plugin-hogehoge/version.rb
+Initializating git repo in /略/fluent-hoge/plugin/fluent-plugin-hogehoge</pre></div>
+<p>なんかいろいろ出来たがちょっとルールがあるようなので整形していく。公式サイトより</p>
+
+<blockquote>
+<p>Installing custom plugins</p>
+
+<p>To install a plugin, put a ruby script to /etc/fluent/plugin directory.</p>
+
+<p>Or you can create gem package that includes lib/fluent/plugin/<TYPE>_<NAME>.rb file.</p>
+
+<p>TYPE is in for input plugins, out for output plugins and buf for buffer plugins.</p>
+
+<p>It’s like lib/fluent/plugin/out_mail.rb.</p>
+
+<p>The packaged gem can be distributed and installed using RubyGems.</p>
+
+<p>See Searching plugins.</p>
+
+<p><cite><a href="http://fluentd.org/doc/devel.html">http://fluentd.org/doc/devel.html</a></cite></p>
+</blockquote>
+
+<ul>
+<li>プラグインは/etc/fluent/pluginにインストールするといいよ
+
+<ul>
+<li>また、-pオプションを指定すればfluent-hoge/plugin下も呼んでくれる</li>
+</ul></li>
+<li>Gem packageを作る場合はパッケージの下にlib/fluent/plugin/<TYPE>_<NAME>.rbって名前にしておいてね
+
+<ul>
+<li>他の方が作ったプラグイン＠GitHubを見ていると確かにそうなっていた！</li>
+</ul></li>
+<li><TYPE>はinputプラグインならin、outputプラグインならoutといったように
+
+<ul>
+<li>このルールは後ほど効いてくる</li>
+</ul></li>
+</ul>
+
+<p>ってわけでディレクトリはこんな構成に。</p>
+<div class="highlight"><pre class="chroma">fluent-hoge/
+├(略)
+├fluent.conf
+└plugin/　…　(1)
+　└fluent-plugin-hogehoge
+　　├Gemfile                      # この辺はほぼいじってない
+　　├LICENSE                      # この辺はほぼいじってない
+　　├README.md                    # この辺はほぼいじってない
+　　├Rakefile                     # この辺はほぼいじってない
+　　├fluent-plugin-inputs.gemspec # この辺はほぼいじってない
+　　└lib/
+　　　└fluent/
+　　　　└plugin/
+　　　　　└in_inputs.rb</pre></div>
+<p>プラグインも作成。ただ{&ldquo;plugin&rdquo;=&gt;&ldquo;yes&rdquo;}を出力しまくるだけのソース。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">FluPluGem</span> <span class="o">&lt;</span> <span class="no">Fluent</span><span class="o">::</span><span class="no">Input</span>
+  <span class="no">Fluent</span><span class="o">::</span><span class="no">Plugin</span><span class="o">.</span><span class="n">register_input</span><span class="p">(</span><span class="s2">&#34;inputs&#34;</span><span class="p">,</span> <span class="nb">self</span><span class="p">)</span>
+  <span class="k">def</span> <span class="nf">initialize</span>
+    <span class="k">super</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span>
+    <span class="k">super</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">start</span>
+    <span class="nb">puts</span> <span class="s2">&#34;a starts&#34;</span>
+    <span class="vi">@thread</span> <span class="o">=</span> <span class="no">Thread</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="nb">method</span><span class="p">(</span><span class="ss">:run</span><span class="p">))</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">run</span>
+    <span class="kp">loop</span> <span class="k">do</span>
+      <span class="no">Fluent</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;debugx.debug&#34;</span><span class="p">,</span> <span class="no">Fluent</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">now</span><span class="p">,</span> <span class="p">{</span><span class="s2">&#34;plugin&#34;</span> <span class="o">=&gt;</span> <span class="s2">&#34;yes&#34;</span><span class="p">})</span>
+      <span class="nb">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+<p>fluent.confにプラグインを追加。</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;source&gt;</span>
+  type inputs
+<span class="nt">&lt;/source&gt;</span></code></pre></div>
+<p>この状態で起動！</p>
+<div class="highlight"><pre class="chroma">/usr/local/bin/fluentd -c /略/fluent-hoge/fluent.conf -p /略/fluent-hoge/plugin/
+2012-09-07 19:57:48 +0900: starting fluentd-0.10.25
+2012-09-07 19:57:48 +0900: reading config file path=&#34;/略/fluent-hoge/fluent.conf&#34;
+2012-09-07 19:57:48 +0900: adding source type=&#34;forward&#34;
+2012-09-07 19:57:48 +0900: adding source type=&#34;inputs&#34;
+2012-09-07 19:57:48 +0900: config error file=&#34;/略/fluent-hoge/fluent.conf&#34; error=&#34;Unknown input plugin &#39;inputs&#39;. Run &#39;gem search -rd fluent-plugin&#39; to find plugins&#34;
+2012-09-07 19:57:48 +0900: process finished code=256
+2012-09-07 19:57:48 +0900: process died within 1 second. exit.</pre></div>
+<p>失敗した…。inputsっていうプラグインなぞないって言われた。でも、プラグイン本体(in_inputs.rb)をplugin直下(ディレクトリ構成の(1)の部分)に持ってくると…</p>
+<div class="highlight"><pre class="chroma">/usr/local/bin/fluentd -c /略/fluent-hoge/fluent.conf -p /略/fluent-hoge/plugin/
+2012-09-07 20:02:28 +0900: starting fluentd-0.10.25
+2012-09-07 20:02:28 +0900: reading config file path=&#34;/略/fluent-hoge/fluent.conf&#34;
+2012-09-07 20:02:28 +0900: adding source type=&#34;forward&#34;
+2012-09-07 20:02:28 +0900: adding source type=&#34;inputs&#34;
+2012-09-07 20:02:28 +0900: adding source type=&#34;thread&#34;
+2012-09-07 20:02:28 +0900: adding source type=&#34;tail&#34;
+2012-09-07 20:02:28 +0900: &#39;pos_file PATH&#39; parameter is not set to a &#39;tail&#39; source.
+2012-09-07 20:02:28 +0900: this parameter is highly recommended to save the position to resume tailing.
+2012-09-07 20:02:28 +0900: adding match pattern=&#34;stdd.std&#34; type=&#34;file&#34;
+2012-09-07 20:02:28 +0900: adding match pattern=&#34;devid.devid&#34; type=&#34;file&#34;
+2012-09-07 20:02:28 +0900: adding match pattern=&#34;jenkins.**&#34; type=&#34;file&#34;
+2012-09-07 20:02:28 +0900: adding match pattern=&#34;debug.**&#34; type=&#34;stdout&#34;
+2012-09-07 20:02:28 +0900: listening fluent socket on 0.0.0.0:24224</pre></div>
+<p>起動した…。</p>
+
+<blockquote>
+<p>Or you can create gem package that includes lib/fluent/plugin/<TYPE>_<NAME>.rb file.</p>
+</blockquote>
+
+<p>この文の認識が間違ってるのかなー？</p>
+
+<p>よくわからないので本丸を攻めてみる。pluginの処理を記述しているのはそのものplugin.rb、また、それを呼ぼうとしているはsupervisor.rb,engine.rbあたりっぽい。</p>
+
+<ul>
+<li>[<a href="https://github.com/fluent/fluentd/blob/master/lib/fluent/plugin.rb:title">https://github.com/fluent/fluentd/blob/master/lib/fluent/plugin.rb:title</a>]</li>
+<li>[<a href="https://github.com/fluent/fluentd/blob/master/lib/fluent/engine.rb:title">https://github.com/fluent/fluentd/blob/master/lib/fluent/engine.rb:title</a>]</li>
+<li>[<a href="https://github.com/fluent/fluentd/blob/master/lib/fluent/supervisor.rb:title">https://github.com/fluent/fluentd/blob/master/lib/fluent/supervisor.rb:title</a>]</li>
+</ul>
+
+<p>ロードしているのはplugin内だろうと思い、いろいろ出力してみる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">load_plugins</span>
+    <span class="n">dir</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">),</span> <span class="s2">&#34;plugin&#34;</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="s2">&#34;!load_plugins:</span><span class="si">#{</span><span class="n">dir</span><span class="si">}</span><span class="s2">&#34;</span>
+    <span class="n">load_plugin_dir</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span>
+    <span class="n">load_gem_plugins</span>
+  <span class="k">end</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">load_plugin_dir</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span>
+    <span class="n">dir</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="s2">&#34;!load_plugin_dir:</span><span class="si">#{</span><span class="n">dir</span><span class="si">}</span><span class="s2">&#34;</span>
+    <span class="no">Dir</span><span class="o">.</span><span class="n">entries</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span><span class="o">.</span><span class="n">sort</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">fname</span><span class="o">|</span>
+<span class="nb">puts</span> <span class="s2">&#34;!load_plugin_dir:</span><span class="si">#{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#34;</span>
+      <span class="k">if</span> <span class="n">fname</span> <span class="o">=~</span> <span class="sr">/\.rb$/</span>
+        <span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="p">}</span>
+    <span class="kp">nil</span>
+  <span class="k">end</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">  <span class="kp">private</span>
+  <span class="k">def</span> <span class="nf">load_gem_plugins</span>
+    <span class="k">return</span> <span class="k">unless</span> <span class="n">defined?</span> <span class="no">Gem</span>
+    <span class="n">plugins</span> <span class="o">=</span> <span class="no">Gem</span><span class="o">.</span><span class="n">find_files</span><span class="p">(</span><span class="s1">&#39;fluent_plugin&#39;</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="s2">&#34;!load_gem_plugins:</span><span class="si">#{</span><span class="n">plugins</span><span class="si">}</span><span class="s2">&#34;</span>
+    <span class="n">plugins</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">plugin</span><span class="o">|</span>
+      <span class="k">begin</span>
+        <span class="nb">load</span> <span class="n">plugin</span>
+      <span class="k">rescue</span> <span class="o">::</span><span class="no">Exception</span> <span class="o">=&gt;</span> <span class="n">e</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">#{</span><span class="n">plugin</span><span class="o">.</span><span class="n">inspect</span><span class="si">}</span><span class="s2">: </span><span class="si">#{</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">e</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2">)&#34;</span>
+        <span class="vg">$log</span><span class="o">.</span><span class="n">warn</span> <span class="s2">&#34;Error loading Fluent plugin </span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&#34;</span>
+      <span class="k">end</span>
+    <span class="p">}</span>
+  <span class="k">end</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">try_load_plugin</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">type</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="s2">&#34;!try_load_plugin:</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">, </span><span class="si">#{</span><span class="n">type</span><span class="si">}</span><span class="s2">&#34;</span>
+    <span class="k">case</span> <span class="nb">name</span>
+    <span class="k">when</span> <span class="s1">&#39;input&#39;</span>
+      <span class="n">path</span> <span class="o">=</span> <span class="s2">&#34;fluent/plugin/in_</span><span class="si">#{</span><span class="n">type</span><span class="si">}</span><span class="s2">&#34;</span>
+    <span class="k">when</span> <span class="s1">&#39;output&#39;</span>
+      <span class="n">path</span> <span class="o">=</span> <span class="s2">&#34;fluent/plugin/out_</span><span class="si">#{</span><span class="n">type</span><span class="si">}</span><span class="s2">&#34;</span>
+    <span class="k">when</span> <span class="s1">&#39;buffer&#39;</span>
+      <span class="n">path</span> <span class="o">=</span> <span class="s2">&#34;fluent/plugin/buf_</span><span class="si">#{</span><span class="n">type</span><span class="si">}</span><span class="s2">&#34;</span>
+    <span class="k">else</span>
+      <span class="k">return</span>
+    <span class="k">end</span>
+
+    <span class="c1"># prefer LOAD_PATH than gems</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="vg">$LOAD_PATH</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">lp</span><span class="o">|</span>
+<span class="nb">puts</span> <span class="s2">&#34;!try_load_plugin:</span><span class="si">#{</span><span class="n">lp</span><span class="si">}</span><span class="s2">&#34;</span>
+      <span class="n">lpath</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="s2">&#34;</span><span class="si">#{</span><span class="n">path</span><span class="si">}</span><span class="s2">.rb&#34;</span><span class="p">)</span>
+      <span class="no">File</span><span class="o">.</span><span class="n">exist?</span><span class="p">(</span><span class="n">lpath</span><span class="p">)</span> <span class="p">?</span> <span class="n">lpath</span> <span class="p">:</span> <span class="kp">nil</span>
+    <span class="p">}</span><span class="o">.</span><span class="n">compact</span>
+    <span class="k">unless</span> <span class="n">files</span><span class="o">.</span><span class="n">empty?</span>
+      <span class="c1"># prefer newer version</span>
+      <span class="nb">require</span> <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="o">.</span><span class="n">last</span>
+      <span class="k">return</span>
+    <span class="k">end</span>
+
+    <span class="c1"># search gems</span>
+    <span class="k">if</span> <span class="n">defined?</span><span class="p">(</span><span class="o">::</span><span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">::</span><span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:find_all</span><span class="p">)</span>
+      <span class="n">specs</span> <span class="o">=</span> <span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="o">.</span><span class="n">find_all</span> <span class="p">{</span><span class="o">|</span><span class="n">spec</span><span class="o">|</span>
+        <span class="n">spec</span><span class="o">.</span><span class="n">contains_requirable_file?</span> <span class="n">path</span>
+      <span class="p">}</span>
+
+      <span class="c1"># prefer newer version</span>
+      <span class="n">specs</span> <span class="o">=</span> <span class="n">specs</span><span class="o">.</span><span class="n">sort_by</span> <span class="p">{</span><span class="o">|</span><span class="n">spec</span><span class="o">|</span> <span class="n">spec</span><span class="o">.</span><span class="n">version</span> <span class="p">}</span>
+      <span class="k">if</span> <span class="n">spec</span> <span class="o">=</span> <span class="n">specs</span><span class="o">.</span><span class="n">last</span>
+        <span class="n">spec</span><span class="o">.</span><span class="n">require_paths</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">lib</span><span class="o">|</span>
+          <span class="n">file</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">#{</span><span class="n">spec</span><span class="o">.</span><span class="n">full_gem_path</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">lib</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">path</span><span class="si">}</span><span class="s2">&#34;</span>
+          <span class="nb">require</span> <span class="n">file</span>
+        <span class="p">}</span>
+      <span class="k">end</span></code></pre></div>
+<p>実行結果はこうなる。</p>
+<div class="highlight"><pre class="chroma">$ /usr/local/bin/fluentd -c /略/fluent-hoge/fluent.conf -p /略/fluent-hoge/plugin/
+2012-09-07 19:37:32 +0900: starting fluentd-0.10.25
+2012-09-07 19:37:32 +0900: reading config file path=&#34;/略/fluent-hoge/fluent.conf&#34;</pre></div>
+<p>→はじめはfluent本体のpluginを呼んでる。</p>
+<div class="highlight"><pre class="chroma">!load_plugins:/usr/local/lib/ruby/gems/1.9.1/gems/fluentd-0.10.25/lib/fluent/plugin
+!load_plugin_dir:/usr/local/lib/ruby/gems/1.9.1/gems/fluentd-0.10.25/lib/fluent/plugin
+!load_plugin_dir:.
+!load_plugin_dir:..
+!load_plugin_dir:buf_file.rb
+!load_plugin_dir:buf_memory.rb
+!load_plugin_dir:buf_zfile.rb
+!load_plugin_dir:in_exec.rb
+!load_plugin_dir:in_forward.rb
+!load_plugin_dir:in_gc_stat.rb
+!load_plugin_dir:in_http.rb
+!load_plugin_dir:in_object_space.rb
+!load_plugin_dir:in_status.rb
+!load_plugin_dir:in_stream.rb
+!load_plugin_dir:in_syslog.rb
+!load_plugin_dir:in_tail.rb
+!load_plugin_dir:out_copy.rb
+!load_plugin_dir:out_exec.rb
+!load_plugin_dir:out_exec_filter.rb
+!load_plugin_dir:out_file.rb
+!load_plugin_dir:out_forward.rb
+!load_plugin_dir:out_null.rb
+!load_plugin_dir:out_roundrobin.rb
+!load_plugin_dir:out_stdout.rb
+!load_plugin_dir:out_stream.rb
+!load_plugin_dir:out_test.rb</pre></div>
+<p>→gemはない。</p>
+<div class="highlight"><pre class="chroma">!load_gem_plugins:[]</pre></div>
+<p>→ここから他のpluginディレクトリ。まずは/etc/fluent/plugin。</p>
+<div class="highlight"><pre class="chroma">!load_plugin_dir:/etc/fluent/plugin
+!load_plugin_dir:.
+!load_plugin_dir:..</pre></div>
+<p>→そして-pオプションで指定したディレクトリ。</p>
+<div class="highlight"><pre class="chroma">!load_plugin_dir:/略/fluent-hoge/plugin
+!load_plugin_dir:.
+!load_plugin_dir:..
+!load_plugin_dir:fluent-plugin-hogehoge
+!load_plugin_dir:simple_thread_plugin.rb</pre></div>
+<p><span class="deco" style="color:#FF0000;">あれ？ディレクトリの上さらっと舐めるだけ？</span></p>
+
+<p>ここからtypeがaddされている。みつかったものは特に何も表示されず次へ次へ……。</p>
+<div class="highlight"><pre class="chroma">2012-09-07 20:16:24 +0900: adding source type=&#34;forward&#34;
+2012-09-07 20:16:24 +0900: adding source type=&#34;thread&#34;
+2012-09-07 20:16:24 +0900: adding source type=&#34;tail&#34;
+2012-09-07 20:16:24 +0900: &#39;pos_file PATH&#39; parameter is not set to a &#39;tail&#39; source.
+2012-09-07 20:16:24 +0900: this parameter is highly recommended to save the position to resume tailing.</pre></div>
+<p>で、今回見つかってないtypeが出てくると、try_load_pluginが呼ばれる。</p>
+<div class="highlight"><pre class="chroma">2012-09-07 20:16:24 +0900: adding source type=&#34;inputs&#34;
+!try_load_plugin:input, inputs
+!try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/http_parser.rb-0.5.3/lib
+!try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/msgpack-0.4.7/lib
+!try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/yajl-ruby-1.1.0/lib
+!try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/iobuffer-1.1.2/lib
+!try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/cool.io-1.1.0/lib
+!try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/http_parser.rb-0.5.3/lib
+!try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/fluentd-0.10.25/lib
+!try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/json-1.7.4/lib
+!try_load_plugin:/usr/local/lib/ruby/site_ruby/1.9.1
+!try_load_plugin:/usr/local/lib/ruby/site_ruby/1.9.1/i686-linux
+!try_load_plugin:/usr/local/lib/ruby/site_ruby
+!try_load_plugin:/usr/local/lib/ruby/vendor_ruby/1.9.1
+!try_load_plugin:/usr/local/lib/ruby/vendor_ruby/1.9.1/i686-linux
+!try_load_plugin:/usr/local/lib/ruby/vendor_ruby
+!try_load_plugin:/usr/local/lib/ruby/1.9.1
+!try_load_plugin:/usr/local/lib/ruby/1.9.1/i686-linux
+!try_load_plugin:/usr/local/lib/ruby/gems/1.9.1/gems/fluentd-0.10.25/lib
+2012-09-07 20:16:24 +0900: config error file=&#34;/略/fluent-hoge/fluent.conf&#34; error=&#34;Unknown input plugin &#39;inputs&#39;. Run &#39;gem search -rd fluent-plugin&#39; to find plugins&#34;
+2012-09-07 20:16:24 +0900: process finished code=256
+2012-09-07 20:16:24 +0900: process died within 1 second. exit.</pre></div>
+<p>まずプラグインの種類によって読み込まれるパスとファイル名が決まるみたい。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">    <span class="k">case</span> <span class="nb">name</span>
+    <span class="k">when</span> <span class="s1">&#39;input&#39;</span>
+      <span class="n">path</span> <span class="o">=</span> <span class="s2">&#34;fluent/plugin/in_</span><span class="si">#{</span><span class="n">type</span><span class="si">}</span><span class="s2">&#34;</span>
+    <span class="k">when</span> <span class="s1">&#39;output&#39;</span>
+      <span class="n">path</span> <span class="o">=</span> <span class="s2">&#34;fluent/plugin/out_</span><span class="si">#{</span><span class="n">type</span><span class="si">}</span><span class="s2">&#34;</span>
+    <span class="k">when</span> <span class="s1">&#39;buffer&#39;</span>
+      <span class="n">path</span> <span class="o">=</span> <span class="s2">&#34;fluent/plugin/buf_</span><span class="si">#{</span><span class="n">type</span><span class="si">}</span><span class="s2">&#34;</span>
+    <span class="k">else</span>
+      <span class="k">return</span>
+    <span class="k">end</span></code></pre></div>
+<blockquote>
+<p>Or you can create gem package that includes lib/fluent/plugin/<TYPE>_<NAME>.rb file.</p>
+</blockquote>
+
+<p>がここで効いてくるわけか。</p>
+
+<p>そしたら$LOAD_PATHの中にfluent/plugin/in_inputs.rbがないか探しに行ってる。そしてそこにもなかった場合、インストールしたGemの中を探す。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">    <span class="c1"># prefer LOAD_PATH than gems</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="vg">$LOAD_PATH</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">lp</span><span class="o">|</span>
+<span class="nb">puts</span> <span class="s2">&#34;!try_load_plugin:</span><span class="si">#{</span><span class="n">lp</span><span class="si">}</span><span class="s2">&#34;</span>
+      <span class="n">lpath</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="s2">&#34;</span><span class="si">#{</span><span class="n">path</span><span class="si">}</span><span class="s2">.rb&#34;</span><span class="p">)</span>
+      <span class="no">File</span><span class="o">.</span><span class="n">exist?</span><span class="p">(</span><span class="n">lpath</span><span class="p">)</span> <span class="p">?</span> <span class="n">lpath</span> <span class="p">:</span> <span class="kp">nil</span>
+    <span class="p">}</span><span class="o">.</span><span class="n">compact</span>
+    <span class="k">unless</span> <span class="n">files</span><span class="o">.</span><span class="n">empty?</span>
+      <span class="c1"># prefer newer version</span>
+      <span class="nb">require</span> <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="o">.</span><span class="n">last</span>
+      <span class="k">return</span>
+    <span class="k">end</span>
+
+    <span class="c1"># search gems</span>
+    <span class="k">if</span> <span class="n">defined?</span><span class="p">(</span><span class="o">::</span><span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">::</span><span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:find_all</span><span class="p">)</span>
+      <span class="n">specs</span> <span class="o">=</span> <span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="o">.</span><span class="n">find_all</span> <span class="p">{</span><span class="o">|</span><span class="n">spec</span><span class="o">|</span>
+        <span class="n">spec</span><span class="o">.</span><span class="n">contains_requirable_file?</span> <span class="n">path</span>
+      <span class="p">}</span>
+
+      <span class="c1"># prefer newer version</span>
+      <span class="n">specs</span> <span class="o">=</span> <span class="n">specs</span><span class="o">.</span><span class="n">sort_by</span> <span class="p">{</span><span class="o">|</span><span class="n">spec</span><span class="o">|</span> <span class="n">spec</span><span class="o">.</span><span class="n">version</span> <span class="p">}</span>
+      <span class="k">if</span> <span class="n">spec</span> <span class="o">=</span> <span class="n">specs</span><span class="o">.</span><span class="n">last</span>
+        <span class="n">spec</span><span class="o">.</span><span class="n">require_paths</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">lib</span><span class="o">|</span>
+          <span class="n">file</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">#{</span><span class="n">spec</span><span class="o">.</span><span class="n">full_gem_path</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">lib</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">path</span><span class="si">}</span><span class="s2">&#34;</span>
+          <span class="nb">require</span> <span class="n">file</span>
+        <span class="p">}</span>
+      <span class="k">end</span></code></pre></div>
+<p>っていう流れになっているらしい。</p>
+
+<p>うーんGemで入れたら読めるんだけどなー。</p>
+
+<p>tagomoris</p>
+
+<ul>
+<li>I PATH オプションも同時に指定するとうまくいきませんか</li>
+</ul>
+
+<p>1347520990</p>
+
+<p>kk_Ataka</p>
+
+<p>なるほど！-Iオプションで指定してもうまくいきますね。<br>それが一番良さそうです！　ありがとうございます！<br><br>今回は、-p PATHの直下がディレクトリの場合でも、その先が<br>lib/fluent/plugin/xx_xx.rbのようになっていれば<br>再帰的に探してくれないのかなーと思い調べてみた次第です！</p>
+
+<p>1347545408</p>
+
+<p>repeatedly</p>
+
+<p>個人的には「オプション-pを複数指定する」というのはあまり気にならないですね．そもそも形になっていプラグインを平行で開発する，という状況があまりないのと，C++とかのリンク先指定で複数追加するのに自分が慣れてしまっているのかもしれませんが…^^;</p>
+
+<p>1347910588</p>
+
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2012/09/13/1347508570/"
+    data-text="Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる… - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2012/09/13/1347508570/"
+    data-hatena-bookmark-title="Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる… - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2012/09/13/1347508570/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2012/09/13/1347508570/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2012/08/29/1346242547/" class="pagination_overflow previous_page">
+          Prev: 
+          12/8/29
+          Git add, commitをした時、中でどんな事が起こっ …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2012/09/14/1347595853/" class="pagination_overflow next_page">
+          Next: 
+          12/9/14
+          JekyllとJekyll Bootstrapでかんたん静的 …
+        </a>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ruby-備忘録-fluentd-fluentdの自作プラグインがロードできないのでソースの中身を追ってみる">[Ruby][備忘録][Fluentd]Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#今できてる事とできてない事">今できてる事とできてない事</a></li>
+<li><a href="#調査結果と-暫定-解決策">調査結果と(暫定)解決策</a>
+<ul>
+<li><a href="#fluentdのプラグインロード順番">fluentdのプラグインロード順番</a></li>
+</ul></li>
+<li><a href="#解決策">解決策</a></li>
+<li><a href="#調査ログ">調査ログ</a></li>
+<li><a href="#bundle-gemコマンドを使ってプラグインを作っていく">bundle gemコマンドを使ってプラグインを作っていく</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>

@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ Jekyllで指定していたGoogle Analyticsの設定が効かなくなっていた。
+他のGitHub Pages@Jekyllでは正しくGoogle Analyticsが動いているのに…。
+結論  前回 GitHub Pages の運用形態を変えていた &amp;hellip; GitHub PagesでJekyllプラグインを使えるようにするには…  変更前: master ブランチにコンテンツを配備し、GitHubにデプロイしてもらう 変更後: source ブランチを作成しコンテンツを移動。ローカルでビルドした静的ファイルを master ブランチにpush  それによる オプション指定の凡ミス  おぉ…。
+参考サイト  WordPressよりjekyllで本格的ブログを作りたくなる、かもしれないまとめ ｜ ゆっくりと… 30分のチュートリアルでJekyllを理解する Jekyll ｜ CSS Radar ｜ Little Books For Front End Developers Liquid for Designers · Shopify/liquid Wiki · GitHub plusjade/jekyll-bootstrap · GitHub  ハマり 前提: GitHub Pagesの運用形態 指定のブランチに以下のようなファイル群を置いておく事で、GitHub Pagesができる。
+ Jekyllのコンテンツ  Jekyllに必要なファイルをpushしておけば、GitHubがよろしくデプロイしておいてくれる  静的ファイル  そのまま表示される   Jekyllのコンテンツをpushして、後はおまかせするだけの運用は便利だけど、 自作プラグインが動かない という問題がある。|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2013/05/23/jekyll-liquid-plugin2/" class="pagination_overflow previous_page">
+          Prev: 
+          13/5/23
+          記事の目次を出力するJekyllプラグインの改良
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2013/06/05/ios-over-the-air/" class="pagination_overflow next_page">
+          Next: 
+          13/6/5
+          Over-the-Airという形式でiOSアプリのインストー …
+        </a>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/jekyll' class="muted-link">
+      [ <span class="Label Label--gray">Jekyll</span> ]
+    </a>
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
+    </a>
+  
+
+
+          Published: <span>2013/05/27</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#結論">結論</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#ハマり">ハマり</a>
+<ul>
+<li><a href="#前提-github-pagesの運用形態">前提: GitHub Pagesの運用形態</a></li>
+<li><a href="#analyticsの設定はどう読み込まれているのか">analyticsの設定はどう読み込まれているのか</a></li>
+</ul></li>
+<li><a href="#蛇足">蛇足</a>
+<ul>
+<li><a href="#ディレクトリ構成">ディレクトリ構成</a></li>
+<li><a href="#include-jb-setup">include JB/setup</a></li>
+<li><a href="#include-themes-twitter-default-html">include themes/twitter/default.html</a></li>
+<li><a href="#まとめ">まとめ</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>Jekyllで指定していたGoogle Analyticsの設定が効かなくなっていた。</p>
+
+<p>他のGitHub Pages@Jekyllでは正しくGoogle Analyticsが動いているのに…。</p>
+
+<h2 id="結論">結論</h2>
+
+<ul>
+<li>前回 GitHub Pages の運用形態を変えていた &hellip; <a href="http://gosyujin.github.io/2013/05/21/jekyll-plugin-githubpages/">GitHub PagesでJekyllプラグインを使えるようにするには…</a>
+
+<ul>
+<li>変更前: <code>master</code> ブランチにコンテンツを配備し、GitHubにデプロイしてもらう</li>
+<li>変更後: <code>source</code> ブランチを作成しコンテンツを移動。ローカルでビルドした静的ファイルを <code>master</code> ブランチにpush</li>
+</ul></li>
+<li>それによる <strong>オプション指定の凡ミス</strong></li>
+</ul>
+
+<p>おぉ…。</p>
+
+<h2 id="参考サイト">参考サイト</h2>
+
+<ul>
+<li><a href="http://tokkono.cute.coocan.jp/blog/slow/index.php/programming/making-blog-with-jekyll/">WordPressよりjekyllで本格的ブログを作りたくなる、かもしれないまとめ ｜ ゆっくりと…</a></li>
+<li><a href="http://melborne.github.io/2012/05/13/first-step-of-jekyll/">30分のチュートリアルでJekyllを理解する</a></li>
+<li><a href="http://css.studiomohawk.com/jekyll/2011/06/11/jekyll/">Jekyll ｜ CSS Radar ｜ Little Books For Front End Developers</a></li>
+<li><a href="https://github.com/Shopify/liquid/wiki/Liquid-for-Designers">Liquid for Designers · Shopify/liquid Wiki · GitHub</a></li>
+<li><a href="https://github.com/plusjade/jekyll-bootstrap">plusjade/jekyll-bootstrap · GitHub</a></li>
+</ul>
+
+<h2 id="ハマり">ハマり</h2>
+
+<h3 id="前提-github-pagesの運用形態">前提: GitHub Pagesの運用形態</h3>
+
+<p>指定のブランチに以下のようなファイル群を置いておく事で、GitHub Pagesができる。</p>
+
+<ol>
+<li>Jekyllのコンテンツ
+
+<ul>
+<li>Jekyllに必要なファイルをpushしておけば、GitHubがよろしくデプロイしておいてくれる</li>
+</ul></li>
+<li>静的ファイル
+
+<ul>
+<li>そのまま表示される</li>
+</ul></li>
+</ol>
+
+<p>Jekyllのコンテンツをpushして、後はおまかせするだけの運用は便利だけど、 <strong>自作プラグインが動かない</strong> という問題がある。</p>
+
+<p>プラグインを動作させるためには、以下のように、あらかじめローカルでビルドした静的ファイルをpushしなければならない。</p>
+
+<ul>
+<li><code>master</code> 以外の別ブランチ(仮に <code>source</code> ブランチ)を作成し、そこでJekyllのコンテンツを管理する</li>
+<li>ローカルの <code>source</code> ブランチで編集を終えたら、 <code>jekyll build</code></li>
+<li>生成された成果物を <code>master</code> ブランチにpushする
+
+<ul>
+<li>ローカルでbuildしているので、プラグインが動作した状態で静的ファイルが出来ている</li>
+<li>こんな感じの手法をとっているのがOctopress</li>
+</ul></li>
+</ul>
+
+<p>この情報をもとに、Rakefileにdeployコマンドを作った。</p>
+
+<p><a href="https://github.com/gosyujin/gosyujin.github.com/blob/source/Rakefile">https://github.com/gosyujin/gosyujin.github.com/blob/source/Rakefile</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="c1"># Usage: rake deploy</span>
+<span class="n">desc</span> <span class="s2">&#34;Begin a push static file to GitHub&#34;</span>
+<span class="n">task</span> <span class="ss">:deploy</span> <span class="k">do</span>
+  <span class="n">sh</span> <span class="s2">&#34;jekyll build&#34;</span>
+  <span class="nb">puts</span> <span class="s2">&#34;! Push to source branch of GitHub&#34;</span>
+  <span class="n">sh</span> <span class="s2">&#34;git push origin source:source&#34;</span>
+<span class="p">(</span><span class="err">略</span><span class="p">)</span></code></pre></div>
+<h3 id="analyticsの設定はどう読み込まれているのか">analyticsの設定はどう読み込まれているのか</h3>
+
+<p><code>_includes/JB/analytics</code> を見ると、analyticsを読み込むには以下の条件を満たす必要がある。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="p">{{</span><span class="s2">&#34;{% if site.safe and site.JB.analytics.provider and page.JB.analytics != false &#34;</span><span class="p">}}</span><span class="s">%}
+</span><span class="s">
+</span><span class="s">{{&#34;{% case site.JB.analytics.provider &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">{{&#34;{% when &#34;google&#34; &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">  {{&#34;{% include JB/analytics-providers/google &#34;}</span><span class="p">}</span><span class="o">%</span><span class="p">}</span>
+<span class="p">(</span><span class="err">略</span><span class="p">)</span></code></pre></div>
+<p>大事なのは、 <strong>site.safe がtrue</strong> である事。</p>
+
+<p>このsafeオプションがtrueになっている条件を見落としてた。trueじゃないとanalytics読み込みはなされない。</p>
+
+<p>しかし…。</p>
+
+<p>※ safeはデフォルトではfalse</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ bundle exec jekyll --help
+    jekyll
+(略)
+    --safe 
+        Safe mode (defaults to false)</code></pre></div>
+<p>※ <a href="https://help.github.com/articles/pages-don-t-build-unable-to-run-jekyll">https://help.github.com/articles/pages-don-t-build-unable-to-run-jekyll</a> 本家のhelpでも <code>--safe</code> オプションよろしく！とのこと。</p>
+
+<p>GitHubがJekyllのコンテンツをデプロイする際は、必ず <code>--safe</code> がつけられる。(そのため、自作プラグインが動かなくなる)</p>
+
+<p>しかし、safeがfalseじゃないと自作のプラグインを動かせないので、 <code>_includes/JB/analytics</code> から <code>if site.safe</code> の条件を削除する事で対応。</p>
+
+<p>ローカルで埋め込んだ後で、pushすればいい。</p>
+
+<hr />
+
+<p>以下、どこが原因かわからなかったので、Jekyll Bootstrapのデフォルトファイルを読んでいった結果。</p>
+
+<h2 id="蛇足">蛇足</h2>
+
+<h3 id="ディレクトリ構成">ディレクトリ構成</h3>
+
+<p>Jekyll Bootstrapを落としてくるとファイル構成はこう。</p>
+
+<ul>
+<li>404.html</li>
+<li>README.md</li>
+<li>Rakefile</li>
+<li>_config.yml</li>
+<li>_includes/</li>
+<li>_layouts/</li>
+<li>_plugins/</li>
+<li>_posts/</li>
+<li>_site/</li>
+<li>archive.html</li>
+<li>assets/</li>
+<li>atom.xml</li>
+<li>categories.html</li>
+<li>changelog.md</li>
+<li>index.md</li>
+<li>pages.html</li>
+<li>rss.xml</li>
+<li>sitemap.txt</li>
+<li>tags.html</li>
+</ul>
+
+<p>その中の <code>_layouts</code> ディレクトリの中にテンプレート的なファイルがある。</p>
+
+<ul>
+<li>_layouts/
+
+<ul>
+<li>default.html</li>
+<li>page.html</li>
+<li>post.html</li>
+</ul></li>
+</ul>
+
+<p>htmlを見てみると…。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">cat</span> <span class="n">_layouts</span><span class="sr">/default.html
+</span><span class="sr">---
+</span><span class="sr">theme :
+</span><span class="sr">  name : twitter
+</span><span class="sr">---
+</span><span class="sr">{{&#34;{% include JB/se</span><span class="n">tup</span> <span class="s2">&#34;}}%}
+</span><span class="s2">{{&#34;</span><span class="p">{</span><span class="sx">% include </span> <span class="n">themes</span><span class="sr">/twitter/</span><span class="n">default</span><span class="o">.</span><span class="n">html</span> <span class="s2">&#34;}}%}</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">cat</span> <span class="n">_layouts</span><span class="sr">/page.html 
+</span><span class="sr">---
+</span><span class="sr">layout: default
+</span><span class="sr">---
+</span><span class="sr">{{&#34;{% include JB/se</span><span class="n">tup</span> <span class="s2">&#34;}}%}
+</span><span class="s2">{{&#34;</span><span class="p">{</span><span class="sx">% include </span> <span class="n">themes</span><span class="sr">/twitter/</span><span class="n">page</span><span class="o">.</span><span class="n">html</span> <span class="s2">&#34;}}%}</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="err">$</span> <span class="n">cat</span> <span class="n">_layouts</span><span class="sr">/post.html 
+</span><span class="sr">---
+</span><span class="sr">layout: default
+</span><span class="sr">---
+</span><span class="sr">{{&#34;{% include JB/se</span><span class="n">tup</span> <span class="s2">&#34;}}%}
+</span><span class="s2">{{&#34;</span><span class="p">{</span><span class="sx">% include </span> <span class="n">themes</span><span class="sr">/twitter/</span><span class="n">post</span><span class="o">.</span><span class="n">html</span> <span class="s2">&#34;}}%}</span></code></pre></div>
+<p>こんな感じ。はじめのハイフンで囲まれたエリアはyaml front matter？ <a href="http://jekyllrb.com/docs/frontmatter/">http://jekyllrb.com/docs/frontmatter/</a></p>
+
+<p>続いて、<code>JB/setup</code> と <code>themes/twitter/default.html</code> <code>page.html</code> <code>post.html</code> をインクルードしている。</p>
+
+<p><code>layout: default</code> と書かれている page.html と post.html は default.html を親にしている事がわかる。</p>
+
+<h3 id="include-jb-setup">include JB/setup</h3>
+
+<p>_layout/default.html 一つ目の include である <code>JB/setup</code> を見てみる。 include なだけあって、 <code>_includes</code> ディレクトリにある。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="p">{{</span><span class="s2">&#34;{% capture jbcache &#34;</span><span class="p">}}</span><span class="s">%}
+</span><span class="s">  &lt;!--
+</span><span class="s">  - Dynamically set liquid variables for working with URLs/paths
+</span><span class="s">  --&gt;
+</span><span class="s">  {{&#34;{% if site.JB.setup.provider == &#34;custom&#34; &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">    {{&#34;{% include custom/setup &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">  {{&#34;{% else &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">    {{&#34;{% if site.safe and site.JB.BASE_PATH and site.JB.BASE_PATH != &#39;&#39; &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">      {{&#34;{% assign BASE_PATH = site.JB.BASE_PATH &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">      {{&#34;{% assign HOME_PATH = site.JB.BASE_PATH &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">    {{&#34;{% else &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">      {{&#34;{% assign BASE_PATH = nil &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">      {{&#34;{% assign HOME_PATH = &#34;/&#34; &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">    {{&#34;{% endif &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">
+</span><span class="s">    {{&#34;{% if site.JB.ASSET_PATH &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">      {{&#34;{% assign ASSET_PATH = site.JB.ASSET_PATH &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">    {{&#34;{% else &#34;}</span><span class="p">}</span><span class="s">%}
+</span><span class="s">      {{&#34;{% capture ASSET_PATH &#34;}</span><span class="p">}</span><span class="s">%}{{ BASE_PATH }</span><span class="p">}</span><span class="sr">/assets/</span><span class="n">themes</span><span class="sr">/{{ page.theme.name }}{{&#34;{% endcapture &#34;}}%}
+</span><span class="sr">    {{&#34;{% endif &#34;}}%}
+</span><span class="sr">  {{&#34;{% endif &#34;}}%}
+</span><span class="sr">{{&#34;{% endcapture &#34;}}%}{{&#34;{% assign jbcache = nil &#34;}}%}</span></code></pre></div>
+<p>site.JB.hogehogeの設定を確認して、パス設定などしているよう。</p>
+
+<p>この <code>site.JB.hogehoge</code> っていうのは <code>_config.yml</code> に定義しているパラメータだよね。こんな感じで定義されている。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="no">JB</span> <span class="p">:</span>
+  <span class="n">version</span> <span class="p">:</span> <span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span>
+  <span class="no">BASE_PATH</span> <span class="p">:</span> <span class="kp">false</span>
+  <span class="no">ASSET_PATH</span> <span class="p">:</span> <span class="kp">false</span>
+  <span class="ss">archive_path</span><span class="p">:</span> <span class="sr">/archive.html
+</span><span class="sr">  categories_path : /</span><span class="n">categories</span><span class="o">.</span><span class="n">html</span>
+  <span class="n">tags_path</span> <span class="p">:</span> <span class="sr">/tags.html
+</span><span class="sr">  atom_path : /</span><span class="n">atom</span><span class="o">.</span><span class="n">xml</span>
+  <span class="n">rss_path</span> <span class="p">:</span> <span class="sr">/rss.xml
+</span><span class="sr">  (略)</span></code></pre></div>
+<p>どんな値になっているのか確認のため、 <code>JB/setup</code> の先頭に以下のような出力を足してみる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">safe {{&#34;{{site.safe&#34;}}}} &lt;br&gt;
+site.JB {{&#34;{{site.JB&#34;}}}} &lt;br&gt;
+provider {{&#34;{{site.JB.setup.provider&#34;}}}} &lt;br&gt;
+base {{&#34;{{site.JB.BASE_PATH&#34;}}}} &lt;br&gt;
+asset {{&#34;{{site.JB.ASSET_PATH&#34;}}}} &lt;br&gt;
+page name {{&#34;{{ page.theme.name &#34;}}}}
+{{&#34;{% capture jbcache &#34;}}%}
+略</code></pre></div>
+<p>で、実行結果。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">safe false 
+site.JB {&#34;version&#34;=&gt;&#34;0.3.0&#34;, &#34;BASE_PATH&#34;=&gt;false, &#34;ASSET_PATH&#34;=&gt;false, &#34;archive_path&#34;=&gt;&#34;/archive.html&#34;, &#34;categories_path&#34;=&gt;&#34;/categories.html&#34;, &#34;tags_path&#34;=&gt;&#34;/tags.html&#34;, &#34;atom_path&#34;=&gt;&#34;/atom.xml&#34;, &#34;rss_path&#34;=&gt;&#34;/rss.xml&#34;, &#34;comments&#34;=&gt;{&#34;provider&#34;=&gt;&#34;disqus&#34;, &#34;disqus&#34;=&gt;{&#34;short_name&#34;=&gt;&#34;jekyllbootstrap&#34;}, &#34;livefyre&#34;=&gt;{&#34;site_id&#34;=&gt;123}, &#34;intensedebate&#34;=&gt;{&#34;account&#34;=&gt;&#34;123abc&#34;}, &#34;facebook&#34;=&gt;{&#34;appid&#34;=&gt;123, &#34;num_posts&#34;=&gt;5, &#34;width&#34;=&gt;580, &#34;colorscheme&#34;=&gt;&#34;light&#34;}}, &#34;analytics&#34;=&gt;{&#34;provider&#34;=&gt;&#34;google&#34;, &#34;google&#34;=&gt;{&#34;tracking_id&#34;=&gt;&#34;UA-123-12&#34;}, &#34;getclicky&#34;=&gt;{&#34;site_id&#34;=&gt;nil}, &#34;mixpanel&#34;=&gt;{&#34;token&#34;=&gt;&#34;_MIXPANEL_TOKEN_&#34;}}, &#34;sharing&#34;=&gt;{&#34;provider&#34;=&gt;false}} 
+provider 
+base false 
+asset false 
+page name twitter</code></pre></div>
+<p>なるほど。実行結果的にはifの最後を通っているようなので、 ASSET_PATH の設定をしている事になる。</p>
+
+<p><code>ASSET_PATH = /assets/themes/twitter</code> となった。</p>
+
+<h3 id="include-themes-twitter-default-html">include themes/twitter/default.html</h3>
+
+<p>_layouts/default.html の二つ目の include。一部を除き、htmlがつらつらと…。</p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;utf-8&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>{{&#34;{{ page.title &#34;}}}}<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    {{&#34;{% if page.description &#34;}}%}<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;description&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;{{&#34;</span><span class="err">{{</span> <span class="na">page</span><span class="err">.</span><span class="na">description</span> <span class="err">&#34;}}}}&#34;</span><span class="p">&gt;</span>{{&#34;{% endif &#34;}}%}
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;author&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;{{ site.author.name }}&#34;</span><span class="p">&gt;</span>
+
+    <span class="c">&lt;!-- Enable responsive viewport --&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;viewport&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;width=device-width, initial-scale=1.0&#34;</span><span class="p">&gt;</span>
+(略)
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;container-narrow&#34;</span><span class="p">&gt;</span>
+
+      <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;content&#34;</span><span class="p">&gt;</span>
+        {{&#34;{{ content &#34;}}}}
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">hr</span><span class="p">&gt;</span></code></pre></div>
+<p>動的に表示させたい部分はliquidで埋め込んでいる。<code>{{&quot;{{ &quot;}}}}</code> とか <code>{{&quot;{% &quot;}}%}</code> で始まる部分がそう。</p>
+
+<p>で、 <code>content</code> 部分に子？の内容が埋め込まれるのか。</p>
+
+<h3 id="まとめ">まとめ</h3>
+
+<p>rake post title=hoge として作った _posts/2013-xx-yy-hoge.md を表示するためには、こんな風に埋め込みしていっている？</p>
+
+<p><img src="/static/images/2013-05-27/jekyll-page.png" alt="jekyll-page" /></p>
+
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2013/05/27/jekyll-githubpages-analytics-setting/"
+    data-text="Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2013/05/27/jekyll-githubpages-analytics-setting/"
+    data-hatena-bookmark-title="Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定が効かなくなっていた - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2013/05/27/jekyll-githubpages-analytics-setting/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2013/05/27/jekyll-githubpages-analytics-setting/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2013/05/23/jekyll-liquid-plugin2/" class="pagination_overflow previous_page">
+          Prev: 
+          13/5/23
+          記事の目次を出力するJekyllプラグインの改良
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2013/06/05/ios-over-the-air/" class="pagination_overflow next_page">
+          Next: 
+          13/6/5
+          Over-the-Airという形式でiOSアプリのインストー …
+        </a>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#結論">結論</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#ハマり">ハマり</a>
+<ul>
+<li><a href="#前提-github-pagesの運用形態">前提: GitHub Pagesの運用形態</a></li>
+<li><a href="#analyticsの設定はどう読み込まれているのか">analyticsの設定はどう読み込まれているのか</a></li>
+</ul></li>
+<li><a href="#蛇足">蛇足</a>
+<ul>
+<li><a href="#ディレクトリ構成">ディレクトリ構成</a></li>
+<li><a href="#include-jb-setup">include JB/setup</a></li>
+<li><a href="#include-themes-twitter-default-html">include themes/twitter/default.html</a></li>
+<li><a href="#まとめ">まとめ</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>

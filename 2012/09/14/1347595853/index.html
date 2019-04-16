@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備 - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Ruby][StartUp][Jekyll]JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備 あらすじ  はてな記法、綺麗に出力できて今までお気に入りだったんだけど、欠点として、はてなでしか使わないという問題が 他にも文章書く時にreSTとかMarkdownを使うと捗るが、結局アウトプットするのは個人でははてなが多い……[1] そもそもはてな記法は基本はてなじゃなきゃ見れない なら最初から…？  うーん。他の記法使う時がきたのか。
+Jekyllとは  Jekyll is a simple, blog aware, static site generator.
+https://github.com/mojombo/jekyll/wiki
+ 静的サイトのジェネレーターなのね。 HTML, Markdown, textile なんでもござれ。
+参考サイト  [https://github.com/mojombo/jekyll:title] http://mattn.kaoriya.net/software/lang/ruby/20090409185248.htm:title http://melborne.github.com/2012/05/13/first-step-of-jekyll/:title http://tokkonopapa.github.com/blog/2011/12/28/easy-usage-of-jekyll-on-github/:title http://d.hatena.ne.jp/yuum3/20120620/1340180894:title http://d.hatena.ne.jp/takuti/20110724/1311464070:title http://dsuket.hatenablog.com/entry/2012/03/06/191459:title http://d.hatena.ne.jp/seinzumtode/20120426/1335402322:title  環境  CentOS 6.2 と、WindowsXP Ruby 1.9.2  Bundler 1.1.4  Git 1.7.9.6 Jekyll 0.11.2 RedCloth 4.2.9  いきなり動かす 本来は決まったディレクトリを作ったり、コンフィグファイルを作ったり、レイアウトファイルを作ったりしていく……のだけど、Jekyll Bootstrapを使えばいきなりフルセットで動かす事ができる。
+取得はGitで。
+$ git clone http://github.com/plusjade/jekyll-bootstrap.git JEKYLL_HOME JekyllはBundlerでインストールするので移動してGemfileを作成。そしてjekyllコマンドで実行！
+$ cd JEKYLL_HOME $ vi Gemfile $ cat Gemfile source :rubygems source &amp;#34;http://rubygems.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2012/09/13/1347508570/" class="pagination_overflow previous_page">
+          Prev: 
+          12/9/13
+          Fluentdの自作プラグインがロードできないのでソースの中 …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2012/09/20/jekyll/" class="pagination_overflow next_page">
+          Next: 
+          12/9/20
+          JekyllをGitHub Pagesに上げるための準備
+        </a>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
+    </a>
+  
+    <a href='/tags/startup' class="muted-link">
+      [ <span class="Label Label--gray">StartUp</span> ]
+    </a>
+  
+    <a href='/tags/jekyll' class="muted-link">
+      [ <span class="Label Label--gray">Jekyll</span> ]
+    </a>
+  
+
+
+          Published: <span>2012/09/14</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ruby-startup-jekyll-jekyllとjekyll-bootstrapでかんたん静的サイト生成-するための準備">[Ruby][StartUp][Jekyll]JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#jekyllとは">Jekyllとは</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#いきなり動かす">いきなり動かす</a></li>
+<li><a href="#ハマり-for-windows">ハマり for Windows</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="ruby-startup-jekyll-jekyllとjekyll-bootstrapでかんたん静的サイト生成-するための準備">[Ruby][StartUp][Jekyll]JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備</h2>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<ul>
+<li>はてな記法、綺麗に出力できて今までお気に入りだったんだけど、欠点として、はてなでしか使わないという問題が</li>
+<li>他にも文章書く時にreSTとかMarkdownを使うと捗るが、結局アウトプットするのは個人でははてなが多い……[1]</li>
+<li>そもそもはてな記法は基本はてなじゃなきゃ見れない</li>
+<li>なら最初から…？</li>
+</ul>
+
+<p>うーん。他の記法使う時がきたのか。</p>
+
+<h2 id="jekyllとは">Jekyllとは</h2>
+
+<blockquote>
+<p>Jekyll is a simple, blog aware, static site generator.</p>
+
+<p><cite><a href="https://github.com/mojombo/jekyll/wiki">https://github.com/mojombo/jekyll/wiki</a></cite></p>
+</blockquote>
+
+<p>静的サイトのジェネレーターなのね。 HTML, Markdown, textile なんでもござれ。</p>
+
+<h2 id="参考サイト">参考サイト</h2>
+
+<ul>
+<li>[<a href="https://github.com/mojombo/jekyll:title">https://github.com/mojombo/jekyll:title</a>]</li>
+<li><a href="http://mattn.kaoriya.net/software/lang/ruby/20090409185248.htm:title">http://mattn.kaoriya.net/software/lang/ruby/20090409185248.htm:title</a></li>
+<li><a href="http://melborne.github.com/2012/05/13/first-step-of-jekyll/:title">http://melborne.github.com/2012/05/13/first-step-of-jekyll/:title</a></li>
+<li><a href="http://tokkonopapa.github.com/blog/2011/12/28/easy-usage-of-jekyll-on-github/:title">http://tokkonopapa.github.com/blog/2011/12/28/easy-usage-of-jekyll-on-github/:title</a></li>
+<li><a href="http://d.hatena.ne.jp/yuum3/20120620/1340180894:title">http://d.hatena.ne.jp/yuum3/20120620/1340180894:title</a></li>
+<li><a href="http://d.hatena.ne.jp/takuti/20110724/1311464070:title">http://d.hatena.ne.jp/takuti/20110724/1311464070:title</a></li>
+<li><a href="http://dsuket.hatenablog.com/entry/2012/03/06/191459:title">http://dsuket.hatenablog.com/entry/2012/03/06/191459:title</a></li>
+<li><a href="http://d.hatena.ne.jp/seinzumtode/20120426/1335402322:title">http://d.hatena.ne.jp/seinzumtode/20120426/1335402322:title</a></li>
+</ul>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>CentOS 6.2 と、WindowsXP</li>
+<li>Ruby 1.9.2
+
+<ul>
+<li>Bundler 1.1.4</li>
+</ul></li>
+<li>Git 1.7.9.6</li>
+<li>Jekyll 0.11.2</li>
+<li>RedCloth 4.2.9</li>
+</ul>
+
+<h2 id="いきなり動かす">いきなり動かす</h2>
+
+<p>本来は決まったディレクトリを作ったり、コンフィグファイルを作ったり、レイアウトファイルを作ったりしていく……のだけど、Jekyll Bootstrapを使えばいきなりフルセットで動かす事ができる。</p>
+
+<p>取得はGitで。</p>
+<div class="highlight"><pre class="chroma">$ git clone http://github.com/plusjade/jekyll-bootstrap.git JEKYLL_HOME</pre></div>
+<p>JekyllはBundlerでインストールするので移動してGemfileを作成。そしてjekyllコマンドで実行！</p>
+<div class="highlight"><pre class="chroma">$ cd JEKYLL_HOME
+$ vi Gemfile
+$ cat Gemfile
+source :rubygems
+source &#34;http://rubygems.org&#34;
+
+gem &#39;jekyll&#39;
+gem &#39;RedCloth&#39;
+
+$ bundle install --path vendor/bundle
+$ bundle exec jekyll --server</pre></div>
+<p>これで、<a href="http://localhost:4000">http://localhost:4000</a> にアクセスしてみると超カッコいいサンプルページが出来上がっている。CentOSは以上。</p>
+
+<h2 id="ハマり-for-windows">ハマり for Windows</h2>
+
+<p>ところで、Windows XPで同じ事やっても_site下に静的ファイルが全然できなかった。……まあ、そもそもXP使うなって話？</p>
+
+<p>結果としては、<span class="deco" style="color:#FF0000;">RedCloth-4.2.9-x86-mingw32直下のspecディレクトリを削除したら生成されるようになった。</span>静的ファイル生成の流れを追っていくと、</p>
+
+<ul>
+<li>jekyll/bin/jekyll内でsite.processメソッドが呼ばれている</li>
+<li>jekyll/lib/jekyll/site.rbのprocessメソッドからread,readからread_directoriesメソッドが呼ばれている</li>
+<li>read_directoriesメソッドは以下のようになっている</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">     <span class="k">def</span> <span class="nf">read_directories</span><span class="p">(</span><span class="n">dir</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+       <span class="n">base</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">dir</span><span class="p">)</span>
+       <span class="n">entries</span> <span class="o">=</span> <span class="no">Dir</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">base</span><span class="p">)</span> <span class="p">{</span> <span class="n">filter_entries</span><span class="p">(</span><span class="no">Dir</span><span class="o">[</span><span class="s1">&#39;*&#39;</span><span class="o">]</span><span class="p">)</span> <span class="p">}</span>
+       <span class="nb">self</span><span class="o">.</span><span class="n">read_posts</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span>
+
+       <span class="n">entries</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+         <span class="n">f_abs</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+         <span class="n">f_rel</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+         <span class="k">if</span> <span class="no">File</span><span class="o">.</span><span class="n">directory?</span><span class="p">(</span><span class="n">f_abs</span><span class="p">)</span>
+           <span class="k">next</span> <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">dest</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sr">/\/$/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">f_abs</span>
+           <span class="n">read_directories</span><span class="p">(</span><span class="n">f_rel</span><span class="p">)</span>
+         <span class="k">elsif</span> <span class="o">!</span><span class="no">File</span><span class="o">.</span><span class="n">symlink?</span><span class="p">(</span><span class="n">f_abs</span><span class="p">)</span>
+           <span class="n">first3</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">f_abs</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">fd</span><span class="o">|</span> <span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="p">}</span>
+           <span class="k">if</span> <span class="n">first3</span> <span class="o">==</span> <span class="s2">&#34;---&#34;</span>
+<span class="c1">#＼yaml！／</span>
+             <span class="c1"># file appears to have a YAML header so process it as a page</span>
+             <span class="n">pages</span> <span class="o">&lt;&lt;</span> <span class="no">Page</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="nb">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">dir</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+           <span class="k">else</span>
+             <span class="c1"># otherwise treat it as a static file</span>
+             <span class="n">static_files</span> <span class="o">&lt;&lt;</span> <span class="no">StaticFile</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="nb">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">dir</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+           <span class="k">end</span>
+         <span class="k">end</span>
+       <span class="k">end</span>
+     <span class="k">end</span></code></pre></div>
+<ul>
+<li>読み込むファイルをputs して眺めていると、＼yaml！／のところでRedCloth-4.2.9-x86-mingw32\spec\fixtures\basic.ymlを呼んだ瞬間止まっている模様……</li>
+<li>まあ、specファイルだしなくてもいいよね？　削除、で、動いたという事で[2]</li>
+</ul>
+
+<p>で、動かす(Windows)。</p>
+<div class="highlight"><pre class="chroma">$ be jekyll --server
+Configuration from C:/HOGE/jekyll/_config.yml
+Auto-regenerating enabled: C:/HOGE/project/jekyll -&gt; C:/HOGE/project/jekyll/_site
+[2012-09-12 23:50:51] regeneration: 983 files changed
+[2012-09-12 23:50:54] INFO  WEBrick 1.3.1
+[2012-09-12 23:50:54] INFO  ruby 1.9.2 (2011-07-09) [i386-mingw32]
+[2012-09-12 23:50:54] INFO  WEBrick::HTTPServer#start: pid=5944 port=4000
+
+ ___________________________________________________________________________
+| Maruku tells you:
++---------------------------------------------------------------------------
+| Unclosed span (waiting for [&#34;_&#34;])
+| ---------------------------------------------------------------------------
+| Included file &#39;sig.markdown&#39; not found in _includes directoryEOF
+| -------------------------------------------------------------|--------------
+|                                                              +--- Byte 61
+| Shown bytes [0 to 61] of 61:
+| &gt;Included file &#39;sig.markdown&#39; not found in _includes directory
+|
+| At line 2
+|       text     |Included file &#39;sig.markdown&#39; not found in _includes directory|
+|      empty --&gt; ||
+|       text     |This _is_ cool|
+|
+|
+| Elements read in span:
+|
+| Current string:
+|   &#34;includes directory&#34;
++---------------------------------------------------------------------------
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/errors_management.rb:49:in `maruku_error&#39;
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/input/parse_span_better.rb:222:in `read_span&#39;
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/input/parse_span_better.rb:423:in `read_em&#39;
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/input/parse_span_better.rb:202:in `read_span&#39;
+!C:/HOGE/project/jekyll/vendor/bundle/ruby/1.9.1/gems/maruku-0.6.0/lib/maruku/input/parse_span_better.rb:46:in `parse_span_better&#39;
+\___________________________________________________________________________</pre></div>
+<p>エラーは出てるけど、これで <a href="http://localhost:4000にアクセスするとページが見れる">http://localhost:4000にアクセスするとページが見れる</a>！</p>
+
+<p>sig &hellip; 署名？　あんまりよくないけど、空っぽでも存在さえすれば怒られないっぽい。</p>
+
+<p>[1] 個人でない場合はExcelとか</p>
+
+<p>[2] なんでbasic.ymlを読もうとして止まったかまでは調べてないです……</p>
+
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2012/09/14/1347595853/"
+    data-text="JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備 - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2012/09/14/1347595853/"
+    data-hatena-bookmark-title="JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備 - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2012/09/14/1347595853/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2012/09/14/1347595853/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2012/09/13/1347508570/" class="pagination_overflow previous_page">
+          Prev: 
+          12/9/13
+          Fluentdの自作プラグインがロードできないのでソースの中 …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2012/09/20/jekyll/" class="pagination_overflow next_page">
+          Next: 
+          12/9/20
+          JekyllをGitHub Pagesに上げるための準備
+        </a>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ruby-startup-jekyll-jekyllとjekyll-bootstrapでかんたん静的サイト生成-するための準備">[Ruby][StartUp][Jekyll]JekyllとJekyll Bootstrapでかんたん静的サイト生成…するための準備</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#jekyllとは">Jekyllとは</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#いきなり動かす">いきなり動かす</a></li>
+<li><a href="#ハマり-for-windows">ハマり for Windows</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>

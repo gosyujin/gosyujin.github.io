@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Android on kk_Atakaの日記</title>
+    <link>https://gosyujin.github.io/tags/android/</link>
+    <description>Recent content in Android on kk_Atakaの日記</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>jp</language>
+    <lastBuildDate>Sun, 04 Aug 2013 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://gosyujin.github.io/tags/android/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Android StudioでAndroid Lint</title>
+      <link>https://gosyujin.github.io/2017/05/31/android-lint/</link>
+      <pubDate>Wed, 31 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2017/05/31/android-lint/</guid>
+      <description>あらすじ Android Lintを使ってみる。
+参考  Android Lint - Android Studio Project Site Android Lint Checks - Android Studio Project Site Android Tips #11 ADT revision 17のLintの機能追加について ｜ Developers.IO  Android Lintって  ADT 16から導入されたツール ソースに潜在するバグをチェックしてくれる  Missing translations (and unused translations) Layout performance problems (all the issues the old layoutopt tool used to find, and more) Unused resources Inconsistent array sizes (when arrays are defined in multiple configurations) Accessibility and internationalization problems (hardcoded strings, missing contentDescription, etc) Icon problems (like missing densities, duplicate icons, wrong sizes, etc) Usability problems (like not specifying an input type on a text field) Manifest errors   使用例 コマンドラインから使う事ができる。</description>
+    </item>
+    
+    <item>
+      <title>GradleのresValueで値をリソースに設定する</title>
+      <link>https://gosyujin.github.io/2017/02/28/gradle_res_value/</link>
+      <pubDate>Tue, 28 Feb 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2017/02/28/gradle_res_value/</guid>
+      <description>あらすじ FacebookのAPIを使うために facebookAppId を取得したが、このAPI Keyを設定ファイル( AndroidManifest.xml )外に追い出すのに苦労した。
+Gradle力が低いので、もっと良いやり方があるかもしれない。
+ スタートガイド - Android SDK   1.strings.xmlファイルを開きます。パスの例:/app/src/main/res/values/strings.xml。 2.新しい文字列を、facebook_app_idの名前とFacebookアプリIDとともに追加します。
+ やりたいこと  facebookAppId を gradle.properties に定義したい AndroidManifest.xml に gradle.properties から参照した文字列を埋め込みたい ただし、プロパティに定義したKeyは数値のみ(文字数値入り混じったKeyなら問題ない)  manifestPlaceholdersに登録して参照(うまくいかなかった)  gradle.properties  キーを書いた   facebookAppId=123456711111111  build.gradle  productFlavors に getProperty(&amp;quot;facebookAppId&amp;quot;) と記載し、 gradle.properties から値を呼び出した   productFlavors { develop { manifestPlaceholders = [ facebook_app_id: getProperty(&amp;#34;facebookAppId&amp;#34;)] 略 } }  AndroidManifest.xml  &amp;lt;meta-data android:name=&amp;#34;com.facebook.sdk.ApplicationId&amp;#34; android:value=&amp;#34;${facebook_app_id}&amp;#34; /&amp;gt; これ、確かに参照はできるんだけどFacebookSDKの中でKeyが数値とみなされて applicationId cannot be null となってしまった。</description>
+    </item>
+    
+    <item>
+      <title>Androidのapkの総メソッド数を調べてMulti-dexを導入するか否かを判断する</title>
+      <link>https://gosyujin.github.io/2016/09/30/android_multi_dex/</link>
+      <pubDate>Fri, 30 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2016/09/30/android_multi_dex/</guid>
+      <description> あらすじ  Androidではapkのメソッド総数が65536を超える場合、ビルド/インストール時にエラーが発生する  Multi-dexを導入して対応しなければならないらしい  しかし、メソッド総数はどう判断すればよい？  参考  mihaip/dex-method-counts: Command-line tool to count per-package methods in Android .dex files Multi-dex Support を使おう - Qiita Androidでメソッド数が65536を超えた時の対処方法 - Qiita [Android] アプリのメソッド数を知るには ｜ Ys&amp;rsquo; Library ｜ プログラミング・ガジェット徒然日記  手順  dex-method-countsを使用する  git clone https://github.com/mihaip/dex-method-counts.git cd dex-method-counts/ ./gradlew assemble ./dex-method-counts hogehoge-debug.apk Processing hogehoge-debug.apk Read in x method IDs. Read in xxx method IDs. &amp;lt;root&amp;gt;: xxx android: x app: x content: x res: x net: x os: x util: x widget: x com: x android: x tools: x fd: x common: x runtime: x dalvik: x system: x java: xxx io: x lang: x ref: x reflect: x math: x security: x util: x logging: x zip: x Overall method count: xxx</description>
+    </item>
+    
+    <item>
+      <title>ProGuardでAndroidアプリを難読化していく手順(良い方法があったら知りたい)</title>
+      <link>https://gosyujin.github.io/2016/05/29/android-apply-proguard/</link>
+      <pubDate>Sun, 29 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2016/05/29/android-apply-proguard/</guid>
+      <description>あらすじ  Androidアプリの難読化作業を最後にまとめて実施しようとしたら思いがけずハマった しかし「こうすれば全部OK」という定石はなく、ライブラリの情報を読み、実際にアプリを実行していくしか方法がなさそう？ ベストプラクティスなどあれば教えて下さい…  参考  ProGuard設定まとめ - Qiita Proguardメモ - Qiita ProGuardのメモ - Qiita android - AndroidStudio disable &amp;ldquo;Expected resource of type string&amp;rdquo; - Stack Overflow  手順 最後に一気にやろうとすると、とにかくまずビルドが通らない。
+まっさらなプロジェクトを用意して一つずつライブラリを入れてくのが良さそう。
+BUILD SUCCESSFULになるまで  まっさらなプロジェクト(以下、確認用プロジェクト)を作る  その状態でProGuardを適用するように設定変更する リリースビルド( gradlew assembleRelease など)が成功する事を確認する  本プロジェクトで使用しているライブラリ( build.gradle に定義されているものなど)を確認用プロジェクトに追加していく  一つ追加してはビルドが失敗しない事を確認する 失敗した場合はエラーメッセージを確認する 恐らく追加したライブラリに関連するエラーが出ているはずなので、該当ライブラリREADME/GitHub IssueにProGuardに関する記載があるか確認する 記載があった場合、ProGuard設定を追加し再度ビルドする …以上の手順を全ライブラリに対して行う  並行して、ビルド成功した場合は本プロジェクトにProGuard設定を転記していっても良いかも  BUILD SUCCESSFULになったあと 難読化の影響で 処理呼び出し時にコケる 、というパターンもある。これは実際にapkを叩いてみるまでわからない模様。
+ PCとAndroid端末をUSBで接続する リリース用apkをインストールする( adb install など) adb logcat でログを確認できるようにしておく 実機でコケる操作を行う logcatからエラーを確認する  コケているライブラリのREADME/GitHub IssueにProGuardに関する記載があるか確認する   …という感じの繰り返しで確認していく。</description>
+    </item>
+    
+    <item>
+      <title>AndroidのAccountManagerをとりあえず動かすところまで</title>
+      <link>https://gosyujin.github.io/2016/04/30/android-minimum-account-manager/</link>
+      <pubDate>Sat, 30 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2016/04/30/android-minimum-account-manager/</guid>
+      <description>あらすじ  Androidでアカウントに関連する情報をアプリ内に持ちたくない  Android側でAccountManagerという仕組みを用意してくれている  しかし、説明を読んでもイマイチピンとこなかった 実際に動きを確認できるところまでサンプル作ってみた  参考  Android Security 安全なアプリケーションを作成するために 11.2章 Android におけるアカウント管理 – Gunosy Tech Blog AccountManagerを利用する - Qiita AccountManagerでアカウントを管理する - Qiita  AccountManagerの概念 AndroidSecurity安全なアプリケーションを作成するために P267より抜粋
+環境  Android Studio 1.5.1 Minimum SDK API 19: Android 4.4(KitKat) Emulator Nexus 5 API 19 Android 4.4.4, API 19  動くもの  こんな感じで動く  ソース: MinimumAccountManagerSample   ハマり AccountManager Authenticator ともにサンプル通り作ってみようと思ったらエラーの切り分けができなかった
+ Android的に×なのか AccountManager的に×なのか 使おうとしたGoogle APIのお作法的に×なのか(多分これが一番有力)  Android Security(2012/2/21 第二版)のサンプルが古めのGoogle APIを使っていたため、これを最新に置き換えて〜という作業も発生していた   空の Authenticator を作って、とりあえず登録できる口だけ用意する事で一気通貫通す事ができた！</description>
+    </item>
+    
+    <item>
+      <title>Androidの自動テストツール、今(2013年)から使うなら何がよいのか</title>
+      <link>https://gosyujin.github.io/2013/08/28/android-test-tools/</link>
+      <pubDate>Wed, 28 Aug 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2013/08/28/android-test-tools/</guid>
+      <description>あらすじ Androidのテストを自動化したいので、テストツールの選定をしてみたが、昔の記事がヒットする事が多く、何を使えばいいのかよくわからん。
+とはいっても、明確に「どんなテストがしたい」という方針もなく、とっかかりとしてどんなツールがあってどのくらい盛り上がってるのかが知りたかった。
+環境  Windows 7 AndroidDeveloperTools Build: v21.1.0-569685  とりあえず Win メインで。
+とっかかり ロジックまわりのテスト ロジック的なものは、 JUnit 拡張の TestCase クラスを使えば何とか書けそうというのはわかった。
+ Androidアプリ開発テスト入門（2）：Android SDKでビジネスロジックのテストを自動化するには (1/3) - ＠IT  2011 年の記事だけど、 JUnit で書くという大前提は崩れていないはず…。
+画面遷移やGUIまわりのテスト 困ったのはこっち。どう書けばいいんだろう。
+「Android 自動テスト ツール」 とかで調べてみた結果、以下のような記事が引っ掛かった。
+ Androidアプリの自動テストツールで最も有望か - 「NativeDriver」，Google製「WebDriver」の拡張　（公式のAndroid版Selenium） - 主に言語とシステム開発に関して  これも 2011 年の記事だが、この中では NativeDriver , robotium , Scirocco の 3 ツールでは最終的に NativeDriver に集約されていくだろうという結論になっている。
+…が、 2013 年現在においても本当にそうなのか？
+結論 2013 年 08 月の時点ではこんな感じ。
+   ツール ソース Android iOS テスト記述可能な言語 備考     NativeDriver svn - - - 開発終了   robotium GitHub 1.</description>
+    </item>
+    
+    <item>
+      <title>Androidアプリのインストール、起動方法によってIntentのタイプが微妙に変わる件</title>
+      <link>https://gosyujin.github.io/2013/08/04/android-install-intent/</link>
+      <pubDate>Sun, 04 Aug 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2013/08/04/android-install-intent/</guid>
+      <description>あらすじ Androidアプリにおいて、Eclipseからビルドしていた時は想定通り動いていたのに、リリース署名をしたアプリ(apkファイル)をインストールした場合だけ動作が想定していないものになった。
+具体的には、Activityがむちゃくちゃたまる現象が起こるということで非常に困った。
+結論 起動のさせ方により、起動時のIntentフラグが変わる。これはAndroid内部で知らぬ間にやられてしまう。
+onCreate時などでIntentのフラグをチェックして何とかするしかない。
+環境  AndroidDeveloperTools Build: v21.1.0-569685  ソースの中身  メインのActivityには action.Main と category.LAUNCHER しか設定していない。  AndroidManifest.xmlはプロジェクト作成時ほぼそのまま   &amp;lt;uses-sdk android:minSdkVersion=&amp;#34;13&amp;#34; android:targetSdkVersion=&amp;#34;14&amp;#34; /&amp;gt; &amp;lt;application android:allowBackup=&amp;#34;true&amp;#34; android:icon=&amp;#34;@drawable/ic_launcher&amp;#34; android:label=&amp;#34;@string/app_name&amp;#34; android:theme=&amp;#34;@style/AppTheme&amp;#34; &amp;gt; &amp;lt;activity android:name=&amp;#34;com.example.testproject.MainActivity&amp;#34; android:label=&amp;#34;@string/app_name&amp;#34; &amp;gt; &amp;lt;intent-filter&amp;gt; &amp;lt;action android:name=&amp;#34;android.intent.action.MAIN&amp;#34; /&amp;gt; &amp;lt;category android:name=&amp;#34;android.intent.category.LAUNCHER&amp;#34; /&amp;gt; &amp;lt;/intent-filter&amp;gt; &amp;lt;/activity&amp;gt; (略)  FLAG設定は特に記載せず  メインのActivity(MainActivity.java)もほぼそのまま   public class MainActivity extends Activity { @Override protected void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); setContentView(R.layout.activity_main); } @Override public boolean onCreateOptionsMenu(Menu menu) { getMenuInflater().</description>
+    </item>
+    
+  </channel>
+</rss>

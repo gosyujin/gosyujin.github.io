@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Oracle on kk_Atakaの日記</title>
+    <link>https://gosyujin.github.io/tags/oracle/</link>
+    <description>Recent content in Oracle on kk_Atakaの日記</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>jp</language>
+    <lastBuildDate>Mon, 19 Oct 2009 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://gosyujin.github.io/tags/oracle/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>OracleにおけるWHERE句、BETWEEN句、IN句、LIKE句、ORDER BY句のまとめ</title>
+      <link>https://gosyujin.github.io/2009/11/16/1258300637/</link>
+      <pubDate>Mon, 16 Nov 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2009/11/16/1258300637/</guid>
+      <description>[Oracle][SQL]OracleにおけるWHERE句、BETWEEN句、IN句、LIKE句、ORDER BY句のまとめ 　まずは基本的な句のまとめから。
+論理演算子の優先順位  NOT &amp;gt; AND &amp;gt; OR  　本当はもっと演算子の優先順位はあるけど、とりあえず引っかかったところだけ。ANDの方がORよりも早いです。
+WHERE句  文字、日付は&amp;rsquo;(シングルクォーテーション)で囲む 文字列の大文字小文字は区別される 日付データのデフォルト値はDD-MON-RR WHERE句では列別名は使えない！  ただし、ORDER BY句では使用できる！[1]   　例。普通のSQL文です。。
+[f:id:kk_Ataka:20091106011618p:image]
+　id列をXYZと名前付けてこいつをWHERE句で使おうとすると…。
+[f:id:kk_Ataka:20091106011755p:image]
+　エラーになります。しかし、name列をXYZと名前付けてORDER BY句で使おうとすると…。
+[f:id:kk_Ataka:20091106011756p:image]
+　使えます！
+BETWEEN &amp;lsquo;○&amp;rsquo; AND &amp;lsquo;△&amp;rsquo; 　○～△で合致するものを探す。こんなテーブルで…
+[f:id:kk_Ataka:20091106010119p:image]
+　nameが1から9で合致するものを探す。
+[f:id:kk_Ataka:20091106010120p:image]
+　1から2で合致するもの。
+[f:id:kk_Ataka:20091106010121p:image]
+[2]
+name (NOT) IN(&amp;lsquo;AA&amp;rsquo;, &amp;lsquo;BB&amp;rsquo;) 　AA、BBいずれかに合致すれば取得します。下図の場合はname列の中からY&amp;rsquo;s IかY&amp;rsquo;s II[3]に合致する値を探してくるので、
+[f:id:kk_Ataka:20091116003449j:image]
+　こうなります。
+　一方、NOTは合致しないものを取得します。Y&amp;rsquo;s IとY&amp;rsquo;s II以外の値を取得します。
+[f:id:kk_Ataka:20091116003450j:image]
+name LIKE &amp;lsquo;%AA%&amp;rsquo; 　(任意の文字列)AA(任意の文字列)に合致するものを探します。他には_(アンダーバー)があります。</description>
+    </item>
+    
+    <item>
+      <title>Oracle Database 10g Express Editionの日本語版を導入します</title>
+      <link>https://gosyujin.github.io/2009/11/05/1257433826/</link>
+      <pubDate>Thu, 05 Nov 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2009/11/05/1257433826/</guid>
+      <description>[Oracle]Oracle Database 10g Express Editionの日本語版を導入します 　実は、前回のこのOracleを選択するページにて
+[f:id:kk_Ataka:20091101015331p:image]
+　上から二つ目のUniversal版を選択しておけば日本語版を導入できました；；　なんでこっち落とさなかったんだ。Multi-byte Unicode database for all language deploymentって書いてあるしっ！
+インストール [f:id:kk_Ataka:20091106000343j:image]
+[f:id:kk_Ataka:20091106000344j:image]
+[f:id:kk_Ataka:20091106000345j:image]
+[f:id:kk_Ataka:20091106000436j:image]
+[f:id:kk_Ataka:20091106000437j:image]
+[f:id:kk_Ataka:20091106000438j:image]
+アプリ [f:id:kk_Ataka:20091106000639p:image]
+　完全に日本語ですどうもありがとうございました。さーいじってみようかなっ！</description>
+    </item>
+    
+    <item>
+      <title>Oracle Database 10g Express Editionを導入します</title>
+      <link>https://gosyujin.github.io/2009/11/01/1257053470/</link>
+      <pubDate>Sun, 01 Nov 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2009/11/01/1257053470/</guid>
+      <description>[Oracle]Oracle Database 10g Express Editionを導入します  Windows XP Home Edition SP3 Oracle Database 10g Express Edition Firefox 3.5.4  　環境下でOracleスタートさせます。
+Oracleを入手する 　何はなくともOracleを入手する所から。まず[http://www.oracle.com/index.html:title=Oracle公式]へ。Oracle Database ○○というリンクをクリック。
+[f:id:kk_Ataka:20091101015327p:image]
+　Express Editionリンクをクリック。
+[f:id:kk_Ataka:20091101015328p:image]
+　Download Oracle Database 10g Express Editionリンクをクリック。
+[f:id:kk_Ataka:20091101015329p:image]
+　プラットフォームを選択。今回はWindowsなので下で。
+[f:id:kk_Ataka:20091101015330p:image]
+　規約に同意してダウンロード。上から三つの違いはシングルバイトかマルチバイトかクライアントのみ…？
+[f:id:kk_Ataka:20091101015331p:image]
+　Oracleのアカウントを持っていない場合このページに飛んでくる。sign up now.リンクをクリック。
+[f:id:kk_Ataka:20091101015332p:image]
+　お客様プロファイル(Oracle.com)を作成リンクをクリック。
+[f:id:kk_Ataka:20091101015333p:image]
+　メールアドレスとパスワードを記入し、名前や所属などの情報を記入していく。このメールアドレスがそのままusernameになるので注意。
+[f:id:kk_Ataka:20091101015334p:image]
+　以上がダウンロードの手順。次にインストール。
+インストールする 　基本的には次へ次へ。
+[f:id:kk_Ataka:20091101015335j:image]
+[f:id:kk_Ataka:20091101015336j:image]
+[f:id:kk_Ataka:20091101015337j:image]
+　ここでパスワード入力。このパスワードを使用するユーザはSYS, SYSTEM！(これ読み飛ばしてて後で詰まった；)
+[f:id:kk_Ataka:20091101015338j:image]
+[f:id:kk_Ataka:20091101015339j:image]</description>
+    </item>
+    
+    <item>
+      <title>文字リテラルで&#39;を使用する場合</title>
+      <link>https://gosyujin.github.io/2009/10/31/1257000092/</link>
+      <pubDate>Sat, 31 Oct 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2009/10/31/1257000092/</guid>
+      <description>[Oracle][SQL]文字リテラルで&amp;rsquo;を使用する場合 　シングルクォーテーションがクセモノな&amp;rsquo;Y&amp;rsquo;s II&amp;rsquo; をきちんと挿入・表示させる。
+シングルクォーテーションを重ねる insert into sample values(2, &amp;#39;Y&amp;#39;&amp;#39;s II&amp;#39;) 　まず基本。シングルクォーテーションを重ねればOK。
+代替引用符を使用する 　もしくは、Oracle 10gからサポートされた代替引用符(q or Q)で、任意の文字を引用符として使用する。
+insert into sample values(3, q&amp;#39;aY&amp;#39;s IIa&amp;#39;) insert into sample values(3, q&amp;#39;%Y&amp;#39;s II%&amp;#39;) 　上はaで挟がった中がリテラルになり、下は%で挟がった中がリテラルになる。ちなみに任意の文字と指定文字が重なってしまった場合でも、
+insert into sample values(3, q&amp;#39;sY&amp;#39;s IIs&amp;#39;) 　問題ない。頭とおしりできちんと見とるんかな。
+091117追記 　どうやら、
+insert into sample values(3, q&amp;#39;[Y&amp;#39;s II]&amp;#39;) insert into sample values(3, q&amp;#39;(Y&amp;#39;s II)&amp;#39;) 　こういう表記も良いらしい。(というか、こっちが主流？)文字や記号だと同じもので挟まないといけないのに、かっこは開きと閉じで対応させる様子。また、
+insert into sample values(3, q&amp;#39;YY&amp;#39;s IIY&amp;#39;) 　これはダメだった。多分イースのイーの部分(Y&amp;rsquo;)が終わりと見なされているから？　記号系では、
+insert into sample values(3, q&amp;#39;&amp;amp;Y&amp;#39;s II&amp;amp;&amp;#39;) 　アンパサンドにすると、置換を求められた。</description>
+    </item>
+    
+    <item>
+      <title>PL/SQLとSQLの種類</title>
+      <link>https://gosyujin.github.io/2009/10/19/1255949562/</link>
+      <pubDate>Mon, 19 Oct 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2009/10/19/1255949562/</guid>
+      <description>[Oracle][SQL]PL/SQLとSQLの種類 　OracleM@sterを目指すためにちょっとずつOracle（というかSQL）のエントリを増やしていく。超にわかなところから徐々にOracleM@sterをコーナーに追い詰めていこうと思います。
+　というわけで題名の件。
+PL/SQL 　OracleのOracleによるOracleのためのプログラミング言語。SQLに変数宣言やif文、for文exceptionなどを記述可能にしたプログラミング言語なのでSQLに分類されない。
+　記述的にはこんな感じになる。
+DECLARE 宣言 BEGIN IF (条件) THEN 処理 END IF EXCEPTION WHEN 例外条件 THEN 処理 END 　次にSQLの種類。
+SQLの種類 　SQLの操作は大きく四つに分けられて、
+ データを定義する言語: DDL(Data Definition Language) データを操作する言語: DML(Data Manipulation Language) データを制御する言語: DCL(Data Control Language) トランザクション制御  　となっている。全部読んで字のごとくなんだけど初見だと略称から意味が出てこない；　あと、若干略称からコマンドが出てこない事がある。コマンドは、
+|*DDL|CREATE(作成)|ALTER(変更)|DROP(削除)|TRUNCATE(切捨て)|　|
+|*DML|SELECT(問い合わせ)|INSERT(挿入)|UPDATE(更新)|DELETE(削除)|MERGE(挿入更新)|
+|*DCL|GRANT(権限付与)|REVOKE(権限削除)|　|　|　|
+|*トランザクション|COMMIT(コミット)|ROLLBACK(取り消し)|SAVEPOINT(RB位置指定)|　|　|
+　こんな感じ。</description>
+    </item>
+    
+  </channel>
+</rss>

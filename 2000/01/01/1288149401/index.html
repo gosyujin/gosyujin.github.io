@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  sara - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[日記]sara emacsのメモ
+環境  CentOS  Mac OS からSSHする  Emacs23.4  ダウンロード $ wget http://ftp.jaist.ac.jp/pub/GNU/emacs/emacs-23.4.tar.gz $ tar zxvf emacs-23.4.tar.gz $ cd emacs-23.4/ $ ./configure --without-x # GUIがない場合はx要らない $ make $ sudo make install 構成 特にインストール先を指定しなければ/usr/local/share/の下にemacsディレクトリができた。
+emacs ┣23.4 ┃┣etc # NEWやライセンス等 ┃┣leim # EmacsのIM ┃┣lisp # Elispが格納、Emacsの全て ┃┗site-lisp # ユーザのElispをインストールする場所(バージョン依存？) ┗site-lisp # Emacsのバージョン関係なく使える？ 設定ファイル 設定ファイルは以下のファイルのうち、優先順位に従って一つ読み込まれる
+ ~/.emacs.el &amp;gt; ~/.emacs &amp;gt; ~/.emacs.d/init.el &amp;gt; ~/.emacs.d/init  前準備 キーバインド 本とかネットなどに書いてある書式。この通りに押すとミニバッファに出力される
+   キー 意味     C-x Control(Ctrl)を押しながらxを押す   C-x C-c Controlを押しながらxを押した後、Controlを押しながらcを押す   C-x → Controlを押しながらxを押した後、右矢印キーを押す   M-x メタキー(Alt)を押しながらxを押す   C-M-v ControlとAltを押しながらvを押す    |C-x RET f|Controlを押しながらxを押した後、Return(Enter)を押し、fを押す||">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <span class="pagination_overflow previous_page disabled">
+          Prev: -
+        </span>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2009/03/05/1236590811/" class="pagination_overflow next_page">
+          Next: 
+          09/3/5
+          追記
+        </a>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">sara</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/%E6%97%A5%E8%A8%98' class="muted-link">
+      [ <span class="Label Label--gray">日記</span> ]
+    </a>
+  
+
+
+          Published: <span>2000/01/01</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#日記-sara">[日記]sara</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#ダウンロード">ダウンロード</a></li>
+<li><a href="#構成">構成</a></li>
+<li><a href="#設定ファイル">設定ファイル</a></li>
+<li><a href="#前準備">前準備</a>
+<ul>
+<li><a href="#キーバインド">キーバインド</a></li>
+<li><a href="#最重要コマンド">最重要コマンド</a></li>
+<li><a href="#mac-osのターミナルを使っている場合">Mac OSのターミナルを使っている場合</a></li>
+</ul></li>
+<li><a href="#ファイル操作">ファイル操作</a>
+<ul>
+<li><a href="#文字コード-改行コード操作">文字コード、改行コード操作</a></li>
+</ul></li>
+<li><a href="#カーソル操作">カーソル操作</a></li>
+<li><a href="#文字列操作">文字列操作</a></li>
+<li><a href="#ウィンドウ操作">ウィンドウ操作</a></li>
+<li><a href="#ディレクトリ操作">ディレクトリ操作</a>
+<ul>
+<li><a href="#ディレクトリ操作モード">ディレクトリ操作モード</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="日記-sara">[日記]sara</h2>
+
+<p>emacsのメモ</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>CentOS
+
+<ul>
+<li>Mac OS からSSHする</li>
+</ul></li>
+<li>Emacs23.4</li>
+</ul>
+
+<h2 id="ダウンロード">ダウンロード</h2>
+<div class="highlight"><pre class="chroma">$ wget http://ftp.jaist.ac.jp/pub/GNU/emacs/emacs-23.4.tar.gz
+$ tar zxvf emacs-23.4.tar.gz
+$ cd emacs-23.4/
+$ ./configure --without-x  # GUIがない場合はx要らない
+$ make
+$ sudo make install</pre></div>
+<h2 id="構成">構成</h2>
+
+<p>特にインストール先を指定しなければ/usr/local/share/の下にemacsディレクトリができた。</p>
+<div class="highlight"><pre class="chroma">emacs
+
+┣23.4
+┃┣etc          # NEWやライセンス等
+┃┣leim        # EmacsのIM
+┃┣lisp         #  Elispが格納、Emacsの全て
+┃┗site-lisp   # ユーザのElispをインストールする場所(バージョン依存？)
+┗site-lisp      # Emacsのバージョン関係なく使える？</pre></div>
+<h2 id="設定ファイル">設定ファイル</h2>
+
+<p>設定ファイルは以下のファイルのうち、優先順位に従って一つ読み込まれる</p>
+
+<ul>
+<li>~/.emacs.el &gt; ~/.emacs &gt; ~/.emacs.d/init.el &gt; ~/.emacs.d/init</li>
+</ul>
+
+<h2 id="前準備">前準備</h2>
+
+<h3 id="キーバインド">キーバインド</h3>
+
+<p>本とかネットなどに書いてある書式。この通りに押すとミニバッファに出力される</p>
+
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>意味</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>C-x</td>
+<td>Control(Ctrl)を押しながらxを押す</td>
+</tr>
+
+<tr>
+<td>C-x C-c</td>
+<td>Controlを押しながらxを押した後、Controlを押しながらcを押す</td>
+</tr>
+
+<tr>
+<td>C-x →</td>
+<td>Controlを押しながらxを押した後、右矢印キーを押す</td>
+</tr>
+
+<tr>
+<td>M-x</td>
+<td>メタキー(Alt)を押しながらxを押す</td>
+</tr>
+
+<tr>
+<td>C-M-v</td>
+<td>ControlとAltを押しながらvを押す</td>
+</tr>
+</tbody>
+</table>
+
+<p>|C-x RET f|Controlを押しながらxを押した後、Return(Enter)を押し、fを押す|</p>
+
+<p>|C-SPC|Controlを押しながらSpaceを押す|</p>
+
+<h3 id="最重要コマンド">最重要コマンド</h3>
+
+<ul>
+<li>C-x C-c(脱出)
+
+<ul>
+<li>使い方がわからん時にEmacsでファイルを開かれると、もうターミナルごと落とすしかなくなるので脱出するコマンドだけ覚えておく。なにかあったらC-x C-c！</li>
+</ul></li>
+<li>C-g(操作キャンセル)
+
+<ul>
+<li>よくわからん状態になったらこれ。だいたい元の画面に戻れる</li>
+</ul></li>
+</ul>
+
+<h3 id="mac-osのターミナルを使っている場合">Mac OSのターミナルを使っている場合</h3>
+
+<p>EmacsではAltキーをMetaキーとして使う(事が多い)。ただし、Max OSのターミナルは設定を変えないとAltをメタキーとして使う事ができない。</p>
+
+<p>例えば</p>
+
+<ul>
+<li>C-v 次の画面に進む</li>
+<li>M-v 前の画面に戻る</li>
+</ul>
+
+<p>というコマンドがあり、C-vは普通に使えるが、M-vを押すと「&#402;」を出してしまう。[1]</p>
+
+<p>メタキーとして使うにはターミナルの環境設定 =&gt; 設定 =&gt; キーボードタブの「メタキーとしてoptionキーを使用」にチェックを入れる</p>
+
+<h2 id="ファイル操作">ファイル操作</h2>
+
+<p>$ emacs FILE_NAME でもファイルを作る&amp;開く事はできるが、ここはemacsを起動した状態からファイルを開く。</p>
+
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>動作</th>
+<th>備考</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>C-x C-f</td>
+<td>ファイルを開く</td>
+<td>ミニバッファからファイル名を入力できる(Tabで補完もきく)。((存在しないファイル名を指定した場合はバッファが作成される。))</td>
+</tr>
+
+<tr>
+<td>C-x C-s</td>
+<td>ファイルを保存</td>
+<td>変更を実際のファイルに書き込む</td>
+</tr>
+
+<tr>
+<td>C-x s</td>
+<td>開いている全てのファイルを保存</td>
+<td>変更を実際のファイルに書き込むy/n等で1つずつ確認して保存できる</td>
+</tr>
+
+<tr>
+<td>C-x C-w</td>
+<td>ファイルを別名保存</td>
+<td>ファイルを別名保存する</td>
+</tr>
+
+<tr>
+<td>C-x i</td>
+<td>別ファイルの内容を流し込む</td>
+<td>指定した別ファイルの内容を流し込む</td>
+</tr>
+
+<tr>
+<td>C-x RET f</td>
+<td>文字コード、改行コード変換</td>
+<td>ミニバッファから文字コード、改行コードを変更できる、後述</td>
+</tr>
+
+<tr>
+<td>C-x b</td>
+<td>バッファ切替</td>
+<td>現在保持しているバッファの中から開くファイルを切り替える</td>
+</tr>
+
+<tr>
+<td>C-x →</td>
+<td>バッファ切替</td>
+<td>順番にバッファのファイルを切り替える</td>
+</tr>
+
+<tr>
+<td>C-x ←</td>
+<td>バッファ切替</td>
+<td>順番にバッファのファイルを切り替える</td>
+</tr>
+
+<tr>
+<td>C-x k</td>
+<td>バッファ消去</td>
+<td>現在保持しているバッファの中から消去するファイルを選択する</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="文字コード-改行コード操作">文字コード、改行コード操作</h3>
+
+<p>C-x RET f で文字コード、改行コードを変更できる。ミニバッファに</p>
+<div class="highlight"><pre class="chroma">Coding system for saving file (default:nil):</pre></div>
+<p>と表示されるので、文字コードと改行コードを選択する。Tab補完がきく。その中で(自分が)使いそうなものを幾つか。</p>
+
+<table>
+<thead>
+<tr>
+<th>コマンド</th>
+<th>動作</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>utf-8</td>
+<td>utf-8に変換</td>
+</tr>
+
+<tr>
+<td>utf-8-dos</td>
+<td>utf-8に変換し、改行コードをCR+LF(Windows)に変換</td>
+</tr>
+
+<tr>
+<td>utf-8-unix</td>
+<td>utf-8に変換し、改行コードをLFに変換</td>
+</tr>
+
+<tr>
+<td>utf-8-mac</td>
+<td>utf-8に変換し、改行コードをCRに変換</td>
+</tr>
+
+<tr>
+<td>sjis</td>
+<td>sjisに変換</td>
+</tr>
+
+<tr>
+<td>sjis-dos</td>
+<td>sjisに変換し、改行コードをCR+LF(Windows)に変換</td>
+</tr>
+
+<tr>
+<td>sjis-unix</td>
+<td>sjisに変換し、改行コードをLFに変換</td>
+</tr>
+
+<tr>
+<td>sjis-mac</td>
+<td>sjisに変換し、改行コードをCRに変換</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="カーソル操作">カーソル操作</h2>
+
+<p>ファイル内を移動する。</p>
+
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>動作</th>
+<th>備考</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>C-f</td>
+<td>一文字進む</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>C-b</td>
+<td>一文字戻る</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>C-n</td>
+<td>一行進む</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>C-p</td>
+<td>一行戻る</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>C-a</td>
+<td>行頭へ</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>C-e</td>
+<td>行末へ</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>C-v</td>
+<td>一画面下へ</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>M-v</td>
+<td>一画面上へ</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>M-&lt;(M-S-,)</td>
+<td>バッファの先頭へ</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>M-&gt;(M-S-.)</td>
+<td>バッファの終端へ</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>M-g M-g</td>
+<td>指定した行番号へ</td>
+<td>Goto line: と表示され、入力した行番号へジャンプする</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre class="chroma">--
+M-&lt;(M-S-,)
+
+--
+
+M-v
+--
+           C-p
+C-a    C-b  _  C-f      C-e
+           C-n
+--
+C-v
+
+--
+
+M-&gt;(M-S-.)
+--</pre></div>
+<h2 id="文字列操作">文字列操作</h2>
+
+<p>文字をコピーしたり。</p>
+
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>動作</th>
+<th>備考</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>C&ndash;</td>
+<td>アンドゥ？リドゥ？</td>
+<td>何か動作原理がよくわからんけど、とりあえずアンドゥはしてくれる？</td>
+</tr>
+
+<tr>
+<td>C-x u</td>
+<td>アンドゥ？リドゥ？</td>
+<td>何か動作原理がよくわからんけど、とりあえずアンドゥはしてくれる？</td>
+</tr>
+
+<tr>
+<td>C-d</td>
+<td>一文字Delete</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>C-k</td>
+<td>一行消去</td>
+<td>空行は残る(カーソルが文末にある場合のみ改行を消去)、カーソルが行頭にない場合そこから改行を除く文末まで消去</td>
+</tr>
+
+<tr>
+<td>M-;</td>
+<td>コメントアウト系</td>
+<td>空行だと# 挿入、コメント行だと文頭へジャンプ、部通の行だと文末に# 挿入</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>動作</th>
+<th>備考</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>C-SPC</td>
+<td>マーク</td>
+<td>文字列操作の起点。現在の位置を記録(マーク)する。カーソルを動かすとマークからのカーソルの位置まで選択される(リージョン)</td>
+</tr>
+
+<tr>
+<td>C-w</td>
+<td>カット</td>
+<td>リージョン部分をカット</td>
+</tr>
+
+<tr>
+<td>M-w</td>
+<td>コピー</td>
+<td>リージョン部分をコピー</td>
+</tr>
+
+<tr>
+<td>C-y</td>
+<td>ペースト</td>
+<td>コピー、カットした内容をペースト</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="ウィンドウ操作">ウィンドウ操作</h2>
+
+<p>画面を分割したり。</p>
+
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>動作</th>
+<th>備考</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>C-x 2</td>
+<td>ウィンドウ水平分割</td>
+<td>今の画面を水平に分割</td>
+</tr>
+
+<tr>
+<td>C-x 3</td>
+<td>ウィンドウ垂直分割</td>
+<td>今の画面を垂直に分割</td>
+</tr>
+
+<tr>
+<td>C-x o</td>
+<td>ウィンドウ移動</td>
+<td>カレントから他の画面に移動</td>
+</tr>
+
+<tr>
+<td>C-x 1</td>
+<td>自分以外のウィンドウを閉じる</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>C-x 0</td>
+<td>自分のウィンドウを閉じる</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="ディレクトリ操作">ディレクトリ操作</h2>
+
+<p>Emscsを開いたままディレクトリを操作できる</p>
+
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>動作</th>
+<th>備考</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>C-x d</td>
+<td>ディレクトリを開く</td>
+<td>ディレクトリ操作の起点。ファイルを開く(C-x f)のと同じようにディレクトリを指定してディレクトリを開く</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="ディレクトリ操作モード">ディレクトリ操作モード</h3>
+
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>動作</th>
+<th>備考</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>q</td>
+<td>ディレクトリモードを抜ける</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>C&ndash;</td>
+<td>直前の作業を戻す</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>+</td>
+<td>ディレクトリ作成</td>
+<td></td>
+</tr>
+
+<tr>
+<td>RET またはf</td>
+<td>現在行のファイルを選択</td>
+<td>ファイルならオープンしようとする、ディレクトリなら中に入る</td>
+</tr>
+
+<tr>
+<td>R</td>
+<td>ファイル(ディレクトリ)名リネーム</td>
+<td>現在カーソルがある行がリネーム対象※</td>
+</tr>
+
+<tr>
+<td>D</td>
+<td>ファイル(ディレクトリ)削除</td>
+<td>現在カーソルがある行が削除対象※</td>
+</tr>
+
+<tr>
+<td>C</td>
+<td>ファイル(ディレクトリ)コピー</td>
+<td>現在カーソルがある行がコピー対象※</td>
+</tr>
+</tbody>
+</table>
+
+<p>※後で覚える: マーク (一応消し方だけ *-!)</p>
+
+<p>[1] 一応、デフォルトでもescを押してからvとすると前の画面に戻るができるが、連打もできないししんどい。</p>
+
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2000/01/01/1288149401/"
+    data-text="sara - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2000/01/01/1288149401/"
+    data-hatena-bookmark-title="sara - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2000/01/01/1288149401/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2000/01/01/1288149401/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <span class="pagination_overflow previous_page disabled">
+          Prev: -
+        </span>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2009/03/05/1236590811/" class="pagination_overflow next_page">
+          Next: 
+          09/3/5
+          追記
+        </a>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#日記-sara">[日記]sara</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#ダウンロード">ダウンロード</a></li>
+<li><a href="#構成">構成</a></li>
+<li><a href="#設定ファイル">設定ファイル</a></li>
+<li><a href="#前準備">前準備</a>
+<ul>
+<li><a href="#キーバインド">キーバインド</a></li>
+<li><a href="#最重要コマンド">最重要コマンド</a></li>
+<li><a href="#mac-osのターミナルを使っている場合">Mac OSのターミナルを使っている場合</a></li>
+</ul></li>
+<li><a href="#ファイル操作">ファイル操作</a>
+<ul>
+<li><a href="#文字コード-改行コード操作">文字コード、改行コード操作</a></li>
+</ul></li>
+<li><a href="#カーソル操作">カーソル操作</a></li>
+<li><a href="#文字列操作">文字列操作</a></li>
+<li><a href="#ウィンドウ操作">ウィンドウ操作</a></li>
+<li><a href="#ディレクトリ操作">ディレクトリ操作</a>
+<ul>
+<li><a href="#ディレクトリ操作モード">ディレクトリ操作モード</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>

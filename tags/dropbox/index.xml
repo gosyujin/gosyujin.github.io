@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dropbox on kk_Atakaの日記</title>
+    <link>https://gosyujin.github.io/tags/dropbox/</link>
+    <description>Recent content in Dropbox on kk_Atakaの日記</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>jp</language>
+    <lastBuildDate>Sat, 23 Apr 2011 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://gosyujin.github.io/tags/dropbox/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Dropboxをコマンドラインで使用する方法</title>
+      <link>https://gosyujin.github.io/2017/04/30/dropbox-cli/</link>
+      <pubDate>Sun, 30 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2017/04/30/dropbox-cli/</guid>
+      <description>あらすじ  LinuxサーバーでもDropboxを起動させたい  参考サイト  インストール - Dropbox  Ubuntu(.deb), Fedora(.rpm), Debian(.deb)パッケージが提供されている。ソースからコンパイルもできる  DropboxをLinuxで利用する方法 - maruko2 Note. Dropbox を Linuxサーバでも使うときにやるべき設定 - Qiita Using the Official Dropbox Command Line Interface (CLI) - The Unofficial Dropbox Wiki  手順  インストール - Dropbox の コマンド ラインを使った Dropbox のヘッドレス インストール に沿ってDropboxデーモンをインストールする  wget -O – &amp;#34;https://www.dropbox.com/download?plat=lnx.x86_64&amp;#34; | tar zxf -  .dropbox-dist というディレクトリができるので、その中の dropboxd を実行後、アカウントと紐付ける  $ ~/.dropbox-dist/dropboxd このコンピュータは Dropbox アカウントにリンクされていません... このデバイスをリンクするには、https://www.</description>
+    </item>
+    
+    <item>
+      <title>さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする</title>
+      <link>https://gosyujin.github.io/2011/10/08/1318068887/</link>
+      <pubDate>Sat, 08 Oct 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/10/08/1318068887/</guid>
+      <description>[Unix][備忘録][Dropbox][さくらVPS]さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする あらすじ DropboxにはEnable LAN syncというオプションがあり、これをONにすると同じLAN内のマシンはインターネットを経由しないで同期ができる。
+f:id:kk_Ataka:20111008190858j:image
+ただし、17500ポートに向けてUDPパケットがやまほど投げているようで、同じLAN内に自分以外のマシンがある状態でこのオプションをONにしていると近隣の方へやまほどパケットを投げまくりで非常に迷惑がかかります……。基本的にDropboxのオプションからEnable LAN sync(LAN同期を有効にする)をOFFにすればよい。
+……のだが、CUIからDropboxをインストールしている場合は少し手順を踏んでこのオプションを切る必要があります。
+参考サイト  http://d.hatena.ne.jp/otn/20110502/p1:title http://blog.7kai.org/2011/04/dropbox-lan-sync-disable/:title  というか、前回の記事http://d.hatena.ne.jp/kk_Ataka/20110423/1303489798:title でインストールするときに参考にしたサイトにこの問題が書いてあった……。
+ To stop dropbox from sending LAN Sync broadcasts every 30 seconds over port 17500 (http://forums.dropbox.com/topic.php?id=16253) see DropboxAddons/DisableLanSync
+http://wiki.dropbox.com/TipsAndTricks/TextBasedLinuxInstall#SuppressLANSyncbroadcasts
+ 必要環境 |*Python|2.6|
+スクリプトDL  http://wiki.dropbox.com/DropboxAddons/PyDropboxValues から pyDropboxValues.py をDLする  設定値を表示できる  http://wiki.dropbox.com/DropboxAddons/DisableLanSync から dropbox_set_lansync.py をDLする  LAN syncオプションを切り替える   手順  pyDropboxValue.pyで設定をバックアップする  $ PYTHON2.6 pyDropboxValues.py _backup Backed up &amp;#39;config.</description>
+    </item>
+    
+    <item>
+      <title>さくらVPSにDropboxをインストールした</title>
+      <link>https://gosyujin.github.io/2011/04/23/1303489798/</link>
+      <pubDate>Sat, 23 Apr 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2011/04/23/1303489798/</guid>
+      <description>[Unix][備忘録][Dropbox][さくらVPS]さくらVPSにDropboxをインストールした ※インストール後、Enable LAN sync(LAN同期を有効にする)オプションをOFFにする必要がある http://d.hatena.ne.jp/kk_Ataka/20111008/1318068887:title
+あらすじ  GUIがなくてもDropboxを使いたい！→CUI版のDropboxがあるらしい  参考サイト  http://wiki.dropbox.com/TipsAndTricks/TextBasedLinuxInstall http://www.hyk-home.com/blog/infra/archives/2009/05/05-202601-137.html:title  上記のサイトの情報だけで全部できました。以下自分用メモ。
+OSとかPythonとか |*CentOS|5.5 x86_64|
+|*Python|2.6.2|
+ Pythonはデフォルトで2.4.3が入っているがこれじゃあ動かなかった。2.6が必須らしい。 http://www.python.org/ftp/python/:title 必要に応じてダウンロードしておく。  Dropboxを手に入れる～インストール  Step-by-stepversion の1.～7.まで順番に実行していく。 (2012/04/07追記)手順を一部修正  [https://www.dropbox.com/install?os=lnx:title]   $ cd ~ &amp;amp;&amp;amp; wget -O - &amp;#34;http://www.dropbox.com/download?plat=lnx.x86&amp;#34; | tar xzf -  - 1. ホームディレクトリに移動する。[1]  2. 32bit版Dropbox をダウンロードする。 3.～5. ダウンロードしたファイルを解凍する。解凍するとホームディレクトリに.dropbox-dist/が生成される。ドットファイルなので隠しファイル。[2] 6. .dropbox-dist/dropboxd を実行する。実行するとリンクしてください！　と言われる。他のPCから指定のアドレスへアクセスし、自分のDropboxアカウントでログインする。   [f:id:kk_Ataka:20110423012022j:image]
+ - リンクすると、自動で同期が始まる。  確認  dropbox.py でステータスなどが確認できる。  $python dropbox.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Rails3レシピブックを読みながらRailsを学ぶ - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Ruby][備忘録][Windows][Rails]Rails3レシピブックを読みながらRailsを学ぶ あらすじ Redmineプラグインの作り方を学ぶ前にRailsの基本的な事を学ばねばなりますまい。そういやあ。
+参考  Rail3レシピブック 190の技  環境  WindowsXP Ruby 1.8.7 Rails 3.2.1  準備  はじめにbundleでrailsをインストールする……が、なんかエラーが。  Gem::InstallError: The &amp;#39;json&amp;#39; native gem requires installed build tools. Please update your PATH to include build tools or download the DevKit from &amp;#39;http://rubyinstaller.org/downloads&amp;#39; and follow the instructions at &amp;#39;http://github.com/oneclick/rubyinstaller/wiki/Development-Kit&amp;#39; An error occured while installing json (1.6.5), and Bundler cannot continue. Make sure that `gem install json -v &amp;#39;1.6.5&amp;#39;` succeeds before bundling.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2012/02/23/1330001338/" class="pagination_overflow previous_page">
+          Prev: 
+          12/2/23
+          GitプロジェクトをコミットしたタイミングでJenkinsに …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2012/02/29/1330528564/" class="pagination_overflow next_page">
+          Next: 
+          12/2/29
+          Rails3レシピブックを読みながらRailsを学ぶ モデ …
+        </a>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">Rails3レシピブックを読みながらRailsを学ぶ</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
+    </a>
+  
+    <a href='/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+    <a href='/tags/windows' class="muted-link">
+      [ <span class="Label Label--gray">Windows</span> ]
+    </a>
+  
+    <a href='/tags/rails' class="muted-link">
+      [ <span class="Label Label--gray">Rails</span> ]
+    </a>
+  
+
+
+          Published: <span>2012/02/28</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ruby-備忘録-windows-rails-rails3レシピブックを読みながらrailsを学ぶ">[Ruby][備忘録][Windows][Rails]Rails3レシピブックを読みながらRailsを学ぶ</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#準備">準備</a></li>
+<li><a href="#アプリケーション作成">アプリケーション作成</a></li>
+<li><a href="#db設定">DB設定</a></li>
+<li><a href="#バージョン等">バージョン等</a></li>
+<li><a href="#とりあえず起動">とりあえず起動</a></li>
+<li><a href="#railsアプリ内のファイルとディレクトリ-抜粋">Railsアプリ内のファイルとディレクトリ(抜粋)</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="ruby-備忘録-windows-rails-rails3レシピブックを読みながらrailsを学ぶ">[Ruby][備忘録][Windows][Rails]Rails3レシピブックを読みながらRailsを学ぶ</h2>
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>Redmineプラグインの作り方を学ぶ前にRailsの基本的な事を学ばねばなりますまい。そういやあ。</p>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li>Rail3レシピブック 190の技</li>
+</ul>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>WindowsXP</li>
+<li>Ruby 1.8.7</li>
+<li>Rails 3.2.1</li>
+</ul>
+
+<h2 id="準備">準備</h2>
+
+<ul>
+<li>はじめにbundleでrailsをインストールする……が、なんかエラーが。</li>
+</ul>
+
+<!-- -->
+<div class="highlight"><pre class="chroma">Gem::InstallError: The &#39;json&#39; native gem requires installed build
+tools.
+
+Please update your PATH to include build tools or download the DevKit
+from &#39;http://rubyinstaller.org/downloads&#39; and follow the instructions
+at &#39;http://github.com/oneclick/rubyinstaller/wiki/Development-Kit&#39;
+An error occured while installing json (1.6.5), and Bundler cannot continue.
+Make sure that `gem install json -v &#39;1.6.5&#39;` succeeds before bundling.</pre></div>
+<p>bundleするまえにjsonをインストールしてくれと言われた。ので、そのとおりにgem install……。</p>
+<div class="highlight"><pre class="chroma">$ gem install json -v &#39;1.6.5&#39;
+ERROR:  Error installing json:
+        The &#39;json&#39; native gem requires installed build tools.
+
+Please update your PATH to include build tools or download the DevKit
+from &#39;http://rubyinstaller.org/downloads&#39; and follow the instructions
+at &#39;http://github.com/oneclick/rubyinstaller/wiki/Development-Kit&#39;</pre></div>
+<p>まだだめか。Development-Kitが必要？　[<a href="https://github.com/oneclick/rubyinstaller/wiki/Development-Kit:title]へ。">https://github.com/oneclick/rubyinstaller/wiki/Development-Kit:title]へ。</a></p>
+
+<p>どれ落とせばいいんだろうと思ったら、</p>
+
+<blockquote>
+<p>for the legacy RubyInstaller v1.8.6 use the DevKit-3.4.5 available at our archive downloads page. For RubyInstaller versions 1.8.7, 1.9.2, and 1.9.3 use the DevKit 4.5.2 from our main downloads page.</p>
+</blockquote>
+
+<p>という事らしいので4.5.2をDLしexeを実行。さらに以下を実行。</p>
+<div class="highlight"><pre class="chroma">$ cd &lt;DEVKIT_INSTALL_DIR&gt;
+$ ruby dk.rb init
+
+Initialization complete! Please review and modify the auto-generated
+&#39;config.yml&#39; file to ensure it contains the root directories to all
+of the installed Rubies you want enhanced by the DevKit.</pre></div>
+<p>config.ymlが生成されるので例に従ってRubyのパスを記述。</p>
+<div class="highlight"><pre class="chroma">  8 # Example:
+  9 #
+ 10 # ---
+ 11 # - C:/ruby19trunk
+ 12 # - C:/ruby192dev
+ 13 #
+ 14 ---
++15 - C:\rubies\Ruby-187-p352</pre></div>
+<p>で、インストール。</p>
+<div class="highlight"><pre class="chroma">$ ruby dk.rb review
+Based upon the settings in the &#39;config.yml&#39; file generated
+from running &#39;ruby dk.rb init&#39; and any of your customizations,
+DevKit functionality will be injected into the following Rubies
+when you run &#39;ruby dk.rb install&#39;.
+
+C:/rubies/Ruby-187-p352
+
+$ ruby dk.rb install
+[INFO] Updating convenience notice gem override for &#39;C:/rubies/Ruby-187-p352&#39;
+[INFO] Installing &#39;C:/rubies/Ruby-187-p352/lib/ruby/site_ruby/devkit.rb&#39;</pre></div>
+<p>満を持してbundle install再び。</p>
+<div class="highlight"><pre class="chroma">…
+Installing json (1.6.5) with native extensions
+…</pre></div>
+<p>オッケー。</p>
+
+<h2 id="アプリケーション作成">アプリケーション作成</h2>
+
+<ul>
+<li>rails new アプリ名で作成</li>
+</ul>
+
+<!-- -->
+<div class="highlight"><pre class="chroma">$ bundle exec rails new sampleapp
+      create
+      create  README.rdoc
+      create  Rakefile
+      create  config.ru
+      create  .gitignore
+      create  Gemfile
+      create  app
+      create  app/assets/images/rails.png</pre></div>
+<ul>
+<li>rails new アプリ名 -d DBでDBを指定して作成もできる。省略した場合はSQLite3</li>
+<li>このアプリ名は変数Rails.rootで参照できる</li>
+<li>Rails.rootでbundle install(また？)</li>
+</ul>
+
+<p>Bundleで入れたRailsでRailsアプリをnewしてそのRailsアプリでまたBundleしてるのが気持ち悪いけどこんなもんなのかな。</p>
+
+<h2 id="db設定">DB設定</h2>
+
+<p>これはRedmineでやった事ある。</p>
+
+<ul>
+<li>config/database.ymlを編集……し……？</li>
+</ul>
+
+<!-- -->
+<div class="highlight"><pre class="chroma">  6 development:
+  7   adapter: sqlite3
+  8   database: db/development.sqlite3
+  9   pool: 5
+ 10   timeout: 5000</pre></div>
+<p>あれ？　もうよろしくされてるじゃん。</p>
+
+<h2 id="バージョン等">バージョン等</h2>
+
+<ul>
+<li>rail -vでRailsのバージョン</li>
+</ul>
+
+<!-- -->
+<div class="highlight"><pre class="chroma">$ bundle exec rails -v
+Rails 3.2.1</pre></div>
+<ul>
+<li>rake aboutでRailが使っているライブラリ</li>
+</ul>
+
+<!-- -->
+<div class="highlight"><pre class="chroma">$ bundle exec rake about
+About your application&#39;s environment
+Ruby version              1.8.7 (i386-mingw32)
+RubyGems version          1.8.12
+Rack version              1.4
+Rails version             3.2.1
+JavaScript Runtime        Node.js (V8)
+Active Record version     3.2.1
+…</pre></div>
+<h2 id="とりあえず起動">とりあえず起動</h2>
+
+<ul>
+<li>rails sまたはrails serverで起動。rails s -p ポート番号でポート指定可能</li>
+</ul>
+
+<!-- -->
+<div class="highlight"><pre class="chroma">$ bundle exec rails s
+=&gt; Booting WEBrick
+=&gt; Rails 3.2.1 application starting in development on http://0.0.0.0:3000
+=&gt; Call with -d to detach
+=&gt; Ctrl-C to shutdown server
+[2012-02-28 19:27:58] INFO  WEBrick 1.3.1
+[2012-02-28 19:27:58] INFO  ruby 1.8.7 (2011-06-30) [i386-mingw32]
+[2012-02-28 19:27:58] INFO  WEBrick::HTTPServer#start: pid=5396 port=3000</pre></div>
+<ul>
+<li><a href="http://localhost:3000にアクセスしてWelcome">http://localhost:3000にアクセスしてWelcome</a> aboard You’re riding Ruby on Rails! と表示されていれば動いている</li>
+</ul>
+
+<h2 id="railsアプリ内のファイルとディレクトリ-抜粋">Railsアプリ内のファイルとディレクトリ(抜粋)</h2>
+
+<p>Redmineでも見たことがあるファイル等もあるが、役割を明確にわかっていなかった。</p>
+
+<table>
+<thead>
+<tr>
+<th>file/dir</th>
+<th>役割</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>config.ru</td>
+<td>Rackアプリケーションとして実行する際の設定ファイル</td>
+</tr>
+
+<tr>
+<td>Rakefile</td>
+<td>MakefileのRuby版、MakeのRuby版であるRakeで使う</td>
+</tr>
+
+<tr>
+<td>app/</td>
+<td>アプリケーションを格納</td>
+</tr>
+
+<tr>
+<td>app/assets/</td>
+<td>CoffeeScript等を格納</td>
+</tr>
+
+<tr>
+<td>app/controllers/</td>
+<td>コントローラを格納</td>
+</tr>
+
+<tr>
+<td>app/models/</td>
+<td>モデルを格納</td>
+</tr>
+
+<tr>
+<td>app/views/</td>
+<td>ビューのテンプレート(html,js)を格納</td>
+</tr>
+
+<tr>
+<td>app/views/layouts/</td>
+<td>ビューのレイアウトとして使用するhtmlテンプレートを格納</td>
+</tr>
+
+<tr>
+<td>app/helper/</td>
+<td>ヘルパーを格納</td>
+</tr>
+
+<tr>
+<td>config/</td>
+<td>DB設定、環境設定等各種設定ファイルを格納</td>
+</tr>
+
+<tr>
+<td>config/environments/</td>
+<td>各実行環境用の設定ファイルを格納</td>
+</tr>
+
+<tr>
+<td>config/initializers/</td>
+<td>初期化時に実行されるファイルを格納</td>
+</tr>
+
+<tr>
+<td>config/locales/</td>
+<td>I18n用のファイルを格納</td>
+</tr>
+
+<tr>
+<td>db/</td>
+<td>DB操作に使用するスクリプトを格納、SQLite3の場合はDBファイルも</td>
+</tr>
+
+<tr>
+<td>db/migrate/</td>
+<td>DBスキーマの編集のためのマイグレーションファイルを格納</td>
+</tr>
+
+<tr>
+<td>lib/</td>
+<td>MVCいずれにも属さない処理をライブラリ化し格納</td>
+</tr>
+
+<tr>
+<td>script/</td>
+<td>各種スクリプトを格納</td>
+</tr>
+
+<tr>
+<td>public</td>
+<td>静的ファイル(html,js,css,画像)を格納</td>
+</tr>
+
+<tr>
+<td>test/</td>
+<td>テストコードを格納</td>
+</tr>
+
+<tr>
+<td>vendor/</td>
+<td>サードパーティ製のライブラリ、外部ライブラリを格納</td>
+</tr>
+
+<tr>
+<td>vendor/plugins/</td>
+<td>プラグインを格納</td>
+</tr>
+</tbody>
+</table>
+
+<p>ほとんどになってしまった……。とりあえず役割は覚えておこう。ただし一部ピンときてない場所もあり。</p>
+
+<p>続く。<a href="http://d.hatena.ne.jp/kk_Ataka/20120229/1330528564:title">http://d.hatena.ne.jp/kk_Ataka/20120229/1330528564:title</a></p>
+
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2012/02/28/1330436604/"
+    data-text="Rails3レシピブックを読みながらRailsを学ぶ - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2012/02/28/1330436604/"
+    data-hatena-bookmark-title="Rails3レシピブックを読みながらRailsを学ぶ - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2012/02/28/1330436604/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2012/02/28/1330436604/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2012/02/23/1330001338/" class="pagination_overflow previous_page">
+          Prev: 
+          12/2/23
+          GitプロジェクトをコミットしたタイミングでJenkinsに …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2012/02/29/1330528564/" class="pagination_overflow next_page">
+          Next: 
+          12/2/29
+          Rails3レシピブックを読みながらRailsを学ぶ モデ …
+        </a>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ruby-備忘録-windows-rails-rails3レシピブックを読みながらrailsを学ぶ">[Ruby][備忘録][Windows][Rails]Rails3レシピブックを読みながらRailsを学ぶ</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#参考">参考</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#準備">準備</a></li>
+<li><a href="#アプリケーション作成">アプリケーション作成</a></li>
+<li><a href="#db設定">DB設定</a></li>
+<li><a href="#バージョン等">バージョン等</a></li>
+<li><a href="#とりあえず起動">とりあえず起動</a></li>
+<li><a href="#railsアプリ内のファイルとディレクトリ-抜粋">Railsアプリ内のファイルとディレクトリ(抜粋)</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>

@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Read it LaterをRubyで取得する - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Ruby][API]Read it LaterをRubyで取得する ブラウザからログインせずともRILを見たい！　追加したい！　ということで。
+前準備  はじめにapikeyを取得するためにhttp://readitlaterlist.com/api/signup/にアクセスします。[1] 必須項目(AppNameとContact Email)を記入し、Generate API Keyします。 取得したapikeyを取っておきます。  [f:id:kk_Ataka:20110302190610p:image]
+ APIの概要はhttp://readitlaterlist.com/api/docs/に載っているので、基本的にはこれを見ながらできる…はず。  記事をGetする 以下のパラメータを生成し、URLのおしりに?AAA=BBB&amp;amp;CCC=DDD&amp;hellip;形式でくっつけてhttps://readitlaterlist.com/v2/getに送ります。[2]パラメータは他にもあるけど、とりあえずこれだけあれば取得はできます。
+|*apikey(必須)|今生成したapikey|
+|*username(必須)|Read It Laterのアカウント|
+|*password(必須)|パスワード|
+|*format|レスポンスのフォーマット。jsonかxmlが選択できる。デフォルトはjson|
+パスワードが丸見えなのでショルダーハックとかされるとアレですが…。
+ソースコード ここまでをRubyで書いてみました。jsonの解析はTwitterから取得したツイートを解析したときと同じようにsimplejsonparserを使用させていただきました。
+require &amp;#39;uri&amp;#39; require &amp;#39;net/http&amp;#39; # http://rubyforge.org/snippet/detail.php?type=snippet&amp;amp;id=148 require &amp;#39;simplejsonparser&amp;#39; require &amp;#39;pp&amp;#39; # RIL取得用のURL url = &amp;#34;https://readitlaterlist.com/v2/get&amp;#34; # アカウント名とパスワード username = &amp;#34;kk_Ataka&amp;#34; password = PASSWORD # apikey apikey = APIKEY # format json or xml format = &amp;#34;json&amp;#34; # パラメータ作成 param = &amp;#34;username=#{username}&amp;amp;password=#{password}&amp;amp;apikey=#{apikey}&amp;amp;format=#{format}&amp;#34; # GETする uri = URI.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2011/01/30/1296401919/" class="pagination_overflow previous_page">
+          Prev: 
+          11/1/30
+          BPStudy#41に参加しました
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2011/03/08/1299588433/" class="pagination_overflow next_page">
+          Next: 
+          11/3/8
+          RubyではてなのWSSE認証をしてはてブにブクマをポストす …
+        </a>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">Read it LaterをRubyで取得する</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
+    </a>
+  
+    <a href='/tags/api' class="muted-link">
+      [ <span class="Label Label--gray">API</span> ]
+    </a>
+  
+
+
+          Published: <span>2011/03/02</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ruby-api-read-it-laterをrubyで取得する">[Ruby][API]Read it LaterをRubyで取得する</a></li>
+<li><a href="#前準備">前準備</a></li>
+<li><a href="#記事をgetする">記事をGetする</a></li>
+<li><a href="#ソースコード">ソースコード</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="ruby-api-read-it-laterをrubyで取得する">[Ruby][API]Read it LaterをRubyで取得する</h2>
+
+<p>ブラウザからログインせずともRILを見たい！　追加したい！　ということで。</p>
+
+<h2 id="前準備">前準備</h2>
+
+<ul>
+<li>はじめにapikeyを取得するために<a href="http://readitlaterlist.com/api/signup/にアクセスします">http://readitlaterlist.com/api/signup/にアクセスします</a>。[1]</li>
+<li>必須項目(AppNameとContact Email)を記入し、Generate API Keyします。</li>
+<li>取得したapikeyを取っておきます。</li>
+</ul>
+
+<p>[f:id:kk_Ataka:20110302190610p:image]</p>
+
+<ul>
+<li>APIの概要は<a href="http://readitlaterlist.com/api/docs/に載っているので、基本的にはこれを見ながらできる…はず">http://readitlaterlist.com/api/docs/に載っているので、基本的にはこれを見ながらできる…はず</a>。</li>
+</ul>
+
+<h2 id="記事をgetする">記事をGetする</h2>
+
+<p>以下のパラメータを生成し、URLのおしりに?AAA=BBB&amp;CCC=DDD&hellip;形式でくっつけて<a href="https://readitlaterlist.com/v2/getに送ります。[2]パラメータは他にもあるけど、とりあえずこれだけあれば取得はできます。">https://readitlaterlist.com/v2/getに送ります。[2]パラメータは他にもあるけど、とりあえずこれだけあれば取得はできます。</a></p>
+
+<p>|*apikey(必須)|今生成したapikey|</p>
+
+<p>|*username(必須)|Read It Laterのアカウント|</p>
+
+<p>|*password(必須)|パスワード|</p>
+
+<p>|*format|レスポンスのフォーマット。jsonかxmlが選択できる。デフォルトはjson|</p>
+
+<p>パスワードが丸見えなのでショルダーハックとかされるとアレですが…。</p>
+
+<h2 id="ソースコード">ソースコード</h2>
+
+<p>ここまでをRubyで書いてみました。jsonの解析はTwitterから取得したツイートを解析したときと同じようにsimplejsonparserを使用させていただきました。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;uri&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;net/http&#39;</span>
+<span class="c1"># http://rubyforge.org/snippet/detail.php?type=snippet&amp;id=148</span>
+<span class="nb">require</span> <span class="s1">&#39;simplejsonparser&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;pp&#39;</span>
+
+<span class="c1"># RIL取得用のURL</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;https://readitlaterlist.com/v2/get&#34;</span>
+
+<span class="c1"># アカウント名とパスワード</span>
+<span class="n">username</span> <span class="o">=</span> <span class="s2">&#34;kk_Ataka&#34;</span>
+<span class="n">password</span> <span class="o">=</span> <span class="no">PASSWORD</span>
+<span class="c1"># apikey</span>
+<span class="n">apikey</span> <span class="o">=</span> <span class="no">APIKEY</span>
+<span class="c1"># format json or xml</span>
+<span class="nb">format</span> <span class="o">=</span> <span class="s2">&#34;json&#34;</span>
+
+<span class="c1"># パラメータ作成</span>
+<span class="n">param</span> <span class="o">=</span> <span class="s2">&#34;username=</span><span class="si">#{</span><span class="n">username</span><span class="si">}</span><span class="s2">&amp;password=</span><span class="si">#{</span><span class="n">password</span><span class="si">}</span><span class="s2">&amp;apikey=</span><span class="si">#{</span><span class="n">apikey</span><span class="si">}</span><span class="s2">&amp;format=</span><span class="si">#{</span><span class="nb">format</span><span class="si">}</span><span class="s2">&#34;</span>
+
+<span class="c1"># GETする</span>
+<span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">proxy_class</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Proxy</span><span class="p">(</span><span class="no">ARGV</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">,</span> <span class="mi">8080</span><span class="p">)</span>
+<span class="n">http</span> <span class="o">=</span> <span class="n">proxy_class</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+<span class="n">http</span><span class="o">.</span><span class="n">start</span> <span class="k">do</span> <span class="o">|</span><span class="n">http</span><span class="o">|</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uri</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&#34;?</span><span class="si">#{</span><span class="n">param</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="s2">&#34;200&#34;</span> <span class="k">then</span>
+                <span class="n">json</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">body</span>
+                <span class="c1"># jsonparseでparseしてもらう</span>
+                <span class="n">jsonparse</span> <span class="o">=</span> <span class="no">JsonParser</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">json</span><span class="p">)</span>
+
+                <span class="n">pp</span> <span class="n">jsonparse</span>
+        <span class="k">else</span>
+                <span class="nb">print</span> <span class="s2">&#34;</span><span class="si">#{</span><span class="n">res</span><span class="o">.</span><span class="n">code</span><span class="si">}</span><span class="se">\n</span><span class="s2">&#34;</span>
+        <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+<p>すると、こんな感じに返ってきます。</p>
+
+<p>[f:id:kk_Ataka:20110302190611j:image]</p>
+
+<p>json形式では、こんなフォーマットで返ってくるみたい。</p>
+
+<blockquote>
+<p>{</p>
+
+<p>　　&rdquo;status&rdquo;:&ldquo;1&rdquo;,         // 1=normal, 2=no changes since your provided &lsquo;since&rsquo;</p>
+
+<p>　　&rdquo;since&rdquo;:&ldquo;1245626956&rsquo;,     // timestamp of this response</p>
+
+<p>　　&rdquo;list&rdquo;:{</p>
+
+<p>　　　&rdquo;93817&rdquo;:{</p>
+
+<p>　　　　&rdquo;item_id&rdquo;:&ldquo;93817&rdquo;           // unique id identifying the url</p>
+
+<p>　　　　&rdquo;url&rdquo;:&rdquo;<a href="http://url.com">http://url.com</a>&rdquo;,</p>
+
+<p>　　　　&rdquo;title&rdquo;:&ldquo;Page Title&rdquo;,</p>
+
+<p>　　　　&rdquo;time_updated&rdquo;:&ldquo;1245626956&rdquo;,       // time the item was last added/changed</p>
+
+<p>　　　　&rdquo;time_added&rdquo;:&ldquo;1245626956&rdquo;,      // time item was added to list</p>
+
+<p>　　　　&rdquo;tags&rdquo;:&ldquo;comma,seperated,list&rdquo;,</p>
+
+<p>　　　　&rdquo;state&rdquo;:&ldquo;0&rdquo;,                       // 0=unread, 1=read</p>
+
+<p>　　　},</p>
+
+<p>&hellip;</p>
+
+<p><cite><a href="http://readitlaterlist.com/api/docs/#get">http://readitlaterlist.com/api/docs/#get</a></cite></p>
+</blockquote>
+
+<p>さしあたり、欲しいのはlist内のurl,titleくらいなんだけど、これどうやって取得するんだろう。うまい方法が思い浮かばなかったので、一旦listのkeyを全部取得してkey分forを回すというあまりイケてない方法に。parse以降をこう変えました。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">                <span class="c1"># jsonparseでparseしてもらう</span>
+                <span class="n">jsonparse</span> <span class="o">=</span> <span class="no">JsonParser</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">json</span><span class="p">)</span>
+                
+                <span class="c1"># listのキーを取得</span>
+                <span class="n">keys</span> <span class="o">=</span> <span class="n">jsonparse</span><span class="o">[</span><span class="s2">&#34;list&#34;</span><span class="o">].</span><span class="n">keys</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="n">keys</span><span class="o">.</span><span class="n">length</span><span class="o">-</span><span class="mi">1</span>
+                        <span class="n">print_url</span> <span class="o">=</span> <span class="n">jsonparse</span><span class="o">[</span><span class="s2">&#34;list&#34;</span><span class="o">][</span><span class="n">keys</span><span class="o">[</span><span class="n">i</span><span class="o">]][</span><span class="s2">&#34;url&#34;</span><span class="o">]</span>
+                        <span class="n">print_title</span> <span class="o">=</span> <span class="n">jsonparse</span><span class="o">[</span><span class="s2">&#34;list&#34;</span><span class="o">][</span><span class="n">keys</span><span class="o">[</span><span class="n">i</span><span class="o">]][</span><span class="s2">&#34;title&#34;</span><span class="o">]</span>
+
+                        <span class="nb">print</span> <span class="s2">&#34;</span><span class="si">#{</span><span class="n">print_title</span><span class="si">}</span><span class="s2"> ■ </span><span class="si">#{</span><span class="n">print_url</span><span class="si">}</span><span class="se">\n</span><span class="s2">&#34;</span>
+                <span class="k">end</span></code></pre></div>
+<p>すると表示は、</p>
+
+<p>[f:id:kk_Ataka:20110302192703p:image]</p>
+
+<p>おお、ニコニコ動画！　次はAddをやりたい。むしろそっちが目的！</p>
+
+<p>[1] ReadItLaterのアカウントを持っていない場合は、あらかじめ作っておきます。</p>
+
+<p>[2] 順不同でもよい</p>
+
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2011/03/02/1299062938/"
+    data-text="Read it LaterをRubyで取得する - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2011/03/02/1299062938/"
+    data-hatena-bookmark-title="Read it LaterをRubyで取得する - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2011/03/02/1299062938/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2011/03/02/1299062938/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2011/01/30/1296401919/" class="pagination_overflow previous_page">
+          Prev: 
+          11/1/30
+          BPStudy#41に参加しました
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2011/03/08/1299588433/" class="pagination_overflow next_page">
+          Next: 
+          11/3/8
+          RubyではてなのWSSE認証をしてはてブにブクマをポストす …
+        </a>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ruby-api-read-it-laterをrubyで取得する">[Ruby][API]Read it LaterをRubyで取得する</a></li>
+<li><a href="#前準備">前準備</a></li>
+<li><a href="#記事をgetする">記事をGetする</a></li>
+<li><a href="#ソースコード">ソースコード</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>

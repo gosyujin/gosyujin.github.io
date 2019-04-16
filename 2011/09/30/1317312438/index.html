@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  .msgファイルをパースして中から添付ファイルを抜き出す - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="[Java][Windows][Ruby][備忘録].msgファイルをパースして中から添付ファイルを抜き出す 正確にはRubyというには微妙なんですが…。
+前回までのあらすじ  選んだメール(本文と添付ファイル)をまとめてDLしてくるだけの簡単なお仕事はできるようになった  http://d.hatena.ne.jp/kk_Ataka/20110517/1305560776:title http://d.hatena.ne.jp/kk_Ataka/20110709/1310140318:title http://d.hatena.ne.jp/kk_Ataka/20110823/1314103220:title   しかし、社内セキュリティGWの設定？　のためかzipとかexeとか怪しい拡張子が付いている添付ファイルは一旦msgファイルに固められるという仕様のためそのままでは添付ファイルが見れない。
+こういうメールが
+メール ┗添付ファイル.zip 届いた時にはこうなっている
+メール ┗ラップ.msg(＼あやしいファイルだから注意してDLしてね／) ┗本来の添付ファイル.zip なんとかRubyからmsgファイル内を解析して添付ファイルを引っこ抜いて保存ができまいか…というのが今回の問題。
+結論 以下のライブラリを駆使して実現しました。
+ msgparser(Auxiliiという所のJava用msgファイルパースライブラリ) jrb(Java Ruby Bridge: RubyからJavaVMを操作できるライブラリ)  一応Rubyでmsgファイルを解析するライブラリも探してみたのですが、あまりないのかな？　http://en.sourceforge.jp/projects/sfnet_ssfiledll/downloads/SSFileDLL%20%28MAPI%29/1.0/SSFileDLL-MAPI-1.0-Source.zip/:title こういうdllは見つけたのですが、MAPIがよくわからん上に説明を見る限りHasAttach(添付ファイルを持ってるか持ってないか？)くらいしかわからない？　ようなのであきらめました。
+あと、msgparserはJavaライブラリなので当初はJRubyで書けば何とかなるかなと思ってました。簡単なサンプルは http://www.rgagnon.com/javadetails/java-0613.html:title このページのような感じ。が、今まで書いたコードをJRubyで実行すると失敗してしまったので方向転換；；　RubyからJavaVMを操作できるrjbというライブラリを使う事に。
+ダウンロード・インストール  msgparser  http://auxilii.com/msgparser/Page.php?id=16000:title よりmsgparserをDL  [http://poi.apache.org/poifs/:title]や[http://www.freeutils.net/source/jtnef/:title]とかが必要になるのですが、上記のmsgparse.zipの中に全部入ってます[1]  distよりmasparser-X.XX.jarを、libよりpoi-X.X-YYYYMMDD.jarとtnef-X.X.X.jarを取得し、同じプロジェクト内にコピー。とりあえずlibフォルダを作ってそこに入れました  rjb  gemで。ただし、当然というかJavaが入っていないと失敗する模様。環境変数JAVA_HOMEも設定している必要があるみたい   gem install rjb ソース ソース全体は [https://github.com/gosyujin/outlook_for_ruby:title] 。msgParse.rbが本体、ライブラリがlibに入っています。
+使い方としてはMsgParseをnewしてinputMsgで.msgファイルのパス指定、saveFileで添付ファイルぶっこぬいて出力先に保存としたい。こんな感じで。
+msg = MsgParse.new msg.inputMsg(MSGFILE) msg.saveFile(SAVEDIR) という事でMsgParser[2]クラスを作成。ソースは [https://github.com/gosyujin/outlook_for_ruby/blob/master/msgParse.rb:title] 。まずは初期化から。|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2011/09/14/1316002377/" class="pagination_overflow previous_page">
+          Prev: 
+          11/9/14
+          Solarisのパッケージを作ってみる もう少し学んだ版
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2011/10/03/1317642705/" class="pagination_overflow next_page">
+          Next: 
+          11/10/3
+          Rubyのgemバージョン管理ができるBundlerを実行で …
+        </a>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">.msgファイルをパースして中から添付ファイルを抜き出す</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/java' class="muted-link">
+      [ <span class="Label Label--gray">Java</span> ]
+    </a>
+  
+    <a href='/tags/windows' class="muted-link">
+      [ <span class="Label Label--gray">Windows</span> ]
+    </a>
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
+    </a>
+  
+    <a href='/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+
+
+          Published: <span>2011/09/30</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#java-windows-ruby-備忘録-msgファイルをパースして中から添付ファイルを抜き出す">[Java][Windows][Ruby][備忘録].msgファイルをパースして中から添付ファイルを抜き出す</a></li>
+<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
+<li><a href="#結論">結論</a></li>
+<li><a href="#ダウンロード-インストール">ダウンロード・インストール</a></li>
+<li><a href="#ソース">ソース</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="java-windows-ruby-備忘録-msgファイルをパースして中から添付ファイルを抜き出す">[Java][Windows][Ruby][備忘録].msgファイルをパースして中から添付ファイルを抜き出す</h2>
+
+<p>正確にはRubyというには微妙なんですが…。</p>
+
+<h2 id="前回までのあらすじ">前回までのあらすじ</h2>
+
+<ul>
+<li>選んだメール(本文と添付ファイル)をまとめてDLしてくるだけの簡単なお仕事はできるようになった
+
+<ul>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20110517/1305560776:title">http://d.hatena.ne.jp/kk_Ataka/20110517/1305560776:title</a></li>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20110709/1310140318:title">http://d.hatena.ne.jp/kk_Ataka/20110709/1310140318:title</a></li>
+<li><a href="http://d.hatena.ne.jp/kk_Ataka/20110823/1314103220:title">http://d.hatena.ne.jp/kk_Ataka/20110823/1314103220:title</a></li>
+</ul></li>
+</ul>
+
+<p>しかし、社内セキュリティGWの設定？　のためかzipとかexeとか怪しい拡張子が付いている添付ファイルは一旦msgファイルに固められるという仕様のためそのままでは添付ファイルが見れない。</p>
+
+<p>こういうメールが</p>
+<div class="highlight"><pre class="chroma">メール
+┗添付ファイル.zip</pre></div>
+<p>届いた時にはこうなっている</p>
+<div class="highlight"><pre class="chroma">メール
+┗ラップ.msg(＼あやしいファイルだから注意してDLしてね／)
+　┗本来の添付ファイル.zip</pre></div>
+<p>なんとかRubyからmsgファイル内を解析して添付ファイルを引っこ抜いて保存ができまいか…というのが今回の問題。</p>
+
+<h2 id="結論">結論</h2>
+
+<p>以下のライブラリを駆使して実現しました。</p>
+
+<ul>
+<li>msgparser(Auxiliiという所のJava用msgファイルパースライブラリ)</li>
+<li>jrb(Java Ruby Bridge: RubyからJavaVMを操作できるライブラリ)</li>
+</ul>
+
+<p>一応Rubyでmsgファイルを解析するライブラリも探してみたのですが、あまりないのかな？　<a href="http://en.sourceforge.jp/projects/sfnet_ssfiledll/downloads/SSFileDLL%20%28MAPI%29/1.0/SSFileDLL-MAPI-1.0-Source.zip/:title">http://en.sourceforge.jp/projects/sfnet_ssfiledll/downloads/SSFileDLL%20%28MAPI%29/1.0/SSFileDLL-MAPI-1.0-Source.zip/:title</a> こういうdllは見つけたのですが、MAPIがよくわからん上に説明を見る限りHasAttach(添付ファイルを持ってるか持ってないか？)くらいしかわからない？　ようなのであきらめました。</p>
+
+<p>あと、msgparserはJavaライブラリなので当初はJRubyで書けば何とかなるかなと思ってました。簡単なサンプルは <a href="http://www.rgagnon.com/javadetails/java-0613.html:title">http://www.rgagnon.com/javadetails/java-0613.html:title</a> このページのような感じ。が、今まで書いたコードをJRubyで実行すると失敗してしまったので方向転換；；　RubyからJavaVMを操作できるrjbというライブラリを使う事に。</p>
+
+<h2 id="ダウンロード-インストール">ダウンロード・インストール</h2>
+
+<ul>
+<li>msgparser
+
+<ul>
+<li><a href="http://auxilii.com/msgparser/Page.php?id=16000:title">http://auxilii.com/msgparser/Page.php?id=16000:title</a> よりmsgparserをDL
+
+<ul>
+<li>[<a href="http://poi.apache.org/poifs/:title]や[http://www.freeutils.net/source/jtnef/:title]とかが必要になるのですが、上記のmsgparse.zipの中に全部入ってます">http://poi.apache.org/poifs/:title]や[http://www.freeutils.net/source/jtnef/:title]とかが必要になるのですが、上記のmsgparse.zipの中に全部入ってます</a>[1]</li>
+</ul></li>
+<li>distよりmasparser-X.XX.jarを、libよりpoi-X.X-YYYYMMDD.jarとtnef-X.X.X.jarを取得し、同じプロジェクト内にコピー。とりあえずlibフォルダを作ってそこに入れました</li>
+</ul></li>
+<li>rjb
+
+<ul>
+<li>gemで。ただし、当然というかJavaが入っていないと失敗する模様。環境変数JAVA_HOMEも設定している必要があるみたい</li>
+</ul></li>
+</ul>
+
+<!-- -->
+<div class="highlight"><pre class="chroma">gem install rjb</pre></div>
+<h2 id="ソース">ソース</h2>
+
+<p>ソース全体は [<a href="https://github.com/gosyujin/outlook_for_ruby:title">https://github.com/gosyujin/outlook_for_ruby:title</a>] 。msgParse.rbが本体、ライブラリがlibに入っています。</p>
+
+<p>使い方としてはMsgParseをnewしてinputMsgで.msgファイルのパス指定、saveFileで添付ファイルぶっこぬいて出力先に保存としたい。こんな感じで。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">    <span class="n">msg</span> <span class="o">=</span> <span class="no">MsgParse</span><span class="o">.</span><span class="n">new</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">inputMsg</span><span class="p">(</span><span class="no">MSGFILE</span><span class="p">)</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">saveFile</span><span class="p">(</span><span class="no">SAVEDIR</span><span class="p">)</span></code></pre></div>
+<p>という事でMsgParser[2]クラスを作成。ソースは [<a href="https://github.com/gosyujin/outlook_for_ruby/blob/master/msgParse.rb:title">https://github.com/gosyujin/outlook_for_ruby/blob/master/msgParse.rb:title</a>] 。まずは初期化から。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">    <span class="kp">include</span> <span class="no">Rjb</span>
+    
+    <span class="c1"># JavaクラスのImport、Jarの読み込み</span>
+    <span class="c1"># 初期化処理を行う</span>
+    <span class="k">def</span> <span class="nf">initialize</span>
+        <span class="c1">#Rjb::load(&#39;./&#39;)</span>
+        <span class="n">initJavaClass</span><span class="p">()</span>
+        <span class="n">addJar</span><span class="p">()</span>
+        <span class="vi">@msg</span> <span class="o">=</span> <span class="kp">nil</span>
+    <span class="k">end</span>
+    
+    <span class="c1"># JavaのクラスをImportする</span>
+    <span class="k">def</span> <span class="nf">initJavaClass</span><span class="p">()</span>
+        <span class="vi">@system</span> <span class="o">=</span> <span class="n">import</span><span class="p">(</span><span class="s2">&#34;java.lang.System&#34;</span><span class="p">)</span>
+<span class="c1">#        @string = import(&#34;java.lang.String&#34;)</span>
+<span class="c1">#        @list = import(&#34;java.util.List&#34;)</span>
+        <span class="vi">@fileOutputStream</span> <span class="o">=</span> <span class="n">import</span><span class="p">(</span><span class="s2">&#34;java.io.FileOutputStream&#34;</span><span class="p">)</span>
+    <span class="k">end</span>
+    
+    <span class="c1"># Jarを読みこむ</span>
+    <span class="k">def</span> <span class="nf">addJar</span><span class="p">()</span>
+        <span class="no">Rjb</span><span class="o">::</span><span class="n">add_jar</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;lib/tnef-1.3.1.jar&#39;</span><span class="p">))</span>
+        <span class="no">Rjb</span><span class="o">::</span><span class="n">add_jar</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;lib/poi-3.2-FINAL-20081019.jar&#39;</span><span class="p">))</span>
+        <span class="no">Rjb</span><span class="o">::</span><span class="n">add_jar</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;lib/msgparser-1.10.jar&#39;</span><span class="p">))</span>
+        <span class="vi">@msgParser</span> <span class="o">=</span> <span class="n">import</span><span class="p">(</span><span class="s2">&#34;com.auxilii.msgparser.MsgParser&#34;</span><span class="p">)</span>
+        <span class="vi">@fileAttachment</span> <span class="o">=</span> <span class="n">import</span><span class="p">(</span><span class="s2">&#34;com.auxilii.msgparser.attachment.FileAttachment&#34;</span><span class="p">)</span>
+    <span class="k">end</span></code></pre></div>
+<p>java.lang.Systemとかjava.lang.Stringとか使う予定のあるクラスは全て明示的にimportしてやる必要がある。今回はjava.lang.Systemとjava.io.FileOutputStreamを使用する。</p>
+
+<p>次にライブラリを読み込む。msgparserをDLしたときのtnef, poi, msgparserを追加する。追加後にcom.auxilii.msgparser.MsgParserとcom.auxilii.msgparser.attachment.FileAttachmentをimportする。※add_jarの順番でエラーになる。-classpathの記述？　に順番って関係あるんだっけ？</p>
+
+<p>これで今回使用したいクラスはRuby上から呼び出せるようになりました。次はファイル読み込み。</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">    <span class="c1"># .msgファイルを読みこむ</span>
+    <span class="k">def</span> <span class="nf">inputMsg</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="vi">@msg</span> <span class="o">=</span> <span class="vi">@msgParser</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">parseMsg</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">end</span></code></pre></div>
+<p>parseMsg(PATH)メソッドを使用し.msgファイルを読み込めるように。最後は.msgファイル内から添付ファイルをぶっこぬく！</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby">    <span class="c1"># .msgファイルの添付ファイル数をカウントする</span>
+    <span class="k">def</span> <span class="nf">getAttachmentSize</span><span class="p">()</span>
+        <span class="vi">@msg</span><span class="o">.</span><span class="n">getAttachments</span><span class="o">.</span><span class="n">size</span>
+    <span class="k">end</span>
+    
+    <span class="c1"># 添付ファイルをpathに保存する</span>
+    <span class="c1"># 返り値は保存した添付ファイル名(の一つ)</span>
+    <span class="k">def</span> <span class="nf">saveFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">fileName</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+        <span class="k">if</span> <span class="n">getAttachmentSize</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">then</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="n">getAttachmentSize</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="n">file</span> <span class="o">=</span> <span class="vi">@msg</span><span class="o">.</span><span class="n">getAttachments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">begin</span>
+                    <span class="n">fileName</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">getLongFilename</span>
+                <span class="k">rescue</span> <span class="o">=&gt;</span> <span class="n">ex</span>
+                    <span class="nb">puts</span> <span class="s2">&#34;File name is including WAVE DASH?:</span><span class="si">#{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&#34;</span>
+                    <span class="n">fileName</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">getFilename</span>
+                <span class="k">end</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="vi">@fileOutputStream</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="n">fileName</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">getData</span><span class="p">)</span>
+                <span class="nb">puts</span> <span class="s2">&#34;■.msgファイル抽出:</span><span class="si">#{</span><span class="n">fileName</span><span class="si">}</span><span class="s2">&#34;</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">close</span>
+            <span class="k">end</span>
+        <span class="k">else</span>
+            <span class="nb">puts</span> <span class="s2">&#34;no temp file.&#34;</span>
+        <span class="k">end</span>
+        <span class="k">return</span> <span class="n">fileName</span>
+    <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+<p>はじめにgetAttachments.get(i)で添付ファイルを取得します。次に保存する時のファイル名として添付ファイル名を取得します。ファイル名を取得できるメソッドは2種類あります。getLongFilenameはファイル名をそのまま取得でき、getFilenameはファイル名を短縮して取得できます。[3]</p>
+
+<p>ここまでやったら最後はFileOutputStream#writeにgetDataで取得した添付ファイルのバイト配列を渡してやればOK！</p>
+
+<p>[1] complete package including source code, binaries and third party librariesと書いてあった</p>
+
+<p>[2] ライブラリと同じ名前にしてしまった…。</p>
+
+<p>[3] TODOとして、添付ファイル名に波ダッシュが入っているとエラーになるので要調査…。</p>
+
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2011/09/30/1317312438/"
+    data-text=".msgファイルをパースして中から添付ファイルを抜き出す - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2011/09/30/1317312438/"
+    data-hatena-bookmark-title=".msgファイルをパースして中から添付ファイルを抜き出す - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2011/09/30/1317312438/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2011/09/30/1317312438/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2011/09/14/1316002377/" class="pagination_overflow previous_page">
+          Prev: 
+          11/9/14
+          Solarisのパッケージを作ってみる もう少し学んだ版
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2011/10/03/1317642705/" class="pagination_overflow next_page">
+          Next: 
+          11/10/3
+          Rubyのgemバージョン管理ができるBundlerを実行で …
+        </a>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#java-windows-ruby-備忘録-msgファイルをパースして中から添付ファイルを抜き出す">[Java][Windows][Ruby][備忘録].msgファイルをパースして中から添付ファイルを抜き出す</a></li>
+<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
+<li><a href="#結論">結論</a></li>
+<li><a href="#ダウンロード-インストール">ダウンロード・インストール</a></li>
+<li><a href="#ソース">ソース</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>

@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編 - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ forkとか、fetchとか、本で読んでるだけじゃ実際やりたい時にどうやりゃいいかわからん…という話。
+Github Pagesで運用しているJekyllのバージョンアップをする時に死んだ
+ 原因は、他の人が公開しているプラグインやcssをほいほい コピペ していたため  公開先ではもちろんJekyllの更新に追従しており、更新を怠った己が自爆しているだけ)  なんとか自分のリポジトリでも追従したい。でもコピペはやだ  追従したいのは、主に Jekyll Bootstrap ファイル全般と @nitoyon さんのてっく煮ブログで使われているプラグイン。(特にはてな系)
+パッパとやって手順だけメモするかーと思ったら凄まじくてこずったので、今回はBootstrapだけ。
+環境  Ruby 1.9.3  RedCloth (4.2.9) bundler (1.3.5) classifier (1.3.3) colorator (0.1) commander (4.1.4) directory_watcher (1.4.1) fast-stemmer (1.0.2) highline (1.6.19) hparser (0.4.0 dc35f05) jekyll (1.0.0 9f94eaf) kramdown (0.14.2) liquid (2.5.1) maruku (0.6.1) posix-spawn (0.3.6) pygments.rb (0.4.2) rake (10.1.0) rdiscount (2.1.6) redcarpet (2.2.2) safe_yaml (0.7.1) syntax (1.0.0) yajl-ruby (1.1.0)   参考サイト  Git - サブモジュール Git で複数のリポジトリをまとめたり、逆に切り出したりする - Qiita [キータ] gitでforkしたrepoにoriginalのrepoをmergeする手順 - memo.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2013/08/04/android-install-intent/" class="pagination_overflow previous_page">
+          Prev: 
+          13/8/4
+          Androidアプリのインストール、起動方法によっ …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2013/08/09/redmine2/" class="pagination_overflow next_page">
+          Next: 
+          13/8/9
+          WindowsにRedmine2.3をインストールする手順 …
+        </a>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
+    </a>
+  
+    <a href='/tags/jekyll' class="muted-link">
+      [ <span class="Label Label--gray">Jekyll</span> ]
+    </a>
+  
+    <a href='/tags/git' class="muted-link">
+      [ <span class="Label Label--gray">Git</span> ]
+    </a>
+  
+
+
+          Published: <span>2013/08/07</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#やりたい事-jekyll-bootstrap-編">やりたい事: Jekyll Bootstrap 編</a>
+<ul>
+<li><a href="#方針">方針</a></li>
+<li><a href="#その1-jekyll-bootstrapリポジトリから直接更新分を持ってくる-断念">その1: Jekyll Bootstrapリポジトリから直接更新分を持ってくる(断念)</a>
+<ul>
+<li><a href="#マージする">マージする</a></li>
+<li><a href="#結論">結論</a></li>
+</ul></li>
+<li><a href="#その2-jekyll-bootstrapリポジトリを一回forkしてそこから更新分を持ってくる-採用">その2: Jekyll Bootstrapリポジトリを一回forkしてそこから更新分を持ってくる(採用)</a>
+<ul>
+<li><a href="#自分用ブランチの作成">自分用ブランチの作成</a></li>
+<li><a href="#合体">合体</a></li>
+<li><a href="#結論-1">結論</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>forkとか、fetchとか、本で読んでるだけじゃ実際やりたい時にどうやりゃいいかわからん…という話。</p>
+
+<hr />
+
+<p>Github Pagesで運用しているJekyllのバージョンアップをする時に死んだ</p>
+
+<ul>
+<li>原因は、他の人が公開しているプラグインやcssをほいほい <strong>コピペ</strong> していたため
+
+<ul>
+<li>公開先ではもちろんJekyllの更新に追従しており、更新を怠った己が自爆しているだけ)</li>
+</ul></li>
+<li>なんとか自分のリポジトリでも追従したい。でもコピペはやだ</li>
+</ul>
+
+<p>追従したいのは、主に Jekyll Bootstrap ファイル全般と @nitoyon さんのてっく煮ブログで使われているプラグイン。(特にはてな系)</p>
+
+<p>パッパとやって手順だけメモするかーと思ったら凄まじくてこずったので、今回はBootstrapだけ。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Ruby 1.9.3
+
+<ul>
+<li>RedCloth (4.2.9)</li>
+<li>bundler (1.3.5)</li>
+<li>classifier (1.3.3)</li>
+<li>colorator (0.1)</li>
+<li>commander (4.1.4)</li>
+<li>directory_watcher (1.4.1)</li>
+<li>fast-stemmer (1.0.2)</li>
+<li>highline (1.6.19)</li>
+<li>hparser (0.4.0 dc35f05)</li>
+<li>jekyll (1.0.0 9f94eaf)</li>
+<li>kramdown (0.14.2)</li>
+<li>liquid (2.5.1)</li>
+<li>maruku (0.6.1)</li>
+<li>posix-spawn (0.3.6)</li>
+<li>pygments.rb (0.4.2)</li>
+<li>rake (10.1.0)</li>
+<li>rdiscount (2.1.6)</li>
+<li>redcarpet (2.2.2)</li>
+<li>safe_yaml (0.7.1)</li>
+<li>syntax (1.0.0)</li>
+<li>yajl-ruby (1.1.0)</li>
+</ul></li>
+</ul>
+
+<h2 id="参考サイト">参考サイト</h2>
+
+<ul>
+<li><a href="http://git-scm.com/book/ja/Git-%E3%81%AE%E3%81%95%E3%81%BE%E3%81%96%E3%81%BE%E3%81%AA%E3%83%84%E3%83%BC%E3%83%AB-%E3%82%B5%E3%83%96%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%BC%E3%83%AB">Git - サブモジュール</a></li>
+<li><a href="http://qiita.com/uasi/items/77d41698630fef012f82">Git で複数のリポジトリをまとめたり、逆に切り出したりする - Qiita [キータ]</a></li>
+<li><a href="http://memo.yomukaku.net/entries/Xj9vo6X">gitでforkしたrepoにoriginalのrepoをmergeする手順 - memo.yomukaku.net</a></li>
+<li><a href="http://bmath.org/wordpress/?p=1733">fork元の xupdate が更新されたので追従する ｜ BmathLog</a></li>
+<li><a href="http://blog.livedoor.jp/odaxsen/archives/1624005.html">オダろぐ : Git＞マージがコンフリクトしたときに，どちらかを有効にする方法</a></li>
+</ul>
+
+<h2 id="やりたい事-jekyll-bootstrap-編">やりたい事: Jekyll Bootstrap 編</h2>
+
+<p>テンプレートとかcssが更新されたらそれを取得して適用したい。</p>
+
+<p>初回に 0.2.13 を持ってくる時はごっそりコピーして自分のリポジトリにaddしてただけなので…。</p>
+
+<p>毎回コピーするよりはなにかうまい方法を探したい。</p>
+
+<h3 id="方針">方針</h3>
+
+<ul>
+<li>Jekyll Bootstrapの新しいバージョン(ブランチ/タグ)をみて新しいのが出たらマージ</li>
+</ul>
+
+<h3 id="その1-jekyll-bootstrapリポジトリから直接更新分を持ってくる-断念">その1: Jekyll Bootstrapリポジトリから直接更新分を持ってくる(断念)</h3>
+
+<p>まずは、自分のJekyllプロジェクトに、本家のJekyl Bootstrapをリモートリポジトリとして登録する。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git remote add jb http://github.com/plusjade/jekyll-bootstrap.git
+$ git remote -v
+jb      http://github.com/plusjade/jekyll-bootstrap.git (fetch)
+jb      http://github.com/plusjade/jekyll-bootstrap.git (push)
+origin  http://github.com/gosyujin/gosyujin.github.com.git (fetch)
+origin  http://github.com/gosyujin/gosyujin.github.com.git (push)</code></pre></div>
+<h4 id="マージする">マージする</h4>
+
+<p>適用するブランチ/タグを探す。</p>
+
+<p>参考: ブランチなら<code>remote show</code> でも見れるんだけど、タグを見るには <code>ls-remote --tags</code> コマンドというものがあるみたい。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git ls-remote --tags jb v*
+20f90ffb0fa840f6aea90fc581ffd0dc84ee701f        refs/tags/v0.1.0
+c1972379f3fa93998947f355948359c24f1307a5        refs/tags/v0.1.0^{}
+8d498097c81e685fee3b1d1ffe61fcb66784db31        refs/tags/v0.2.0
+4c29c7ed76a1f972b456f3cd158432caef5c0a81        refs/tags/v0.2.0^{}
+37c14cf57ef968b8d27a54f9c3b55957bd9f7591        refs/tags/v0.2.1
+3a2df76133171e1cd576708a60694e7d0632b671        refs/tags/v0.2.1^{}
+f23e43f6f5cc564a3f411c503ca4eceb88b8b4c7        refs/tags/v0.2.13
+9c0026973bf54324304ed1b917bb227603d87071        refs/tags/v0.2.13^{}
+8fc944393399c6f64a2fa54045ce3cb7282e1970        refs/tags/v0.2.7
+12e41751883d7336225cfd039139137bac9eca4d        refs/tags/v0.2.7^{}
+7b27f21b7eb8f84be4decfe9085d82c6eb374e8d        refs/tags/v0.2.8
+cefdd4e2c3ff08a1e949e035d492387b90329c88        refs/tags/v0.2.8^{}
+653b332f47eff2f8fbe36eaca206fa0f1136d9ad        refs/tags/v0.2.9
+162a85dfb6f2801840b00ae995adeb322487132b        refs/tags/v0.2.9^{}</code></pre></div>
+<p>ん？ <code>^{}</code> はなんだ…？ちょっとわからないところがあるが、いったんおいといて最新版をfetchしてmerge。(どうもtagが切られていないだけで、0.3.0が出ているよう)</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git fetch jb HEAD
+warning: no common commits
+remote: Counting objects: 658, done.
+remote: Compressing objects: 100% (350/350), done.
+remote: Total 658 (delta 324), reused 560 (delta 272)
+Receiving objects: 100% (658/658), 209.25 KiB, done.
+Resolving deltas: 100% (324/324), done.
+From http://github.com/plusjade/jekyll-bootstrap
+ * tag               HEAD     -&gt; FETCH_HEAD</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git checkout source # 適用したいブランチに移動
+$ git merge FETCH_HEAD
+Auto-merging index.md
+CONFLICT (add/add): Merge conflict in index.md
+Auto-merging changelog.md
+CONFLICT (add/add): Merge conflict in changelog.md
+Auto-merging atom.xml
+CONFLICT (add/add): Merge conflict in atom.xml
+(略)</code></pre></div>
+<p>いっぱいコンフリクトしたので、地道にコンフリクト解消。。。</p>
+
+<h4 id="結論">結論</h4>
+
+<ul>
+<li>毎回コピーはしなくてよくなった</li>
+<li>Jekyll Bootstrap の更新はチェックする必要がある</li>
+<li>コンフリクト解消作業は毎回やることに…？(量が増えたら毎回めんどい？)</li>
+<li><strong>ログを確認するとき、Jekyll Bootstrapの更新も表示されてしまう</strong> (かなり多い)</li>
+</ul>
+
+<p>Bootstrap側でどんな更新があったかまでは確認できる必要もないんだけど…と思って調べていくと、 git checkout に <code>--orphan</code> オプションがあるということがわかった。</p>
+
+<ul>
+<li><a href="https://www.kernel.org/pub/software/scm/git/docs/git-checkout.html">git-checkout(1)</a></li>
+<li><a href="http://onjiro.blogspot.jp/2013/03/fuelphpgitorphan.html">ひょうたん: FuelPHPのgit管理にorphanブランチ使ったらどうかねぇ？</a></li>
+</ul>
+
+<p>これは使えるかも?</p>
+
+<h3 id="その2-jekyll-bootstrapリポジトリを一回forkしてそこから更新分を持ってくる-採用">その2: Jekyll Bootstrapリポジトリを一回forkしてそこから更新分を持ってくる(採用)</h3>
+
+<p>今度は、はじめに <strong>forkして</strong> 自分のところに持ってくる。そしてclone。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git clone http://github.com/gosyujin/jekyll-bootstrap.git # forkしたのでアカウントが `plusjade` から自分に変わっている</code></pre></div>
+<h4 id="自分用ブランチの作成">自分用ブランチの作成</h4>
+
+<p>Bootstrap系のログを除外したいので、まったく独立した <code>oreore-jb</code> ブランチを作りたい。</p>
+
+<p>独立したブランチを作るには <code>checkout --orphan</code> を使う。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git checkout --orphan oreore-jb
+Switched to a new branch &#39;oreore-jb&#39;
+$ git st
+# On branch oreore-jb
+#
+# Initial commit
+#
+# Changes to be committed:
+#   (use &#34;git rm --cached &lt;file&gt;...&#34; to unstage)
+#
+#       new file:   .gitignore
+#       new file:   404.html
+#       new file:   README.md
+#       new file:   Rakefile
+#       new file:   _config.yml
+(略)</code></pre></div>
+<p>ファイルはステージングされた状態になっているのでそのままadd。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git add .
+$ git com &#34;first commit&#34;
+[oreore-jb (root-commit) df703a3] fc
+ 46 files changed, 2530 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 404.html
+ create mode 100644 README.md
+ create mode 100644 Rakefile
+ create mode 100644 _config.yml
+(略)</code></pre></div>
+<p>これで、独立した <code>oreore-jb</code> ブランチにBootstrapの最新版が入ったことになる。</p>
+
+<p>試しにmasterブランチでいくつか適当にコミットしたあとグラフを確認してみる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git g (グラフ表示エイリアス)
+*   bb73195 8940469 2013-08-06 kk_Ataka  (HEAD, master) test2
+| * df703a3 fac1d1e 2013-08-06 kk_Ataka  (oreore-jb) first commit
+*   9da0a7c fac1d1e 2013-08-06 kk_Ataka  test1j
+*   7501cf3 4b3dcb2 2013-07-26 Jade Dominguez  (origin/master, origin/HEAD) Merge add-drafts. closes #167
+|\
+| * c2d70e5 4b3dcb2 2013-07-23 Jade Dominguez  add draft feature</code></pre></div>
+<p>過去を断ち切れてる。</p>
+
+<p>一度 <code>oreore-jb</code> を作れたら、以降は</p>
+
+<ul>
+<li>本家の更新をチェック</li>
+<li>masterブランチにfetch, merge</li>
+<li>独立ブランチ2 <code>feature</code> を作成</li>
+<li><code>feature</code> と <code>oreore-jb</code> とmerge</li>
+</ul>
+
+<p>するのかな？？</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git checkout --orphan feature # 本家の最新版を取り入れた後…
+$ git add ./
+$ git commit -m &#34;更新取り入れ&#34;  # この時点でブランチは大きく1. 本流, 2. oreore-jb, 3. feature の3つが存在する
+$ git checkout oreore-jb
+$ git merge feature             # 変更されてるところはぶつかる
+Auto-merging Rakefile
+CONFLICT (add/add): Merge conflict in Rakefile
+Automatic merge failed; fix conflicts and then commit the result.
+$ git ch --theirs Rakefile      # theirsのファイルかoursのファイルか(エディタ使って手でなおしてもいい)
+$ git add ./
+$ git commit -m &#34;vX.X.X&#34;
+$ git g
+*     221593a 028b015 2013-08-06 kk_Ataka  (HEAD, master) 本流の変更4
+| *   940c432 a4f1743 2013-08-06 kk_Ataka  (oreore-jb) com
+| |\
+| | * 1938f54 a4f1743 2013-08-06 kk_Ataka  (feature) 新バージョン
+* |   7b7427f f3131bb 2013-08-06 kk_Ataka  本流の変更3
+* |   d109479 bd61d9c 2013-08-06 kk_Ataka  本流の変更2
+| *   1fd0b54 9d627ae 2013-08-06 kk_Ataka  merge
+| |\
+| | * 626d51a 9d627ae 2013-08-06 kk_Ataka  tuizui
+* |   6c592be 9d627ae 2013-08-06 kk_Ataka  本流の変更
+| *   59abd4b 4b3dcb2 2013-08-06 kk_Ataka  first commit
+*     7501cf3 4b3dcb2 2013-07-26 Jade Dominguez  (origin/master, origin/HEAD) Merge add-drafts. closes #167
+$ git push origin oreore-jb:oreore-jb</code></pre></div>
+<p>わかりにくいけどグラフの左が本流、右が今回作ったJekyll Bootstrap自体の履歴をもたない <code>oreore-jb</code> 傍流。</p>
+
+<h4 id="合体">合体</h4>
+
+<p>これを、自分のJekyllにmergeしてやる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git re add jb http://github.com/gosyujin/jekyll-bootstrap.git
+$ git fetch jb oreore-jb
+remote: Counting objects: 7, done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 5 (delta 3), reused 0 (delta 0)
+Unpacking objects: 100% (5/5), done.
+From http://github.com/gosyujin/jekyll-bootstrap.git
+ * branch            oreore-jb  -&gt; FETCH_HEAD
+$ git merge FETCH_HEAD   # コンフリクトした場合は解消にいそしむ
+$ git g
+| *     feaea36 1675a4d 2013-08-06 kk_Ataka  (HEAD, source) Merge branch &#39;oreore-jb&#39; of ../jekyll-bootstrap into source
+| |\
+| | *   940c432 a4f1743 2013-08-06 kk_Ataka  com
+| | |\
+| | | * 1938f54 a4f1743 2013-08-06 kk_Ataka  新バージョン
+| * |   6caafdd 7d2b1c0 2013-08-06 kk_Ataka  OK
+| |\ \
+| | |/
+| | *   1fd0b54 9d627ae 2013-08-06 kk_Ataka  merge
+| | |\
+| | | * 626d51a 9d627ae 2013-08-06 kk_Ataka  tuizui
+| | *   59abd4b 4b3dcb2 2013-08-06 kk_Ataka  first commit
+* |     b3f9818 1d67408 2013-08-06 kk_Ataka  (origin/master, origin/HEAD) deploy at 2013-08-06 01:03:02 +0900
+| *     524de33 4135ebe 2013-08-04 kk_Ataka  (origin/source) 追加 AndroidアプリのIntentタイプ</code></pre></div>
+<p>グラフの左はdeploy用のブランチなのでおいといて、真ん中がソースを管理している <code>source</code> ブランチ、右が <code>oreore-jb</code> 。</p>
+
+<h4 id="結論-1">結論</h4>
+
+<ul>
+<li>毎回コピーはしなくてよくなった</li>
+<li>Jekyll Bootstrap の更新はチェックする必要がある</li>
+<li>コンフリクト解消作業は毎回やることに…？(量が増えたら毎回めんどい？)</li>
+<li>ログは自分がBootstrapから切り出した最小限のものだけにできた</li>
+</ul>
+
+<p>というわけで、自分の中では一応納得。</p>
+
+<p>しかし、これがいい方法なのかはわからんー。</p>
+
+<p>後半へ続く。</p>
+
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2013/08/07/jekyll-maintenance-1/"
+    data-text="Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編 - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2013/08/07/jekyll-maintenance-1/"
+    data-hatena-bookmark-title="Jekyllバージョンアップの際に思いのほか手こずった話 Jekyll Bootstrapの更新に追従したい編 - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2013/08/07/jekyll-maintenance-1/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2013/08/07/jekyll-maintenance-1/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2013/08/04/android-install-intent/" class="pagination_overflow previous_page">
+          Prev: 
+          13/8/4
+          Androidアプリのインストール、起動方法によっ …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2013/08/09/redmine2/" class="pagination_overflow next_page">
+          Next: 
+          13/8/9
+          WindowsにRedmine2.3をインストールする手順 …
+        </a>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#参考サイト">参考サイト</a></li>
+<li><a href="#やりたい事-jekyll-bootstrap-編">やりたい事: Jekyll Bootstrap 編</a>
+<ul>
+<li><a href="#方針">方針</a></li>
+<li><a href="#その1-jekyll-bootstrapリポジトリから直接更新分を持ってくる-断念">その1: Jekyll Bootstrapリポジトリから直接更新分を持ってくる(断念)</a>
+<ul>
+<li><a href="#マージする">マージする</a></li>
+<li><a href="#結論">結論</a></li>
+</ul></li>
+<li><a href="#その2-jekyll-bootstrapリポジトリを一回forkしてそこから更新分を持ってくる-採用">その2: Jekyll Bootstrapリポジトリを一回forkしてそこから更新分を持ってくる(採用)</a>
+<ul>
+<li><a href="#自分用ブランチの作成">自分用ブランチの作成</a></li>
+<li><a href="#合体">合体</a></li>
+<li><a href="#結論-1">結論</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>

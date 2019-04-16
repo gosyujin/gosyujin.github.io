@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  Ruby 2.0.0 をpikとrvm経由でインストール&amp;環境構築 - kk_Atakaの日記
+
+    </title>
+
+    
+
+    
+      <meta name="description" property="og:description" content="あらすじ Ruby 2.0.0 がリリースされたので、インストールしつつ、新機能を使ってみる。
+…と思ったけど、意外とてこずったので、とりあえずインストールと準備だけ。
+後途中にGemの作り方めも。
+環境1  Windows XP Ruby 2.0.0 pik  インストール まずはインストール。pikなので pik install で。
+$ pik install ruby 2.0.0 ** Downloading: http://rubyforge.org/frs/download.php/76807/ruby-2.0.0-p0-i386-mingw32.7z to: C:\Documents and Settings\user\.pik\downloads\ruby-2.0.0-p0-i386-mingw32.7z ruby-2.0.0-p0-i386-mingw32.7z: 100% |oooooooooo| 8.9MB/ 8.9MB Time: 00:00:57 ** Extracting: C:\Documents and Settings\user\.pik\downloads\ruby-2.0.0-p0-i386-mingw32.7z to: C:\rubies\Ruby-200-p0 done ** Adding: 200: ruby 2.0.0p0 (2013-02-24) [i386-mingw32] Located at: C:\rubies\Ruby-200-p0\bin あっさり。
+$ pik default $ ruby -v bundler is found: bundle exec ruby -v ruby 1.|">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2013/02/19/haskell-helloworld5/" class="pagination_overflow previous_page">
+          Prev: 
+          13/2/19
+          すごいHaskellたのしく学ぼうでHaskellことはじ …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2013/03/03/evernote-oauth/" class="pagination_overflow next_page">
+          Next: 
+          13/3/3
+          自作EvernoteスクリプトをOAuth対応する
+        </a>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">Ruby 2.0.0 をpikとrvm経由でインストール&amp;環境構築</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: 
+
+  
+    <a href='/tags/ruby' class="muted-link">
+      [ <span class="Label Label--gray">Ruby</span> ]
+    </a>
+  
+    <a href='/tags/startup' class="muted-link">
+      [ <span class="Label Label--gray">StartUp</span> ]
+    </a>
+  
+
+
+          Published: <span>2013/02/25</span>
+        </div>
+      </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境1">環境1</a></li>
+<li><a href="#インストール">インストール</a>
+<ul>
+<li><a href="#環境構築">環境構築</a></li>
+</ul></li>
+<li><a href="#環境2">環境2</a></li>
+<li><a href="#インストール-1">インストール</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p>Ruby 2.0.0 がリリースされたので、インストールしつつ、新機能を使ってみる。</p>
+
+<p>…と思ったけど、意外とてこずったので、とりあえずインストールと準備だけ。</p>
+
+<p>後途中にGemの作り方めも。</p>
+
+<h2 id="環境1">環境1</h2>
+
+<ul>
+<li>Windows XP</li>
+<li>Ruby 2.0.0</li>
+<li>pik</li>
+</ul>
+
+<h2 id="インストール">インストール</h2>
+
+<p>まずはインストール。pikなので <code>pik install</code> で。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ pik install ruby 2.0.0
+** Downloading:  http://rubyforge.org/frs/download.php/76807/ruby-2.0.0-p0-i386-mingw32.7z
+   to:  C:\Documents and Settings\user\.pik\downloads\ruby-2.0.0-p0-i386-mingw32.7z
+
+ruby-2.0.0-p0-i386-mingw32.7z: 100% |oooooooooo|   8.9MB/  8.9MB Time: 00:00:57
+
+** Extracting:  C:\Documents and Settings\user\.pik\downloads\ruby-2.0.0-p0-i386-mingw32.7z
+   to:  C:\rubies\Ruby-200-p0
+done
+
+** Adding:  200: ruby 2.0.0p0 (2013-02-24) [i386-mingw32]
+ Located at:  C:\rubies\Ruby-200-p0\bin</code></pre></div>
+<p>あっさり。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ pik default
+$ ruby -v
+bundler is found: bundle exec ruby -v
+ruby 1.9.3p0 (2011-10-30) [i386-mingw32]</code></pre></div>
+<p>今は、1.9.3。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ pik list
+  167: jruby 1.6.7 (ruby-1.8.7-p357) (2012-02-22 3e82bc8) (Java HotSpot(TM) Client VM 1.6.0_04)...
+  187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]
+  187: ruby 1.8.7 (2011-06-30 patchlevel 352) [i386-mingw32]
+  192: ruby 1.9.2p290 (2011-07-09) [i386-mingw32]
+* 193: ruby 1.9.3p0 (2011-10-30) [i386-mingw32]
+  200: ruby 2.0.0p0 (2013-02-24) [i386-mingw32]
+$ pik use 200
+$ pik list
+  167: jruby 1.6.7 (ruby-1.8.7-p357) (2012-02-22 3e82bc8) (Java HotSpot(TM) Client VM 1.6.0_04)...
+  187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]
+  187: ruby 1.8.7 (2011-06-30 patchlevel 352) [i386-mingw32]
+  192: ruby 1.9.2p290 (2011-07-09) [i386-mingw32]
+  193: ruby 1.9.3p0 (2011-10-30) [i386-mingw32]
+* 200: ruby 2.0.0p0 (2013-02-24) [i386-mingw32]
+$ ruby -v
+bundler is NOT found or Gemfile is NOT found: ruby -v
+ruby 2.0.0p0 (2013-02-24) [i386-mingw32]</code></pre></div>
+<p>2.0.0に切り替わった！</p>
+
+<p>gem確認。。。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ gem list
+Failed to load C:/Documents and Settings/user/.gemrc because it doesn&#39;t contain valid YAML hash
+
+*** LOCAL GEMS ***
+
+bigdecimal (1.2.0)
+io-console (0.4.2)
+json (1.7.7)
+minitest (4.3.2)
+psych (2.0.0)
+rake (0.9.6)
+rdoc (4.0.0)
+test-unit (2.0.0.0)</code></pre></div>
+<p>あれ？なんかエラー出る…。</p>
+
+<p>色々動かしてみたら、どうも <code>空の.gemrc</code> があると、警告が出るようになった様子。出てても問題なさげ？</p>
+
+<ul>
+<li>Ruby 1.9.3
+
+<ul>
+<li>.gemrcなし: 何も出ない</li>
+<li>空.gemrc: 何も出ない</li>
+<li>記載あり.gemrc: 何も出ない</li>
+</ul></li>
+<li>Ruby 2.0.0
+
+<ul>
+<li>.gemrcなし: 何も出ない</li>
+<li>空.gemrc: <code>Failed to load ...</code></li>
+<li>記載あり.gemrc: 何も出ない</li>
+</ul></li>
+</ul>
+
+<p>という事で、今は特に使っていないので、いさぎよく.gemrcを削除。</p>
+
+<h3 id="環境構築">環境構築</h3>
+
+<p>Bundlerだけでも入れておこうかな</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ gem install bundler
+Fetching: bundler-1.2.4.gem (100%)
+Successfully installed bundler-1.2.4
+Parsing documentation for bundler-1.2.4
+Installing ri documentation for bundler-1.2.4
+Done installing documentation for bundler (18 sec).
+1 gem installed
+
+$ ruby -v
+bundler is found: bundle exec ruby -v
+Bundler is not compatible with Ruby 2.0 or Rubygems 2.0.
+Please upgrade to Bundler 1.3 or higher.</code></pre></div>
+<p>ガーン。Bundler 1.3以降じゃないと対応してないのかー。</p>
+
+<p>あれ？GitHubには24 February 2013に1.3出てるって書かれてる。</p>
+
+<ul>
+<li><a href="https://github.com/carlhuda/bundler">carlhuda/bundler · GitHub</a></li>
+</ul>
+
+<p>まだRubygemsに反映されていないのかな？なら直接入れてみよう。</p>
+
+<p>一旦、旧Bundler削除。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ gem uninstall bundler
+Remove executables:
+        bundle
+
+in addition to the gem? [Yn]  y
+Removing bundle
+Successfully uninstalled bundler-1.2.4</code></pre></div>
+<p>次に、上記のサイトからbundlerを落としてくる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ git clone http://github.com/carlhuda/bundler.git
+Cloning into &#39;bundler&#39;...
+remote: Counting objects: 28447, done.
+remote: Compressing objects: 100% (9733/9733), done.
+remote: Total 28447 (delta 19095), reused 27460 (delta 18213)Receiving objects:  99% (28163/28447), 2.47 MiB | 2.43 MiB/s
+Receiving objects: 100% (28447/28447), 5.30 MiB | 2.43 MiB/s, done.
+Resolving deltas: 100% (19095/19095), done.
+Checking out files: 100% (214/214), done.</code></pre></div>
+<p>で、gemを作る。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ gem build bundler.gemspec
+  Successfully built RubyGem
+  Name: bundler
+  Version: 1.3.0
+  File: bundler-1.3.0.gem</code></pre></div>
+<p><code>bundler-1.3.0.gem</code> ができるので、これをインストール。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ gem install --local bundler-1.3.0.gem
+Successfully installed bundler-1.3.0
+Done installing documentation for bundler (0 sec).
+1 gem installed
+$ bundle -v
+Bundler version 1.3.0</code></pre></div>
+<p>入った。
+1プロジェクトだけbundle installしてみたけどうまく動いたので、とりあえずOKかな。</p>
+
+<p>次。</p>
+
+<h2 id="環境2">環境2</h2>
+
+<ul>
+<li>CentOS 6.2</li>
+<li>Ruby 2.0.0</li>
+<li>rvm 1.11.6</li>
+</ul>
+
+<h2 id="インストール-1">インストール</h2>
+
+<p>……する前に。そのままだと <code>rvm list known</code> を見てもruby 1.9.3までしかないので、rvmの更新を行う。</p>
+
+<ul>
+<li><a href="http://kuroigamen.com/51">RVM がかなり古くなってたので、RVM のアップデートに挑戦 - KUROIGAMEN(黒い画面)</a></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ rvm -v
+
+rvm 1.11.6 () by Wayne E. Seguin &lt;wayneeseguin@gmail.com&gt;, Michal Papis &lt;mpapis@gmail.com&gt; [https://rvm.beginrescueend.com/]</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ rvm get latest
+Downloading RVM version 1.18.14
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   125  100   125    0     0    147      0 --:--:-- --:--:-- --:--:--   193
+100 1490k  100 1490k    0     0   315k      0  0:00:04  0:00:04 --:--:--  493k
+
+Upgrading the RVM installation in /home/kk_Ataka/.rvm/
+    RVM PATH line found in /home/kk_Ataka/.bashrc.
+    RVM sourcing line found in /home/kk_Ataka/.bashrc /home/kk_Ataka/.bash_profile /home/kk_Ataka/.zlogin.
+
+Upgrade Notes:
+
+  * For screen users, please do not forget to read https://rvm.io/workflow/screen/.
+  * If your shell exits on entering a directory with freshly checked out sources
+  * RVM comes with set of default gems including &#39;bundler&#39;, &#39;rake&#39;, &#39;rubygems-bundler&#39; and &#39;rvm&#39; gems,
+    if you do not wish to get this gems install RVM with this flag: --without-gems=&#34;rvm rubygems-bundler&#34;
+    this option is remembered, it&#39;s enough to use it once.
+
+  * If you wish to get more default(global) gems installed, install RVM with this flag: --with-gems=&#34;pry vagrant&#34;
+    this option is remembered, it&#39;s enough to use it once.
+
+  * For first installed ruby RVM will: display rvm requirements, set it as default and use it.
+    To avoid this behavior either use full path to rvm binary or prefix it with `command `.
+
+  * Binary rubies are installed by default if available, you can read about it in help:
+      rvm help install
+      rvm help mount
+
+  * The default umask for multi-user installation got extended to `umask u=rwx,g=rwx,o=rx`,
+    comment it out to avoid automatic updates.
+
+
+# RVM:  Shell scripts enabling management of multiple ruby environments.
+# RTFM: https://rvm.io/
+# HELP: http://webchat.freenode.net/?channels=rvm (#rvm on irc.freenode.net)
+# Cheatsheet: http://cheat.errtheblog.com/s/rvm/
+# Screencast: http://screencasts.org/episodes/how-to-use-rvm
+
+# In case of any issues read output of &#39;rvm requirements&#39; and/or &#39;rvm notes&#39;
+
+Upgrade of RVM in /home/kk_Ataka/.rvm/ is complete.
+
+# kk_Ataka,
+#
+#   Thank you for using RVM!
+#   I sincerely hope that RVM helps to make your life easier and
+#   more enjoyable!!!
+#
+# ~Wayne
+
+RVM reloaded!</code></pre></div>
+<p>一覧を確認すると……あった。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ rvm list known
+# MRI Rubies
+[ruby-]1.8.6[-p420]
+[ruby-]1.8.7[-p371]
+[ruby-]1.9.1[-p431]
+[ruby-]1.9.2[-p320]
+[ruby-]1.9.3-p125
+[ruby-]1.9.3-p194
+[ruby-]1.9.3-p286
+[ruby-]1.9.3-p327
+[ruby-]1.9.3-p362
+[ruby-]1.9.3-p374
+[ruby-]1.9.3-p385
+[ruby-]1.9.3-[p392]
+[ruby-]1.9.3-head
+[ruby-]2.0.0-rc1
+[ruby-]2.0.0-rc2
+[ruby-]2.0.0[-p0]
+ruby-head
+
+# GoRuby
+goruby
+...</code></pre></div>
+<p>そしてインストール。でもここで止まる……。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ rvm install ruby-2.0.0
+Searching for binary rubies, this might take some time.
+No binary rubies available for: centos/6.2/x86_64/ruby-2.0.0-p0.
+Continuing with compilation. Please read &#39;rvm mount&#39; to get more information on binary rubies.
+Fetching yaml-0.1.4.tar.gz to /home/kk_Ataka/.rvm/archives
+######################################################################## 100.0%
+Extracting yaml to /home/kk_Ataka/.rvm/src/yaml-0.1.4
+Prepare yaml in /home/kk_Ataka/.rvm/src/yaml-0.1.4.
+Configuring yaml in /home/kk_Ataka/.rvm/src/yaml-0.1.4.
+Compiling yaml in /home/kk_Ataka/.rvm/src/yaml-0.1.4.
+Installing yaml to /home/kk_Ataka/.rvm/usr
+Installing Ruby from source to: /home/kk_Ataka/.rvm/rubies/ruby-2.0.0-p0, this may take a while depending on your cpu(s)...
+ruby-2.0.0-p0 - #downloading ruby-2.0.0-p0, this may take a while depending on your connection...
+######################################################################## 100.0%
+ruby-2.0.0-p0 - #extracting ruby-2.0.0-p0 to /home/kk_Ataka/.rvm/src/ruby-2.0.0-p0
+ruby-2.0.0-p0 - #extracted to /home/kk_Ataka/.rvm/src/ruby-2.0.0-p0
+ruby-2.0.0-p0 - #configuring
+ruby-2.0.0-p0 - #compiling</code></pre></div>
+<p>かなり時間がかかったので、どこかで処理が止まっているのかなと思い一回abortさせてしまったが、再度挑戦したらいけた。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ rvm install ruby-2.0.0
+Searching for binary rubies, this might take some time.
+No binary rubies available for: centos/6.2/x86_64/ruby-2.0.0-p0.
+Continuing with compilation. Please read &#39;rvm mount&#39; to get more information on binary rubies.
+Installing Ruby from source to: /home/kk_Ataka/.rvm/rubies/ruby-2.0.0-p0, this may take a while depending on your cpu(s)...
+ruby-2.0.0-p0 - #downloading ruby-2.0.0-p0, this may take a while depending on your connection...
+ruby-2.0.0-p0 - #extracted to /home/kk_Ataka/.rvm/src/ruby-2.0.0-p0 (already extracted)
+ruby-2.0.0-p0 - #configuring
+ruby-2.0.0-p0 - #compiling
+ruby-2.0.0-p0 - #installing 
+Retrieving rubygems-2.0.0
+######################################################################## 100.0%
+Extracting rubygems-2.0.0 ...
+Removing old Rubygems files...
+Installing rubygems-2.0.0 for ruby-2.0.0-p0 ...
+Installation of rubygems completed successfully.
+Saving wrappers to &#39;/home/kk_Ataka/.rvm/bin&#39;.
+ruby-2.0.0-p0 - #adjusting #shebangs for (gem irb erb ri rdoc testrb rake).
+ruby-2.0.0-p0 - #importing default gemsets, this may take time ...
+Install of ruby-2.0.0-p0 - #complete </code></pre></div><div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ rvm list
+
+rvm rubies
+
+   ruby-1.8.7-p358 [ x86_64 ]
+=* ruby-1.9.2-p318 [ x86_64 ]
+   ruby-1.9.3-p125 [ x86_64 ]
+   ruby-2.0.0-p0 [ x86_64 ]
+
+# =&gt; - current
+# =* - current &amp;&amp; default
+#  * - default</code></pre></div>
+<p>切り替えもできる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ rvm use ruby-2.0.0
+Using /home/kk_Ataka/.rvm/gems/ruby-2.0.0-p0
+$ ruby -v
+ruby -v
+ruby 2.0.0p0 (2013-02-24 revision 39474) [x86_64-linux]
+$ gem list
+
+*** LOCAL GEMS ***
+
+bigdecimal (1.2.0)
+bundler (1.3.0.pre.8)
+io-console (0.4.2)
+json (1.7.7)
+minitest (4.3.2)
+psych (2.0.0)
+rake (10.0.3, 0.9.6)
+rdoc (4.0.0)
+rubygems-bundler (1.1.0)
+rvm (1.11.3.6)
+test-unit (2.0.0.0)</code></pre></div>
+<p>あれ？こっちはbundlerのpreが入っとる。</p>
+
+<p>bundle実行した時に警告？が出るなー。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ bundle install
+The source :rubygems is deprecated because HTTP requests are insecure.
+Please change your source to &#39;https://rubygems.org&#39; if possible, or &#39;http://rubygems.org&#39; if not.</code></pre></div>
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2013/02/25/ruby200-helloworld-pik-rvm/"
+    data-text="Ruby 2.0.0 をpikとrvm経由でインストール&amp;環境構築 - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2013/02/25/ruby200-helloworld-pik-rvm/"
+    data-hatena-bookmark-title="Ruby 2.0.0 をpikとrvm経由でインストール&amp;環境構築 - kk_Atakaの日記"
+    data-hatena-bookmark-layout="standard"
+    class="hatena-bookmark-button"
+    title="add Hatena bookmark">
+    <img src="https://b.st-hatena.com/images/entry-button/button-only.gif"
+      alt="add Hatena bookmark"
+      width="20" height="20" style="border: none;" />
+  </a>
+  <script type="text/javascript"
+    src="https://b.st-hatena.com/js/bookmark_button.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/https://gosyujin.github.io/2013/02/25/ruby200-helloworld-pik-rvm/">
+    <img src="https://b.hatena.ne.jp/entry/image/https://gosyujin.github.io/2013/02/25/ruby200-helloworld-pik-rvm/" />
+  </a>
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2013/02/19/haskell-helloworld5/" class="pagination_overflow previous_page">
+          Prev: 
+          13/2/19
+          すごいHaskellたのしく学ぼうでHaskellことはじ …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <a href="https://gosyujin.github.io/2013/03/03/evernote-oauth/" class="pagination_overflow next_page">
+          Next: 
+          13/3/3
+          自作EvernoteスクリプトをOAuth対応する
+        </a>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+        <li>
+          <span>16/12/31 </span>
+          
+          <a class="mb-2" href="/2016/12/31/gmail_smtp_username_and_password_not_accepted/">Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7.14</a>
+        </li>
+      
+        <li>
+          <span>16/11/30 </span>
+          
+          <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
+        </li>
+      
+        <li>
+          <span>16/10/31 </span>
+          
+          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境1">環境1</a></li>
+<li><a href="#インストール">インストール</a>
+<ul>
+<li><a href="#環境構築">環境構築</a></li>
+</ul></li>
+<li><a href="#環境2">環境2</a></li>
+<li><a href="#インストール-1">インストール</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>
