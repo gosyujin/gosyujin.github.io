@@ -1,10 +1,13 @@
 <ul>
   {{ range .Pages }}
-    {{ if .Draft }}
-      <li class="draft">
-    {{ else }}
-      <li>
-    {{ end }}
+
+    {{ if eq .Params.layout "post" }}
+
+      {{ if .Draft }}
+        <li class="draft">
+      {{ else }}
+        <li>
+      {{ end }}
       <span>{{ .Date.Format "2006/01/02" }} </span>
       {{ partial "taxonomy.html" . }}
       <a class="mb-2" href="{{ .URL }}">{{ .Title }}</a>
@@ -12,6 +15,8 @@
       <a href="http://b.hatena.ne.jp/entry/{{ .Site.BaseURL }}{{ .URL }}">
         <img src="http://b.hatena.ne.jp/entry/image/{{ .Site.BaseURL }}{{ .URL }}" />
       </a>
-    </li>
+      </li>
+
+    {{ end }}
   {{ end }}
 </ul>

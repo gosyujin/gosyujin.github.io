@@ -1,5 +1,5 @@
 {{ define "title" }}
-  {{ .Title }} &ndash; {{ .Site.Title }}
+  {{ .Title }} - {{ .Site.Title }}
 {{ end }}
 
 {{ define "fixside" }}
@@ -12,40 +12,49 @@
 
 {{ define "main" }}
 
-{{ if eq .Params.layout "post" }}
-  {{ partial "relatedsection.html" . }}
-{{ end }}
+  {{ if eq .Params.layout "post" }}
 
-  <div class="Subhead">
-    <div class="Subhead-heading">
-      <div class="h2 mt-3 mb-1">{{ .Title }}</div>
-    </div>
-{{ if eq .Params.layout "post" }}
-    <div class="Subhead-description">
-      <div class="float-md-right">
-        {{ if .Draft }}
-          DRAFT!! 
-        {{ end }}
-        Tags: {{ partial "taxonomy.html" . }} 
-        Published: <span>{{ .Date.Format "2006/01/02" }}</span>
+    <!-- post -->
+    {{ partial "relatedsection.html" . }}
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">{{ .Title }}</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-right">
+          Tags: {{ partial "taxonomy.html" . }}
+          Published: <span>{{ .Date.Format "2006/01/02" }}</span>
+        </div>
       </div>
     </div>
-{{ end }}
-  </div>
 
-{{ if eq .Params.layout "post" }}
-  {{ partial "toc.html" . }}
-{{ end }}
+    {{ partial "toc.html" . }}
 
-  <article>
-   <section class="pb-6 mb-3 border-bottom">
-      {{ .Content }}
-    </section>
-  </article>
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        {{ .Content }}
+      </section>
+    </article>
 
-{{ if eq .Params.layout "post" }}
-  {{ partial "relatedsection.html" . }}
-{{ end }}
+    {{ partial "social.html" . }}
+    {{ partial "relatedsection.html" . }}
+
+  {{ else }}
+
+    <!-- page -->
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">{{ .Title }}</div>
+      </div>
+    </div>
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        {{ .Content }}
+      </section>
+    </article>
+
+  {{ end }}
 
 {{ end }}
  
