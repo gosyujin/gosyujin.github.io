@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Fluentd on kk_Atakaの日記</title>
-    <link>/tags/fluentd/</link>
+    <link>https://gosyujin.github.io/tags/fluentd/</link>
     <description>Recent content in Fluentd on kk_Atakaの日記</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>jp</language>
     <lastBuildDate>Thu, 12 Jul 2012 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/fluentd/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://gosyujin.github.io/tags/fluentd/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる…</title>
-      <link>/2012/09/13/1347508570/</link>
+      <link>https://gosyujin.github.io/2012/09/13/1347508570/</link>
       <pubDate>Thu, 13 Sep 2012 00:00:00 +0000</pubDate>
       
-      <guid>/2012/09/13/1347508570/</guid>
+      <guid>https://gosyujin.github.io/2012/09/13/1347508570/</guid>
       <description>[Ruby][備忘録][Fluentd]Fluentdの自作プラグインがロードできないのでソースの中身を追ってみる… あらすじ [http://d.hatena.ne.jp/kk_Ataka/20120817/1345209899:title=前回]までに簡単なプラグインを作成する事はできた。
 次はプラグインをGem化しようかなと思って色々いじってたら、実行時になんかうまくプラグインが読めない……。なんで？
 参考サイト  [https://github.com/fluent/fluentd:title] http://d.hatena.ne.jp/tagomoris/20120715/1342368392:title http://blog.ksauzz.com/?p=37:title  今できてる事とできてない事 BundlerでFluentdをインストールし、
@@ -27,10 +27,10 @@ $ bundle exec fluentd -c /hoge/fluent.conf -p /hoge/plugin  を実行した時�
     
     <item>
       <title>Fluentdのプラグインを作成してみる(練習用)</title>
-      <link>/2012/08/17/1345209899/</link>
+      <link>https://gosyujin.github.io/2012/08/17/1345209899/</link>
       <pubDate>Fri, 17 Aug 2012 00:00:00 +0000</pubDate>
       
-      <guid>/2012/08/17/1345209899/</guid>
+      <guid>https://gosyujin.github.io/2012/08/17/1345209899/</guid>
       <description>[Fluentd][備忘録][Ruby]Fluentdのプラグインを作成してみる(練習用) 前回までのあらすじ http://d.hatena.ne.jp/kk_Ataka/20120712/1342098141:title で、confファイルのコメントアウトを外してとりあえず動くっていうところまではいけた。今度は簡単なプラグインを作ってみる。
 参考サイト  http://fluentd.org/doc/:title http://d.hatena.ne.jp/erukiti/20120205/1328452455:title http://d.hatena.ne.jp/tagomoris/20120221/1329815126:title  ひたすら何かを吐き続けるプラグイン Inputプラグインの場合 Fluent::Inputクラスを継承する。
 class SimpleInput &amp;lt; Fluent::Input # 第一引数がプラグインの名前、&amp;lt;source&amp;gt; typeに指定される Fluent::Plugin.register_input(&amp;#34;simple_in&amp;#34;, self) def start @thread = Thread.new(&amp;amp;method(:run)) end def run loop do # emitメソッドの第一引数が &amp;lt;match **.**&amp;gt; の**に該当すればその形式で出力される # fluent.confでdebug.**はstdoutで出力すると定義されている Fluent::Engine.emit(&amp;#34;debug.debug&amp;#34;, Fluent::Engine.now, {&amp;#34;simple&amp;#34; =&amp;gt; &amp;#34;debudebu&amp;#34;}) # fluent.confに&amp;lt;match simple.output&amp;gt; type simple_outを定義したので、以下のOutput形式で出力される Fluent::Engine.emit(&amp;#34;simple.output&amp;#34;, Fluent::Engine.now, {&amp;#34;simple&amp;#34; =&amp;gt; &amp;#34;simout&amp;#34;}) sleep(1) end end end 上のソースには書かれていないけど、他にもメソッドがいくつか。(公式サイトより)
@@ -39,10 +39,10 @@ class SimpleInput &amp;lt; Fluent::Input # 第一引数がプラグインの名�
     
     <item>
       <title>Fluentdというログ収集ツールを使ってApacheのログを取得するまで</title>
-      <link>/2012/07/12/1342098141/</link>
+      <link>https://gosyujin.github.io/2012/07/12/1342098141/</link>
       <pubDate>Thu, 12 Jul 2012 00:00:00 +0000</pubDate>
       
-      <guid>/2012/07/12/1342098141/</guid>
+      <guid>https://gosyujin.github.io/2012/07/12/1342098141/</guid>
       <description>[Fluentd][備忘録][Ruby]Fluentdというログ収集ツールを使ってApacheのログを取得するまで あらすじ  Twitterで@[https://twitter.com/tosikawa:title=tosikawa]さんにこんなツールあるよ、と教えてもらった …が、未見だったためすぐググる とりあえずどんなものか動かしてみる事に  Fluentdとは  Log everything in JSON
 http://fluentd.org/
  Oh&amp;hellip;シンプルイズベスト…。
