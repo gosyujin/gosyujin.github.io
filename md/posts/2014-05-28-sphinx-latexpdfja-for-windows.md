@@ -4,6 +4,7 @@ title: "WindowsにSphinxのlatexpdfjaができる環境を整えるのに苦戦�
 description: ""
 category: 
 tags: [Sphinx]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20140528/1401271312
 ---
 
 ## あらすじ

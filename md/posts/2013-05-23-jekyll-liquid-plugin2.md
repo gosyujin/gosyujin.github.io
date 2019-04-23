@@ -4,6 +4,7 @@ title: "記事の目次を出力するJekyllプラグインの改良"
 description: ""
 category: 
 tags: [Jekyll, Liquid, Ruby]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130523/1369318476
 ---
 
 ## 前回までのあらすじ

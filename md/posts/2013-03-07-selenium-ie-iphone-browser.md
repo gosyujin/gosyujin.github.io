@@ -4,6 +4,7 @@ title: "IEとかiPhoneWebView上でSeleniumを走らせる"
 description: ""
 category: 
 tags: [Ruby, Selenium, iPhone, IE, Test]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130307/1362629679
 ---
 
 ## あらすじ

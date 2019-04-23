@@ -4,6 +4,7 @@ title: "GitHub PagesでJekyllプラグインを使えるようにするには…
 description: ""
 category: 
 tags: [Jekyll, Git]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130521/1369138182
 ---
 
 ## あらすじ

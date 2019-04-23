@@ -4,6 +4,7 @@ title: "軽量マークアップ言語の歴史をゆるく調べた #sphinxjp"
 description: ""
 category:
 tags: [Markdown, reST, Wiki]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20150713/1436751705
 ---
 
 ## はじめに

@@ -4,6 +4,7 @@ title: "Androidアプリのインストール、起動方法によってIntent�
 description: ""
 category:
 tags: [Java, Android]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130804/1375624170
 ---
 
 ## あらすじ

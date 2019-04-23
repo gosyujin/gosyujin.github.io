@@ -4,6 +4,7 @@ title: "ProGuardでAndroidアプリを難読化していく手順(良い方法�
 description: ""
 category: 
 tags: [Android]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20160529/1464500148
 ---
 
 ## あらすじ

@@ -4,6 +4,7 @@ title: "localhost:xxxxにはてブしてるコメントを収集してみた"
 description: ""
 category:
 tags: [ネタ]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20170111/1484122803
 ---
 
 ## あらすじ

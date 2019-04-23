@@ -4,6 +4,7 @@ title: "Golangで作ったスクリプトをbrew install&brew updateできるよ
 description: ""
 category: 
 tags: [Golang, Homebrew]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20160305/1457154877
 ---
 
 ## あらすじ

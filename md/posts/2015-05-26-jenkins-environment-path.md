@@ -4,6 +4,7 @@ title: "実行ユーザの違いでJenkinsのホームディレクトリが変�
 description: ""
 category: 
 tags: [Jenkins]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20150526/1432652074
 ---
 
 ## あらすじ

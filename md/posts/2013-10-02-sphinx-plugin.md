@@ -4,6 +4,7 @@ title: "Sphinxのプラグインの作り方を学ぶ"
 description: ""
 category: 
 tags: [Sphinx]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20131003/1380726853
 ---
 
 ## あらすじ

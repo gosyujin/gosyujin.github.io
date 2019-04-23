@@ -4,6 +4,7 @@ title: "git-svnインストールからgit svn dcommit完了までの手順"
 description: ""
 category: 
 tags: [Git,Subversion]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20121213/1355386083
 ---
 
 ## あらすじ

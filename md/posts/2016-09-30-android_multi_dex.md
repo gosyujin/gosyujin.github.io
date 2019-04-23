@@ -4,6 +4,7 @@ title: "Androidのapkの総メソッド数を調べてMulti-dexを導入する�
 description: ""
 category: 
 tags: [Android]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20160930/1475475530
 ---
 
 ## あらすじ

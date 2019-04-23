@@ -4,6 +4,7 @@ title: "Pygmentsを使ってJekyll内記事のコードハイライトを実現�
 description: ""
 category: 
 tags: [Python, Ruby, Jekyll]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20121001/1349067721
 ---
 
 ## あらすじ

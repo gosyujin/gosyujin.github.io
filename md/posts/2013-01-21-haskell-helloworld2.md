@@ -4,6 +4,7 @@ title: "すごいHaskellたのしく学ぼうでHaskellことはじめ"
 description: ""
 category: 
 tags: [Haskell]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130121/1358740776
 ---
 
 ## あらすじ

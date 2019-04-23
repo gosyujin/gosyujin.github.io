@@ -4,6 +4,7 @@ title: "bundle execを省略したいのでバッチを作った(Windows版)"
 description: ""
 category: 
 tags: [Ruby, Bundle, Windows]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20121002/1349156405
 ---
 
 ## あらすじ

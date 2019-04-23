@@ -4,6 +4,7 @@ title: "Rubyの変数DATABASE_URLでハマった話"
 description: ""
 category: 
 tags: [Ruby]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20160831/1472695105
 ---
 
 ## あらすじ

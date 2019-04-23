@@ -4,6 +4,7 @@ title: "Jekyllがデフォルトでは外部から繋がらなくなってたよ
 description: ""
 category: 
 tags: [Jekyll]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20150314/1426326141
 ---
 
 ## あらすじ

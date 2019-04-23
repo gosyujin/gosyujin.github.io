@@ -4,6 +4,7 @@ title: "PyConJP 2015 in TokyoでSphinxハンズオンのTAをしてきた #pycon
 description: ""
 category: 
 tags: [Sphinx, Python, イベント]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20151013/1444700301
 ---
 
 ## あらすじ

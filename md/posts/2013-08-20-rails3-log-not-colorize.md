@@ -4,6 +4,7 @@ title: "Rails3のログ出力にANSIカラーコードを使用しない設定"
 description: ""
 category: 
 tags: [Ruby, Rails, Redmine]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130820/1377009454
 ---
 
 ## あらすじ

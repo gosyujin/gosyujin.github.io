@@ -4,6 +4,7 @@ title: "WEB+DB PRESS vol.82を参考にHubotと戯れてみた"
 description: ""
 category: 
 tags: [node.js, Hubot]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20140924/1411551718
 ---
 
 ## あらすじ

@@ -4,6 +4,7 @@ title: "jekyllrb-ja キックオフを実施しました"
 description: ""
 category: 
 tags: [Jekyll, Translate]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20140726/1406354583
 ---
 
 ## あらすじ

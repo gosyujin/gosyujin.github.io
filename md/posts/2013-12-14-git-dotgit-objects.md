@@ -4,6 +4,7 @@ title: "Gitの.git/objectsの中身を追ってみる"
 description: ""
 category: 
 tags: [Git]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20131214/1386947348
 ---
 
 ## あらすじ

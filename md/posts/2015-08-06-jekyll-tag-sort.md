@@ -4,6 +4,7 @@ title: "Jekyllで出力するタグをソートする 解決編"
 description: ""
 category:
 tags: [Jekyll, Liquid]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20150806/1438843502
 ---
 
 ## あらすじ

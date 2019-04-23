@@ -4,6 +4,7 @@ title: "rbenvを最新にして新しいバージョンのRubyをインストー
 description: ""
 category: 
 tags: [Ruby]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20170330/1490831210
 ---
 
 ## あらすじ

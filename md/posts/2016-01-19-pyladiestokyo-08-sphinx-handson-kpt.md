@@ -4,6 +4,7 @@ title: "PyLadiesTokyo #8でSphinxハンズオンのTAをしてきた #sphinxjp"
 description: ""
 category: 
 tags: [Sphinx, イベント]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20160119/1453186203
 ---
 
 ## あらすじ

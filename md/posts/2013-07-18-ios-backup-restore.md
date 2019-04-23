@@ -4,6 +4,7 @@ title: "iOSのバックアップ/リストアで残るもの/消えるもの そ
 description: ""
 category: 
 tags: [iPhone, iOS]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130718/1374151752
 ---
 
 ## あらすじ

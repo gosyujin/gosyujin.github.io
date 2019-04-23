@@ -4,6 +4,7 @@ title: "Ruby1.9.3のWebrickで出るCould not determine content-length...エラ�
 description: ""
 category:
 tags: [Ruby, Rails]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130903/1378214760
 ---
 
 ## あらすじ

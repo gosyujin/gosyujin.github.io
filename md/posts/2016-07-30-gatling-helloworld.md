@@ -4,6 +4,7 @@ title: "Gatlingを使用してみた"
 description: ""
 category:
 tags: [Scala]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20160730/1469865940
 ---
 
 ## あらすじ

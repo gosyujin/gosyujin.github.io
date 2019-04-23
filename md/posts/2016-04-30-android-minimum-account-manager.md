@@ -4,6 +4,7 @@ title: "AndroidのAccountManagerをとりあえず動かすところまで"
 description: ""
 category: 
 tags: [Android]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20160430/1462026944
 ---
 
 ## あらすじ

@@ -4,6 +4,7 @@ title: "Jekyllバージョンアップの際に思いのほか手こずった話
 description: ""
 category: 
 tags: [Ruby, Git, Jekyll]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130907/1378480561
 ---
 
 ## 前回までのあらすじ

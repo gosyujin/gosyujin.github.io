@@ -4,6 +4,7 @@ title: "Jekyllのプラグイン作成で複数ファイルにまたがったタ
 description: ""
 category: 
 tags: [Jekyll]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20131125/1385379992
 ---
 
 ## あらすじ

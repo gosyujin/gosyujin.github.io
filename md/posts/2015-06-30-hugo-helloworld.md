@@ -4,6 +4,7 @@ title: "Hugoを使ってみた"
 description: ""
 category:
 tags: [Golang, Hugo]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20150630/1435664516
 ---
 
 ## あらすじ

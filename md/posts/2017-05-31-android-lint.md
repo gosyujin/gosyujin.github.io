@@ -4,6 +4,7 @@ title: "Android StudioでAndroid Lint"
 description: ""
 category: 
 tags: [Android]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20170531/1497081501
 ---
 
 ## あらすじ

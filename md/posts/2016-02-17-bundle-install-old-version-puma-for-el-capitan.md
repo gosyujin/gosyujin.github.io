@@ -4,6 +4,7 @@ title: "El Capitan上に古いpumaをインストールすると失敗する"
 description: ""
 category: 
 tags: [Ruby, Mac]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20160217/1455714725
 ---
 
 ## あらすじ

@@ -4,6 +4,7 @@ title: "iOSのUIWebViewのキャッシュがどういうタイミングでリセ
 description: ""
 category: 
 tags: [iOS, iPhone]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130926/1380124366
 ---
 
 ## あらすじ

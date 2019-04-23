@@ -4,6 +4,7 @@ title: " 入門Chef Solo - Infrastructure as Code を読みながらChef Soloで
 description: ""
 category: 
 tags: [Ruby, StartUp, Chef]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130401/1364788720
 ---
 
 ## あらすじ

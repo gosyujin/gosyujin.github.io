@@ -4,6 +4,7 @@ title: "Ruby 2.0.0 をpikとrvm経由でインストール&環境構築"
 description: ""
 category: 
 tags: [Ruby, StartUp]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130225/1361802565
 ---
 
 ## あらすじ

@@ -4,6 +4,7 @@ title: "GradleのresValueで値をリソースに設定する"
 description: ""
 category: 
 tags: [Android, Gradle]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20170228/1488631327
 ---
 
 ## あらすじ

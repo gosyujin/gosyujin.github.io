@@ -4,6 +4,7 @@ title: "Androidの自動テストツール、今(2013年)から使うなら何�
 description: ""
 category: 
 tags: [Java, Android]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130828/1377693786
 ---
 
 ## あらすじ

@@ -4,6 +4,7 @@ title: "Sphinxワークショップ@関西で事例紹介とハンズオンTAを
 description: ""
 category: 
 tags: [Sphinx, イベント]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20151101/1446370179
 ---
 
 ## あらすじ

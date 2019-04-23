@@ -4,6 +4,7 @@ title: "はてなダイアリーのエントリをJekyllへ移行する"
 description: ""
 category: 
 tags: [Ruby, Jekyll]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20121113/1352792241
 ---
 
 ## あらすじ

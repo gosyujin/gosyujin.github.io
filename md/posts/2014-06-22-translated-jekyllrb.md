@@ -4,6 +4,7 @@ title: "Jekyllドキュメントを翻訳してなんとなくわかってきた
 description: ""
 category: 
 tags: [Jekyll, Translate]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20140622/1403365855
 ---
 
 ## あらすじ

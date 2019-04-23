@@ -4,6 +4,7 @@ title: "Jekyll@GitHub Pagesの運用形態を変えたのでAnalyticsの設定�
 description: ""
 category: 
 tags: [Jekyll, Ruby]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130527/1369661558
 ---
 
 ## あらすじ

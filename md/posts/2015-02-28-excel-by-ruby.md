@@ -4,6 +4,7 @@ title: "rubyXLを使ってExcelを操作したい"
 description: ""
 category: 
 tags: [Ruby]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20150228/1425134715
 ---
 
 ## あらすじ

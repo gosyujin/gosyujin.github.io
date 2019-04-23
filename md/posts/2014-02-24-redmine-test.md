@@ -4,6 +4,7 @@ title: "Redmine 2.x でテストを実行するとエラーになってしまう
 description: ""
 category: 
 tags: [Redmine]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20140224/1393251209
 ---
 
 ## あらすじ

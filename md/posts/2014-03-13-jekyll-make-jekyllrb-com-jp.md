@@ -4,6 +4,7 @@ title: "Jekyllドキュメントの日本語翻訳リポジトリ「jekyllrb.com
 description: ""
 category: 
 tags: [Jekyll, GitHub]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20140314/1394723421
 ---
 
 ## あらすじ

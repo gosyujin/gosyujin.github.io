@@ -4,6 +4,7 @@ title: "Sphinxをインストールしようとしたら全然関係ないproxy�
 description: ""
 category: 
 tags: [Python, Sphinx]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130823/1377264611
 ---
 
 ## 前回までのあらすじ

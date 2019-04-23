@@ -4,6 +4,7 @@ title: "自作EvernoteスクリプトをOAuth対応する"
 description: ""
 category: 
 tags: [Ruby, Evernote, OAuth]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130304/1362374145
 ---
 
 ## あらすじ

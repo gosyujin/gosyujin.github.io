@@ -4,6 +4,7 @@ title: "golangでサーバのファイルをゆっくりダウンロードする
 description: ""
 category: 
 tags: [Golang]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20150430/1430390069
 ---
 
 ## あらすじ

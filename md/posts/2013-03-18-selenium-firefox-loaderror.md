@@ -4,6 +4,7 @@ title: "Selenium WebDriverでFirefoxがロードできなくなった"
 description: ""
 category: 
 tags: [Selenium, Firefox, Ruby]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130318/1363614480
 ---
 
 ## あらすじ

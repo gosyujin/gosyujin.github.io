@@ -4,6 +4,7 @@ title: "プログラミングHaskellでHaskellことはじめ"
 description: ""
 category: 
 tags: [Haskell]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130110/1357798953
 ---
 
 ## あらすじ

@@ -4,6 +4,7 @@ title: "Jekyll(Liquid)で記事の目次を出力するプラグインを作っ�
 description: ""
 category: 
 tags: [Jekyll, Liquid, Ruby]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20121011/1349927467
 ---
 
 ## あらすじ

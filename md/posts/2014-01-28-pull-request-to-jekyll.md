@@ -4,6 +4,7 @@ title: "Jekyllプロジェクトへpull requestを行う手順(したとは言�
 description: ""
 category: 
 tags: [Jekyll, GitHub, Ruby]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20140128/1390919513
 ---
 
 ## あらすじ

@@ -4,6 +4,7 @@ title: "Subversionのproxy設定でいつもハマるやつ"
 description: ""
 category: 
 tags: [Git, Subversion]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130905/1378311577
 ---
 
 ## あらすじ

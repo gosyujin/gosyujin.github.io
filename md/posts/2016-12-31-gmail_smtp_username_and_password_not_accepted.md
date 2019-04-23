@@ -4,6 +4,7 @@ title: "Gmail経由でのstmp送信でUsername and Password not accepted 534-5.7
 description: ""
 category: 
 tags: [Gmail]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20161231/1484122766
 ---
 
 ## あらすじ

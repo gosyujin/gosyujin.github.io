@@ -4,6 +4,7 @@ title: "Over-the-Airという形式でiOSアプリのインストールを試み
 description: ""
 category: 
 tags: [iPhone, iOS]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20130605/1370434868
 ---
 
 ## あらすじ

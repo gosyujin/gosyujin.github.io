@@ -4,6 +4,7 @@ title: "「Sphinxをはじめよう」を読んで導入したいと思ったの
 description: ""
 category: 
 tags: [Sphinx]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20140519/1400471131
 ---
 
 ## 前回のあらすじ

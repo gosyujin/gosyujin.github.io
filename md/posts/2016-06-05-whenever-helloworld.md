@@ -4,6 +4,7 @@ title: "Rubyで自然言語っぽくcrontab管理できるwheneverを使う"
 description: ""
 category: 
 tags: [Ruby]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20160605/1465121213
 ---
 
 ## あらすじ

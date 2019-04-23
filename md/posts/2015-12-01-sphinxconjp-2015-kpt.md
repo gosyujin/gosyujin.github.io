@@ -4,6 +4,7 @@ title: "SphinxCon JP 2015 で雑用してきた #sphinxjp"
 description: ""
 category: 
 tags: [Sphinx, イベント]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20151201/1448957787
 ---
 
 ## あらすじ

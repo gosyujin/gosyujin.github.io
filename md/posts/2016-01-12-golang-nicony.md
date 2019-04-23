@@ -4,6 +4,7 @@ title: "golangでニコ動の動画をパトロールするツール「nicony」
 description: ""
 category: 
 tags: [Golang]
+old_url: http://d.hatena.ne.jp/kk_Ataka/20160112/1452565517
 ---
 
 ## あらすじ
