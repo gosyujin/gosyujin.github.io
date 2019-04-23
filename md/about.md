@@ -5,6 +5,10 @@ description:
 category: 
 ---
 
+## Author
+
+- kk_Ataka
+
 ## Wrote at
 
 - 2009-2012 [はてなダイアリー](http://d.hatena.ne.jp/kk_Ataka/)
