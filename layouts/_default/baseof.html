@@ -14,14 +14,10 @@
       {{ end }}
     </title>
 
-    {{ with .Keywords }}
-      <meta content="{{ delimit . `, ` }}" name="keywords">
-    {{ end }}
-
     {{ if .Description }}
-      <meta name="description" property="og:description" content="{{ .Description }}|{{ .Site.Params.Description }}">
+      <meta name="description" property="og:description" content="{{ .Description | truncate 100 }}">
     {{ else if .IsPage }}
-      <meta name="description" property="og:description" content="{{ .Summary | plainify }}|{{ .Site.Params.Description }}">
+      <meta name="description" property="og:description" content="{{ .Summary | plainify | truncate 100 }}">
     {{ else }}
       <meta name="description" property="og:description" content="{{ .Site.Params.Description }}">
     {{ end }}
