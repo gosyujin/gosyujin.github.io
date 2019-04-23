@@ -11,10 +11,18 @@
       <span>{{ .Date.Format "2006/01/02" }} </span>
       {{ partial "taxonomy.html" . }}
       <a class="mb-2" href="{{ .URL }}">{{ .Title }}</a>
+
       <!-- Hatena Bookmark Users -->
       <a href="http://b.hatena.ne.jp/entry/{{ .Site.BaseURL }}{{ .URL }}">
         <img src="https://b.hatena.ne.jp/entry/image/{{ .Site.BaseURL }}{{ .URL }}" />
       </a>
+      {{ if .Params.old_url }}
+      <!-- Hatena Bookmark Users -->
+      <a href="http://b.hatena.ne.jp/entry/{{ .Params.old_url }}">
+        <img src="https://b.hatena.ne.jp/entry/image/{{ .Params.old_url }}" />
+      </a>
+      {{ end }}
+
       </li>
 
     {{ end }}
