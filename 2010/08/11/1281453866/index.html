@@ -22,14 +22,8 @@ ga('send', 'pageview');
     </title>
 
     
-
-    
       <meta name="description" property="og:description" content="[Java][イベント]JVM勉強会に行ってきました ふむ、jojo勉強会以来…？　あれ、java-ja温泉の事って書いてなかったっけか。書いてなかったのか……。
-というわけで行ってまいりましたJVM勉強会。
-VMの中の人まで意識した設計をしたことがなく、ClassLoaderをサンプルでちょこちょこって動かした程度のレベルですが。
-参考資料 とりあえず、会場で持ってる人が割といた、もしくは発表内で話題にあがった本など。
- Java仮想マシン仕様 ガベージコレクションのアルゴリズムと実装 デコンパイリングJava  この辺りを読んでくると、より内容を楽しめた模様。
-本編  @ashigeruさん クラスローダについて  クラスローダはfindClass()をオーバライドする loadClass()を実行すると委譲先クラスを探しにいく。親から見ていって、なかったら自分でロード  親から見ていくので、親が古いライブラリを持っているとそれをロードしてしまう！  某アプリケーションサーバは親を最後に検索する = PARENT_LAST  その名のとおり自分のクラスローダを最初に検索するので、親のライブラリの影響を受けにくい  同じ名前のクラスでも定義ローダーが違えば別のもの。Class.getClassLoader()でどこから呼ばれたか確認できる。 PARENT_LASTの問題点としてドッペルゲンガーという現象。などなど……    @skrbさん Stack on JavaVM  JVMとスタックについて スタックを使用した逆ポーランド法のアニメーション（わかりやすい！） JVMはスタック スタックはThreadひとつにつきひとつ  中にはプログラムカウンタがひとつ フレームの中にはローカル変数とオペランドスタック  JVMの中ではBooleanはIntとして扱われている インスタンスはヒープにアロケーションされる スタックは二段構え（JavaStackとオペランドスタック）    @kmizuさん わかる！Javaバイトコード－30分でわからない？Javaバイトコード入門  Hello Worldの逆アセンブル byte,short,char,boolean -&amp;gt; すべてintとして扱われる ロード/ストア命令…定数をオペランドスタックにロードする命令 ロード/ストア命令2…ローカル変数の値をオペランドスタックにロードする命令 型変換命令…キャストなどint -&amp;gt;longなど 配列関係の命令 オブジェクトの生成・操作命令 モニタ命令 クラスファイルベリファイア  classファイルのフォーマットがJava仮想マシン仕様に従っているかどうかを該当クラスの初期化より前にチェックする。未初期化ローカル変数へのアクセス、型エラー、jasmin……この辺よくわかりませんした＞＜     @cactusmanさん GCについて  GC  ルートを起点として参照できるオブジェクトは生きている ルートに到達できないものがGCされる  GCを学ぶ意義としてメモリ領域の効率的な使い方を意識できる マーク＆スイープ  ルートオブジェクトからたどれるオブジェクトをマークしていく マークのないオブジェクトを回収 メリット：実装は簡単 デメリット：フラグメンテーション、アロケーション速度、停止時間が長い→マークしている期間  参照カウント  自信のオブジェクトが参照されているオブジェクトをカウント 0になった時点でGC メリット：参照が停止されたタイミングで開放、停止時間が短い、参照をたどる必要がない デメリット：循環参照を回収できない、カウンターの値の増減処理が重い、実装が難しい  コピー  メリット：スループットがいい、メモリ回収と同時にコンパクションを行える(フラグメンテーションが起きない) デメリット：ヒープ領域を余分に取る  GCの種類 ScavengeGC - コピーGC    @nekopさん クラスローダリークパターン なにそれおいしいの？  ThreadLocalで設定した値はThreadから強参照される java.|">
+というわけで行ってまいりましたJVM …">
     
 
     <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
@@ -482,6 +476,12 @@ public static void main(java.lang.String[]);
     <ul>
       
         <li>
+          <span>19/4/23 </span>
+          
+          <a class="mb-2" href="/2019/04/23/database-alter-table/">色々なDBのバージョン確認方法とか論理名のつけ方とか</a>
+        </li>
+      
+        <li>
           <span>19/4/15 </span>
           
           <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
@@ -533,12 +533,6 @@ public static void main(java.lang.String[]);
           <span>16/11/30 </span>
           
           <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        </li>
-      
-        <li>
-          <span>16/10/31 </span>
-          
-          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
         </li>
       
     </ul>
@@ -596,6 +590,13 @@ public static void main(java.lang.String[]);
           <span class="">Chef</span>
         </a>
         <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/db2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">DB2</span>
+        </a>
+        <span class="text-right Counter">1</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">
@@ -791,7 +792,14 @@ public static void main(java.lang.String[]);
         <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
           <span class="">Oracle</span>
         </a>
-        <span class="text-right Counter">5</span>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/postgresql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">PostgreSQL</span>
+        </a>
+        <span class="text-right Counter">1</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">
@@ -840,7 +848,7 @@ public static void main(java.lang.String[]);
         <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
           <span class="">SQL Server</span>
         </a>
-        <span class="text-right Counter">1</span>
+        <span class="text-right Counter">2</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">

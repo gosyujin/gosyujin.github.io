@@ -22,28 +22,7 @@ ga('send', 'pageview');
     </title>
 
     
-
-    
-      <meta name="description" property="og:description" content="[Ruby][Twitter][API]RubyでTwitterのOAuth認証をしてみる その2 前回のエントリ では、リクエストトークンまで発行してもらえました。だもんで今回は前回に続いてアクセストークンを発行してもらいます。アクセストークン発行の流れとしては、
- 今もらったリクエストトークンを付加して http://twitter.com/oauth/authorize へアクセスする 画面に表示されるPINコード(oauth_verifier)を控える リクエストトークンとPINコードをを付加して http://twitter.com/oauth/access_token へアクセスする  行きます。
-PINコードを発行してもらう リクエストトークンを発行してもらうと、
-oauth_token=XXXXXXXXXX&amp;amp;oauth_token_secret=YYYYYYYYYYYYYYYYYYYYYYYYYYYY&amp;amp;oauth_callback_confirmed=true という文字列がbodyに埋まってきたはず。[1]
-この中から oauth_tokenを抜き出し、 http://twitter.com/oauth/authorize にパラメータとしてくっつけます。こんな感じ。
-http://twitter.com/oauth/authorize?oauth_token=XXXXXXXXXX
-アドレスが正しければ、以下のような画面が出るはず。[2]アプリケーションからのアクセスを許可しますか？　と尋ねられるので許可するを選択。
-[f:id:kk_Ataka:20101130220734j:image]
-許可すると、PINコードが画面に表示されるのでこれを控えておく。
-[f:id:kk_Ataka:20101130220731j:image]
-再度signatureを作成する このPINコードを&amp;rdquo;oauth_verify&amp;rdquo;として。先ほどURLに貼っつけたoauth_tokenを&amp;rdquo;oauth_token&amp;rdquo;としてパラメータとして持たせます。
-そして、ここでもう一度signatureを作成を作成します。注意点としては、
- 今まで使っていたoauth_signatureは一旦消して、以下のパラメータで新たにつくり直す  oauth_consumer_key oauth_nonce oauth_signature_method oauth_timestamp oauth_version oauth_token New! oauth_verifier New!  URLは&amp;rdquo;http://twitter.com/oauth/access_token&amp;rdquo;をエスケープしたもの 暗号化用のキーは&amp;rdquo;consumer_secret&amp;amp;oauth_token_secret&amp;rdquo;[3]  この3点でしょうか。
-signatureが作成できたら、前回と同様にアルファベット順に並べて連結し、URLのおしりにくっつけます。URLはこんな感じになります。
-[f:id:kk_Ataka:20101130223243j:image]
-成功したら、oauth_token, oauth_token_secret, user_id, screen_nameが返ってきます。これ俺や！！
-[f:id:kk_Ataka:20101130220728j:image]
-ここで返してもらったoauth_tokenとoauth_token_secretは本物なので大切にとっておく！　というわけで、次は自分のTimelineを取得します！
-ソースはこんな感じ。
-require &amp;#39;openssl&amp;#39; require &amp;#39;uri&amp;#39; require &amp;#39;net/http&amp;#39; # signature作成 def signature(method, consumer_secret, oauth_token_secret, url, oauth_header) # signature_keyの作成 # リクエストトークン時は&amp;#34;CONSUMER_SECRET&amp;amp;&amp;#34;(アンドが入っている) # アクセストークン時は&amp;#34;CONSUMER_SECRET&amp;amp;OAUTH_TOKEN_SECRET&amp;#34;として使用 signature_key = consumer_secret &#43; &amp;#34;&amp;amp;&amp;#34; if !|">
+      <meta name="description" property="og:description" content="[Ruby][Twitter][API]RubyでTwitterのOAuth認証をしてみる その2 前回のエントリ では、リクエストトークンまで発行してもらえました。だもんで今回は前回に続いてアクセス …">
     
 
     <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
@@ -550,6 +529,12 @@ require &amp;#39;openssl&amp;#39; require &amp;#39;uri&amp;#39; require &amp;#39
     <ul>
       
         <li>
+          <span>19/4/23 </span>
+          
+          <a class="mb-2" href="/2019/04/23/database-alter-table/">色々なDBのバージョン確認方法とか論理名のつけ方とか</a>
+        </li>
+      
+        <li>
           <span>19/4/15 </span>
           
           <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
@@ -601,12 +586,6 @@ require &amp;#39;openssl&amp;#39; require &amp;#39;uri&amp;#39; require &amp;#39
           <span>16/11/30 </span>
           
           <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        </li>
-      
-        <li>
-          <span>16/10/31 </span>
-          
-          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
         </li>
       
     </ul>
@@ -664,6 +643,13 @@ require &amp;#39;openssl&amp;#39; require &amp;#39;uri&amp;#39; require &amp;#39
           <span class="">Chef</span>
         </a>
         <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/db2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">DB2</span>
+        </a>
+        <span class="text-right Counter">1</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">
@@ -859,7 +845,14 @@ require &amp;#39;openssl&amp;#39; require &amp;#39;uri&amp;#39; require &amp;#39
         <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
           <span class="">Oracle</span>
         </a>
-        <span class="text-right Counter">5</span>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/postgresql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">PostgreSQL</span>
+        </a>
+        <span class="text-right Counter">1</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">
@@ -908,7 +901,7 @@ require &amp;#39;openssl&amp;#39; require &amp;#39;uri&amp;#39; require &amp;#39
         <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
           <span class="">SQL Server</span>
         </a>
-        <span class="text-right Counter">1</span>
+        <span class="text-right Counter">2</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">

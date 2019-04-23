@@ -22,28 +22,7 @@ ga('send', 'pageview');
     </title>
 
     
-
-    
-      <meta name="description" property="og:description" content="[Ruby][Twitter][API]RubyでTwitterのOAuth認証をしてみる 随分前にTwitterがベーシック認証からOAuth認証に切り替えたという事で。Java&#43;Wicket&#43;AppEngineでベーシック認証を駆使して作っていたTwitterサイトが見れなくなったもんで切り替えました。(http://gihyo.jp/dev/feature/01/wicket:title を見つつ)
-一応出来たんですが、結局のところOAuthがどうなってるのかよくわからなかった……ので、ちょっと一から書いてみようと。
-id:Yoshiori さんのhttp://d.hatena.ne.jp/Yoshiori/20100929/1285727199:title と、 id:yuroyoro さんの[http://d.hatena.ne.jp/yuroyoro/20100506/1273137673:title]がとっても詳しかったので、参考にしました。
-大きな流れとしては、
- consumer_keyとconsumer_secretを発行してもらう リクエストトークンを発行してもらう アクセストークンを発行してもらう  の3項目。今回はリクエストトークンを発行してもらうところまでやります。
-準備 Twitterにアプリを登録し、consumer_keyとconsumer_secretを発行してもらう  Twitterにログイン &amp;gt; 設定 &amp;gt; 連携アプリ を選択  [f:id:kk_Ataka:20101120225746p:image]
- 開発者の方へ &amp;gt; こちら を選択  [f:id:kk_Ataka:20101120230042p:image]
- ページ下部の新しいアプリケーションを追加 を選択  [f:id:kk_Ataka:20101120230314p:image]
-後で編集もできるのでとりあえず入力しておく。下記の2項目はとりあえず
- - アプリケーションの種類: クライアントアプリケーション  標準のアクセスタイプ: Read &amp;amp; Write   にしておく。
- 登録したら、consumer_keyとconsumer_secretをもらえるので控えておく  [f:id:kk_Ataka:20101120232314p:image]
-フォローをリクエストしました。のURL、Access token URL、Authorize URLは認証時に使うのでこれも控えておく。
-リクエストトークンを発行してもらう こっからRuby。以下のパラメータを生成してhttp://twitter.com/oauth/request_tokenに送ります。POSTでもGETでもよいみたいなので、今回はGETを使ってURLのおしりにくっつけて送ります。
-|*oauth_consumer_key|Twitterからもらったconsumer_key|
-|*oauth_nonce|一意な値(にする必要があるが、とりあえず適当でもよいみたい)|
-|*oauth_signature|認証するための暗号|
-|*oauth_signature_method|認証方式(色々あるようだが、Twitterでは&amp;rdquo;HMAC-SHA1&amp;rdquo;固定)|
-|*oauth_timestamp|今のタイムスタンプ(ミリ秒)|
-|*oauth_version|バージョン(必須ではないが、付ける場合は&amp;rdquo;1.0&amp;rdquo;)|
-consumer_key, nonce, signature_method, timestamp, versionの生成は難しくないのですが、問題はsignature。signature生成は大きく3つの流れを踏む事になります。|">
+      <meta name="description" property="og:description" content="[Ruby][Twitter][API]RubyでTwitterのOAuth認証をしてみる 随分前にTwitterがベーシック認証からOAuth認証に切り替えたという事 …">
     
 
     <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
@@ -544,6 +523,12 @@ consumer_key, nonce, signature_method, timestamp, versionの生成は難しく�
     <ul>
       
         <li>
+          <span>19/4/23 </span>
+          
+          <a class="mb-2" href="/2019/04/23/database-alter-table/">色々なDBのバージョン確認方法とか論理名のつけ方とか</a>
+        </li>
+      
+        <li>
           <span>19/4/15 </span>
           
           <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
@@ -595,12 +580,6 @@ consumer_key, nonce, signature_method, timestamp, versionの生成は難しく�
           <span>16/11/30 </span>
           
           <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        </li>
-      
-        <li>
-          <span>16/10/31 </span>
-          
-          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
         </li>
       
     </ul>
@@ -658,6 +637,13 @@ consumer_key, nonce, signature_method, timestamp, versionの生成は難しく�
           <span class="">Chef</span>
         </a>
         <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/db2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">DB2</span>
+        </a>
+        <span class="text-right Counter">1</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">
@@ -853,7 +839,14 @@ consumer_key, nonce, signature_method, timestamp, versionの生成は難しく�
         <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
           <span class="">Oracle</span>
         </a>
-        <span class="text-right Counter">5</span>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/postgresql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">PostgreSQL</span>
+        </a>
+        <span class="text-right Counter">1</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">
@@ -902,7 +895,7 @@ consumer_key, nonce, signature_method, timestamp, versionの生成は難しく�
         <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
           <span class="">SQL Server</span>
         </a>
-        <span class="text-right Counter">1</span>
+        <span class="text-right Counter">2</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">

@@ -22,27 +22,7 @@ ga('send', 'pageview');
     </title>
 
     
-
-    
-      <meta name="description" property="og:description" content="[Ruby][Windows]MicrosoftOutlookで消せなくなったフォルダをwin32ole経由でRubyから消してみる ※この操作をすると新しくフォルダを追加してもOutlookの画面から見れなくなるようです？win32ole経由だと見えるのになんで…。→Windows再起動したらなおりました。
-あらすじ OutlookのRSSフィード内にどうやっても消えないフォルダが出来てしまい途方に暮れていた。
-何がどうなってこうなのかは定かではないんですが、誤って「RSSフィードフォルダ」内にある「RSSフィード記事」に対して「RSSフィードフォルダ」自体をD&amp;amp;Dしてしまった時に生まれたフォルダだと思いまする。。
-フィードをまるごと削除しようとしても「権限を見直してからまた挑戦してねてへぺろ(・ω＜)」[1]とか言って絶対消えてくれないのでOutlookフォルダとかレジストリとかいじらないと消滅させられないのかなーと悩んでいました。
-……が、正直どこをどういじればいいかわからないので、最後にダメ元でwin32oleにお願いしてみた。
-解法そして解放 これで消えた……。
-require &amp;#39;win32ole&amp;#39; ol = WIN32OLE::connect(&amp;#34;Outlook.Application&amp;#34;) nameSpace = ol.getNameSpace(&amp;#34;MAPI&amp;#34;) # RSSFEEDは「RSS フィード」フォルダのEntryId nameSpace.getFolderFromID(RSSFEED).Folders.Remove(1) # puts nameSpace.getFolderFromID(RSSFEED).Name =&amp;gt; # RSS フィード Removeメソッドはインデックスを指定するとの事。
- |*メソッド・プロパティ|説明|
-|*Add|指定した名前の Outlook フォルダを追加します。|
-|*GetFirst|最初の Outlookフォルダを取得します。|
-|*GetNext|次の Outlook フォルダを取得します。|
-|*Item|あるインデックスの Outlook フォルダを取得します。|
-|*Remove|あるインデックスの Outlook フォルダを削除します。|
-http://jp.rubyist.net/magazine/?0007-Win32OLE:title
- また、インデックスは1から始まりフォルダビューの親フォルダ直下にあるフォルダを1とし2, 3&amp;hellip;と並んでいる様子。上記のソースでは「RSS フィード」フォルダ直下の(1番目の)フォルダを削除できた！
-EntryIdを見つけるにはFoldersオブジェクトを回してEntryIdを調べる。これを繰り返せば深い階層までいける。
-folders = nameSpace.Folders folders.each do |f| puts f.Name puts f.EntryId end ありがとうwin32ole…。
-おまけ Windowsのirbにショートカットでペーストする方法をはじめて知ったのでメモ。[2]
- Shift &#43; insert !|">
+      <meta name="description" property="og:description" content="[Ruby][Windows]MicrosoftOutlookで消せなくなったフォルダをwin32ole経由でRubyから消してみる ※この操作をすると新しくフォルダを追加してもOutlookの画面か …">
     
 
     <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
@@ -376,6 +356,12 @@ folders = nameSpace.Folders folders.each do |f| puts f.Name puts f.EntryId end �
     <ul>
       
         <li>
+          <span>19/4/23 </span>
+          
+          <a class="mb-2" href="/2019/04/23/database-alter-table/">色々なDBのバージョン確認方法とか論理名のつけ方とか</a>
+        </li>
+      
+        <li>
           <span>19/4/15 </span>
           
           <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
@@ -427,12 +413,6 @@ folders = nameSpace.Folders folders.each do |f| puts f.Name puts f.EntryId end �
           <span>16/11/30 </span>
           
           <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        </li>
-      
-        <li>
-          <span>16/10/31 </span>
-          
-          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
         </li>
       
     </ul>
@@ -490,6 +470,13 @@ folders = nameSpace.Folders folders.each do |f| puts f.Name puts f.EntryId end �
           <span class="">Chef</span>
         </a>
         <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/db2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">DB2</span>
+        </a>
+        <span class="text-right Counter">1</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">
@@ -685,7 +672,14 @@ folders = nameSpace.Folders folders.each do |f| puts f.Name puts f.EntryId end �
         <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
           <span class="">Oracle</span>
         </a>
-        <span class="text-right Counter">5</span>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/postgresql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">PostgreSQL</span>
+        </a>
+        <span class="text-right Counter">1</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">
@@ -734,7 +728,7 @@ folders = nameSpace.Folders folders.each do |f| puts f.Name puts f.EntryId end �
         <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
           <span class="">SQL Server</span>
         </a>
-        <span class="text-right Counter">1</span>
+        <span class="text-right Counter">2</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">

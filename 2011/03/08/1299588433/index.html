@@ -22,26 +22,7 @@ ga('send', 'pageview');
     </title>
 
     
-
-    
-      <meta name="description" property="og:description" content="[Ruby][API]RubyではてなのWSSE認証をしてはてブにブクマをポストする ReadItLaterの続きをやろうと思ったのですが、GitHubにはてブスクリプトをコミットしたので先にまとめる。
-結構前に作ったので、OAuthではなくWSSE認証を使っています。
-手順  X-WSSEヘッダを作成する ブックマークするUrl・コメントを記述したxmlデータと、X-WSSEヘッダを含めたリクエストをhttp://b.hatena.ne.jp/atom/postへPOSTする  手順はこれだけ。次に詳細を…。
-ヘッダを作成する 以下のデータを用意します
-|*Username|はてなID|
-|*Nonce|HTTPリクエスト毎に生成したセキュリティ・トークンをBASE64エンコードしたもの[1]|
-|*Created|Nonce作成時のタイムスタンプをISO-8601表記で記述したもの|
-|*PasswordDigest|「Nonce&#43;Created&#43;はてなのパスワード」をSHA1でダイジェスト化しBASE64エンコードしたもの|
-これらのデータをX-WSSEヘッダに以下の形式で格納します。
-UsernameToken Username=&amp;#34;USERNAME&amp;#34;, PasswordDigest=&amp;#34;PASSWORDDIGEST&amp;#34;, Nonce=&amp;#34;NONCE&amp;#34;, Created=&amp;#34;CREATED&amp;#34; POSTする ヘッダは完成したので、次にブックマークする情報を用意します。形式はxmlで以下のようなフォーマットで作成します。[2]
-&amp;lt;entry xmlns=&amp;#34;http://purl.org/atom/ns#&amp;#34;&amp;gt; &amp;lt;title&amp;gt;dummy&amp;lt;/title&amp;gt; &amp;lt;link rel=&amp;#34;related&amp;#34; type=&amp;#34;text/html&amp;#34; href=&amp;#34;ブックマークするURL&amp;#34; /&amp;gt; &amp;lt;summary type=&amp;#34;text/plain&amp;#34;&amp;gt;ブックマークコメント&amp;lt;/summary&amp;gt; &amp;lt;/entry&amp;gt; 作成されたヘッダとデータはこんな感じになります。
-[f:id:kk_Ataka:20110308213639j:image]
-最後に作成したヘッダとブックマークデータをhttp://b.hatena.ne.jp/atom/postへポストすると。
-[f:id:kk_Ataka:20110308213640j:image]
-おお。
-正常に作成された場合は、ステータスコードは201が返ってくるようです。
-ソース Gistは直接貼れるけどGitHubは貼れないのね…。ここにあります。[https://github.com/gosyujin/hatena:title]
-require &amp;#39;rubygems&amp;#39; require &amp;#39;pit&amp;#39; require &amp;#39;time&amp;#39; require &amp;#39;digest/sha1&amp;#39; require &amp;#39;net/http&amp;#39; require &amp;#39;uri&amp;#39; require &amp;#39;nkf&amp;#39; # wsse認証を行う def wsse(hatena_id, password) # 一意な値(仮実装) nonce = [Time.now.to_i.to_s].pack(&amp;#39;m&amp;#39;).gsub(/\n/, &amp;#39;&amp;#39;) # nonce作成時のタイムスタンプをISO-8601表記で記述したもの now = Time.|">
+      <meta name="description" property="og:description" content="[Ruby][API]RubyではてなのWSSE認証をしてはてブにブクマをポストする ReadItLaterの続きをやろうと思ったのですが、GitHubにはてブスクリプトをコミットしたので先にまとめ …">
     
 
     <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
@@ -443,6 +424,12 @@ require &amp;#39;rubygems&amp;#39; require &amp;#39;pit&amp;#39; require &amp;#3
     <ul>
       
         <li>
+          <span>19/4/23 </span>
+          
+          <a class="mb-2" href="/2019/04/23/database-alter-table/">色々なDBのバージョン確認方法とか論理名のつけ方とか</a>
+        </li>
+      
+        <li>
           <span>19/4/15 </span>
           
           <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
@@ -494,12 +481,6 @@ require &amp;#39;rubygems&amp;#39; require &amp;#39;pit&amp;#39; require &amp;#3
           <span>16/11/30 </span>
           
           <a class="mb-2" href="/2016/11/30/pyconjp-sphinx-handson-kpt/">PyConJP 2016 in TokyoでSphinxハンズオンのTAをしてきた #pyconjp</a>
-        </li>
-      
-        <li>
-          <span>16/10/31 </span>
-          
-          <a class="mb-2" href="/2016/10/31/software-design-2016-11/">Software Design 2016年11月号にSphinxの記事を執筆しました #sphinxjp</a>
         </li>
       
     </ul>
@@ -557,6 +538,13 @@ require &amp;#39;rubygems&amp;#39; require &amp;#39;pit&amp;#39; require &amp;#3
           <span class="">Chef</span>
         </a>
         <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/db2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">DB2</span>
+        </a>
+        <span class="text-right Counter">1</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">
@@ -752,7 +740,14 @@ require &amp;#39;rubygems&amp;#39; require &amp;#39;pit&amp;#39; require &amp;#3
         <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
           <span class="">Oracle</span>
         </a>
-        <span class="text-right Counter">5</span>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/postgresql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">PostgreSQL</span>
+        </a>
+        <span class="text-right Counter">1</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">
@@ -801,7 +796,7 @@ require &amp;#39;rubygems&amp;#39; require &amp;#39;pit&amp;#39; require &amp;#3
         <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
           <span class="">SQL Server</span>
         </a>
-        <span class="text-right Counter">1</span>
+        <span class="text-right Counter">2</span>
       </span>
     
       <span class="css-truncate no-wrap m-1 pl-1">
