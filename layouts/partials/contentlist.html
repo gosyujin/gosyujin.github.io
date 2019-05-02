@@ -8,19 +8,11 @@
       {{ else }}
         <li>
       {{ end }}
+
       <span>{{ .Date.Format "2006/01/02" }} </span>
       {{ partial "taxonomy.html" . }}
+
       <a class="mb-2" href="{{ .URL }}">{{ .Title }}</a>
-
-      <!-- http 本当にこれしか取得方法ない？-->
-      <a href="http://b.hatena.ne.jp/entry/{{ replace .Site.BaseURL "https://" "http://" }}{{ .URL }}" class="bookmark-widget-counter">
-        <img src="https://b.hatena.ne.jp/entry/image/{{ replace .Site.BaseURL "https://" "http://" }}{{ .URL }}" />
-      </a>
-
-      <!-- https -->
-      <a href="http://b.hatena.ne.jp/entry/{{ .Site.BaseURL }}{{ .URL }}" class="bookmark-widget-counter">
-        <img src="https://b.hatena.ne.jp/entry/image/{{ .Site.BaseURL }}{{ .URL }}" />
-      </a>
 
       {{ if .Params.old_url }}
         <!-- はてな時代の -->
@@ -29,8 +21,17 @@
         </a>
       {{ end }}
 
-      </li>
+      <!-- https -->
+      <a href="http://b.hatena.ne.jp/entry/{{ .Site.BaseURL }}{{ .URL }}" class="bookmark-widget-counter">
+        <img src="https://b.hatena.ne.jp/entry/image/{{ .Site.BaseURL }}{{ .URL }}" />
+      </a>
 
+      <!-- http 本当にこれしか取得方法ない？-->
+      <a href="http://b.hatena.ne.jp/entry/{{ replace .Site.BaseURL "https://" "http://" }}{{ .URL }}" class="bookmark-widget-counter">
+        <img src="https://b.hatena.ne.jp/entry/image/{{ replace .Site.BaseURL "https://" "http://" }}{{ .URL }}" />
+      </a>
+
+      </li>
     {{ end }}
   {{ end }}
 </ul>
