@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  実行したSQLで暗黙の型変換が起こっているかどうかはどうやって調べたらよいの(SQL Server)
+title:  SQL Serverで実行したSQLが暗黙の型変換が起こっているかどうかはどうやって調べたらよいのか
 description: 
 category: 
 tags: [SQL Server]
