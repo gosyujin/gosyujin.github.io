@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+      
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-34929069-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+    
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      
+  SQL Serverの動的管理ビューから、実行したSQL(とバインド変数)を取得する - kk_Atakaの日記
+
+    </title>
+
+    
+      <meta name="description" property="og:description" content="あらすじ 前回の記事では暗黙の型変換が起こっているか調べるために動的管理ビューから実行計画(query_plan)とSQL(text)を取得した。 実行計画にはいろいろ情報が入っていてバインド変数のパ …">
+    
+
+    <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
+
+    <link rel="stylesheet" href="/css/primer-syntax.css">
+    <link rel="stylesheet" href="/css/primer-build.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+  </head>
+
+  <body class="bg-gray">
+    <div id="holy" class="container-lg bg-white h-100">
+
+      <div id="header" class="px-1 bg-white">
+        <nav class="UnderlineNav UnderlineNav--right px-2">
+  <a class="UnderlineNav-actions muted-link h2" href="https://gosyujin.github.io">
+    kk_Atakaの日記
+  </a>
+
+  
+    
+
+    <div class="UnderlineNav-body">
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/about/">
+            
+            <span>About</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/">
+            
+            <span>Archives</span>
+          </a>
+        
+      
+        
+          <a class="UnderlineNav-item
+            "
+
+          href="/tags/">
+            
+            <span>Tags</span>
+          </a>
+        
+      
+    </div>
+  
+</nav>
+
+      </div>
+
+      <div role="main" id="main" class="holy-main markdown-body px-4 bg-white">
+        
+
+  
+
+    
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2019/05/02/sqlserver-convert-implicit/" class="pagination_overflow previous_page">
+          Prev: 
+          19/5/2
+          SQL Serverで実行したSQLが暗黙の型変換が起こって …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <span class="pagination_overflow next_page disabled">
+          Next: -
+        </span>
+      
+  </div>
+</nav>
+
+
+    <div class="Subhead">
+      <div class="Subhead-heading">
+        <div class="h2 mt-3 mb-1">SQL Serverの動的管理ビューから、実行したSQL(とバインド変数)を取得する</div>
+      </div>
+      <div class="Subhead-description">
+        <div class="float-md-left">
+          <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2019/05/21/sqlserver-query-parameter/"
+    data-text="SQL Serverの動的管理ビューから、実行したSQL(とバインド変数)を取得する - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label-counter" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/v4/public/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+</div>
+
+        </div>
+         <div class="float-md-right">
+          Tags: 
+
+
+  
+    <a href='https://gosyujin.github.io/tags/sql-server' class="muted-link">
+      [ <span class="Label Label--gray">SQL Server</span> ]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/xquery' class="muted-link">
+      [ <span class="Label Label--gray">xQuery</span> ]
+    </a>
+  
+
+
+          Published: <span>2019/05/21</span>
+        </div>
+     </div>
+    </div>
+
+    
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#前提条件">前提条件</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#手順">手順</a>
+<ul>
+<li><a href="#おさらい">おさらい</a></li>
+<li><a href="#query-planからパラメータ取得">query_planからパラメータ取得</a>
+<ul>
+<li><a href="#仕様">仕様</a></li>
+<li><a href="#ほしいパス">ほしいパス</a></li>
+<li><a href="#実際に取得">実際に取得</a></li>
+</ul></li>
+<li><a href="#実行結果">実行結果</a>
+<ul>
+<li><a href="#param">param</a></li>
+<li><a href="#text">text</a></li>
+</ul></li>
+<li><a href="#fetch-api-cursor">FETCH API_CURSOR</a></li>
+</ul></li>
+<li><a href="#参考">参考</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+    <article>
+     <section class="pb-6 mb-3 border-bottom">
+        
+
+<h2 id="あらすじ">あらすじ</h2>
+
+<p><a href="https://gosyujin.github.io/2019/05/02/sqlserver-convert-implicit/">前回の記事</a>では暗黙の型変換が起こっているか調べるために動的管理ビューから実行計画(<code>query_plan</code>)とSQL(<code>text</code>)を取得した。
+実行計画にはいろいろ情報が入っていてバインド変数のパラメータも埋めこまれている。</p>
+
+<p>組み合わせたら、実行したSQL(とバインド変数)がわかるのでは。</p>
+
+<h2 id="前提条件">前提条件</h2>
+
+<p>そもそも、いい感じのフレームワークとかロガーを導入しており、実行したSQLのログが出てればそれで確認すれば良いので◎</p>
+
+<p>色々調べるのがつらい環境だとこの方法で確認してみる価値があるかも。</p>
+
+<ul>
+<li>ログにSQL文が出力されない</li>
+<li>ライブラリ(変数バインド済のSQLを吐いてくれるP6Spyなど)が入れづらい
+
+<ul>
+<li>外界と遮断されているとか</li>
+</ul></li>
+<li>ローカル環境、あるいはそれなりに小規模な環境
+
+<ul>
+<li>頻繁にみんながアクセスする環境だと、動的管理ビューから情報が流れていく</li>
+</ul></li>
+</ul>
+
+<h2 id="環境">環境</h2>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">SERVERPROPERTY</span><span class="p">(</span><span class="s1">&#39;productversion&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="k">VERSION</span><span class="p">;</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th align="left">VERSION</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">14.0.1000.169</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="手順">手順</h2>
+
+<h3 id="おさらい">おさらい</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="p">,</span> <span class="n">query_plan</span>
+  <span class="p">,</span> <span class="nb">text</span> 
+<span class="k">FROM</span>
+  <span class="n">sys</span><span class="p">.</span><span class="n">dm_exec_query_stats</span> 
+  <span class="k">cross</span> <span class="n">apply</span> <span class="n">sys</span><span class="p">.</span><span class="n">dm_exec_query_plan</span><span class="p">(</span><span class="n">plan_handle</span><span class="p">)</span> 
+  <span class="k">cross</span> <span class="n">apply</span> <span class="n">sys</span><span class="p">.</span><span class="n">dm_exec_sql_text</span><span class="p">(</span><span class="n">sql_handle</span><span class="p">)</span> 
+<span class="k">ORDER</span> <span class="k">BY</span>
+  <span class="n">last_execution_time</span> <span class="k">DESC</span><span class="p">;</span> </code></pre></div>
+<p>これで実行計画(<code>query_plan</code>)とSQL(<code>text</code>)を取得できた。</p>
+
+<h3 id="query-planからパラメータ取得">query_planからパラメータ取得</h3>
+
+<h4 id="仕様">仕様</h4>
+
+<p><code>query_plan</code>の仕様は<a href="http://schemas.microsoft.com/sqlserver/2004/07/showplan/">Showplan Schema</a>の<a href="http://schemas.microsoft.com/sqlserver/2004/07/showplan/sql2017/showplanxml.xsd">ここ</a>に定義されている。</p>
+
+<h4 id="ほしいパス">ほしいパス</h4>
+
+<p>バインド変数とパラメータは<code>けっこう深い階層/ParameterList/ColumnReference</code>にセットされている。</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">(略)
+<span class="nt">&lt;ParameterList&gt;</span>
+  <span class="nt">&lt;ColumnReference</span> <span class="na">Column=</span><span class="s">&#34;@P0&#34;</span>
+  <span class="na">ParameterDataType=</span><span class="s">&#34;nvarchar(4000)&#34;</span>
+  <span class="na">ParameterCompiledValue=</span><span class="s">&#34;N&#39;TEST&#39;&#34;</span> <span class="nt">/&gt;</span>
+...
+<span class="nt">&lt;/ParameterList&gt;</span>
+(略)</code></pre></div>
+<p>仕様を見ながら定義を上へ上へさかのぼっていくと、<code>ParameterList</code>が格納される可能性があるパスはこの3つっぽい。</p>
+
+<ol>
+<li><code>/ShowPlanXML/BatchSequence/Batch/Statements/StmtSimple/QueryPlan/ParameterList</code></li>
+<li><code>/ShowPlanXML/BatchSequence/Batch/Statements/StmtCond/Condition/QueryPlan/ParameterList</code></li>
+<li><code>/ShowPlanXML/BatchSequence/Batch/Statements/StmtCursor/CursorPlan/Operation/QueryPlan/ParameterList</code></li>
+</ol>
+
+<h4 id="実際に取得">実際に取得</h4>
+
+<p>引っこ抜いた。(とりあえず1.の<code>～/StmtSimple/～</code>だけ)</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">WITH</span> <span class="n">XMLNAMESPACES</span><span class="p">(</span> 
+  <span class="k">DEFAULT</span> <span class="s1">&#39;http://schemas.microsoft.com/sqlserver/2004/07/showplan&#39;</span>
+<span class="p">)</span> 
+<span class="k">SELECT</span>
+  <span class="c1">-- 2. ParameterList/ColumnReferenceをパラメータ引数の分forで回す
+</span><span class="c1"></span>  <span class="n">item</span><span class="p">.</span><span class="n">query</span><span class="p">(</span> 
+    <span class="s1">&#39;
+</span><span class="s1">        &lt;parameters&gt;
+</span><span class="s1">          {
+</span><span class="s1">            for $i in ColumnReference
+</span><span class="s1">              return &lt;parameter&gt;{string($i/@Column)},{string($i/@ParameterCompiledValue)}&lt;/parameter&gt;
+</span><span class="s1">          }
+</span><span class="s1">        &lt;/parameters&gt;
+</span><span class="s1">      &#39;</span>
+  <span class="p">)</span> <span class="k">AS</span> <span class="n">param</span>
+  <span class="p">,</span> <span class="nb">text</span> 
+<span class="k">FROM</span>
+  <span class="n">sys</span><span class="p">.</span><span class="n">dm_exec_query_stats</span> 
+  <span class="k">CROSS</span> <span class="n">APPLY</span> <span class="n">sys</span><span class="p">.</span><span class="n">dm_exec_query_plan</span><span class="p">(</span><span class="n">plan_handle</span><span class="p">)</span> 
+  <span class="k">CROSS</span> <span class="n">APPLY</span> <span class="n">sys</span><span class="p">.</span><span class="n">dm_exec_sql_text</span><span class="p">(</span><span class="n">sql_handle</span><span class="p">)</span>
+  <span class="c1">-- 1. query_planからParameterListタグ下を取得
+</span><span class="c1"></span>  <span class="k">OUTER</span> <span class="n">APPLY</span> <span class="n">query_plan</span><span class="p">.</span><span class="n">nodes</span><span class="p">(</span> 
+    <span class="s1">&#39;/ShowPlanXML/BatchSequence/Batch/Statements/StmtSimple/QueryPlan/ParameterList&#39;</span>
+  <span class="p">)</span> <span class="k">AS</span> <span class="n">T</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> 
+<span class="k">ORDER</span> <span class="k">BY</span>
+  <span class="n">last_execution_time</span> <span class="k">DESC</span><span class="p">;</span></code></pre></div>
+<h3 id="実行結果">実行結果</h3>
+
+<table>
+<thead>
+<tr>
+<th align="left">param</th>
+<th align="left">text</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">下記</td>
+<td align="left">下記</td>
+</tr>
+</tbody>
+</table>
+
+<p>この二つから実行したSQLがわかる！</p>
+
+<h4 id="param">param</h4>
+
+<p>うまくパラメータだけ取得できた。</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;p1:parameters</span> <span class="na">xmlns:p1=</span><span class="s">&#34;http://schemas.microsoft.com/sqlserver/2004/07/showplan&#34;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;p1:parameter&gt;</span>@P1,N&#39;SAMPLE_PARAM2&#39;<span class="nt">&lt;/p1:parameter&gt;</span>
+  <span class="nt">&lt;p1:parameter&gt;</span>@P0,N&#39;SAMPLE_PARAM&#39;<span class="nt">&lt;/p1:parameter&gt;</span>
+<span class="nt">&lt;/p1:parameters&gt;</span></code></pre></div>
+<h4 id="text">text</h4>
+
+<p>こっちは特に変わらず。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="p">(</span><span class="o">@</span><span class="n">P0</span> <span class="n">nvarchar</span><span class="p">(</span><span class="mi">4000</span><span class="p">),</span><span class="o">@</span><span class="n">P1</span> <span class="n">nvarchar</span><span class="p">(</span><span class="mi">4000</span><span class="p">))</span>
+<span class="k">SELECT</span>
+  <span class="o">*</span>
+<span class="k">FROM</span>
+  <span class="n">SAMPLESCHEMA</span><span class="p">.</span><span class="n">SAMPLETABLE</span> 
+<span class="k">WHERE</span>
+  <span class="n">testcol1</span> <span class="o">=</span> <span class="o">@</span><span class="n">P0</span>
+<span class="k">AND</span>
+  <span class="n">testcol2</span> <span class="o">=</span> <span class="o">@</span><span class="n">P1</span></code></pre></div>
+<h3 id="fetch-api-cursor">FETCH API_CURSOR</h3>
+
+<p>途中で出てくる<code>FETCH API_CURSOR...</code>ってやつについて。</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;ShowPlanXML</span>
+<span class="na">xmlns=</span><span class="s">&#34;http://schemas.microsoft.com/sqlserver/2004/07/showplan&#34;</span>
+<span class="na">Version=</span><span class="s">&#34;1.6&#34;</span> <span class="na">Build=</span><span class="s">&#34;14.0.1000.169&#34;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;BatchSequence&gt;</span>
+  <span class="nt">&lt;Batch&gt;</span>
+    <span class="nt">&lt;Statements&gt;</span>
+      <span class="nt">&lt;StmtCursor</span>
+        <span class="na">StatementText=</span><span class="s">&#34;FETCH API_CURSOR000000000000XXXX&#34;</span> <span class="na">StatementId=</span><span class="s">&#34;1&#34;</span>
+        <span class="na">StatementCompId=</span><span class="s">&#34;1&#34;</span> <span class="na">StatementType=</span><span class="s">&#34;FETCH CURSOR&#34;</span>
+        <span class="na">RetrievedFromCache=</span><span class="s">&#34;true&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;CursorPlan</span> <span class="na">CursorName=</span><span class="s">&#34;API_CURSOR000000000000XXXX&#34;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/StmtCursor&gt;</span>
+    <span class="nt">&lt;/Statements&gt;</span>
+  <span class="nt">&lt;/Batch&gt;</span>
+  <span class="nt">&lt;/BatchSequence&gt;</span>
+<span class="nt">&lt;/ShowPlanXML&gt;</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">FETCH</span> <span class="n">API_CURSOR000000000000XXXX</span></code></pre></div>
+<p>ちょっと邪魔…。</p>
+
+<ul>
+<li><a href="https://dba.stackexchange.com/questions/110784/lots-of-fetch-api-cursor0000-on-sp-whoisactive-sql-server-2008-r2">execution plan - Lots of &ldquo;FETCH API_CURSOR0000&hellip;&rdquo; on sp_WhoIsActive ( SQL Server 2008 R2 ) - Database Administrators Stack Exchange</a></li>
+</ul>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="https://docs.microsoft.com/ja-jp/sql/xquery/flwor-statement-and-iteration-xquery?view=sql-server-2017">FLWOR ステートメントと繰り返し (XQuery) - SQL Server | Microsoft Docs</a></li>
+<li><a href="https://docs.microsoft.com/ja-jp/sql/xquery/data-accessor-functions-string-xquery?view=sql-server-2017">string 関数 (XQuery) - SQL Server | Microsoft Docs</a></li>
+<li><a href="https://docs.microsoft.com/ja-jp/sql/t-sql/queries/from-transact-sql?view=sql-server-2017">FROM (Transact-SQL) - SQL Server | Microsoft Docs</a></li>
+</ul>
+
+<blockquote>
+<p>CROSS または OUTER は、APPLY を使用して指定する必要があります。 CROSS を指定した場合は、left_table_source の指定行に対して right_table_source を評価し、空の結果セットが返されると、行は生成されません。</p>
+
+<p>OUTER を指定した場合は、left_table_source の各行に対して right_table_source を評価し、空の結果セットが返されても、各行に対して 1 行が生成されます。</p>
+</blockquote>
+
+      </section>
+    </article>
+
+    <div class="social">
+  
+  <a href="https://twitter.com/share"
+    data-url="https://gosyujin.github.io/2019/05/21/sqlserver-query-parameter/"
+    data-text="SQL Serverの動的管理ビューから、実行したSQL(とバインド変数)を取得する - kk_Atakaの日記"
+    data-related=""
+    data-lang="ja"
+    data-size="horizontal"
+    data-dnt="true"
+    class="twitter-share-button">Tweet</a>
+  <script type="text/javascript"
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8" async="async"></script>
+
+  
+  <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label-counter" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/v4/public/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+</div>
+
+    <nav class="paginate-container">
+  <div class="pagination">
+      
+        <a href="https://gosyujin.github.io/2019/05/02/sqlserver-convert-implicit/" class="pagination_overflow previous_page">
+          Prev: 
+          19/5/2
+          SQL Serverで実行したSQLが暗黙の型変換が起こって …
+        </a>
+      
+
+      <a href="https://gosyujin.github.io" class="pagination_center">
+        Archives
+      </a>
+      </span>
+
+      
+        <span class="pagination_overflow next_page disabled">
+          Next: -
+        </span>
+      
+  </div>
+</nav>
+
+
+  
+
+
+      </div>
+
+      <div id="side" class="pr-1 bg-white">
+        <div class="pr-3">
+          
+  <div id="profile" class="Box Box-blue p-2 mb-3 mt-5">
+  <h3>Link</h3>
+  <ul>
+    <li>
+      <a href="https://github.com/gosyujin">GitHub</a>
+    </li>
+    <li>
+      <a href="http://www.slideshare.net/kk_Ataka">Slideshare</a>
+    </li>
+    <li>
+      <a href="http://connpass.com/user/kk_Ataka/">Connpass</a>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+  <div id="recent" class="Box Box-blue p-2 mb-3 mt-5">
+    <a href="https://gosyujin.github.io"><h3>Recent Entry</h3></a>
+    <ul>
+      
+        <li>
+          <span>19/5/21 </span>
+          
+          <a class="mb-2" href="/2019/05/21/sqlserver-query-parameter/">SQL Serverの動的管理ビューから、実行したSQL(とバインド変数)を取得する</a>
+        </li>
+      
+        <li>
+          <span>19/5/2 </span>
+          
+          <a class="mb-2" href="/2019/05/02/sqlserver-convert-implicit/">SQL Serverで実行したSQLが暗黙の型変換が起こっているかどうかはどうやって調べたらよいのか</a>
+        </li>
+      
+        <li>
+          <span>19/4/23 </span>
+          
+          <a class="mb-2" href="/2019/04/23/database-alter-table/">色々なDBのバージョン確認方法とか論理名のつけ方とか</a>
+        </li>
+      
+        <li>
+          <span>19/4/15 </span>
+          
+          <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
+        </li>
+      
+        <li>
+          <span>17/6/30 </span>
+          
+          <a class="mb-2" href="/2017/06/30/nicorepo/">ニコレポの仕様が変わったので一覧情報の取得方法を調査した</a>
+        </li>
+      
+        <li>
+          <span>17/5/31 </span>
+          
+          <a class="mb-2" href="/2017/05/31/android-lint/">Android StudioでAndroid Lint</a>
+        </li>
+      
+        <li>
+          <span>17/4/30 </span>
+          
+          <a class="mb-2" href="/2017/04/30/dropbox-cli/">Dropboxをコマンドラインで使用する方法</a>
+        </li>
+      
+        <li>
+          <span>17/3/30 </span>
+          
+          <a class="mb-2" href="/2017/03/30/rbenv-update/">rbenvを最新にして新しいバージョンのRubyをインストールできるようにする</a>
+        </li>
+      
+        <li>
+          <span>17/2/28 </span>
+          
+          <a class="mb-2" href="/2017/02/28/gradle_res_value/">GradleのresValueで値をリソースに設定する</a>
+        </li>
+      
+        <li>
+          <span>17/1/11 </span>
+          
+          <a class="mb-2" href="/2017/01/11/localhost-hateb/">localhost:xxxxにはてブしてるコメントを収集してみた</a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div id="tags" class="Box Box--blue p-2 mb-3 mt-5">
+    <a href="/tags/"><h3>Tags</h3></a>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/api" class="link-gray text-emphasized css-truncate-target">
+          <span class="">API</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/agile" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Agile</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/android" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Android</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ansible" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ansible</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/application" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Application</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/bundle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Bundle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/chef" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Chef</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/db2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">DB2</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/dropbox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Dropbox</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/eclipse" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Eclipse</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/evernote" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Evernote</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/firefox" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Firefox</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/fluentd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Fluentd</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/git" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Git</span>
+        </a>
+        <span class="text-right Counter">16</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/github" class="link-gray text-emphasized css-truncate-target">
+          <span class="">GitHub</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gmail" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gmail</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/golang" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Golang</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/gradle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Gradle</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haml" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haml</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/haskell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Haskell</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/heroku" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Heroku</span>
+        </a>
+        <span class="text-right Counter">5</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/homebrew" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Homebrew</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hubot" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hubot</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/hugo" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Hugo</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ie" class="link-gray text-emphasized css-truncate-target">
+          <span class="">IE</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Java</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/javascript" class="link-gray text-emphasized css-truncate-target">
+          <span class="">JavaScript</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jekyll" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jekyll</span>
+        </a>
+        <span class="text-right Counter">20</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/jenkins" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Jenkins</span>
+        </a>
+        <span class="text-right Counter">7</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/liquid" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Liquid</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/lokka" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Lokka</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mac" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Mac</span>
+        </a>
+        <span class="text-right Counter">8</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/markdown" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Markdown</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/mysql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">MySql</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oauth" class="link-gray text-emphasized css-truncate-target">
+          <span class="">OAuth</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/oracle" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Oracle</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/postgresql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">PostgreSQL</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/python" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Python</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rspec" class="link-gray text-emphasized css-truncate-target">
+          <span class="">RSpec</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rails" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Rails</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/redmine" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Redmine</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ruby" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Ruby</span>
+        </a>
+        <span class="text-right Counter">75</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sql-server" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQL Server</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sqlite3" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SQLite3</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/scala" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Scala</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/selenium" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Selenium</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/shell" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Shell</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sinatra" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sinatra</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/slideshare" class="link-gray text-emphasized css-truncate-target">
+          <span class="">SlideShare</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/solaris" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Solaris</span>
+        </a>
+        <span class="text-right Counter">12</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/sphinx" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Sphinx</span>
+        </a>
+        <span class="text-right Counter">18</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/startup" class="link-gray text-emphasized css-truncate-target">
+          <span class="">StartUp</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/subversion" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Subversion</span>
+        </a>
+        <span class="text-right Counter">9</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/tdd" class="link-gray text-emphasized css-truncate-target">
+          <span class="">TDD</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/test" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Test</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/translate" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Translate</span>
+        </a>
+        <span class="text-right Counter">2</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/twitter" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Twitter</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/unix" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Unix</span>
+        </a>
+        <span class="text-right Counter">13</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vb" class="link-gray text-emphasized css-truncate-target">
+          <span class="">VB</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/vim" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Vim</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wicket" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wicket</span>
+        </a>
+        <span class="text-right Counter">6</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/wiki" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Wiki</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/windows" class="link-gray text-emphasized css-truncate-target">
+          <span class="">Windows</span>
+        </a>
+        <span class="text-right Counter">25</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/ios" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iOS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/iphone" class="link-gray text-emphasized css-truncate-target">
+          <span class="">iPhone</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/java-ja" class="link-gray text-emphasized css-truncate-target">
+          <span class="">java-ja</span>
+        </a>
+        <span class="text-right Counter">4</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/node.js" class="link-gray text-emphasized css-truncate-target">
+          <span class="">node.js</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/rest" class="link-gray text-emphasized css-truncate-target">
+          <span class="">reST</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/xquery" class="link-gray text-emphasized css-truncate-target">
+          <span class="">xQuery</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%81%95%e3%81%8f%e3%82%89vps" class="link-gray text-emphasized css-truncate-target">
+          <span class="">さくらVPS</span>
+        </a>
+        <span class="text-right Counter">3</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88" class="link-gray text-emphasized css-truncate-target">
+          <span class="">イベント</span>
+        </a>
+        <span class="text-right Counter">27</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e3%83%8d%e3%82%bf" class="link-gray text-emphasized css-truncate-target">
+          <span class="">ネタ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e5%82%99%e5%bf%98%e9%8c%b2" class="link-gray text-emphasized css-truncate-target">
+          <span class="">備忘録</span>
+        </a>
+        <span class="text-right Counter">76</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e6%97%a5%e8%a8%98" class="link-gray text-emphasized css-truncate-target">
+          <span class="">日記</span>
+        </a>
+        <span class="text-right Counter">11</span>
+      </span>
+    
+      <span class="css-truncate no-wrap m-1 pl-1">
+        <a href="/tags/%e8%aa%bf%e6%9f%bb%e3%83%ad%e3%82%b0" class="link-gray text-emphasized css-truncate-target">
+          <span class="">調査ログ</span>
+        </a>
+        <span class="text-right Counter">1</span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+        <aside class="pr-3">
+          
+  
+  
+  <div id="toc" class="Box Box--blue p-2 mb-3 mt-5">
+    <h3>Contents</h3>
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#前提条件">前提条件</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#手順">手順</a>
+<ul>
+<li><a href="#おさらい">おさらい</a></li>
+<li><a href="#query-planからパラメータ取得">query_planからパラメータ取得</a>
+<ul>
+<li><a href="#仕様">仕様</a></li>
+<li><a href="#ほしいパス">ほしいパス</a></li>
+<li><a href="#実際に取得">実際に取得</a></li>
+</ul></li>
+<li><a href="#実行結果">実行結果</a>
+<ul>
+<li><a href="#param">param</a></li>
+<li><a href="#text">text</a></li>
+</ul></li>
+<li><a href="#fetch-api-cursor">FETCH API_CURSOR</a></li>
+</ul></li>
+<li><a href="#参考">参考</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+
+
+
+
+
+        </aside>
+      </div>
+
+      <div id="footer" class="pt-2 pb-3 bg-white text-center">
+        <span class="text-small text-gray">
+  Powered by
+  <a href="https://gohugo.io" class="link-gray-dark">Hugo</a>.
+  theme based on
+  <a href="https://github.com/qqhann/hugo-primer" class="link-gray-dark">Hugo-Primer</a>
+</span>
+
+      </div>
+    </div>
+
+    
+    
+    
+    
+  </body>
+</html>
