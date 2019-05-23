@@ -41,7 +41,7 @@ SELECT SERVERPROPERTY('productversion') as VERSION;
 
 ```sql
 SELECT
-  , query_plan
+  query_plan
   , text 
 FROM
   sys.dm_exec_query_stats 
