@@ -21,10 +21,10 @@
 組み合わせたら、実行したSQL(とバインド変数)がわかるのでは。
 前提条件 そもそも、いい感じのフレームワークとかロガーを導入しており、実行したSQLのログが出てればそれで確認すれば良いので◎
 色々調べるのがつらい環境だとこの方法で確認してみる価値があるかも。
- ログにSQL文が出力されない ライブラリ(変数バインド済のSQLを吐いてくれるP6Spyなど)が入れづらい  外界と遮断されているとか  ローカル環境、あるいはそれなりに小規模な環境  頻繁にみんながアクセスする環境だと、動的管理ビューから情報が流れていく   環境 SELECT SERVERPROPERTY(&amp;#39;productversion&amp;#39;) as VERSION;    VERSION     14.0.1000.169    手順 おさらい SELECT , query_plan , text FROM sys.dm_exec_query_stats cross apply sys.dm_exec_query_plan(plan_handle) cross apply sys.dm_exec_sql_text(sql_handle) ORDER BY last_execution_time DESC;  これで実行計画(query_plan)とSQL(text)を取得できた。
+ ログにSQL文が出力されない ライブラリ(変数バインド済のSQLを吐いてくれるP6Spyなど)が入れづらい  外界と遮断されているとか  ローカル環境、あるいはそれなりに小規模な環境  頻繁にみんながアクセスする環境だと、動的管理ビューから情報が流れていく   環境 SELECT SERVERPROPERTY(&amp;#39;productversion&amp;#39;) as VERSION;    VERSION     14.0.1000.169    手順 おさらい SELECT query_plan , text FROM sys.dm_exec_query_stats cross apply sys.dm_exec_query_plan(plan_handle) cross apply sys.dm_exec_sql_text(sql_handle) ORDER BY last_execution_time DESC;  これで実行計画(query_plan)とSQL(text)を取得できた。
 query_planからパラメータ取得 仕様 query_planの仕様はShowplan Schemaのここに定義されている。
 ほしいパス バインド変数とパラメータはけっこう深い階層/ParameterList/ColumnReferenceにセットされている。
-(略) &amp;lt;ParameterList&amp;gt; &amp;lt;ColumnReference Column=&amp;#34;@P0&amp;#34; ParameterDataType=&amp;#34;nvarchar(4000)&amp;#34; ParameterCompiledValue=&amp;#34;N&amp;#39;TEST&amp;#39;&amp;#34; /&amp;gt; .</description>
+(略) &amp;lt;ParameterList&amp;gt; &amp;lt;ColumnReference Column=&amp;#34;@P0&amp;#34; ParameterDataType=&amp;#34;nvarchar(4000)&amp;#34; ParameterCompiledValue=&amp;#34;N&amp;#39;TEST&amp;#39;&amp;#34; /&amp;gt; ... &amp;lt;/ParameterList&amp;gt; (略) 仕様を見ながら定義を上へ上へさかのぼっていくと、ParameterListが格納される可能性があるパスはこの3つっぽい。</description>
     </item>
     
   </channel>
