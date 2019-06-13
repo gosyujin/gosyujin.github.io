@@ -12,6 +12,20 @@
     
     
     <item>
+      <title>SQL Serverでnvarchar(x)のカラムにx文字入らないのはなぜ</title>
+      <link>https://gosyujin.github.io/2019/06/13/sqlserver-varchar-nvarchar/</link>
+      <pubDate>Thu, 13 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2019/06/13/sqlserver-varchar-nvarchar/</guid>
+      <description>あらすじ SQL Serverにおける文字列型の長さは、nvarcharクラスを使っていればバイト数に関するあれこれは SQL Server側で吸収してくれて、特に気にする必要ないと思ってたが違った。
+環境 SELECT SERVERPROPERTY(&amp;#39;productversion&amp;#39;) as VERSION;    VERSION     14.0.1000.169    事象 CREATE TABLE dbo.sampletable ( nvc nvarchar(3) ); 例えば、nvarchar(3)カラムを持つテーブルを作ったら、以下のような長さのデータは全部INSERTできると考えていた。
+ abc あいう ｱｲｳ 亜位宇  実際これらはINSERTできる。でもこれはINSERTできない。
+ &amp;#x20BB7;野家  原因と対策 サロゲート文字は1文字でデータ長2として扱われる模様。なので、SQL Serverの文字列型は
+ 補助文字によって 2 つのバイト ペア (またはサロゲート ペア) が使用されるため、格納できる文字数は n よりも少なくなる場合があります。
+  nvarchar型を使う サロゲート文字がまざると定義した長さの最大値は入らない  照合順序によってはLEN関数も正しくカウントされない  カラムのサイズは想定したMAXデータ長×2で定義した方がよさげ(全部サロゲート文字の場合)  文字数を正確にカウントしたい場合、SCの照合順序を使用する    SC の照合順序を使用する場合、返される整数値では、UTF-16 サロゲート ペアが 1 文字としてカウントされます。</description>
+    </item>
+    
+    <item>
       <title>SQL Serverのカラムに設定されている論理名をまとめて取得する</title>
       <link>https://gosyujin.github.io/2019/06/03/sqlserver-show-columns-logical-name/</link>
       <pubDate>Mon, 03 Jun 2019 00:00:00 +0000</pubDate>
