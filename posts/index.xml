@@ -12,6 +12,20 @@
     
     
     <item>
+      <title>Ctrl&#43;Sで画面停止する機能を無効化する</title>
+      <link>https://gosyujin.github.io/2019/06/13/stty-ixon/</link>
+      <pubDate>Thu, 13 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://gosyujin.github.io/2019/06/13/stty-ixon/</guid>
+      <description>あらすじ たまにターミナルの応答がまったく効かなくなることがあって困ってた。
+どうやらそういう命令があった模様。(Ctrl+S)多分、Windowsの保存感覚で押下していた。 知らなかった…。
+ 「Ctrl」+「s」による「画面への出力の停止」を無効化 - PukiWiki  環境 $ lsb_release -a No LSB modules are available. Distributor ID:	Ubuntu Description:	Ubuntu 18.04.2 LTS Release:	18.04 Codename:	bionic 解決方法 Ctrl+Sを無効化する。
+ただし、Bashの場合これを無効化するとインクリメンタルサーチ(i-search)が活きるようになるのでビックリしないように。
+ stty(1) manページ  確認 まずはCtrl+で発動するコマンドを確認してみる。
+$ stty -a (略) intr = ^C; quit = ^\; erase = ^?; kill = ^U; eof = ^D; eol = &amp;lt;undef&amp;gt;; eol2 = &amp;lt;undef&amp;gt;; swtch = &amp;lt;undef&amp;gt;; start = ^Q; stop = ^S; susp = ^Z; rprnt = ^R; werase = ^W; lnext = ^V; discard = ^O; min = 1; time = 0; (略)  intr = ^C; 割り込み(interrupt) quit = ^\; 終了(quit) erase = ^?</description>
+    </item>
+    
+    <item>
       <title>SQL Serverでnvarchar(x)のカラムにx文字入らないのはなぜ</title>
       <link>https://gosyujin.github.io/2019/06/13/sqlserver-varchar-nvarchar/</link>
       <pubDate>Thu, 13 Jun 2019 00:00:00 +0000</pubDate>

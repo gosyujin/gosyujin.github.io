@@ -17,12 +17,13 @@ ga('send', 'pageview');
 
     <title>
       
-  さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする - kk_Atakaの日記
+  Ctrl&#43;Sで画面停止する機能を無効化する - kk_Atakaの日記
 
     </title>
 
     
-      <meta name="description" property="og:description" content="[Unix][備忘録][Dropbox][さくらVPS]さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする あらすじ DropboxにはEnable …">
+      <meta name="description" property="og:description" content="あらすじ たまにターミナルの応答がまったく効かなくなることがあって困ってた。
+どうやらそういう命令があった模様。(Ctrl&#43;S)多分、Windowsの保存感覚で押下していた。 知らなかった…。 …">
     
 
     <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
@@ -92,10 +93,10 @@ ga('send', 'pageview');
     <nav class="paginate-container">
   <div class="pagination">
       
-        <a href="https://gosyujin.github.io/2011/10/04/1317660186/" class="pagination_overflow previous_page">
+        <a href="https://gosyujin.github.io/2019/06/13/sqlserver-varchar-nvarchar/" class="pagination_overflow previous_page">
           Prev: 
-          11/10/4
-          複数のRuby環境の管理・切替ができるpikを実行できた
+          19/6/13
+          SQL Serverでnvarchar(x)のカラムにx文字 …
         </a>
       
 
@@ -105,11 +106,9 @@ ga('send', 'pageview');
       </span>
 
       
-        <a href="https://gosyujin.github.io/2011/10/11/1318334855/" class="pagination_overflow next_page">
-          Next: 
-          11/10/11
-          Windowsのローカル環境にWordPressをインストー …
-        </a>
+        <span class="pagination_overflow next_page disabled">
+          Next: -
+        </span>
       
   </div>
 </nav>
@@ -117,7 +116,7 @@ ga('send', 'pageview');
 
     <div class="Subhead">
       <div class="Subhead-heading">
-        <div class="h2 mt-3 mb-1">さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする</div>
+        <div class="h2 mt-3 mb-1">Ctrl&#43;Sで画面停止する機能を無効化する</div>
       </div>
       <div class="Subhead-description">
         
@@ -130,21 +129,9 @@ ga('send', 'pageview');
       [ <span class="Label Label--gray">Unix</span> ]
     </a>
   
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [ <span class="Label Label--gray">備忘録</span> ]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/dropbox' class="muted-link">
-      [ <span class="Label Label--gray">Dropbox</span> ]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E3%81%95%E3%81%8F%E3%82%89vps' class="muted-link">
-      [ <span class="Label Label--gray">さくらVPS</span> ]
-    </a>
-  
 
 
-          Published: <span>2011/10/08</span>
+          Published: <span>2019/06/13</span>
         </div>
      </div>
     </div>
@@ -156,13 +143,15 @@ ga('send', 'pageview');
 <ul>
 <li>
 <ul>
-<li><a href="#unix-備忘録-dropbox-さくらvps-さくらvpsにインストールしたdropboxのenable-lan-syncオプションをoffにする">[Unix][備忘録][Dropbox][さくらVPS]さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする</a></li>
 <li><a href="#あらすじ">あらすじ</a></li>
-<li><a href="#参考サイト">参考サイト</a></li>
-<li><a href="#必要環境">必要環境</a></li>
-<li><a href="#スクリプトdl">スクリプトDL</a></li>
-<li><a href="#手順">手順</a></li>
-<li><a href="#実行時にエラー">実行時にエラー？</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#解決方法">解決方法</a>
+<ul>
+<li><a href="#確認">確認</a></li>
+<li><a href="#無効化">無効化</a></li>
+</ul></li>
+<li><a href="#注意事項">注意事項</a></li>
+<li><a href="#参考">参考</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -174,104 +163,94 @@ ga('send', 'pageview');
      <section class="pb-6 mb-3 border-bottom">
         
 
-<h2 id="unix-備忘録-dropbox-さくらvps-さくらvpsにインストールしたdropboxのenable-lan-syncオプションをoffにする">[Unix][備忘録][Dropbox][さくらVPS]さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする</h2>
-
 <h2 id="あらすじ">あらすじ</h2>
 
-<p>DropboxにはEnable LAN syncというオプションがあり、これをONにすると同じLAN内のマシンはインターネットを経由しないで同期ができる。</p>
+<p>たまにターミナルの応答がまったく効かなくなることがあって困ってた。</p>
 
-<p>f:id:kk_Ataka:20111008190858j:image</p>
-
-<p>ただし、17500ポートに向けてUDPパケットがやまほど投げているようで、同じLAN内に自分以外のマシンがある状態でこのオプションをONにしていると近隣の方へやまほどパケットを投げまくりで非常に迷惑がかかります……。基本的にDropboxのオプションからEnable LAN sync(LAN同期を有効にする)をOFFにすればよい。</p>
-
-<p>……のだが、CUIからDropboxをインストールしている場合は少し手順を踏んでこのオプションを切る必要があります。</p>
-
-<h2 id="参考サイト">参考サイト</h2>
+<p>どうやらそういう命令があった模様。(<code>Ctrl+S</code>)多分、Windowsの保存感覚で押下していた。
+知らなかった…。</p>
 
 <ul>
-<li><a href="http://d.hatena.ne.jp/otn/20110502/p1:title">http://d.hatena.ne.jp/otn/20110502/p1:title</a></li>
-<li><a href="http://blog.7kai.org/2011/04/dropbox-lan-sync-disable/:title">http://blog.7kai.org/2011/04/dropbox-lan-sync-disable/:title</a></li>
+<li><a href="http://www.lovebug.jp/index.php?%E3%80%8CCtrl%E3%80%8D%2B%E3%80%8Cs%E3%80%8D%E3%81%AB%E3%82%88%E3%82%8B%E3%80%8C%E7%94%BB%E9%9D%A2%E3%81%B8%E3%81%AE%E5%87%BA%E5%8A%9B%E3%81%AE%E5%81%9C%E6%AD%A2%E3%80%8D%E3%82%92%E7%84%A1%E5%8A%B9%E5%8C%96">「Ctrl」+「s」による「画面への出力の停止」を無効化 - PukiWiki</a></li>
 </ul>
 
-<p>というか、前回の記事<a href="http://d.hatena.ne.jp/kk_Ataka/20110423/1303489798:title">http://d.hatena.ne.jp/kk_Ataka/20110423/1303489798:title</a> でインストールするときに参考にしたサイトにこの問題が書いてあった……。</p>
+<h2 id="環境">環境</h2>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Ubuntu
+Description:	Ubuntu <span class="m">18</span>.04.2 LTS
+Release:	<span class="m">18</span>.04
+Codename:	bionic</code></pre></div>
+<h2 id="解決方法">解決方法</h2>
+
+<p><code>Ctrl+S</code>を無効化する。</p>
+
+<p>ただし、Bashの場合これを無効化するとインクリメンタルサーチ(<code>i-search</code>)が活きるようになるのでビックリしないように。</p>
+
+<ul>
+<li><a href="https://nxmnpg.lemoda.net/ja/1/stty">stty(1) manページ</a></li>
+</ul>
+
+<h3 id="確認">確認</h3>
+
+<p>まずは<code>Ctrl+</code>で発動するコマンドを確認してみる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ stty -a
+<span class="o">(</span>略<span class="o">)</span>
+<span class="nv">intr</span> <span class="o">=</span> ^C<span class="p">;</span> <span class="nv">quit</span> <span class="o">=</span> ^<span class="se">\;</span> <span class="nv">erase</span> <span class="o">=</span> ^?<span class="p">;</span> <span class="nb">kill</span> <span class="o">=</span> ^U<span class="p">;</span> <span class="nv">eof</span> <span class="o">=</span> ^D<span class="p">;</span> <span class="nv">eol</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span>
+<span class="nv">eol2</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span> <span class="nv">swtch</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span> <span class="nv">start</span> <span class="o">=</span> ^Q<span class="p">;</span> <span class="nv">stop</span> <span class="o">=</span> ^S<span class="p">;</span> <span class="nv">susp</span> <span class="o">=</span> ^Z<span class="p">;</span> <span class="nv">rprnt</span> <span class="o">=</span> ^R<span class="p">;</span>
+<span class="nv">werase</span> <span class="o">=</span> ^W<span class="p">;</span> <span class="nv">lnext</span> <span class="o">=</span> ^V<span class="p">;</span> <span class="nv">discard</span> <span class="o">=</span> ^O<span class="p">;</span> <span class="nv">min</span> <span class="o">=</span> <span class="m">1</span><span class="p">;</span> <span class="nb">time</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span>
+<span class="o">(</span>略<span class="o">)</span></code></pre></div>
+<ul>
+<li>intr = ^C; 割り込み(interrupt)</li>
+<li>quit = ^\; 終了(quit)</li>
+<li>erase = ^?; 最後にタイプした文字消去</li>
+<li>kill = ^U; 現在の行消去(パスフレーズ入力時も消去される)</li>
+<li>eof = ^D ファイル終了(end of file)</li>
+<li><strong>start = ^Q;</strong></li>
+<li><strong>stop = ^S;</strong></li>
+<li>susp = ^Z; 停止(suspend)</li>
+<li>rprnt = ^R;</li>
+<li>werase = ^W;</li>
+<li>lnext = ^V;</li>
+<li>discard = ^O;</li>
+</ul>
+
+<p>などなど…。</p>
+
+<h3 id="無効化">無効化</h3>
+
+<p>startもstopも暴発した時以外使った事ないのでこの先もいらないでしょう。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ stty start undef
+$ stty stop undef</code></pre></div>
+<p>または</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ stty -ixon</code></pre></div>
+<p>の方がいいかも。</p>
 
 <blockquote>
-<p>To stop dropbox from sending LAN Sync broadcasts every 30 seconds over port 17500 (<a href="http://forums.dropbox.com/topic.php?id=16253">http://forums.dropbox.com/topic.php?id=16253</a>) see DropboxAddons/DisableLanSync</p>
+<p>ixon (-ixon)</p>
 
-<p><cite><a href="http://wiki.dropbox.com/TipsAndTricks/TextBasedLinuxInstall#SuppressLANSyncbroadcasts">http://wiki.dropbox.com/TipsAndTricks/TextBasedLinuxInstall#SuppressLANSyncbroadcasts</a></cite></p>
+<p>　制御コードの START/STOP を使った出力フロー制御を有効 (無効) にします。</p>
 </blockquote>
 
-<h2 id="必要環境">必要環境</h2>
+<h2 id="注意事項">注意事項</h2>
 
-<p>|*Python|2.6|</p>
+<p>これを<code>.bashrc</code>に直接書くと非対話時(scp等)でコケる。(<code>.bashrc</code>で標準出力など<strong>してはいけない</strong>)</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ scp -P <span class="m">3333</span> foo.py ubuntu@localhost:
+ubuntu@localhost<span class="err">&#39;</span>s password:
+stty: standard input: Inappropriate ioctl <span class="k">for</span> device</code></pre></div>
+<p>そのため、対話モードの時のみ実行されるようにする必要がある。</p>
 
-<h2 id="スクリプトdl">スクリプトDL</h2>
+<p>変数<code>$-</code>に現在のオプションが格納されている。対話モードの場合は<code>$-</code>に<code>i</code>が付加されるので、これを条件にしてやればよい。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ <span class="nb">echo</span> <span class="nv">$-</span>
+himBHs</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="o">[[</span> <span class="nv">$-</span> <span class="o">==</span> *i* <span class="o">]]</span> <span class="o">&amp;&amp;</span> stty -ixon</code></pre></div>
+<p><a href="https://unix.stackexchange.com/questions/26676/how-to-check-if-a-shell-is-login-interactive-batch">How to check if a shell is login/interactive/batch - Unix &amp; Linux Stack Exchange</a>にあるように、対話モードか否かの判断は色々な方法でできる。</p>
+
+<h2 id="参考">参考</h2>
 
 <ul>
-<li><a href="http://wiki.dropbox.com/DropboxAddons/PyDropboxValues">http://wiki.dropbox.com/DropboxAddons/PyDropboxValues</a> から <a href="http://dl.dropbox.com/u/340607/pyDropboxValues.py">pyDropboxValues.py</a> をDLする
-
-<ul>
-<li>設定値を表示できる</li>
-</ul></li>
-<li><a href="http://wiki.dropbox.com/DropboxAddons/DisableLanSync">http://wiki.dropbox.com/DropboxAddons/DisableLanSync</a> から <a href="http://dl.dropbox.com/u/340607/dropbox_set_lansync.py">dropbox_set_lansync.py</a> をDLする
-
-<ul>
-<li>LAN syncオプションを切り替える</li>
-</ul></li>
+<li><a href="https://linuxjm.osdn.jp/html/GNU_bash/man1/bash.1.html">Man page of BASH</a></li>
+<li><a href="https://stackoverflow.com/questions/24623021/getting-stty-standard-input-inappropriate-ioctl-for-device-when-using-scp-thro">linux - Getting stty: standard input: Inappropriate ioctl for device when using scp through an ssh tunnel - Stack Overflow</a></li>
 </ul>
-
-<h2 id="手順">手順</h2>
-
-<ul>
-<li>pyDropboxValue.pyで設定をバックアップする</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">PYTHON2</span><span class="o">.</span><span class="mi">6</span> <span class="n">pyDropboxValues</span><span class="o">.</span><span class="n">py</span> <span class="n">_backup</span>
-<span class="n">Backed</span> <span class="n">up</span> <span class="s1">&#39;config.db&#39;</span> <span class="n">to</span> <span class="s1">&#39;/home/kk_Ataka/.dropbox/backup_1_config.db&#39;</span></code></pre></div>
-<ul>
-<li>-   LAN syncオプションを確認する</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">PYTHON2</span><span class="o">.</span><span class="mi">6</span> <span class="n">pyDropboxValues</span><span class="o">.</span><span class="n">py</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">p2p_enable</span>
-<span class="n">p2p_enable</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># LAN syncオプションはp2p_enableというらしい。1でON。</span></code></pre></div>
-<ul>
-<li>dropbox_set_lansync.pyでEnable LAN syncオプションをOFFにする</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">PYTHON2</span><span class="o">.</span><span class="mi">6</span> <span class="n">dropbox_set_lansync</span><span class="o">.</span><span class="n">py</span> <span class="n">off</span> <span class="c1"># 特にレスポンスは返ってこないが…。</span></code></pre></div>
-<ul>
-<li>-   LAN syncオプションを確認する</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">PYTHON2</span><span class="o">.</span><span class="mi">6</span> <span class="n">pyDropboxValues</span><span class="o">.</span><span class="n">py</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">p2p_enable</span>
-<span class="n">p2p_enable</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 0になっていればよい。最後にプロセスを再起動するのを忘れないように……。</span></code></pre></div>
-<p>f:id:kk_Ataka:20111008190855j:image</p>
-
-<ul>
-<li>Dropboxプロセスを再起動する(dropbox.pyは以前DLしているはず)</li>
-</ul>
-
-<!-- -->
-<div class="highlight"><pre class="chroma">$ PYTHON2.6 dropbox.py stop
-Dropbox daemon stopped.
-$ PYTHON2.6 dropbox.py start
-Starting Dropbox...Dropbox isn&#39;t running!
-Done!</pre></div>
-<h2 id="実行時にエラー">実行時にエラー？</h2>
-
-<p>実行しようとするとsqlite3のImportErrorになる？　なんで？　標準で入ってるんじゃないの？</p>
-<div class="highlight"><pre class="chroma"><code class="language-Python" data-lang="Python"><span class="err">$</span> <span class="n">PYTHON2</span><span class="o">.</span><span class="mi">6</span> <span class="n">pyDropboxValues</span><span class="o">.</span><span class="n">py</span>
-<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
-  <span class="n">File</span> <span class="s2">&#34;pyDropboxValue.py&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">21</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-    <span class="kn">import</span> <span class="nn">sqlite3</span>
-  <span class="n">File</span> <span class="s2">&#34;/usr/local/Python-2.6.2/lib/python2.6/sqlite3/__init__.py&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">24</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-    <span class="kn">from</span> <span class="nn">dbapi2</span> <span class="kn">import</span> <span class="o">*</span>
-  <span class="n">File</span> <span class="s2">&#34;/usr/local/Python-2.6.2/lib/python2.6/sqlite3/dbapi2.py&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">27</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-    <span class="kn">from</span> <span class="nn">_sqlite3</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="ne">ImportError</span><span class="p">:</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="n">_sqlite3</span></code></pre></div>
-<p>f:id:kk_Ataka:20111008190856j:image</p>
-
-<p>→ <a href="http://d.hatena.ne.jp/omiyan/20110108/p1:title">http://d.hatena.ne.jp/omiyan/20110108/p1:title</a> によるとPython2.6からはsqlite3は標準インストールから外れているらしい。この辺りはわからんね。yumでsqliteを入れなおす。</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="err">$</span> <span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">sqlite</span><span class="o">-*</span></code></pre></div>
-<p>f:id:kk_Ataka:20111008190857j:image</p>
-
-<p>そして、PythonをソースからインストールしなおせばOK！</p>
 
       </section>
     </article>
@@ -283,7 +262,7 @@ Done!</pre></div>
 <ul>
   
     <li>
-      <span>2011/04/23 </span>
+      <span>2011/12/24 </span>
       
 
 
@@ -296,178 +275,182 @@ Done!</pre></div>
       [ <span class="Label Label--gray">備忘録</span> ]
     </a>
   
-    <a href='https://gosyujin.github.io/tags/dropbox' class="muted-link">
-      [ <span class="Label Label--gray">Dropbox</span> ]
+
+
+
+      <a class="mb-2" href="/2011/12/24/1324741031/">特定のファイルを探したり除外したり(メモ)</a>
+    </li>
+  
+    <li>
+      <span>2011/12/23 </span>
+      
+
+
+  
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [ <span class="Label Label--gray">Unix</span> ]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/vim' class="muted-link">
+      [ <span class="Label Label--gray">Vim</span> ]
+    </a>
+  
+
+
+
+      <a class="mb-2" href="/2011/12/23/1324651460/">Vimコマンドよく使うものと覚えたいコマンドまとめ</a>
+    </li>
+  
+    <li>
+      <span>2011/12/18 </span>
+      
+
+
+  
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [ <span class="Label Label--gray">Unix</span> ]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/vim' class="muted-link">
+      [ <span class="Label Label--gray">Vim</span> ]
+    </a>
+  
+
+
+
+      <a class="mb-2" href="/2011/12/18/1324219740/">Vimを使い始めるためにインストールから設定まで行った</a>
+    </li>
+  
+    <li>
+      <span>2011/12/17 </span>
+      
+
+
+  
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [ <span class="Label Label--gray">Unix</span> ]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+
+
+
+      <a class="mb-2" href="/2011/12/17/1324168464/">Unixでwmvファイルを他のファイルフォーマットに変換したい</a>
+    </li>
+  
+    <li>
+      <span>2011/12/16 </span>
+      
+
+
+  
+    <a href='https://gosyujin.github.io/tags/subversion' class="muted-link">
+      [ <span class="Label Label--gray">Subversion</span> ]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [ <span class="Label Label--gray">Unix</span> ]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
+    </a>
+  
+
+
+
+      <a class="mb-2" href="/2011/12/16/1324086694/">svn infoコマンドでリビジョン番号を抜き出す</a>
+    </li>
+  
+    <li>
+      <span>2011/12/14 </span>
+      
+
+
+  
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [ <span class="Label Label--gray">Unix</span> ]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [ <span class="Label Label--gray">備忘録</span> ]
     </a>
   
     <a href='https://gosyujin.github.io/tags/%E3%81%95%E3%81%8F%E3%82%89vps' class="muted-link">
       [ <span class="Label Label--gray">さくらVPS</span> ]
     </a>
   
+    <a href='https://gosyujin.github.io/tags/startup' class="muted-link">
+      [ <span class="Label Label--gray">StartUp</span> ]
+    </a>
+  
 
 
 
-      <a class="mb-2" href="/2011/04/23/1303489798/">さくらVPSにDropboxをインストールした</a>
+      <a class="mb-2" href="/2011/12/14/1323868360/">さくらVPSの初期設定メモ</a>
     </li>
   
     <li>
-      <span>2011/10/04 </span>
+      <span>2011/12/13 </span>
       
 
 
   
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [ <span class="Label Label--gray">Ruby</span> ]
+    <a href='https://gosyujin.github.io/tags/subversion' class="muted-link">
+      [ <span class="Label Label--gray">Subversion</span> ]
     </a>
   
     <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
       [ <span class="Label Label--gray">備忘録</span> ]
     </a>
   
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [ <span class="Label Label--gray">Unix</span> ]
+    </a>
+  
 
 
 
-      <a class="mb-2" href="/2011/10/04/1317660186/">複数のRuby環境の管理・切替ができるpikを実行できた</a>
+      <a class="mb-2" href="/2011/12/13/1323783496/">svn updateコマンド以外でリビジョン番号を抜き出す</a>
     </li>
   
     <li>
-      <span>2011/10/03 </span>
+      <span>2011/12/12 </span>
       
 
 
   
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [ <span class="Label Label--gray">Ruby</span> ]
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [ <span class="Label Label--gray">Unix</span> ]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/shell' class="muted-link">
+      [ <span class="Label Label--gray">Shell</span> ]
     </a>
   
     <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
       [ <span class="Label Label--gray">備忘録</span> ]
     </a>
-  
-
-
-
-      <a class="mb-2" href="/2011/10/03/1317642705/">Rubyのgemバージョン管理ができるBundlerを実行できなかった</a>
-    </li>
-  
-    <li>
-      <span>2011/09/30 </span>
-      
-
-
-  
-    <a href='https://gosyujin.github.io/tags/java' class="muted-link">
-      [ <span class="Label Label--gray">Java</span> ]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/windows' class="muted-link">
-      [ <span class="Label Label--gray">Windows</span> ]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [ <span class="Label Label--gray">Ruby</span> ]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [ <span class="Label Label--gray">備忘録</span> ]
-    </a>
-  
-
-
-
-      <a class="mb-2" href="/2011/09/30/1317312438/">.msgファイルをパースして中から添付ファイルを抜き出す</a>
-    </li>
-  
-    <li>
-      <span>2011/09/14 </span>
-      
-
-
   
     <a href='https://gosyujin.github.io/tags/solaris' class="muted-link">
       [ <span class="Label Label--gray">Solaris</span> ]
     </a>
   
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [ <span class="Label Label--gray">備忘録</span> ]
-    </a>
-  
 
 
 
-      <a class="mb-2" href="/2011/09/14/1316002377/">Solarisのパッケージを作ってみる もう少し学んだ版</a>
-    </li>
-  
-    <li>
-      <span>2011/09/12 </span>
-      
-
-
-  
-    <a href='https://gosyujin.github.io/tags/solaris' class="muted-link">
-      [ <span class="Label Label--gray">Solaris</span> ]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [ <span class="Label Label--gray">備忘録</span> ]
-    </a>
-  
-
-
-
-      <a class="mb-2" href="/2011/09/12/1315826713/">Solarisのパッケージを作ってみる</a>
-    </li>
-  
-    <li>
-      <span>2011/09/07 </span>
-      
-
-
-  
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [ <span class="Label Label--gray">Ruby</span> ]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/redmine' class="muted-link">
-      [ <span class="Label Label--gray">Redmine</span> ]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/sqlite3' class="muted-link">
-      [ <span class="Label Label--gray">SQLite3</span> ]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/windows' class="muted-link">
-      [ <span class="Label Label--gray">Windows</span> ]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [ <span class="Label Label--gray">備忘録</span> ]
-    </a>
-  
-
-
-
-      <a class="mb-2" href="/2011/09/07/1315401886/">Redmineのプラグイン作成のための備忘録と、時々SQLite3</a>
-    </li>
-  
-    <li>
-      <span>2011/09/04 </span>
-      
-
-
-  
-    <a href='https://gosyujin.github.io/tags/solaris' class="muted-link">
-      [ <span class="Label Label--gray">Solaris</span> ]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [ <span class="Label Label--gray">備忘録</span> ]
-    </a>
-  
-
-
-
-      <a class="mb-2" href="/2011/09/04/1315146050/">vmstatとかiostatとかsarとかswapコマンドのメモ</a>
+      <a class="mb-2" href="/2011/12/12/1323701022/">ファイルの拡張子を見て適切なコマンドで解凍してくれるスクリプトを組んだ</a>
     </li>
   
 </ul>
@@ -476,10 +459,10 @@ Done!</pre></div>
     <nav class="paginate-container">
   <div class="pagination">
       
-        <a href="https://gosyujin.github.io/2011/10/04/1317660186/" class="pagination_overflow previous_page">
+        <a href="https://gosyujin.github.io/2019/06/13/sqlserver-varchar-nvarchar/" class="pagination_overflow previous_page">
           Prev: 
-          11/10/4
-          複数のRuby環境の管理・切替ができるpikを実行できた
+          19/6/13
+          SQL Serverでnvarchar(x)のカラムにx文字 …
         </a>
       
 
@@ -489,11 +472,9 @@ Done!</pre></div>
       </span>
 
       
-        <a href="https://gosyujin.github.io/2011/10/11/1318334855/" class="pagination_overflow next_page">
-          Next: 
-          11/10/11
-          Windowsのローカル環境にWordPressをインストー …
-        </a>
+        <span class="pagination_overflow next_page disabled">
+          Next: -
+        </span>
       
   </div>
 </nav>
@@ -1160,13 +1141,15 @@ Done!</pre></div>
 <ul>
 <li>
 <ul>
-<li><a href="#unix-備忘録-dropbox-さくらvps-さくらvpsにインストールしたdropboxのenable-lan-syncオプションをoffにする">[Unix][備忘録][Dropbox][さくらVPS]さくらVPSにインストールしたDropboxのEnable LAN syncオプションをOFFにする</a></li>
 <li><a href="#あらすじ">あらすじ</a></li>
-<li><a href="#参考サイト">参考サイト</a></li>
-<li><a href="#必要環境">必要環境</a></li>
-<li><a href="#スクリプトdl">スクリプトDL</a></li>
-<li><a href="#手順">手順</a></li>
-<li><a href="#実行時にエラー">実行時にエラー？</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#解決方法">解決方法</a>
+<ul>
+<li><a href="#確認">確認</a></li>
+<li><a href="#無効化">無効化</a></li>
+</ul></li>
+<li><a href="#注意事項">注意事項</a></li>
+<li><a href="#参考">参考</a></li>
 </ul></li>
 </ul>
 </nav>
