@@ -1,0 +1,14 @@
+{{ $related := .Site.RegularPages.Related . | first 8 }}
+{{ with $related }}
+<h2>関連記事</h2>
+<ul>
+  {{ range . }}
+    <li>
+      <span>{{ .Date.Format "2006/01/02" }} </span>
+      {{ partial "taxonomy.html" . }}
+
+      <a class="mb-2" href="{{ .RelPermalink }}">{{ .Title }}</a>
+    </li>
+  {{ end }}
+</ul>
+{{ end }}
