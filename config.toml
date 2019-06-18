@@ -3,10 +3,11 @@ language               = "jp"
 languageCode           = "jp"
 defaultContentLanguage = "jp"
 
-baseURL      = "https://gosyujin.github.io"
-contentDir   = "md"
-# publishDir = "_site"
-ignoreFiles  = ["\\var/$"]
+baseURL       = "https://gosyujin.github.io"
+contentDir    = "md"
+# publishDir  = "_site"
+ignoreFiles   = ["\\var/$"]
+enableGitInfo = true
 
 googleAnalytics = "UA-34929069-1"
 
@@ -25,7 +26,7 @@ pygmentsCodeFencesGuessSyntax = true
 
 [blackfriday]
 fractions     = false
-#   taskLists = false
+taskLists     = true
 
 [taxonomies]
   tag        = "tags"
@@ -52,4 +53,16 @@ fractions     = false
   url        = "/tags/"
   weight     = 3
 
-[params]
+[related]
+  threshold = 80
+  includeNewer = true
+  toLower = false
+[[related.indices]]
+  name = "keywords"
+  weight = 100
+[[related.indices]]
+  name = "tags"
+  weight = 100
+[[related.indices]]
+  name = "date"
+  weight = 10

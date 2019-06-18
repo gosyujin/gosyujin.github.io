@@ -11,21 +11,15 @@
 {{ end }}
 
 {{ define "main" }}
-
   {{ if eq .Params.layout "post" }}
-
-    <!-- post -->
-    <div class="Subhead">
-      <div class="Subhead-heading">
-        <div class="h2 mt-3 mb-1">{{ .Title }}</div>
-      </div>
+  <!-- post -->
+    <div>
+      <h1>{{ .Title }}</h1>
       <div class="Subhead-description">
-        <!--<div class="float-md-left">{{ partial "social.html" . }}</div>-->
-        <div class="float-md-right">
-          Tags: {{ partial "taxonomy.html" . }}
-          Published: <span>{{ .Date.Format "2006/01/02" }}</span>
-        </div>
-     </div>
+        <!-- {{ partial "social.html" . }} -->
+        <!-- {{ partial "relatedsection.html" . }} -->
+        {{ partial "gitinfo.html" . }}
+      </div>
     </div>
 
     {{ partial "toc.html" . }}
@@ -36,18 +30,18 @@
       </section>
     </article>
 
-    <!--{{ partial "social.html" . }}-->
-    {{ partial "related.html" . }}
-    {{ partial "relatedsection.html" . }}
+    <div class="Subhead-description">
+      <!-- {{ partial "social.html" . }} -->
+      {{ partial "relatedsection.html" . }}
+      {{ partial "related.html" . }}
+    </div>
 
   {{ else }}
-
-    <!-- page -->
-    <div class="Subhead">
-      <div class="Subhead-heading">
-        <div class="h2 mt-3 mb-1">{{ .Title }}</div>
-      </div>
+  <!-- page -->
+    <div>
+      <h1>{{ .Title }}</h1>
     </div>
+
     <article>
      <section class="pb-6 mb-3 border-bottom">
         {{ .Content }}
@@ -55,6 +49,5 @@
     </article>
 
   {{ end }}
-
 {{ end }}
  

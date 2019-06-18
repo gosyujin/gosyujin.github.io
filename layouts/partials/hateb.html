@@ -1,0 +1,15 @@
+{{ if .Params.old_url }}
+  <!-- はてな時代の -->
+  <a href="http://b.hatena.ne.jp/entry/{{ .Params.old_url }}">
+    <img src="https://b.hatena.ne.jp/entry/image/{{ .Params.old_url }}" />
+  </a>
+{{ end }}
+<!-- https -->
+<a href="http://b.hatena.ne.jp/entry/{{ .Site.BaseURL }}{{ .URL }}" class="bookmark-widget-counter">
+  <img src="https://b.hatena.ne.jp/entry/image/{{ .Site.BaseURL }}{{ .URL }}" />
+</a>
+<!-- http 本当にこれしか取得方法ない？-->
+1
+<a href="http://b.hatena.ne.jp/entry/{{ replace .Site.BaseURL "https://" "http://" }}{{ .URL }}" class="bookmark-widget-counter">
+  <img src="https://b.hatena.ne.jp/entry/image/{{ replace .Site.BaseURL "https://" "http://" }}{{ .URL }}" />
+</a>
