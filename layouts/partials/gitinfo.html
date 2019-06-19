@@ -1,14 +1,20 @@
 <div>
   <ul>
-    <li>Tags:{{ partial "taxonomy.html" . }}</li>
-    <li>初版発行: {{ .Date.Format "2006/01/02" }}</li>
+    <li>
+      Tags:
+      {{ partial "taxonomy.html" . }}
+    </li>
+    <li>
+      初版発行:
+      {{ .Date.Format "2006/01/02" }}
+    </li>
     <li>
       最終更新:
       {{ if .Params.Draft }}
         {{ .Date.Format "2006/01/02" }}
       {{ else }}
         {{ .GitInfo.AuthorDate.Format "2006/01/02" }}
-        <a href="https://github.com/gosyujin/gosyujin.github.io/commit/{{ .GitInfo.Hash }}">{{ .GitInfo.Subject }}</a>
+        <a href="{{ .Site.Params.GithubCommitURL }}{{ .GitInfo.Hash }}">{{ .GitInfo.Subject }}</a>
       {{ end }}
     </li>
   </ul>
