@@ -17,12 +17,13 @@ ga('send', 'pageview');
 
     <title>
       
-  pikでインストールしたRubyでbundle exec rubyしたらエラーになった 解決編 - kk_Atakaの日記
+  Ctrl&#43;Sで画面停止する機能を無効化する - kk_Atakaの日記
 
     </title>
 
     
-      <meta name="description" property="og:description" content="[Ruby][備忘録]pikでインストールしたRubyでbundle exec rubyしたらエラー …">
+      <meta name="description" property="og:description" content="あらすじ たまにターミナルの応答がまったく効かなくなることがあって困ってた。
+どうやらそういう命令があった模様。(Ctrl&#43;S)多分、Windowsの保存感覚で押下していた。 知らなかった…。 …">
     
 
     <meta name="apple-mobile-web-app-title" content="kk_Atakaの日記">
@@ -88,7 +89,7 @@ ga('send', 'pageview');
   
   
     <div>
-      <h1>pikでインストールしたRubyでbundle exec rubyしたらエラーになった 解決編</h1>
+      <h1>Ctrl&#43;Sで画面停止する機能を無効化する</h1>
       <div class="Subhead-description">
         
         
@@ -100,12 +101,8 @@ ga('send', 'pageview');
 
 
   
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [<span class="Label Label--gray">備忘録</span>]
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [<span class="Label Label--gray">Unix</span>]
     </a>
   
 
@@ -113,13 +110,13 @@ ga('send', 'pageview');
     </li>
     <li>
       初版発行:
-      2011/11/29
+      2019/06/20
     </li>
     <li>
       最終更新:
       
-        2019/04/15
-        <a href="https://github.com/gosyujin/gosyujin.github.io/commit/c1fe96dc0147a12ff32c768e07ff29c53fe6586c">ジェネレータをhugoに変更</a>
+        2019/06/20
+        <a href="https://github.com/gosyujin/gosyujin.github.io/commit/e0dbf5a13499dfd55ef27a68eb696102d18e2a92">初版発行</a>
       
     </li>
   </ul>
@@ -135,13 +132,15 @@ ga('send', 'pageview');
 <ul>
 <li>
 <ul>
-<li><a href="#ruby-備忘録-pikでインストールしたrubyでbundle-exec-rubyしたらエラーになった-解決編">[Ruby][備忘録]pikでインストールしたRubyでbundle exec rubyしたらエラーになった 解決編</a></li>
-<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
-<li><a href="#結論">結論</a></li>
-<li><a href="#調査">調査</a></li>
-<li><a href="#pikの設定変更">pikの設定変更</a></li>
-<li><a href="#backward-compatibility-change">BACKWARD COMPATIBILITY CHANGE</a></li>
-<li><a href="#結論-1">結論</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#解決方法">解決方法</a>
+<ul>
+<li><a href="#確認">確認</a></li>
+<li><a href="#無効化">無効化</a></li>
+</ul></li>
+<li><a href="#注意事項">注意事項</a></li>
+<li><a href="#参考">参考</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -153,166 +152,94 @@ ga('send', 'pageview');
      <section class="pb-6 mb-3 border-bottom">
         
 
-<h2 id="ruby-備忘録-pikでインストールしたrubyでbundle-exec-rubyしたらエラーになった-解決編">[Ruby][備忘録]pikでインストールしたRubyでbundle exec rubyしたらエラーになった 解決編</h2>
+<h2 id="あらすじ">あらすじ</h2>
 
-<h2 id="前回までのあらすじ">前回までのあらすじ</h2>
+<p>たまにターミナルの応答がまったく効かなくなることがあって困ってた。</p>
 
-<p>[<a href="http://d.hatena.ne.jp/kk_Ataka/20111128/1322482230:title]で出たRubyオプションのエラー">http://d.hatena.ne.jp/kk_Ataka/20111128/1322482230:title]で出たRubyオプションのエラー</a>。</p>
-<div class="highlight"><pre class="chroma">$ bundle exec ruby app.rb
-ruby: invalid switch in RUBYOPT: -a (RuntimeError)</pre></div>
-<p>この-aオプションはどこから出てきたのかというと、&rdquo;Documents and Settings&rdquo;のaだという事がわかった。</p>
-
-<h2 id="結論">結論</h2>
+<p>どうやらそういう命令があった模様。(<code>Ctrl+S</code>)多分、Windowsの保存感覚で押下していた。
+知らなかった…。</p>
 
 <ul>
-<li><span class="deco" style="color:#FF0000;">Rubyのインストールパスにスペースを含めない</span></li>
-<li><span class="deco" style="color:#FF0000;">pikでRubyをインストールする前にpik config install_dir=XXXでパス指定する</span></li>
+<li><a href="http://www.lovebug.jp/index.php?%E3%80%8CCtrl%E3%80%8D%2B%E3%80%8Cs%E3%80%8D%E3%81%AB%E3%82%88%E3%82%8B%E3%80%8C%E7%94%BB%E9%9D%A2%E3%81%B8%E3%81%AE%E5%87%BA%E5%8A%9B%E3%81%AE%E5%81%9C%E6%AD%A2%E3%80%8D%E3%82%92%E7%84%A1%E5%8A%B9%E5%8C%96">「Ctrl」+「s」による「画面への出力の停止」を無効化 - PukiWiki</a></li>
 </ul>
 
-<p>先に結論を書くと、やっぱりこうだった。以下、調査ログ。</p>
+<h2 id="環境">環境</h2>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Ubuntu
+Description:	Ubuntu <span class="m">18</span>.04.2 LTS
+Release:	<span class="m">18</span>.04
+Codename:	bionic</code></pre></div>
+<h2 id="解決方法">解決方法</h2>
 
-<h2 id="調査">調査</h2>
+<p><code>Ctrl+S</code>を無効化する。</p>
 
-<p>試しに以下のディレクトリに設置したRubyを使用しようとしたところ、下記のエラーが。(whichとか使えてるのはnyaosを使っているからです)</p>
+<p>ただし、Bashの場合これを無効化するとインクリメンタルサーチ(<code>i-search</code>)が活きるようになるのでビックリしないように。</p>
 
 <ul>
-<li>C:\rubies\Ru by<br /></li>
+<li><a href="https://nxmnpg.lemoda.net/ja/1/stty">stty(1) manページ</a></li>
 </ul>
 
-<!-- -->
-<div class="highlight"><pre class="chroma">$ which ruby
-C:\rubies\Ru by\bin\ruby.exe
-$ bundle exec ruby myapp.rb
-ruby: illegal switch in RUBYOPT: -b (RuntimeError)</pre></div>
+<h3 id="確認">確認</h3>
+
+<p>まずは<code>Ctrl+</code>で発動するコマンドを確認してみる。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ stty -a
+<span class="o">(</span>略<span class="o">)</span>
+<span class="nv">intr</span> <span class="o">=</span> ^C<span class="p">;</span> <span class="nv">quit</span> <span class="o">=</span> ^<span class="se">\;</span> <span class="nv">erase</span> <span class="o">=</span> ^?<span class="p">;</span> <span class="nb">kill</span> <span class="o">=</span> ^U<span class="p">;</span> <span class="nv">eof</span> <span class="o">=</span> ^D<span class="p">;</span> <span class="nv">eol</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span>
+<span class="nv">eol2</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span> <span class="nv">swtch</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span> <span class="nv">start</span> <span class="o">=</span> ^Q<span class="p">;</span> <span class="nv">stop</span> <span class="o">=</span> ^S<span class="p">;</span> <span class="nv">susp</span> <span class="o">=</span> ^Z<span class="p">;</span> <span class="nv">rprnt</span> <span class="o">=</span> ^R<span class="p">;</span>
+<span class="nv">werase</span> <span class="o">=</span> ^W<span class="p">;</span> <span class="nv">lnext</span> <span class="o">=</span> ^V<span class="p">;</span> <span class="nv">discard</span> <span class="o">=</span> ^O<span class="p">;</span> <span class="nv">min</span> <span class="o">=</span> <span class="m">1</span><span class="p">;</span> <span class="nb">time</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span>
+<span class="o">(</span>略<span class="o">)</span></code></pre></div>
 <ul>
-<li>C:\rubies\R uby<br /></li>
+<li>intr = ^C; 割り込み(interrupt)</li>
+<li>quit = ^\; 終了(quit)</li>
+<li>erase = ^?; 最後にタイプした文字消去</li>
+<li>kill = ^U; 現在の行消去(パスフレーズ入力時も消去される)</li>
+<li>eof = ^D ファイル終了(end of file)</li>
+<li><strong>start = ^Q;</strong></li>
+<li><strong>stop = ^S;</strong></li>
+<li>susp = ^Z; 停止(suspend)</li>
+<li>rprnt = ^R;</li>
+<li>werase = ^W;</li>
+<li>lnext = ^V;</li>
+<li>discard = ^O;</li>
 </ul>
 
-<!-- -->
-<div class="highlight"><pre class="chroma">$ which ruby
-C:\rubies\R uby\bin\ruby.exe
-$ bundle exec ruby myapp.rb
-ruby: illegal switch in RUBYOPT: -u (RuntimeError)</pre></div>
-<p>あぁやっぱりかー。</p>
+<p>などなど…。</p>
 
-<h2 id="pikの設定変更">pikの設定変更</h2>
+<h3 id="無効化">無効化</h3>
 
-<p>という事は、pik install時にデフォルトでDocuments and Settingsに入れられるのは避けなければならん。pikのhistoryにそれっぽいことが書いてあった。</p>
+<p>startもstopも暴発した時以外使った事ないのでこの先もいらないでしょう。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ stty start undef
+$ stty stop undef</code></pre></div>
+<p>または</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ stty -ixon</code></pre></div>
+<p>の方がいいかも。</p>
 
 <blockquote>
-<p>=== 0.2.8 / 2010-06-22</p>
+<p>ixon (-ixon)</p>
 
-<h2 id="backward-compatibility-change">BACKWARD COMPATIBILITY CHANGE</h2>
-
-<p>pik will now install new rubies to %USERPROFILE%\rubies\, instead of %PIK_BIN%\pik\ this was necessary to all for installation into %PROGRAMFILES% dir. If you&rsquo;d like to keep the old path, run:</p>
-<div class="highlight"><pre class="chroma">&amp;gt;pik config install\_dir=C:\\path\\to\\pik</pre></div>
-<p><cite><a href="https://github.com/vertiginous/pik/blob/master/History.txt">https://github.com/vertiginous/pik/blob/master/History.txt</a></cite></p>
+<p>　制御コードの START/STOP を使った出力フロー制御を有効 (無効) にします。</p>
 </blockquote>
 
-<p>なるほど。pik configコマンドでパスを指定するのか。</p>
-<div class="highlight"><pre class="chroma">$ pik config install_dir=C:\rubies\
-$ pik config
-** CURRENT CONFIGURATION **
+<h2 id="注意事項">注意事項</h2>
 
-187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32] *
-     path: C:\rubies\Ruby\bin
+<p>これを<code>.bashrc</code>に直接書くと非対話時(scp等)でコケる。(<code>.bashrc</code>で標準出力など<strong>してはいけない</strong>)</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ scp -P <span class="m">3333</span> foo.py ubuntu@localhost:
+ubuntu@localhost<span class="err">&#39;</span>s password:
+stty: standard input: Inappropriate ioctl <span class="k">for</span> device</code></pre></div>
+<p>そのため、対話モードの時のみ実行されるようにする必要がある。</p>
 
-** GLOBAL CONFIGURATION **
+<p>変数<code>$-</code>に現在のオプションが格納されている。対話モードの場合は<code>$-</code>に<code>i</code>が付加されるので、これを条件にしてやればよい。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ <span class="nb">echo</span> <span class="nv">$-</span>
+himBHs</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="o">[[</span> <span class="nv">$-</span> <span class="o">==</span> *i* <span class="o">]]</span> <span class="o">&amp;&amp;</span> stty -ixon</code></pre></div>
+<p><a href="https://unix.stackexchange.com/questions/26676/how-to-check-if-a-shell-is-login-interactive-batch">How to check if a shell is login/interactive/batch - Unix &amp; Linux Stack Exchange</a>にあるように、対話モードか否かの判断は色々な方法でできる。</p>
 
----
-install_dir: C:\rubies\</pre></div>
-<p>install_dirがセットされた。次にinstall。Rubyはとりあえず1.9.1を指定。</p>
-<div class="highlight"><pre class="chroma">$ pik install ruby 1.9.1
-** Downloading:  http://rubyforge.org/frs/download.php/72076/ruby-1.9.1-p430-i386-mingw32.7z
-   to:  C:\Documents and Settings\USERNAME\.pik\downloads\ruby-1.9.1-p430-i386-mingw32.7z
-
-ruby-1.9.1-p430-i386-min...7z: 100% |oooooooooo|   4.7MB/  4.7MB Time: 00:01:11
-
-** Extracting:  C:\Documents and Settings\USERNAME\.pik\downloads\ruby-1.9.1-p430-i386-mingw32.7z
-   to:  C:\rubies\Ruby-191-p430
-done
-
-** Adding:  191: ruby 1.9.1p430 (2010-08-16 revision 28998) [i386-mingw32]
- Located at:  C:\rubies\Ruby-191-p430\bin</pre></div>
-<p>ダウンロードはUSERPROFILEか。でもインストール先はちゃんとinstall_dirになってる。</p>
-<div class="highlight"><pre class="chroma">$ pik list
- * 187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]
-   187: ruby 1.8.7 (2011-06-30 patchlevel 352) [i386-mingw32]
-   191: ruby 1.9.1p430 (2010-08-16 revision 28998) [i386-mingw32]
-   193: ruby 1.9.3p0 (2011-10-30) [i386-mingw32]
-$ pik use 1.9.1
-$ pik list
-   187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]
-   187: ruby 1.8.7 (2011-06-30 patchlevel 352) [i386-mingw32]
- * 191: ruby 1.9.1p430 (2010-08-16 revision 28998) [i386-mingw32]
-   193: ruby 1.9.3p0 (2011-10-30) [i386-mingw32]
-$ which ruby
-C:\rubies\Ruby-191-p430\bin\ruby.exe
-$ ruby -v
-ruby 1.9.1p430 (2010-08-16 revision 28998) [i386-mingw32]</pre></div>
-<p>1.9.1確認。%USERPROFILE%\.pik\config.ymlも更新されてた。</p>
-<div class="highlight"><pre class="chroma">--- 
-&#34;187: ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mswin32]&#34;: 
-  :path: !ruby/object:Pathname 
-    path: C:/rubies/Ruby/bin
-&#34;187: ruby 1.8.7 (2011-06-30 patchlevel 352) [i386-mingw32]&#34;: 
-  :path: !ruby/object:Pathname 
-    path: C:/rubies/Ruby-187-p352/bin
-&#34;191: ruby 1.9.1p430 (2010-08-16 revision 28998) [i386-mingw32]&#34;: 
-  :path: !ruby/object:Pathname 
-    path: C:/rubies/Ruby-191-p430/bin
-&#34;193: ruby 1.9.3p0 (2011-10-30) [i386-mingw32]&#34;: 
-  :path: !ruby/object:Pathname 
-    path: C:/rubies/Ruby-193-p0/bin
---- 
-:install_dir: !ruby/object:Pathname 
-  path: c:\rubies\</pre></div>
-<p>最後に実行してみ…なんじゃこりゃあーー！</p>
-<div class="highlight"><pre class="chroma">$ bundle exec ruby test.rb
-Error loading gem paths on load path in gem_prelude
-can&#39;t modify frozen string
-&lt;internal:gem_prelude&gt;:69:in `force_encoding&#39;
-&lt;internal:gem_prelude&gt;:69:in `set_home&#39;
-&lt;internal:gem_prelude&gt;:38:in `dir&#39;
-&lt;internal:gem_prelude&gt;:76:in `set_paths&#39;
-&lt;internal:gem_prelude&gt;:47:in `path&#39;
-&lt;internal:gem_prelude&gt;:286:in `push_all_highest_version_gems_on_load_path&#39;
-&lt;internal:gem_prelude&gt;:355:in `&lt;compiled&gt;&#39;
-&lt;internal:gem_prelude&gt;:345:in `method_missing&#39;: undefined method `user_home&#39; for Gem:Module (NoMethodError)
-        from C:/rubies/Ruby-191-p430/lib/ruby/gems/1.9.1/gems/bundler-1.0.21/lib/bundler/rubygems_integration.rb:57:in `user_home&#39;
-        from C:/rubies/Ruby-191-p430/lib/ruby/gems/1.9.1/gems/bundler-1.0.21/lib/bundler/settings.rb:107:in `global_config_file&#39;
-        from C:/rubies/Ruby-191-p430/lib/ruby/gems/1.9.1/gems/bundler-1.0.21/lib/bundler/settings.rb:6:in `initialize&#39;
-        from C:/rubies/Ruby-191-p430/lib/ruby/gems/1.9.1/gems/bundler-1.0.21/lib/bundler.rb:185:in `new&#39;
-        from C:/rubies/Ruby-191-p430/lib/ruby/gems/1.9.1/gems/bundler-1.0.21/lib/bundler.rb:185:in `settings&#39;
-        from C:/rubies/Ruby-191-p430/lib/ruby/gems/1.9.1/gems/bundler-1.0.21/lib/bundler.rb:261:in `configure_gem_home_and_path&#39;
-        from C:/rubies/Ruby-191-p430/lib/ruby/gems/1.9.1/gems/bundler-1.0.21/lib/bundler.rb:82:in `configure&#39;
-        from C:/rubies/Ruby-191-p430/lib/ruby/gems/1.9.1/gems/bundler-1.0.21/lib/bundler.rb:136:in `definition&#39;
-        from C:/rubies/Ruby-191-p430/lib/ruby/gems/1.9.1/gems/bundler-1.0.21/lib/bundler.rb:126:in `load&#39;
-        from C:/rubies/Ruby-191-p430/lib/ruby/gems/1.9.1/gems/bundler-1.0.21/lib/bundler.rb:110:in `setup&#39;
-        from C:/rubies/Ruby-191-p430/lib/ruby/gems/1.9.1/gems/bundler-1.0.21/lib/bundler/setup.rb:7:in `&lt;top (required)&gt;&#39;
-        from C:\rubies\Ruby-191-p430\bin\ruby.exe:0:in `require&#39;</pre></div>
-<ul>
-<li><a href="http://saikyoline.jp/weblog/2011/09/10/013622.html:title">http://saikyoline.jp/weblog/2011/09/10/013622.html:title</a></li>
-<li><a href="http://d.hatena.ne.jp/sasaplus1/20110522/1306074417:title">http://d.hatena.ne.jp/sasaplus1/20110522/1306074417:title</a></li>
-<li><a href="http://www.ruby-forum.com/topic/1832630:title">http://www.ruby-forum.com/topic/1832630:title</a></li>
-</ul>
-
-<p>Ruby1.9.1の現象らしい…。1.9.2に切り替えて…。</p>
-<div class="highlight"><pre class="chroma">$ bundle exec ruby myapp.rb
-[2011-11-29 13:45:14] INFO  WEBrick 1.3.1
-[2011-11-29 13:45:14] INFO  ruby 1.9.2 (2011-07-09) [i386-mingw32]
-== Sinatra/1.3.1 has taken the stage on 4567 for development with backup from WEBrick
-[2011-11-29 13:45:14] INFO  WEBrick::HTTPServer#start: pid=4568 port=4567</pre></div>
-<p>ふぅ…いろんなことが起こりすぎた…。最後のエラーは置いといて、デフォルトでスペース入っているパスにインストールされると危ないな。</p>
-
-<h2 id="結論-1">結論</h2>
+<h2 id="参考">参考</h2>
 
 <ul>
-<li><span class="deco" style="color:#FF0000;">Rubyのインストールパスにスペースを含めない</span></li>
-<li><span class="deco" style="color:#FF0000;">pikでRubyをインストールする前にpik config install_dir=XXXでパス指定する</span></li>
+<li><a href="https://linuxjm.osdn.jp/html/GNU_bash/man1/bash.1.html">Man page of BASH</a></li>
+<li><a href="https://stackoverflow.com/questions/24623021/getting-stty-standard-input-inappropriate-ioctl-for-device-when-using-scp-thro">linux - Getting stty: standard input: Inappropriate ioctl for device when using scp through an ssh tunnel - Stack Overflow</a></li>
 </ul>
-
-<p>大事なことだったので二回書いた。</p>
 
       </section>
     </article>
@@ -322,10 +249,10 @@ can&#39;t modify frozen string
       <nav class="paginate-container">
   <div class="pagination">
       
-        <a href="https://gosyujin.github.io/2011/11/28/1322482230/" class="pagination_overflow previous_page">
+        <a href="https://gosyujin.github.io/2019/06/13/sqlserver-varchar-nvarchar/" class="pagination_overflow previous_page">
           Prev: 
-          11/11/28
-          pikでインストールしたRubyでbundle exec …
+          19/6/13
+          SQL Serverでnvarchar(x)のカラムにx文字 …
         </a>
       
 
@@ -335,11 +262,9 @@ can&#39;t modify frozen string
       </span>
 
       
-        <a href="https://gosyujin.github.io/2011/11/30/1322662743/" class="pagination_overflow next_page">
-          Next: 
-          11/11/30
-          rvm環境でRuby実行時にReadlineエラーが起きた時 …
-        </a>
+        <span class="pagination_overflow next_page disabled">
+          Next: -
+        </span>
       
   </div>
 </nav>
@@ -352,183 +277,303 @@ can&#39;t modify frozen string
 <ol>
   
     
-      <li class="newer-post">
+      <li class="older-post">
     
-      <span>2011/12/27 </span>
+      <span>2019/06/13 </span>
       
 
 
   
-    <a href='https://gosyujin.github.io/tags/evernote' class="muted-link">
-      [<span class="Label Label--gray">Evernote</span>]
+    <a href='https://gosyujin.github.io/tags/sql-server' class="muted-link">
+      [<span class="Label Label--gray">SQL Server</span>]
     </a>
   
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [<span class="Label Label--gray">備忘録</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/api' class="muted-link">
-      [<span class="Label Label--gray">API</span>]
+    <a href='https://gosyujin.github.io/tags/%E6%96%87%E5%AD%97%E3%82%B3%E3%83%BC%E3%83%89' class="muted-link">
+      [<span class="Label Label--gray">文字コード</span>]
     </a>
   
 
 
 
-      <a class="mb-2" href="/2011/12/27/1324911671/">EvernoteのAPIをRubyから叩きたい</a>
+      <a class="mb-2" href="/2019/06/13/sqlserver-varchar-nvarchar/">SQL Serverでnvarchar(x)のカラムにx文字入らないのはなぜ</a>
     </li>
   
     
-      <li class="newer-post">
+      <li class="older-post">
     
-      <span>2011/12/26 </span>
+      <span>2019/06/03 </span>
       
 
 
   
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
+    <a href='https://gosyujin.github.io/tags/sql-server' class="muted-link">
+      [<span class="Label Label--gray">SQL Server</span>]
     </a>
   
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [<span class="Label Label--gray">備忘録</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/haml' class="muted-link">
-      [<span class="Label Label--gray">Haml</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/sinatra' class="muted-link">
-      [<span class="Label Label--gray">Sinatra</span>]
+    <a href='https://gosyujin.github.io/tags/a5-sql-mk-2' class="muted-link">
+      [<span class="Label Label--gray">A5 SQL Mk-2</span>]
     </a>
   
 
 
 
-      <a class="mb-2" href="/2011/12/26/1324910284/">SinatraでHaml入門</a>
+      <a class="mb-2" href="/2019/06/03/sqlserver-show-columns-logical-name/">SQL Serverのカラムに設定されている論理名をまとめて取得する</a>
     </li>
   
     
-      <li class="newer-post">
+      <li class="older-post">
     
-      <span>2011/12/21 </span>
+      <span>2019/05/21 </span>
       
 
 
   
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
+    <a href='https://gosyujin.github.io/tags/sql-server' class="muted-link">
+      [<span class="Label Label--gray">SQL Server</span>]
     </a>
   
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [<span class="Label Label--gray">備忘録</span>]
+    <a href='https://gosyujin.github.io/tags/xquery' class="muted-link">
+      [<span class="Label Label--gray">xQuery</span>]
     </a>
   
 
 
 
-      <a class="mb-2" href="/2011/12/21/1324477125/">Ruby実行時のオプションをよろしく解析してくれるoptparseを使ってみる</a>
+      <a class="mb-2" href="/2019/05/21/sqlserver-query-parameter/">SQL Serverの動的管理ビューから、実行したSQL(とバインド変数)を取得する</a>
     </li>
   
     
-      <li class="newer-post">
+      <li class="older-post">
     
-      <span>2011/12/15 </span>
+      <span>2019/05/02 </span>
       
 
 
   
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/solaris' class="muted-link">
-      [<span class="Label Label--gray">Solaris</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [<span class="Label Label--gray">備忘録</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/redmine' class="muted-link">
-      [<span class="Label Label--gray">Redmine</span>]
+    <a href='https://gosyujin.github.io/tags/sql-server' class="muted-link">
+      [<span class="Label Label--gray">SQL Server</span>]
     </a>
   
 
 
 
-      <a class="mb-2" href="/2011/12/15/1323951847/">RedmineとApacheを連携させるPassengerをインストールできなかった</a>
+      <a class="mb-2" href="/2019/05/02/sqlserver-convert-implicit/">SQL Serverで実行したSQLが暗黙の型変換が起こっているかどうかはどうやって調べたらよいのか</a>
     </li>
   
     
-      <li class="newer-post">
+      <li class="older-post">
     
-      <span>2011/12/07 </span>
+      <span>2019/04/23 </span>
       
 
 
   
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
+    <a href='https://gosyujin.github.io/tags/oracle' class="muted-link">
+      [<span class="Label Label--gray">Oracle</span>]
     </a>
   
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [<span class="Label Label--gray">備忘録</span>]
+    <a href='https://gosyujin.github.io/tags/sql-server' class="muted-link">
+      [<span class="Label Label--gray">SQL Server</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/postgresql' class="muted-link">
+      [<span class="Label Label--gray">PostgreSQL</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/db2' class="muted-link">
+      [<span class="Label Label--gray">DB2</span>]
     </a>
   
 
 
 
-      <a class="mb-2" href="/2011/12/07/1323291938/">ZenTestでRSpecを自動実行できるようにした</a>
+      <a class="mb-2" href="/2019/04/23/database-alter-table/">色々なDBのバージョン確認方法とか論理名のつけ方とか</a>
     </li>
   
     
-      <li class="newer-post">
+      <li class="older-post">
     
-      <span>2011/12/05 </span>
+      <span>2019/04/15 </span>
       
 
 
   
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [<span class="Label Label--gray">備忘録</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/redmine' class="muted-link">
-      [<span class="Label Label--gray">Redmine</span>]
+    <a href='https://gosyujin.github.io/tags/sql-server' class="muted-link">
+      [<span class="Label Label--gray">SQL Server</span>]
     </a>
   
 
 
 
-      <a class="mb-2" href="/2011/12/05/1323092947/">RedmineでプラグインインストールしたらTemplateErrorが出た</a>
+      <a class="mb-2" href="/2019/04/15/sqlserver-collation-name/">SQL Serverでの照合順序の確認方法</a>
     </li>
   
     
-      <li class="newer-post">
+      <li class="older-post">
     
-      <span>2011/12/04 </span>
+      <span>2011/12/24 </span>
       
 
 
   
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [<span class="Label Label--gray">Unix</span>]
     </a>
   
     <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
       [<span class="Label Label--gray">備忘録</span>]
     </a>
   
-    <a href='https://gosyujin.github.io/tags/mac' class="muted-link">
-      [<span class="Label Label--gray">Mac</span>]
+
+
+
+      <a class="mb-2" href="/2011/12/24/1324741031/">特定のファイルを探したり除外したり(メモ)</a>
+    </li>
+  
+    
+      <li class="older-post">
+    
+      <span>2011/12/23 </span>
+      
+
+
+  
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [<span class="Label Label--gray">Unix</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [<span class="Label Label--gray">備忘録</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/vim' class="muted-link">
+      [<span class="Label Label--gray">Vim</span>]
+    </a>
+  
+
+
+
+      <a class="mb-2" href="/2011/12/23/1324651460/">Vimコマンドよく使うものと覚えたいコマンドまとめ</a>
+    </li>
+  
+    
+      <li class="older-post">
+    
+      <span>2011/12/18 </span>
+      
+
+
+  
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [<span class="Label Label--gray">Unix</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [<span class="Label Label--gray">備忘録</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/vim' class="muted-link">
+      [<span class="Label Label--gray">Vim</span>]
+    </a>
+  
+
+
+
+      <a class="mb-2" href="/2011/12/18/1324219740/">Vimを使い始めるためにインストールから設定まで行った</a>
+    </li>
+  
+    
+      <li class="older-post">
+    
+      <span>2011/12/17 </span>
+      
+
+
+  
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [<span class="Label Label--gray">Unix</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [<span class="Label Label--gray">備忘録</span>]
+    </a>
+  
+
+
+
+      <a class="mb-2" href="/2011/12/17/1324168464/">Unixでwmvファイルを他のファイルフォーマットに変換したい</a>
+    </li>
+  
+    
+      <li class="older-post">
+    
+      <span>2011/12/16 </span>
+      
+
+
+  
+    <a href='https://gosyujin.github.io/tags/subversion' class="muted-link">
+      [<span class="Label Label--gray">Subversion</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [<span class="Label Label--gray">Unix</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [<span class="Label Label--gray">備忘録</span>]
+    </a>
+  
+
+
+
+      <a class="mb-2" href="/2011/12/16/1324086694/">svn infoコマンドでリビジョン番号を抜き出す</a>
+    </li>
+  
+    
+      <li class="older-post">
+    
+      <span>2011/12/14 </span>
+      
+
+
+  
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [<span class="Label Label--gray">Unix</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [<span class="Label Label--gray">備忘録</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/%E3%81%95%E3%81%8F%E3%82%89vps' class="muted-link">
+      [<span class="Label Label--gray">さくらVPS</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/startup' class="muted-link">
+      [<span class="Label Label--gray">StartUp</span>]
+    </a>
+  
+
+
+
+      <a class="mb-2" href="/2011/12/14/1323868360/">さくらVPSの初期設定メモ</a>
+    </li>
+  
+    
+      <li class="older-post">
+    
+      <span>2011/12/13 </span>
+      
+
+
+  
+    <a href='https://gosyujin.github.io/tags/subversion' class="muted-link">
+      [<span class="Label Label--gray">Subversion</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
+      [<span class="Label Label--gray">備忘録</span>]
     </a>
   
     <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
@@ -538,211 +583,63 @@ can&#39;t modify frozen string
 
 
 
-      <a class="mb-2" href="/2011/12/04/1323009249/">複数のRuby環境の管理・切替ができるrvmをインストールした</a>
-    </li>
-  
-    
-      <li class="newer-post">
-    
-      <span>2011/11/30 </span>
-      
-
-
-  
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [<span class="Label Label--gray">備忘録</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/heroku' class="muted-link">
-      [<span class="Label Label--gray">Heroku</span>]
-    </a>
-  
-
-
-
-      <a class="mb-2" href="/2011/11/30/1322662743/">rvm環境でRuby実行時にReadlineエラーが起きた時の対処法</a>
+      <a class="mb-2" href="/2011/12/13/1323783496/">svn updateコマンド以外でリビジョン番号を抜き出す</a>
     </li>
   
     
       <li class="older-post">
     
-      <span>2011/11/28 </span>
+      <span>2011/12/12 </span>
       
 
 
   
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [<span class="Label Label--gray">Unix</span>]
+    </a>
+  
+    <a href='https://gosyujin.github.io/tags/shell' class="muted-link">
+      [<span class="Label Label--gray">Shell</span>]
     </a>
   
     <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
       [<span class="Label Label--gray">備忘録</span>]
     </a>
   
+    <a href='https://gosyujin.github.io/tags/solaris' class="muted-link">
+      [<span class="Label Label--gray">Solaris</span>]
+    </a>
+  
 
 
 
-      <a class="mb-2" href="/2011/11/28/1322482230/">pikでインストールしたRubyでbundle exec rubyしたらエラーになった</a>
+      <a class="mb-2" href="/2011/12/12/1323701022/">ファイルの拡張子を見て適切なコマンドで解凍してくれるスクリプトを組んだ</a>
     </li>
   
     
       <li class="older-post">
     
-      <span>2011/11/27 </span>
+      <span>2011/12/09 </span>
       
 
 
   
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
+    <a href='https://gosyujin.github.io/tags/unix' class="muted-link">
+      [<span class="Label Label--gray">Unix</span>]
     </a>
   
     <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
       [<span class="Label Label--gray">備忘録</span>]
     </a>
   
-    <a href='https://gosyujin.github.io/tags/heroku' class="muted-link">
-      [<span class="Label Label--gray">Heroku</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/lokka' class="muted-link">
-      [<span class="Label Label--gray">Lokka</span>]
+    <a href='https://gosyujin.github.io/tags/solaris' class="muted-link">
+      [<span class="Label Label--gray">Solaris</span>]
     </a>
   
 
 
 
-      <a class="mb-2" href="/2011/11/27/1322329546/">LokkaをインストールしてHerokuにデプロイした</a>
-    </li>
-  
-    
-      <li class="older-post">
-    
-      <span>2011/11/26 </span>
-      
-
-
-  
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [<span class="Label Label--gray">備忘録</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/sinatra' class="muted-link">
-      [<span class="Label Label--gray">Sinatra</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/heroku' class="muted-link">
-      [<span class="Label Label--gray">Heroku</span>]
-    </a>
-  
-
-
-
-      <a class="mb-2" href="/2011/11/26/1322240459/">HerokuにWebアプリ(Sinatra)をデプロイする手順をまとめた</a>
-    </li>
-  
-    
-      <li class="older-post">
-    
-      <span>2011/11/24 </span>
-      
-
-
-  
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [<span class="Label Label--gray">備忘録</span>]
-    </a>
-  
-
-
-
-      <a class="mb-2" href="/2011/11/24/1322138944/">複数のRuby環境の管理・切替ができるpikを実行できた nyaos編</a>
-    </li>
-  
-    
-      <li class="older-post">
-    
-      <span>2011/10/04 </span>
-      
-
-
-  
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [<span class="Label Label--gray">備忘録</span>]
-    </a>
-  
-
-
-
-      <a class="mb-2" href="/2011/10/04/1317660186/">複数のRuby環境の管理・切替ができるpikを実行できた</a>
-    </li>
-  
-    
-      <li class="older-post">
-    
-      <span>2011/10/03 </span>
-      
-
-
-  
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [<span class="Label Label--gray">備忘録</span>]
-    </a>
-  
-
-
-
-      <a class="mb-2" href="/2011/10/03/1317642705/">Rubyのgemバージョン管理ができるBundlerを実行できなかった</a>
-    </li>
-  
-    
-      <li class="older-post">
-    
-      <span>2011/09/30 </span>
-      
-
-
-  
-    <a href='https://gosyujin.github.io/tags/java' class="muted-link">
-      [<span class="Label Label--gray">Java</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/windows' class="muted-link">
-      [<span class="Label Label--gray">Windows</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/ruby' class="muted-link">
-      [<span class="Label Label--gray">Ruby</span>]
-    </a>
-  
-    <a href='https://gosyujin.github.io/tags/%E5%82%99%E5%BF%98%E9%8C%B2' class="muted-link">
-      [<span class="Label Label--gray">備忘録</span>]
-    </a>
-  
-
-
-
-      <a class="mb-2" href="/2011/09/30/1317312438/">.msgファイルをパースして中から添付ファイルを抜き出す</a>
+      <a class="mb-2" href="/2011/12/09/1323474254/">Unixでファイル圧縮・解凍するときに使うコマンドをまとめた</a>
     </li>
   
 </ol>
@@ -1410,13 +1307,15 @@ can&#39;t modify frozen string
 <ul>
 <li>
 <ul>
-<li><a href="#ruby-備忘録-pikでインストールしたrubyでbundle-exec-rubyしたらエラーになった-解決編">[Ruby][備忘録]pikでインストールしたRubyでbundle exec rubyしたらエラーになった 解決編</a></li>
-<li><a href="#前回までのあらすじ">前回までのあらすじ</a></li>
-<li><a href="#結論">結論</a></li>
-<li><a href="#調査">調査</a></li>
-<li><a href="#pikの設定変更">pikの設定変更</a></li>
-<li><a href="#backward-compatibility-change">BACKWARD COMPATIBILITY CHANGE</a></li>
-<li><a href="#結論-1">結論</a></li>
+<li><a href="#あらすじ">あらすじ</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#解決方法">解決方法</a>
+<ul>
+<li><a href="#確認">確認</a></li>
+<li><a href="#無効化">無効化</a></li>
+</ul></li>
+<li><a href="#注意事項">注意事項</a></li>
+<li><a href="#参考">参考</a></li>
 </ul></li>
 </ul>
 </nav>
