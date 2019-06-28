@@ -1,10 +1,12 @@
 <ul>
   {{ range .Pages }}
     {{ if eq .Params.layout "post" }}
-      <li>
+      <li class="{{ if .Draft }}draft{{ end }}">
         <span>{{ .Date.Format "2006/01/02" }} </span>
         {{ partial "taxonomy.html" . }}
-        <a class="mb-2" href="{{ .URL }}">{{ .Title }}</a>
+        <a class="mb-2 {{ if .Draft }}draft{{ end }}" href="{{ .URL }}">
+          {{ .Title }}
+        </a>
         <!-- {{ partial "hateb.html" . }} -->
       </li>
     {{ end }}
