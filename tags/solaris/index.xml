@@ -2,30 +2,30 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Solaris on kk_Atakaの日記</title>
-    <link>https://gosyujin.github.io/tags/solaris/</link>
+    <link>https://blog.gosyujin.com/tags/solaris/</link>
     <description>Recent content in Solaris on kk_Atakaの日記</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>jp</language>
     <lastBuildDate>Tue, 17 Apr 2012 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://gosyujin.github.io/tags/solaris/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://blog.gosyujin.com/tags/solaris/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Subversionで2ヶ所のリポジトリの同期を取るメモ</title>
-      <link>https://gosyujin.github.io/2012/04/17/1334669770/</link>
+      <link>https://blog.gosyujin.com/2012/04/17/1334669770/</link>
       <pubDate>Tue, 17 Apr 2012 00:00:00 +0000</pubDate>
       
-      <guid>https://gosyujin.github.io/2012/04/17/1334669770/</guid>
+      <guid>https://blog.gosyujin.com/2012/04/17/1334669770/</guid>
       <description>[Solaris][備忘録][Subversion]Subversionで2ヶ所のリポジトリの同期を取るメモ 前回のあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120115/1326624864:title  参考サイト  http://www.asahi-net.or.jp/~iu9m-tcym/svndoc/svn_backup.html:title http://www.ilovex.co.jp/blog/system/other/subversion.html:title http://www.02.246.ne.jp/~torutk/subversion/intro.html:title http://d.hatena.ne.jp/pasela/20090206/svn_backup:title http://terai.xrea.jp/Subversion.html:title  前提  以下の二つのサーバがある  Aサーバ:開発を進んでいるリポジトリがある(r222) Bサーバ:これからAサーバのリポジトリと同期をとりたいリポジトリがある(r111)   差分のdumpとってload(失敗) Aサーバ  進んでいる分のダンプを取る。  rオプションでダンプを取るリビジョンを指定できる。一つだけだとそのリビジョンだけ。(222ならリビジョン222)範囲指定する場合はAAA:BBBとする   $ svnadmin dump リポジトリパス(/home/xxx/yyyなど) -r 111:222 --incremental &amp;gt; repo.dump  これをなんらかの方法でBサーバへ移動する(ftpでもUSBでも)  Bサーバ  svnadmin loadコマンドで差分ダンプファイルを流しこむ。  リビジョンがかぶっているとエラー(リビジョン111未満のもの)   $ svnadmin load リポジトリパス(/home/xxx/yyyなど) &amp;lt; repo.dump &amp;lt;&amp;lt;&amp;lt; オリジナルのリビジョン 111 に基づき、新しいトランザクションを開始しました * パスを追加しています : trunk/xxx ...svnadmin: ファイルが既に存在します: ファイルシステム &amp;#39;リポジトリパス&amp;#39;, トランザクション xxx-xx, パス &amp;#39;trunk/xxx&amp;#39;  - 112からダンプしたファイルをloadする…とうまくいく予定だったのだが、なんかファイルのチェックサムが違うといわれた……。  $ svnadmin load リポジトリパス(/home/xxx/yyyなど) &amp;lt; repo.</description>
     </item>
     
     <item>
       <title>Subversionのリポジトリをサーバ間でまるごと移動する</title>
-      <link>https://gosyujin.github.io/2012/01/15/1326624864/</link>
+      <link>https://blog.gosyujin.com/2012/01/15/1326624864/</link>
       <pubDate>Sun, 15 Jan 2012 00:00:00 +0000</pubDate>
       
-      <guid>https://gosyujin.github.io/2012/01/15/1326624864/</guid>
+      <guid>https://blog.gosyujin.com/2012/01/15/1326624864/</guid>
       <description>[Solaris][備忘録][Subversion]Subversionのリポジトリをサーバ間でまるごと移動する あらすじ AサーバからBサーバにリポジトリを引っ越しする。
 参考サイト http://hain.jp/index.php/tech-j/2008/03/24/p199:title
 手順 引っ越し元のサーバ まずはリポジトリのダンプファイルを作成。
@@ -37,20 +37,20 @@ $ svnadmin load repos &amp;lt; repo.dump * パスを追加しています... (�
     
     <item>
       <title>SolarisにSubversionをインストールするときのメモ</title>
-      <link>https://gosyujin.github.io/2011/12/22/1324573161/</link>
+      <link>https://blog.gosyujin.com/2011/12/22/1324573161/</link>
       <pubDate>Thu, 22 Dec 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://gosyujin.github.io/2011/12/22/1324573161/</guid>
+      <guid>https://blog.gosyujin.com/2011/12/22/1324573161/</guid>
       <description>[Solaris][備忘録][Subversion]SolarisにSubversionをインストールするときのメモ インストール  http://www.sunfreeware.com/ ftp://ftp.ne.jp/Sun/sunfreeware/  から必要なライブラリをダウンロード。
  - neon 0.29.5[1]  swig 1.3.40[2] expat 2.0.1[3] libxml2 2.7.8[4] db 4.2.52 REV=1.0.12[5] openssl 1.0.0d[6] libiconv 1.13.1[7] libintl 3.4.0[8] sasl 2.1.21[9] gcc(libgcc 3.4.6((The GNU C compiler and related programs - installs in /usr/local. This package includes the GNU C, C++, and f77 suites and support files. These gcc packages require the installation of libiconv. It was compiled to use the SUN assembler and loader usually in /usr/ccs/bin if the SUNW developer packages are installed.</description>
     </item>
     
     <item>
       <title>RedmineとApacheを連携させるPassengerをインストールできなかった</title>
-      <link>https://gosyujin.github.io/2011/12/15/1323951847/</link>
+      <link>https://blog.gosyujin.com/2011/12/15/1323951847/</link>
       <pubDate>Thu, 15 Dec 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://gosyujin.github.io/2011/12/15/1323951847/</guid>
+      <guid>https://blog.gosyujin.com/2011/12/15/1323951847/</guid>
       <description>[Ruby][Solaris][備忘録][Redmine]RedmineとApacheを連携させるPassengerをインストールできなかった あらすじ  Redmineを自動起動するようにしたい  Phusion Passenger(mod_rails for Apache)を使えばApacheと連携できるらしい    特徴
 \* Apache単独でRailsアプリケーションを実行可能です。Apacheのモジュールとして実装されており、別途デーモンを起動する必要がありません。tcpポートも使いません。 \* Railsアプリケーションのデプロイが簡単になります。ファイルをアップロードするだけ。ほぼPHP感覚です。 \* サーバのメモリを節約できます。Railsインスタンスは必要なタイミングで生成します。また、一定時間アクセスがなければインスタンスを終了させます。 http://redmine.jp/tech_note/apache-passenger/
  ふーむ。
@@ -62,20 +62,20 @@ $ passenger-install-apache2-module Welcome to the Phusion Passenger Apache 2 mod
     
     <item>
       <title>ファイルの拡張子を見て適切なコマンドで解凍してくれるスクリプトを組んだ</title>
-      <link>https://gosyujin.github.io/2011/12/12/1323701022/</link>
+      <link>https://blog.gosyujin.com/2011/12/12/1323701022/</link>
       <pubDate>Mon, 12 Dec 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://gosyujin.github.io/2011/12/12/1323701022/</guid>
+      <guid>https://blog.gosyujin.com/2011/12/12/1323701022/</guid>
       <description> [Unix][Shell][備忘録][Solaris]ファイルの拡張子を見て適切なコマンドで解凍してくれるスクリプトを組んだ  http://d.hatena.ne.jp/kk_Ataka/20111209/1323474254:title http://d.hatena.ne.jp/kk_Ataka/20111210/1323541524:title  を基に引数に指定したらよろしく解凍してくれるスクリプトを組んでみる。とりあえずオプション指定できないし圧縮できないけど必要になったら実装していこう。
  </description>
     </item>
     
     <item>
       <title>tarコマンドでzオプションを使わずにファイルを解凍する</title>
-      <link>https://gosyujin.github.io/2011/12/10/1323541524/</link>
+      <link>https://blog.gosyujin.com/2011/12/10/1323541524/</link>
       <pubDate>Sat, 10 Dec 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://gosyujin.github.io/2011/12/10/1323541524/</guid>
+      <guid>https://blog.gosyujin.com/2011/12/10/1323541524/</guid>
       <description>[Solaris][備忘録]tarコマンドでzオプションを使わずにファイルを解凍する あらすじ Solarisにデフォルトで入っているtarではzオプションなどが使えない。のでtar.gzやtar.bz2ファイルを一発で解凍するにはパイプでつないでやる必要がある。
 コマンド $ gzip -cd xxxx.tar.gz | tar -xvf - こんな感じ。cオプションを指定してやる。……やってる事はわかるけど、tarの最後にあるハイフンはなんじゃろう。tar -f -で標準入力から持ってくるルール？
  http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1120031991:title  ふむ。マニュアルを見てみる。
@@ -84,10 +84,10 @@ $ passenger-install-apache2-module Welcome to the Phusion Passenger Apache 2 mod
     
     <item>
       <title>Unixでファイル圧縮・解凍するときに使うコマンドをまとめた</title>
-      <link>https://gosyujin.github.io/2011/12/09/1323474254/</link>
+      <link>https://blog.gosyujin.com/2011/12/09/1323474254/</link>
       <pubDate>Fri, 09 Dec 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://gosyujin.github.io/2011/12/09/1323474254/</guid>
+      <guid>https://blog.gosyujin.com/2011/12/09/1323474254/</guid>
       <description>[Unix][備忘録][Solaris]Unixでファイル圧縮・解凍するときに使うコマンドをまとめた あらすじ 不意に.Zファイルがやってきて解凍の仕方を調べてしまった。あとだいたいオプションを忘れるのでメモ。対象ファイルは以下。
  .zip .Z .gz .bz2 .tar.gz .tgz .tar.bz2 .tbz .tar.Z  こんなファイルを固めたり解凍したり。
 extracted ┣direct/ ┃┗ls.txt # man ls &amp;gt;&amp;gt; ls.txt ┣slink ┣tar.txt # man tar &amp;gt;&amp;gt; tar.txt ┗zip.txt # man zip &amp;gt;&amp;gt; zip.txt tar ┗sample.tar $ tar tvf sample.tar ../extracted drwxr-xr-x 9999/9999 0 12月 8日 19:14 2011年 ../extracted/ lrwxrwxrwx 9999/9999 7 12月 8日 19:13 2011年 ../extracted/slink tar.txt へのシンボリックリンク drwxr-xr-x 9999/9999 0 12月 8日 19:37 2011年 ../extracted/direct/ -rw-r--r-- 9999/9999 36890 12月 8日 19:37 2011年 .</description>
@@ -95,10 +95,10 @@ extracted ┣direct/ ┃┗ls.txt # man ls &amp;gt;&amp;gt; ls.txt ┣slink ┣t
     
     <item>
       <title>Solarisで現在のOSバージョンやパッチバージョンを確認する</title>
-      <link>https://gosyujin.github.io/2011/12/08/1323357042/</link>
+      <link>https://blog.gosyujin.com/2011/12/08/1323357042/</link>
       <pubDate>Thu, 08 Dec 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://gosyujin.github.io/2011/12/08/1323357042/</guid>
+      <guid>https://blog.gosyujin.com/2011/12/08/1323357042/</guid>
       <description>[Solaris][備忘録]Solarisで現在のOSバージョンやパッチバージョンを確認する SPARC向けだろうか。そんなことなかったぜ！
 参考サイト  http://www.rose.sannet.ne.jp/nterasim/solaris/patch.html:title  unameコマンドでパッチ確認+α uname(現在のシステム名の表示)コマンドを使用していろいろ取得する。
    コマンド 引数 意味 出力内容     uname OSの表示 SunOS   uname -n ホスト名の表示 XXXXXXX   uname -r OSリリースレベルの表示 5.10   uname -v カーネルパッチバージョンの表示 Generic_999999-99   uname -m マシンタイプの表示 sunXX   uname -p プロセッサタイプの表示 sparc   uname -i プラットフォーム名の表示 SUNXX,SPARC-ZZZZZZZZZZ   uname -a 全部 SunOS XXXXXXX 5.10 Generic_141999-99 (以下略)    [f:id:kk_Ataka:20111210091242j:image]</description>
@@ -106,10 +106,10 @@ extracted ┣direct/ ┃┗ls.txt # man ls &amp;gt;&amp;gt; ls.txt ┣slink ┣t
     
     <item>
       <title>DAT装置の使い方 超簡易版(Solaris)</title>
-      <link>https://gosyujin.github.io/2011/12/01/1322746718/</link>
+      <link>https://blog.gosyujin.com/2011/12/01/1322746718/</link>
       <pubDate>Thu, 01 Dec 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://gosyujin.github.io/2011/12/01/1322746718/</guid>
+      <guid>https://blog.gosyujin.com/2011/12/01/1322746718/</guid>
       <description>[Solaris][備忘録]DAT装置の使い方 超簡易版(Solaris) あらすじ 結局はtarコマンド+αなんだけど、どうもDAT装置とテープというデバイスが使い慣れないので操作方法をメモしておく。とりあえず
  状態確認 何も考えずに書き込み 全部取り出し  くらい。
 コマンド 使用するコマンドはmt(磁気テープの制御)とtar。まずはmt。
@@ -123,10 +123,10 @@ $ tar tvf openssl-xxx.tar -rw-r--r-- 9/9 99999 3月 19日 22:22 2011年 test/aaa
     
     <item>
       <title>Solarisのパッケージを作ってみる もう少し学んだ版</title>
-      <link>https://gosyujin.github.io/2011/09/14/1316002377/</link>
+      <link>https://blog.gosyujin.com/2011/09/14/1316002377/</link>
       <pubDate>Wed, 14 Sep 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://gosyujin.github.io/2011/09/14/1316002377/</guid>
+      <guid>https://blog.gosyujin.com/2011/09/14/1316002377/</guid>
       <description>[Solaris][備忘録]Solarisのパッケージを作ってみる もう少し学んだ版 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20110912/1315826713:title  もう少し調べてみた。
 参考サイト  http://dlc.sun.com/osol/g11n/content/PACKINSTALL/ja/ch2buildpkg-11300.html:title  必要なもの パッケージコンテンツ
 ディレクトリ含めたソース一式。ざっくりソース一式とか言ってるのでここは作るものによってもう少しブレークダウンする必要がある
@@ -153,10 +153,10 @@ PKG=&amp;#34;MYAPpkg&amp;#34; NAME=&amp;#34;MyApplyPackage&amp;#34; ARCH=&amp;#3
     
     <item>
       <title>Solarisのパッケージを作ってみる</title>
-      <link>https://gosyujin.github.io/2011/09/12/1315826713/</link>
+      <link>https://blog.gosyujin.com/2011/09/12/1315826713/</link>
       <pubDate>Mon, 12 Sep 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://gosyujin.github.io/2011/09/12/1315826713/</guid>
+      <guid>https://blog.gosyujin.com/2011/09/12/1315826713/</guid>
       <description>[Solaris][備忘録]Solarisのパッケージを作ってみる もう少し学んだ。http://d.hatena.ne.jp/kk_Ataka/20110914/1316002377:title
 あらすじ  Solarisのパッケージの作り方を学ぶ刻がきた  参考サイト  http://www.syuhitu.org/other/package/package.html:title http://www.nognog.com/techmemo/Solaris_Package_Creation_HOWTO.php:title http://blogs.oracle.com/yappri/entry/create_solaris_package  インストール後のファイルを作成する 作業用ディレクトリに移動する。
 $ cd /tmp/kk_Ataka 次にインストール後のファイル構成を作る。今回はこんなパッケージを作る。
@@ -172,10 +172,10 @@ i pkginfo なのでこうなる。</description>
     
     <item>
       <title>vmstatとかiostatとかsarとかswapコマンドのメモ</title>
-      <link>https://gosyujin.github.io/2011/09/04/1315146050/</link>
+      <link>https://blog.gosyujin.com/2011/09/04/1315146050/</link>
       <pubDate>Sun, 04 Sep 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://gosyujin.github.io/2011/09/04/1315146050/</guid>
+      <guid>https://blog.gosyujin.com/2011/09/04/1315146050/</guid>
       <description>[Solaris][備忘録]vmstatとかiostatとかsarとかswapコマンドのメモ すぐ忘れるのでメモ。あと略称とかも。
 vmstat  表示  kthr memory page disk faults cpu r b w swap free re mf pi po fr de sr ** ** ** ** in sy cs us sy id  kthr: KernelTHRead  |*r|Run queue|待ち行列内のカーネルスレッド数(mpstatやprstatでも取得可能)|
 |*b|?|I/Oで待たされているカーネルスレッド数|
