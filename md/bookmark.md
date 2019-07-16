@@ -5,10 +5,16 @@ description: あとでまとめるよう
 category: 
 ---
 
-<div id="book-list"><button class="sort btn btn-default" data-sort="title">Sort</button> <input class="search" />
+<div id="book-list"><button class="sort btn btn-default" data-sort="title">Title</button><button class="sort btn btn-default" data-sort="desc">Desc</button><input class="search" />
 
+
+
+- [GitHub Pagesを独自ドメインで公開する - A1 Blog](https://blog.a-1.dev/post/2017-05-14-custom_domain/)
+- [さくらのレンタルサーバをやめてGitHub Pagesを使うことにした（経緯と簡易手順） - おかゆ++](https://okayu-moka.hatenablog.com/entry/2018/03/10/151123)
+- [GitHub Pagesに独自ドメインを設定してHTTPS化する | maesblog](https://mae.chab.in/archives/60095)
 - [照合順序に KI、WI はないですよー - お だ のスペース](https://odashinsuke.hatenablog.com/entry/2017/02/15/205329)
     - 正しくは、省略して何も指定しないです。
+    - 区別するときに明示的に指定
 - [照合順序と Unicode のサポート - SQL Server | Microsoft Docs](https://docs.microsoft.com/ja-jp/sql/relational-databases/collations/collation-and-unicode-support?view=sql-server-2017)
 - [JS history](https://www.slideshare.net/badatmath/js-shistory/)
 - [QTTabBar - QuizoApps](http://qttabbar-ja.wikidot.com/)
@@ -49,6 +55,7 @@ category:
 - [labstack/echo: High performance, minimalist Go web framework](https://github.com/labstack/echo)
 - [Routing | Echo - High performance, minimalist Go web framework](https://echo.labstack.com/guide/routing)
 - [Wails](https://wails.app/)
+    - A framework for building desktop apps using Go & Web Technologies
 - [Goコンパイラをゼロから作って147日でセルフホストを達成した - Qiita](https://qiita.com/DQNEO/items/2efaec18772a1ae3c198)
 - [API with GitHub | Small and Tiny APIs with GitHub for quick use](https://apiwithgithub.com/)
 - [顔文字を3万個集める技術/kaomoji_over_30_thousand - Speaker Deck](https://speakerdeck.com/colorbox/kaomoji-over-30-thousand)
@@ -64,14 +71,20 @@ javascript:(function(){const e=document.createElement('input');e.value="- "+`[${
 <script>
 var ul = document.querySelector('#book-list ul');
 ul.classList.add('list');
+1
 var aList = document.querySelectorAll('#book-list li a');
-for (i = 0; i < aList.length - 1; i++) {
+for (i = 0; i <= aList.length - 1; i++) {
     aList[i].classList.add('title');
+}
+
+var descList = document.querySelectorAll('#book-list ul li ul li');
+for (i = 0; i <= descList.length - 1; i++) {
+    descList[i].classList.add('desc');
 }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.js"></script>
 <script>
-var options = { valueNames: [ 'title' ] };
+var options = { valueNames: [ 'title', 'desc' ] };
 var bookList = new List('book-list', options);
 </script>
 
