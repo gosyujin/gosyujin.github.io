@@ -5,7 +5,7 @@ description: あとでまとめるよう
 category: 
 ---
 
-<div id="book-list"><button class="sort btn btn-default" data-sort="title">Title</button><button class="sort btn btn-default" data-sort="desc">Desc</button><input class="search" />
+<div id="book-list"><button class="sort btn btn-default" data-sort="title">Tit</button><button class="sort btn btn-default" data-sort="desc">Des</button><input class="search" />
 
 
 
