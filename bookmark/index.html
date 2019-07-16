@@ -105,13 +105,17 @@ ga('send', 'pageview');
 
     <article>
      <section class="pb-6 mb-3 border-bottom">
-        <p><div id="book-list"><button class="sort btn btn-default" data-sort="title">Sort</button> <input class="search" /></p>
+        <p><div id="book-list"><button class="sort btn btn-default" data-sort="title">Title</button><button class="sort btn btn-default" data-sort="desc">Desc</button><input class="search" /></p>
 
 <ul>
+<li><a href="https://blog.a-1.dev/post/2017-05-14-custom_domain/">GitHub Pagesを独自ドメインで公開する - A1 Blog</a></li>
+<li><a href="https://okayu-moka.hatenablog.com/entry/2018/03/10/151123">さくらのレンタルサーバをやめてGitHub Pagesを使うことにした（経緯と簡易手順） - おかゆ++</a></li>
+<li><a href="https://mae.chab.in/archives/60095">GitHub Pagesに独自ドメインを設定してHTTPS化する | maesblog</a></li>
 <li><a href="https://odashinsuke.hatenablog.com/entry/2017/02/15/205329">照合順序に KI、WI はないですよー - お だ のスペース</a>
 
 <ul>
 <li>正しくは、省略して何も指定しないです。</li>
+<li>区別するときに明示的に指定</li>
 </ul></li>
 <li><a href="https://docs.microsoft.com/ja-jp/sql/relational-databases/collations/collation-and-unicode-support?view=sql-server-2017">照合順序と Unicode のサポート - SQL Server | Microsoft Docs</a></li>
 <li><a href="https://www.slideshare.net/badatmath/js-shistory/">JS history</a></li>
@@ -152,7 +156,11 @@ ga('send', 'pageview');
 <li><a href="http://peroon.hatenablog.com/entry/2016/08/02/213018">Golang + echoでAPIサーバを書いてみる - peroon&rsquo;s diary</a></li>
 <li><a href="https://github.com/labstack/echo">labstack/echo: High performance, minimalist Go web framework</a></li>
 <li><a href="https://echo.labstack.com/guide/routing">Routing | Echo - High performance, minimalist Go web framework</a></li>
-<li><a href="https://wails.app/">Wails</a></li>
+<li><a href="https://wails.app/">Wails</a>
+
+<ul>
+<li>A framework for building desktop apps using Go &amp; Web Technologies</li>
+</ul></li>
 <li><a href="https://qiita.com/DQNEO/items/2efaec18772a1ae3c198">Goコンパイラをゼロから作って147日でセルフホストを達成した - Qiita</a></li>
 <li><a href="https://apiwithgithub.com/">API with GitHub | Small and Tiny APIs with GitHub for quick use</a></li>
 <li><a href="https://speakerdeck.com/colorbox/kaomoji-over-30-thousand">顔文字を3万個集める技術/kaomoji_over_30_thousand - Speaker Deck</a></li>
@@ -166,14 +174,20 @@ ga('send', 'pageview');
 <script>
 var ul = document.querySelector('#book-list ul');
 ul.classList.add('list');
+1
 var aList = document.querySelectorAll('#book-list li a');
-for (i = 0; i < aList.length - 1; i++) {
+for (i = 0; i <= aList.length - 1; i++) {
     aList[i].classList.add('title');
+}
+
+var descList = document.querySelectorAll('#book-list ul li ul li');
+for (i = 0; i <= descList.length - 1; i++) {
+    descList[i].classList.add('desc');
 }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.js"></script>
 <script>
-var options = { valueNames: [ 'title' ] };
+var options = { valueNames: [ 'title', 'desc' ] };
 var bookList = new List('book-list', options);
 </script>
 
