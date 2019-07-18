@@ -14,12 +14,10 @@ category:
 ## Wrote at
 
 - 2009-2012
-    - [はてなダイアリー](http://d.hatena.ne.jp/kk_Ataka/) http://d.hatena.ne.jp/kk_Ataka/
-        - 2019年サービス終了に伴い、はてなブログへ自動移行している…らしい
-    - [はてなブログ(com)](http://gosyujin.hatenablog.com/)
-        - 自動移行先？空っぽになってしまった…
-    - [はてなブログ(jp)](http://gosyujin.hatenablog.jp/)
-        - サービス開始時に作っていた方
+    - [はてなダイアリー](http://d.hatena.ne.jp/kk_Ataka/)
+        - サービス終了に伴い更新終了
+            - [跡地](http://gosyujin.hatenablog.com/) 自動移行先？空っぽになってしまった…
+            - [はてなブログサービス開始時に作っていた方](http://gosyujin.hatenablog.jp/)
 - 2012-2017
       - Jekyll@GitHub Pages
           - Markdownで記事を書いて、はてなダイアリーとマルチポストしてた
