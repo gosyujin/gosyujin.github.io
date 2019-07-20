@@ -68,6 +68,14 @@ category:
 javascript:(function(){const e=document.createElement('input');e.value="- "+`[${document.title}](${location.href})`;document.querySelector('body').append(e);e.select();document.execCommand('copy');e.remove();})();
 ```
 
+```js
+javascript:(function(){prompt("`title <url>`_","`"+document.title+" <"+location.href+">`_")})();
+```
+
+```js
+javascript:(function(){var v;document.querySelectorAll("#work_outline tbody tr").forEach(function(value){if(value.getElementsByTagName("th")[0].innerText=="声優"){v=value.getElementsByTagName("td")[0].innerText}});const e=document.createElement('input');e.value=`[${document.getElementsByClassName("maker_name")[0].innerText}][${v}] ${document.getElementById("work_name").innerText}`;document.querySelector('body').append(e);e.select();document.execCommand('copy');e.remove();})();
+```
+
 <script>
 var ul = document.querySelector('#book-list ul');
 ul.classList.add('list');
