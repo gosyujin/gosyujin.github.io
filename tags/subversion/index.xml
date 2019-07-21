@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Subversion on kk_Atakaの日記</title>
-    <link>https://blog.gosyujin.com/tags/subversion/</link>
-    <description>Recent content in Subversion on kk_Atakaの日記</description>
+    <title>Subversion on note.gosyujin.com - kk_Atakaの日記</title>
+    <link>https://note.gosyujin.com/tags/subversion/</link>
+    <description>Recent content in Subversion on note.gosyujin.com - kk_Atakaの日記</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>jp</language>
     <lastBuildDate>Thu, 05 Sep 2013 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://blog.gosyujin.com/tags/subversion/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://note.gosyujin.com/tags/subversion/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Subversionのproxy設定でいつもハマるやつ</title>
-      <link>https://blog.gosyujin.com/2013/09/05/svn-proxy-error-by-git-svn/</link>
+      <link>https://note.gosyujin.com/2013/09/05/svn-proxy-error-by-git-svn/</link>
       <pubDate>Thu, 05 Sep 2013 00:00:00 +0000</pubDate>
       
-      <guid>https://blog.gosyujin.com/2013/09/05/svn-proxy-error-by-git-svn/</guid>
+      <guid>https://note.gosyujin.com/2013/09/05/svn-proxy-error-by-git-svn/</guid>
       <description>あらすじ git svn しようとしたらエラー。
 $ git svn rebase Malformed file: /c/Users/xxx/.subversion/servers:68: Option expected at /usr/lib/perl5/site_perl/Git/SVN/Ra.pm line 81 環境  Windows  svn バージョン等は失念。まあ、多分バージョンはあまり関係ないと思われる？
 結論 git-svn の問題ではなく proxy 環境下 においての svn 設定ミスだった。
@@ -28,10 +28,10 @@ $ git svn rebase Malformed file: /c/Users/xxx/.subversion/servers:68: Option exp
     
     <item>
       <title>git-svnインストールからgit svn dcommit完了までの手順</title>
-      <link>https://blog.gosyujin.com/2012/12/12/git-svn-dcommit/</link>
+      <link>https://note.gosyujin.com/2012/12/12/git-svn-dcommit/</link>
       <pubDate>Wed, 12 Dec 2012 00:00:00 +0000</pubDate>
       
-      <guid>https://blog.gosyujin.com/2012/12/12/git-svn-dcommit/</guid>
+      <guid>https://note.gosyujin.com/2012/12/12/git-svn-dcommit/</guid>
       <description>あらすじ CentOSのインストール時に入れたGitにはgit-svnが入っていない(？)ので、一から入れようとしたが、ネットに繋がっていない環境だと結構依存とかがめんどくさかったのでメモ。
 環境  CentOS 6.2 Git 1.7.1  git は入っているが、git svnは実行できない console $ git svn git: &#39;svn&#39; is not a git command. See &#39;git --help&#39;.   svn 1.6.11 (r934486) ネットにつながっていないぼっち環境  yumとかで入れられると一発っぽいんだけどなー。
 手順 まずは、git-svnのrpmをDLしてくる。
@@ -41,19 +41,19 @@ $ git svn rebase Malformed file: /c/Users/xxx/.subversion/servers:68: Option exp
     
     <item>
       <title>Subversionで2ヶ所のリポジトリの同期を取るメモ</title>
-      <link>https://blog.gosyujin.com/2012/04/17/1334669770/</link>
+      <link>https://note.gosyujin.com/2012/04/17/1334669770/</link>
       <pubDate>Tue, 17 Apr 2012 00:00:00 +0000</pubDate>
       
-      <guid>https://blog.gosyujin.com/2012/04/17/1334669770/</guid>
+      <guid>https://note.gosyujin.com/2012/04/17/1334669770/</guid>
       <description>[Solaris][備忘録][Subversion]Subversionで2ヶ所のリポジトリの同期を取るメモ 前回のあらすじ  http://d.hatena.ne.jp/kk_Ataka/20120115/1326624864:title  参考サイト  http://www.asahi-net.or.jp/~iu9m-tcym/svndoc/svn_backup.html:title http://www.ilovex.co.jp/blog/system/other/subversion.html:title http://www.02.246.ne.jp/~torutk/subversion/intro.html:title http://d.hatena.ne.jp/pasela/20090206/svn_backup:title http://terai.xrea.jp/Subversion.html:title  前提  以下の二つのサーバがある  Aサーバ:開発を進んでいるリポジトリがある(r222) Bサーバ:これからAサーバのリポジトリと同期をとりたいリポジトリがある(r111)   差分のdumpとってload(失敗) Aサーバ  進んでいる分のダンプを取る。  rオプションでダンプを取るリビジョンを指定できる。一つだけだとそのリビジョンだけ。(222ならリビジョン222)範囲指定する場合はAAA:BBBとする   $ svnadmin dump リポジトリパス(/home/xxx/yyyなど) -r 111:222 --incremental &amp;gt; repo.dump  これをなんらかの方法でBサーバへ移動する(ftpでもUSBでも)  Bサーバ  svnadmin loadコマンドで差分ダンプファイルを流しこむ。  リビジョンがかぶっているとエラー(リビジョン111未満のもの)   $ svnadmin load リポジトリパス(/home/xxx/yyyなど) &amp;lt; repo.dump &amp;lt;&amp;lt;&amp;lt; オリジナルのリビジョン 111 に基づき、新しいトランザクションを開始しました * パスを追加しています : trunk/xxx ...svnadmin: ファイルが既に存在します: ファイルシステム &amp;#39;リポジトリパス&amp;#39;, トランザクション xxx-xx, パス &amp;#39;trunk/xxx&amp;#39;  - 112からダンプしたファイルをloadする…とうまくいく予定だったのだが、なんかファイルのチェックサムが違うといわれた……。  $ svnadmin load リポジトリパス(/home/xxx/yyyなど) &amp;lt; repo.</description>
     </item>
     
     <item>
       <title>Subversionでファイルを分けてコミットする</title>
-      <link>https://blog.gosyujin.com/2012/04/02/1333369857/</link>
+      <link>https://note.gosyujin.com/2012/04/02/1333369857/</link>
       <pubDate>Mon, 02 Apr 2012 00:00:00 +0000</pubDate>
       
-      <guid>https://blog.gosyujin.com/2012/04/02/1333369857/</guid>
+      <guid>https://note.gosyujin.com/2012/04/02/1333369857/</guid>
       <description>[Subversion][備忘録]Subversionでファイルを分けてコミットする あらすじ コマンドラインからファイルをたくさんコミットしたいんだけど、コミットログを分けたいので分割してコミットしたい。
 参考サイト  http://www.caldron.jp/~nabetaro/svn/svnbook-1.5-final/html-chunk/svn.ref.svn.c.changelist.html:title http://d.hatena.ne.jp/namutaka/20110125/1295964889:title http://www-aos.eps.s.u-tokyo.ac.jp/~takagi/subversion.html#sec16 http://blog.cgfm.jp/garyu/archives/83:title  方法 なんかいっぱいファイルがあるとする。
 $ ls a001.html a019.html a037.html a055.html a073.html a091.html a002.html a020.html a038.html a056.html a074.html a092.html a003.html a021.html a039.html a057.html a075.html a093.html a004.html a022.html a040.html a058.html a076.html a094.html a005.html a023.html a041.html a059.html a077.html a095.html a006.html a024.html a042.html a060.html a078.html a096.html a007.html a025.html a043.html a061.html a079.html a097.html a008.html a026.html a044.html a062.html a080.html a098.html a009.html a027.html a045.html a063.html a081.html a099.html a010.html a028.</description>
@@ -61,10 +61,10 @@ $ ls a001.html a019.html a037.html a055.html a073.html a091.html a002.html a020.
     
     <item>
       <title>Subversionのリポジトリをサーバ間でまるごと移動する</title>
-      <link>https://blog.gosyujin.com/2012/01/15/1326624864/</link>
+      <link>https://note.gosyujin.com/2012/01/15/1326624864/</link>
       <pubDate>Sun, 15 Jan 2012 00:00:00 +0000</pubDate>
       
-      <guid>https://blog.gosyujin.com/2012/01/15/1326624864/</guid>
+      <guid>https://note.gosyujin.com/2012/01/15/1326624864/</guid>
       <description>[Solaris][備忘録][Subversion]Subversionのリポジトリをサーバ間でまるごと移動する あらすじ AサーバからBサーバにリポジトリを引っ越しする。
 参考サイト http://hain.jp/index.php/tech-j/2008/03/24/p199:title
 手順 引っ越し元のサーバ まずはリポジトリのダンプファイルを作成。
@@ -76,20 +76,20 @@ $ svnadmin load repos &amp;lt; repo.dump * パスを追加しています... (�
     
     <item>
       <title>SolarisにSubversionをインストールするときのメモ</title>
-      <link>https://blog.gosyujin.com/2011/12/22/1324573161/</link>
+      <link>https://note.gosyujin.com/2011/12/22/1324573161/</link>
       <pubDate>Thu, 22 Dec 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://blog.gosyujin.com/2011/12/22/1324573161/</guid>
+      <guid>https://note.gosyujin.com/2011/12/22/1324573161/</guid>
       <description>[Solaris][備忘録][Subversion]SolarisにSubversionをインストールするときのメモ インストール  http://www.sunfreeware.com/ ftp://ftp.ne.jp/Sun/sunfreeware/  から必要なライブラリをダウンロード。
  - neon 0.29.5[1]  swig 1.3.40[2] expat 2.0.1[3] libxml2 2.7.8[4] db 4.2.52 REV=1.0.12[5] openssl 1.0.0d[6] libiconv 1.13.1[7] libintl 3.4.0[8] sasl 2.1.21[9] gcc(libgcc 3.4.6((The GNU C compiler and related programs - installs in /usr/local. This package includes the GNU C, C++, and f77 suites and support files. These gcc packages require the installation of libiconv. It was compiled to use the SUN assembler and loader usually in /usr/ccs/bin if the SUNW developer packages are installed.</description>
     </item>
     
     <item>
       <title>svn infoコマンドでリビジョン番号を抜き出す</title>
-      <link>https://blog.gosyujin.com/2011/12/16/1324086694/</link>
+      <link>https://note.gosyujin.com/2011/12/16/1324086694/</link>
       <pubDate>Fri, 16 Dec 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://blog.gosyujin.com/2011/12/16/1324086694/</guid>
+      <guid>https://note.gosyujin.com/2011/12/16/1324086694/</guid>
       <description>[Subversion][Unix][備忘録]svn infoコマンドでリビジョン番号を抜き出す 前回までのあらすじ  http://d.hatena.ne.jp/kk_Ataka/20111213/1323783496:title  もっとよい方法 どう考えても他にやり方があるだろうと思っていたらやっぱりあった。[http://twitter.com/#!/jun66j5:title=@jun66j5]さんよりTwitterで教えてもらいました。ありがとうございます。
 [twitter:147687551027781632:detail]
 svn infoコマンドで見られるのか。というわけで(全然使ってない)プロジェクトで試してみた。まず普通。
@@ -99,10 +99,10 @@ $ LC_ALL=en_US.UTF8 svn info Path: . URL: file:///home/kk_Ataka/svn/xxxx Reposit
     
     <item>
       <title>svn updateコマンド以外でリビジョン番号を抜き出す</title>
-      <link>https://blog.gosyujin.com/2011/12/13/1323783496/</link>
+      <link>https://note.gosyujin.com/2011/12/13/1323783496/</link>
       <pubDate>Tue, 13 Dec 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://blog.gosyujin.com/2011/12/13/1323783496/</guid>
+      <guid>https://note.gosyujin.com/2011/12/13/1323783496/</guid>
       <description>[Subversion][備忘録][Unix]svn updateコマンド以外でリビジョン番号を抜き出す あらすじ svnのリビジョン番号だけ抜き出したい。アップデートなしで！　svn updateするとリビジョンは出てくれるんだけど、アップデート走らせないようにリビジョン番号だけ抜き出したい。
 $ svn up リビジョン 111 です 続編  http://d.hatena.ne.jp/kk_Ataka/20111216/1324086694:title  以下はとてもめんどくさい方法での実現となります。
 試行錯誤 svn log svn logで表示したリビジョンを抽出する。limit N で出力するログを制御。
@@ -113,10 +113,10 @@ $ /usr/local/bin/svn log --limit 1 | grep ^r.*lines$ r111 | kk_Ataka | 2011-12-1
     
     <item>
       <title>Subversionのauto-props設定ではまった</title>
-      <link>https://blog.gosyujin.com/2011/08/14/1313326346/</link>
+      <link>https://note.gosyujin.com/2011/08/14/1313326346/</link>
       <pubDate>Sun, 14 Aug 2011 00:00:00 +0000</pubDate>
       
-      <guid>https://blog.gosyujin.com/2011/08/14/1313326346/</guid>
+      <guid>https://note.gosyujin.com/2011/08/14/1313326346/</guid>
       <description>[Subversion][備忘録]Subversionのauto-props設定ではまった SubversionでExcelファイルをコミットしようとするとエラーが発生。
 ファイル &amp;#39;C:\～～～\なんとか管理表.xls&amp;#39; の MIMEタイプ属性はバイナリです んーなんでだっけー？.xlsファイルのmime-typeを指定してないからかなー？ という事でconfigファイルにmime-type指定。http://trac.symfony-project.org/wiki/SymfonyRepositoryTips:title ここを参考に。
 *.xls = svn:mime-type=application/vnd.ms-excel しかしエラーは変わらず。なんでだー。というか今までは別にmime-type指定しなくてもいけてた気がするのに…と、ここまでやってconfigをよく見ると
