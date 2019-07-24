@@ -9,6 +9,11 @@ category:
 
 
 
+- [Let's Encrypt - Free SSL/TLS Certificates](https://letsencrypt.org/)
+- [letsencryptで証明書を取得するときにはまったこと - Qiita](https://qiita.com/fk_2000/items/c43d919ebda1531ef341)
+- [letsencryptを利用して無料でSSLを実装 【Ubuntu16.04 + Nginx】](https://www.walker.co.jp/letsencrypt%E3%82%92%E5%88%A9%E7%94%A8%E3%81%97%E3%81%A6%E7%84%A1%E6%96%99%E3%81%A7ssl%E3%82%92%E5%AE%9F%E8%A3%85-%E3%80%90ubuntu16-04-nginx%E3%80%91/)
+- [Let's Encrypt 総合ポータル](https://free-ssl.jp/)
+- [Let's Encrypt証明書取得 クイックセットアップ [努力したＷｉｋｉ]](https://hgotoh.jp/wiki/doku.php/documents/quick/quick-0012)
 - [GitHub Pagesを独自ドメインで公開する - A1 Blog](https://blog.a-1.dev/post/2017-05-14-custom_domain/)
 - [さくらのレンタルサーバをやめてGitHub Pagesを使うことにした（経緯と簡易手順） - おかゆ++](https://okayu-moka.hatenablog.com/entry/2018/03/10/151123)
 - [GitHub Pagesに独自ドメインを設定してHTTPS化する | maesblog](https://mae.chab.in/archives/60095)
@@ -70,6 +75,10 @@ javascript:(function(){const e=document.createElement('input');e.value="- "+`[${
 
 ```js
 javascript:(function(){prompt("`title <url>`_","`"+document.title+" <"+location.href+">`_")})();
+```
+
+```js
+javascript:(function(){const e=document.createElement('input');e.value="%E3%80%80["+`${document.title.replace(/\s*[\[\]]\s*/g,' ')} ${location.href}`+"]";document.querySelector('body').append(e);e.select();document.execCommand('copy');e.remove();})();
 ```
 
 ```js
