@@ -9,6 +9,9 @@ category:
 
 
 
+- [文字コードのカオスな世界を整理してみた - A painter and a black cat](https://raintrees.net/news/51#%E3%82%B5%E3%83%AD%E3%82%B2%E3%83%BC%E3%83%88%E3%83%9A%E3%82%A2%E3%82%B5%E3%83%AD%E3%82%B2%E3%83%BC%E3%83%88%E6%96%87%E5%AD%97%E3%81%AE%E6%B7%B7%E5%90%8C)
+- [unicode - UTF-8で日本語1文字が3バイトなのはなぜ？ - スタック・オーバーフロー](https://ja.stackoverflow.com/questions/38728/utf-8%e3%81%a7%e6%97%a5%e6%9c%ac%e8%aa%9e1%e6%96%87%e5%ad%97%e3%81%8c3%e3%83%90%e3%82%a4%e3%83%88%e3%81%aa%e3%81%ae%e3%81%af%e3%81%aa%e3%81%9c/38731#38731)
+- [Unicodeについて](http://maxy.osdn.jp/help/HTML/for_developers/unicode.html)
 - [Let's Encrypt - Free SSL/TLS Certificates](https://letsencrypt.org/)
 - [letsencryptで証明書を取得するときにはまったこと - Qiita](https://qiita.com/fk_2000/items/c43d919ebda1531ef341)
 - [letsencryptを利用して無料でSSLを実装 【Ubuntu16.04 + Nginx】](https://www.walker.co.jp/letsencrypt%E3%82%92%E5%88%A9%E7%94%A8%E3%81%97%E3%81%A6%E7%84%A1%E6%96%99%E3%81%A7ssl%E3%82%92%E5%AE%9F%E8%A3%85-%E3%80%90ubuntu16-04-nginx%E3%80%91/)
