@@ -12,6 +12,16 @@
     
     
     <item>
+      <title>Eclipseの動的Webプロジェクトから別プロジェクト(自作ライブラリ)を参照する</title>
+      <link>https://note.gosyujin.com/2019/08/29/eclipse-deployment-assembly/</link>
+      <pubDate>Thu, 29 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://note.gosyujin.com/2019/08/29/eclipse-deployment-assembly/</guid>
+      <description> あらすじ  同じワークスペース上にあるsampleプロジェクトからutilプロジェクトのメソッドを呼び出しているソースがある ビルドは通っているが、実際に該当ロジックを動作させた時にClassNotFoundExceptionあるいはNoClassDefFoundErrorが出る  環境  Eclipse 4.7 WAS Liberty 19.0.0.1  本文  ビルド・パスを通しただけだったのでWTP起動時に依存プロジェクトを一緒に配備できていなかった プロジェクト右クリック -&amp;gt; プロパティ -&amp;gt; デプロイメント・アセンブリー(Deployment Assembly)  呼び出し先のプロジェクトを追加する。(古いEclipseだとJava EE Module Dependencies)  ビルドして再び実行するとうまくいった。 sampleプロジェクトの.projectファイルに以下の値が追加されていた。  &amp;lt;projects&amp;gt; &amp;lt;project&amp;gt;util&amp;lt;/project&amp;gt; &amp;lt;/projects&amp;gt;  「問題」タブには警告は出てない(多すぎてカットされている？) 「マーカー」タブには警告がバッチリ出てた   クラスパス・エントリー /util は、エクスポートまたは公開されません。実行時に ClassNotFoundExceptions が発生する可能性があります。 sampleP/sampleクラスパス依存性バリデーター・メッセージ
+ 参考  EclipseでWebアプリを作っていて別プロジェクトを参照している場合の注意点 - wyukawa&amp;rsquo;s diary 動的WebプロジェクトからJavaプロジェクトを参照する - シュンツのつまづき日記 java - Javaのビルド・パス - ライブラリー(L) - Web app ライブラリー に、別プロジェクトを追加する方法 - スタック・オーバーフロー Dynamic Web Projectで任意の場所からライブラリを追加する方法 - marsのメモ JavaEE 7をやってみよう。 Webデプロイメントアセンブリー - ひこぽんのーと  </description>
+    </item>
+    
+    <item>
       <title>Android Studioのコードフォーマットをプロジェクトで統一する</title>
       <link>https://note.gosyujin.com/2019/07/09/android-studio-code-format/</link>
       <pubDate>Tue, 09 Jul 2019 00:00:00 +0000</pubDate>
